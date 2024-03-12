@@ -36,7 +36,7 @@ public class ArrayEditor : CollectionEditor
             return items;
         }
 
-        return Array.Empty<object>();
+        return [];
     }
 
     /// <summary>

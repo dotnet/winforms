@@ -21,7 +21,7 @@ public class ListBindingConverter : TypeConverter
     {
         get
         {
-            s_ctorTypes ??= new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
+            s_ctorTypes ??= [typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider)];
 
             return s_ctorTypes;
         }
@@ -34,7 +34,7 @@ public class ListBindingConverter : TypeConverter
     {
         get
         {
-            s_ctorParamProps ??= new string?[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
+            s_ctorParamProps ??= [null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo",];
 
             return s_ctorParamProps;
         }
@@ -154,12 +154,12 @@ public class ListBindingConverter : TypeConverter
         if (ctor is null)
         {
             isComplete = false;
-            ctor = typeof(Binding).GetConstructor(new Type[]
-            {
+            ctor = typeof(Binding).GetConstructor(
+            [
                 typeof(string),
                 typeof(object),
                 typeof(string)
-            });
+            ]);
         }
 
         // now fill in the values.

@@ -14,7 +14,7 @@ internal class ContextMenuStripGroup
     {
         get
         {
-            _items ??= new List<ToolStripItem>();
+            _items ??= [];
 
             return _items;
         }

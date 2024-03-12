@@ -623,7 +623,7 @@ public partial class DataGridView
                         string? dataPropertyName = null;
                         if (e.PropertyDescriptor is not null)
                         {
-                            dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
+                            dataPropertyName = e.PropertyDescriptor.Name;
                         }
 
                         for (int columnIndex = 0; columnIndex < _owner.Columns.Count; columnIndex++)

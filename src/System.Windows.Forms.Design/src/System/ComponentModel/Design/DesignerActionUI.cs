@@ -106,7 +106,7 @@ internal partial class DesignerActionUI : IDisposable
             _mainParentWindow = uiService.GetDialogOwnerWindow();
         }
 
-        _componentToGlyph = new();
+        _componentToGlyph = [];
         _marshalingControl = new Control();
         _marshalingControl.CreateControl();
     }
@@ -328,7 +328,7 @@ internal partial class DesignerActionUI : IDisposable
             Debug.Assert(behaviorWithPanelToRegen.RelatedComponent is not null, "could not find related component for this refresh");
             DesignerActionPanel? dap = designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
             dap?.UpdateTasks(behaviorWithPanelToRegen.ActionLists,
-                new DesignerActionListCollection(),
+                [],
                 string.Format(SR.DesignerActionPanel_DefaultPanelTitle, behaviorWithPanelToRegen.RelatedComponent.GetType().Name),
                 subtitle: null);
             designerActionHost.UpdateContainerSize();
@@ -364,7 +364,7 @@ internal partial class DesignerActionUI : IDisposable
         // We need to invoke this async because the designer action service will  raise this event from the thread pool.
         if (_marshalingControl is not null && _marshalingControl.IsHandleCreated)
         {
-            _marshalingControl.BeginInvoke(new ActionChangedEventHandler(OnInvokedDesignerActionChanged), new object[] { sender, e });
+            _marshalingControl.BeginInvoke(new ActionChangedEventHandler(OnInvokedDesignerActionChanged), [sender, e]);
         }
     }
 

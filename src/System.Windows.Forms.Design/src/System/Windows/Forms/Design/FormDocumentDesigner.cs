@@ -452,7 +452,7 @@ internal class FormDocumentDesigner : DocumentDesigner
         base.PreFilterProperties(properties);
         // Handle shadowed properties
         string[] shadowProps = ["Opacity", "IsMdiContainer", "Size", "ShowInTaskBar", "WindowState", "AutoSize", "AcceptButton", "CancelButton"];
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];

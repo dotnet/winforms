@@ -52,10 +52,10 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
         HRESULT hr = propertyBrowsing->GetPropertyAttributes(dispid, &attributeCount, &nativeTypeNames, &nativeValues);
         if (hr != HRESULT.S_OK || attributeCount == 0 || nativeValues is null)
         {
-            return Array.Empty<Attribute>();
+            return [];
         }
 
-        List<Attribute> attributes = new();
+        List<Attribute> attributes = [];
 
         string[] typeNames = GetStringsFromPtr(nativeTypeNames, attributeCount);
         object?[] values = GetVariantsFromPtr(nativeValues, attributeCount);
@@ -63,7 +63,7 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
         Debug.Assert(typeNames.Length == values.Length, "Mismatched parameter and attribute name length");
         if (typeNames.Length != values.Length)
         {
-            return Array.Empty<Attribute>();
+            return [];
         }
 
         // Get the types.
@@ -159,7 +159,7 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
                         // Found a one-parameter ctor, use it to try to construct a default one.
                         try
                         {
-                            if (Activator.CreateInstance(type, new object[] { value }) is Attribute attribute)
+                            if (Activator.CreateInstance(type, [value]) is Attribute attribute)
                             {
                                 attributes.Add(attribute);
                             }
@@ -190,14 +190,14 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
             }
         }
 
-        return attributes.ToArray();
+        return [.. attributes];
     }
 
     private static string[] GetStringsFromPtr(BSTR* values, uint count)
     {
         if (values is null)
         {
-            return Array.Empty<string>();
+            return [];
         }
 
         string[] strings = new string[count];

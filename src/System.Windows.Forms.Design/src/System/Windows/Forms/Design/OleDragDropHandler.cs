@@ -59,7 +59,7 @@ internal partial class OleDragDropHandler
     [MemberNotNull(nameof(s_currentDrags))]
     private static void AddCurrentDrag(IDataObject data, IComponent component)
     {
-        s_currentDrags ??= new();
+        s_currentDrags ??= [];
         s_currentDrags[data] = component;
     }
 
@@ -142,7 +142,7 @@ internal partial class OleDragDropHandler
         //
         IToolboxService? toolboxSvc = GetService<IToolboxService>();
         IDesignerHost? host = GetService<IDesignerHost>();
-        IComponent[]? comps = Array.Empty<IComponent>();
+        IComponent[]? comps = [];
 
         Cursor? oldCursor = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
@@ -156,7 +156,7 @@ internal partial class OleDragDropHandler
             }
             catch (CheckoutException cxe) when (cxe == CheckoutException.Canceled)
             {
-                return Array.Empty<IComponent>();
+                return [];
             }
 
             try
@@ -171,12 +171,12 @@ internal partial class OleDragDropHandler
                         IUIService? uiService = GetService<IUIService>();
                         uiService?.ShowMessage(SR.LocalizingCannotAdd);
 
-                        return Array.Empty<IComponent>();
+                        return [];
                     }
 
                     // Create a dictionary of default values that the designer can
                     // use to initialize a control with.
-                    Hashtable defaultValues = new();
+                    Hashtable defaultValues = [];
                     if (parent is not null)
                         defaultValues["Parent"] = parent;
 
@@ -199,7 +199,7 @@ internal partial class OleDragDropHandler
                 }
                 catch (CheckoutException checkoutEx) when (checkoutEx == CheckoutException.Canceled)
                 {
-                    comps = Array.Empty<IComponent>();
+                    comps = [];
                 }
                 catch (ArgumentException argumentEx)
                 {
@@ -234,7 +234,7 @@ internal partial class OleDragDropHandler
                     }
                 }
 
-                comps ??= Array.Empty<IComponent>();
+                comps ??= [];
             }
             finally
             {
@@ -506,7 +506,7 @@ internal partial class OleDragDropHandler
         // for each of them. This way, we will not accidentally try to drop
         // ourselves into our own children.
         //
-        List<Control> allowDropChanged = new();
+        List<Control> allowDropChanged = [];
         foreach (object comp in components)
         {
             if (comp is Control { HasChildren: true } ctl)
@@ -762,7 +762,7 @@ internal partial class OleDragDropHandler
                             host.Activate();
                         }
 
-                        List<IComponent> selectComps = new();
+                        List<IComponent> selectComps = [];
 
                         for (int i = 0; i < components.Length; i++)
                         {
@@ -1090,7 +1090,7 @@ internal partial class OleDragDropHandler
         }
 
         IList compList = (IList)comps;
-        List<object> topLevel = new();
+        List<object> topLevel = [];
         foreach (object comp in compList)
         {
             Control? c = comp as Control;

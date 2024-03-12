@@ -140,7 +140,7 @@ internal partial class PbrsForward : IWindowTarget
                     break;
                 }
 
-                bufferedChars ??= new();
+                bufferedChars ??= [];
                 bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
 
                 if (!ignoreMessages && MenuCommandService is not null)

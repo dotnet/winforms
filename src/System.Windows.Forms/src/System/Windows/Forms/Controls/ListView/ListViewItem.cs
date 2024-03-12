@@ -38,7 +38,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     private string? _groupName;
 
     private ListViewSubItemCollection? _listViewSubItemCollection;
-    private List<ListViewSubItem> _subItems = new();
+    private List<ListViewSubItem> _subItems = [];
 
     // we stash the last index we got as a seed to GetDisplayIndex.
     private int _lastIndex = -1;
@@ -776,8 +776,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                _subItems = new List<ListViewSubItem>(1);
-                _subItems.Add(new ListViewSubItem(this, string.Empty));
+                _subItems = [new ListViewSubItem(this, string.Empty)];
                 SubItemCount = 1;
             }
 
@@ -1099,7 +1098,7 @@ public partial class ListViewItem : ICloneable, ISerializable
 
             nint result = PInvoke.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
-            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
+            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
             Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
         }
 
@@ -1147,7 +1146,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             _group = null;
             foreach (ListViewGroup lvg in ListView!.Groups)
             {
-                if (lvg.ID == (int)lvItem.iGroupId)
+                if (lvg.ID == lvItem.iGroupId)
                 {
                     _group = lvg;
                     break;

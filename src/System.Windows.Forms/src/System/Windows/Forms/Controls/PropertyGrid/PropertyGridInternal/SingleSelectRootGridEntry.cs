@@ -243,13 +243,13 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
         // First, walk through all the entries and group them by their category.
 
-        Dictionary<string, List<GridEntry>> categories = new();
+        Dictionary<string, List<GridEntry>> categories = [];
         foreach (var child in Children)
         {
             string category = child.PropertyCategory;
             if (!categories.TryGetValue(category, out var gridEntries))
             {
-                gridEntries = new List<GridEntry>();
+                gridEntries = [];
                 categories[category] = gridEntries;
             }
 
@@ -258,7 +258,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
         // Now walk through and create a CategoryGridEntry that holds all the properties for each category.
 
-        List<GridEntry> categoryGridEntries = new();
+        List<GridEntry> categoryGridEntries = [];
         foreach (var entry in categories)
         {
             var gridEntries = entry.Value;

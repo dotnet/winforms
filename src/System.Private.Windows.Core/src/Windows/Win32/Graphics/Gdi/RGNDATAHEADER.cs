@@ -9,7 +9,7 @@ internal partial struct RGNDATAHEADER
     {
         if (regionData is null || regionData->nCount == 0)
         {
-            return Array.Empty<RECT>();
+            return [];
         }
 
         // Region RECTs directly follow the header

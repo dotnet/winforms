@@ -106,7 +106,7 @@ public partial class ToolStripDropDown : ToolStrip
                 {
                     if (Properties.ContainsObject(PropOpacity))
                     {
-                        Properties.SetObject(PropOpacity, (object)1.0f);
+                        Properties.SetObject(PropOpacity, 1.0f);
                     }
 
                     UpdateLayered();

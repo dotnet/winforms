@@ -83,11 +83,11 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
             throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
         }
 
-        _controlToSendTo?.Invoke(d, new object?[] { state });
+        _controlToSendTo?.Invoke(d, [state]);
     }
 
     public override void Post(SendOrPostCallback d, object? state)
-        => _controlToSendTo?.BeginInvoke(d, new object?[] { state });
+        => _controlToSendTo?.BeginInvoke(d, [state]);
 
     public override SynchronizationContext CreateCopy()
         => new WindowsFormsSynchronizationContext(_controlToSendTo, DestinationThread);

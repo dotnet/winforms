@@ -17,7 +17,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     // Used only during deserialization to provide name to object mapping.
     private IDictionary? _nameTable;
     private Dictionary<string, OrderedCodeStatementCollection>? _statementTable;
-    private static readonly Attribute[] s_designTimeFilter = { DesignOnlyAttribute.Yes };
+    private static readonly Attribute[] s_designTimeFilter = [DesignOnlyAttribute.Yes];
     private static readonly object s_initMethodKey = new();
     private static TypeCodeDomSerializer? s_default;
 
@@ -362,11 +362,11 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         {
             if (member is CodeConstructor ctor && ctor.Parameters.Count == 0)
             {
-                return new CodeMemberMethod[] { ctor };
+                return [ctor];
             }
         }
 
-        return Array.Empty<CodeMemberMethod>();
+        return [];
     }
 
     /// <summary>
@@ -489,7 +489,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     /// </summary>
     private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection? members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
     {
-        Dictionary<string, CodeMethodMap> methodMap = new();
+        Dictionary<string, CodeMethodMap> methodMap = [];
         // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a complete graph.
         if (members is not null)
         {

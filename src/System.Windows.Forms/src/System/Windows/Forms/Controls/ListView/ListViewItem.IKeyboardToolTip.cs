@@ -21,7 +21,7 @@ public partial class ListViewItem : IKeyboardToolTip
 
     IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
     {
-        List<Rectangle> neighboringRectangles = new();
+        List<Rectangle> neighboringRectangles = [];
         if (_listView is null)
         {
             return neighboringRectangles;

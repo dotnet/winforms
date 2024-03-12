@@ -303,12 +303,12 @@ internal partial class StyleCollectionEditor
 
             // columnsAndRowsListView
             resources.ApplyResources(_columnsAndRowsListView, "columnsAndRowsListView");
-            _columnsAndRowsListView.Columns.AddRange(new ColumnHeader[]
-            {
+            _columnsAndRowsListView.Columns.AddRange(
+            [
                  _membersColumnHeader,
                  _sizeTypeColumnHeader,
                  _valueColumnHeader
-            });
+            ]);
             _columnsAndRowsListView.FullRowSelect = true;
             _columnsAndRowsListView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             _columnsAndRowsListView.HideSelection = false;
@@ -608,7 +608,7 @@ internal partial class StyleCollectionEditor
                 }
 
                 // We add 1, since we want the Member to read <Column|Row>1,2,3...
-                _columnsAndRowsListView.Items.Add(new ListViewItem(new string[] { baseName + (i + 1).ToString(CultureInfo.InvariantCulture), sizeType, sizeValue }));
+                _columnsAndRowsListView.Items.Add(new ListViewItem([baseName + (i + 1).ToString(CultureInfo.InvariantCulture), sizeType, sizeValue]));
             }
 
             if (styleCount > 0)
@@ -840,11 +840,11 @@ internal partial class StyleCollectionEditor
             {
                 _columnsAndRowsListView.Items.Insert(
                     index,
-                    new ListViewItem(new string[]
-                    {
+                    new ListViewItem(
+                    [
                         member, SizeType.Absolute.ToString(),
                         DesignerUtils.MINIMUMSTYLESIZE.ToString(CultureInfo.InvariantCulture)
-                     }));
+                     ]));
 
                 // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
                 // so we might as well just update the entire listView.
@@ -1078,7 +1078,7 @@ internal partial class StyleCollectionEditor
                         {
                             foreach (object obj in _deleteList)
                             {
-                                List<IComponent> componentList = new();
+                                List<IComponent> componentList = [];
                                 DesignerUtils.GetAssociatedComponents((IComponent)obj, host, componentList);
                                 foreach (IComponent component in componentList)
                                 {

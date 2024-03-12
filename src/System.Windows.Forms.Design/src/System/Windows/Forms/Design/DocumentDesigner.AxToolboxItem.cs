@@ -70,13 +70,14 @@ public partial class DocumentDesigner
                 {
                     TLIBATTR tlibAttr = GetTypeLibAttr();
 
-                    object[] args = new object[5];
-                    args[0] = $"{{{tlibAttr.guid}}}";
-                    args[1] = (int)tlibAttr.wMajorVerNum;
-                    args[2] = (int)tlibAttr.wMinorVerNum;
-                    args[3] = tlibAttr.lcid;
-
-                    args[4] = "";
+                    object[] args =
+                    [
+                        $"{{{tlibAttr.guid}}}",
+                        (int)tlibAttr.wMajorVerNum,
+                        (int)tlibAttr.wMinorVerNum,
+                        tlibAttr.lcid,
+                        "",
+                    ];
                     object? tlbRef = references.GetType().InvokeMember(
                         "AddActiveX",
                         BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
@@ -129,7 +130,7 @@ public partial class DocumentDesigner
                     uiSvc.ShowError(SR.AxImportFailed);
                 }
 
-                return Array.Empty<IComponent>();
+                return [];
             }
 
             var comps = new IComponent[1];

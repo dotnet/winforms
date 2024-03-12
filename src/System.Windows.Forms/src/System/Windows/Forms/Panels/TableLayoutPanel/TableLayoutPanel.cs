@@ -265,7 +265,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
         TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
         if (containerInfo.Columns is null)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         int[] cw = new int[containerInfo.Columns.Length];
@@ -287,7 +287,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
         TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
         if (containerInfo.Rows is null)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         int[] rh = new int[containerInfo.Rows.Length];
@@ -515,7 +515,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
         int lastColumn = containerInfo.Columns.Length - 1;
         if (containerInfo.Columns.Length > 0)
         {
-            lastColumnHeight = containerInfo.Columns[containerInfo.Columns.Length - 1].MinSize;
+            lastColumnHeight = containerInfo.Columns[^1].MinSize;
         }
 
         foreach (ColumnStyle cs in ColumnStyles)

@@ -29,12 +29,12 @@ public sealed partial class TableLayoutSettings
                 {
                     case SizeType.AutoSize:
                         return new InstanceDescriptor(
-                            style.GetType().GetConstructor(Array.Empty<Type>()),
+                            style.GetType().GetConstructor([]),
                             Array.Empty<object>());
                     case SizeType.Absolute:
                     case SizeType.Percent:
                         return new InstanceDescriptor(
-                            style.GetType().GetConstructor(new Type[] { typeof(SizeType), typeof(int) }),
+                            style.GetType().GetConstructor([typeof(SizeType), typeof(int)]),
                             new object[] { style.SizeType, style.Size });
                     default:
                         break;

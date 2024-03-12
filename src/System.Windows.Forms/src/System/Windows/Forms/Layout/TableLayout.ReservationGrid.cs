@@ -11,7 +11,7 @@ internal partial class TableLayout
     private sealed class ReservationGrid
     {
         private int _numColumns = 1;
-        private readonly List<BitArray> _rows = new();
+        private readonly List<BitArray> _rows = [];
 
         public bool IsReserved(int column, int rowOffset)
         {

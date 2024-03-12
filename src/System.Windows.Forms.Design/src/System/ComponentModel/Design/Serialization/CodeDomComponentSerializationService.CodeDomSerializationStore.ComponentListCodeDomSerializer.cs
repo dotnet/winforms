@@ -16,11 +16,11 @@ public sealed partial class CodeDomComponentSerializationService
         private class ComponentListCodeDomSerializer : CodeDomSerializer
         {
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
-            private readonly Dictionary<string, OrderedCodeStatementCollection?> _statementsTable = new();
-            private readonly Dictionary<string, List<CodeExpression>> _expressions = new();
+            private readonly Dictionary<string, OrderedCodeStatementCollection?> _statementsTable = [];
+            private readonly Dictionary<string, List<CodeExpression>> _expressions = [];
             private Dictionary<string, CodeDomComponentSerializationState>? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
-            private readonly HashSet<string> _nameResolveGuard = new();
+            private readonly HashSet<string> _nameResolveGuard = [];
 
             public override object Deserialize(IDesignerSerializationManager manager, object state)
             {
@@ -47,7 +47,7 @@ public sealed partial class CodeDomComponentSerializationService
                     // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
                     if (!expressions.TryGetValue(name, out List<CodeExpression>? exps))
                     {
-                        exps = new();
+                        exps = [];
                         expressions[name] = exps;
                     }
 
@@ -64,7 +64,7 @@ public sealed partial class CodeDomComponentSerializationService
             /// </summary>
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
-                CodeStatementCollection completeStatements = new();
+                CodeStatementCollection completeStatements = [];
                 _expressions.Clear();
                 _applyDefaults = applyDefaults;
                 foreach (string name in objectNames)
@@ -76,7 +76,7 @@ public sealed partial class CodeDomComponentSerializationService
                     }
                 }
 
-                CodeStatementCollection mappedStatements = new();
+                CodeStatementCollection mappedStatements = [];
                 CodeMethodMap methodMap = new(mappedStatements);
 
                 methodMap.Add(completeStatements);
@@ -488,7 +488,7 @@ public sealed partial class CodeDomComponentSerializationService
                         object? code = null;
                         CodeStatementCollection? ctxStatements = null;
                         Dictionary<string, object?>? resources = null;
-                        CodeStatementCollection extraStatements = new();
+                        CodeStatementCollection extraStatements = [];
                         manager.Context.Push(extraStatements);
                         if (manager.TryGetSerializer(data._value.GetType(), out CodeDomSerializer? serializer))
                         {
@@ -518,7 +518,7 @@ public sealed partial class CodeDomComponentSerializationService
                             }
                             else
                             {
-                                CodeStatementCollection codeStatements = new();
+                                CodeStatementCollection codeStatements = [];
                                 foreach (MemberData md in data.Members)
                                 {
                                     if (md._member.Attributes.Contains(DesignOnlyAttribute.Yes))
@@ -527,7 +527,7 @@ public sealed partial class CodeDomComponentSerializationService
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
                                         if (md._member is PropertyDescriptor prop && prop.PropertyType.IsSerializable)
                                         {
-                                            resources ??= new Dictionary<string, object?>();
+                                            resources ??= [];
 
                                             resources[prop.Name] = prop.GetValue(data._value);
                                         }
@@ -588,7 +588,7 @@ public sealed partial class CodeDomComponentSerializationService
 
                                     if (eventProp.GetValue(data._value) is null)
                                     {
-                                        defaultEventList ??= new List<string>();
+                                        defaultEventList ??= [];
 
                                         defaultEventList.Add(eventProp.Name);
                                     }
@@ -604,7 +604,7 @@ public sealed partial class CodeDomComponentSerializationService
                                     if (ebs?.GetEvent(prop) is not null)
                                     {
                                         Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
-                                        defaultEventList ??= new List<string>();
+                                        defaultEventList ??= [];
 
                                         defaultEventList.Add(prop.Name);
                                     }

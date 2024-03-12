@@ -805,7 +805,7 @@ internal static class DesignerUtils
 
     private static List<IComponent> GetCopySelection(IReadOnlyList<IComponent> objects, IDesignerHost host)
     {
-        List<IComponent> copySelection = new();
+        List<IComponent> copySelection = [];
         foreach (IComponent comp in objects)
         {
             copySelection.Add(comp);

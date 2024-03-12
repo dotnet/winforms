@@ -814,7 +814,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -903,7 +903,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -919,7 +919,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -934,7 +934,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -950,7 +950,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -966,7 +966,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         try
         {
             using var webBrowser2 = AxIWebBrowser2.GetInterface();
-            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, (VARIANT*)default, default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -1331,7 +1331,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         }
         catch (COMException ce)
         {
-            if ((uint)unchecked(ce.ErrorCode) != (uint)unchecked(0x800704c7))
+            if ((uint)unchecked(ce.ErrorCode) != unchecked(0x800704c7))
             {
                 // "the operation was canceled by the user" - navigation failed
                 // ignore this error, IE has already alerted the user.

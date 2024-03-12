@@ -32,7 +32,7 @@ public abstract partial class UndoEngine
             if (UndoEngine.TryGetService(out ISelectionService? ss))
             {
                 ICollection selection = ss.GetSelectedComponents();
-                Dictionary<string, IContainer> selectedNames = new();
+                Dictionary<string, IContainer> selectedNames = [];
                 foreach (object sel in selection)
                 {
                     if (sel is IComponent { Site: ISite site })
@@ -59,7 +59,7 @@ public abstract partial class UndoEngine
         /// </summary>
         private void AddEvent(UndoEvent e)
         {
-            _events ??= new();
+            _events ??= [];
 
             _events.Add(e);
         }
@@ -108,7 +108,7 @@ public abstract partial class UndoEngine
 
             _ignoreAddingList?.Remove(e.Component);
 
-            _ignoreAddedList ??= new();
+            _ignoreAddedList ??= [];
 
             _ignoreAddedList.Add(e.Component);
         }
@@ -118,7 +118,7 @@ public abstract partial class UndoEngine
         /// </summary>
         public virtual void ComponentAdding(ComponentEventArgs e)
         {
-            _ignoreAddingList ??= new();
+            _ignoreAddingList ??= [];
 
             _ignoreAddingList.Add(e.Component!);
         }
@@ -197,7 +197,7 @@ public abstract partial class UndoEngine
                 return;
             }
 
-            _changeEvents ??= new();
+            _changeEvents ??= [];
 
             // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
             if (UndoEngine.GetName(e.Component, false) is not null)
@@ -325,7 +325,7 @@ public abstract partial class UndoEngine
                 return;
             }
 
-            _removeEvents ??= new();
+            _removeEvents ??= [];
 
             try
             {

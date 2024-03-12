@@ -212,7 +212,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
                 e = e.InnerException!;
             }
 
-            localErrorList = new() { e };
+            localErrorList = [e];
             successful = false;
         }
 

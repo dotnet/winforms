@@ -1713,7 +1713,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             return false;
         }
 
-        IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
+        IDataGridViewEditingCell editingCell = this;
         if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
         {
             if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked))

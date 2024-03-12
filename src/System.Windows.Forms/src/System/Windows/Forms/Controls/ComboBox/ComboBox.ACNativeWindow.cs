@@ -13,7 +13,7 @@ public partial class ComboBox
         internal static int s_inWndProcCnt;
 
         // This dictionary can contain null for those ACWindows we find, but are sure are not ours.
-        private static readonly Dictionary<HWND, ACNativeWindow?> s_ACWindows = new();
+        private static readonly Dictionary<HWND, ACNativeWindow?> s_ACWindows = [];
 
         internal ACNativeWindow(HWND acHandle)
         {
@@ -104,7 +104,7 @@ public partial class ComboBox
         /// </summary>
         internal static void ClearNullACWindows()
         {
-            List<HWND> toRemove = new();
+            List<HWND> toRemove = [];
             foreach (var acNativeWindowByHandle in s_ACWindows)
             {
                 if (acNativeWindowByHandle.Value is null)

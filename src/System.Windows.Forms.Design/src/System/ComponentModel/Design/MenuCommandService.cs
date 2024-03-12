@@ -44,7 +44,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     {
         _serviceProvider = serviceProvider;
         _commandGroupsLock = new object();
-        _commandGroups = new();
+        _commandGroups = [];
         _commandChangedHandler = new EventHandler(OnCommandChanged);
         TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeRefreshed);
     }
@@ -101,10 +101,10 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         {
             if (!_commandGroups.TryGetValue(commandId.Guid, out List<MenuCommand>? commandsList))
             {
-                commandsList = new()
-                {
+                commandsList =
+                [
                     command
-                };
+                ];
                 _commandGroups.Add(commandId.Guid, commandsList);
             }
             else
@@ -131,7 +131,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     {
         ArgumentNullException.ThrowIfNull(verb);
 
-        _globalVerbs ??= new();
+        _globalVerbs ??= [];
         _globalVerbs.Add(verb);
         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandAdded, verb));
         EnsureVerbs();
@@ -206,7 +206,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
             int verbCount = 0;
             DesignerVerbCollection? localVerbs = null;
-            List<DesignerVerb> designerActionVerbs = new(); // we instantiate this one here...
+            List<DesignerVerb> designerActionVerbs = []; // we instantiate this one here...
 
             if (_selectionService?.SelectionCount == 1 && TryGetService(out IDesignerHost? designerHost))
             {
@@ -271,7 +271,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
             // merge all
             Dictionary<string, int> buildVerbs = new(verbCount, StringComparer.OrdinalIgnoreCase);
-            List<DesignerVerb> verbsOrder = new();
+            List<DesignerVerb> verbsOrder = [];
 
             // PRIORITY ORDER FROM HIGH TO LOW: LOCAL VERBS - DESIGNERACTION VERBS - GLOBAL VERBS
             if (useGlobalVerbs)

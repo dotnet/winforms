@@ -119,10 +119,10 @@ public class SelectionRangeConverter : TypeConverter
 
             if (destinationType == typeof(InstanceDescriptor))
             {
-                ConstructorInfo? ctor = typeof(SelectionRange).GetConstructor(new Type[]
-                {
+                ConstructorInfo? ctor = typeof(SelectionRange).GetConstructor(
+                [
                     typeof(DateTime), typeof(DateTime)
-                });
+                ]);
                 if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, new object[] { range.Start, range.End });
@@ -173,7 +173,7 @@ public class SelectionRangeConverter : TypeConverter
     public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
     {
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(SelectionRange), attributes);
-        return props.Sort(new string[] { "Start", "End" });
+        return props.Sort(["Start", "End"]);
     }
 
     /// <summary>

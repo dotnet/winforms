@@ -21,7 +21,7 @@ public partial class TreeNode : IKeyboardToolTip
     {
         TreeNode? nextNode = NextVisibleNode;
         TreeNode? prevNode = PrevVisibleNode;
-        List<Rectangle> neighboringRectangles = new();
+        List<Rectangle> neighboringRectangles = [];
 
         if (nextNode is not null)
         {

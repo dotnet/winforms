@@ -333,17 +333,17 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         add.Text = SR.TableLayoutPanelDesignerAddMenu;
         add.Tag = isRow;
         add.Name = "add";
-        add.Click += new System.EventHandler(OnAddClick);
+        add.Click += OnAddClick;
 
         insert.Text = SR.TableLayoutPanelDesignerInsertMenu;
         insert.Tag = isRow;
         insert.Name = "insert";
-        insert.Click += new System.EventHandler(OnInsertClick);
+        insert.Click += OnInsertClick;
 
         delete.Text = SR.TableLayoutPanelDesignerDeleteMenu;
         delete.Tag = isRow;
         delete.Name = "delete";
-        delete.Click += new System.EventHandler(OnDeleteClick);
+        delete.Click += OnDeleteClick;
 
         label.Text = SR.TableLayoutPanelDesignerLabelMenu;
         if (SR.TableLayoutPanelDesignerDontBoldLabel == "0")
@@ -356,22 +356,22 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         absolute.Text = SR.TableLayoutPanelDesignerAbsoluteMenu;
         absolute.Tag = isRow;
         absolute.Name = "absolute";
-        absolute.Click += new System.EventHandler(OnAbsoluteClick);
+        absolute.Click += new EventHandler(OnAbsoluteClick);
 
         percent.Text = SR.TableLayoutPanelDesignerPercentageMenu;
         percent.Tag = isRow;
         percent.Name = "percent";
-        percent.Click += new System.EventHandler(OnPercentClick);
+        percent.Click += new EventHandler(OnPercentClick);
 
         autosize.Text = SR.TableLayoutPanelDesignerAutoSizeMenu;
         autosize.Tag = isRow;
         autosize.Name = "autosize";
-        autosize.Click += new System.EventHandler(OnAutoSizeClick);
+        autosize.Click += new EventHandler(OnAutoSizeClick);
 
         ToolStripDropDownMenu menu = new();
-        menu.Items.AddRange(new ToolStripItem[] { add, insert, delete, separator, label, absolute, percent, autosize });
+        menu.Items.AddRange((ToolStripItem[])[add, insert, delete, separator, label, absolute, percent, autosize]);
         menu.Tag = isRow;
-        menu.Opening += new System.ComponentModel.CancelEventHandler(OnRowColMenuOpening);
+        menu.Opening += new CancelEventHandler(OnRowColMenuOpening);
 
         IUIService uis = GetService(typeof(IUIService)) as IUIService;
         if (uis is not null)
@@ -577,7 +577,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             // Need to do this after the transaction has been created
             if (localCopy)
             {
-                List<IComponent> temp = new() { control };
+                List<IComponent> temp = [control];
                 temp = DesignerUtils.CopyDragObjects(temp, Component.Site);
                 control = temp[0] as Control;
             }
@@ -1423,7 +1423,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (extenderProperties is null && Component is not null)
             {
-                extenderProperties = new Dictionary<string, bool>();
+                extenderProperties = [];
 
                 AttributeCollection attribs = TypeDescriptor.GetAttributes(Component.GetType());
 
@@ -1800,7 +1800,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         throw;
                     }
                 }
-                catch (System.InvalidOperationException ex)
+                catch (InvalidOperationException ex)
                 {
                     IUIService uiService = (IUIService)GetService(typeof(IUIService));
                     uiService.ShowError(ex.Message);
@@ -1907,7 +1907,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 try
                 {
                     Table.SuspendLayout();
-                    List<Control> deleteList = new();
+                    List<Control> deleteList = [];
 
                     // First fix up any controls in the row/col we are deleting
                     FixUpControlsOnDelete(isRow, index, deleteList);
@@ -1923,7 +1923,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         PropChanging(childProp);
                         foreach (Control control in deleteList)
                         {
-                            List<IComponent> al = new();
+                            List<IComponent> al = [];
                             DesignerUtils.GetAssociatedComponents(control, host, al);
                             foreach (IComponent comp in al)
                             {
@@ -1963,7 +1963,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             bool isRow = (bool)((ToolStripMenuItem)sender).Tag;
             OnRemoveInternal(isRow, isRow ? curRow : curCol);
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException ex)
         {
             IUIService uiService = (IUIService)GetService(typeof(IUIService));
             uiService.ShowError(ex.Message);
@@ -2066,7 +2066,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 }
             }
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException ex)
         {
             IUIService uiService = (IUIService)GetService(typeof(IUIService));
             uiService.ShowError(ex.Message);
@@ -2085,7 +2085,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             EditorServiceContext.EditValue(this, Table, "ColumnStyles");
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException ex)
         {
             IUIService uiService = (IUIService)GetService(typeof(IUIService));
             uiService.ShowError(ex.Message);
@@ -2115,20 +2115,20 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "ColumnStyles",
             "RowStyles",
             "ColumnCount",
             "RowCount"
-        };
+        ];
 
         // VSWhidbey 491088
         // To enable the PropertyGrid to work with the TableLayoutPanel at runtime (when no designer is available),
         // the above properties are marked browsable(false) and re-enabled when a designer is present.
         // Since so much of the logic for keeping the TLP in a valid Row/Column state is designer dependent,
         // these properties are not accessible by the PropertyGrid without a designer.
-        Attribute[] attribs = new Attribute[] { new BrowsableAttribute(true) };
+        Attribute[] attribs = [new BrowsableAttribute(true)];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
@@ -2257,7 +2257,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            List<IComponent> subset = new();
+            List<IComponent> subset = [];
 
             if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
             {

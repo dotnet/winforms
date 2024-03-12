@@ -416,7 +416,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
+    ///  Gets or sets the <see cref="Input.ICommand"/> whose <see cref="Input.ICommand.Execute(object?)"/>
     ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked.
     /// </summary>
     [Bindable(true)]
@@ -431,8 +431,8 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the
-    ///  <see cref="System.Windows.Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
+    ///  Occurs when the <see cref="Input.ICommand.CanExecute(object?)"/> status of the
+    ///  <see cref="Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -444,7 +444,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> of the <see cref="Command"/> property has changed.
+    ///  Occurs when the assigned <see cref="Input.ICommand"/> of the <see cref="Command"/> property has changed.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -456,7 +456,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Gets or sets the parameter that is passed to the <see cref="System.Windows.Input.ICommand"/>
+    ///  Gets or sets the parameter that is passed to the <see cref="Input.ICommand"/>
     ///  which is assigned to the <see cref="Command"/> property.
     /// </summary>
     [Bindable(true)]
@@ -1817,7 +1817,7 @@ public abstract partial class ToolStripItem :
              ParentInternal.LastMouseDownedItem == this));
 
     /// <summary>
-    ///  Occurs when value of the <see cref="ToolStripItem.Selected" /> property changes.
+    ///  Occurs when value of the <see cref="Selected" /> property changes.
     /// </summary>
     /// <remarks>
     ///  This event is raised when item is selected by mouse, keyboard or programmatically.
@@ -1831,7 +1831,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
+    ///  Raises the <see cref="SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
     ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
     /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
@@ -2190,7 +2190,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
     ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
-    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>) or some <see cref="object"/> that implements
     ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
     ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
     ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
@@ -2736,7 +2736,7 @@ public abstract partial class ToolStripItem :
 
             if (parent.IsHandleCreated && parent.InvokeRequired)
             {
-                parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), new object?[] { o, e });
+                parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), [o, e]);
                 return;
             }
 
@@ -2747,7 +2747,7 @@ public abstract partial class ToolStripItem :
     protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
+    ///  Raises the <see cref="CommandChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2755,7 +2755,7 @@ public abstract partial class ToolStripItem :
         => RaiseEvent(s_commandChangedEvent, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
+    ///  Raises the <see cref="CommandCanExecuteChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2763,7 +2763,7 @@ public abstract partial class ToolStripItem :
         => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
+    ///  Raises the <see cref="CommandParameterChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2771,7 +2771,7 @@ public abstract partial class ToolStripItem :
 
     /// <summary>
     ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke
-    ///  <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
+    ///  <see cref="Input.ICommand.Execute(object?)"/> if the context allows.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected virtual void OnRequestCommandExecute(EventArgs e)
@@ -2786,7 +2786,7 @@ public abstract partial class ToolStripItem :
         => OnCommandCanExecuteChanged(e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
+    ///  Raises the <see cref="DragEnter"/> event.
     ///  Inheriting classes should override this method to handle this event.
     ///  Call base.OnEnter to send this event to any registered event listeners.
     /// </summary>

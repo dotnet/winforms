@@ -23,7 +23,7 @@ public partial class ListBox
         /// <param name="owningListBox">The owning ListBox control.</param>
         public ListBoxAccessibleObject(ListBox owningListBox) : base(owningListBox)
         {
-            _itemAccessibleObjects = new Dictionary<ItemArray.Entry, ListBoxItemAccessibleObject>();
+            _itemAccessibleObjects = [];
         }
 
         private protected override bool IsInternal => true;

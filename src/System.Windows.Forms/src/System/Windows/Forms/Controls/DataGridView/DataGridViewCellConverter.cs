@@ -27,7 +27,7 @@ internal class DataGridViewCellConverter : ExpandableObjectConverter
 
         if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCell cell)
         {
-            ConstructorInfo? ctor = cell.GetType().GetConstructor(Array.Empty<Type>());
+            ConstructorInfo? ctor = cell.GetType().GetConstructor([]);
             if (ctor is not null)
             {
                 return new InstanceDescriptor(ctor, Array.Empty<object>(), false);

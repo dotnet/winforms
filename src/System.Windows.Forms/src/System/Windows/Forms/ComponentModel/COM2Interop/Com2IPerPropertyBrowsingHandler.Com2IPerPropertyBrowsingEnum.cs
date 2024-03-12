@@ -64,7 +64,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
 
                 if (hr.Failed)
                 {
-                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                    PopulateArrays([], []);
                     return;
                 }
 
@@ -88,7 +88,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
 
                 if (targetType is null)
                 {
-                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                    PopulateArrays([], []);
                     return;
                 }
 
@@ -147,7 +147,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
             }
             catch (Exception ex)
             {
-                PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                PopulateArrays([], []);
                 Debug.Fail($"Failed to build IPerPropertyBrowsing editor. {ex.GetType().Name}, {ex.Message}");
             }
         }

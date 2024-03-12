@@ -54,7 +54,7 @@ public sealed partial class BinaryEditor
                 }
                 else
                 {
-                    _byteViewer.SetBytes(Array.Empty<byte>());
+                    _byteViewer.SetBytes([]);
                     _byteViewer.Enabled = false;
                 }
             }

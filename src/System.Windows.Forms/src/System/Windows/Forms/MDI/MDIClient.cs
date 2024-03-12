@@ -120,7 +120,7 @@ public sealed partial class MdiClient : Control
     {
         get
         {
-            return _children.ToArray();
+            return [.. _children];
         }
     }
 

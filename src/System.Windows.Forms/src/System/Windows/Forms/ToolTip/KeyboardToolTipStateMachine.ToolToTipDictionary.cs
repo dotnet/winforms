@@ -9,7 +9,7 @@ internal sealed partial class KeyboardToolTipStateMachine
 {
     private sealed class ToolToTipDictionary
     {
-        private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip?>> _table = new();
+        private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip?>> _table = [];
 
         public ToolTip? this[IKeyboardToolTip tool]
         {

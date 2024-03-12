@@ -80,19 +80,23 @@ public abstract class ToolStripRenderer
             {
                 // this is the result of a GreyScale matrix multiplied by a transparency matrix of .5
 
-                float[][] greyscale = new float[5][];
-                greyscale[0] = new float[5] { 0.2125f, 0.2125f, 0.2125f, 0, 0 };
-                greyscale[1] = new float[5] { 0.2577f, 0.2577f, 0.2577f, 0, 0 };
-                greyscale[2] = new float[5] { 0.0361f, 0.0361f, 0.0361f, 0, 0 };
-                greyscale[3] = new float[5] { 0, 0, 0, 1, 0 };
-                greyscale[4] = new float[5] { 0.38f, 0.38f, 0.38f, 0, 1 };
+                float[][] greyscale =
+                [
+                    [0.2125f, 0.2125f, 0.2125f, 0, 0],
+                    [0.2577f, 0.2577f, 0.2577f, 0, 0],
+                    [0.0361f, 0.0361f, 0.0361f, 0, 0],
+                    [0, 0, 0, 1, 0],
+                    [0.38f, 0.38f, 0.38f, 0, 1],
+                ];
 
-                float[][] transparency = new float[5][];
-                transparency[0] = new float[5] { 1, 0, 0, 0, 0 };
-                transparency[1] = new float[5] { 0, 1, 0, 0, 0 };
-                transparency[2] = new float[5] { 0, 0, 1, 0, 0 };
-                transparency[3] = new float[5] { 0, 0, 0, .7F, 0 };
-                transparency[4] = new float[5] { 0, 0, 0, 0, 0 };
+                float[][] transparency =
+                [
+                    [1, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 0, .7F, 0],
+                    [0, 0, 0, 0, 0],
+                ];
 
                 s_disabledImageColorMatrix = ControlPaint.MultiplyColorMatrix(transparency, greyscale);
             }
@@ -638,40 +642,40 @@ public abstract class ToolStripRenderer
             {
                 case ArrowDirection.Up:
 
-                    arrow = new Point[]
-                    {
+                    arrow =
+                    [
                         new(middle.X - Offset2X, middle.Y + 1),
                         new(middle.X + Offset2X + 1, middle.Y + 1),
                         new(middle.X, middle.Y - Offset2Y)
-                    };
+                    ];
 
                     break;
                 case ArrowDirection.Left:
-                    arrow = new Point[]
-                    {
+                    arrow =
+                    [
                         new(middle.X + Offset2X, middle.Y - offset4Y),
                         new(middle.X + Offset2X, middle.Y + offset4Y),
                         new(middle.X - horizontalOffset, middle.Y)
-                    };
+                    ];
 
                     break;
                 case ArrowDirection.Right:
-                    arrow = new Point[]
-                    {
+                    arrow =
+                    [
                         new(middle.X - Offset2X, middle.Y - offset4Y),
                         new(middle.X - Offset2X, middle.Y + offset4Y),
                         new(middle.X + horizontalOffset, middle.Y)
-                    };
+                    ];
 
                     break;
                 case ArrowDirection.Down:
                 default:
-                    arrow = new Point[]
-                    {
+                    arrow =
+                    [
                         new(middle.X - Offset2X, middle.Y - 1),
                         new(middle.X + Offset2X + 1, middle.Y - 1),
                         new(middle.X, middle.Y + Offset2Y)
-                    };
+                    ];
                     break;
             }
 

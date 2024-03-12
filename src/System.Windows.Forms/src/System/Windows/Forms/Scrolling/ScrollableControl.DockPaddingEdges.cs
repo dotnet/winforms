@@ -18,7 +18,7 @@ public partial class ScrollableControl
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(DockPaddingEdges), attributes);
-            return props.Sort(new string[] { "All", "Left", "Top", "Right", "Bottom" });
+            return props.Sort(["All", "Left", "Top", "Right", "Bottom"]);
         }
 
         /// <summary>

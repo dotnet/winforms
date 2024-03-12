@@ -375,7 +375,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 // "local" visibility, not the hierarchy.
                 if (current is not null && current.DesiredVisibility)
                 {
-                    switch (((Control)current).Dock)
+                    switch (current.Dock)
                     {
                         case DockStyle.Bottom:
                             _scrollMargin.Height += current.Size.Height;
@@ -959,7 +959,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Raises the <see cref="System.Windows.Forms.ScrollBar.OnScroll"/> event.
+    ///  Raises the <see cref="ScrollBar.OnScroll"/> event.
     /// </summary>
     protected virtual void OnScroll(ScrollEventArgs se)
     {
@@ -1142,7 +1142,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollPosition"/> property should
+    ///  Indicates whether the <see cref="AutoScrollPosition"/> property should
     ///  be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollPosition()
@@ -1160,12 +1160,12 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMargin"/> property should be persisted.
+    ///  Indicates whether the <see cref="AutoScrollMargin"/> property should be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollMargin() => !AutoScrollMargin.Equals(Size.Empty);
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMinSize"/>
+    ///  Indicates whether the <see cref="AutoScrollMinSize"/>
     ///  property should be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollMinSize() => !AutoScrollMinSize.Equals(Size.Empty);

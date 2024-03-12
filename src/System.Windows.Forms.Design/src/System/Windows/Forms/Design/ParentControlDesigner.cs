@@ -860,7 +860,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     internal List<Control> GetComponentsInRect(Rectangle value, bool screenCoords, bool containRect)
     {
-        List<Control> list = new();
+        List<Control> list = [];
         Rectangle rect = screenCoords ? Control.RectangleToClient(value) : value;
 
         IContainer container = Component.Site.Container;

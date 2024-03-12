@@ -26,7 +26,7 @@ internal sealed class ExtenderProviderService : IExtenderProviderService, IExten
             return _providers.ToArray();
         }
 
-        return Array.Empty<IExtenderProvider>();
+        return [];
     }
 
     /// <summary>

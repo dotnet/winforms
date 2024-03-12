@@ -43,7 +43,7 @@ public class ByteViewer : TableLayoutPanel
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
     private int _rowCount = DEFAULT_ROW_COUNT;
-    private byte[] _dataBuf = Array.Empty<byte>();
+    private byte[] _dataBuf = [];
     private int _startLine;
     private int _displayLinesCount;
     private int _linesCount;

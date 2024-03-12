@@ -81,7 +81,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         AllowDrop = true;
         Text = "ComponentTray"; // makes debugging easier
         SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
-        controls = new();
+        controls = [];
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         IExtenderProviderService es = (IExtenderProviderService)GetService(typeof(IExtenderProviderService));
         Debug.Assert(es is not null, "Component tray wants an extender provider service, but there isn't one.");
@@ -179,7 +179,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         {
             fResetAmbient = true;
             ResetTrayControls();
-            BeginInvoke(new AsyncInvokeHandler(Invalidate), new object[] { true });
+            BeginInvoke(new AsyncInvokeHandler(Invalidate), [true]);
         }
     }
 
@@ -210,7 +210,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         {
             fResetAmbient = true;
             ResetTrayControls();
-            BeginInvoke(new AsyncInvokeHandler(Invalidate), new object[] { true });
+            BeginInvoke(new AsyncInvokeHandler(Invalidate), [true]);
         }
     }
 
@@ -1334,12 +1334,12 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             }
             else
             {
-                comps = Array.Empty<IComponent>();
+                comps = [];
             }
 
             if (comps.Length == 0)
             {
-                comps = new IComponent[] { mainDesigner.Component };
+                comps = [mainDesigner.Component];
             }
 
             try
@@ -1361,7 +1361,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
 
     private IComponent[] GetComponentsInRect(Rectangle rect)
     {
-        List<IComponent> list = new();
+        List<IComponent> list = [];
         int controlCount = Controls.Count;
         for (int i = 0; i < controlCount; i++)
         {
@@ -1723,7 +1723,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 Control prevCtl = null;
                 if (controls.Count > 1)
                 {
-                    prevCtl = controls[controls.Count - 1];
+                    prevCtl = controls[^1];
                 }
 
                 PositionInNextAutoSlot(c, prevCtl, true);
@@ -2623,7 +2623,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         /// </summary>
         public GlyphCollection GetGlyphsForComponent(IComponent comp)
         {
-            GlyphCollection glyphs = new();
+            GlyphCollection glyphs = [];
             if (_behaviorSvc is not null && comp is not null)
             {
                 if (_behaviorSvc.DesignerActionUI is not null)

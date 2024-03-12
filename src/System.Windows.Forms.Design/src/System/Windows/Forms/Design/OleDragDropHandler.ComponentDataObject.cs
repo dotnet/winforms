@@ -70,7 +70,7 @@ internal partial class OleDragDropHandler
                     Deserialize(null, false);
                 }
 
-                return (object[]?)_components?.Clone() ?? Array.Empty<object>();
+                return (object[]?)_components?.Clone() ?? [];
             }
         }
 
@@ -99,7 +99,7 @@ internal partial class OleDragDropHandler
             IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
             if (host is not null)
             {
-                List<IComponent> copySelection = new();
+                List<IComponent> copySelection = [];
                 foreach (IComponent comp in selectedComponents)
                 {
                     copySelection.Add(comp);
@@ -196,7 +196,7 @@ internal partial class OleDragDropHandler
         /// </summary>
         public string[] GetFormats()
         {
-            return new string[] { NestedToolboxItemFormat, DataFormat, DataFormats.Serializable, ExtraInfoFormat };
+            return [NestedToolboxItemFormat, DataFormat, DataFormats.Serializable, ExtraInfoFormat];
         }
 
         [MemberNotNull(nameof(_components))]

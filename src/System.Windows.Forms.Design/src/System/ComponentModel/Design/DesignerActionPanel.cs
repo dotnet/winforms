@@ -54,9 +54,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         SetStyle(ControlStyles.UserPaint, true);
 
         _serviceProvider = serviceProvider;
-        _lines = new List<Line>();
-        _lineHeights = new List<int>();
-        _lineYPositions = new List<int>();
+        _lines = [];
+        _lineHeights = [];
+        _lineYPositions = [];
         _toolTip = new ToolTip();
         // Try to get the font from the IUIService, otherwise, use the default
         IUIService? uiService = _serviceProvider.GetService<IUIService>();
@@ -125,8 +125,8 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     ///  Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
     /// </summary>
     public CommandID[] FilteredCommandIDs =>
-        _filteredCommandIDs ??= new CommandID[]
-        {
+        _filteredCommandIDs ??=
+        [
             StandardCommands.Copy,
             StandardCommands.Cut,
             StandardCommands.Delete,
@@ -160,7 +160,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             MenuCommands.KeySelectPrevious,
             MenuCommands.KeyShiftEnd,
             MenuCommands.KeyShiftHome,
-        };
+        ];
 
     /// <summary>
     ///  Gets the Line that currently has input focus.
@@ -210,13 +210,13 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
         if (!categories.TryGetValue(categoryName, out Dictionary<DesignerActionList, List<LineInfo>>? category))
         {
-            category = new Dictionary<DesignerActionList, List<LineInfo>>();
+            category = [];
             categories.Add(categoryName, category);
         }
 
         if (!category.TryGetValue(lineInfo.List, out List<LineInfo>? categoryList))
         {
-            categoryList = new List<LineInfo>();
+            categoryList = [];
             category.Add(lineInfo.List, categoryList);
         }
 
@@ -619,7 +619,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
         }
 
-        List<StandardLineInfo> lineInfos = new();
+        List<StandardLineInfo> lineInfos = [];
 
         if (relatedLists is not null)
         {
@@ -808,15 +808,15 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
 
             // Merge the categories from the lists and create controls for each of the items
-            Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories = new();
+            Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories = [];
             ProcessLists(actionLists, categories);
             ProcessLists(serviceActionLists, categories);
             // Create a flat list of lines w/ separators
-            List<LineInfo> newLines = new List<LineInfo>
-            {
+            List<LineInfo> newLines =
+            [
                 // Always add a special line for the header
                 new PanelHeaderLine.Info(new DesignerActionPanelHeaderItem(title, subtitle))
-            };
+            ];
             int categoriesIndex = 0;
             foreach (Dictionary<DesignerActionList, List<LineInfo>> category in categories.Values)
             {

@@ -171,7 +171,7 @@ public enum AccessibleStates
     ///  or <see cref="AccessibleSelection.RemoveSelection"/>. This flag does
     ///  not change the focus or the selection anchor unless it is combined with
     /// <see cref="AccessibleSelection.TakeFocus"/>. The behavior of
-    /// <see cref="AccessibleStates.ExtSelectable"/>|<see cref="AccessibleSelection.TakeFocus"/>
+    /// <see cref="ExtSelectable"/>|<see cref="AccessibleSelection.TakeFocus"/>
     ///  is equivalent to adding an item to a selection manually by holding down
     ///  the SHIFT key and clicking an unselected object.
     ///  This flag may not be combined with <see cref="AccessibleSelection.TakeSelection"/>.
