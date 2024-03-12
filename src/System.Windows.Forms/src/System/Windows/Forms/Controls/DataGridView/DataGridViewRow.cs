@@ -1612,7 +1612,7 @@ public partial class DataGridViewRow : DataGridViewBand
                     graphics.SetClip(rowRect);
                 }
 
-                dataGridViewColumn = (DataGridViewColumn)dataGridView.Columns[dataGridView.FirstDisplayedScrollingColumnIndex];
+                dataGridViewColumn = dataGridView.Columns[dataGridView.FirstDisplayedScrollingColumnIndex];
                 Debug.Assert(dataGridViewColumn.Visible && !dataGridViewColumn.Frozen);
 
                 while (dataGridViewColumn is not null)

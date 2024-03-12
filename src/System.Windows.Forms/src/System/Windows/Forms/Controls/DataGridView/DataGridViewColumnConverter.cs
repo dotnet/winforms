@@ -39,7 +39,7 @@ internal class DataGridViewColumnConverter : ExpandableObjectConverter
             //
             if (dataGridViewColumn.CellType is not null)
             {
-                ctor = dataGridViewColumn.GetType().GetConstructor(new Type[] { typeof(Type) });
+                ctor = dataGridViewColumn.GetType().GetConstructor([typeof(Type)]);
                 if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, new object[] { dataGridViewColumn.CellType }, false);
@@ -48,7 +48,7 @@ internal class DataGridViewColumnConverter : ExpandableObjectConverter
 
             // public DataGridViewColumn()
             //
-            ctor = dataGridViewColumn.GetType().GetConstructor(Array.Empty<Type>());
+            ctor = dataGridViewColumn.GetType().GetConstructor([]);
             if (ctor is not null)
             {
                 return new InstanceDescriptor(ctor, Array.Empty<object>(), false);

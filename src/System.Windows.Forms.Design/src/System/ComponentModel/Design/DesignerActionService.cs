@@ -37,8 +37,8 @@ public class DesignerActionService : IDisposable
             _selectionService = serviceProvider.GetService<ISelectionService>();
         }
 
-        _designerActionLists = new();
-        _componentToVerbsEventHookedUp = new();
+        _designerActionLists = [];
+        _componentToVerbsEventHookedUp = [];
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public class DesignerActionService : IDisposable
     /// </summary>
     public void Add(IComponent comp, DesignerActionList actionList)
     {
-        Add(comp, new DesignerActionListCollection(new[] { actionList }));
+        Add(comp, new DesignerActionListCollection([actionList]));
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class DesignerActionService : IDisposable
     {
         ArgumentNullException.ThrowIfNull(component);
 
-        DesignerActionListCollection result = new();
+        DesignerActionListCollection result = [];
         switch (type)
         {
             case ComponentActionsType.All:
@@ -180,7 +180,7 @@ public class DesignerActionService : IDisposable
                 DesignerVerbCollection? verbs = designerCommandSet.Verbs;
                 if (verbs is not null && verbs.Count != 0)
                 {
-                    List<DesignerVerb> verbsArray = new();
+                    List<DesignerVerb> verbsArray = [];
                     bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
 
                     foreach (DesignerVerb verb in verbs)

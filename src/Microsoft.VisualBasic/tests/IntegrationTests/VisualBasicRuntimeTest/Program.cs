@@ -107,7 +107,7 @@ internal static class Program
             }
         };
 
-        application.Run(Array.Empty<string>());
+        application.Run([]);
 
         if (startUpNextInstance)
         {

@@ -62,7 +62,7 @@ public class ApplicationBaseTests
 
     private static (string, string)[] GetEnvironmentVariables()
     {
-        List<(string, string)> pairs = new();
+        List<(string, string)> pairs = [];
         var vars = Environment.GetEnvironmentVariables();
         foreach (string key in vars.Keys)
         {

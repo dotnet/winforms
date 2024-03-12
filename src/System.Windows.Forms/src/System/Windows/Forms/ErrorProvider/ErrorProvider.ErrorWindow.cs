@@ -19,7 +19,7 @@ public partial class ErrorProvider
     internal partial class ErrorWindow : NativeWindow
     {
         private AccessibleObject? _accessibleObject;
-        private readonly List<ControlItem> _items = new();
+        private readonly List<ControlItem> _items = [];
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
         private Rectangle _windowBounds;

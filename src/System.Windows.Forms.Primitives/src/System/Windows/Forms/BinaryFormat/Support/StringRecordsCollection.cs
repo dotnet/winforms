@@ -9,8 +9,8 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal class StringRecordsCollection
 {
-    private readonly Dictionary<string, int> _strings = new();
-    private readonly Dictionary<int, MemberReference> _memberReferences = new();
+    private readonly Dictionary<string, int> _strings = [];
+    private readonly Dictionary<int, MemberReference> _memberReferences = [];
 
     public int CurrentId { get; set; }
 

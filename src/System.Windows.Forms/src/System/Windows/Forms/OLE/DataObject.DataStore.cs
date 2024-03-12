@@ -230,7 +230,7 @@ public partial class DataObject
                     }
                 }
 
-                baseVar = distinctFormats.ToArray();
+                baseVar = [.. distinctFormats];
             }
 
             CompModSwitches.DataObject.TraceVerbose($"DataStore: returning {baseVar.Length} formats from GetFormats");

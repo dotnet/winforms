@@ -10,16 +10,16 @@ namespace System.ComponentModel.Design.Serialization;
 internal class ComponentCodeDomSerializer : CodeDomSerializer
 {
     private Type[]? _containerConstructor;
-    private static readonly Attribute[] _runTimeFilter = { DesignOnlyAttribute.No };
-    private static readonly Attribute[] _designTimeFilter = { DesignOnlyAttribute.Yes };
+    private static readonly Attribute[] _runTimeFilter = [DesignOnlyAttribute.No];
+    private static readonly Attribute[] _designTimeFilter = [DesignOnlyAttribute.Yes];
     private static WeakReference<ComponentCodeDomSerializer>? s_defaultSerializerRef;
 
     private Type[] GetContainerConstructor(IDesignerSerializationManager manager)
     {
-        _containerConstructor ??= new Type[]
-            {
+        _containerConstructor ??=
+            [
                 GetReflectionTypeFromTypeHelper(manager, typeof(IContainer))
-            };
+            ];
 
         return _containerConstructor;
     }
@@ -141,7 +141,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                 //      a) Inherited or existing expression: no
                 //      b) otherwise, yes.
 
-                statements = new CodeStatementCollection();
+                statements = [];
                 RootContext? rootCtx = manager.GetContext<RootContext>();
 
                 // Defaults for components
@@ -416,7 +416,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             }
                             else
                             {
-                                entry.Statements = new CodeStatementCollection();
+                                entry.Statements = [];
                             }
 
                             entry.Component = value;

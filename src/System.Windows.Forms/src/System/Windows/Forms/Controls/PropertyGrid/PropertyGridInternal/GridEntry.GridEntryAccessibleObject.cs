@@ -288,7 +288,7 @@ internal abstract partial class GridEntry
             // Make sure we're on the right thread.
             if (PropertyGridView.InvokeRequired)
             {
-                PropertyGridView.Invoke(new SelectDelegate(Select), new object[] { flags });
+                PropertyGridView.Invoke(new SelectDelegate(Select), [flags]);
                 return;
             }
 

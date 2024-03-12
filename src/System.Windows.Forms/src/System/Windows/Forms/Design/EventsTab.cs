@@ -119,7 +119,7 @@ public class EventsTab : PropertyTab
 
         if (attributes is null)
         {
-            specifiedAttributesPlusContent = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
+            specifiedAttributesPlusContent = [DesignerSerializationVisibilityAttribute.Content];
         }
         else
         {
@@ -150,7 +150,7 @@ public class EventsTab : PropertyTab
             EventDescriptorCollection propertyEvents = TypeDescriptor.GetEvents(value!, attributes!);
             if (propertyEvents.Count > 0)
             {
-                matchingPropertyEvents ??= new();
+                matchingPropertyEvents ??= [];
 
                 // Make the matching property non-mergable.
                 matchingPropertyEvents.Add(TypeDescriptor.CreateProperty(property.ComponentType, property, MergablePropertyAttribute.No));

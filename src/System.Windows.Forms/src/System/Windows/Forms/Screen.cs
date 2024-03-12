@@ -105,18 +105,18 @@ public partial class Screen
             {
                 if (SystemInformation.MultiMonitorSupport)
                 {
-                    List<Screen> screens = new();
+                    List<Screen> screens = [];
                     PInvoke.EnumDisplayMonitors((HMONITOR hmonitor, HDC hdc) =>
                     {
                         screens.Add(new(hmonitor, hdc));
                         return true;
                     });
 
-                    s_screens = screens.Count > 0 ? screens.ToArray() : new Screen[] { new(PRIMARY_MONITOR) };
+                    s_screens = screens.Count > 0 ? [.. screens] : [new(PRIMARY_MONITOR)];
                 }
                 else
                 {
-                    s_screens = new Screen[] { PrimaryScreen! };
+                    s_screens = [PrimaryScreen!];
                 }
 
                 // Now that we have our screens, attach a display setting changed

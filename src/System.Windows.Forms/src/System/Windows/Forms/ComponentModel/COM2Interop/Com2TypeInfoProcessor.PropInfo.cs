@@ -19,7 +19,7 @@ internal static partial class Com2TypeInfoProcessor
 
         public Type? ValueType { get; set; }
 
-        public List<Attribute> Attributes { get; } = new();
+        public List<Attribute> Attributes { get; } = [];
 
         public int ReadOnly { get; set; } = ReadOnlyUnknown;
 

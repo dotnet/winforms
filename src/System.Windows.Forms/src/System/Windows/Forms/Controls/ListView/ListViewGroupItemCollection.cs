@@ -17,7 +17,7 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
 
     public int Count => Items.Count;
 
-    private List<ListViewItem> Items => _items ??= new List<ListViewItem>();
+    private List<ListViewItem> Items => _items ??= [];
 
     public bool OwnerIsVirtualListView => _group.ListView is not null && _group.ListView.VirtualMode;
 

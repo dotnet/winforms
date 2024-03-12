@@ -306,7 +306,7 @@ public class BitmapTests
 
         if (sRslt.Length > 0)
         {
-            if (sRslt[sRslt.Length - 1] != '\\' && sRslt[sRslt.Length - 1] != '/')
+            if (sRslt[^1] != '\\' && sRslt[^1] != '/')
             {
                 sRslt += "/";
             }

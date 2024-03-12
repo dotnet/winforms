@@ -295,8 +295,8 @@ public partial class ComponentEditorForm : Form
         AcceptButton = _okButton;
 
         Controls.Clear();
-        Controls.AddRange(new Control[]
-        {
+        Controls.AddRange(
+        [
             _selector,
             grayStrip,
             _pageHost,
@@ -304,7 +304,7 @@ public partial class ComponentEditorForm : Form
             _cancelButton,
             _applyButton,
             _helpButton
-        });
+        ]);
 
         // continuing with the old autoscale base size stuff, it works,
         // and is currently set to a non-standard height

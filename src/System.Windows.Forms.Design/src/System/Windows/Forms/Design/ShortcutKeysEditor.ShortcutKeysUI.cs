@@ -17,7 +17,7 @@ public partial class ShortcutKeysEditor
         ///  Array of keys that are present in the drop down list of the combo box.
         /// </summary>
         private static readonly Keys[] s_validKeys =
-        {
+        [
             Keys.A, Keys.B, Keys.C, Keys.D, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7,
             Keys.D8, Keys.D9, Keys.Delete, Keys.Down, Keys.E, Keys.End, Keys.F, Keys.F1, Keys.F10, Keys.F11,
             Keys.F12, Keys.F13, Keys.F14, Keys.F15, Keys.F16, Keys.F17, Keys.F18, Keys.F19, Keys.F2, Keys.F20,
@@ -28,7 +28,7 @@ public partial class ShortcutKeysEditor
             Keys.Oemcomma, Keys.OemMinus, Keys.OemOpenBrackets, Keys.OemPeriod, Keys.OemPipe, Keys.Oemplus,
             Keys.OemQuestion, Keys.OemQuotes, Keys.OemSemicolon, Keys.Oemtilde, Keys.P, Keys.Pause, Keys.Q, Keys.R,
             Keys.Right, Keys.S, Keys.Space, Keys.T, Keys.Tab, Keys.U, Keys.Up, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
-        };
+        ];
 
         private Button _resetButton;
         private CheckBox _altCheckBox;
@@ -213,7 +213,7 @@ public partial class ShortcutKeysEditor
             _resetButton.Click += OnResetButtonClick;
 
             resources.ApplyResources(this, "$this");
-            Controls.AddRange(new Control[] { _innerPanel, _outerPanel });
+            Controls.AddRange([_innerPanel, _outerPanel]);
             Name = "ShortcutKeysUI";
             Padding = new Padding(4);
 

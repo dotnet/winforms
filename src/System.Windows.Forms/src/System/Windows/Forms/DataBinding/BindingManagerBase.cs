@@ -113,7 +113,7 @@ public abstract class BindingManagerBase
             {
                 if (property.Name == "Item" && property.PropertyType != typeof(object))
                 {
-                    return TypeDescriptor.GetProperties(property.PropertyType, new Attribute[] { new BrowsableAttribute(true) });
+                    return TypeDescriptor.GetProperties(property.PropertyType, [new BrowsableAttribute(true)]);
                 }
             }
 
@@ -134,7 +134,7 @@ public abstract class BindingManagerBase
                 if (property.Name == "Item" && property.PropertyType != typeof(object))
                 {
                     // get all the properties that are not marked as Browsable(false)
-                    itemProps = TypeDescriptor.GetProperties(property.PropertyType, new Attribute[] { new BrowsableAttribute(true) });
+                    itemProps = TypeDescriptor.GetProperties(property.PropertyType, [new BrowsableAttribute(true)]);
                 }
             }
 

@@ -567,7 +567,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // Proceed with the drag and drop, passing in the list item.
                 try
                 {
-                    List<ToolStripItem> dragItems = new();
+                    List<ToolStripItem> dragItems = [];
                     ICollection selComps = selSvc.GetSelectedComponents();
                     // create our list of controls-to-drag
                     foreach (IComponent comp in selComps)

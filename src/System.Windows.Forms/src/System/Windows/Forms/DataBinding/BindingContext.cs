@@ -20,7 +20,7 @@ public partial class BindingContext : ICollection
     /// </summary>
     public BindingContext()
     {
-        _listManagers = new();
+        _listManagers = [];
     }
 
     /// <summary>
@@ -324,7 +324,7 @@ public partial class BindingContext : ICollection
         {
             if (de.Value.Target is null)
             {
-                cleanupList ??= new();
+                cleanupList ??= [];
 
                 cleanupList.Add(de.Key);
             }

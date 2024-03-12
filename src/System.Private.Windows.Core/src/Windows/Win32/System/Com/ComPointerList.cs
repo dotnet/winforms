@@ -13,7 +13,7 @@ namespace Windows.Win32.Foundation;
 /// </remarks>
 internal unsafe class ComPointerList<T> where T : unmanaged, IComIID
 {
-    private readonly List<nint> _pointers = new();
+    private readonly List<nint> _pointers = [];
 
     public int Count => _pointers.Count;
 

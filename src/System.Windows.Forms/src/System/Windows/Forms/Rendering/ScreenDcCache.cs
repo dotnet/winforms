@@ -54,7 +54,7 @@ internal sealed partial class ScreenDcCache : IDisposable
         }
 
         // Didn't find anything in the cache, create a new HDC
-        return new ScreenDcScope(this, PInvokeCore.CreateCompatibleDC((HDC)default));
+        return new ScreenDcScope(this, PInvokeCore.CreateCompatibleDC(default));
     }
 
     /// <summary>

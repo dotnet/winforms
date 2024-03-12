@@ -102,8 +102,8 @@ public class TaskDialogPage
     /// </summary>
     public TaskDialogPage()
     {
-        _buttons = new TaskDialogButtonCollection();
-        _radioButtons = new TaskDialogRadioButtonCollection();
+        _buttons = [];
+        _radioButtons = [];
 
         // Create empty (hidden) controls.
         _checkBox = new TaskDialogVerificationCheckBox();
@@ -372,7 +372,7 @@ public class TaskDialogPage
     /// <para>
     ///   This property can be set while the dialog is shown, however, it
     ///   cannot be switched between instances created from an
-    ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
+    ///   <see cref="Drawing.Icon"/> (or from a handle pointer)
     ///   and standard icon instances.
     /// </para>
     /// </remarks>

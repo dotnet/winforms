@@ -34,7 +34,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// <summary>
         ///  Internal access to the actual data store.
         /// </summary>
-        internal List<object> InnerArray => _items ??= new List<object>();
+        internal List<object> InnerArray => _items ??= [];
 
         object ICollection.SyncRoot => ((ICollection)InnerArray).SyncRoot;
 

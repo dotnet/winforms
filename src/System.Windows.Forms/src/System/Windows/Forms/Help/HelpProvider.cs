@@ -17,11 +17,11 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionHelpProvider))]
 public class HelpProvider : Component, IExtenderProvider
 {
-    private readonly Dictionary<Control, string?> _helpStrings = new();
-    private readonly Dictionary<Control, bool> _showHelp = new();
-    private readonly List<Control> _boundControls = new();
-    private readonly Dictionary<Control, string?> _keywords = new();
-    private readonly Dictionary<Control, HelpNavigator> _navigators = new();
+    private readonly Dictionary<Control, string?> _helpStrings = [];
+    private readonly Dictionary<Control, bool> _showHelp = [];
+    private readonly List<Control> _boundControls = [];
+    private readonly Dictionary<Control, string?> _keywords = [];
+    private readonly Dictionary<Control, HelpNavigator> _navigators = [];
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="HelpProvider"/> class.

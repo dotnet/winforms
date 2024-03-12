@@ -146,7 +146,7 @@ public unsafe class WebBrowserSiteBase :
         Message msg = *pMsg;
         try
         {
-            bool f = ((Control)Host).PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
+            bool f = Host.PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;
             return f ? HRESULT.S_OK : HRESULT.S_FALSE;
         }
         finally

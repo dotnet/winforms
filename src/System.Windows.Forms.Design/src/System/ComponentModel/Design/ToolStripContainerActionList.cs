@@ -298,8 +298,8 @@ internal class ToolStripContainerActionList : DesignerActionList
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection
-        {
+        DesignerActionItemCollection items =
+        [
             new DesignerActionHeaderItem(SR.ToolStripContainerActionList_Visible, SR.ToolStripContainerActionList_Show),
             new DesignerActionPropertyItem(nameof(TopVisible),
                                            SR.ToolStripContainerActionList_Top,
@@ -320,7 +320,7 @@ internal class ToolStripContainerActionList : DesignerActionList
                                            SR.ToolStripContainerActionList_Right,
                                            SR.ToolStripContainerActionList_Show,
                                            SR.ToolStripContainerActionList_RightDesc)
-        };
+        ];
 
         if (!IsDockFilled)
         {

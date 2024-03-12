@@ -149,14 +149,14 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             if (!GetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes))
             {
                 Debug.Assert(_baseAttributes is not null);
-                return _baseAttributes ??= Array.Empty<Attribute>();
+                return _baseAttributes ??= [];
             }
 
             SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, false);
 
             int baseCount = _baseAttributes is null ? 0 : _baseAttributes.Length;
 
-            List<Attribute> attributes = new();
+            List<Attribute> attributes = [];
 
             if (_baseAttributes is not null)
             {
@@ -176,7 +176,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             }
             else
             {
-                _baseAttributes = Array.Empty<Attribute>();
+                _baseAttributes = [];
             }
 
             return _baseAttributes;
@@ -226,7 +226,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             try
             {
                 // Demand get any extended attributes
-                List<Attribute> attributeList = new();
+                List<Attribute> attributeList = [];
 
                 OnGetDynamicAttributes(new GetAttributesEvent(attributeList));
 

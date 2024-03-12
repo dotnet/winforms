@@ -144,8 +144,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     // These should be in the order given by the PROPCAT_X values
     // Also, note that they are not to be localized...
 
-    private static readonly CategoryAttribute?[] s_categoryNames = new CategoryAttribute?[]
-    {
+    private static readonly CategoryAttribute?[] s_categoryNames =
+    [
         null,
         new WinCategoryAttribute("Default"),
         new WinCategoryAttribute("Default"),
@@ -158,7 +158,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         new WinCategoryAttribute("Text"),
         new WinCategoryAttribute("Scale"),
         new WinCategoryAttribute("DDE")
-    };
+    ];
 
     private Dictionary<PROPCAT, CategoryAttribute>? _objectDefinedCategoryNames;
 
@@ -2390,7 +2390,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (hr.Succeeded && !name.IsNull)
         {
             category = new CategoryAttribute(name.ToString());
-            _objectDefinedCategoryNames ??= new();
+            _objectDefinedCategoryNames ??= [];
             _objectDefinedCategoryNames[propcat] = category;
             return category;
         }
@@ -2599,12 +2599,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
         }
 
-        List<PropertyDescriptor> returnProperties = new();
-        _properties ??= new Dictionary<string, PropertyDescriptor>();
+        List<PropertyDescriptor> returnProperties = [];
+        _properties ??= [];
 
         if (_propertyInfos is null)
         {
-            _propertyInfos = new Dictionary<string, PropertyInfo>();
+            _propertyInfos = [];
 
             PropertyInfo[] propInfos = GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
@@ -2692,7 +2692,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                             && prop.TryGetAttribute(out BrowsableAttribute? browsableAttribute)
                             && !browsableAttribute.Equals(browse))
                         {
-                            removeList ??= new();
+                            removeList ??= [];
                             removeList.Add(prop);
                         }
                     }
@@ -2709,7 +2709,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         // Update our stashed values.
-        _propsStash = new PropertyDescriptorCollection(returnProperties.ToArray());
+        _propsStash = new PropertyDescriptorCollection([.. returnProperties]);
         _attribsStash = attributes;
 
         return _propsStash;
@@ -3631,7 +3631,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         if (s_fontTable is null)
         {
-            s_fontTable = new();
+            s_fontTable = [];
         }
         else if (s_fontTable.TryGetValue(font, out object? cachedFDesc))
         {

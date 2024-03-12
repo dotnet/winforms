@@ -238,7 +238,7 @@ public class ResXResourceWriter : IResourceWriter
         _xmlTextWriter.WriteEndElement();
     }
 
-    private XmlWriter Writer
+    private XmlTextWriter Writer
     {
         get
         {
@@ -253,7 +253,7 @@ public class ResXResourceWriter : IResourceWriter
     public virtual void AddAlias(string? aliasName, AssemblyName assemblyName)
     {
         ArgumentNullException.ThrowIfNull(assemblyName);
-        _cachedAliases ??= new();
+        _cachedAliases ??= [];
         _cachedAliases[assemblyName.FullName] = aliasName;
     }
 
@@ -497,7 +497,7 @@ public class ResXResourceWriter : IResourceWriter
 
     private string? GetAliasFromName(AssemblyName assemblyName)
     {
-        _cachedAliases ??= new();
+        _cachedAliases ??= [];
         if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string? alias) || string.IsNullOrEmpty(alias))
         {
             alias = assemblyName.Name;

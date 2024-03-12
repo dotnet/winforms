@@ -64,11 +64,7 @@ public class DesignerActionList
             items.Add(dispName, new DesignerActionPropertyItem(info.Name, dispName, cat, desc));
         }
 
-        DesignerActionItemCollection returnValue = new();
-        foreach (DesignerActionItem dai in items.Values)
-        {
-            returnValue.Add(dai);
-        }
+        DesignerActionItemCollection returnValue = [.. items.Values];
 
         return returnValue;
     }

@@ -83,7 +83,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         InvalidateCachedRowCounts();
         InvalidateCachedRowsHeights();
         _dataGridView = dataGridView;
-        _rowStates = new List<DataGridViewElementStates>();
+        _rowStates = [];
         _items = new RowList(this);
     }
 
@@ -793,7 +793,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         {
             if (DataGridView.DataConnection!.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
             {
-                ((IList)list).Clear();
+                list.Clear();
             }
             else
             {
@@ -1267,7 +1267,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += _items[rowIndex].GetHeight(rowIndex);
             }
         }
 
@@ -1295,7 +1295,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += _items[rowIndex].GetHeight(rowIndex);
             }
         }
 
@@ -1313,7 +1313,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += _items[rowIndex].GetHeight(rowIndex);
                 if (rowsHeight > heightLimit)
                 {
                     return true;

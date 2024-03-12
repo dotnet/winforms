@@ -16,7 +16,7 @@ public abstract unsafe partial class AxHost
     {
         private readonly Hashtable _bag;
 
-        internal PropertyBagStream() => _bag = new();
+        internal PropertyBagStream() => _bag = [];
 
         internal PropertyBagStream(Stream stream)
         {
@@ -49,7 +49,7 @@ public abstract unsafe partial class AxHost
 #pragma warning restore SYSLIB0011
 
                 // Error reading. Just init an empty hashtable.
-                _bag = new();
+                _bag = [];
             }
         }
 

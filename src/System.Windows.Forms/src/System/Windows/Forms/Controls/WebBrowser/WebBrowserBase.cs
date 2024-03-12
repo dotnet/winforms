@@ -337,7 +337,7 @@ public unsafe partial class WebBrowserBase : Control
             MSG msg = new()
             {
                 hwnd = HWND.Null,
-                message = (uint)PInvoke.WM_SYSKEYDOWN,
+                message = PInvoke.WM_SYSKEYDOWN,
                 wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                 lParam = 0x20180001,
                 time = PInvoke.GetTickCount()

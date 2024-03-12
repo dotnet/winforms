@@ -84,8 +84,8 @@ public partial class ResXFileRef
 
             string[] parts = remainingString.Split(';');
             result = parts.Length > 1
-                ? (new string[] { fileName, parts[0], parts[1] })
-                : parts.Length > 0 ? (new string[] { fileName, parts[0] }) : (new string[] { fileName });
+                ? ([fileName, parts[0], parts[1]])
+                : parts.Length > 0 ? ([fileName, parts[0]]) : ([fileName]);
 
             return result;
         }
@@ -154,7 +154,7 @@ public partial class ResXFileRef
                     toCreate,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
                     null,
-                    new object[] { memoryStream },
+                    [memoryStream],
                     null);
         }
     }

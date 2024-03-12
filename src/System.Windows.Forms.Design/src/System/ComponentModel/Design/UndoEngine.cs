@@ -426,9 +426,9 @@ public abstract partial class UndoEngine : IDisposable
                         {
                             if (propsToUpdate is null)
                             {
-                                propsToUpdate = new List<ReferencingComponent>();
+                                propsToUpdate = [];
 
-                                _refToRemovedComponent ??= new Dictionary<IComponent, List<ReferencingComponent>>();
+                                _refToRemovedComponent ??= [];
 
                                 _refToRemovedComponent[e.Component] = propsToUpdate;
                             }

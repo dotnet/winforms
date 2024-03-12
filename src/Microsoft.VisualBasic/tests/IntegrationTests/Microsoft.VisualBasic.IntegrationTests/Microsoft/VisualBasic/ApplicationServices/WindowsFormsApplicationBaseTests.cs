@@ -35,6 +35,6 @@ public class WindowsFormsApplicationBaseTests
     {
         WindowsFormsApplicationBase application = new();
         // Exception.ToString() called to verify message is constructed successfully.
-        _ = Assert.Throws<NoStartupFormException>(() => application.Run(Array.Empty<string>())).ToString();
+        _ = Assert.Throws<NoStartupFormException>(() => application.Run([])).ToString();
     }
 }

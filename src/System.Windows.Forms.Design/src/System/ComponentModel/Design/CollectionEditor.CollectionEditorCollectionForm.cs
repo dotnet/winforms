@@ -126,7 +126,7 @@ public partial class CollectionEditor
         /// </summary>
         private void AddItems(IList instances)
         {
-            _createdItems ??= new List<object>();
+            _createdItems ??= [];
 
             _listBox.BeginUpdate();
             try
@@ -150,7 +150,7 @@ public partial class CollectionEditor
             if (instances.Count == 1)
             {
                 // optimize for the case where we just added one thing...
-                UpdateItemWidths(_listBox.Items[_listBox.Items.Count - 1] as ListItem);
+                UpdateItemWidths(_listBox.Items[^1] as ListItem);
             }
             else
             {
@@ -277,7 +277,7 @@ public partial class CollectionEditor
                 }
                 else
                 {
-                    Items = Array.Empty<object>();
+                    Items = [];
                 }
             }
             catch (Exception ex)
@@ -743,7 +743,7 @@ public partial class CollectionEditor
             }
 
             // Remember these contents for cancellation
-            _originalItems ??= new List<object>();
+            _originalItems ??= [];
 
             _originalItems.Clear();
 
@@ -891,7 +891,7 @@ public partial class CollectionEditor
                     {
                         if (CanRemoveInstance(item.Value))
                         {
-                            _removedItems ??= new List<object>();
+                            _removedItems ??= [];
 
                             _removedItems.Add(item.Value);
                             _listBox.Items.Remove(item);
@@ -1049,7 +1049,7 @@ public partial class CollectionEditor
                 // otherwise, the user will be presented with a batch of read only properties, which isn't terribly useful.
                 if (IsImmutable)
                 {
-                    items = new object[] { new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems) };
+                    items = [new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems)];
                 }
                 else
                 {
@@ -1129,13 +1129,13 @@ public partial class CollectionEditor
             private object? _value;
 
             public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection)
-                : base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
+                : base("Value", [new CategoryAttribute(collectionItemType.Name)])
             {
                 ComponentType = collectionType;
                 PropertyType = collectionItemType;
                 _control = control;
                 _collection = collection;
-                _properties = new PropertyDescriptorCollection(new PropertyDescriptor[] { this });
+                _properties = new PropertyDescriptorCollection([this]);
 
                 Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                 _value = this;

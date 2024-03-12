@@ -15,7 +15,7 @@ namespace System.Windows.Forms;
 public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 {
     private static readonly int[] borderStyleToOffset =
-    {
+    [
         /*None = */ 0,
         /*Single = */ 1,
         /*Inset = */ 2,
@@ -23,7 +23,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         /*Outset = */ 2,
         /*OutsetDouble = */ 3,
         /*OutsetPartial = */ 3
-    };
+    ];
     private TableLayoutPanelCellBorderStyle _borderStyle;
     private TableLayoutSettingsStub? _stub;
 

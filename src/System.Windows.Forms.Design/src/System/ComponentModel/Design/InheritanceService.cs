@@ -24,7 +24,7 @@ public class InheritanceService : IInheritanceService, IDisposable
     /// </summary>
     public InheritanceService()
     {
-        _inheritedComponents = new();
+        _inheritedComponents = [];
     }
 
     /// <summary>

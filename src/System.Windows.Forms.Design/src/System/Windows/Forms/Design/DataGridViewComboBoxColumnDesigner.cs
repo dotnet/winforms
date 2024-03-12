@@ -103,13 +103,13 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
         PropertyDescriptor? property = (PropertyDescriptor?)properties["ValueMember"];
         if (property is not null)
         {
-            properties["ValueMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, Array.Empty<Attribute>());
+            properties["ValueMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, []);
         }
 
         property = (PropertyDescriptor?)properties["DisplayMember"];
         if (property is not null)
         {
-            properties["DisplayMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, Array.Empty<Attribute>());
+            properties["DisplayMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, []);
         }
     }
 }
