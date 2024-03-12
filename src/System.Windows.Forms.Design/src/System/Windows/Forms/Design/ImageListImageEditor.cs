@@ -96,7 +96,7 @@ public class ImageListImageEditor : ImageEditor
     /// </summary>
     public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
-    private static ImageListImage LoadImageFromStream(FileStream stream, bool imageIsIcon)
+    private static ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
     {
         // Copy the original stream to a buffer, then wrap a memory stream around it to avoid locking the file.
         byte[] buffer = new byte[stream.Length];
