@@ -90,6 +90,6 @@ public class TextBoxRendererTests
         Rectangle bounds = new Rectangle(10, 20, 30, 40);
         Rectangle textBounds = new Rectangle(10, 20, 30, 40);
 
-        TextBoxRenderer.DrawTextBox(graphics, bounds, "text", SystemFonts.DefaultFont, textBounds, TextFormatFlags.TextBoxControl, state);
+        TextBoxRenderer.DrawTextBox(graphics, bounds, "text", SystemFonts.DefaultFont, textBounds, flag, state);
     }
 }
