@@ -16,7 +16,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
                                          // forward [de]activation messages to the requisite container...
     private WebBrowserBase? siteUIActive;
     private WebBrowserBase? siteActive;
-    private readonly HashSet<Control> containerCache = new();
+    private readonly HashSet<Control> containerCache = [];
     private HashSet<Control>? components;
     private WebBrowserBase? _controlInEditMode;
 
@@ -49,7 +49,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
         {
             Debug.Assert(parent is not null);
-            List<object> list = new();
+            List<object> list = [];
             ListAXControls(list, true);
             if (list.Count > 0)
             {
@@ -212,7 +212,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             ComponentCollection comps = container.Components;
             if (comps is not null)
             {
-                components = new();
+                components = [];
                 foreach (IComponent comp in comps)
                 {
                     if (comp is Control ctrl && comp != parent && comp.Site is not null)
@@ -228,12 +228,12 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         Debug.Assert(parent.Site is null, "Parent is sited but we could not find IContainer!!!");
 
         bool checkHashSet = true;
-        Control[] ctls = containerCache.ToArray();
+        Control[] ctls = [.. containerCache];
         if (ctls is not null)
         {
             if (ctls.Length > 0 && components is null)
             {
-                components = new();
+                components = [];
                 checkHashSet = false;
             }
 
@@ -256,7 +256,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             return;
         }
 
-        components ??= new();
+        components ??= [];
 
         if (ctl != parent && !components.Contains(ctl))
         {

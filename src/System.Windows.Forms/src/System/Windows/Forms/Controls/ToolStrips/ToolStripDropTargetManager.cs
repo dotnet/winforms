@@ -93,13 +93,13 @@ internal class ToolStripDropTargetManager : IDropTarget
                 // the item wants this event
                 DragDropDebug.TraceVerbose($"ToolStripItem taking this: {item}");
 
-                _lastDropTarget = ((IDropTarget)item);
+                _lastDropTarget = item;
             }
             else if (_owner.AllowDrop)
             {
                 // the ToolStrip wants this event
                 DragDropDebug.TraceVerbose("ToolStrip taking this because AllowDrop set to true.");
-                _lastDropTarget = ((IDropTarget)_owner);
+                _lastDropTarget = _owner;
             }
             else
             {
@@ -148,13 +148,13 @@ internal class ToolStripDropTargetManager : IDropTarget
             {
                 // the item wants this event
                 DragDropDebug.TraceVerbose($"ToolStripItem taking this: {item}");
-                newDropTarget = ((IDropTarget)item);
+                newDropTarget = item;
             }
             else if (_owner.AllowDrop)
             {
                 // the ToolStrip wants this event
                 DragDropDebug.TraceVerbose("ToolStrip taking this because AllowDrop set to true.");
-                newDropTarget = ((IDropTarget)_owner);
+                newDropTarget = _owner;
             }
             else
             {

@@ -89,11 +89,11 @@ public class LinkConverter : TypeConverter
 
                 string sep = culture.TextInfo.ListSeparator + " ";
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                string?[] args = new string?[]
-                {
+                string?[] args =
+                [
                     intConverter.ConvertToString(context, culture, link.Start),
                     intConverter.ConvertToString(context, culture, link.Length)
-                };
+                ];
                 return string.Join(sep, args);
             }
 
@@ -102,13 +102,13 @@ public class LinkConverter : TypeConverter
                 if (link.LinkData is null)
                 {
                     return new InstanceDescriptor(
-                        typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }),
+                        typeof(LinkLabel.Link).GetConstructor([typeof(int), typeof(int)]),
                         new object[] { link.Start, link.Length },
                         true);
                 }
 
                 return new InstanceDescriptor(
-                    typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }),
+                    typeof(LinkLabel.Link).GetConstructor([typeof(int), typeof(int), typeof(object)]),
                     new object[] { link.Start, link.Length, link.LinkData },
                     true);
             }

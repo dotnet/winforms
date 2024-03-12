@@ -39,7 +39,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         }
 
         // first hash up the values so we can quickly decide if it's a new one or not
-        Dictionary<object, int> originalValues = new();
+        Dictionary<object, int> originalValues = [];
         foreach (object originalValue in original)
         {
             // the array could contain multiple copies of the same value (think of a string collection), so we need to be sensitive of that.
@@ -65,7 +65,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                 // we've got one we need to remove, so  create our array list, and push all the values we've passed into it.
                 if (result is null)
                 {
-                    result = new List<object>();
+                    result = [];
                     modifiedEnum.Reset();
                     for (int n = 0; n < i && modifiedEnum.MoveNext(); n++)
                     {
@@ -190,7 +190,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
                         if (resultCollection is null)
                         {
-                            resultCollection = new CodeStatementCollection();
+                            resultCollection = [];
                             if (result is CodeStatement resultStatement)
                             {
                                 resultCollection.Add(resultStatement);
@@ -316,8 +316,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             provider ??= TypeDescriptor.GetProvider(originalCollection);
 
             MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
-            List<MethodInfo> addRangeMethods = new();
-            List<MethodInfo> addMethods = new();
+            List<MethodInfo> addRangeMethods = [];
+            List<MethodInfo> addMethods = [];
             foreach (MethodInfo method in methods)
             {
                 switch (method.Name)
@@ -466,7 +466,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         Type elementType,
         ICollection valuesToSerialize)
     {
-        CodeStatementCollection statements = new();
+        CodeStatementCollection statements = [];
         using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
         {
             Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
@@ -552,7 +552,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         Type elementType,
         ICollection valuesToSerialize)
     {
-        CodeStatementCollection statements = new();
+        CodeStatementCollection statements = [];
         using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
         {
             Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
@@ -668,7 +668,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
         if (shouldClear)
         {
-            MethodInfo? clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, Array.Empty<Type>(), null);
+            MethodInfo? clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, [], null);
             if (clearMethod is null || !MethodSupportsSerialization(clearMethod))
             {
                 shouldClear = false;

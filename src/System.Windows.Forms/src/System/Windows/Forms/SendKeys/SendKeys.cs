@@ -261,7 +261,7 @@ public partial class SendKeys
     }
 
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
 #pragma warning restore CS3016
     private static unsafe LRESULT EmptyHookCallback(int nCode, WPARAM wparam, LPARAM lparam) => (LRESULT)0;
 
@@ -918,7 +918,7 @@ public partial class SendKeys
         SKEvent[]? previousEvents = null;
         if (s_events.Count != 0)
         {
-            previousEvents = s_events.ToArray();
+            previousEvents = [.. s_events];
         }
 
         // Generate the list of events that we're going to fire off with the hook.

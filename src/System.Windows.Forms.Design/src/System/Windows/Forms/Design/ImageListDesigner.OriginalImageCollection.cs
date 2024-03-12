@@ -16,7 +16,7 @@ internal partial class ImageListDesigner
     internal class OriginalImageCollection : IList
     {
         private readonly ImageListDesigner _owner;
-        private readonly List<object> _items = new();
+        private readonly List<object> _items = [];
 
         internal OriginalImageCollection(ImageListDesigner owner)
         {

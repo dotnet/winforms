@@ -125,12 +125,12 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // Add event Handlers
             imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
             enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
-            AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
+            AddRange([imageToolStripMenuItem, enabledToolStripMenuItem]);
             if (selectedItem is ToolStripMenuItem)
             {
                 checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
                 showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                AddRange(new ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
+                AddRange([checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem]);
             }
             else
             {
@@ -154,10 +154,10 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                 // alignmentToolStripMenuItem
                 alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
-                alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem });
+                alignmentToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[leftToolStripMenuItem, rightToolStripMenuItem]);
                 // displayStyleToolStripMenuItem
                 displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
-                displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem });
+                displayStyleToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem]);
 
                 if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                 {
@@ -179,7 +179,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                     }
                 }
 
-                AddRange(new ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
+                AddRange([alignmentToolStripMenuItem, displayStyleToolStripMenuItem,]);
             }
 
             toolStripSeparator1 = new ToolStripSeparator();
@@ -197,7 +197,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
         };
 
-        AddRange(new ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
+        AddRange([convertToolStripMenuItem, insertToolStripMenuItem]);
 
         if (currentItem is ToolStripDropDownItem)
         {

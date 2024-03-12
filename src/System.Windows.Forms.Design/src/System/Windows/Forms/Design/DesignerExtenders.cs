@@ -23,11 +23,11 @@ internal partial class DesignerExtenders
     public DesignerExtenders(IExtenderProviderService ex)
     {
         extenderService = ex;
-        providers ??= new IExtenderProvider[]
-            {
+        providers ??=
+            [
                 new NameExtenderProvider(),
                 new NameInheritedExtenderProvider()
-            };
+            ];
 
         for (int i = 0; i < providers.Length; i++)
         {

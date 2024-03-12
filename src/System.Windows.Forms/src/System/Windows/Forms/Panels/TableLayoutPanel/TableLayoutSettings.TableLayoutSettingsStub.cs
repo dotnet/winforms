@@ -74,15 +74,15 @@ public sealed partial class TableLayoutSettings
             _rowStyles = null;
         }
 
-        public TableLayoutColumnStyleCollection ColumnStyles => _columnStyles ??= new TableLayoutColumnStyleCollection();
+        public TableLayoutColumnStyleCollection ColumnStyles => _columnStyles ??= [];
 
-        public TableLayoutRowStyleCollection RowStyles => _rowStyles ??= new TableLayoutRowStyleCollection();
+        public TableLayoutRowStyleCollection RowStyles => _rowStyles ??= [];
 
         internal List<ControlInformation> GetControlsInformation()
         {
             if (_controlsInfo is null)
             {
-                return new List<ControlInformation>();
+                return [];
             }
 
             List<ControlInformation> listOfControlInfo = new(_controlsInfo.Count);
@@ -116,7 +116,7 @@ public sealed partial class TableLayoutSettings
 
         private void SetControlInformation(object controlName, ControlInformation info)
         {
-            _controlsInfo ??= new Dictionary<object, ControlInformation>();
+            _controlsInfo ??= [];
             _controlsInfo[controlName] = info;
         }
 

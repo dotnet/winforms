@@ -32,7 +32,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private readonly DataGridView _dataGridViewPrivateCopy;
     private readonly DataGridViewColumnCollection _columnsPrivateCopy;
-    private readonly Dictionary<DataGridViewColumn, string?> _columnsNames = new();
+    private readonly Dictionary<DataGridViewColumn, string?> _columnsNames = [];
     private DataGridViewAddColumnDialog? _addColumnDialog;
 
     private const int _OWNERDRAWHORIZONTALBUFFER = 3;
@@ -47,7 +47,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     private bool _formIsDirty;
     private TableLayoutPanel? _overarchingTableLayoutPanel;
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
-    private readonly HashSet<DataGridViewColumn> _userAddedColumns = new();
+    private readonly HashSet<DataGridViewColumn> _userAddedColumns = [];
 
     private readonly IServiceProvider? _serviceProvider;
 
@@ -762,7 +762,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
     }
 
-    private void DataGridViewColumnCollectionDialog_Closed(object? sender, System.EventArgs e)
+    private void DataGridViewColumnCollectionDialog_Closed(object? sender, EventArgs e)
     {
         // scrub the TypeDescriptor association between DataGridViewColumns and their designers
         for (int i = 0; i < _selectedColumns.Items.Count; i++)
@@ -1280,7 +1280,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
                 // We should look into speeding this up w/ our own DataGridViewColumnTypes...
                 //
-                Dictionary<string, PropertyDescriptor> hash = new();
+                Dictionary<string, PropertyDescriptor> hash = [];
                 for (int i = 0; i < props.Count; i++)
                 {
                     hash.Add(props[i].Name, props[i]);
@@ -1299,7 +1299,7 @@ internal class DataGridViewColumnCollectionDialog : Form
                 props.CopyTo(propArray, 0);
             }
 
-            propArray[propArray.Length - 1] = new ColumnTypePropertyDescriptor();
+            propArray[^1] = new ColumnTypePropertyDescriptor();
 
             return new PropertyDescriptorCollection(propArray);
         }
@@ -1348,7 +1348,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             get
             {
-                EditorAttribute editorAttr = new($"System.Windows.Forms.Design.DataGridViewColumnTypeEditor, {AssemblyRef.SystemDesign}", typeof(System.Drawing.Design.UITypeEditor));
+                EditorAttribute editorAttr = new($"System.Windows.Forms.Design.DataGridViewColumnTypeEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor));
                 DescriptionAttribute descriptionAttr = new(SR.DataGridViewColumnTypePropertyDescription);
                 CategoryAttribute categoryAttr = CategoryAttribute.Design;
                 // add the description attribute and the categories attribute

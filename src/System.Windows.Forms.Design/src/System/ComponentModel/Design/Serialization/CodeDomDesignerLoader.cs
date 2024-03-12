@@ -236,7 +236,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
                         if (t is null)
                         {
-                            failures ??= new();
+                            failures ??= [];
                             failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDeclaration.Name, typeReference.BaseType));
                         }
                         else if (!t.IsInterface)
@@ -303,7 +303,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                         // If we didn't find a serializer for this type, report it.
                         if (_rootSerializer is null && _typeSerializer is null)
                         {
-                            failures ??= new();
+                            failures ??= [];
 
                             if (foundAttribute)
                             {
@@ -461,7 +461,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // Now start looking through the new declaration and process it.
         // We are index driven, so if we need to add new values we put
         // them into an array list, and post process them.
-        List<CodeTypeMember> newElements = new();
+        List<CodeTypeMember> newElements = [];
 
         foreach (CodeTypeMember member in newDecl.Members)
         {
@@ -601,11 +601,11 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (TryGetService(out _extenderProviderService))
         {
-            _extenderProviders = new IExtenderProvider[]
-            {
+            _extenderProviders =
+            [
                 new ModifiersExtenderProvider(),
                 new ModifiersInheritedExtenderProvider()
-            };
+            ];
 
             foreach (IExtenderProvider p in _extenderProviders)
             {

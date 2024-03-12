@@ -28,7 +28,7 @@ public abstract partial class AxHost
         private AxHost? _siteUIActive;
         private AxHost? _siteActive;
         private bool _formAlreadyCreated;
-        private readonly HashSet<AxHost> _containerCache = new();
+        private readonly HashSet<AxHost> _containerCache = [];
         private int _lockCount;
         private HashSet<Control>? _components;
         private Dictionary<Control, ExtenderProxy>? _extenderCache;
@@ -83,7 +83,7 @@ public abstract partial class AxHost
             ExtenderProxy? extender = null;
             if (_extenderCache is null)
             {
-                _extenderCache = new();
+                _extenderCache = [];
             }
             else
             {
@@ -192,7 +192,7 @@ public abstract partial class AxHost
 
                 int first = 0;
                 int last = -1; // meaning all
-                Control[] controls = Array.Empty<Control>();
+                Control[] controls = [];
                 switch (dwWhich)
                 {
                     default:
@@ -219,7 +219,7 @@ public abstract partial class AxHost
                         additionalControl = null;
                         break;
                     case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINER:
-                        results = new();
+                        results = [];
                         additionalControl = null;
                         MaybeAdd(results, control, selected, (OLECONTF)dwOleContF, allowContainingControls: false);
 
@@ -238,14 +238,14 @@ public abstract partial class AxHost
 
                         break;
                     case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_ALL:
-                        controls = GetComponents().ToArray();
+                        controls = [.. GetComponents()];
                         additionalControl = _parent;
                         break;
                 }
 
                 if (results is null)
                 {
-                    results = new();
+                    results = [];
                     if (last == -1 && controls is not null)
                     {
                         last = controls.Length;
@@ -270,7 +270,7 @@ public abstract partial class AxHost
                     results.Reverse();
                 }
 
-                return new EnumUnknown(results.ToArray());
+                return new EnumUnknown([.. results]);
             }
             finally
             {
@@ -317,7 +317,7 @@ public abstract partial class AxHost
         {
             if (container?.Components is { } components)
             {
-                _components = new();
+                _components = [];
                 foreach (IComponent component in components)
                 {
                     if (component is Control control && component != _parent && component.Site is not null)
@@ -335,7 +335,7 @@ public abstract partial class AxHost
             {
                 if (_components is null)
                 {
-                    _components = new();
+                    _components = [];
                 }
                 else
                 {
@@ -530,7 +530,7 @@ public abstract partial class AxHost
 
             _formAlreadyCreated = true;
 
-            List<AxHost> hostControls = new();
+            List<AxHost> hostControls = [];
             foreach (Control control in GetComponents())
             {
                 if (control is AxHost hostControl)
@@ -581,7 +581,7 @@ public abstract partial class AxHost
             {
                 Debug.Assert(_parent is not null);
 
-                List<object> oleControls = new();
+                List<object> oleControls = [];
                 foreach (Control control in GetComponents())
                 {
                     if (control is AxHost hostControl)
@@ -592,7 +592,7 @@ public abstract partial class AxHost
 
                 if (oleControls.Count > 0)
                 {
-                    *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new EnumUnknown(oleControls.ToArray()));
+                    *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new EnumUnknown([.. oleControls]));
                     return HRESULT.S_OK;
                 }
             }

@@ -23,9 +23,9 @@ internal partial class ToolStripSettingsManager
 
     internal void Load()
     {
-        List<SettingsStub> savedToolStripSettingsObjects = new();
+        List<SettingsStub> savedToolStripSettingsObjects = [];
 
-        List<ToolStrip> toolStripControls = new();
+        List<ToolStrip> toolStripControls = [];
         FindControls(true, form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)
@@ -47,7 +47,7 @@ internal partial class ToolStripSettingsManager
 
     internal void Save()
     {
-        List<ToolStrip> toolStripControls = new();
+        List<ToolStrip> toolStripControls = [];
         FindControls(true, form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)
@@ -101,7 +101,7 @@ internal partial class ToolStripSettingsManager
         Dictionary<string, ToolStrip> itemLocationHash = BuildItemOriginationHash();
 
         // build up a hash of where we want the ToolStrips to go
-        Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new();
+        Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = [];
 
         foreach (SettingsStub toolStripSettings in toolStripSettingsToApply)
         {
@@ -122,7 +122,7 @@ internal partial class ToolStripSettingsManager
                 // This toolStrip is in a ToolStripPanel. We will process it below.
                 if (!toolStripPanelDestinationHash.TryGetValue(destinationPanel, out List<SettingsStub>? value))
                 {
-                    value = new List<SettingsStub>();
+                    value = [];
                     toolStripPanelDestinationHash[destinationPanel] = value;
                 }
 
@@ -131,7 +131,7 @@ internal partial class ToolStripSettingsManager
         }
 
         // Build up a list of the toolstrippanels to party on.
-        List<ToolStripPanel> toolStripPanels = new();
+        List<ToolStripPanel> toolStripPanels = [];
         FindControls(true, form.Controls, toolStripPanels);
         foreach (ToolStripPanel toolStripPanel in toolStripPanels)
         {
@@ -209,9 +209,9 @@ internal partial class ToolStripSettingsManager
 
     private Dictionary<string, ToolStrip> BuildItemOriginationHash()
     {
-        Dictionary<string, ToolStrip> itemLocationHash = new();
+        Dictionary<string, ToolStrip> itemLocationHash = [];
 
-        List<ToolStrip> toolStripControls = new();
+        List<ToolStrip> toolStripControls = [];
         FindControls(true, form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)

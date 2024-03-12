@@ -22,8 +22,8 @@ public class KeysConverter : TypeConverter, IComparer
     [MemberNotNull(nameof(_cultureToKeyName))]
     private void Initialize()
     {
-        _cultureToDisplayOrder = new();
-        _cultureToKeyName = new();
+        _cultureToDisplayOrder = [];
+        _cultureToKeyName = [];
         AddLocalizedKeyNames(CultureInfo.InvariantCulture);
     }
 
@@ -234,7 +234,7 @@ public class KeysConverter : TypeConverter, IComparer
 
         Enum[] GetTermKeys(Keys key)
         {
-            List<Enum> termKeys = new();
+            List<Enum> termKeys = [];
             Keys modifiers = key & Keys.Modifiers;
             Dictionary<string, Keys> keyNames = GetKeyNames(culture);
             List<string> displayOrder = GetDisplayOrder(culture);
@@ -277,7 +277,7 @@ public class KeysConverter : TypeConverter, IComparer
                 termKeys.Add(keyOnly);
             }
 
-            return termKeys.ToArray();
+            return [.. termKeys];
         }
 
         string GetTermsString(Keys key)
@@ -365,7 +365,7 @@ public class KeysConverter : TypeConverter, IComparer
     {
         if (_values is null)
         {
-            Keys[] values = CultureToKeyName[CultureInfo.InvariantCulture].Values.ToArray();
+            Keys[] values = [.. CultureToKeyName[CultureInfo.InvariantCulture].Values];
             Array.Sort(values, this);
             _values = new StandardValuesCollection(values);
         }

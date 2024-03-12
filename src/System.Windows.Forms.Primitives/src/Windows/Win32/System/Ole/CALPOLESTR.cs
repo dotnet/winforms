@@ -2,13 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace Windows.Win32.System.Ole;
+
 internal partial struct CALPOLESTR
 {
     public unsafe string?[] ConvertAndFree()
     {
         if (cElems == 0 || pElems is null)
         {
-            return Array.Empty<string>();
+            return [];
         }
 
         string?[] values = new string?[(int)cElems];

@@ -20,7 +20,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     /// <summary>
     ///  Initializes a new instance of the <see cref="InheritedPropertyDescriptor"/> class.
     /// </summary>
-    public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
+    public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, [])
     {
         Debug.Assert(propertyDescriptor is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {propertyDescriptor}");
         _propertyDescriptor = propertyDescriptor;

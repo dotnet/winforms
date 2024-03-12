@@ -290,7 +290,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         {
             if (value)
             {
-                _flags |= (byte)DisplayIndexHasChangedInternal;
+                _flags |= DisplayIndexHasChangedInternal;
             }
             else
             {
@@ -415,7 +415,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     }
 
     private bool ShouldSerializeHeaderText() =>
-        HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
+        HasHeaderCell && HeaderCell.ContainsLocalValue;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -573,7 +573,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         {
             if (value)
             {
-                _flags |= (byte)ColumnIsBrowsableInternal;
+                _flags |= ColumnIsBrowsableInternal;
             }
             else
             {
@@ -593,7 +593,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         {
             if (value)
             {
-                _flags |= (byte)ColumnIsDataBound;
+                _flags |= ColumnIsDataBound;
             }
             else
             {
@@ -734,12 +734,12 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                     if (value == DataGridViewColumnSortMode.Automatic)
                     {
                         _flags = (byte)(_flags & ~ProgrammaticSort);
-                        _flags |= (byte)AutomaticSort;
+                        _flags |= AutomaticSort;
                     }
                     else
                     {
                         _flags = (byte)(_flags & ~AutomaticSort);
-                        _flags |= (byte)ProgrammaticSort;
+                        _flags |= ProgrammaticSort;
                     }
                 }
                 else

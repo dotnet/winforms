@@ -66,7 +66,7 @@ internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter
         if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutPanelCellPosition cellPosition)
         {
             return new InstanceDescriptor(
-                typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }),
+                typeof(TableLayoutPanelCellPosition).GetConstructor([typeof(int), typeof(int)]),
                 new object[] { cellPosition.Column, cellPosition.Row });
         }
 
@@ -100,7 +100,7 @@ internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter
     public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
     {
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(TableLayoutPanelCellPosition), attributes);
-        return props.Sort(new string[] { nameof(TableLayoutPanelCellPosition.Column), nameof(TableLayoutPanelCellPosition.Row) });
+        return props.Sort([nameof(TableLayoutPanelCellPosition.Column), nameof(TableLayoutPanelCellPosition.Row)]);
     }
 
     public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;

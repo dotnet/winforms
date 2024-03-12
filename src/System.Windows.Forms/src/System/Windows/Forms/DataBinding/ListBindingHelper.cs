@@ -15,7 +15,7 @@ public static class ListBindingHelper
     {
         get
         {
-            browsableAttribute ??= new Attribute[] { new BrowsableAttribute(true) };
+            browsableAttribute ??= [new BrowsableAttribute(true)];
 
             return browsableAttribute;
         }

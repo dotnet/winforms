@@ -81,7 +81,7 @@ internal sealed partial class DesignerHost
         /// </summary>
         void IDictionaryService.SetValue(object key, object? value)
         {
-            _dictionary ??= new();
+            _dictionary ??= [];
 
             if (value is null)
             {

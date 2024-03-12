@@ -44,7 +44,7 @@ internal partial class MdiControlStrip : MenuStrip
         }
 
         // add in opposite order to how you want it merged
-        Items.AddRange(new ToolStripItem[] { _minimize, _restore, _close, _system });
+        Items.AddRange((ToolStripItem[])[_minimize, _restore, _close, _system]);
 
         SuspendLayout();
         foreach (ToolStripItem item in Items)

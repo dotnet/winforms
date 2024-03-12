@@ -226,7 +226,7 @@ public partial class CheckedListBox : ListBox
                 _flat = !value;
 
                 // see if we have some items, and only invalidate if we do.
-                ObjectCollection items = (ObjectCollection)Items;
+                ObjectCollection items = Items;
                 if ((items is not null) && (items.Count > 0))
                 {
                     Invalidate();

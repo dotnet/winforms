@@ -21,7 +21,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
 
         lock (s_lock)
         {
-            s_categoryStates ??= new();
+            s_categoryStates ??= [];
 
             if (!s_categoryStates.ContainsKey(name))
             {

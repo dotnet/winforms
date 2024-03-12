@@ -215,7 +215,7 @@ public static class Clipboard
     /// </summary>
     public static StringCollection GetFileDropList()
     {
-        StringCollection result = new();
+        StringCollection result = [];
 
         if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
         {

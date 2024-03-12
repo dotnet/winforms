@@ -22,8 +22,8 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionErrorProvider))]
 public partial class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
 {
-    private readonly Dictionary<Control, ControlItem> _items = new();
-    private readonly Dictionary<Control, ErrorWindow> _windows = new();
+    private readonly Dictionary<Control, ControlItem> _items = [];
+    private readonly Dictionary<Control, ErrorWindow> _windows = [];
     private Icon _icon = DefaultIcon;
     private IconRegion? _region;
     private int _itemIdCounter;
@@ -575,7 +575,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             _icon = value.OrThrowIfNull();
             DisposeRegion();
-            ErrorWindow[] array = _windows.Values.ToArray();
+            ErrorWindow[] array = [.. _windows.Values];
             for (int i = 0; i < array.Length; i++)
             {
                 array[i].Update(timerCaused: false);
@@ -652,7 +652,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     public void Clear()
     {
-        ErrorWindow[] w = _windows.Values.ToArray();
+        ErrorWindow[] w = [.. _windows.Values];
         for (int i = 0; i < w.Length; i++)
         {
             w[i].Dispose();
@@ -713,7 +713,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
         if (!_items.TryGetValue(control, out ControlItem? item))
         {
-            item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
+            item = new ControlItem(this, control, ++_itemIdCounter);
             _items[control] = item;
         }
 

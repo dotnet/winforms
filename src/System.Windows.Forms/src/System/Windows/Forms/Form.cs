@@ -1507,7 +1507,7 @@ public partial class Form : ContainerControl
             }
             else
             {
-                return Array.Empty<Form>();
+                return [];
             }
         }
     }
@@ -4280,7 +4280,7 @@ public partial class Form : ContainerControl
                 // for AutoScaleMode is Font. In other modes, Windows OS will compute Form's size.
                 if (AutoScaleMode == AutoScaleMode.Font)
                 {
-                    _dpiFormSizes ??= new Dictionary<int, Size>();
+                    _dpiFormSizes ??= [];
 
                     if (!_dpiFormSizes.ContainsKey(e.DeviceDpiNew))
                     {
@@ -5708,7 +5708,7 @@ public partial class Form : ContainerControl
 
     private static Type? FindClosestStockType(Type type)
     {
-        Type[] stockTypes = new Type[] { typeof(MenuStrip) }; // as opposed to what we had before...
+        Type[] stockTypes = [typeof(MenuStrip)]; // as opposed to what we had before...
                                                               // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
         foreach (Type t in stockTypes)
         {

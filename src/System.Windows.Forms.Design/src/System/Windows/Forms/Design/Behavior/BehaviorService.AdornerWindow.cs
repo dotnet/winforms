@@ -15,7 +15,7 @@ public sealed partial class BehaviorService
     {
         private readonly BehaviorService _behaviorService;
         private static MouseHook? s_mouseHook;
-        private static readonly List<AdornerWindow> s_adornerWindowList = new();
+        private static readonly List<AdornerWindow> s_adornerWindowList = [];
 
         /// <summary>
         ///  Constructor that parents itself to the Designer Frame and hooks all

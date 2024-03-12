@@ -125,7 +125,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
     [MemberNotNull(nameof(_addedComponents))]
     private void OnComponentAdded(object? sender, ComponentEventArgs cevent)
     {
-        _addedComponents ??= new();
+        _addedComponents ??= [];
         IComponent compAdded = cevent.Component!;
         if (compAdded.Site is not INestedSite)
         {
@@ -140,7 +140,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
     [MemberNotNull(nameof(_removedComponents))]
     private void OnComponentRemoved(object? sender, ComponentEventArgs cevent)
     {
-        _removedComponents ??= new();
+        _removedComponents ??= [];
         IComponent compRemoved = cevent.Component!;
         if (compRemoved.Site is not INestedSite)
         {

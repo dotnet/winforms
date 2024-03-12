@@ -246,7 +246,7 @@ public static partial class ToolStripManager
         {
             if (_inputFilterQueue is not null && _inputFilterQueue.Count > 0)
             {
-                return _inputFilterQueue[_inputFilterQueue.Count - 1];
+                return _inputFilterQueue[^1];
             }
 
             return null;
@@ -446,7 +446,7 @@ public static partial class ToolStripManager
             if (_inputFilterQueue is null)
             {
                 // Use list because we want to be able to remove at any point.
-                _inputFilterQueue = new List<ToolStrip>();
+                _inputFilterQueue = [];
             }
             else
             {

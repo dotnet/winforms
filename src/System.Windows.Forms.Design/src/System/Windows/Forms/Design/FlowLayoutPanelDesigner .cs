@@ -12,7 +12,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the <see cref="System.Windows.Forms.FlowLayoutPanel"/>
+///  This class handles all design time behavior for the <see cref="Forms.FlowLayoutPanel"/>
 ///  control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
 ///  draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
 ///  some cached state to see if we believe that it needs to be inserted at a particular index. If
@@ -33,7 +33,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Store the maximum height/width of each row/column.
     /// </summary>
-    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = new();
+    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = [];
 
     private const int s_invalidIndex = -1;
 
@@ -92,7 +92,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
         if (flowDirection is not null)
         {
-            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, Array.Empty<Attribute>());
+            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, []);
         }
     }
 
@@ -177,7 +177,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         var children = Control.Controls;
         if (children.Count == 0)
         {
-            _childInfo = Array.Empty<ChildInfo>();
+            _childInfo = [];
             return;
         }
 

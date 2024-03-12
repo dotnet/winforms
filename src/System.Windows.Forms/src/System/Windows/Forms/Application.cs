@@ -265,7 +265,7 @@ public sealed partial class Application
     /// <summary>
     ///  Gets the forms collection associated with this application.
     /// </summary>
-    public static FormCollection OpenForms => s_forms ??= new FormCollection();
+    public static FormCollection OpenForms => s_forms ??= [];
 
     /// <summary>
     ///  Gets

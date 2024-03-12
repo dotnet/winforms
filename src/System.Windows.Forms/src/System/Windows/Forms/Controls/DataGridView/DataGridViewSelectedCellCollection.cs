@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 [ListBindable(false)]
 public class DataGridViewSelectedCellCollection : BaseCollection, IList
 {
-    private readonly List<DataGridViewCell> _items = new();
+    private readonly List<DataGridViewCell> _items = [];
 
     int IList.Add(object? value)
     {

@@ -57,8 +57,7 @@ internal class MaskedTextBoxDesignerActionList : DesignerActionList
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new();
-        items.Add(new DesignerActionMethodItem(this, "SetMask", SR.MaskedTextBoxDesignerVerbsSetMaskDesc));
+        DesignerActionItemCollection items = [new DesignerActionMethodItem(this, "SetMask", SR.MaskedTextBoxDesignerVerbsSetMaskDesc)];
         return items;
     }
 }

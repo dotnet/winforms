@@ -28,7 +28,7 @@ public sealed partial class AnchorEditor
             _right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
             _top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
             _bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-            _tabOrder = new[] { _left, _top, _right, _bottom };
+            _tabOrder = [_left, _top, _right, _bottom];
 
             InitializeComponent();
         }
@@ -113,20 +113,20 @@ public sealed partial class AnchorEditor
             _bottom.AccessibleName = SR.AnchorEditorBottomAccName;
 
             Controls.Clear();
-            Controls.AddRange(new Control[]
-            {
+            Controls.AddRange(
+            [
                 _container
-            });
+            ]);
 
             _container.Controls.Clear();
-            _container.Controls.AddRange(new Control[]
-            {
+            _container.Controls.AddRange(
+            [
                 _control,
                 _top,
                 _left,
                 _bottom,
                 _right
-            });
+            ]);
             ResumeLayout(false);
         }
 

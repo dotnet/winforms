@@ -220,7 +220,7 @@ public partial class ComboBox : ListControl
         {
             if (_autoCompleteCustomSource is null)
             {
-                _autoCompleteCustomSource = new AutoCompleteStringCollection();
+                _autoCompleteCustomSource = [];
                 _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
             }
 

@@ -57,7 +57,7 @@ internal sealed partial class ComponentCache : IDisposable
         {
             if (Enabled)
             {
-                _cache ??= new Dictionary<object, Entry>();
+                _cache ??= [];
             }
 
             // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
@@ -231,7 +231,7 @@ internal sealed partial class ComponentCache : IDisposable
         }
 
         public object? Component; // pointer back to the component that generated this entry
-        public CodeStatementCollection Statements = new();
+        public CodeStatementCollection Statements = [];
 
         public ICollection<ResourceEntry>? Metadata => _metadata;
 
@@ -247,14 +247,14 @@ internal sealed partial class ComponentCache : IDisposable
 
         internal void AddLocalName(string name)
         {
-            LocalNames ??= new List<string>();
+            LocalNames ??= [];
 
             LocalNames.Add(name);
         }
 
         public void AddDependency(object dep)
         {
-            Dependencies ??= new List<object>();
+            Dependencies ??= [];
 
             if (!Dependencies.Contains(dep))
             {
@@ -264,14 +264,14 @@ internal sealed partial class ComponentCache : IDisposable
 
         public void AddMetadata(ResourceEntry re)
         {
-            _metadata ??= new List<ResourceEntry>();
+            _metadata ??= [];
 
             _metadata.Add(re);
         }
 
         public void AddResource(ResourceEntry re)
         {
-            _resources ??= new List<ResourceEntry>();
+            _resources ??= [];
 
             _resources.Add(re);
         }

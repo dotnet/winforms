@@ -572,7 +572,7 @@ internal sealed partial class PropertyGridView :
             {
                 OwnerGrid.CheckInCreate();
 
-                _toolTip = new GridToolTip(new Control[] { this, EditTextBox })
+                _toolTip = new GridToolTip([this, EditTextBox])
                 {
                     ToolTip = string.Empty,
                     Font = Font
@@ -4208,10 +4208,10 @@ internal sealed partial class PropertyGridView :
     {
         if (entries is null)
         {
-            return new();
+            return [];
         }
 
-        expandedItems ??= new();
+        expandedItems ??= [];
 
         for (int i = 0; i < entries.Count; i++)
         {
@@ -5048,8 +5048,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMessage,
             HWND.Null,
-            (uint)PInvoke.WM_MOUSEFIRST,
-            (uint)PInvoke.WM_MOUSELAST,
+            PInvoke.WM_MOUSEFIRST,
+            PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.
@@ -5125,8 +5125,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMsg,
             HWND.Null,
-            (uint)PInvoke.WM_MOUSEFIRST,
-            (uint)PInvoke.WM_MOUSELAST,
+            PInvoke.WM_MOUSEFIRST,
+            PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.

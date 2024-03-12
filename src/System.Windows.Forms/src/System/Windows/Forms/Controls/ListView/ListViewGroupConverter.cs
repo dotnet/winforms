@@ -94,7 +94,7 @@ internal class ListViewGroupConverter : TypeConverter
             ListViewGroup group = (ListViewGroup)value;
 
             // Header
-            ConstructorInfo ctor = typeof(ListViewGroup).GetConstructor(new Type[] { typeof(string), typeof(HorizontalAlignment) })!;
+            ConstructorInfo ctor = typeof(ListViewGroup).GetConstructor([typeof(string), typeof(HorizontalAlignment)])!;
             Debug.Assert(ctor is not null, "Expected the constructor to exist.");
             return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
         }

@@ -23,23 +23,23 @@ internal sealed partial class DragAssistanceManager
     private readonly bool _disposeEdgePen;
     private readonly Pen _baselinePen = new(Color.Fuchsia);
     // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in these lists have been properly adjusted for the AdornerWindow coords.
-    private readonly List<SnapLine> _verticalSnapLines = new();
-    private readonly List<SnapLine> _horizontalSnapLines = new();
+    private readonly List<SnapLine> _verticalSnapLines = [];
+    private readonly List<SnapLine> _horizontalSnapLines = [];
     // These are SnapLines that represent our target control.
-    private readonly List<SnapLine> _targetVerticalSnapLines = new();
-    private readonly List<SnapLine> _targetHorizontalSnapLines = new();
+    private readonly List<SnapLine> _targetVerticalSnapLines = [];
+    private readonly List<SnapLine> _targetHorizontalSnapLines = [];
     // This is a list of all the different type of SnapLines our target control has.  When compiling our global SnapLine lists, if we see a SnapLineType that doesn't exist on our target - we can safely ignore it
-    private readonly List<SnapLineType> _targetSnapLineTypes = new();
+    private readonly List<SnapLineType> _targetSnapLineTypes = [];
     // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control.  Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
     private int[] _verticalDistances;
     private int[] _horizontalDistances;
     // These are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
-    private readonly List<Line> _tempVertLines = new();
-    private readonly List<Line> _tempHorzLines = new();
-    private Line[] _vertLines = Array.Empty<Line>();
-    private Line[] _horzLines = Array.Empty<Line>();
+    private readonly List<Line> _tempVertLines = [];
+    private readonly List<Line> _tempHorzLines = [];
+    private Line[] _vertLines = [];
+    private Line[] _horzLines = [];
     // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to.  To do this, we'll keep a dictionary... format: snapLineToBounds[SnapLine]=ControlBounds.
-    private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = new();
+    private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = [];
     // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.  From there, if we receive a test hook message requesting these - we got 'em
     private Line[]? _recentLines;
     private readonly Image? _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
@@ -354,7 +354,7 @@ internal sealed partial class DragAssistanceManager
         }
         else
         {
-            lines = Array.Empty<Line>();
+            lines = [];
         }
 
         return lines;
@@ -376,7 +376,7 @@ internal sealed partial class DragAssistanceManager
             return _recentLines;
         }
 
-        return Array.Empty<Line>();
+        return [];
     }
 
     private void IdentifyAndStoreValidLines(List<SnapLine> snapLines, int[] distances, Rectangle dragBounds, int smallestDistance)

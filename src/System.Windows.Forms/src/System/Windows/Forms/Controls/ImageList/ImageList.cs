@@ -473,7 +473,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
         {
             _nativeImageList.Dispose();
             _nativeImageList = null;
-            _originals = new List<Original>();
+            _originals = [];
         }
     }
 
@@ -743,7 +743,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
         if (_originals is null || Images.Empty)
         {
             // spoof it into thinking this is the first CreateHandle
-            _originals = new List<Original>();
+            _originals = [];
         }
 
         DestroyHandle();

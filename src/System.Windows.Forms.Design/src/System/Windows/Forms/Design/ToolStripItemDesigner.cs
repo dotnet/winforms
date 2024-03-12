@@ -82,12 +82,12 @@ internal class ToolStripItemDesigner : ComponentDesigner
             if (_selectionService.SelectionCount > 1)
             {
                 toolStripContextMenu.GroupOrdering.Clear();
-                toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
+                toolStripContextMenu.GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
             }
             else
             {
                 toolStripContextMenu.GroupOrdering.Clear();
-                toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
+                toolStripContextMenu.GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
                 toolStripContextMenu.Text = "CustomContextMenu";
                 toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
 
@@ -246,7 +246,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     internal List<Component> AddParentTree()
     {
-        List<Component> parentControls = new();
+        List<Component> parentControls = [];
         if (!TryGetService(out IDesignerHost designerHost))
         {
             return parentControls;
@@ -1038,7 +1038,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         string[] shadowProps = ["AutoSize", "AccessibleName", "Visible", "Overflow"];
 
         PropertyDescriptor prop;
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];

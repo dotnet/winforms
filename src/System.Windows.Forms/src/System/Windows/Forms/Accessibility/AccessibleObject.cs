@@ -744,7 +744,7 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UIA.ExpandCollapseState ExpandCollapseState => UIA.ExpandCollapseState.ExpandCollapseState_Collapsed;
+    internal virtual ExpandCollapseState ExpandCollapseState => ExpandCollapseState.ExpandCollapseState_Collapsed;
 
     internal virtual void Toggle()
     {
@@ -821,7 +821,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual int GetMultiViewProviderCurrentView() => 0;
 
-    internal virtual int[]? GetMultiViewProviderSupportedViews() => Array.Empty<int>();
+    internal virtual int[]? GetMultiViewProviderSupportedViews() => [];
 
     internal virtual string GetMultiViewProviderViewName(int viewId) => string.Empty;
 
@@ -2990,7 +2990,7 @@ public unsafe partial class AccessibleObject :
         // `accChild` .NET Core only ever exposes the ITypeInfo for IUnknown.
         if (args?.Length == 0 && s_propertiesWithArguments.Contains(name))
         {
-            args = new object[] { (int)PInvoke.CHILDID_SELF };
+            args = [(int)PInvoke.CHILDID_SELF];
         }
 
         return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);

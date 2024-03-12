@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 public abstract class TableLayoutStyleCollection : IList
 {
     private IArrangedElement? _owner;
-    private readonly List<TableLayoutStyle> _innerList = new();
+    private readonly List<TableLayoutStyle> _innerList = [];
 
     internal TableLayoutStyleCollection(IArrangedElement? owner)
     {

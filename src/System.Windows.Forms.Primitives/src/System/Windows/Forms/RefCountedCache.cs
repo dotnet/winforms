@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 ///  Cache that ref counts handed-out objects via "scopes" <see cref="Scope"/>.
 /// </summary>
 /// <typeparam name="TObject">
-///  The target object the cache represents. If you're caching <see cref="System.Drawing.Pen"/> that would be the
+///  The target object the cache represents. If you're caching <see cref="Drawing.Pen"/> that would be the
 ///  type you would use here. <see cref="Scope"/> is implicitly convertible to this type.
 /// </typeparam>
 /// <typeparam name="TCacheEntryData">

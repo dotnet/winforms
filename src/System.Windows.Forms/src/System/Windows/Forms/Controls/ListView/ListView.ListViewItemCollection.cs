@@ -294,10 +294,10 @@ public partial class ListView
         {
             key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-            List<ListViewItem> foundItems = new();
+            List<ListViewItem> foundItems = [];
             FindInternal(key, searchAllSubItems, this, foundItems);
 
-            return foundItems.ToArray();
+            return [.. foundItems];
         }
 
         /// <summary>

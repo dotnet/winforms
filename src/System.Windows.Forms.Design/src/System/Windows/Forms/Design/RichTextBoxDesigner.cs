@@ -64,12 +64,12 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
 
         // Handle shadowed properties
         //
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             nameof(Text)
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         PropertyDescriptor? prop;
         for (int i = 0; i < shadowProps.Length; i++)

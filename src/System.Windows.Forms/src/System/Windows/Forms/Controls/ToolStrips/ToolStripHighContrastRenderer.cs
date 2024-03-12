@@ -460,7 +460,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
     private static void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
     {
         Rectangle bounds = item.ClientBounds;
-        float[] dashValues = { 2, 2 };
+        float[] dashValues = [2, 2];
         int penWidth = 2;
 
         Pen focusPen1 = new(SystemColors.ControlText, penWidth)

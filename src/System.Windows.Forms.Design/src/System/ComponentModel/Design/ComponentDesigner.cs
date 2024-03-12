@@ -25,7 +25,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Gets the design-time actionlists supported by the component associated with the designer.
     /// </summary>
-    public virtual DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection();
+    public virtual DesignerActionListCollection ActionLists => _actionLists ??= [];
 
     /// <summary>
     ///  Retrieves a list of associated components. These are components that should be included in a cut or copy
@@ -180,7 +180,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Gets the design-time verbs supported by the component associated with the designer.
     /// </summary>
-    public virtual DesignerVerbCollection Verbs => _verbs ??= new DesignerVerbCollection();
+    public virtual DesignerVerbCollection Verbs => _verbs ??= [];
 
     /// <summary>
     ///  Controls whether the default property of <see cref="Component"/> is automatically set
@@ -401,7 +401,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     private void InitializeInheritedProperties()
     {
-        Dictionary<string, InheritedPropertyDescriptor> props = new();
+        Dictionary<string, InheritedPropertyDescriptor> props = [];
         InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
         bool readOnlyInherit = inheritanceAttribute is not null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly);
 
@@ -712,7 +712,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             properties[SettingsKeyName] = TypeDescriptor.CreateProperty(
                 typeof(ComponentDesigner),
                 prop,
-                Array.Empty<Attribute>());
+                []);
         }
     }
 

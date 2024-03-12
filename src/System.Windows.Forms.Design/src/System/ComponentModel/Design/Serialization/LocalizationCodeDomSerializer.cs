@@ -155,7 +155,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
     /// </summary>
     private class ApplyMethodTable
     {
-        private readonly HashSet<object> _table = new();
+        private readonly HashSet<object> _table = [];
 
         internal bool Add(object value) => _table.Add(value);
     }

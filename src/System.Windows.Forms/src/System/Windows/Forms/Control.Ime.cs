@@ -1338,7 +1338,7 @@ public readonly struct ImeModeConversion
     ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
     /// </summary>
     private static readonly ImeMode[] japaneseTable =
-    {
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Off,
@@ -1349,10 +1349,10 @@ public readonly struct ImeModeConversion
         ImeMode.KatakanaHalf,
         ImeMode.AlphaFull,
         ImeMode.Alpha
-    };
+    ];
 
     private static readonly ImeMode[] koreanTable =
-    {
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Alpha,
@@ -1363,10 +1363,10 @@ public readonly struct ImeModeConversion
         ImeMode.Hangul,
         ImeMode.AlphaFull,
         ImeMode.Alpha
-    };
+    ];
 
     private static readonly ImeMode[] chineseTable =
-    {
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Off,
@@ -1377,9 +1377,9 @@ public readonly struct ImeModeConversion
         ImeMode.OnHalf,
         ImeMode.Off,
         ImeMode.Off
-    };
+    ];
 
-    private static readonly ImeMode[] unsupportedTable = Array.Empty<ImeMode>();
+    private static readonly ImeMode[] unsupportedTable = [];
 
     internal static ImeMode[] ChineseTable
     {
@@ -1427,7 +1427,7 @@ public readonly struct ImeModeConversion
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_InputLanguageTable(), Input Language = {InputLanguage.CurrentInputLanguage.Culture.DisplayName}, Thread = {Environment.CurrentManagedThreadId}");
             InputLanguage inputLanguage = InputLanguage.CurrentInputLanguage;
 
-            int lcid = (int)((long)inputLanguage.Handle & (long)0xFFFF);
+            int lcid = (int)(inputLanguage.Handle & (long)0xFFFF);
 
             switch (lcid)
             {

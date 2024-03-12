@@ -15,7 +15,7 @@ public class AssemblyInfoTests
 
     [Theory]
     [MemberData(nameof(AssemblyProperties_TestData))]
-    public void AssemblyProperties(System.Reflection.Assembly assembly)
+    public void AssemblyProperties(Assembly assembly)
     {
         AssemblyInfo assemblyInfo = new(assembly);
         var assemblyName = assembly.GetName();
@@ -63,7 +63,7 @@ public class AssemblyInfoTests
         Assert.True(workingSet > 0);
     }
 
-    private static string GetAttributeValue<TAttribute>(System.Reflection.Assembly assembly, Func<TAttribute, string> getAttributeValue)
+    private static string GetAttributeValue<TAttribute>(Assembly assembly, Func<TAttribute, string> getAttributeValue)
         where TAttribute : Attribute
     {
         var attribute = (TAttribute)assembly.GetCustomAttribute(typeof(TAttribute));

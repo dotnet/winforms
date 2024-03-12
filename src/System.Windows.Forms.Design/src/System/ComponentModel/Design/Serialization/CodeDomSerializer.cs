@@ -13,9 +13,9 @@ namespace System.ComponentModel.Design.Serialization;
 public class CodeDomSerializer : CodeDomSerializerBase
 {
     private static CodeDomSerializer? s_default;
-    private static readonly Attribute[] s_runTimeFilter = { DesignOnlyAttribute.No };
-    private static readonly Attribute[] s_designTimeFilter = { DesignOnlyAttribute.Yes };
-    private static readonly Attribute[] s_deserializeFilter = { BrowsableAttribute.Yes };
+    private static readonly Attribute[] s_runTimeFilter = [DesignOnlyAttribute.No];
+    private static readonly Attribute[] s_designTimeFilter = [DesignOnlyAttribute.Yes];
+    private static readonly Attribute[] s_deserializeFilter = [BrowsableAttribute.Yes];
     private static readonly CodeThisReferenceExpression s_thisRef = new();
 
     internal static CodeDomSerializer Default => s_default ??= new CodeDomSerializer();
@@ -172,7 +172,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
                     else
                     {
                         // Ok, we have an incomplete expression. That means we've created the object but we will need to set properties on it to configure it.  Therefore, we need to have a variable reference to it unless we were given a preset expression already.
-                        CodeStatementCollection statements = new();
+                        CodeStatementCollection statements = [];
 
                         // We need to find out if SerializeCreationExpression returned a preset expression.
                         bool isPreset = manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value);
@@ -237,7 +237,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(owningObject);
         ArgumentNullException.ThrowIfNull(member);
 
-        CodeStatementCollection statements = new();
+        CodeStatementCollection statements = [];
         // See if we have an existing expression for this member.  If not, fabricate one
         CodeExpression? expression = GetExpression(manager, owningObject);
         if (expression is null)
@@ -354,7 +354,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
             return;
         }
 
-        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance, new Attribute[] { BrowsableAttribute.Yes });
+        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance, [BrowsableAttribute.Yes]);
         foreach (PropertyDescriptor prop in props)
         {
             if (!prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden))

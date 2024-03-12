@@ -116,14 +116,14 @@ internal class ListViewDesigner : ControlDesigner
 
         if (ownerDrawProp is not null)
         {
-            properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, Array.Empty<Attribute>());
+            properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, []);
         }
 
         PropertyDescriptor viewProp = (PropertyDescriptor)properties["View"];
 
         if (viewProp is not null)
         {
-            properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, Array.Empty<Attribute>());
+            properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, []);
         }
 
         base.PreFilterProperties(properties);

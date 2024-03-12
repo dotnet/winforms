@@ -15,8 +15,8 @@ namespace System.Drawing.Design;
 /// </summary>
 public class IconEditor : UITypeEditor
 {
-    private static readonly List<string> s_iconExtensions = new() { "ico" };
-    private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
+    private static readonly List<string> s_iconExtensions = ["ico"];
+    private static readonly Type[] s_imageExtenders = [];
     private FileDialog? _fileDialog;
 
     protected static string? CreateExtensionsString(string?[]? extensions, string sep)

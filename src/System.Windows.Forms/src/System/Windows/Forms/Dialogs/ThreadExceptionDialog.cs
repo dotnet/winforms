@@ -104,11 +104,11 @@ public class ThreadExceptionDialog : Form
             messageText = w.Message;
             if (w.HelpUrl is null)
             {
-                buttons = new Button[] { _continueButton };
+                buttons = [_continueButton];
             }
             else
             {
-                buttons = new Button[] { _continueButton, _helpButton };
+                buttons = [_continueButton, _helpButton];
             }
         }
         else
@@ -128,7 +128,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton, _quitButton };
+                buttons = [_detailsButton, _continueButton, _quitButton];
             }
             else
             {
@@ -141,7 +141,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgContinueErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton };
+                buttons = [_detailsButton, _continueButton];
             }
         }
 

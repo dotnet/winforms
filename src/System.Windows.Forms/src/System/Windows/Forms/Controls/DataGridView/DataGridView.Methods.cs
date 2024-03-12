@@ -5420,7 +5420,7 @@ public partial class DataGridView
 
         for (int arrayIndex = 0; arrayIndex < dataGridViewRows.Length; arrayIndex++)
         {
-            currentRowFrozen = ((DataGridViewRow)dataGridViewRows[arrayIndex]).Frozen;
+            currentRowFrozen = dataGridViewRows[arrayIndex].Frozen;
             if (!previousRowFrozen && currentRowFrozen)
             {
                 throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenRow);
@@ -5693,7 +5693,7 @@ public partial class DataGridView
                 completeColumns--;
             }
 
-            dataGridViewColumn = (DataGridViewColumn)Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol];
+            dataGridViewColumn = Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol];
             Debug.Assert(dataGridViewColumn.Visible && !dataGridViewColumn.Frozen);
 
             while (dataGridViewColumn is not null && cx < cxMax)
@@ -6587,7 +6587,7 @@ public partial class DataGridView
             else
             {
                 Rectangle rectScreen = Screen.FromControl(this).WorkingArea;
-                int maxDisplayedRows = (int)(rectScreen.Height / DataGridViewBand.MinBandThickness);
+                int maxDisplayedRows = rectScreen.Height / DataGridViewBand.MinBandThickness;
 
                 // Make sure all displayed scrolling rows have the Displayed state.
                 int rowIndexTmp = DisplayedBandsInfo.FirstDisplayedScrollingRow;
@@ -7335,13 +7335,13 @@ public partial class DataGridView
             return null;
         }
 
-        string[] formats = new string[]
-        {
+        string[] formats =
+        [
             DataFormats.Html,
             DataFormats.Text,
             DataFormats.UnicodeText,
             DataFormats.CommaSeparatedValue
-        };
+        ];
         DataObject dataObject = new();
         bool includeColumnHeaders = false, includeRowHeaders = false;
         string? cellContent = null;
@@ -8355,7 +8355,7 @@ public partial class DataGridView
         return dataObject;
     }
 
-    private static void GetClipboardContentForHtml(StringBuilder sbContent, out IO.MemoryStream utf8Stream)
+    private static void GetClipboardContentForHtml(StringBuilder sbContent, out MemoryStream utf8Stream)
     {
         byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
         byte[] destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
@@ -8384,9 +8384,9 @@ public partial class DataGridView
         sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
         destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
 
-        utf8Stream = new IO.MemoryStream(bytecountEndOfHtml + 1);
+        utf8Stream = new MemoryStream(bytecountEndOfHtml + 1);
         utf8Stream.Write(destinationBytes, 0, bytecountEndOfHtml);
-        utf8Stream.WriteByte((byte)0);
+        utf8Stream.WriteByte(0);
 
         Debug.Assert(destinationBytes[97] == '<');
         Debug.Assert(destinationBytes[bytecountEndOfHtml - 1] == '>');
@@ -11186,7 +11186,7 @@ public partial class DataGridView
 
         // Make sure the sum of the column weights does not exceed ushort.MaxValue
         float weightSum = Columns.GetColumnsFillWeight(DataGridViewElementStates.None) + dataGridViewColumn.FillWeight;
-        if (weightSum > (float)ushort.MaxValue)
+        if (weightSum > ushort.MaxValue)
         {
             throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
         }
@@ -11258,7 +11258,7 @@ public partial class DataGridView
     {
         // Make sure the sum of the column weights does not exceed ushort.MaxValue
         float weightSum = Columns.GetColumnsFillWeight(DataGridViewElementStates.None);
-        Debug.Assert(weightSum <= (float)ushort.MaxValue);
+        Debug.Assert(weightSum <= ushort.MaxValue);
 
         // throw an exception if any of the columns to be added breaks the rules
         Debug.Assert(dataGridViewColumns is not null);
@@ -11317,13 +11317,13 @@ public partial class DataGridView
             }
 
             weightSum += dataGridViewColumn.FillWeight;
-            if (weightSum > (float)ushort.MaxValue)
+            if (weightSum > ushort.MaxValue)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
         }
 
-        Debug.Assert(weightSum <= (float)ushort.MaxValue);
+        Debug.Assert(weightSum <= ushort.MaxValue);
 
         // make sure no two columns are identical
         int columnCount = dataGridViewColumns.Length;
@@ -16858,7 +16858,7 @@ public partial class DataGridView
 
         bool verticalScroll = ((ModifierKeys & Keys.Control) == 0);
 
-        ScrollBar sb = (verticalScroll ? (ScrollBar)_vertScrollBar : (ScrollBar)_horizScrollBar);
+        ScrollBar sb = (verticalScroll ? _vertScrollBar : _horizScrollBar);
 
         if (!sb.Visible || !sb.Enabled)
         {
@@ -16886,12 +16886,12 @@ public partial class DataGridView
         if (verticalScroll)
         {
             _cumulativeVerticalWheelDelta += e.Delta;
-            partialNotches = (float)_cumulativeVerticalWheelDelta / (float)PInvoke.WHEEL_DELTA;
+            partialNotches = _cumulativeVerticalWheelDelta / (float)PInvoke.WHEEL_DELTA;
         }
         else
         {
             _cumulativeHorizontalWheelDelta += e.Delta;
-            partialNotches = (float)_cumulativeHorizontalWheelDelta / (float)PInvoke.WHEEL_DELTA;
+            partialNotches = _cumulativeHorizontalWheelDelta / (float)PInvoke.WHEEL_DELTA;
         }
 
         int fullNotches = (int)partialNotches;
@@ -16971,7 +16971,7 @@ public partial class DataGridView
                         }
                         else
                         {
-                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                     else
@@ -16998,7 +16998,7 @@ public partial class DataGridView
                         }
                         else
                         {
-                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                 }
@@ -17029,7 +17029,7 @@ public partial class DataGridView
                     }
                     else
                     {
-                        _cumulativeHorizontalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                        _cumulativeHorizontalWheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                     }
                 }
             }

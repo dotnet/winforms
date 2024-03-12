@@ -145,7 +145,7 @@ public partial class CheckedListBox
         {
             get
             {
-                return ((ObjectCollection)_owner.Items).InnerArray;
+                return _owner.Items.InnerArray;
             }
         }
 

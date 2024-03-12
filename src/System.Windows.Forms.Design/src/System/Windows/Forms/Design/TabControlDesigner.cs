@@ -475,12 +475,12 @@ internal class TabControlDesigner : ParentControlDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-            {
+        string[] shadowProps =
+            [
                 "SelectedIndex",
-            };
+            ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {

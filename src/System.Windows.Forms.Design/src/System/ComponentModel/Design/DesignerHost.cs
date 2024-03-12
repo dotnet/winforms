@@ -19,7 +19,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
     private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading); // A transaction is in the process of being Canceled or Commited.
 
-    private static readonly Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
+    private static readonly Type[] s_defaultServices = [typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2)];
 
     // IDesignerHost events
     private static readonly object s_eventActivated = new(); // Designer has been activated
@@ -61,7 +61,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     {
         _surface = surface;
         _state = default;
-        _designers = new();
+        _designers = [];
         _events = new EventHandlerList();
 
         // Add the relevant services.  We try to add these as "fixed" services.  A fixed service cannot be removed by the user.  The reason for this is that each of these services depends on each other, so you can't really remove and replace just one of them. If we can't get our own service container that supports fixed services, we add these as regular services.
@@ -687,7 +687,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // Now remove all the designers and their components.  We save the root for last.  Note that we eat any exceptions that components or their designers generate.  A bad component or designer should not prevent an unload from happening.  We do all of this in a transaction to help reduce the number of events we generate.
         _state[s_stateUnloading] = true;
         DesignerTransaction t = ((IDesignerHost)this).CreateTransaction();
-        List<Exception> exceptions = new();
+        List<Exception> exceptions = [];
         try
         {
             IComponent[] components = new IComponent[Components.Count];
@@ -1182,7 +1182,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
                     _state[s_stateLoading] = true;
                     Unload();
 
-                    List<object> errorList = errorCollection is null ? new() : errorCollection.Cast<object>().ToList();
+                    List<object> errorList = errorCollection is null ? [] : errorCollection.Cast<object>().ToList();
                     errorList.Insert(0, ex);
 
                     errorCollection = errorList;

@@ -46,10 +46,13 @@ public class MarginsConverterTests
         MarginsConverter mc = new();
         MyTypeDescriptorContext context = new();
 
-        IDictionary values = new Dictionary<string, int>();
-        values.Add("Left", 1);
-        values.Add("Right", 2);
-        values.Add("Top", 3);
+        IDictionary values = new Dictionary<string, int>
+        {
+            { "Left", 1 },
+            { "Right", 2 },
+            { "Top", 3 }
+        };
+
         Assert.Throws<ArgumentException>(() => mc.CreateInstance(context, values));
         values.Add("Bottom", 4);
 
