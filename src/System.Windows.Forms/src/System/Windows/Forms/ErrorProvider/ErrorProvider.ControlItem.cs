@@ -33,12 +33,12 @@ public partial class ErrorProvider
             Id = id;
             _control = control;
             _provider = provider;
-            _control.HandleCreated += new EventHandler(OnCreateHandle);
-            _control.HandleDestroyed += new EventHandler(OnDestroyHandle);
-            _control.LocationChanged += new EventHandler(OnBoundsChanged);
-            _control.SizeChanged += new EventHandler(OnBoundsChanged);
-            _control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
-            _control.ParentChanged += new EventHandler(OnParentVisibleChanged);
+            _control.HandleCreated += OnCreateHandle;
+            _control.HandleDestroyed += OnDestroyHandle;
+            _control.LocationChanged += OnBoundsChanged;
+            _control.SizeChanged += OnBoundsChanged;
+            _control.VisibleChanged += OnParentVisibleChanged;
+            _control.ParentChanged += OnParentVisibleChanged;
         }
 
         /// <summary>
@@ -50,21 +50,18 @@ public partial class ErrorProvider
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ControlItemAccessibleObject(this, _window, _control, _provider);
-        }
+        private ControlItemAccessibleObject CreateAccessibilityInstance() => new(this, _window, _control, _provider);
 
         public void Dispose()
         {
             if (_control is not null)
             {
-                _control.HandleCreated -= new EventHandler(OnCreateHandle);
-                _control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
-                _control.LocationChanged -= new EventHandler(OnBoundsChanged);
-                _control.SizeChanged -= new EventHandler(OnBoundsChanged);
-                _control.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
-                _control.ParentChanged -= new EventHandler(OnParentVisibleChanged);
+                _control.HandleCreated -= OnCreateHandle;
+                _control.HandleDestroyed -= OnDestroyHandle;
+                _control.LocationChanged -= OnBoundsChanged;
+                _control.SizeChanged -= OnBoundsChanged;
+                _control.VisibleChanged -= OnParentVisibleChanged;
+                _control.ParentChanged -= OnParentVisibleChanged;
             }
 
             _error = string.Empty;

@@ -66,10 +66,7 @@ public partial class ErrorProvider
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ErrorWindowAccessibleObject(this);
-        }
+        private ErrorWindowAccessibleObject CreateAccessibilityInstance() => new(this);
 
         /// <summary>
         ///  Called to get rid of any resources the Object may have.

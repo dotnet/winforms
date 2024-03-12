@@ -659,7 +659,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         return text;
     }
 
-    private unsafe Image? GetNativeMenuItemImage()
+    private unsafe Bitmap? GetNativeMenuItemImage()
     {
         if (_nativeMenuCommandID == -1 || _nativeMenuHandle.IsNull)
         {

@@ -209,8 +209,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     private IDesignerTarget DesignerTarget { get; set; }
 
-    private Dictionary<IntPtr, bool> SubclassedChildWindows
-        => _subclassedChildren ??= [];
+    private Dictionary<IntPtr, bool> SubclassedChildWindows => _subclassedChildren ??= [];
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more
