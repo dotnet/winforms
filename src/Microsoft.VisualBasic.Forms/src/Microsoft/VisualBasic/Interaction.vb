@@ -281,14 +281,14 @@ Namespace Microsoft.VisualBasic
             Dim vbhost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = CompilerServices.HostServices.VBHost
+            vbhost = HostServices.VBHost
             If vbhost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
             If String.IsNullOrEmpty(Title) Then
                 If vbhost Is Nothing Then
-                    Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                    Title = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                 Else
                     Title = vbhost.GetWindowTitle()
                 End If
@@ -297,7 +297,7 @@ Namespace Microsoft.VisualBasic
             'Threading state can only be set once, and will most often be already set
             'but set to STA and check if it isn't STA, then we need to start another thread
             'to display the InputBox
-            If System.Threading.Thread.CurrentThread.GetApartmentState() <> Threading.ApartmentState.STA Then
+            If Thread.CurrentThread.GetApartmentState() <> ApartmentState.STA Then
                 Dim InputHandler As New InputBoxHandler(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
                 Dim thread As New Thread(New ThreadStart(AddressOf InputHandler.StartHere))
                 thread.Start()
@@ -355,7 +355,7 @@ Namespace Microsoft.VisualBasic
             Dim vbhost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = CompilerServices.HostServices.VBHost
+            vbhost = HostServices.VBHost
             If vbhost IsNot Nothing Then
                 ParentWindow = vbhost.GetParentWindow()
             End If
@@ -387,7 +387,7 @@ Namespace Microsoft.VisualBasic
             Try
                 If Title Is Nothing Then
                     If vbhost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                        sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
                         sTitle = vbhost.GetWindowTitle()
                     End If
@@ -404,7 +404,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(System.Windows.Forms.MessageBox.Show(ParentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(ParentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),

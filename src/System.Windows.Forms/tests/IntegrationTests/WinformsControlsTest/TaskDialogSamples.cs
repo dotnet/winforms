@@ -10,7 +10,7 @@ public class TaskDialogSamples : Form
 {
     public TaskDialogSamples()
     {
-        this.Text = "Task Dialog Demos";
+        Text = "Task Dialog Demos";
 
         AutoSize = true;
         AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -203,7 +203,7 @@ public class TaskDialogSamples : Form
             Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...",
             // Display the form's icon in the task dialog.
             // Note however that the task dialog will not scale the icon.
-            Icon = new TaskDialogIcon(this.Icon),
+            Icon = new TaskDialogIcon(Icon),
             ProgressBar = new TaskDialogProgressBar()
             {
                 State = TaskDialogProgressBarState.Paused

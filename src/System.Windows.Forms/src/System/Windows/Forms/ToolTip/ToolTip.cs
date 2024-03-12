@@ -1337,7 +1337,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
                 if (duration > 0)
                 {
-                    StartTimer(this._window, duration);
+                    StartTimer(_window, duration);
                 }
             }
             else

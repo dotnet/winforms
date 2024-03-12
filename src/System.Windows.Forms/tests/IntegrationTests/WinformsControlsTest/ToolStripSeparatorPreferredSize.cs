@@ -9,7 +9,7 @@ internal class ToolStripSeparatorPreferredSize : Form
     public ToolStripSeparatorPreferredSize()
     {
         InitializeComponent();
-        this.buttonChangeOrientation.Click += ChangeOrientation;
+        buttonChangeOrientation.Click += ChangeOrientation;
         SetLabelText();
     }
 
@@ -28,72 +28,72 @@ internal class ToolStripSeparatorPreferredSize : Form
 
     private void InitializeComponent()
     {
-        this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-        this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-        this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-        this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-        this.buttonChangeOrientation = new System.Windows.Forms.Button();
-        this.label1 = new System.Windows.Forms.Label();
-        this.toolStrip1.SuspendLayout();
-        this.SuspendLayout();
+        toolStrip1 = new System.Windows.Forms.ToolStrip();
+        toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+        toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+        toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+        buttonChangeOrientation = new System.Windows.Forms.Button();
+        label1 = new System.Windows.Forms.Label();
+        toolStrip1.SuspendLayout();
+        SuspendLayout();
         // 
         // toolStrip1
         // 
-        this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+        toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
         {
-            this.toolStripLabel1,
-            this.toolStripSeparator1,
-            this.toolStripLabel2
+            toolStripLabel1,
+            toolStripSeparator1,
+            toolStripLabel2
         });
-        this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-        this.toolStrip1.Name = "toolStrip1";
-        this.toolStrip1.Size = new System.Drawing.Size(481, 22);
-        this.toolStrip1.TabIndex = 0;
-        this.toolStrip1.Text = "toolStrip1";
-        this.toolStrip1.TabStop = true;
+        toolStrip1.Location = new System.Drawing.Point(0, 0);
+        toolStrip1.Name = "toolStrip1";
+        toolStrip1.Size = new System.Drawing.Size(481, 22);
+        toolStrip1.TabIndex = 0;
+        toolStrip1.Text = "toolStrip1";
+        toolStrip1.TabStop = true;
         // 
         // toolStripLabel1
         // 
-        this.toolStripLabel1.Name = "toolStripLabel1";
-        this.toolStripLabel1.Size = new System.Drawing.Size(86, 22);
-        this.toolStripLabel1.Text = "ToolStripLabel";
+        toolStripLabel1.Name = "toolStripLabel1";
+        toolStripLabel1.Size = new System.Drawing.Size(86, 22);
+        toolStripLabel1.Text = "ToolStripLabel";
         // 
         // toolStripLabel2
         // 
-        this.toolStripLabel2.Name = "toolStripLabel2";
-        this.toolStripLabel2.Size = new System.Drawing.Size(86, 22);
-        this.toolStripLabel2.Text = "ToolStripLabel";
+        toolStripLabel2.Name = "toolStripLabel2";
+        toolStripLabel2.Size = new System.Drawing.Size(86, 22);
+        toolStripLabel2.Text = "ToolStripLabel";
         // 
         // buttonChangeOrientation
         // 
-        this.buttonChangeOrientation.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        this.buttonChangeOrientation.Name = "buttonChangeOrientation";
-        this.buttonChangeOrientation.Location = new System.Drawing.Point(10, 75);
-        this.buttonChangeOrientation.Size = new System.Drawing.Size(150, 25);
-        this.buttonChangeOrientation.TabIndex = 0;
-        this.buttonChangeOrientation.Text = "Change Orientation";
-        this.buttonChangeOrientation.UseVisualStyleBackColor = true;
+        buttonChangeOrientation.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        buttonChangeOrientation.Name = "buttonChangeOrientation";
+        buttonChangeOrientation.Location = new System.Drawing.Point(10, 75);
+        buttonChangeOrientation.Size = new System.Drawing.Size(150, 25);
+        buttonChangeOrientation.TabIndex = 0;
+        buttonChangeOrientation.Text = "Change Orientation";
+        buttonChangeOrientation.UseVisualStyleBackColor = true;
         // 
         // label1
         //
-        this.label1.Name = "label1";
-        this.label1.Location = new System.Drawing.Point(10, 50);
-        this.label1.AutoSize = true;
+        label1.Name = "label1";
+        label1.Location = new System.Drawing.Point(10, 50);
+        label1.AutoSize = true;
         // 
         // Form1
         // 
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.Size = new System.Drawing.Size(881, 150);
-        this.Controls.Add(this.toolStrip1);
-        this.Controls.Add(this.label1);
-        this.Controls.Add(this.buttonChangeOrientation);
-        this.Name = "ToolStripSeparatorPreferredSize";
-        this.Text = "ToolStripSeparator GetPreferredSize";
-        this.toolStrip1.ResumeLayout(false);
-        this.toolStrip1.PerformLayout();
-        this.ResumeLayout(false);
-        this.PerformLayout();
+        AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        Size = new System.Drawing.Size(881, 150);
+        Controls.Add(toolStrip1);
+        Controls.Add(label1);
+        Controls.Add(buttonChangeOrientation);
+        Name = "ToolStripSeparatorPreferredSize";
+        Text = "ToolStripSeparator GetPreferredSize";
+        toolStrip1.ResumeLayout(false);
+        toolStrip1.PerformLayout();
+        ResumeLayout(false);
+        PerformLayout();
     }
 
     private System.Windows.Forms.ToolStrip toolStrip1;
