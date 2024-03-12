@@ -313,7 +313,7 @@ public partial class ListView
                 IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
                 for (int i = 0; i < visibleGroups.Count; i++)
                 {
-                    if (visibleGroups[i].AccessibilityObject.Bounds.Contains(hitTestPoint))
+                    if (visibleGroups[i].AccessibilityObject?.Bounds.Contains(hitTestPoint) == true)
                     {
                         return visibleGroups[i].AccessibilityObject;
                     }

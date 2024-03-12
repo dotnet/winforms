@@ -74,8 +74,26 @@ public sealed partial class ListViewGroup : ISerializable
         _headerAlignment = headerAlignment;
     }
 
-    internal AccessibleObject AccessibilityObject
-        => _accessibilityObject ??= new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
+    internal AccessibleObject? AccessibilityObject
+    {
+        get
+        {
+            if (_accessibilityObject is not null)
+            {
+                return _accessibilityObject;
+            }
+
+            // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
+            var listView = ListView;
+            listView ??= Items.Count > 0 ? Items[0].ListView : null;
+            if (listView is not null)
+            {
+                _accessibilityObject = new ListViewGroupAccessibleObject(this, listView, owningGroupIsDefault: !listView.Groups.Contains(this));
+            }
+
+            return _accessibilityObject;
+        }
+    }
 
     /// <summary>
     ///  The text displayed in the group header.

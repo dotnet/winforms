@@ -1326,10 +1326,12 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         };
 
         listView.Groups.Add(listGroup);
-        ListViewItem item = new("Test");
-        item.Group = listGroup;
+        ListViewItem item = new("Test")
+        {
+            Group = listGroup
+        };
         listView.Items.Add(item);
-        ListViewGroupAccessibleObject accessibleObject = new(listGroup, false);
+        ListViewGroupAccessibleObject accessibleObject = new(listGroup, listView, false);
 
         if (createHandle)
         {
