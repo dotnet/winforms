@@ -97,8 +97,7 @@ internal partial class CategoryGridEntry
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId == UIA_PATTERN_ID.UIA_GridItemPatternId ||
-                patternId == UIA_PATTERN_ID.UIA_TableItemPatternId)
+            if (patternId is UIA_PATTERN_ID.UIA_GridItemPatternId or UIA_PATTERN_ID.UIA_TableItemPatternId)
             {
                 return true;
             }

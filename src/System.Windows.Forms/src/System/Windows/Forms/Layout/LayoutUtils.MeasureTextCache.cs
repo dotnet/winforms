@@ -87,7 +87,7 @@ internal static partial class LayoutUtils
         ///  Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
         public void InvalidateCache()
         {
-            _unconstrainedPreferredSize = LayoutUtils.s_invalidSize;
+            _unconstrainedPreferredSize = s_invalidSize;
             _sizeCacheList = null;
         }
 

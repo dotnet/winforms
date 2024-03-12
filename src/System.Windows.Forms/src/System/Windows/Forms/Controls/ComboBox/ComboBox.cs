@@ -193,7 +193,7 @@ public partial class ComboBox : ListControl
                 throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
             }
 
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
                 throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
@@ -2028,8 +2028,8 @@ public partial class ComboBox : ListControl
     // constraints on their size.
     internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
-        if (DropDownStyle == ComboBoxStyle.DropDown
-            || DropDownStyle == ComboBoxStyle.DropDownList)
+        if (DropDownStyle is ComboBoxStyle.DropDown
+            or ComboBoxStyle.DropDownList)
         {
             proposedHeight = PreferredHeight;
         }
@@ -2242,7 +2242,7 @@ public partial class ComboBox : ListControl
     protected override bool IsInputKey(Keys keyData)
     {
         Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
-        if (keyCode == Keys.Return || keyCode == Keys.Escape)
+        if (keyCode is Keys.Return or Keys.Escape)
         {
             if (DroppedDown || _autoCompleteDroppedDown)
             {

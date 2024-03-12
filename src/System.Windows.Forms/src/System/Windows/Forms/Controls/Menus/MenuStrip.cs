@@ -201,8 +201,8 @@ public partial class MenuStrip : ToolStrip
     {
         if (!(Focused || ContainsFocus))
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] set focus to menustrip");
-            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/true);
+            s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] set focus to menustrip");
+            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, menuKeyPressed: true);
 
             if (DisplayedItems.Count > 0)
             {

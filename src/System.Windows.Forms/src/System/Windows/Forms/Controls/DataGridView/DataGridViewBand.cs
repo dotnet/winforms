@@ -301,7 +301,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 {
                     if (IsRow)
                     {
-                        if (!(value is DataGridViewRowHeaderCell))
+                        if (value is not DataGridViewRowHeaderCell)
                         {
                             throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewRow.HeaderCell), "System.Windows.Forms.DataGridViewRowHeaderCell"), nameof(value));
                         }
@@ -317,7 +317,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                     }
                     else
                     {
-                        if (!(value is DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell))
+                        if (value is not DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell)
                         {
                             throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewColumn.HeaderCell), "System.Windows.Forms.DataGridViewColumnHeaderCell"), nameof(value));
                         }
@@ -375,11 +375,11 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 {
                     if (IsRow)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, DataGridViewBand.MinBandThickness));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, MinBandThickness));
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumWidthSmallerThanOne, DataGridViewBand.MinBandThickness));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumWidthSmallerThanOne, MinBandThickness));
                     }
                 }
 
@@ -565,7 +565,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                         throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Selected)));
                     }
 
-                    if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect || DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
+                    if (DataGridView.SelectionMode is DataGridViewSelectionMode.FullRowSelect or DataGridViewSelectionMode.RowHeaderSelect)
                     {
                         DataGridView.SetSelectedRowCoreInternal(Index, value);
                     }
@@ -573,7 +573,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 else
                 {
                     Debug.Assert(Index >= 0);
-                    if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect || DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
+                    if (DataGridView.SelectionMode is DataGridViewSelectionMode.FullColumnSelect or DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
                         DataGridView.SetSelectedColumnCoreInternal(Index, value);
                     }
@@ -657,9 +657,9 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
             {
                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)this;
                 DataGridViewAutoSizeColumnMode inheritedAutoSizeMode = dataGridViewColumn.InheritedAutoSizeMode;
-                if (inheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill &&
-                    inheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.None &&
-                    inheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.NotSet)
+                if (inheritedAutoSizeMode is not DataGridViewAutoSizeColumnMode.Fill and
+                    not DataGridViewAutoSizeColumnMode.None and
+                    not DataGridViewAutoSizeColumnMode.NotSet)
                 {
                     CachedThickness = value;
                     setThickness = false;

@@ -98,7 +98,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     {
         set
         {
-            Debug.Assert(value >= FlatStyle.Flat && value <= FlatStyle.System);
+            Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
                 Properties.SetInteger(s_propButtonCellFlatStyle, (int)value);
@@ -172,7 +172,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             dataGridViewCell = (DataGridViewButtonCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
         dataGridViewCell.FlatStyleInternal = FlatStyle;
         dataGridViewCell.UseColumnTextForButtonValueInternal = UseColumnTextForButtonValue;
         return dataGridViewCell;
@@ -327,7 +327,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         Rectangle borderWidthsRect = StdBorderWidths;
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
-        DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
+        DataGridViewFreeDimension freeDimension = GetFreeDimensionFromConstraint(constraintSize);
         int marginWidths, marginHeights;
         string? formattedString = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
         if (string.IsNullOrEmpty(formattedString))
@@ -340,7 +340,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         // Adding space for text padding.
         if (DataGridView.ApplyVisualStylesToInnerCells)
         {
-            Rectangle rectThemeMargins = DataGridViewButtonCell.GetThemeMargins(graphics);
+            Rectangle rectThemeMargins = GetThemeMargins(graphics);
             marginWidths = rectThemeMargins.X + rectThemeMargins.Width;
             marginHeights = rectThemeMargins.Y + rectThemeMargins.Height;
         }
@@ -754,7 +754,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     {
                         if (paint && PaintContentBackground(paintParts))
                         {
-                            PushButtonState pbState = VisualStyles.PushButtonState.Normal;
+                            PushButtonState pbState = PushButtonState.Normal;
                             if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
                             {
                                 pbState = PushButtonState.Pressed;
@@ -919,7 +919,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             valBounds.Height > 2 * SystemInformation.Border3DSize.Height + 1)
         {
             // Draw focus rectangle
-            if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard)
+            if (FlatStyle is FlatStyle.System or FlatStyle.Standard)
             {
                 ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(valBounds, -1, -1), Color.Empty, cellStyle.ForeColor);
             }

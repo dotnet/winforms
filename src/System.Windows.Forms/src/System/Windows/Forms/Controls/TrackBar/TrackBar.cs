@@ -359,7 +359,7 @@ public partial class TrackBar : Control, ISupportInitialize
         get => _orientation;
         set
         {
-            if (value < Orientation.Horizontal || value > Orientation.Vertical)
+            if (value is < Orientation.Horizontal or > Orientation.Vertical)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
             }
@@ -530,7 +530,7 @@ public partial class TrackBar : Control, ISupportInitialize
         get => _tickStyle;
         set
         {
-            if (value < TickStyle.None || value > TickStyle.Both)
+            if (value is < TickStyle.None or > TickStyle.Both)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TickStyle));
             }

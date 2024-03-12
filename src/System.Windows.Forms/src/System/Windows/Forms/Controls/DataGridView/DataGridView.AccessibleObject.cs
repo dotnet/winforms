@@ -79,7 +79,7 @@ public partial class DataGridView
 
             if (owner.Columns.Count == 0)
             {
-                Diagnostics.Debug.Assert(GetChildCount() == 0);
+                Debug.Assert(GetChildCount() == 0);
                 return null;
             }
 

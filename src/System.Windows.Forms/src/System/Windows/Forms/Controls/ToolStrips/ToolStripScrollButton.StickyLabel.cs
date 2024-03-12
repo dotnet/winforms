@@ -37,7 +37,7 @@ internal partial class ToolStripScrollButton
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg >= (int)PInvoke.WM_KEYFIRST && m.Msg <= (int)PInvoke.WM_KEYLAST)
+            if (m.Msg is >= ((int)PInvoke.WM_KEYFIRST) and <= ((int)PInvoke.WM_KEYLAST))
             {
                 DefWndProc(ref m);
                 return;

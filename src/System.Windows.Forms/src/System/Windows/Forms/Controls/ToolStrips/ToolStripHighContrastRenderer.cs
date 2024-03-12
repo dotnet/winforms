@@ -260,7 +260,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         {
             g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
-            if (!(e.ToolStrip is ToolStripOverflow))
+            if (e.ToolStrip is not ToolStripOverflow)
             {
                 // make the neck connected.
                 g.FillRectangle(SystemBrushes.Control, e.ConnectedArea);

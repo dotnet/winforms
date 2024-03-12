@@ -417,7 +417,7 @@ public partial class ColumnHeader : Component, ICloneable
 
     public void AutoResize(ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        if (headerAutoResize < ColumnHeaderAutoResizeStyle.None || headerAutoResize > ColumnHeaderAutoResizeStyle.ColumnContent)
+        if (headerAutoResize is < ColumnHeaderAutoResizeStyle.None or > ColumnHeaderAutoResizeStyle.ColumnContent)
         {
             throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
         }

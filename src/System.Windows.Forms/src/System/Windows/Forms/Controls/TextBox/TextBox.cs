@@ -586,7 +586,7 @@ public partial class TextBox : TextBoxBase
             _selectionSet = true;
 
             // If the user didn't provide a selection, force one in.
-            if (SelectionLength == 0 && Control.MouseButtons == MouseButtons.None)
+            if (SelectionLength == 0 && MouseButtons == MouseButtons.None)
             {
                 SelectAll();
             }
@@ -610,7 +610,7 @@ public partial class TextBox : TextBoxBase
             return;
         }
 
-        base.SetSelectionOnHandle();
+        SetSelectionOnHandle();
 
         if (_passwordChar != 0)
         {

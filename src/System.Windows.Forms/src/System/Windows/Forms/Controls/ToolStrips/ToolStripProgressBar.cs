@@ -84,7 +84,7 @@ public partial class ToolStripProgressBar : ToolStripControlHost
     {
         get
         {
-            if (Owner is not null && Owner is StatusStrip)
+            if (Owner is not null and StatusStrip)
             {
                 return _defaultStatusStripMargin;
             }

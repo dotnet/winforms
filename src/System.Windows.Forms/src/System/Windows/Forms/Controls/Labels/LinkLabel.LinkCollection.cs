@@ -170,7 +170,7 @@ public partial class LinkLabel
 
             if (_owner.Links.Count > 1)
             {
-                _owner._links.Sort(LinkLabel.s_linkComparer);
+                _owner._links.Sort(s_linkComparer);
             }
 
             _owner.ValidateNoOverlappingLinks();
@@ -350,7 +350,7 @@ public partial class LinkLabel
                 _owner.Invalidate();
             }
 
-            _owner._links.Sort(LinkLabel.s_linkComparer);
+            _owner._links.Sort(s_linkComparer);
 
             _owner.ValidateNoOverlappingLinks();
             _owner.UpdateSelectability();

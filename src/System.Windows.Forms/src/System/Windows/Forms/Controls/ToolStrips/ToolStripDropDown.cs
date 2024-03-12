@@ -1108,7 +1108,7 @@ public partial class ToolStripDropDown : ToolStrip
         {
             Point screenPoint = Point.Empty;
 
-            if ((ownerItem is not null) && (ownerItem is ToolStripDropDownItem))
+            if (ownerItem is not null and ToolStripDropDownItem)
             {
                 screenPoint = ((ToolStripDropDownItem)ownerItem).DropDownLocation;
             }
@@ -1130,9 +1130,9 @@ public partial class ToolStripDropDown : ToolStrip
         else
         {
             Point parentClientPoint = Point.Empty;
-            if ((ownerItem is not null) && (ownerItem is ToolStripDropDownItem) && (ParentInternal is not null))
+            if ((ownerItem is not null) && (ownerItem is ToolStripDropDownItem item) && (ParentInternal is not null))
             {
-                parentClientPoint = ParentInternal.PointToClient(((ToolStripDropDownItem)ownerItem).DropDownLocation);
+                parentClientPoint = ParentInternal.PointToClient(item.DropDownLocation);
             }
             else
             {
@@ -1352,7 +1352,7 @@ public partial class ToolStripDropDown : ToolStrip
     protected override void OnMouseUp(MouseEventArgs mea)
     {
         base.OnMouseUp(mea);
-        ToolStrip.s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
+        s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
 
         // Menus should dismiss when you drag off
         if (!ClientRectangle.Contains(mea.Location))
@@ -1423,7 +1423,7 @@ public partial class ToolStripDropDown : ToolStrip
         }
         else
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SelectPreviousToolStrip] No previous toolstrip to select - exiting menu mode.");
+            s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SelectPreviousToolStrip] No previous toolstrip to select - exiting menu mode.");
             ToolStripManager.ModalMenuFilter.ExitMenuMode();
         }
     }
@@ -1435,11 +1435,11 @@ public partial class ToolStripDropDown : ToolStrip
     ///  </summary>
     internal override bool ProcessArrowKey(Keys keyCode)
     {
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripDropDown.ProcessArrowKey] MenuTimer.Cancel called");
+        s_menuAutoExpandDebug.TraceVerbose("[ToolStripDropDown.ProcessArrowKey] MenuTimer.Cancel called");
 
         ToolStripMenuItem.MenuTimer.Cancel();
 
-        if (keyCode == Keys.Left || keyCode == Keys.Right)
+        if (keyCode is Keys.Left or Keys.Right)
         {
             bool forward = keyCode == Keys.Right;
 
@@ -1513,7 +1513,7 @@ public partial class ToolStripDropDown : ToolStrip
             ToolStrip? toplevel = GetToplevelOwnerToolStrip();
             if (toplevel is not null)
             {
-                ToolStrip.s_snapFocusDebug.TraceVerbose("[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
+                s_snapFocusDebug.TraceVerbose("[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
                 toplevel.RestoreFocusInternal();
                 ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
             }
@@ -1871,7 +1871,7 @@ public partial class ToolStripDropDown : ToolStrip
 
                                 ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
 
-                                ToolStrip.s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SetVisibleCore] Exiting menu mode because item clicked");
+                                s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SetVisibleCore] Exiting menu mode because item clicked");
 
                                 ToolStripManager.ModalMenuFilter.ExitMenuMode();
                             }

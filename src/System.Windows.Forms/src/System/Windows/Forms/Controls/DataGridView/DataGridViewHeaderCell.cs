@@ -246,7 +246,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             dataGridViewCell = (DataGridViewHeaderCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
         dataGridViewCell.Value = Value;
         return dataGridViewCell;
     }
@@ -447,7 +447,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
                 // does not work either at this time. It AVs -So we hard code the margins for now.
                 try
                 {
-                    string themeFilename = System.IO.Path.GetFileName(System.Windows.Forms.VisualStyles.VisualStyleInformation.ThemeFilename);
+                    string themeFilename = Path.GetFileName(VisualStyles.VisualStyleInformation.ThemeFilename);
                     if (string.Equals(themeFilename, AeroThemeFileName, StringComparison.OrdinalIgnoreCase))
                     {
                         s_rectThemeMargins = new Rectangle(2, 1, 0, 2);
@@ -470,26 +470,19 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     }
 
     protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
-        DataGridView is null
-            ? false
-            : e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
+        DataGridView is not null && e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
 
     protected override bool MouseEnterUnsharesRow(int rowIndex) =>
-        DataGridView is null
-            ? false
-            : ColumnIndex == DataGridView.MouseDownCellAddress.X &&
-               rowIndex == DataGridView.MouseDownCellAddress.Y &&
-               DataGridView.ApplyVisualStylesToHeaderCells;
+        DataGridView is not null
+            && ColumnIndex == DataGridView.MouseDownCellAddress.X
+            && rowIndex == DataGridView.MouseDownCellAddress.Y
+            && DataGridView.ApplyVisualStylesToHeaderCells;
 
     protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
-        DataGridView is null
-            ? false
-            : ButtonState != ButtonState.Normal && DataGridView.ApplyVisualStylesToHeaderCells;
+        DataGridView is not null && ButtonState != ButtonState.Normal && DataGridView.ApplyVisualStylesToHeaderCells;
 
     protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
-        DataGridView is null
-            ? false
-            : e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
+        DataGridView is not null && e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
 
     protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
     {

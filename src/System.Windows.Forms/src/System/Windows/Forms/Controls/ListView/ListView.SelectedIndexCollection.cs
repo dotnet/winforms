@@ -295,7 +295,7 @@ public partial class ListView
         {
             if (Count > 0)
             {
-                System.Array.Copy(IndicesArray, 0, dest, index, Count);
+                Array.Copy(IndicesArray, 0, dest, index, Count);
             }
         }
 

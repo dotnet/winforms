@@ -1640,18 +1640,18 @@ public partial class RichTextBox : TextBoxBase
         {
             switch (cookieVal & DIRECTIONMASK)
             {
-                case RichTextBox.OUTPUT:
+                case OUTPUT:
                     {
                         _editStream ??= new MemoryStream();
 
                         switch (cookieVal & KINDMASK)
                         {
-                            case RichTextBox.RTF:
-                            case RichTextBox.TEXTCRLF:
+                            case RTF:
+                            case TEXTCRLF:
                                 Marshal.Copy(buf, bytes, 0, cb);
                                 _editStream.Write(bytes, 0, cb);
                                 break;
-                            case RichTextBox.TEXTLF:
+                            case TEXTLF:
                                 // Strip out \r characters so that we consistently return
                                 // \n for linefeeds. In a future version the RichEdit control
                                 // may support a SF_NOXLATCRLF flag which would do this for
@@ -1722,7 +1722,7 @@ public partial class RichTextBox : TextBoxBase
                         break;
                     }
 
-                case RichTextBox.INPUT:
+                case INPUT:
                     {
                         // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
                         // We had a case of a customer using Everett bits and another case of a customer using Whidbey Beta1 bits.
@@ -2657,29 +2657,17 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void SaveFile(Stream data, RichTextBoxStreamType fileType)
     {
-        uint flags;
-        switch (fileType)
+        uint flags = fileType switch
         {
-            case RichTextBoxStreamType.RichText:
-                flags = PInvoke.SF_RTF;
-                break;
-            case RichTextBoxStreamType.PlainText:
-                flags = PInvoke.SF_TEXT;
-                break;
-            case RichTextBoxStreamType.UnicodePlainText:
-                flags = PInvoke.SF_UNICODE | PInvoke.SF_TEXT;
-                break;
-            case RichTextBoxStreamType.RichNoOleObjs:
-                flags = PInvoke.SF_RTFNOOBJS;
-                break;
-            case RichTextBoxStreamType.TextTextOleObjs:
-                flags = PInvoke.SF_TEXTIZED;
-                break;
-            default:
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-        }
+            RichTextBoxStreamType.RichText => PInvoke.SF_RTF,
+            RichTextBoxStreamType.PlainText => PInvoke.SF_TEXT,
+            RichTextBoxStreamType.UnicodePlainText => PInvoke.SF_UNICODE | PInvoke.SF_TEXT,
+            RichTextBoxStreamType.RichNoOleObjs => PInvoke.SF_RTFNOOBJS,
+            RichTextBoxStreamType.TextTextOleObjs => PInvoke.SF_TEXTIZED,
+            _ => throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType)),
+        };
 
-        StreamOut(data, flags, true);
+        StreamOut(data, flags, includeCrLfs: true);
     }
 
     /// <summary>
@@ -2729,20 +2717,14 @@ public partial class RichTextBox : TextBoxBase
             CHARFORMAT2W cf = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
-                dwMask = mask
+                dwMask = mask,
+                dwEffects = charFormat switch
+                {
+                    RichTextBoxSelectionAttribute.All => effect,
+                    RichTextBoxSelectionAttribute.None => 0,
+                    _ => throw new ArgumentException(SR.UnknownAttr),
+                }
             };
-
-            switch (charFormat)
-            {
-                case RichTextBoxSelectionAttribute.All:
-                    cf.dwEffects = effect;
-                    break;
-                case RichTextBoxSelectionAttribute.None:
-                    cf.dwEffects = 0;
-                    break;
-                default:
-                    throw new ArgumentException(SR.UnknownAttr);
-            }
 
             // Set the format information.
             return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf) != 0;
@@ -3419,7 +3401,7 @@ public partial class RichTextBox : TextBoxBase
         // remove the last completed character typed.
 
         // Is either the Hangul or HangulFull IME currently in use?
-        if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
+        if (ImeMode is ImeMode.Hangul or ImeMode.HangulFull)
         {
             // Is the IME CompositionWindow open?
             LRESULT compMode = PInvoke.SendMessage(this, PInvoke.EM_GETIMECOMPMODE);

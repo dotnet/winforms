@@ -106,7 +106,7 @@ internal class Command : WeakReference
         FindSlotComplete:
 
             cmd._id = icmd + IdMin;
-            Debug.Assert(cmd._id >= IdMin && cmd._id < IdLim, "generated command id out of range");
+            Debug.Assert(cmd._id is >= IdMin and < IdLim, "generated command id out of range");
 
             s_cmds[icmd] = cmd;
             s_icmdTry = icmd + 1;
