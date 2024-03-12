@@ -95,6 +95,17 @@ dotnet_style_prefer_collection_expression = true:suggestion
 # C# files
 [*.cs]
 
+# These two conflict with our usage of CsWin32
+
+# SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+dotnet_diagnostic.SYSLIB1054.severity = none
+
+# SYSLIB1096: Convert to 'GeneratedComInterface'
+dotnet_diagnostic.SYSLIB1096.severity = none
+
+# DOC100: Place text in paragraphs
+dotnet_diagnostic.DOC100.severity = error
+
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
@@ -182,9 +193,6 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 
 # Visual Basic files
 
-# SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
-dotnet_diagnostic.SYSLIB1054.severity = none
-
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
@@ -222,3 +230,13 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
+
+# Test specific
+[**/tests/**/*.cs]
+
+# CA1861: Avoid constant arrays as arguments - expected to be inline for test readability (4000 hits)
+dotnet_diagnostic.CA1861.severity = silent
+
+# This should be fixed https://github.com/dotnet/winforms/issues/11041
+# xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
+dotnet_diagnostic.xUnit1042.severity = none

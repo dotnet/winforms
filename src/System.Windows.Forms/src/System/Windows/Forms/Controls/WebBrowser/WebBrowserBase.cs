@@ -187,7 +187,7 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     /// <remarks>
-    /// We have to resize the ActiveX control when our size changes.
+    ///  <para>We have to resize the ActiveX control when our size changes.</para>
     /// </remarks>
     internal override unsafe void OnBoundsUpdate(int x, int y, int width, int height)
     {
@@ -361,8 +361,10 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     /// <remarks>
-    /// Certain messages are forwarder directly to the ActiveX control,
-    /// others are first processed by the wndproc of Control
+    ///  <para>
+    ///   Certain messages are forwardef directly to the ActiveX control, others are first processed by the wndproc of
+    ///   <see cref="Control"/>.
+    ///  </para>
     /// </remarks>
     protected override unsafe void WndProc(ref Message m)
     {

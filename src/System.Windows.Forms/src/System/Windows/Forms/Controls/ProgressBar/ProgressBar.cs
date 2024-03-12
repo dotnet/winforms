@@ -666,8 +666,10 @@ public partial class ProgressBar : Control
     }
 
     /// <remarks>
-    ///  Note: <see cref="ProgressBar"/> doesn't work like other controls as far as setting ForeColor/BackColor.
-    ///  You need to send messages to update the colors.
+    ///  <para>
+    ///   Note: <see cref="ProgressBar"/> doesn't work like other controls as far as setting ForeColor/BackColor.
+    ///   You need to send messages to update the colors.
+    ///  </para>
     /// </remarks>
     private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
     {

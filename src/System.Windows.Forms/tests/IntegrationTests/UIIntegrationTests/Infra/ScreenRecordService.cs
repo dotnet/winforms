@@ -16,11 +16,11 @@ internal class ScreenRecordService : IDisposable
     private static readonly Stopwatch s_timer = Stopwatch.StartNew();
 
     /// <summary>
-    /// Frames captured for the current test. The elapsed time field is a timestamp relative to a fixed but unspecified
-    /// point in time.
+    ///  Frames captured for the current test. The elapsed time field is a timestamp relative to a fixed but unspecified
+    ///  point in time.
     /// </summary>
     /// <remarks>
-    /// Lock on this object before accessing to prevent concurrent accesses.
+    ///  <para>Lock on this object before accessing to prevent concurrent accesses.</para>
     /// </remarks>
     private static readonly List<(TimeSpan elapsed, Bitmap image)> s_frames = new();
     private static readonly ArrayPool<byte> s_pool = ArrayPool<byte>.Shared;
