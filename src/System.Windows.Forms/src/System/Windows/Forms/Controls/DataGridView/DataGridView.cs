@@ -267,7 +267,7 @@ public partial class DataGridView : Control, ISupportInitialize
     private object? _uneditedFormattedValue;
     private Control? _latestEditingControl;
     private Control? _cachedEditingControl;
-    private Panel? _editingPanel;
+    private DataGridViewEditingPanel? _editingPanel;
     private DataGridViewEditingPanelAccessibleObject? _editingPanelAccessibleObject;
     private Point _ptCurrentCell;
     private Point _ptCurrentCellCache = Point.Empty;

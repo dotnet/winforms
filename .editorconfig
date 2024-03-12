@@ -106,6 +106,9 @@ dotnet_diagnostic.SYSLIB1096.severity = none
 # DOC100: Place text in paragraphs
 dotnet_diagnostic.DOC100.severity = error
 
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = error
+
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
@@ -240,3 +243,6 @@ dotnet_diagnostic.CA1861.severity = silent
 # This should be fixed https://github.com/dotnet/winforms/issues/11041
 # xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
 dotnet_diagnostic.xUnit1042.severity = none
+
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = none

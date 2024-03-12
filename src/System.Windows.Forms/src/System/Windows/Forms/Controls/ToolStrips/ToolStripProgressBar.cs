@@ -235,19 +235,12 @@ public partial class ToolStripProgressBar : ToolStripControlHost
         }
     }
 
-    private static Control CreateControlInstance()
+    private static ToolStripProgressBarControl CreateControlInstance() => new()
     {
-        ProgressBar progressBar = new ToolStripProgressBarControl
-        {
-            Size = new Size(100, 15)
-        };
-        return progressBar;
-    }
+        Size = new Size(100, 15)
+    };
 
-    private void HandleRightToLeftLayoutChanged(object? sender, EventArgs e)
-    {
-        OnRightToLeftLayoutChanged(e);
-    }
+    private void HandleRightToLeftLayoutChanged(object? sender, EventArgs e) => OnRightToLeftLayoutChanged(e);
 
     protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
     {

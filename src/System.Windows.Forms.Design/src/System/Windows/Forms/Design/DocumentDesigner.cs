@@ -326,7 +326,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         return true;
     }
 
-    private ToolboxItem CreateAxToolboxItem(IDataObject dataObject)
+    private AxToolboxItem CreateAxToolboxItem(IDataObject dataObject)
     {
         // Read the stream out of the dataobject and get hold of the CLSID of the Toolbox item.
         MemoryStream stm = (MemoryStream)dataObject.GetData(AxClipFormat, true);

@@ -42,15 +42,11 @@ public partial class ToolStripComboBox : ToolStripControlHost
         throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
     }
 
-    private static Control CreateControlInstance()
+    private static ToolStripComboBoxControl CreateControlInstance() => new()
     {
-        ComboBox comboBox = new ToolStripComboBoxControl
-        {
-            FlatStyle = FlatStyle.Popup,
-            Font = ToolStripManager.DefaultFont
-        };
-        return comboBox;
-    }
+        FlatStyle = FlatStyle.Popup,
+        Font = ToolStripManager.DefaultFont
+    };
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]

@@ -33,11 +33,10 @@ public sealed class ResXDataNode : ISerializable
     private ResXFileRef? _fileRef;
 
     [Obsolete(DiagnosticId = "SYSLIB0051")]
-    private IFormatter? _binaryFormatter;
+    private BinaryFormatter? _binaryFormatter;
 
     // This is going to be used to check if a ResXDataNode is of type ResXFileRef
-    private static readonly ITypeResolutionService s_internalTypeResolver
-        = new AssemblyNamesTypeResolutionService([new("System.Windows.Forms")]);
+    private static readonly AssemblyNamesTypeResolutionService s_internalTypeResolver = new([new("System.Windows.Forms")]);
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:

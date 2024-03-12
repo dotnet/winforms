@@ -1961,7 +1961,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         return default;
     }
 
-    private IWin32Window? GetCurrentToolWindow()
+    private Control? GetCurrentToolWindow()
     {
         HWND hwnd = GetCurrentToolHwnd();
         return _owners.TryGetValue(hwnd, out Control? control) ? control : Control.FromHandle(hwnd);

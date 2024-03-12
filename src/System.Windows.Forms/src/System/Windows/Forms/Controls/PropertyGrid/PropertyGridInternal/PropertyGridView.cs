@@ -83,7 +83,7 @@ internal sealed partial class PropertyGridView :
     private DropDownHolder? _dropDownHolder;
     private Rectangle _lastClientRect = Rectangle.Empty;
     private Control? _currentEditor;
-    private ScrollBar? _scrollBar;
+    private VScrollBar? _scrollBar;
     private GridToolTip? _toolTip;
     private GridErrorDialog? _errorDialog;
 

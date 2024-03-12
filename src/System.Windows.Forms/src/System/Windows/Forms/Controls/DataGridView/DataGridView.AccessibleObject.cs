@@ -47,28 +47,13 @@ public partial class DataGridView
             _selectedCellsAccessibilityObject = null;
         }
 
-        public override AccessibleRole Role
-            => this.GetOwnerAccessibleRole(AccessibleRole.Table);
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Table);
 
-        private AccessibleObject? TopRowAccessibilityObject
-        {
-            get
-            {
-                _topRowAccessibilityObject ??= this.TryGetOwnerAs(out DataGridView? owner) ? new DataGridViewTopRowAccessibleObject(owner) : null;
+        private DataGridViewTopRowAccessibleObject? TopRowAccessibilityObject =>
+            _topRowAccessibilityObject ??= this.TryGetOwnerAs(out DataGridView? owner) ? new(owner) : null;
 
-                return _topRowAccessibilityObject;
-            }
-        }
-
-        private AccessibleObject SelectedCellsAccessibilityObject
-        {
-            get
-            {
-                _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(this);
-
-                return _selectedCellsAccessibilityObject;
-            }
-        }
+        private DataGridViewSelectedCellsAccessibleObject SelectedCellsAccessibilityObject =>
+            _selectedCellsAccessibilityObject ??= new(this);
 
         public override AccessibleObject? GetChild(int index)
         {

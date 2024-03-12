@@ -13309,46 +13309,25 @@ public unsafe partial class Control :
     ///
     ///  Explicit support of DropTarget
     ///
-    void IDropTarget.OnDragEnter(DragEventArgs drgEvent)
-    {
-        OnDragEnter(drgEvent);
-    }
+    void IDropTarget.OnDragEnter(DragEventArgs drgEvent) => OnDragEnter(drgEvent);
 
-    void IDropTarget.OnDragOver(DragEventArgs drgEvent)
-    {
-        OnDragOver(drgEvent);
-    }
+    void IDropTarget.OnDragOver(DragEventArgs drgEvent) => OnDragOver(drgEvent);
 
-    void IDropTarget.OnDragLeave(EventArgs e)
-    {
-        OnDragLeave(e);
-    }
+    void IDropTarget.OnDragLeave(EventArgs e) => OnDragLeave(e);
 
-    void IDropTarget.OnDragDrop(DragEventArgs drgEvent)
-    {
-        OnDragDrop(drgEvent);
-    }
+    void IDropTarget.OnDragDrop(DragEventArgs drgEvent) => OnDragDrop(drgEvent);
 
     ///
     ///  Explicit support of DropSource
     ///
-    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)
-    {
-        OnGiveFeedback(giveFeedbackEventArgs);
-    }
+    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs) => OnGiveFeedback(giveFeedbackEventArgs);
 
-    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs)
-    {
-        OnQueryContinueDrag(queryContinueDragEventArgs);
-    }
+    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) => OnQueryContinueDrag(queryContinueDragEventArgs);
 
     #region IKeyboardToolTip implementation
 
-    bool IKeyboardToolTip.CanShowToolTipsNow()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return IsHandleCreated && Visible && (host is null || host.CanShowToolTipsNow());
-    }
+    bool IKeyboardToolTip.CanShowToolTipsNow() =>
+        IsHandleCreated && Visible && (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.CanShowToolTipsNow());
 
     Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => GetToolNativeScreenRectangle();
 
@@ -13356,17 +13335,11 @@ public unsafe partial class Control :
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => IsHoveredWithMouse();
 
-    bool IKeyboardToolTip.HasRtlModeEnabled()
-    {
-        Control? topLevelControl = TopLevelControlInternal;
-        return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
-    }
+    bool IKeyboardToolTip.HasRtlModeEnabled() =>
+        TopLevelControlInternal is { } topLevelControl && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
 
-    bool IKeyboardToolTip.AllowsToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.AllowsToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.AllowsToolTip()) && AllowsKeyboardToolTip();
 
     IWin32Window IKeyboardToolTip.GetOwnerWindow() => this;
 
@@ -13376,21 +13349,12 @@ public unsafe partial class Control :
 
     string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
-    bool IKeyboardToolTip.ShowsOwnToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.ShowsOwnToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
 
-    bool IKeyboardToolTip.IsBeingTabbedTo()
-    {
-        return AreCommonNavigationalKeysDown();
-    }
+    bool IKeyboardToolTip.IsBeingTabbedTo() => AreCommonNavigationalKeysDown();
 
-    bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
-    {
-        return AllowsChildrenToShowToolTips();
-    }
+    bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => AllowsChildrenToShowToolTips();
 
     #endregion
 
