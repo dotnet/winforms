@@ -1765,14 +1765,14 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 scale = factor.Height;
             }
 
-            SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
-            _splitterDistance = (int)Math.Round((float)_splitterDistance * scale);
+            SplitterWidth = (int)Math.Round(SplitterWidth * scale);
+            _splitterDistance = (int)Math.Round(_splitterDistance * scale);
             _splitDistance = _splitterDistance;
 
             // If FixedPanel property is set.
             if (_panelSize != 0)
             {
-                _panelSize = (int)Math.Round((float)_panelSize * scale);
+                _panelSize = (int)Math.Round(_panelSize * scale);
             }
         }
         finally
@@ -2194,7 +2194,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 SetSplitterRect(true /*Vertical*/);
                 if (!_resizeCalled)
                 {
-                    _ratioWidth = ((double)(Width) / (double)(Panel1.Width) > 0) ? (double)(Width) / (double)(Panel1.Width) : _ratioWidth;
+                    _ratioWidth = (Width / (double)(Panel1.Width) > 0) ? Width / (double)(Panel1.Width) : _ratioWidth;
                 }
             }
             else
@@ -2213,7 +2213,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 // Update Ratio when the splitContainer is in CollapsedMode.
                 if (!_resizeCalled)
                 {
-                    _ratioWidth = ((double)(Width) / (double)(_splitterDistance) > 0) ? (double)(Width) / (double)(_splitterDistance) : _ratioWidth;
+                    _ratioWidth = (Width / (double)(_splitterDistance) > 0) ? Width / (double)(_splitterDistance) : _ratioWidth;
                 }
             }
         }
@@ -2235,7 +2235,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
                 if (!_resizeCalled)
                 {
-                    _ratioHeight = ((double)(Height) / (double)(Panel1.Height) > 0) ? (double)(Height) / (double)(Panel1.Height) : _ratioHeight;
+                    _ratioHeight = (Height / (double)(Panel1.Height) > 0) ? Height / (double)(Panel1.Height) : _ratioHeight;
                 }
             }
             else
@@ -2254,7 +2254,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 // Update Ratio when the splitContainer is in CollapsedMode.
                 if (!_resizeCalled)
                 {
-                    _ratioHeight = ((double)(Height) / (double)(_splitterDistance) > 0) ? (double)(Height) / (double)(_splitterDistance) : _ratioHeight;
+                    _ratioHeight = (Height / (double)(_splitterDistance) > 0) ? Height / (double)(_splitterDistance) : _ratioHeight;
                 }
             }
         }
@@ -2312,7 +2312,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 #endif
         if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
         {
-            Keys keyCode = (Keys)keyData & Keys.KeyCode;
+            Keys keyCode = keyData & Keys.KeyCode;
             switch (keyCode)
             {
                 case Keys.Tab:

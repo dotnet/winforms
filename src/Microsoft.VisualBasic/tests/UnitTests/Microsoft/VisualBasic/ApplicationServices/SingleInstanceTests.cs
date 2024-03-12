@@ -14,7 +14,7 @@ public class SingleInstanceTests
 
     private sealed class ReceivedArgs
     {
-        private List<string[]> _received = new();
+        private List<string[]> _received = [];
 
         internal void Add(string[] args)
         {
@@ -33,7 +33,7 @@ public class SingleInstanceTests
 
     private static dynamic GetTestHelper()
     {
-        var assembly = typeof(Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase).Assembly;
+        var assembly = typeof(WindowsFormsApplicationBase).Assembly;
         var type = assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
         return type.TestAccessor().Dynamic;
     }
@@ -75,7 +75,7 @@ public class SingleInstanceTests
     [Fact]
     public void MultipleDistinctServers()
     {
-        List<NamedPipeServerStream> pipeServers = new();
+        List<NamedPipeServerStream> pipeServers = [];
         int n = 5;
         try
         {
@@ -211,7 +211,7 @@ public class SingleInstanceTests
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, timeout: 300, Array.Empty<string>()), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
+            var task = Task.Factory.StartNew(() => SendSecondInstanceArgs(pipeName, timeout: 300, []), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
             bool result = await task;
             Assert.False(result);
         }
@@ -226,7 +226,7 @@ public class SingleInstanceTests
         using (pipeServer)
         {
             ReceivedArgs receivedArgs = new();
-            var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
+            var task = Task.Factory.StartNew(() => SendSecondInstanceArgs(pipeName, SendTimeout, ["1", "ABC"]), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
             // Allow time for connection.
             Thread.Sleep(100);
             _ = WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
@@ -256,7 +256,7 @@ public class SingleInstanceTests
 
             FlushLastConnection(pipeName);
 
-            Assert.Equal(new[] { Array.Empty<string>(), new[] { "ABC" }, new[] { "", "" } }, receivedArgs.Freeze());
+            Assert.Equal(new[] { (string[])[], ["ABC"], ["", ""] }, receivedArgs.Freeze());
         }
 
         static void sendData<T>(string pipeName, T obj)
@@ -287,8 +287,8 @@ public class SingleInstanceTests
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             // Send valid args.
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, Array.Empty<string>()));
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, []));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, ["1", "ABC"]));
 
             // Send bad args: close client after connect.
             closeAfterConnect(pipeName);
@@ -297,11 +297,11 @@ public class SingleInstanceTests
             sendUnexpectedArgs(pipeName);
 
             // Send valid args.
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "DEF", "2" }));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, ["DEF", "2"]));
 
             FlushLastConnection(pipeName);
 
-            Assert.Equal(new[] { Array.Empty<string>(), new[] { "1", "ABC" }, new[] { "DEF", "2" } }, receivedArgs.Freeze());
+            Assert.Equal(new[] { (string[])[], ["1", "ABC"], ["DEF", "2"] }, receivedArgs.Freeze());
         }
 
         static void closeAfterConnect(string pipeName)
@@ -319,7 +319,7 @@ public class SingleInstanceTests
 
             using (pipeClient)
             {
-                pipeClient.Write(new byte[] { 1, 2, 3 }, 0, 3);
+                pipeClient.Write([1, 2, 3], 0, 3);
             }
         }
     }

@@ -82,12 +82,12 @@ internal class ToolStripPanelCell : ArrangedElement
 
     public IArrangedElement InnerElement
     {
-        get { return _wrappedToolStrip as IArrangedElement; }
+        get { return _wrappedToolStrip; }
     }
 
     public ISupportToolStripPanel DraggedControl
     {
-        get { return _wrappedToolStrip as ISupportToolStripPanel; }
+        get { return _wrappedToolStrip; }
     }
 
     public ToolStripPanelRow? ToolStripPanelRow

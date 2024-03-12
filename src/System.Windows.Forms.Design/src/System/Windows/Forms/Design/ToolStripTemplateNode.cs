@@ -267,7 +267,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 Populated = false
             };
             templateNodeContextMenu.GroupOrdering.Clear();
-            templateNodeContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit });
+            templateNodeContextMenu.GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit]);
             templateNodeContextMenu.Text = "CustomContextMenu";
 
             TemplateNodeCustomMenuItemCollection templateNodeCustomMenuItemCollection = new(_component.Site, _controlHost);
@@ -1344,7 +1344,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         _centerLabel.MouseMove += new MouseEventHandler(CenterLabelMouseMove);
         _centerLabel.MouseLeave += new EventHandler(CenterLabelMouseLeave);
 
-        _miniToolStrip.Items.AddRange(new ToolStripItem[] { _centerLabel });
+        _miniToolStrip.Items.AddRange((ToolStripItem[])[_centerLabel]);
     }
 
     /// <summary>
@@ -1403,10 +1403,10 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         {
         }
 
-        _miniToolStrip.Items.AddRange(new ToolStripItem[]
-        {
+        _miniToolStrip.Items.AddRange((ToolStripItem[])
+        [
             _addItemButton
-        });
+        ]);
     }
 
     /// <summary>

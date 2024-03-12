@@ -13,7 +13,7 @@ public class FontNameConverterTest
     [Fact]
     public void TestConvertFrom()
     {
-        FontConverter.FontNameConverter converter = new();
+        FontNameConverter converter = new();
         // returns "Times" under Linux and "Times New Roman" under Windows
         if (PlatformDetection.IsWindows)
         {
@@ -31,7 +31,7 @@ public class FontNameConverterTest
     [Fact]
     public void ExTestConvertFrom_ThrowsNotSupportedException()
     {
-        FontConverter.FontNameConverter converter = new();
+        FontNameConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(null));
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(1));
     }

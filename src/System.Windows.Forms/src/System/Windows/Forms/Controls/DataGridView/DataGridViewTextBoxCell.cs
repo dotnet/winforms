@@ -568,7 +568,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
         if (throughMouseClick)
         {
-            _flagsState |= (byte)DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
+            _flagsState |= DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
         }
     }
 

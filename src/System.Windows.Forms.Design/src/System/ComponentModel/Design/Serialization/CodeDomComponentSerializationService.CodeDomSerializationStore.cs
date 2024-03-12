@@ -55,9 +55,9 @@ public sealed partial class CodeDomComponentSerializationService
         internal CodeDomSerializationStore(IServiceProvider? provider)
         {
             _provider = provider;
-            _objects = new Dictionary<object, ObjectData>();
-            _objectNames = new List<string>();
-            _shimObjectNames = new List<string>();
+            _objects = [];
+            _objectNames = [];
+            _shimObjectNames = [];
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// </summary>
         internal List<object> Deserialize(IServiceProvider? provider, IContainer? container = null)
         {
-            List<object> collection = new();
+            List<object> collection = [];
             Deserialize(provider, container, validateRecycledTypes: true, applyDefaults: true, collection);
             return collection;
         }

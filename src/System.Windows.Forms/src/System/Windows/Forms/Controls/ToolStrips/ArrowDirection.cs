@@ -9,8 +9,8 @@ namespace System.Windows.Forms;
 /// </summary>
 public enum ArrowDirection
 {
-    Up = 0x00 | (int)Orientation.Vertical,
-    Down = 0x10 | (int)Orientation.Vertical,
-    Left = 0x00 | (int)Orientation.Horizontal,
-    Right = 0x10 | (int)Orientation.Horizontal,
+    Up = 0x00 | Orientation.Vertical,
+    Down = 0x10 | Orientation.Vertical,
+    Left = 0x00 | Orientation.Horizontal,
+    Right = 0x10 | Orientation.Horizontal,
 }

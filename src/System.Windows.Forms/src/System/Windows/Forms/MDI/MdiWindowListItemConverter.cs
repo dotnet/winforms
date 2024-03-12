@@ -20,7 +20,7 @@ internal class MdiWindowListItemConverter : ComponentConverter
         if (context?.Instance is MenuStrip menu)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            List<ToolStripItem> list = new();
+            List<ToolStripItem> list = [];
             for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] is ToolStripItem currentItem && currentItem.Owner == menu)

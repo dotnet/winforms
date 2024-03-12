@@ -42,7 +42,7 @@ public class PropertiesTab : PropertyTab
 
     public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object component, Attribute[]? attributes)
     {
-        attributes ??= new Attribute[] { BrowsableAttribute.Yes };
+        attributes ??= [BrowsableAttribute.Yes];
 
         if (context is null)
         {

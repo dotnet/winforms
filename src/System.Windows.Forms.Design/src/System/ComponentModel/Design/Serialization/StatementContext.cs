@@ -50,7 +50,7 @@ public sealed class ObjectStatementCollection : IEnumerable
     {
         if (_table is null)
         {
-            _table = new List<TableEntry>();
+            _table = [];
         }
         else
         {
@@ -97,7 +97,7 @@ public sealed class ObjectStatementCollection : IEnumerable
                     {
                         if (_table[idx].Statements is null)
                         {
-                            _table[idx] = new TableEntry(statementOwner, new CodeStatementCollection());
+                            _table[idx] = new TableEntry(statementOwner, []);
                         }
 
                         return _table[idx].Statements;
@@ -213,7 +213,7 @@ public sealed class ObjectStatementCollection : IEnumerable
 
                 if (_table._table[_position].Statements is null)
                 {
-                    _table._table[_position] = new TableEntry(_table._table[_position].Owner, new CodeStatementCollection());
+                    _table._table[_position] = new TableEntry(_table._table[_position].Owner, []);
                 }
 
                 TableEntry entry = _table._table[_position];

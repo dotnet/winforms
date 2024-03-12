@@ -94,7 +94,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            DesignerActionListCollection actions = new();
+            DesignerActionListCollection actions = [];
 
             // Here is our action list we'll use
             ToolStripContainerActionList actionList = new(_toolStripContainer!)
@@ -147,7 +147,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            ArrayList components = new();
+            ArrayList components = [];
             foreach (Control parent in _toolStripContainer!.Controls)
             {
                 foreach (Control control in parent.Controls)

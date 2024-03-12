@@ -66,11 +66,11 @@ public sealed partial class BehaviorService : IDisposable
             AdornerWindowIndex = os.PushOverlay(_adornerWindow);
         }
 
-        _dragEnterReplies = new();
+        _dragEnterReplies = [];
 
         // Start with an empty adorner collection & no behavior on the stack
         Adorners = new BehaviorServiceAdornerCollection(this);
-        _behaviorStack = new();
+        _behaviorStack = [];
 
         _hitTestedGlyph = null;
         _validDragArgs = null;
@@ -786,7 +786,7 @@ public sealed partial class BehaviorService : IDisposable
         }
 
         // Copy the name into the given IntPtr
-        char[] nullChar = new char[] { (char)0 };
+        char[] nullChar = [(char)0];
         byte[] nullBytes;
         byte[] bytes;
 

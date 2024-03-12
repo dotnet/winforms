@@ -32,7 +32,7 @@ internal class RelatedPropertyManager : PropertyManager
 
     internal override string GetListName()
     {
-        string name = GetListName(new ArrayList());
+        string name = GetListName([]);
         if (name.Length > 0)
         {
             return name;

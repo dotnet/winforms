@@ -358,7 +358,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
                 case PictureBoxSizeMode.Zoom:
                     Size imageSize = _image.Size;
-                    float ratio = Math.Min((float)ClientRectangle.Width / (float)imageSize.Width, (float)ClientRectangle.Height / (float)imageSize.Height);
+                    float ratio = Math.Min(ClientRectangle.Width / (float)imageSize.Width, ClientRectangle.Height / (float)imageSize.Height);
                     result.Width = (int)(imageSize.Width * ratio);
                     result.Height = (int)(imageSize.Height * ratio);
                     result.X = (ClientRectangle.Width - result.Width) / 2;
@@ -725,7 +725,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 // Report progress thus far, but only if we know total length.
                 if (_contentLength != -1)
                 {
-                    int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
+                    int progress = (int)(100 * (_totalBytesRead / ((float)_contentLength)));
                     _currentAsyncLoadOperation?.Post(
                         _loadProgressDelegate!,
                         new ProgressChangedEventArgs(progress, null));

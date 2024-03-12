@@ -21,7 +21,7 @@ public class InvalidEnumDataAttribute<TEnum> : CommonMemberDataAttribute where T
         TEnum currentValue = default;
         bool defined;
 
-        List<TEnum> data = new();
+        List<TEnum> data = [];
 
         if (typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null)
         {

@@ -761,7 +761,7 @@ internal partial class CommonProperties
 
     public static Dictionary<string, string?> Debug_GetCurrentPropertyState(object obj)
     {
-        Dictionary<string, string?> propertyHash = new();
+        Dictionary<string, string?> propertyHash = [];
         if (PreferredSize.TraceVerbose)
         {
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj))

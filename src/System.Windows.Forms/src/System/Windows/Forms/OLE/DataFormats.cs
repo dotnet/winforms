@@ -272,8 +272,8 @@ public static partial class DataFormats
     {
         if (s_formatCount == 0)
         {
-            s_formatList = new Format[]
-            {
+            s_formatList =
+            [
                 // Text name                  Win32 format ID
                 new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
                 new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
@@ -291,13 +291,13 @@ public static partial class DataFormats
                 new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
                 new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
                 new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
-            };
+            ];
 
             s_formatCount = s_formatList.Length;
         }
         else
         {
-            s_formatList ??= Array.Empty<Format>();
+            s_formatList ??= [];
         }
     }
 }

@@ -23,17 +23,17 @@ internal class Com2Enum
     /// <summary>
     ///  Our array of value string names.
     /// </summary>
-    private string[] _names = Array.Empty<string>();
+    private string[] _names = [];
 
     /// <summary>
     ///  Our values.
     /// </summary>
-    private object[] _values = Array.Empty<object>();
+    private object[] _values = [];
 
     /// <summary>
     ///  Our cached array of value.ToString()'s.
     /// </summary>
-    private string?[] _stringValues = Array.Empty<string>();
+    private string?[] _stringValues = [];
 
     /// <summary>
     ///  Retrieve a copy of the value array.

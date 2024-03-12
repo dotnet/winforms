@@ -161,7 +161,7 @@ public class TaskDialogButton : TaskDialogControl
     /// <summary>
     ///   Gets or sets a value that indicates whether the task dialog should close
     ///   when this button is clicked. Or, if this button is the
-    ///   <see cref="TaskDialogButton.Help"/> button, indicates whether the
+    ///   <see cref="Help"/> button, indicates whether the
     ///   <see cref="TaskDialogPage.HelpRequest"/> should be raised.
     /// </summary>
     /// <value>

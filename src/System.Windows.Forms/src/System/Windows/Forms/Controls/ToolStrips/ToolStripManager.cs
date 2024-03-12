@@ -668,8 +668,8 @@ public static partial class ToolStripManager
     public static bool IsValidShortcut(Keys shortcut)
     {
         // Should have a key and one or more modifiers.
-        Keys keyCode = (Keys)(shortcut & Keys.KeyCode);
-        Keys modifiers = (Keys)(shortcut & Keys.Modifiers);
+        Keys keyCode = shortcut & Keys.KeyCode;
+        Keys modifiers = shortcut & Keys.Modifiers;
 
         if (shortcut == Keys.None)
         {

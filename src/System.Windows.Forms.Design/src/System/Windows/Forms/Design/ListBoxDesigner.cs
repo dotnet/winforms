@@ -70,13 +70,13 @@ internal class ListBoxDesigner : ControlDesigner
         PropertyDescriptor integralHeightProp = (PropertyDescriptor)properties["IntegralHeight"];
         if (integralHeightProp is not null)
         {
-            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, Array.Empty<Attribute>());
+            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
         }
 
         PropertyDescriptor dockProp = (PropertyDescriptor)properties["Dock"];
         if (dockProp is not null)
         {
-            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, Array.Empty<Attribute>());
+            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
         }
 
         base.PreFilterProperties(properties);

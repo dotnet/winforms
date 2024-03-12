@@ -1662,40 +1662,40 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         switch (direction)
         {
             case ArrowDirection.Up:
-                arrow = new Point[]
-                {
+                arrow =
+                [
                     new(middle.X - Offset2X, middle.Y + 1),
                     new(middle.X + Offset2X + 1, middle.Y + 1),
                     new(middle.X, middle.Y - Offset2Y)
-                };
+                ];
                 break;
 
             case ArrowDirection.Left:
-                arrow = new Point[]
-                {
+                arrow =
+                [
                     new(middle.X + Offset2X, middle.Y - Offset2Y - 1),
                     new(middle.X + Offset2X, middle.Y + Offset2Y + 1),
                     new(middle.X - 1, middle.Y)
-                };
+                ];
                 break;
 
             case ArrowDirection.Right:
-                arrow = new Point[]
-                {
+                arrow =
+                [
                     new(middle.X - Offset2X, middle.Y - Offset2Y - 1),
                     new(middle.X - Offset2X, middle.Y + Offset2Y + 1),
                     new(middle.X + 1, middle.Y)
-                };
+                ];
                 break;
 
             case ArrowDirection.Down:
             default:
-                arrow = new Point[]
-                {
+                arrow =
+                [
                     new(middle.X - Offset2X, middle.Y - 1),
                     new(middle.X + Offset2X + 1, middle.Y - 1),
                     new(middle.X, middle.Y + Offset2Y)
-                };
+                ];
                 break;
         }
 

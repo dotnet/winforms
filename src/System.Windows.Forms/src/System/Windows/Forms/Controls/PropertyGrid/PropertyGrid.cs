@@ -39,7 +39,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private Bitmap? _categoryBitmap;
     private Bitmap? _propertyPageBitmap;
 
-    private readonly List<TabInfo> _tabs = new();
+    private readonly List<TabInfo> _tabs = [];
     private TabInfo? _selectedTab;
     private bool _tabsDirty = true;
 
@@ -888,7 +888,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     public object? SelectedObject
     {
         get => _selectedObjects is null || _selectedObjects.Length == 0 ? null : _selectedObjects[0];
-        set => SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
+        set => SelectedObjects = value is null ? [] : ([value]);
     }
 
     [Browsable(false)]
@@ -896,7 +896,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [AllowNull]
     public object[] SelectedObjects
     {
-        get => _selectedObjects is null ? Array.Empty<object>() : (object[])_selectedObjects.Clone();
+        get => _selectedObjects is null ? [] : (object[])_selectedObjects.Clone();
         set
         {
             using FreezePaintScope _ = new(this);
@@ -990,7 +990,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 // objects. Set it to null to avoid leaks.
                 _defaultEntry = null;
 
-                _selectedObjects = value is null ? Array.Empty<object>() : (object[])value.Clone();
+                _selectedObjects = value is null ? [] : (object[])value.Clone();
 
                 SinkPropertyNotifyEvents();
                 SetFlag(Flags.PropertiesChanged, true);
@@ -1675,7 +1675,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 if (parameter is not null && constructor is not null)
                 {
-                    tab = (PropertyTab)constructor.Invoke(new object[] { parameter });
+                    tab = (PropertyTab)constructor.Invoke([parameter]);
                 }
                 else
                 {
@@ -2159,7 +2159,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return Array.Empty<Type>();
         }
 
-        List<Type> tabClasses = new();
+        List<Type> tabClasses = [];
 
         // Find all tab types that match the requested scope.
         for (int i = 0; i < tabAttribute.TabScopes.Length; i++)
@@ -3017,7 +3017,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         if (InvokeRequired)
         {
-            BeginInvoke(new RefreshEventHandler(OnTypeDescriptorRefreshedInvoke), new object[] { e });
+            BeginInvoke(new RefreshEventHandler(OnTypeDescriptorRefreshedInvoke), [e]);
         }
         else
         {
@@ -3555,7 +3555,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             // Clear the component refs of the tabs.
             foreach (TabInfo info in _tabs)
             {
-                info.Tab.Components = Array.Empty<object>();
+                info.Tab.Components = [];
             }
         }
     }
@@ -3666,7 +3666,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         if (_designerHost is not null)
         {
-            _designerSelections ??= new();
+            _designerSelections ??= [];
 
             // If _selectedTab is null, we will set the _designerSelections item to -1.
             _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab!);
@@ -4184,7 +4184,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 _rootEntry.BrowsableAttributes = BrowsableAttributes;
             }
 
-            _viewTabProperties ??= new();
+            _viewTabProperties ??= [];
             _viewTabProperties[tabName] = _rootEntry;
         }
 
@@ -4319,7 +4319,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 m.ResultInternal = (LRESULT)1;
                 return;
-            case (uint)AutomationMessages.PGM_GETBUTTONCOUNT:
+            case AutomationMessages.PGM_GETBUTTONCOUNT:
                 if (_toolStrip is not null)
                 {
                     m.ResultInternal = (LRESULT)_toolStrip.Items.Count;
@@ -4327,7 +4327,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (uint)AutomationMessages.PGM_GETBUTTONSTATE:
+            case AutomationMessages.PGM_GETBUTTONSTATE:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4347,7 +4347,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (uint)AutomationMessages.PGM_SETBUTTONSTATE:
+            case AutomationMessages.PGM_SETBUTTONSTATE:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4380,8 +4380,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 break;
 
-            case (uint)AutomationMessages.PGM_GETBUTTONTEXT:
-            case (uint)AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
+            case AutomationMessages.PGM_GETBUTTONTEXT:
+            case AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4406,7 +4406,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 break;
 
-            case (uint)AutomationMessages.PGM_GETTESTINGINFO:
+            case AutomationMessages.PGM_GETTESTINGINFO:
                 {
                     // Get "testing info" string for Nth grid entry (or active entry if N < 0)
                     string testingInfo = _gridView.GetTestingInfo((int)m.WParamInternal);
@@ -4414,7 +4414,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                     return;
                 }
 
-            case (uint)AutomationMessages.PGM_GETROWCOORDS:
+            case AutomationMessages.PGM_GETROWCOORDS:
                 if (m.Msg == _copyDataMessage)
                 {
                     m.ResultInternal = (LRESULT)_gridView.GetPropertyLocation(
@@ -4425,11 +4425,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (uint)AutomationMessages.PGM_GETSELECTEDROW:
-            case (uint)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                m.ResultInternal = (LRESULT)PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+            case AutomationMessages.PGM_GETSELECTEDROW:
+            case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
+                m.ResultInternal = PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
-            case (uint)AutomationMessages.PGM_SETSELECTEDTAB:
+            case AutomationMessages.PGM_SETSELECTEDTAB:
                 if (m.LParamInternal != 0)
                 {
                     string? tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);

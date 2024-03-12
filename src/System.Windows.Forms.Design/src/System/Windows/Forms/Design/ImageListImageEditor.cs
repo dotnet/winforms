@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design;
 public class ImageListImageEditor : ImageEditor
 {
     // Metafile types are not supported in the ImageListImageEditor and should not be displayed as an option.
-    internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor) };
+    internal static Type[] s_imageExtenders = [typeof(BitmapEditor)];
     private OpenFileDialog? _fileDialog;
 
     // Derived classes can implement a different list of supported image types.
@@ -28,7 +28,7 @@ public class ImageListImageEditor : ImageEditor
             return value;
         }
 
-        ArrayList images = new();
+        ArrayList images = [];
         if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return images;

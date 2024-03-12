@@ -60,11 +60,10 @@ public class ImageListCodeDomSerializer : CodeDomSerializer
                         {
                             CodeMethodInvokeExpression setNameMethodCall
                                 = new(imageListImagesProperty, "SetKeyName",
-                                    new CodeExpression[]
-                                    {
+                                    [
                                         new CodePrimitiveExpression(i),         // SetKeyName(int,
                                         new CodePrimitiveExpression(imageKey)        // string);
-                                    });
+                                    ]);
 
                             codeStatementCollection.Add(setNameMethodCall);
                         }

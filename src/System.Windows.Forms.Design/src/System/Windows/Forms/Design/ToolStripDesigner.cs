@@ -143,7 +143,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            ArrayList items = new();
+            ArrayList items = [];
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is not DesignerToolStripControlHost)
@@ -348,7 +348,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            _items ??= new ArrayList();
+            _items ??= [];
 
             return _items;
         }
@@ -1335,7 +1335,7 @@ internal class ToolStripDesigner : ControlDesigner
     public override GlyphCollection GetGlyphs(GlyphSelectionType selType)
     {
         // get the default glyphs for this component.
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
         ICollection selComponents = SelectionService.GetSelectedComponents();
         foreach (object comp in selComponents)
         {
@@ -2194,13 +2194,13 @@ internal class ToolStripDesigner : ControlDesigner
     {
         base.PreFilterProperties(properties);
         PropertyDescriptor prop;
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
            "Visible",
            "AllowDrop",
            "AllowItemReorder"
-        };
-        Attribute[] empty = Array.Empty<Attribute>();
+        ];
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];

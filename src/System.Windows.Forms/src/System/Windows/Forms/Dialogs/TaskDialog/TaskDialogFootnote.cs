@@ -89,7 +89,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     /// <para>
     ///   This property can be set while the dialog is shown (but in that case, it
     ///   cannot be switched between instances created from an
-    ///   <see cref="System.Drawing.Icon"/> (or from a handle pointer)
+    ///   <see cref="Drawing.Icon"/> (or from a handle pointer)
     ///   and standard icon instances).
     /// </para>
     /// </remarks>

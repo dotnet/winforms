@@ -357,13 +357,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // Handle shadowed properties
         //
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "AutoSizeColumnsMode",
             "DataSource"
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
@@ -623,7 +623,7 @@ internal class DataGridViewDesigner : ControlDesigner
             columnsToBeAdded = new List<DataGridViewColumn>(backEndProps!.Count);
             for (int i = 0; i < backEndProps.Count; i++)
             {
-                TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(System.Drawing.Image));
+                TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(Image));
 
                 Type propType = backEndProps[i].PropertyType;
 
@@ -819,7 +819,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
+            DesignerActionItemCollection items = [];
             DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
                                                                SR.DataGridViewChooseDataSource);// displayName
             chooseDataSource.RelatedComponent = _owner.Component;
@@ -910,15 +910,17 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
-            items.Add(new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                        SR.DataGridViewEnableAdding));
-            items.Add(new DesignerActionPropertyItem("ReadOnly",
-                                                        SR.DataGridViewEnableEditing));
-            items.Add(new DesignerActionPropertyItem("AllowUserToDeleteRows",
-                                                        SR.DataGridViewEnableDeleting));
-            items.Add(new DesignerActionPropertyItem("AllowUserToOrderColumns",
-                                                        SR.DataGridViewEnableColumnReordering));
+            DesignerActionItemCollection items =
+            [
+                new DesignerActionPropertyItem("AllowUserToAddRows",
+                                                            SR.DataGridViewEnableAdding),
+                new DesignerActionPropertyItem("ReadOnly",
+                                                            SR.DataGridViewEnableEditing),
+                new DesignerActionPropertyItem("AllowUserToDeleteRows",
+                                                            SR.DataGridViewEnableDeleting),
+                new DesignerActionPropertyItem("AllowUserToOrderColumns",
+                                                            SR.DataGridViewEnableColumnReordering),
+            ];
             return items;
         }
 

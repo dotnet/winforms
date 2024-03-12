@@ -22,11 +22,13 @@ internal class ListControlUnboundActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection returnItems = new();
-        returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-            SR.ListControlUnboundActionListEditItemsDisplayName,
-            SR.ItemsCategoryName,
-            SR.ListControlUnboundActionListEditItemsDescription, true));
+        DesignerActionItemCollection returnItems =
+        [
+            new DesignerActionMethodItem(this, "InvokeItemsDialog",
+                SR.ListControlUnboundActionListEditItemsDisplayName,
+                SR.ItemsCategoryName,
+                SR.ListControlUnboundActionListEditItemsDescription, true),
+        ];
         return returnItems;
     }
 }

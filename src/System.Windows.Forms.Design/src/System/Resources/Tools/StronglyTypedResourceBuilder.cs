@@ -312,7 +312,7 @@ public static partial class StronglyTypedResourceBuilder
 
         // Keep a list of errors describing known strings that couldn't be fixed up (like "4"), as well as listing
         // all duplicate resources that were fixed up to the same name (like "A B" and "A-B" both going to "A_B").
-        List<string> errors = new();
+        List<string> errors = [];
 
         // Verify the resource names are valid property names, and they don't conflict.  This includes checking for
         // language-specific keywords, translating spaces to underscores, etc.
@@ -590,7 +590,7 @@ public static partial class StronglyTypedResourceBuilder
             CodeMethodInvokeExpression getTypeInfo = new(
                 new CodeTypeOfExpression(new CodeTypeReference(classDeclaration.Name)),
                 "GetTypeInfo",
-                Array.Empty<CodeExpression>());
+                []);
             getAssemblyProperty = new(getTypeInfo, "Assembly");
         }
         else
@@ -609,11 +609,11 @@ public static partial class StronglyTypedResourceBuilder
             new CodePrimitiveExpression(resourceManagerConstructorParameter),
             getAssemblyProperty);
 
-        CodeStatement[] assignNewResourceManager = new CodeStatement[]
-        {
+        CodeStatement[] assignNewResourceManager =
+        [
             new CodeVariableDeclarationStatement(resourceManagerType, tempVariableName, newResourceManager),
             new CodeAssignStatement(resourceManagerField, new CodeVariableReferenceExpression(tempVariableName))
-        };
+        ];
 
         resourceManagerProperty.GetStatements.Add(new CodeConditionStatement(isResourceManagerNull, assignNewResourceManager));
         resourceManagerProperty.GetStatements.Add(new CodeMethodReturnStatement(resourceManagerField));

@@ -85,7 +85,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         get
         {
             CheckSession();
-            errorList ??= new();
+            errorList ??= [];
             return errorList;
         }
     }
@@ -440,7 +440,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
                 if (serializer is not null && session is not null)
                 {
-                    serializers ??= new();
+                    serializers ??= [];
                     serializers[objectType] = serializer;
                 }
             }
@@ -470,7 +470,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 }
             }
 
-            defaultProviderTable ??= new();
+            defaultProviderTable ??= [];
             defaultProviderTable.Add(serializerType);
         }
 
@@ -628,7 +628,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 PropertyDescriptor[] propArray;
                 if (propObject is null)
                 {
-                    propArray = Array.Empty<PropertyDescriptor>();
+                    propArray = [];
                 }
                 else
                 {
@@ -691,7 +691,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
     {
-        designerSerializationProviders ??= new();
+        designerSerializationProviders ??= [];
         designerSerializationProviders.Add(provider);
     }
 
@@ -861,7 +861,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
 
     internal HashSet<IDesignerSerializationProvider> SerializationProviders
     {
-        get => designerSerializationProviders ??= new();
+        get => designerSerializationProviders ??= [];
     }
 
     /// <summary>

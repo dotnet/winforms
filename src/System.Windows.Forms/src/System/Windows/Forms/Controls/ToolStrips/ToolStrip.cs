@@ -2894,7 +2894,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // had focus.
         bool hasModifiers = ((keyData & (Keys.Alt | Keys.Control)) != Keys.None);
 
-        Keys keyCode = (Keys)keyData & Keys.KeyCode;
+        Keys keyCode = keyData & Keys.KeyCode;
         switch (keyCode)
         {
             case Keys.Back:

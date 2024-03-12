@@ -10,9 +10,7 @@ using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using Windows.Win32.UI.Controls.Dialogs;
 using Windows.Win32.UI.Controls.RichEdit;
-using static Interop;
 using static Interop.Richedit;
-using RichEdit = Windows.Win32.UI.Controls.RichEdit;
 
 namespace System.Windows.Forms;
 
@@ -278,7 +276,7 @@ public partial class RichTextBox : TextBoxBase
                 // This code has been here since the inception of the project,
                 // we can't determine why we have to compare w/ 32 here.
                 // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space)
-                if ((ulong)s_moduleHandle < (ulong)32)
+                if ((ulong)s_moduleHandle < 32)
                 {
                     throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.RichEdit41));
                 }
@@ -557,7 +555,7 @@ public partial class RichTextBox : TextBoxBase
         get => _richTextBoxFlags[richTextShortcutsEnabledSection] != 0;
         set
         {
-            s_shortcutsToDisable ??= new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
+            s_shortcutsToDisable ??= [(int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ];
 
             _richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
         }
@@ -1186,7 +1184,7 @@ public partial class RichTextBox : TextBoxBase
     {
         get
         {
-            int[] selTabs = Array.Empty<int>();
+            int[] selTabs = [];
 
             ForceHandleCreate();
             PARAFORMAT pf = new()
@@ -1629,7 +1627,7 @@ public partial class RichTextBox : TextBoxBase
         base.DrawToBitmap(bitmap, targetBounds);
     }
 
-    private unsafe int EditStreamProc(IntPtr dwCookie, IntPtr buf, int cb, out int transferred)
+    private unsafe int EditStreamProc(nint dwCookie, nint buf, int cb, out int transferred)
     {
         int ret = 0;    // assume that everything is Okay
 
@@ -1695,7 +1693,7 @@ public partial class RichTextBox : TextBoxBase
 
                                     fixed (byte* pb = bytes)
                                     {
-                                        byte* pChars = (byte*)pb;
+                                        byte* pChars = pb;
                                         byte* pBuffer = (byte*)(long)buf;
 
                                         for (int i = 0; i < requestedCharCount; i++)
@@ -2147,7 +2145,7 @@ public partial class RichTextBox : TextBoxBase
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
 
-        PInvoke.SendMessage(this, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)(fSelection ? PInvoke.SCF_SELECTION : PInvoke.SCF_DEFAULT), ref cf);
+        PInvoke.SendMessage(this, PInvoke.EM_GETCHARFORMAT, (WPARAM)(fSelection ? PInvoke.SCF_SELECTION : PInvoke.SCF_DEFAULT), ref cf);
         return cf;
     }
 
@@ -2186,7 +2184,7 @@ public partial class RichTextBox : TextBoxBase
         float fontSize = 13;
         if ((cf.dwMask & CFM_MASK.CFM_SIZE) != 0)
         {
-            fontSize = (float)cf.yHeight / (float)20.0;
+            fontSize = cf.yHeight / (float)20.0;
             if (fontSize == 0 && cf.yHeight > 0)
             {
                 fontSize = 1;
@@ -2317,7 +2315,7 @@ public partial class RichTextBox : TextBoxBase
         // valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
-        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        FileStream file = new(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         try
         {
             LoadFile(file, fileType);
@@ -2643,7 +2641,7 @@ public partial class RichTextBox : TextBoxBase
         // valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
-        Stream file = File.Create(path);
+        FileStream file = File.Create(path);
         try
         {
             SaveFile(file, fileType);
@@ -2715,7 +2713,7 @@ public partial class RichTextBox : TextBoxBase
 
         if (numerator != 0)
         {
-            _zoomMultiplier = ((float)numerator) / ((float)denominator);
+            _zoomMultiplier = numerator / ((float)denominator);
         }
         else
         {
@@ -2824,7 +2822,7 @@ public partial class RichTextBox : TextBoxBase
     {
         SetupLogPixels();
         int logP = xDirection ? s_logPixelsX : s_logPixelsY;
-        return (int)(((((double)v) / 20.0) / 72.0) * logP);
+        return (int)(((v / 20.0) / 72.0) * logP);
     }
 
     private void StreamIn(string str, uint flags)
@@ -2849,7 +2847,7 @@ public partial class RichTextBox : TextBoxBase
         int nullTerminatedLength = str.IndexOf((char)0);
         if (nullTerminatedLength != -1)
         {
-            str = str.Substring(0, nullTerminatedLength);
+            str = str[..nullTerminatedLength];
         }
 
         // Get the string into a byte array
@@ -2936,7 +2934,7 @@ public partial class RichTextBox : TextBoxBase
             PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, int.MaxValue);
 
             // go get the text for the control
-            PInvoke.SendMessage(this, PInvoke.EM_STREAMIN, (WPARAM)(uint)flags, ref es);
+            PInvoke.SendMessage(this, PInvoke.EM_STREAMIN, (WPARAM)flags, ref es);
             GC.KeepAlive(callback);
 
             UpdateMaxLength();
@@ -2969,7 +2967,7 @@ public partial class RichTextBox : TextBoxBase
 
     private string StreamOut(uint flags)
     {
-        Stream stream = new MemoryStream();
+        MemoryStream stream = new();
         StreamOut(stream, flags, false);
         stream.Position = 0;
         int streamLength = (int)stream.Length;
@@ -2994,9 +2992,9 @@ public partial class RichTextBox : TextBoxBase
             // We should consider removing this in the future, but it would need to
             // be checked against input strings with a trailing null.
 
-            if (!string.IsNullOrEmpty(result) && (result[result.Length - 1] == '\0'))
+            if (!string.IsNullOrEmpty(result) && (result[^1] == '\0'))
             {
-                result = result.Substring(0, result.Length - 1);
+                result = result[..^1];
             }
         }
 
@@ -3036,7 +3034,7 @@ public partial class RichTextBox : TextBoxBase
             es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
             // Get Text
-            PInvoke.SendMessage(this, PInvoke.EM_STREAMOUT, (WPARAM)(uint)flags, ref es);
+            PInvoke.SendMessage(this, PInvoke.EM_STREAMOUT, (WPARAM)flags, ref es);
             GC.KeepAlive(callback);
 
             // check to make sure things went well
@@ -3131,7 +3129,7 @@ public partial class RichTextBox : TextBoxBase
             AllowOleObjects = true;
 
             _oleCallback = CreateRichEditOleCallback();
-            using var oleCallback = ComHelpers.GetComScope<RichEdit.IRichEditOleCallback>(_oleCallback);
+            using var oleCallback = ComHelpers.GetComScope<IRichEditOleCallback>(_oleCallback);
             PInvoke.SendMessage(this, PInvoke.EM_SETOLECALLBACK, 0, (nint)oleCallback);
         }
 
@@ -3199,13 +3197,15 @@ public partial class RichTextBox : TextBoxBase
     ///  Converts a CHARRANGE to a string.
     /// </summary>
     /// <remarks>
-    ///  The behavior of this is dependent on the current window class name being used.
-    ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
-    ///  not based on the SystemCharWidth.
+    ///  <para>
+    ///   The behavior of this is dependent on the current window class name being used.
+    ///   We have to create a CharBuffer of the type of RichTextBox DLL we're using,
+    ///   not based on the SystemCharWidth.
+    ///  </para>
     /// </remarks>
     private string CharRangeToString(CHARRANGE c)
     {
-        Richedit.TEXTRANGE txrg = new()
+        TEXTRANGE txrg = new()
         {
             chrg = c
         };
@@ -3398,7 +3398,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private void WmSelectionChange(Richedit.SELCHANGE selChange)
+    private void WmSelectionChange(SELCHANGE selChange)
     {
         int selStart = selChange.chrg.cpMin;
         int selEnd = selChange.chrg.cpMax;

@@ -177,7 +177,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             {
                 if (value)
                 {
-                    _flags |= (byte)CellValueIsIcon;
+                    _flags |= CellValueIsIcon;
                 }
                 else
                 {

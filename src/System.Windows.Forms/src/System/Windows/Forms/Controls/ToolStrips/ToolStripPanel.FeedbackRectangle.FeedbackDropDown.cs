@@ -52,8 +52,8 @@ public partial class ToolStripPanel
                     while (PInvoke.PeekMessage(
                         &msg,
                         HWND.Null,
-                        (uint)PInvoke.WM_PAINT,
-                        (uint)PInvoke.WM_PAINT,
+                        PInvoke.WM_PAINT,
+                        PInvoke.WM_PAINT,
                         PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                     {
                         PInvoke.UpdateWindow(msg.hwnd);
@@ -102,7 +102,7 @@ public partial class ToolStripPanel
             {
                 if (m.MsgInternal == PInvoke.WM_NCHITTEST)
                 {
-                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTTRANSPARENT;
+                    m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                 }
 
                 base.WndProc(ref m);

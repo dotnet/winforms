@@ -60,7 +60,7 @@ public partial class LinkLabel
                 {
                     _enabled = value;
 
-                    if ((int)(State & (LinkState.Hover | LinkState.Active)) != 0)
+                    if ((State & (LinkState.Hover | LinkState.Active)) != 0)
                     {
                         State &= ~(LinkState.Hover | LinkState.Active);
                         if (Owner is not null)

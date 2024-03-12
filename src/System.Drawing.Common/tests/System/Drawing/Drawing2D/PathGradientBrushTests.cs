@@ -350,22 +350,22 @@ public class PathGradientBrushTests
         {
             Assert.Equal(focus, brush.Blend.Positions[0]);
             Assert.Equal(defaultScale, brush.Blend.Factors[0]);
-            Assert.Equal(1f, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(0f, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(1f, brush.Blend.Positions[^1]);
+            Assert.Equal(0f, brush.Blend.Factors[^1]);
         }
         else if (focus == 1f)
         {
             Assert.Equal(0f, brush.Blend.Positions[0]);
             Assert.Equal(0f, brush.Blend.Factors[0]);
-            Assert.Equal(focus, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(defaultScale, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(focus, brush.Blend.Positions[^1]);
+            Assert.Equal(defaultScale, brush.Blend.Factors[^1]);
         }
         else
         {
             Assert.Equal(0f, brush.Blend.Positions[0]);
             Assert.Equal(0f, brush.Blend.Factors[0]);
-            Assert.Equal(1f, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(0f, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(1f, brush.Blend.Positions[^1]);
+            Assert.Equal(0f, brush.Blend.Factors[^1]);
         }
     }
 
@@ -384,8 +384,8 @@ public class PathGradientBrushTests
             Assert.Equal(256, brush.Blend.Factors.Length);
             Assert.Equal(focus, brush.Blend.Positions[0]);
             Assert.Equal(1f, brush.Blend.Factors[0]);
-            Assert.Equal(1f, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(0f, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(1f, brush.Blend.Positions[^1]);
+            Assert.Equal(0f, brush.Blend.Factors[^1]);
         }
         else if (focus == 1f)
         {
@@ -393,8 +393,8 @@ public class PathGradientBrushTests
             Assert.Equal(256, brush.Blend.Factors.Length);
             Assert.Equal(0f, brush.Blend.Positions[0]);
             Assert.Equal(0f, brush.Blend.Factors[0]);
-            Assert.Equal(focus, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(1f, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(focus, brush.Blend.Positions[^1]);
+            Assert.Equal(1f, brush.Blend.Factors[^1]);
         }
         else
         {
@@ -404,8 +404,8 @@ public class PathGradientBrushTests
             Assert.Equal(0f, brush.Blend.Factors[0]);
             Assert.Equal(focus, brush.Blend.Positions[255]);
             Assert.Equal(1f, brush.Blend.Factors[255]);
-            Assert.Equal(1f, brush.Blend.Positions[brush.Blend.Positions.Length - 1]);
-            Assert.Equal(0f, brush.Blend.Factors[brush.Blend.Factors.Length - 1]);
+            Assert.Equal(1f, brush.Blend.Positions[^1]);
+            Assert.Equal(0f, brush.Blend.Factors[^1]);
         }
     }
 

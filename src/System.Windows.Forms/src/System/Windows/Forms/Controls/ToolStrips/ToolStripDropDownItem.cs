@@ -564,7 +564,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
     protected internal override bool ProcessDialogKey(Keys keyData)
     {
-        Keys keyCode = (Keys)keyData & Keys.KeyCode;
+        Keys keyCode = keyData & Keys.KeyCode;
 
         // Items on the overflow should have the same kind of keyboard handling as a toplevel.
         bool isTopLevel = (!IsOnDropDown || IsOnOverflow);

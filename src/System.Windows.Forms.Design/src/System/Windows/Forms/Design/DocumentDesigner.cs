@@ -355,7 +355,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         // Create a new AxToolboxItem and add it to the cache.
         tool = new AxToolboxItem(clsid);
-        axTools ??= new();
+        axTools ??= [];
         axTools[clsid] = tool;
         Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
         return tool;
@@ -558,7 +558,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// </summary>
     public override GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
     {
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
 
         if (selectionType != GlyphSelectionType.NotSelected)
         {
@@ -1266,12 +1266,12 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             if (hs is not null)
             {
                 ushort type = 0;
-                string[] types = new string[]
-                {
+                string[] types =
+                [
                     "VisualSelection",
                     "NonVisualSelection",
                     "MixedSelection"
-                };
+                ];
 
                 foreach (object obj in selComponents)
                 {
@@ -1342,22 +1342,22 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         // Handle shadowed properties
         //
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "Location",
             "BackColor"
-        };
+        ];
 
-        string[] noBrowseProps = new string[]
-        {
+        string[] noBrowseProps =
+        [
             "Anchor",
             "Dock",
             "TabIndex",
             "TabStop",
             "Visible"
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
@@ -1497,7 +1497,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     {
         get
         {
-            return new ViewTechnology[] { ViewTechnology.Default, (ViewTechnology)1 };
+            return [ViewTechnology.Default, (ViewTechnology)1];
         }
     }
 
@@ -1511,7 +1511,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     // We can live with this one. We have obsoleted some of the enum values. This method
     // only takes on argument, so it is pretty obvious what argument is bad.
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
+    [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
     object IRootDesigner.GetView(ViewTechnology technology)
     {
         if (technology != ViewTechnology.Default && technology != (ViewTechnology)1)

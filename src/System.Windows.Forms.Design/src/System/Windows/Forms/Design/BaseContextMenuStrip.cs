@@ -73,7 +73,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             Items.Remove(selectionMenuItem);
         }
 
-        List<Component> parentControls = new();
+        List<Component> parentControls = [];
         int nParentControls = 0;
 
         // Get the currently selected Control
@@ -205,7 +205,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             }
         }
 
-        GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
+        GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
         // ADD MENUITEMS
         AddCodeMenuItem();
         AddZorderMenuItem();

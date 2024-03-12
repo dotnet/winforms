@@ -17,7 +17,7 @@ internal partial class TableLayout
     /// </summary>
     internal sealed class ContainerInfo
     {
-        private static readonly Strip[] s_emptyStrip = Array.Empty<Strip>();
+        private static readonly Strip[] s_emptyStrip = [];
 
         private static readonly int s_stateValid = BitVector32.CreateMask();
         private static readonly int s_stateChildInfoValid = BitVector32.CreateMask(s_stateValid);
@@ -278,7 +278,7 @@ internal partial class TableLayout
                     _state[s_stateChildInfoValid] = true;
                 }
 
-                return _childInfo ?? Array.Empty<LayoutInfo>();
+                return _childInfo ?? [];
             }
         }
 

@@ -43,7 +43,7 @@ internal partial class PropertyGridToolStripButton : ToolStripButton
     private void DrawHightContrastDashedBorer(Graphics graphics)
     {
         Rectangle bounds = ClientBounds;
-        float[] dashValues = { 2, 2 };
+        float[] dashValues = [2, 2];
         int penWidth = 2;
 
         Pen focusPen1 = new(SystemColors.ControlText, penWidth)

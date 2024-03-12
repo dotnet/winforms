@@ -1455,7 +1455,7 @@ internal class ToolStripKeyboardHandlingService
     // caches the old commands from the menuCommand service.
     private void PopulateOldCommands()
     {
-        _oldCommands ??= new();
+        _oldCommands ??= [];
 
         IMenuCommandService mcs = MenuService;
         if (mcs is not null)
@@ -1493,7 +1493,7 @@ internal class ToolStripKeyboardHandlingService
     // populates a list of our custom commands to be added to menu command service.
     private void PopulateNewCommands()
     {
-        _newCommands ??= new();
+        _newCommands ??= [];
 
         _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectNext));
         _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectPrevious));

@@ -44,7 +44,7 @@ internal class EnumCodeDomSerializer : CodeDomSerializer
             }
             else
             {
-                values = new Enum[] { enumValue };
+                values = [enumValue];
                 needCast = true;
             }
 

@@ -205,7 +205,7 @@ public partial class ListView
             => this.TryGetOwnerAs(out ListView? owningListView) ? (int)owningListView.View : base.GetMultiViewProviderCurrentView();
 
         internal override int[] GetMultiViewProviderSupportedViews()
-            => new int[] { (int)View.Details };
+            => [(int)View.Details];
 
         internal override string GetMultiViewProviderViewName(int viewId)
         {
@@ -233,7 +233,7 @@ public partial class ListView
                 return visibleGroups.Count == 0 ? null : visibleGroups[visibleGroups.Count - 1].AccessibilityObject;
             }
 
-            return owningListView.Items.Count == 0 ? null : owningListView.Items[owningListView.Items.Count - 1].AccessibilityObject;
+            return owningListView.Items.Count == 0 ? null : owningListView.Items[^1].AccessibilityObject;
         }
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
@@ -274,7 +274,7 @@ public partial class ListView
 
         internal IReadOnlyList<ListViewGroup> GetVisibleGroups()
         {
-            List<ListViewGroup> list = new();
+            List<ListViewGroup> list = [];
 
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {

@@ -168,7 +168,7 @@ public partial class BindingSource : Component,
     private BindingSource GetRelatedBindingSource(string dataMember)
     {
         // Auto-create the binding source cache on first use
-        _relatedBindingSources ??= new Dictionary<string, BindingSource>();
+        _relatedBindingSources ??= [];
 
         // Look for an existing binding source that uses this data member, and return that
         foreach (string key in _relatedBindingSources.Keys)
@@ -290,8 +290,7 @@ public partial class BindingSource : Component,
             }
             else if (List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
             {
-                ListSortDescription[] sortsArray = new ListSortDescription[1];
-                sortsArray[0] = new ListSortDescription(ibl.SortProperty, ibl.SortDirection);
+                ListSortDescription[] sortsArray = [new ListSortDescription(ibl.SortProperty, ibl.SortDirection)];
                 sortsColln = new ListSortDescriptionCollection(sortsArray);
             }
 
@@ -518,7 +517,7 @@ public partial class BindingSource : Component,
     private static IList CreateBindingList(Type type)
     {
         Type genericType = typeof(BindingList<>);
-        Type bindingType = genericType.MakeGenericType(new Type[] { type });
+        Type bindingType = genericType.MakeGenericType([type]);
 
         return (IList)Activator.CreateInstance(bindingType)!;
     }
@@ -1190,7 +1189,7 @@ public partial class BindingSource : Component,
             _itemConstructor = _itemType.GetConstructor(
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance,
                 binder: null,
-                Array.Empty<Type>(),
+                [],
                 modifiers: null);
         }
 

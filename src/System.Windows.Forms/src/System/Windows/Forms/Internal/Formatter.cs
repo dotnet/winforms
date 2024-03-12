@@ -439,33 +439,33 @@ internal static class Formatter
                 "Parse",
                 BindingFlags.Public | BindingFlags.Static,
                 binder: null,
-                new Type[] { stringType, typeof(NumberStyles), typeof(IFormatProvider) },
+                [stringType, typeof(NumberStyles), typeof(IFormatProvider)],
                 modifiers: null);
             if (methodInfo is not null)
             {
-                return methodInfo.Invoke(obj: null, new object?[] { (string?)value, NumberStyles.Any, formatInfo });
+                return methodInfo.Invoke(obj: null, [(string?)value, NumberStyles.Any, formatInfo]);
             }
 
             methodInfo = targetType.GetMethod(
                 "Parse",
                 BindingFlags.Public | BindingFlags.Static,
                 binder: null,
-                new Type[] { stringType, typeof(IFormatProvider) },
+                [stringType, typeof(IFormatProvider)],
                 modifiers: null);
             if (methodInfo is not null)
             {
-                return methodInfo.Invoke(obj: null, new object?[] { (string?)value, formatInfo });
+                return methodInfo.Invoke(obj: null, [(string?)value, formatInfo]);
             }
 
             methodInfo = targetType.GetMethod(
                 "Parse",
                 BindingFlags.Public | BindingFlags.Static,
                 null,
-                new Type[] { stringType },
+                [stringType],
                 null);
             if (methodInfo is not null)
             {
-                return methodInfo.Invoke(obj: null, new object?[] { (string?)value });
+                return methodInfo.Invoke(obj: null, [(string?)value]);
             }
 
             return parseMethodNotFound;

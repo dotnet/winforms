@@ -8,7 +8,7 @@ internal sealed class GridEntryCollection : NonNullCollection<GridEntry>, IDispo
     private readonly bool _disposeItems;
 
     public GridEntryCollection(IEnumerable<GridEntry>? items = null, bool disposeItems = true)
-        : base(items ?? Enumerable.Empty<GridEntry>())
+        : base(items ?? [])
     {
         _disposeItems = disposeItems;
     }

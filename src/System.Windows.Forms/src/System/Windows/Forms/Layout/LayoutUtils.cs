@@ -25,15 +25,15 @@ internal partial class LayoutUtils
     public const AnchorStyles HorizontalAnchorStyles = AnchorStyles.Left | AnchorStyles.Right;
     public const AnchorStyles VerticalAnchorStyles = AnchorStyles.Top | AnchorStyles.Bottom;
 
-    private static readonly AnchorStyles[] s_dockingToAnchor = new AnchorStyles[]
-    {
+    private static readonly AnchorStyles[] s_dockingToAnchor =
+    [
         /* None   */ AnchorStyles.Top | AnchorStyles.Left,
         /* Top    */ AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
         /* Bottom */ AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
         /* Left   */ AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom,
         /* Right  */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom,
         /* Fill   */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
-    };
+    ];
 
     // A good, short test string for measuring control height.
     public const string TestString = "j^";

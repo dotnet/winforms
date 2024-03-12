@@ -254,7 +254,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
             BindingContext? bm = base.BindingContext;
             if (bm is null)
             {
-                bm = new BindingContext();
+                bm = [];
                 BindingContext = bm;
             }
 
@@ -1225,7 +1225,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         LastKeyData = keyData;
         if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
         {
-            Keys keyCode = (Keys)keyData & Keys.KeyCode;
+            Keys keyCode = keyData & Keys.KeyCode;
             switch (keyCode)
             {
                 case Keys.Tab:

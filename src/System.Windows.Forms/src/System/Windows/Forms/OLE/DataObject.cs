@@ -206,7 +206,7 @@ public unsafe partial class DataObject :
 
     public virtual StringCollection GetFileDropList()
     {
-        StringCollection dropList = new();
+        StringCollection dropList = [];
         if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
         {
             dropList.AddRange(strings);
@@ -267,24 +267,24 @@ public unsafe partial class DataObject :
     private static string[]? GetMappedFormats(string format) => format switch
     {
         null => null,
-        DataFormats.TextConstant or DataFormats.UnicodeTextConstant or DataFormats.StringConstant => new string[]
-            {
+        DataFormats.TextConstant or DataFormats.UnicodeTextConstant or DataFormats.StringConstant =>
+            [
                 DataFormats.StringConstant,
                 DataFormats.UnicodeTextConstant,
                 DataFormats.TextConstant
-            },
-        DataFormats.FileDropConstant or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW => new string[]
-            {
+            ],
+        DataFormats.FileDropConstant or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
+            [
                 DataFormats.FileDropConstant,
                 CF_DEPRECATED_FILENAMEW,
                 CF_DEPRECATED_FILENAME
-            },
-        DataFormats.BitmapConstant or BitmapFullName => new string[]
-            {
+            ],
+        DataFormats.BitmapConstant or BitmapFullName =>
+            [
                 BitmapFullName,
                 DataFormats.BitmapConstant
-            },
-        _ => new string[] { format }
+            ],
+        _ => [format]
     };
 
     int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
