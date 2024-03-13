@@ -14,12 +14,12 @@ public sealed class SelectionRange
     /// <summary>
     ///  The lower limit of the selection range.
     /// </summary>
-    private DateTime start = DateTime.MinValue.Date;
+    private DateTime _start = DateTime.MinValue.Date;
 
     /// <summary>
     ///  The upper limit of the selection range.
     /// </summary>
-    private DateTime end = DateTime.MaxValue.Date;
+    private DateTime _end = DateTime.MaxValue.Date;
 
     /// <summary>
     ///  Create a new SelectionRange object with the range [null, null].
@@ -40,13 +40,13 @@ public sealed class SelectionRange
         // We use lower.Date and upper.Date to remove any time component
         if (lower < upper)
         {
-            start = lower.Date;
-            end = upper.Date;
+            _start = lower.Date;
+            _end = upper.Date;
         }
         else
         {
-            start = upper.Date;
-            end = lower.Date;
+            _start = upper.Date;
+            _end = lower.Date;
         }
     }
 
@@ -55,8 +55,8 @@ public sealed class SelectionRange
     /// </summary>
     public SelectionRange(SelectionRange range)
     {
-        start = range.start;
-        end = range.end;
+        _start = range._start;
+        _end = range._end;
     }
 
     /// <summary>
@@ -66,11 +66,11 @@ public sealed class SelectionRange
     {
         get
         {
-            return end;
+            return _end;
         }
         set
         {
-            end = value.Date;
+            _end = value.Date;
         }
     }
 
@@ -81,11 +81,11 @@ public sealed class SelectionRange
     {
         get
         {
-            return start;
+            return _start;
         }
         set
         {
-            start = value.Date;
+            _start = value.Date;
         }
     }
 
@@ -94,6 +94,6 @@ public sealed class SelectionRange
     /// </summary>
     public override string ToString()
     {
-        return $"SelectionRange: Start: {start}, End: {end}";
+        return $"SelectionRange: Start: {_start}, End: {_end}";
     }
 }

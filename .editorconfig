@@ -104,6 +104,9 @@ dotnet_diagnostic.SYSLIB1054.severity = none
 # SYSLIB1096: Convert to 'GeneratedComInterface'
 dotnet_diagnostic.SYSLIB1096.severity = none
 
+# IDE1006: Naming Styles (in progress)
+# dotnet_diagnostic.IDE1006.severity = error
+
 # CA1725: Parameter names should match base declaration
 dotnet_diagnostic.CA1725.severity = error
 
@@ -113,8 +116,15 @@ dotnet_diagnostic.DOC100.severity = error
 # CA1859: Use concrete types when possible for improved performance
 dotnet_diagnostic.CA1859.severity = error
 
+# IDE0002: Simplify Member Access
+dotnet_diagnostic.IDE0002.severity = error
+
 # IDE0003: Remove qualification
 dotnet_diagnostic.IDE0003.severity = error
+
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = error
+
 
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none

@@ -21,16 +21,16 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTabControl))]
 public partial class TabControl : Control
 {
-    private static readonly Size DefaultItemSize = Size.Empty;
-    private static readonly Point DefaultPaddingPoint = new(6, 3);
+    private static readonly Size s_defaultItemSize = Size.Empty;
+    private static readonly Point s_defaultPaddingPoint = new(6, 3);
 
     // Properties
     private readonly TabPageCollection _tabCollection;
     private TabAlignment _alignment = TabAlignment.Top;
     private TabDrawMode _drawMode = TabDrawMode.Normal;
     private ImageList? _imageList;
-    private Size _itemSize = DefaultItemSize;
-    private Point _padding = DefaultPaddingPoint;
+    private Size _itemSize = s_defaultItemSize;
+    private Point _padding = s_defaultPaddingPoint;
     private TabSizeMode _sizeMode = TabSizeMode.Normal;
     private TabAppearance _appearance = TabAppearance.Normal;
     private Rectangle _cachedDisplayRect;
@@ -507,7 +507,7 @@ public partial class TabControl : Control
                     return GetTabRect(0).Size;
                 }
 
-                return DefaultItemSize;
+                return s_defaultItemSize;
             }
 
             return _itemSize;
@@ -1596,12 +1596,12 @@ public partial class TabControl : Control
 
     private void ResetItemSize()
     {
-        ItemSize = DefaultItemSize;
+        ItemSize = s_defaultItemSize;
     }
 
     private void ResetPadding()
     {
-        Padding = DefaultPaddingPoint;
+        Padding = s_defaultPaddingPoint;
     }
 
     private void ResizePages()
@@ -1759,12 +1759,12 @@ public partial class TabControl : Control
 
     private bool ShouldSerializeItemSize()
     {
-        return !_itemSize.Equals(DefaultItemSize);
+        return !_itemSize.Equals(s_defaultItemSize);
     }
 
     private new bool ShouldSerializePadding()
     {
-        return !_padding.Equals(DefaultPaddingPoint);
+        return !_padding.Equals(s_defaultPaddingPoint);
     }
 
     /// <summary>

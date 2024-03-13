@@ -5,7 +5,7 @@ namespace System.Collections.Specialized;
 
 internal class BackCompatibleStringComparer : IEqualityComparer<string>
 {
-    internal static IEqualityComparer<string> Default = new BackCompatibleStringComparer();
+    internal static IEqualityComparer<string> Default { get; } = new BackCompatibleStringComparer();
 
     internal BackCompatibleStringComparer()
     {

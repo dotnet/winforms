@@ -94,10 +94,10 @@ public class PrivateFontCollectionTests
     }
 
     [Fact]
-    public void AddFontFile_InvalidPath_ThrowsArgumentException()
+    public void AddFontFile_InvalidPath_ThrowsFileNotFoundException()
     {
         using PrivateFontCollection fontCollection = new();
-        AssertExtensions.Throws<ArgumentException>("path", null, () => fontCollection.AddFontFile(string.Empty));
+        AssertExtensions.Throws<FileNotFoundException>(() => fontCollection.AddFontFile(string.Empty));
     }
 
     [Fact]

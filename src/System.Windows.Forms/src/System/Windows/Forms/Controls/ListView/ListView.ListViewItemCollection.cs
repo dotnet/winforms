@@ -17,9 +17,9 @@ public partial class ListView
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
         ///  issues by holding on to extra references.
-        private int lastAccessedIndex = -1;
+        private int _lastAccessedIndex = -1;
 
-        private readonly IInnerList innerList;
+        private readonly IInnerList _innerList;
 
         public ListViewItemCollection(ListView owner)
         {
@@ -27,66 +27,30 @@ public partial class ListView
             // In Whidbey this constructor is a no-op.
 
             // initialize the inner list w/ a dummy list.
-            innerList = new ListViewNativeItemCollection(owner);
+            _innerList = new ListViewNativeItemCollection(owner);
         }
 
         internal ListViewItemCollection(IInnerList innerList)
         {
             Debug.Assert(innerList is not null, "Can't pass in null innerList");
-            this.innerList = innerList;
+            _innerList = innerList;
         }
 
-        private IInnerList InnerList
-        {
-            get
-            {
-                return innerList;
-            }
-        }
+        private IInnerList InnerList => _innerList;
 
         /// <summary>
         ///  Returns the total number of items within the list view.
         /// </summary>
         [Browsable(false)]
-        public int Count
-        {
-            get
-            {
-                return InnerList.Count;
-            }
-        }
+        public int Count => InnerList.Count;
 
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
+        object ICollection.SyncRoot => this;
 
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ICollection.IsSynchronized => true;
 
-        bool IList.IsFixedSize
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IList.IsFixedSize => false;
 
-        public bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
         ///  Returns the ListViewItem at the given index.
@@ -369,11 +333,11 @@ public partial class ListView
             }
 
             // step 1 - check the last cached item
-            if (IsValidIndex(lastAccessedIndex))
+            if (IsValidIndex(_lastAccessedIndex))
             {
-                if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                 {
-                    return lastAccessedIndex;
+                    return _lastAccessedIndex;
                 }
             }
 
@@ -382,13 +346,13 @@ public partial class ListView
             {
                 if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                 {
-                    lastAccessedIndex = i;
+                    _lastAccessedIndex = i;
                     return i;
                 }
             }
 
             // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-            lastAccessedIndex = -1;
+            _lastAccessedIndex = -1;
             return -1;
         }
 

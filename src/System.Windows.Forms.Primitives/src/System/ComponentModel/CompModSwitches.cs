@@ -5,33 +5,33 @@ namespace System.ComponentModel;
 
 internal static class CompModSwitches
 {
-    private static TraceSwitch? flowLayout;
-    private static TraceSwitch? dataCursor;
-    private static TraceSwitch? dataGridCursor;
-    private static TraceSwitch? dataGridEditing;
-    private static TraceSwitch? dataGridKeys;
-    private static TraceSwitch? dataGridLayout;
-    private static TraceSwitch? dataGridPainting;
-    private static TraceSwitch? dataGridParents;
-    private static TraceSwitch? dataGridScrolling;
-    private static TraceSwitch? dataGridSelection;
-    private static TraceSwitch? dataObject;
-    private static TraceSwitch? dataView;
-    private static TraceSwitch? debugGridView;
-    private static TraceSwitch? dgCaptionPaint;
-    private static TraceSwitch? dgEditColumnEditing;
-    private static TraceSwitch? dgRelationShpRowLayout;
-    private static TraceSwitch? dgRelationShpRowPaint;
-    private static TraceSwitch? dgRowPaint;
-    private static TraceSwitch? dragDrop;
-    private static TraceSwitch? imeMode;
-    private static TraceSwitch? msaa;
-    private static TraceSwitch? layoutPerformance;
-    private static TraceSwitch? layoutSuspendResume;
-    private static TraceSwitch? richLayout;
-    private static TraceSwitch? setBounds;
+    private static TraceSwitch? s_flowLayout;
+    private static TraceSwitch? s_dataCursor;
+    private static TraceSwitch? s_dataGridCursor;
+    private static TraceSwitch? s_dataGridEditing;
+    private static TraceSwitch? s_dataGridKeys;
+    private static TraceSwitch? s_dataGridLayout;
+    private static TraceSwitch? s_dataGridPainting;
+    private static TraceSwitch? s_dataGridParents;
+    private static TraceSwitch? s_dataGridScrolling;
+    private static TraceSwitch? s_dataGridSelection;
+    private static TraceSwitch? s_dataObject;
+    private static TraceSwitch? s_dataView;
+    private static TraceSwitch? s_debugGridView;
+    private static TraceSwitch? s_dgCaptionPaint;
+    private static TraceSwitch? s_dgEditColumnEditing;
+    private static TraceSwitch? s_dgRelationShpRowLayout;
+    private static TraceSwitch? s_dgRelationShpRowPaint;
+    private static TraceSwitch? s_dgRowPaint;
+    private static TraceSwitch? s_dragDrop;
+    private static TraceSwitch? s_imeMode;
+    private static TraceSwitch? s_msaa;
+    private static TraceSwitch? s_layoutPerformance;
+    private static TraceSwitch? s_layoutSuspendResume;
+    private static TraceSwitch? s_richLayout;
+    private static TraceSwitch? s_setBounds;
 
-    private static BooleanSwitch? lifetimeTracing;
+    private static BooleanSwitch? s_lifetimeTracing;
 
     private static TraceSwitch? s_handleLeak;
     private static BooleanSwitch? s_traceCollect;
@@ -41,9 +41,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataCursor ??= new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
+            s_dataCursor ??= new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
 
-            return dataCursor;
+            return s_dataCursor;
         }
     }
 
@@ -51,9 +51,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridCursor ??= new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
+            s_dataGridCursor ??= new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
 
-            return dataGridCursor;
+            return s_dataGridCursor;
         }
     }
 
@@ -61,9 +61,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridEditing ??= new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
+            s_dataGridEditing ??= new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
 
-            return dataGridEditing;
+            return s_dataGridEditing;
         }
     }
 
@@ -71,9 +71,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridKeys ??= new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
+            s_dataGridKeys ??= new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
 
-            return dataGridKeys;
+            return s_dataGridKeys;
         }
     }
 
@@ -81,9 +81,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridLayout ??= new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
+            s_dataGridLayout ??= new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
 
-            return dataGridLayout;
+            return s_dataGridLayout;
         }
     }
 
@@ -91,9 +91,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridPainting ??= new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
+            s_dataGridPainting ??= new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
 
-            return dataGridPainting;
+            return s_dataGridPainting;
         }
     }
 
@@ -101,9 +101,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridParents ??= new TraceSwitch("DataGridParents", "DataGrid parent rows");
+            s_dataGridParents ??= new TraceSwitch("DataGridParents", "DataGrid parent rows");
 
-            return dataGridParents;
+            return s_dataGridParents;
         }
     }
 
@@ -111,9 +111,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridScrolling ??= new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
+            s_dataGridScrolling ??= new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
 
-            return dataGridScrolling;
+            return s_dataGridScrolling;
         }
     }
 
@@ -121,9 +121,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataGridSelection ??= new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
+            s_dataGridSelection ??= new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
 
-            return dataGridSelection;
+            return s_dataGridSelection;
         }
     }
 
@@ -131,9 +131,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataObject ??= new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
+            s_dataObject ??= new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
 
-            return dataObject;
+            return s_dataObject;
         }
     }
 
@@ -141,9 +141,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dataView ??= new TraceSwitch("DataView", "DataView");
+            s_dataView ??= new TraceSwitch("DataView", "DataView");
 
-            return dataView;
+            return s_dataView;
         }
     }
 
@@ -151,9 +151,9 @@ internal static class CompModSwitches
     {
         get
         {
-            debugGridView ??= new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
+            s_debugGridView ??= new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
 
-            return debugGridView;
+            return s_debugGridView;
         }
     }
 
@@ -161,9 +161,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dgCaptionPaint ??= new TraceSwitch("DGCaptionPaint", "DataGridCaption");
+            s_dgCaptionPaint ??= new TraceSwitch("DGCaptionPaint", "DataGridCaption");
 
-            return dgCaptionPaint;
+            return s_dgCaptionPaint;
         }
     }
 
@@ -171,9 +171,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dgEditColumnEditing ??= new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
+            s_dgEditColumnEditing ??= new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
 
-            return dgEditColumnEditing;
+            return s_dgEditColumnEditing;
         }
     }
 
@@ -181,9 +181,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dgRelationShpRowLayout ??= new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
+            s_dgRelationShpRowLayout ??= new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
 
-            return dgRelationShpRowLayout;
+            return s_dgRelationShpRowLayout;
         }
     }
 
@@ -191,9 +191,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dgRelationShpRowPaint ??= new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
+            s_dgRelationShpRowPaint ??= new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
 
-            return dgRelationShpRowPaint;
+            return s_dgRelationShpRowPaint;
         }
     }
 
@@ -201,9 +201,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dgRowPaint ??= new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
+            s_dgRowPaint ??= new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
 
-            return dgRowPaint;
+            return s_dgRowPaint;
         }
     }
 
@@ -211,9 +211,9 @@ internal static class CompModSwitches
     {
         get
         {
-            dragDrop ??= new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
+            s_dragDrop ??= new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
 
-            return dragDrop;
+            return s_dragDrop;
         }
     }
 
@@ -221,9 +221,9 @@ internal static class CompModSwitches
     {
         get
         {
-            flowLayout ??= new TraceSwitch("FlowLayout", "Debug flow layout");
+            s_flowLayout ??= new TraceSwitch("FlowLayout", "Debug flow layout");
 
-            return flowLayout;
+            return s_flowLayout;
         }
     }
 
@@ -231,9 +231,9 @@ internal static class CompModSwitches
     {
         get
         {
-            imeMode ??= new TraceSwitch("ImeMode", "Debug IME Mode");
+            s_imeMode ??= new TraceSwitch("ImeMode", "Debug IME Mode");
 
-            return imeMode;
+            return s_imeMode;
         }
     }
 
@@ -241,9 +241,9 @@ internal static class CompModSwitches
     {
         get
         {
-            layoutPerformance ??= new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
+            s_layoutPerformance ??= new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
 
-            return layoutPerformance;
+            return s_layoutPerformance;
         }
     }
 
@@ -251,9 +251,9 @@ internal static class CompModSwitches
     {
         get
         {
-            layoutSuspendResume ??= new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
+            s_layoutSuspendResume ??= new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
 
-            return layoutSuspendResume;
+            return s_layoutSuspendResume;
         }
     }
 
@@ -261,9 +261,9 @@ internal static class CompModSwitches
     {
         get
         {
-            lifetimeTracing ??= new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
+            s_lifetimeTracing ??= new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
 
-            return lifetimeTracing;
+            return s_lifetimeTracing;
         }
     }
 
@@ -271,9 +271,9 @@ internal static class CompModSwitches
     {
         get
         {
-            msaa ??= new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
+            s_msaa ??= new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
 
-            return msaa;
+            return s_msaa;
         }
     }
 
@@ -281,9 +281,9 @@ internal static class CompModSwitches
     {
         get
         {
-            richLayout ??= new TraceSwitch("RichLayout", "Debug layout in RichControls");
+            s_richLayout ??= new TraceSwitch("RichLayout", "Debug layout in RichControls");
 
-            return richLayout;
+            return s_richLayout;
         }
     }
 
@@ -291,9 +291,9 @@ internal static class CompModSwitches
     {
         get
         {
-            setBounds ??= new TraceSwitch("SetBounds", "Trace changes to control size/position.");
+            s_setBounds ??= new TraceSwitch("SetBounds", "Trace changes to control size/position.");
 
-            return setBounds;
+            return s_setBounds;
         }
     }
 

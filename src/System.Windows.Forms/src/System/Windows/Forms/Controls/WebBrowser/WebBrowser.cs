@@ -1111,7 +1111,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
     {
         if (disposing)
         {
-            htmlShimManager?.Dispose();
+            _htmlShimManager?.Dispose();
 
             DetachSink();
             ActiveXSite.Dispose();
@@ -1185,19 +1185,16 @@ public unsafe partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Raises the <see cref="CanGoBackChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnCanGoBackChanged(EventArgs e) => CanGoBackChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="CanGoForwardChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnCanGoForwardChanged(EventArgs e) => CanGoForwardChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="DocumentCompleted"/> event.
     /// </summary>
-    //
     protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
     {
         using var webBrowser2 = AxIWebBrowser2.GetInterface();
@@ -1208,49 +1205,41 @@ public unsafe partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Raises the <see cref="DocumentTitleChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnDocumentTitleChanged(EventArgs e) => DocumentTitleChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="EncryptionLevelChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnEncryptionLevelChanged(EventArgs e) => EncryptionLevelChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="FileDownload"/> event.
     /// </summary>
-    //
     protected virtual void OnFileDownload(EventArgs e) => FileDownload?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="Navigated"/> event.
     /// </summary>
-    //
     protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e) => Navigated?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="Navigating"/> event.
     /// </summary>
-    //
     protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e) => Navigating?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="NewWindow"/> event.
     /// </summary>
-    //
     protected virtual void OnNewWindow(CancelEventArgs e) => NewWindow?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="ProgressChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e) => ProgressChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="StatusTextChanged"/> event.
     /// </summary>
-    //
     protected virtual void OnStatusTextChanged(EventArgs e)
     {
         StatusTextChanged?.Invoke(this, e);
@@ -1258,15 +1247,15 @@ public unsafe partial class WebBrowser : WebBrowserBase
 
     #region ShimSupport
 
-    private HtmlShimManager? htmlShimManager;
+    private HtmlShimManager? _htmlShimManager;
 
     internal HtmlShimManager ShimManager
     {
         get
         {
-            htmlShimManager ??= new HtmlShimManager();
+            _htmlShimManager ??= new HtmlShimManager();
 
-            return htmlShimManager;
+            return _htmlShimManager;
         }
     }
     #endregion

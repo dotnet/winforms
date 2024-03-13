@@ -35,12 +35,12 @@ internal class DataGridViewColumnCollectionDialog : Form
     private readonly Dictionary<DataGridViewColumn, string?> _columnsNames = [];
     private DataGridViewAddColumnDialog? _addColumnDialog;
 
-    private const int _OWNERDRAWHORIZONTALBUFFER = 3;
-    private const int _OWNERDRAWVERTICALBUFFER = 4;
-    private const int _OWNERDRAWITEMIMAGEBUFFER = 2;
+    private const int OWNERDRAWHORIZONTALBUFFER = 3;
+    private const int OWNERDRAWVERTICALBUFFER = 4;
+    private const int OWNERDRAWITEMIMAGEBUFFER = 2;
 
     // static because we can only have one instance of the DataGridViewColumnCollectionDialog running at a time
-    private static Bitmap? _selectedColumnsItemBitmap;
+    private static Bitmap? s_selectedColumnsItemBitmap;
 
     private bool _columnCollectionChanging;
 
@@ -77,15 +77,15 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         get
         {
-            if (_selectedColumnsItemBitmap is null)
+            if (s_selectedColumnsItemBitmap is null)
             {
-                _selectedColumnsItemBitmap = new Bitmap(
+                s_selectedColumnsItemBitmap = new Bitmap(
                     BitmapSelector.GetResourceStream(typeof(DataGridViewColumnCollectionDialog), "DataGridViewColumnsDialog.selectedColumns.bmp")
                     ?? throw new InvalidOperationException());
-                _selectedColumnsItemBitmap.MakeTransparent(Color.Red);
+                s_selectedColumnsItemBitmap.MakeTransparent(Color.Red);
             }
 
-            return _selectedColumnsItemBitmap;
+            return s_selectedColumnsItemBitmap;
         }
     }
 
@@ -109,7 +109,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         _formIsDirty = true;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void ColumnTypeChanged(ListBoxItem item, Type newType)
     {
         DataGridViewColumn currentColumn = item.DataGridViewColumn;
@@ -175,7 +174,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void CommitChanges()
     {
         if (!_formIsDirty)
@@ -328,7 +326,6 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     // We don't have any control over the srcColumn constructor.
     // So we do a catch all.
-    [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
     private static void CopyDefaultCellStyle(DataGridViewColumn srcColumn, DataGridViewColumn destColumn)
     {
         // Here is what we want to do ( see vsw 352177 for more details ):
@@ -644,7 +641,6 @@ internal class DataGridViewColumnCollectionDialog : Form
     }
     #endregion
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private static bool IsColumnAddedByUser(DataGridViewColumn col)
     {
         PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
@@ -798,13 +794,12 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void DataGridViewColumnCollectionDialog_Load(object? sender, EventArgs e)
     {
-        // get the Dialog Font
-        //
+        // Get the Dialog Font
         IUIService? uiService = _liveDataGridView?.Site?.GetService<IUIService>();
         object? font = uiService?.Styles["DialogFont"];
         if (font is not Font uiFont)
         {
-            uiFont = Control.DefaultFont;
+            uiFont = DefaultFont;
         }
 
         Font = uiFont;
@@ -817,7 +812,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _deleteButton.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
         _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
 
-        _selectedColumns.ItemHeight = Font.Height + _OWNERDRAWVERTICALBUFFER;
+        _selectedColumns.ItemHeight = Font.Height + OWNERDRAWVERTICALBUFFER;
 
         ActiveControl = _selectedColumns;
 
@@ -989,16 +984,16 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
 #endif // DGV_DITHERING
         e.Graphics.DrawImage(listBoxItem!.ToolboxBitmap!,
-                             e.Bounds.X + _OWNERDRAWITEMIMAGEBUFFER,
-                             e.Bounds.Y + _OWNERDRAWITEMIMAGEBUFFER,
+                             e.Bounds.X + OWNERDRAWITEMIMAGEBUFFER,
+                             e.Bounds.Y + OWNERDRAWITEMIMAGEBUFFER,
                              listBoxItem.ToolboxBitmap!.Width,
                              listBoxItem.ToolboxBitmap.Height);
 
         Rectangle bounds = e.Bounds;
-        bounds.Width -= listBoxItem.ToolboxBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.X += listBoxItem.ToolboxBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.Y += _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.Height -= 2 * _OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Width -= listBoxItem.ToolboxBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER;
+        bounds.X += listBoxItem.ToolboxBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Y += OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Height -= 2 * OWNERDRAWITEMIMAGEBUFFER;
 
         Brush selectedBrush = new SolidBrush(e.BackColor);
         Brush foreBrush = new SolidBrush(e.ForeColor);
@@ -1011,7 +1006,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             // first get the text rectangle
             int textWidth = Size.Ceiling(e.Graphics.MeasureString(columnName, e.Font!, new SizeF(bounds.Width, bounds.Height))).Width;
             // DANIELHE: the spec calls for + 7 but I think that + 3 does the trick better
-            Rectangle focusRectangle = new(bounds.X, e.Bounds.Y + 1, textWidth + _OWNERDRAWHORIZONTALBUFFER, e.Bounds.Height - 2);
+            Rectangle focusRectangle = new(bounds.X, e.Bounds.Y + 1, textWidth + OWNERDRAWHORIZONTALBUFFER, e.Bounds.Height - 2);
 
             e.Graphics.FillRectangle(selectedBrush, focusRectangle);
             focusRectangle.Inflate(-1, -1);
@@ -1051,7 +1046,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void selectedColumns_KeyPress(object? sender, KeyPressEventArgs e)
     {
-        Keys modifierKeys = Control.ModifierKeys;
+        Keys modifierKeys = ModifierKeys;
 
         // vsw 479960.
         // Don't let Ctrl-* propagate to the selected columns list box.
@@ -1169,7 +1164,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             maxItemWidth = Math.Max(maxItemWidth, itemWidth);
         }
 
-        _selectedColumns.HorizontalExtent = SelectedColumnsItemBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER + maxItemWidth + _OWNERDRAWHORIZONTALBUFFER;
+        _selectedColumns.HorizontalExtent = SelectedColumnsItemBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER + maxItemWidth + OWNERDRAWHORIZONTALBUFFER;
     }
 
     private void UnhookComponentChangedEventHandler(IComponentChangeService componentChangeService)
@@ -1319,7 +1314,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         ISite? IComponent.Site
         {
             get => Owner._liveDataGridView?.Site;
-
             set { }
         }
 
@@ -1329,10 +1323,6 @@ internal class DataGridViewColumnCollectionDialog : Form
             remove { }
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")      // The ListBoxItem does not own the ToolBoxBitmap
-                                                                                               // so it can't dispose it.
-        ]
         void IDisposable.Dispose()
         {
         }

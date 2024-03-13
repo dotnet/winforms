@@ -8,7 +8,7 @@ internal class MenuTimer
     private readonly Timer _autoMenuExpandTimer = new();
 
     // consider - weak reference?
-    private ToolStripMenuItem? currentItem;
+    private ToolStripMenuItem? _currentItem;
     private ToolStripMenuItem? _fromItem;
     private bool _inTransition;
 
@@ -31,12 +31,12 @@ internal class MenuTimer
     {
         get
         {
-            return currentItem;
+            return _currentItem;
         }
         set
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && currentItem != value, $"[MenuTimer.CurrentItem] changed: {(value is null ? "null" : value.ToString())}");
-            currentItem = value;
+            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && _currentItem != value, $"[MenuTimer.CurrentItem] changed: {(value is null ? "null" : value.ToString())}");
+            _currentItem = value;
         }
     }
 

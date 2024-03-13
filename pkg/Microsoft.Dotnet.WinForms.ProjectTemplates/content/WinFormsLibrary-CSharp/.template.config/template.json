@@ -30,16 +30,6 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp3.1",
-          "description": "Target netcoreapp3.1",
-          "displayName": ".NET Core 3.1"
-        },
-        {
-          "choice": "net5.0",
-          "description": "Target net5.0",
-          "displayName": ".NET 5.0"
-        },
-        {
           "choice": "net6.0",
           "description": "Target net6.0",
           "displayName": ".NET 6.0"
@@ -120,16 +110,6 @@
     }
   ],
   "sources": [
-    {
-      "condition": "Framework == \"netcoreapp3.1\"",
-      "source": "./netcoreapp3.1",
-      "target": "./"
-    },
-    {
-      "condition": "Framework == \"net5.0\"",
-      "source": "./net5.0",
-      "target": "./"
-    },
     {
       "condition": "(Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\")",
       "source": "./net6.0",
