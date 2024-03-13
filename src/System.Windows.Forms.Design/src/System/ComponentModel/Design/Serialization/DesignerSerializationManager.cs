@@ -587,7 +587,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     ///  This method takes a property that is owned by the given owner,
     ///  and it wraps them in new property that is owned by the serialization manager.
     /// </summary>
-    private static PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
+    private static WrappedPropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
     {
         ArgumentNullException.ThrowIfNull(property);
 

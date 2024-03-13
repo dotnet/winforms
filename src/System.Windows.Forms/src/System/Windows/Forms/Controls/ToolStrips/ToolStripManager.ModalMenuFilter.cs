@@ -8,20 +8,20 @@ namespace System.Windows.Forms;
 public static partial class ToolStripManager
 {
     ///  <remarks>
-    ///  - this installs a message filter when a dropdown becomes active.
-    ///  - the message filter
-    ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
-    ///  doesnt get highlight processing/tooltips
-    ///  b. detects mouse clicks. if the click is outside the dropdown, it
-    ///  dismisses it.
-    ///  c. detects when the active window has changed. If the active window
-    ///  is unexpected, it dismisses all dropdowns.
-    ///  d. detects keyboard messages, and redirects them to the active dropdown.
-    ///
-    ///  - There should be 1 Message Filter per thread and it should be uninstalled once
-    ///  the last dropdown has gone away
-    ///  This is not part of ToolStripManager because it's DropDown specific and
-    ///  we don't want to publicly expose this message filter.
+    ///   <para>
+    ///    This installs a message filter when a dropdown becomes active. The filter:
+    ///   </para>
+    ///   <list type="bullet">
+    ///    <item><description>Eats WM_MOUSEMOVEs so that the window underneath doesnt get highlight processing/tooltips.</description></item>
+    ///    <item><description>Dismisses the menu if clicked outside the dropdown.</description></item>
+    ///    <item><description>Dismisses all dropdowns if the active window changes.</description></item>
+    ///    <item><description>Redirects keyboard messages to the active dropdown.</description></item>
+    ///   </list>
+    ///   <para>
+    ///    There should be one Message Filter per thread and it should be uninstalled once the last dropdown has gone away.
+    ///    This is not part of <see cref="ToolStripManager"/> because it is DropDown specific and
+    ///    we don't want to publicly expose this message filter.
+    ///   </para>
     ///  </remarks>
     internal partial class ModalMenuFilter : IMessageModifyAndFilter
     {
@@ -70,7 +70,7 @@ public static partial class ToolStripManager
                 if (_showUnderlines != value)
                 {
                     _showUnderlines = value;
-                    ToolStripManager.NotifyMenuModeChange(invalidateText: true, activationChange: false);
+                    NotifyMenuModeChange(invalidateText: true, activationChange: false);
                 }
             }
         }
@@ -236,7 +236,7 @@ public static partial class ToolStripManager
                 // Skip the setter here so we only iterate through the toolstrips once.
                 bool textStyleChanged = _showUnderlines;
                 _showUnderlines = false;
-                ToolStripManager.NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
+                NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
             }
         }
 
@@ -293,7 +293,7 @@ public static partial class ToolStripManager
                 }
                 else if (!MenuKeyToggle)
                 {
-                    ModalMenuFilter.Instance.ShowUnderlines = true;
+                    Instance.ShowUnderlines = true;
                 }
             }
         }
@@ -531,7 +531,7 @@ public static partial class ToolStripManager
             {
                 return true;
             }
-            else if (m.Msg >= (int)PInvoke.WM_NCLBUTTONDOWN && m.Msg <= (int)PInvoke.WM_NCMBUTTONDBLCLK)
+            else if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
             {
                 return true;
             }

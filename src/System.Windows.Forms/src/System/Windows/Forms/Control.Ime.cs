@@ -170,7 +170,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_IgnoreWmImeNotify()");
             Debug.Indent();
 
-            bool val = Control.ignoreWmImeNotify;
+            bool val = ignoreWmImeNotify;
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value: {val}");
             Debug.Unindent();
@@ -180,7 +180,7 @@ public partial class Control
         set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside set_IgnoreWmImeNotify(): {value}");
-            Control.ignoreWmImeNotify = value;
+            ignoreWmImeNotify = value;
         }
     }
 
@@ -377,7 +377,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_PropagatingImeMode()");
             Debug.Indent();
 
-            if (Control.propagatingImeMode == ImeMode.Inherit)
+            if (propagatingImeMode == ImeMode.Inherit)
             {
                 // Initialize the propagating IME mode to the value the IME associated to the focused window currently has,
                 // this enables propagating the IME mode from/to unmanaged applications hosting winforms controls.
@@ -410,14 +410,14 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {propagatingImeMode}");
             Debug.Unindent();
 
-            return Control.propagatingImeMode;
+            return propagatingImeMode;
         }
         private set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside set_PropagatingImeMode()");
             Debug.Indent();
 
-            if (Control.propagatingImeMode != value)
+            if (propagatingImeMode != value)
             {
                 switch (value)
                 {
@@ -433,7 +433,7 @@ public partial class Control
                         Debug.WriteLineIf(
                             CompModSwitches.ImeMode.Level >= TraceLevel.Warning,
                             $"Setting PropagatingImeMode: Current value = {propagatingImeMode}, New value = {value}");
-                        Control.propagatingImeMode = value;
+                        propagatingImeMode = value;
                         break;
                 }
             }
@@ -774,7 +774,7 @@ public partial class Control
             // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
             // lead to another WM_IME_NOTIFY loop.
 
-            if (wparam == (int)PInvoke.IMN_SETCONVERSIONMODE || wparam == (int)PInvoke.IMN_SETOPENSTATUS)
+            if (wparam is ((int)PInvoke.IMN_SETCONVERSIONMODE) or ((int)PInvoke.IMN_SETOPENSTATUS))
             {
                 Debug.WriteLineIf(
                     CompModSwitches.ImeMode.Level >= TraceLevel.Info,
@@ -847,7 +847,7 @@ public partial class Control
             // See the PropagatingImeMode property
 
             // Note: We need to check the static field here directly to avoid initialization of the property.
-            if (Control.propagatingImeMode != ImeMode.Inherit)
+            if (propagatingImeMode != ImeMode.Inherit)
             {
                 // Setting the ime context of the top window will generate a WM_IME_NOTIFY on the focused control which will
                 // update its ImeMode, we need to prevent this temporarily.
@@ -895,9 +895,9 @@ public static class ImeContext
         {
             // Close the IME if necessary
             //
-            if (ImeContext.IsOpen(handle))
+            if (IsOpen(handle))
             {
-                ImeContext.SetOpenStatus(false, handle);
+                SetOpenStatus(false, handle);
             }
 
             // Disable the IME by disassociating the context from the window.
@@ -910,7 +910,7 @@ public static class ImeContext
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -954,13 +954,13 @@ public static class ImeContext
             }
 
             // Make sure the IME is opened.
-            if (!ImeContext.IsOpen(handle))
+            if (!IsOpen(handle))
             {
-                ImeContext.SetOpenStatus(true, handle);
+                SetOpenStatus(true, handle);
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -996,7 +996,7 @@ public static class ImeContext
             goto cleanup;
         }
 
-        if (!ImeContext.IsOpen(handle))
+        if (!IsOpen(handle))
         {
             // There's an IME associated with the window but is closed - the input is taken from the keyboard as is (English).
             retval = countryTable[ImeModeConversion.ImeClosed];
@@ -1045,7 +1045,7 @@ public static class ImeContext
             PInvoke.ImmReleaseContext((HWND)handle, inputContext);
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
 
         Debug.Unindent();
         return retval;
@@ -1193,12 +1193,12 @@ public static class ImeContext
 
         if (imeMode == ImeMode.Disable)
         {
-            ImeContext.Disable(handle);
+            Disable(handle);
         }
         else
         {
             // This will make sure the IME is opened.
-            ImeContext.Enable(handle);
+            Enable(handle);
         }
 
         switch (imeMode)
@@ -1234,7 +1234,7 @@ public static class ImeContext
                     goto default;
                 }
 
-                ImeContext.SetOpenStatus(false, handle);
+                SetOpenStatus(false, handle);
                 break;
 
             default:
@@ -1267,7 +1267,7 @@ public static class ImeContext
         }
 
     cleanup:
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -1300,7 +1300,7 @@ public static class ImeContext
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 }// end ImeContext class

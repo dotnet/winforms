@@ -187,7 +187,7 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     /// <remarks>
-    /// We have to resize the ActiveX control when our size changes.
+    ///  <para>We have to resize the ActiveX control when our size changes.</para>
     /// </remarks>
     internal override unsafe void OnBoundsUpdate(int x, int y, int width, int height)
     {
@@ -361,8 +361,10 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     /// <remarks>
-    /// Certain messages are forwarder directly to the ActiveX control,
-    /// others are first processed by the wndproc of Control
+    ///  <para>
+    ///   Certain messages are forwardef directly to the ActiveX control, others are first processed by the wndproc of
+    ///   <see cref="Control"/>.
+    ///  </para>
     /// </remarks>
     protected override unsafe void WndProc(ref Message m)
     {
@@ -745,7 +747,7 @@ public unsafe partial class WebBrowserBase : Control
         if (DesignMode)
         {
             ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
-            this._selectionStyle = selectionStyle;
+            _selectionStyle = selectionStyle;
             if (iss is not null && iss.GetComponentSelected(this))
             {
                 // The ActiveX Host designer will offer an extender property
@@ -1159,17 +1161,9 @@ public unsafe partial class WebBrowserBase : Control
     // Find the uppermost ContainerControl that this control lives in
     internal ContainerControl? FindContainerControlInternal()
     {
-        if (Site is not null)
+        if (Site.TryGetService(out IDesignerHost? host) && host.RootComponent is ContainerControl rootContainerControl)
         {
-            IDesignerHost? host = (IDesignerHost?)Site.GetService(typeof(IDesignerHost));
-            if (host is not null)
-            {
-                IComponent comp = host.RootComponent;
-                if (comp is not null && comp is ContainerControl)
-                {
-                    return (ContainerControl)comp;
-                }
-            }
+            return rootContainerControl;
         }
 
         ContainerControl? containerControl = null;
@@ -1183,7 +1177,7 @@ public unsafe partial class WebBrowserBase : Control
 
         if (containerControl is null && IsHandleCreated)
         {
-            containerControl = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
+            containerControl = FromHandle(PInvoke.GetParent(this)) as ContainerControl;
         }
 
         // Never use the parking window for this: its hwnd can be destroyed at any time.
@@ -1242,7 +1236,7 @@ public unsafe partial class WebBrowserBase : Control
         // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
         // that is not good enough for DragDrop.
         //
-        if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+        if (Application.OleRequired() != ApartmentState.STA)
         {
             throw new ThreadStateException(SR.ThreadMustBeSTA);
         }

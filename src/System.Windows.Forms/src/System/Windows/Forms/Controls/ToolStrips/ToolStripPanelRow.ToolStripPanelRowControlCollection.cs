@@ -73,7 +73,7 @@ public partial class ToolStripPanelRow
         {
             ArgumentNullException.ThrowIfNull(value);
 
-            if (!(value is ISupportToolStripPanel control))
+            if (value is not ISupportToolStripPanel control)
             {
                 throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
             }

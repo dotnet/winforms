@@ -149,7 +149,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         {
             base.Dock = value;
 
-            if (value == DockStyle.Left || value == DockStyle.Right)
+            if (value is DockStyle.Left or DockStyle.Right)
             {
                 Orientation = Orientation.Vertical;
             }

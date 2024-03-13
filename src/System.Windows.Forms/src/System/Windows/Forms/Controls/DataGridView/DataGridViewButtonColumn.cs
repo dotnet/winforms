@@ -196,7 +196,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
             dataGridViewColumn = (DataGridViewButtonColumn)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewColumn);
+        CloneInternal(dataGridViewColumn);
         dataGridViewColumn.Text = _text;
 
         return dataGridViewColumn;

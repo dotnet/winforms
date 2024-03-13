@@ -248,15 +248,12 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Gets the hash code for this <see cref='Font'/>.
+    ///  Gets the hash code for this <see cref='Font'/>.
     /// </summary>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Name, Style, Size, Unit);
-    }
+    public override int GetHashCode() => HashCode.Combine(Name, Style, Size, Unit);
 
     /// <summary>
-    /// Returns a human-readable string representation of this <see cref='Font'/>.
+    ///  Returns a human-readable string representation of this <see cref='Font'/>.
     /// </summary>
     public override string ToString() =>
         $"[{GetType().Name}: Name={FontFamily.Name}, Size={_fontSize}, Units={(int)_fontUnit}, GdiCharSet={_gdiCharSet}, GdiVerticalFont={_gdiVerticalFont}]";
@@ -264,12 +261,17 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     // This is used by SystemFonts when constructing a system Font objects.
     internal void SetSystemFontName(string systemFontName) => _systemFontName = systemFontName;
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public void ToLogFont(object logFont, Graphics graphics)
     {
         ArgumentNullException.ThrowIfNull(logFont);
 
         Type type = logFont.GetType();
         int nativeSize = sizeof(LOGFONT);
+
+        // Marshal is necessary here. ToLogFont(LogFont, Graphics) is the marshal free version.
+
+#pragma warning disable CA1421 // This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied
         if (Marshal.SizeOf(type) != nativeSize)
         {
             // If we don't actually have an object that is LOGFONT in size, trying to pass
@@ -290,6 +292,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
             Buffer.MemoryCopy(&nativeLogFont, (byte*)handle.AddrOfPinnedObject(), nativeSize, nativeSize);
             handle.Free();
         }
+#pragma warning restore CA1421
     }
 
 #if NET8_0_OR_GREATER
@@ -558,9 +561,9 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
 #if NET8_0_OR_GREATER
-public
+    public
 #else
-internal
+    internal
 #endif
     static Font FromLogFont(in LOGFONT logFont)
     {
@@ -607,6 +610,7 @@ internal
     /// <param name="lf">A boxed LOGFONT.</param>
     /// <param name="hdc">Handle to a device context (HDC).</param>
     /// <returns>The newly created <see cref="Font"/>.</returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static Font FromLogFont(object lf, IntPtr hdc)
     {
         ArgumentNullException.ThrowIfNull(lf);
@@ -619,6 +623,9 @@ internal
 
         Type type = lf.GetType();
         int nativeSize = sizeof(LOGFONT);
+
+        // Marshal is necessary here. FromLogFont(LogFont, IntPtr) is the marshal free version.
+#pragma warning disable CA1421 // This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied
         if (Marshal.SizeOf(type) != nativeSize)
         {
             // If we don't actually have an object that is LOGFONT in size, trying to pass
@@ -630,6 +637,7 @@ internal
         logFont = default;
 
         Marshal.StructureToPtr(lf, new IntPtr(&logFont), fDeleteOld: false);
+#pragma warning restore CA1421
 
         return FromLogFont(in logFont, hdc);
     }

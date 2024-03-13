@@ -70,7 +70,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         DataGridView = dataGridView;
     }
 
-    internal static IComparer<DataGridViewColumn?> ColumnCollectionOrderComparer => DataGridViewColumnCollection.s_columnOrderComparer;
+    internal static IComparer<DataGridViewColumn?> ColumnCollectionOrderComparer => s_columnOrderComparer;
 
     protected override ArrayList List => ArrayList.Adapter(_items);
 
@@ -905,12 +905,12 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
     internal void InvalidateCachedColumnCount(DataGridViewElementStates includeFilter)
     {
-        Debug.Assert(includeFilter == DataGridViewElementStates.Displayed ||
-                     includeFilter == DataGridViewElementStates.Selected ||
-                     includeFilter == DataGridViewElementStates.ReadOnly ||
-                     includeFilter == DataGridViewElementStates.Resizable ||
-                     includeFilter == DataGridViewElementStates.Frozen ||
-                     includeFilter == DataGridViewElementStates.Visible);
+        Debug.Assert(includeFilter is DataGridViewElementStates.Displayed
+            or DataGridViewElementStates.Selected
+            or DataGridViewElementStates.ReadOnly
+            or DataGridViewElementStates.Resizable
+            or DataGridViewElementStates.Frozen
+            or DataGridViewElementStates.Visible);
 
         if (includeFilter == DataGridViewElementStates.Visible)
         {
@@ -928,12 +928,12 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
     internal void InvalidateCachedColumnsWidth(DataGridViewElementStates includeFilter)
     {
-        Debug.Assert(includeFilter == DataGridViewElementStates.Displayed ||
-                     includeFilter == DataGridViewElementStates.Selected ||
-                     includeFilter == DataGridViewElementStates.ReadOnly ||
-                     includeFilter == DataGridViewElementStates.Resizable ||
-                     includeFilter == DataGridViewElementStates.Frozen ||
-                     includeFilter == DataGridViewElementStates.Visible);
+        Debug.Assert(includeFilter is DataGridViewElementStates.Displayed
+            or DataGridViewElementStates.Selected
+            or DataGridViewElementStates.ReadOnly
+            or DataGridViewElementStates.Resizable
+            or DataGridViewElementStates.Frozen
+            or DataGridViewElementStates.Visible);
 
         if (includeFilter == DataGridViewElementStates.Visible)
         {

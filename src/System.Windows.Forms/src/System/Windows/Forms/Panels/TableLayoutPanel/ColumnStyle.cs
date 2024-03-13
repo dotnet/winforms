@@ -22,7 +22,7 @@ public class ColumnStyle : TableLayoutStyle
 
     public float Width
     {
-        get => base.Size;
-        set => base.Size = value;
+        get => Size;
+        set => Size = value;
     }
 }

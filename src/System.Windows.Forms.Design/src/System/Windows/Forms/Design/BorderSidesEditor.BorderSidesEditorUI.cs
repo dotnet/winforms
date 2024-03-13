@@ -32,7 +32,7 @@ public partial class BorderSidesEditor
 
         public BorderSidesEditorUI(BorderSidesEditor editor)
         {
-            this._editor = editor;
+            _editor = editor;
             End();
             InitializeComponent();
             Size = PreferredSize;

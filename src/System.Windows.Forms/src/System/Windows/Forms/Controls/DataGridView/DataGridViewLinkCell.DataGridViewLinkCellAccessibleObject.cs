@@ -23,7 +23,7 @@ public partial class DataGridViewLinkCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewLinkCell dataGridViewCell))
+            if (Owner is not DataGridViewLinkCell dataGridViewCell)
             {
                 return;
             }

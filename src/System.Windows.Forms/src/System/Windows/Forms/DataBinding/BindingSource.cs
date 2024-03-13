@@ -778,8 +778,10 @@ public partial class BindingSource : Component,
     public void MovePrevious() => Position--;
 
     /// <remarks>
-    ///  This method is used to fire ListChanged events when the inner list
-    ///  is not an IBindingList (and therefore cannot fire them itself).
+    ///  <para>
+    ///   This method is used to fire ListChanged events when the inner list is not an <see cref="IBindingList"/>
+    ///   (and therefore cannot fire them itself).
+    ///  </para>
     /// </remarks>
     private void OnSimpleListChanged(ListChangedType listChangedType, int newIndex)
     {

@@ -10,12 +10,12 @@ namespace System.Windows.Forms.Metafiles;
 /// <summary>
 ///  Record that represents a 16 bit Poly record.
 /// </summary>
-/// <remarks>
+/// <devdoc>
 ///   Not an actual Win32 define, encapsulates:
 ///
 ///   - EMRSETTEXTCOLOR
 ///   - EMRSETBKCOLOR
-/// </remarks>
+/// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRSETCOLOR
 {

@@ -72,48 +72,19 @@ public partial class ToolStripTextBox : ToolStripControlHost
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            if (IsOnDropDown)
-            {
-                return _defaultDropDownMargin;
-            }
-            else
-            {
-                return _defaultMargin;
-            }
-        }
-    }
+    protected internal override Padding DefaultMargin => IsOnDropDown ? _defaultDropDownMargin : _defaultMargin;
 
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(100, 22);
-        }
-    }
+    protected override Size DefaultSize => new Size(100, 22);
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public TextBox TextBox
-    {
-        get
-        {
-            return (TextBox)Control;
-        }
-    }
+    public TextBox TextBox => (TextBox)Control;
 
-    private static Control CreateControlInstance()
+    private static ToolStripTextBoxControl CreateControlInstance() => new()
     {
-        TextBox textBox = new ToolStripTextBoxControl
-        {
-            BorderStyle = BorderStyle.Fixed3D,
-            AutoSize = true
-        };
-        return textBox;
-    }
+        BorderStyle = BorderStyle.Fixed3D,
+        AutoSize = true
+    };
 
     public override Size GetPreferredSize(Size constrainingSize)
     {
@@ -122,70 +93,31 @@ public partial class ToolStripTextBox : ToolStripControlHost
         return new Size(bounds.Width, TextBox.PreferredHeight);
     }
 
-    private void HandleAcceptsTabChanged(object? sender, EventArgs e)
-    {
-        OnAcceptsTabChanged(e);
-    }
+    private void HandleAcceptsTabChanged(object? sender, EventArgs e) => OnAcceptsTabChanged(e);
 
-    private void HandleBorderStyleChanged(object? sender, EventArgs e)
-    {
-        OnBorderStyleChanged(e);
-    }
+    private void HandleBorderStyleChanged(object? sender, EventArgs e) => OnBorderStyleChanged(e);
 
-    private void HandleHideSelectionChanged(object? sender, EventArgs e)
-    {
-        OnHideSelectionChanged(e);
-    }
+    private void HandleHideSelectionChanged(object? sender, EventArgs e) => OnHideSelectionChanged(e);
 
-    private void HandleModifiedChanged(object? sender, EventArgs e)
-    {
-        OnModifiedChanged(e);
-    }
+    private void HandleModifiedChanged(object? sender, EventArgs e) => OnModifiedChanged(e);
 
-    private void HandleMultilineChanged(object? sender, EventArgs e)
-    {
-        OnMultilineChanged(e);
-    }
+    private void HandleMultilineChanged(object? sender, EventArgs e) => OnMultilineChanged(e);
 
-    private void HandleReadOnlyChanged(object? sender, EventArgs e)
-    {
-        OnReadOnlyChanged(e);
-    }
+    private void HandleReadOnlyChanged(object? sender, EventArgs e) => OnReadOnlyChanged(e);
 
-    private void HandleTextBoxTextAlignChanged(object? sender, EventArgs e)
-    {
-        RaiseEvent(s_eventTextBoxTextAlignChanged, e);
-    }
+    private void HandleTextBoxTextAlignChanged(object? sender, EventArgs e) => RaiseEvent(s_eventTextBoxTextAlignChanged, e);
 
-    protected virtual void OnAcceptsTabChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventAcceptsTabChanged, e);
-    }
+    protected virtual void OnAcceptsTabChanged(EventArgs e) => RaiseEvent(s_eventAcceptsTabChanged, e);
 
-    protected virtual void OnBorderStyleChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventBorderStyleChanged, e);
-    }
+    protected virtual void OnBorderStyleChanged(EventArgs e) => RaiseEvent(s_eventBorderStyleChanged, e);
 
-    protected virtual void OnHideSelectionChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventHideSelectionChanged, e);
-    }
+    protected virtual void OnHideSelectionChanged(EventArgs e) => RaiseEvent(s_eventHideSelectionChanged, e);
 
-    protected virtual void OnModifiedChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventModifiedChanged, e);
-    }
+    protected virtual void OnModifiedChanged(EventArgs e) => RaiseEvent(s_eventModifiedChanged, e);
 
-    protected virtual void OnMultilineChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventMultilineChanged, e);
-    }
+    protected virtual void OnMultilineChanged(EventArgs e) => RaiseEvent(s_eventMultilineChanged, e);
 
-    protected virtual void OnReadOnlyChanged(EventArgs e)
-    {
-        RaiseEvent(s_eventReadOnlyChanged, e);
-    }
+    protected virtual void OnReadOnlyChanged(EventArgs e) => RaiseEvent(s_eventReadOnlyChanged, e);
 
     protected override void OnSubscribeControlEvents(Control? control)
     {

@@ -377,9 +377,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         if (uis is not null)
         {
             menu.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
-            if (uis.Styles["VsColorPanelText"] is Color)
+            if (uis.Styles["VsColorPanelText"] is Color color)
             {
-                menu.ForeColor = (Color)uis.Styles["VsColorPanelText"];
+                menu.ForeColor = color;
             }
         }
 
@@ -401,7 +401,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private class TableLayouPanelRowColumnActionList : DesignerActionList
     {
-        private TableLayoutPanelDesigner owner;
+        private readonly TableLayoutPanelDesigner owner;
 
         public TableLayouPanelRowColumnActionList(TableLayoutPanelDesigner owner) : base(owner.Component)
         {
@@ -869,36 +869,36 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         int[] cw = Table.GetColumnWidths();
         int[] rh = Table.GetRowHeights();
 
-        using (Pen pen = BorderPen)
+        using Pen pen = BorderPen;
+
+        if (cw.Length > 1)
         {
-            if (cw.Length > 1)
-            {
-                bool isRTL = (Table.RightToLeft == RightToLeft.Yes);
-                // offset by padding
-                int startX = isRTL ? rc.Right : rc.Left;
-                for (int i = 0; i < cw.Length - 1; i++)
-                {
-                    if (isRTL)
-                    {
-                        startX -= cw[i];
-                    }
-                    else
-                    {
-                        startX += cw[i];
-                    }
+            bool isRTL = (Table.RightToLeft == RightToLeft.Yes);
 
-                    graphics.DrawLine(pen, startX, rc.Top, startX, rc.Bottom);
+            // offset by padding
+            int startX = isRTL ? rc.Right : rc.Left;
+            for (int i = 0; i < cw.Length - 1; i++)
+            {
+                if (isRTL)
+                {
+                    startX -= cw[i];
                 }
+                else
+                {
+                    startX += cw[i];
+                }
+
+                graphics.DrawLine(pen, startX, rc.Top, startX, rc.Bottom);
             }
+        }
 
-            if (rh.Length > 1)
+        if (rh.Length > 1)
+        {
+            int startY = rc.Top;
+            for (int i = 0; i < rh.Length - 1; i++)
             {
-                int startY = rc.Top;
-                for (int i = 0; i < rh.Length - 1; i++)
-                {
-                    startY += rh[i];
-                    graphics.DrawLine(pen, rc.Left, startY, rc.Right, startY);
-                }
+                startY += rh[i];
+                graphics.DrawLine(pen, rc.Left, startY, rc.Right, startY);
             }
         }
     }
@@ -1301,7 +1301,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         if (dragOp)
         {
-            Control existingControl = (Control)((TableLayoutPanel)Control).GetControlFromPosition(dropPoint.X, dropPoint.Y);
+            Control existingControl = ((TableLayoutPanel)Control).GetControlFromPosition(dropPoint.X, dropPoint.Y);
 
             // If the cell is not empty, and we are not doing a local drag, then show the no-smoking cursor
             // or if we are doing a multi-select local drag, then show the no-smoking cursor.
@@ -1663,29 +1663,30 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
         if (host is not null && Table.Site is not null)
         {
-            using (DesignerTransaction t = host.CreateTransaction(string.Format(isRow ? SR.TableLayoutPanelDesignerAddRowUndoUnit :
-                                                                                        SR.TableLayoutPanelDesignerAddColumnUndoUnit, Table.Site.Name)))
+            using DesignerTransaction t = host.CreateTransaction(
+                string.Format(isRow
+                    ? SR.TableLayoutPanelDesignerAddRowUndoUnit
+                    : SR.TableLayoutPanelDesignerAddColumnUndoUnit, Table.Site.Name));
+
+            try
             {
-                try
+                Table.SuspendLayout(); // To avoid flickering
+                                       // This ensures that the Row/Col Style gets set BEFORE the row is added. This in turn
+                                       // ensures that the row/col shows up. Since we turn off tablelayout, a style won't have been added
+                                       // when EnsureVisibleStyles is called from the shadowed property.
+                InsertRowCol(isRow, isRow ? Table.RowCount : Table.ColumnCount);
+                Table.ResumeLayout();
+                t.Commit();
+            }
+            catch (CheckoutException checkoutException)
+            {
+                if (CheckoutException.Canceled.Equals(checkoutException))
                 {
-                    Table.SuspendLayout(); // To avoid flickering
-                                           // This ensures that the Row/Col Style gets set BEFORE the row is added. This in turn
-                                           // ensures that the row/col shows up. Since we turn off tablelayout, a style won't have been added
-                                           // when EnsureVisibleStyles is called from the shadowed property.
-                    InsertRowCol(isRow, isRow ? Table.RowCount : Table.ColumnCount);
-                    Table.ResumeLayout();
-                    t.Commit();
+                    t?.Cancel();
                 }
-                catch (CheckoutException checkoutException)
+                else
                 {
-                    if (CheckoutException.Canceled.Equals(checkoutException))
-                    {
-                        t?.Cancel();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
             }
         }
@@ -1778,33 +1779,33 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         if (host is not null && Table.Site is not null)
         {
             bool isRow = (bool)((ToolStripMenuItem)sender).Tag;
-            using (DesignerTransaction t = host.CreateTransaction(string.Format(isRow ? SR.TableLayoutPanelDesignerAddRowUndoUnit :
-                                                                                        SR.TableLayoutPanelDesignerAddColumnUndoUnit, Table.Site.Name)))
+            using DesignerTransaction t = host.CreateTransaction(string.Format(
+                isRow ? SR.TableLayoutPanelDesignerAddRowUndoUnit : SR.TableLayoutPanelDesignerAddColumnUndoUnit,
+                Table.Site.Name));
+
+            try
             {
-                try
+                Table.SuspendLayout();
+                InsertRowCol(isRow, isRow ? curRow : curCol);
+                FixUpControlsOnInsert(isRow, isRow ? curRow : curCol);
+                Table.ResumeLayout();
+                t.Commit();
+            }
+            catch (CheckoutException checkoutException)
+            {
+                if (CheckoutException.Canceled.Equals(checkoutException))
                 {
-                    Table.SuspendLayout();
-                    InsertRowCol(isRow, isRow ? curRow : curCol);
-                    FixUpControlsOnInsert(isRow, isRow ? curRow : curCol);
-                    Table.ResumeLayout();
-                    t.Commit();
+                    t?.Cancel();
                 }
-                catch (CheckoutException checkoutException)
+                else
                 {
-                    if (CheckoutException.Canceled.Equals(checkoutException))
-                    {
-                        t?.Cancel();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                catch (InvalidOperationException ex)
-                {
-                    IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                    uiService.ShowError(ex.Message);
-                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                IUIService uiService = (IUIService)GetService(typeof(IUIService));
+                uiService.ShowError(ex.Message);
             }
         }
     }
@@ -1901,54 +1902,54 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
         if (host is not null && Table.Site is not null)
         {
-            using (DesignerTransaction t = host.CreateTransaction(string.Format(isRow ? SR.TableLayoutPanelDesignerRemoveRowUndoUnit :
-                                                                    SR.TableLayoutPanelDesignerRemoveColumnUndoUnit, Table.Site.Name)))
+            using DesignerTransaction t = host.CreateTransaction(string.Format(
+                isRow ? SR.TableLayoutPanelDesignerRemoveRowUndoUnit : SR.TableLayoutPanelDesignerRemoveColumnUndoUnit,
+                Table.Site.Name));
+
+            try
             {
-                try
+                Table.SuspendLayout();
+                List<Control> deleteList = [];
+
+                // First fix up any controls in the row/col we are deleting
+                FixUpControlsOnDelete(isRow, index, deleteList);
+                // Then delete the row col
+                DeleteRowCol(isRow, index);
+
+                // Now delete any child control
+
+                // IF YOU CHANGE THIS, YOU SHOULD ALSO CHANGE THE CODE IN StyleCollectionEditor.OnOkButtonClick
+                if (deleteList.Count > 0)
                 {
-                    Table.SuspendLayout();
-                    List<Control> deleteList = [];
-
-                    // First fix up any controls in the row/col we are deleting
-                    FixUpControlsOnDelete(isRow, index, deleteList);
-                    // Then delete the row col
-                    DeleteRowCol(isRow, index);
-
-                    // Now delete any child control
-
-                    // IF YOU CHANGE THIS, YOU SHOULD ALSO CHANGE THE CODE IN StyleCollectionEditor.OnOkButtonClick
-                    if (deleteList.Count > 0)
+                    PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
+                    PropChanging(childProp);
+                    foreach (Control control in deleteList)
                     {
-                        PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
-                        PropChanging(childProp);
-                        foreach (Control control in deleteList)
+                        List<IComponent> al = [];
+                        DesignerUtils.GetAssociatedComponents(control, host, al);
+                        foreach (IComponent comp in al)
                         {
-                            List<IComponent> al = [];
-                            DesignerUtils.GetAssociatedComponents(control, host, al);
-                            foreach (IComponent comp in al)
-                            {
-                                compSvc.OnComponentChanging(comp, null);
-                            }
-
-                            host.DestroyComponent(control);
+                            compSvc.OnComponentChanging(comp, null);
                         }
 
-                        PropChanged(childProp);
+                        host.DestroyComponent(control);
                     }
 
-                    Table.ResumeLayout();
-                    t.Commit();
+                    PropChanged(childProp);
                 }
-                catch (CheckoutException checkoutException)
+
+                Table.ResumeLayout();
+                t.Commit();
+            }
+            catch (CheckoutException checkoutException)
+            {
+                if (CheckoutException.Canceled.Equals(checkoutException))
                 {
-                    if (CheckoutException.Canceled.Equals(checkoutException))
-                    {
-                        t?.Cancel();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    t?.Cancel();
+                }
+                else
+                {
+                    throw;
                 }
             }
         }
@@ -2005,63 +2006,62 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
             if (host is not null && Table.Site is not null)
             {
-                using (DesignerTransaction t = host.CreateTransaction(string.Format(SR.TableLayoutPanelDesignerChangeSizeTypeUndoUnit, Table.Site.Name)))
+                using DesignerTransaction t = host.CreateTransaction(string.Format(SR.TableLayoutPanelDesignerChangeSizeTypeUndoUnit, Table.Site.Name));
+
+                try
                 {
-                    try
+                    Table.SuspendLayout();
+
+                    PropChanging(isRow ? rowStyleProp : colStyleProp);
+
+                    switch (newType)
                     {
-                        Table.SuspendLayout();
+                        case SizeType.Absolute:
+                            styles[index].SizeType = SizeType.Absolute;
+                            if (isRow)
+                            {
+                                Table.RowStyles[index].Height = rh[index];
+                            }
+                            else
+                            {
+                                Table.ColumnStyles[index].Width = ch[index];
+                            }
 
-                        PropChanging(isRow ? rowStyleProp : colStyleProp);
+                            break;
+                        case SizeType.Percent:
+                            styles[index].SizeType = SizeType.Percent;
+                            if (isRow)
+                            {
+                                Table.RowStyles[index].Height = DesignerUtils.MINIMUMSTYLEPERCENT;
+                            }
+                            else
+                            {
+                                Table.ColumnStyles[index].Width = DesignerUtils.MINIMUMSTYLEPERCENT;
+                            }
 
-                        switch (newType)
-                        {
-                            case SizeType.Absolute:
-                                styles[index].SizeType = SizeType.Absolute;
-                                if (isRow)
-                                {
-                                    Table.RowStyles[index].Height = rh[index];
-                                }
-                                else
-                                {
-                                    Table.ColumnStyles[index].Width = ch[index];
-                                }
-
-                                break;
-                            case SizeType.Percent:
-                                styles[index].SizeType = SizeType.Percent;
-                                if (isRow)
-                                {
-                                    Table.RowStyles[index].Height = DesignerUtils.MINIMUMSTYLEPERCENT;
-                                }
-                                else
-                                {
-                                    Table.ColumnStyles[index].Width = DesignerUtils.MINIMUMSTYLEPERCENT;
-                                }
-
-                                break;
-                            case SizeType.AutoSize:
-                                styles[index].SizeType = SizeType.AutoSize;
-                                break;
-                            default:
-                                Debug.Fail("Unknown SizeType!");
-                                break;
-                        }
-
-                        PropChanged(isRow ? rowStyleProp : colStyleProp);
-
-                        Table.ResumeLayout();
-                        t.Commit();
+                            break;
+                        case SizeType.AutoSize:
+                            styles[index].SizeType = SizeType.AutoSize;
+                            break;
+                        default:
+                            Debug.Fail("Unknown SizeType!");
+                            break;
                     }
-                    catch (CheckoutException checkoutException)
+
+                    PropChanged(isRow ? rowStyleProp : colStyleProp);
+
+                    Table.ResumeLayout();
+                    t.Commit();
+                }
+                catch (CheckoutException checkoutException)
+                {
+                    if (CheckoutException.Canceled.Equals(checkoutException))
                     {
-                        if (CheckoutException.Canceled.Equals(checkoutException))
-                        {
-                            t?.Cancel();
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        t?.Cancel();
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
             }
@@ -2180,7 +2180,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     [DesignerSerializer(typeof(DesignerTableLayoutControlCollectionCodeDomSerializer), typeof(CodeDomSerializer))]
     internal class DesignerTableLayoutControlCollection : TableLayoutControlCollection, IList
     {
-        private TableLayoutControlCollection realCollection;
+        private readonly TableLayoutControlCollection realCollection;
 
         public DesignerTableLayoutControlCollection(TableLayoutPanel owner) : base(owner) => realCollection = owner.Controls;
 

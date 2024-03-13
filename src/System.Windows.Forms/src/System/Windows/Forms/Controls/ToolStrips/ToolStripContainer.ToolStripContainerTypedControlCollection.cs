@@ -42,7 +42,7 @@ public partial class ToolStripContainer
 
         public override void Remove(Control? value)
         {
-            if (value is ToolStripPanel || value is ToolStripContentPanel)
+            if (value is ToolStripPanel or ToolStripContentPanel)
             {
                 if (!_owner.DesignMode)
                 {
@@ -58,7 +58,7 @@ public partial class ToolStripContainer
 
         internal override void SetChildIndexInternal(Control child, int newIndex)
         {
-            if (child is ToolStripPanel || child is ToolStripContentPanel)
+            if (child is ToolStripPanel or ToolStripContentPanel)
             {
                 if (!_owner.DesignMode)
                 {

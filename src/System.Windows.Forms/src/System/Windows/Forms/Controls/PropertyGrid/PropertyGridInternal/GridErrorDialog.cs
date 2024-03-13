@@ -311,7 +311,7 @@ internal partial class GridErrorDialog : Form
 
             // Location is relative to its parent.
             Control? parent = _detailsButton.Parent;
-            while (parent is not null && parent is not Form)
+            while (parent is not null and not Form)
             {
                 y += parent.Location.Y;
                 parent = parent.Parent;

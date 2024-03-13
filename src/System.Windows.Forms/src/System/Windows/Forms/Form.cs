@@ -1120,9 +1120,7 @@ public partial class Form : ContainerControl
     // so that WM_SETFOCUS sent to MDIClient does not activate that child. (See MdiClient.WndProc).
     internal bool IsMdiChildFocusable
     {
-        get => Properties.TryGetObject(PropMdiChildFocusable, out bool value)
-            ? value
-            : false;
+        get => Properties.TryGetObject(PropMdiChildFocusable, out bool value) && value;
         set
         {
             if (value != IsMdiChildFocusable)
@@ -1516,7 +1514,11 @@ public partial class Form : ContainerControl
     /// Gets or sets the anchoring for minimized MDI children.
     /// </summary>
     /// <value><see langword="true" /> to anchor minimized MDI children to the bottom left of the parent form; <see langword="false" /> to anchor to the top left of the parent form.</value>
-    /// <remarks>By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.</remarks>
+    /// <remarks>
+    ///  <para>
+    ///   By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [DefaultValue(true)]
     [SRDescription(nameof(SR.FormMdiChildrenMinimizedAnchorBottomDescr))]
@@ -2736,8 +2738,7 @@ public partial class Form : ContainerControl
         UpdateWindowState();
         FormWindowState winState = WindowState;
         FormBorderStyle borderStyle = FormBorderStyle;
-        bool sizableBorder = (borderStyle == FormBorderStyle.SizableToolWindow
-                              || borderStyle == FormBorderStyle.Sizable);
+        bool sizableBorder = borderStyle is FormBorderStyle.SizableToolWindow or FormBorderStyle.Sizable;
 
         bool showMin = MinimizeBox && winState != FormWindowState.Minimized;
         bool showMax = MaximizeBox && winState != FormWindowState.Maximized;
@@ -3074,7 +3075,7 @@ public partial class Form : ContainerControl
 
     protected override AccessibleObject CreateAccessibilityInstance()
     {
-        AccessibleObject accessibleObject = new FormAccessibleObject(this);
+        FormAccessibleObject accessibleObject = new(this);
 
         // Try to raise UIA focus event for the form, if it's focused.
         // Try it after the accessible object creation, because a screen reader
@@ -3596,13 +3597,12 @@ public partial class Form : ContainerControl
 
         try
         {
-            using (Graphics graphics = Graphics.FromHwndInternal(IntPtr.Zero /*screen*/))
-            {
-                string magicString = "The quick brown fox jumped over the lazy dog.";
-                double magicNumber = 44.549996948242189; // chosen for compatibility with older versions of windows forms, but approximately magicString.Length
-                float stringWidth = graphics.MeasureString(magicString, font).Width;
-                width = (float)(stringWidth / magicNumber);
-            }
+            // Get the screen HDC
+            using Graphics graphics = Graphics.FromHwndInternal(0);
+            string magicString = "The quick brown fox jumped over the lazy dog.";
+            double magicNumber = 44.549996948242189; // chosen for compatibility with older versions of windows forms, but approximately magicString.Length
+            float stringWidth = graphics.MeasureString(magicString, font).Width;
+            width = (float)(stringWidth / magicNumber);
         }
         catch
         {
@@ -5557,9 +5557,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        if (containerControl.ActiveControl is IButtonControl)
+        if (containerControl.ActiveControl is IButtonControl buttonControl)
         {
-            SetDefaultButton((IButtonControl)containerControl.ActiveControl);
+            SetDefaultButton(buttonControl);
         }
         else
         {
@@ -5699,7 +5699,7 @@ public partial class Form : ContainerControl
     internal void UpdateFormStyles()
     {
         Size previousClientSize = ClientSize;
-        base.UpdateStyles();
+        UpdateStyles();
         if (!ClientSize.Equals(previousClientSize))
         {
             ClientSize = previousClientSize;
@@ -5708,8 +5708,10 @@ public partial class Form : ContainerControl
 
     private static Type? FindClosestStockType(Type type)
     {
-        Type[] stockTypes = [typeof(MenuStrip)]; // as opposed to what we had before...
-                                                              // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
+        Type[] stockTypes = [typeof(MenuStrip)];
+
+        // Add other types here from most specific to most generic if we want to merge other types of toolstrips.
+
         foreach (Type t in stockTypes)
         {
             if (t.IsAssignableFrom(type))
@@ -6485,7 +6487,7 @@ public partial class Form : ContainerControl
         if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
         {
             int result = (int)m.ResultInternal;
-            if (result >= (int)PInvoke.HTLEFT && result <= (int)PInvoke.HTBOTTOMRIGHT)
+            if (result is >= ((int)PInvoke.HTLEFT) and <= ((int)PInvoke.HTBOTTOMRIGHT))
             {
                 m.ResultInternal = (LRESULT)(nint)PInvoke.HTBORDER;
             }

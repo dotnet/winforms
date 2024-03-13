@@ -36,7 +36,7 @@ public partial class DataGridViewImageCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewImageCell dataGridViewCell))
+            if (Owner is not DataGridViewImageCell dataGridViewCell)
             {
                 return;
             }

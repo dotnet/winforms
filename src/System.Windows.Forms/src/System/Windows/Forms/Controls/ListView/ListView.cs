@@ -749,19 +749,11 @@ public partial class ListView : Control
         }
     }
 
-    internal ListViewGroup DefaultGroup
-    {
-        get
+    internal ListViewGroup DefaultGroup =>
+        _defaultGroup ??= new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"))
         {
-            if (_defaultGroup is null)
-            {
-                _defaultGroup = new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"));
-                _defaultGroup.ListView = this;
-            }
-
-            return _defaultGroup;
-        }
-    }
+            ListView = this
+        };
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
@@ -1540,7 +1532,7 @@ public partial class ListView : Control
             if (_sorting != value)
             {
                 _sorting = value;
-                if (View == View.LargeIcon || View == View.SmallIcon)
+                if (View is View.LargeIcon or View.SmallIcon)
                 {
                     if (_listItemSorter is null)
                     {
@@ -1743,7 +1735,7 @@ public partial class ListView : Control
     {
         get
         {
-            if (_viewStyle == View.LargeIcon || _viewStyle == View.SmallIcon || _viewStyle == View.Tile)
+            if (_viewStyle is View.LargeIcon or View.SmallIcon or View.Tile)
             {
                 throw new InvalidOperationException(SR.ListViewGetTopItem);
             }
@@ -1770,7 +1762,7 @@ public partial class ListView : Control
         }
         set
         {
-            if (_viewStyle == View.LargeIcon || _viewStyle == View.SmallIcon || _viewStyle == View.Tile)
+            if (_viewStyle is View.LargeIcon or View.SmallIcon or View.Tile)
             {
                 throw new InvalidOperationException(SR.ListViewSetTopItem);
             }
@@ -2498,7 +2490,7 @@ public partial class ListView : Control
     /// <summary>
     ///  This is the sorting callback function called by the system ListView control.
     /// </summary>
-    private int CompareFunc(IntPtr lparam1, IntPtr lparam2, IntPtr lparamSort)
+    private int CompareFunc(nint lparam1, nint lparam2, nint lparamSort)
     {
         Debug.Assert(_listItemSorter is not null, "null sorter!");
         if (_listItemSorter is not null)
@@ -2709,7 +2701,7 @@ public partial class ListView : Control
                         }
                     }
 
-                    if (_viewStyle == View.Details || _viewStyle == View.Tile)
+                    if (_viewStyle is View.Details or View.Tile)
                     {
                         m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NOTIFYSUBITEMDRAW | PInvoke.CDRF_NEWFONT);
                         dontmess = true; // don't mess with our return value!
@@ -2868,8 +2860,7 @@ public partial class ListView : Control
                     {
                         changeColor = false;
                     }
-                    else if ((_activation == ItemActivation.OneClick)
-                          || (_activation == ItemActivation.TwoClick))
+                    else if (_activation is ItemActivation.OneClick or ItemActivation.TwoClick)
                     {
                         if ((state & (NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED
                                     | NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED
@@ -3281,12 +3272,12 @@ public partial class ListView : Control
 
     public ListViewItem? FindNearestItem(SearchDirectionHint searchDirection, int x, int y)
     {
-        if (View != View.SmallIcon && View != View.LargeIcon)
+        if (View is not View.SmallIcon and not View.LargeIcon)
         {
             throw new InvalidOperationException(SR.ListViewFindNearestItemWorksOnlyInIconView);
         }
 
-        if (searchDirection < SearchDirectionHint.Left || searchDirection > SearchDirectionHint.Down)
+        if (searchDirection is < SearchDirectionHint.Left or > SearchDirectionHint.Down)
         {
             throw new ArgumentOutOfRangeException(nameof(searchDirection), searchDirection, string.Format(SR.InvalidArgument, nameof(searchDirection), searchDirection));
         }
@@ -5074,7 +5065,7 @@ public partial class ListView : Control
             Debug.Assert(retval != 0);
 
             // ListView control seems to be bogus. Items affected need to be invalidated in LargeIcon and SmallIcons views.
-            if (View == View.LargeIcon || View == View.SmallIcon)
+            if (View is View.LargeIcon or View.SmallIcon)
             {
                 Rectangle rectInvalid = Items[startIndex].Bounds;
                 for (int index = startIndex + 1; index <= endIndex; index++)
@@ -5168,11 +5159,12 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    /// Does the job of telling win32 listView to remove this group
+    ///  Does the job of telling win32 listView to remove this group
     /// </summary>
     /// <remarks>
-    /// It is the job of whoever deletes this group to also turn off grouping if this was the last
-    /// group deleted
+    ///  <para>
+    ///   It is the job of whoever deletes this group to also turn off grouping if this was the last group deleted
+    ///  </para>
     /// </remarks>
     private void RemoveGroupNative(ListViewGroup group)
     {
@@ -5202,7 +5194,7 @@ public partial class ListView : Control
             // save the image to a temporary file name
             _backgroundImageFileName = Path.GetTempFileName();
 
-            BackgroundImage.Save(_backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+            BackgroundImage.Save(_backgroundImageFileName, Drawing.Imaging.ImageFormat.Bmp);
 
             backgroundImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
             backgroundImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_URL;

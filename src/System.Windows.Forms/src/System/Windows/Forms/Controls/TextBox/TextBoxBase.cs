@@ -187,18 +187,17 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
-        //
         // There are a few keys that change the alignment of the text, but that
         // are not ignored by the native control when the ReadOnly property is set.
         // We need to workaround that.
         if (_textBoxFlags[readOnly])
         {
             int k = (int)keyData;
-            if (k == (int)Shortcut.CtrlL        // align left
-                || k == (int)Shortcut.CtrlR     // align right
-                || k == (int)Shortcut.CtrlE     // align centre
-                || k == (int)Shortcut.CtrlJ)
-            {  // align justified
+            if (k is ((int)Shortcut.CtrlL)        // align left
+                or ((int)Shortcut.CtrlR)          // align right
+                or ((int)Shortcut.CtrlE)          // align center
+                or ((int)Shortcut.CtrlJ))         // align justified
+            {
                 return true;
             }
         }
@@ -605,13 +604,13 @@ public abstract partial class TextBoxBase : Control
                 for (; lineEnd < text.Length; lineEnd++)
                 {
                     char c = text[lineEnd];
-                    if (c == '\r' || c == '\n')
+                    if (c is '\r' or '\n')
                     {
                         break;
                     }
                 }
 
-                string line = text.Substring(lineStart, lineEnd - lineStart);
+                string line = text[lineStart..lineEnd];
                 list.Add(line);
 
                 // Treat "\r", "\r\n", and "\n" as new lines
@@ -1299,23 +1298,11 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    protected bool ContainsNavigationKeyCode(Keys keyCode)
+    protected bool ContainsNavigationKeyCode(Keys keyCode) => keyCode switch
     {
-        switch (keyCode)
-        {
-            case Keys.Up:
-            case Keys.Down:
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-            case Keys.Left:
-            case Keys.Right:
-                return true;
-            default:
-                return false;
-        }
-    }
+        Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+        _ => false,
+    };
 
     /// <summary>
     ///  Copies the current selection in the text box to the Clipboard.
@@ -1821,14 +1808,8 @@ public abstract partial class TextBoxBase : Control
         base.SetBoundsCore(x, y, width, height, specified);
     }
 
-    private static void Swap(ref int n1, ref int n2)
-    {
-        int temp = n2;
-        n2 = n1;
-        n1 = temp;
-    }
+    private static void Swap(ref int n1, ref int n2) => (n1, n2) = (n2, n1);
 
-    //
     // Send in -1 if you don't have the text length cached
     // when calling this method. It will be computed. If not,
     // please pass in the text length as the last parameter.

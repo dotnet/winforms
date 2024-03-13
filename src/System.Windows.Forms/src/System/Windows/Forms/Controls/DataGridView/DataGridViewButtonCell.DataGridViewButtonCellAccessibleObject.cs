@@ -25,7 +25,7 @@ public partial class DataGridViewButtonCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewButtonCell dataGridViewCell))
+            if (Owner is not DataGridViewButtonCell dataGridViewCell)
             {
                 return;
             }

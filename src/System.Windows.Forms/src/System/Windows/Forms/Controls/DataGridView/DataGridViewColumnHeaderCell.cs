@@ -87,7 +87,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         set
         {
-            Debug.Assert(value >= SortOrder.None && value <= SortOrder.Descending);
+            Debug.Assert(value is >= SortOrder.None and <= SortOrder.Descending);
             _sortGlyphDirection = value;
         }
     }
@@ -106,7 +106,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             dataGridViewCell = (DataGridViewColumnHeaderCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
         dataGridViewCell.Value = Value;
         return dataGridViewCell;
     }
@@ -488,7 +488,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
+        DataGridViewFreeDimension freeDimension = GetFreeDimensionFromConstraint(constraintSize);
         DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new(), dgvabsEffective;
         dgvabsEffective = DataGridView.AdjustColumnHeaderBorderStyle(DataGridView.AdvancedColumnHeadersBorderStyle,
             dgvabsPlaceholder,
@@ -514,7 +514,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                         if (cellStyle.WrapMode == DataGridViewTriState.True)
                         {
                             preferredSize = new Size(
-                                DataGridViewCell.MeasureTextWidth(
+                                MeasureTextWidth(
                                     graphics,
                                     valStr,
                                     cellStyle.Font,
@@ -525,7 +525,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                         else
                         {
                             preferredSize = new Size(
-                                DataGridViewCell.MeasureTextSize(
+                                MeasureTextSize(
                                     graphics,
                                     valStr,
                                     cellStyle.Font,
@@ -582,7 +582,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                             {
                                 preferredSize = new Size(
                                     0,
-                                    DataGridViewCell.MeasureTextHeight(
+                                    MeasureTextHeight(
                                         graphics,
                                         valStr,
                                         cellStyle.Font,
@@ -597,7 +597,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                             {
                                 preferredSize = new Size(
                                     0,
-                                    DataGridViewCell.MeasureTextHeight(
+                                    MeasureTextHeight(
                                         graphics,
                                         valStr,
                                         cellStyle.Font,
@@ -611,7 +611,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                         {
                             preferredSize = new Size(
                                 0,
-                                DataGridViewCell.MeasureTextSize(
+                                MeasureTextSize(
                                     graphics,
                                     valStr,
                                     cellStyle.Font,
@@ -630,7 +630,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                     {
                         if (cellStyle.WrapMode == DataGridViewTriState.True)
                         {
-                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(
+                            preferredSize = MeasureTextPreferredSize(
                                 graphics,
                                 valStr,
                                 cellStyle.Font,
@@ -639,7 +639,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                         }
                         else
                         {
-                            preferredSize = DataGridViewCell.MeasureTextSize(
+                            preferredSize = MeasureTextSize(
                                 graphics,
                                 valStr,
                                 cellStyle.Font,
@@ -687,7 +687,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
         if (DataGridView.ApplyVisualStylesToHeaderCells)
         {
-            Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(graphics);
+            Rectangle rectThemeMargins = GetThemeMargins(graphics);
             if (freeDimension != DataGridViewFreeDimension.Height)
             {
                 preferredSize.Width += rectThemeMargins.X + rectThemeMargins.Width;
@@ -758,7 +758,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         Debug.Assert(cellStyle is not null);
         Rectangle contentBounds = Rectangle.Empty;
 
-        if (paint && DataGridViewCell.PaintBorder(paintParts))
+        if (paint && PaintBorder(paintParts))
         {
             PaintBorder(g, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
         }
@@ -794,7 +794,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             }
 
             // Theming
-            if (paint && DataGridViewCell.PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
+            if (paint && PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
             {
                 int state = (int)HeaderItemState.Normal;
 
@@ -849,7 +849,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             }
 
             // update the value bounds
-            Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(g);
+            Rectangle rectThemeMargins = GetThemeMargins(g);
             valBounds.Y += rectThemeMargins.Y;
             valBounds.Height -= rectThemeMargins.Y + rectThemeMargins.Height;
             if (DataGridView.RightToLeftInternal)
@@ -927,7 +927,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                     2 * s_sortGlyphHorizontalMargin;
                 if (width > 0)
                 {
-                    int preferredHeight = DataGridViewCell.GetPreferredTextHeight(
+                    int preferredHeight = GetPreferredTextHeight(
                         g,
                         DataGridView.RightToLeftInternal,
                         formattedValueStr,
@@ -969,7 +969,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
             if (paint)
             {
-                if (DataGridViewCell.PaintContentForeground(paintParts))
+                if (PaintContentForeground(paintParts))
                 {
                     if ((flags & TextFormatFlags.SingleLine) != 0)
                     {

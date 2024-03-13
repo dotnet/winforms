@@ -2162,7 +2162,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         return;
 
         static bool IsSpecialImageIndex(int actualIndex)
-            => actualIndex == ImageList.Indexer.NoneIndex || actualIndex == ImageList.Indexer.DefaultIndex;
+            => actualIndex is ImageList.Indexer.NoneIndex or ImageList.Indexer.DefaultIndex;
     }
 
     internal unsafe void UpdateImage()

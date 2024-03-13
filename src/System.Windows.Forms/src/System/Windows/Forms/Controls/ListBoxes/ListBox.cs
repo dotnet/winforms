@@ -572,8 +572,7 @@ public partial class ListBox : ListControl
     {
         get
         {
-            if (_drawMode == DrawMode.OwnerDrawFixed ||
-                _drawMode == DrawMode.OwnerDrawVariable)
+            if (_drawMode is DrawMode.OwnerDrawFixed or DrawMode.OwnerDrawVariable)
             {
                 return _itemHeight;
             }

@@ -479,8 +479,7 @@ public partial class DateTimePicker : Control
         set
         {
             // Valid values are 0x0 to 0x1
-            SourceGenerated.EnumValidator.Validate(value);
-
+            EnumValidator.Validate(value);
             SetStyleBit(value == LeftRightAlignment.Right, PInvoke.DTS_RIGHTALIGN);
         }
     }
@@ -1029,16 +1028,11 @@ public partial class DateTimePicker : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     /// <summary>

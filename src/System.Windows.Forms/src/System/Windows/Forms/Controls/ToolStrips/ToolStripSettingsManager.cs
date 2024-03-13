@@ -254,7 +254,7 @@ internal partial class ToolStripSettingsManager
             {
                 for (int i = 0; i < controlsToLookIn.Count; i++)
                 {
-                    if (controlsToLookIn[i] is null || controlsToLookIn[i] is Form)
+                    if (controlsToLookIn[i] is null or Form)
                     {
                         continue;
                     }

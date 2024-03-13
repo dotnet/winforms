@@ -624,11 +624,11 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 
     private void SetBounds(Rectangle bounds)
     {
-        if (bounds != this._bounds)
+        if (bounds != _bounds)
         {
-            Rectangle oldBounds = this._bounds;
+            Rectangle oldBounds = _bounds;
 
-            this._bounds = bounds;
+            _bounds = bounds;
             OnBoundsChanged(oldBounds, bounds);
         }
     }

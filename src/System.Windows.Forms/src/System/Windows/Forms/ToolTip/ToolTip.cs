@@ -749,7 +749,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         else
         {
             int delayTime = _delayTimes[(int)PInvoke.TTDT_AUTOPOP];
-            if (delayTime >= 1 && delayTime != DefaultDelay * AutoPopRatio)
+            if (delayTime is >= 1 and not (DefaultDelay * AutoPopRatio))
             {
                 SetDelayTime(PInvoke.TTDT_AUTOPOP, delayTime);
             }
@@ -1337,7 +1337,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
                 if (duration > 0)
                 {
-                    StartTimer(this._window, duration);
+                    StartTimer(_window, duration);
                 }
             }
             else
@@ -1672,7 +1672,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                         return true;
                     case LocationIndexBottom:
                         // Right and Left locations are preferred instead of Bottom location.
-                        if (competingIndex == LocationIndexLeft || competingIndex == LocationIndexRight)
+                        if (competingIndex is LocationIndexLeft or LocationIndexRight)
                         {
                             return true;
                         }
@@ -1795,7 +1795,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             if (toolInfo.SendMessage(this, PInvoke.TTM_GETTOOLINFOW) != IntPtr.Zero)
             {
                 TOOLTIP_FLAGS flags = TOOLTIP_FLAGS.TTF_TRACK;
-                if (type == TipInfo.Type.Absolute || type == TipInfo.Type.SemiAbsolute)
+                if (type is TipInfo.Type.Absolute or TipInfo.Type.SemiAbsolute)
                 {
                     flags |= TOOLTIP_FLAGS.TTF_ABSOLUTE;
                 }
@@ -1847,7 +1847,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             var toolInfo = GetWinTOOLINFO(window);
             toolInfo.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRACK;
 
-            if (type == TipInfo.Type.Absolute || type == TipInfo.Type.SemiAbsolute)
+            if (type is TipInfo.Type.Absolute or TipInfo.Type.SemiAbsolute)
             {
                 toolInfo.Info.uFlags |= TOOLTIP_FLAGS.TTF_ABSOLUTE;
             }
@@ -1961,7 +1961,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         return default;
     }
 
-    private IWin32Window? GetCurrentToolWindow()
+    private Control? GetCurrentToolWindow()
     {
         HWND hwnd = GetCurrentToolHwnd();
         return _owners.TryGetValue(hwnd, out Control? control) ? control : Control.FromHandle(hwnd);

@@ -125,7 +125,7 @@ internal class MdiWindowListStrip : MenuStrip
 
                             accel++;
                             formsAddedToMenu++;
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {windowListItem.Text}");
+                            s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {windowListItem.Text}");
                             mergeItem.DropDownItems.Add(windowListItem);
                         }
                     }
@@ -138,7 +138,7 @@ internal class MdiWindowListStrip : MenuStrip
                     {
                         Text = SR.MDIMenuMoreWindows
                     };
-                    ToolStrip.s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {moreWindowsMenuItem.Text}");
+                    s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {moreWindowsMenuItem.Text}");
                     moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
                     moreWindowsMenuItem.MergeAction = MergeAction.Append;
                     mergeItem.DropDownItems.Add(moreWindowsMenuItem);
@@ -160,18 +160,16 @@ internal class MdiWindowListStrip : MenuStrip
 
         if (forms is not null)
         {
-            using (MdiWindowDialog dialog = new())
+            using MdiWindowDialog dialog = new();
+            dialog.SetItems(_mdiParent?.ActiveMdiChild, forms);
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                dialog.SetItems(_mdiParent?.ActiveMdiChild, forms);
-                DialogResult result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
+                // AllWindows Assert above allows this...
+                dialog.ActiveChildForm?.Activate();
+                if (dialog.ActiveChildForm?.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
                 {
-                    // AllWindows Assert above allows this...
-                    dialog.ActiveChildForm?.Activate();
-                    if (dialog.ActiveChildForm?.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
-                    {
-                        dialog.ActiveChildForm.ActiveControl.Focus();
-                    }
+                    dialog.ActiveChildForm.ActiveControl.Focus();
                 }
             }
         }

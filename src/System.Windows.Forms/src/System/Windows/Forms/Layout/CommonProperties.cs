@@ -274,7 +274,7 @@ internal partial class CommonProperties
     ///  element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height, BoundsSpecified specified)
     {
-        Rectangle originalBounds = CommonProperties.GetSpecifiedBounds(element);
+        Rectangle originalBounds = GetSpecifiedBounds(element);
 
         // PERF note: Bitwise operator usage intentional to optimize out branching.
 
@@ -348,7 +348,7 @@ internal partial class CommonProperties
     ///  typically done in dispose.
     internal static void xClearAllPreferredSizeCaches(IArrangedElement start)
     {
-        CommonProperties.xClearPreferredSizeCache(start);
+        xClearPreferredSizeCache(start);
 
         ArrangedElementCollection controlsCollection = start.Children;
         // This may have changed the sizes of our children.
@@ -614,18 +614,12 @@ internal partial class CommonProperties
     ///  in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
     ///  the PropertyStore to get a 0 back from PropertyStore.GetInteger().
     /// </summary>
-    private static AnchorStyles xTranslateAnchorValue(AnchorStyles anchor)
+    private static AnchorStyles xTranslateAnchorValue(AnchorStyles anchor) => anchor switch
     {
-        switch (anchor)
-        {
-            case AnchorStyles.None:
-                return DefaultAnchor;
-            case DefaultAnchor:
-                return AnchorStyles.None;
-        }
-
-        return anchor;
-    }
+        AnchorStyles.None => DefaultAnchor,
+        DefaultAnchor => AnchorStyles.None,
+        _ => anchor,
+    };
 
     #endregion
 

@@ -10,13 +10,13 @@ namespace System.Windows.Forms.Metafiles;
 /// <summary>
 ///  Record that represents an index.
 /// </summary>
-/// <remarks>
+/// <devdoc>
 ///   Not an actual Win32 define, encapsulates:
 ///
 ///   - EMRSELECTOBJECT
 ///   - EMRDELETEOBJECT
 ///   - EMRSELECTPALETTE
-/// </remarks>
+/// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRINDEXRECORD
 {
