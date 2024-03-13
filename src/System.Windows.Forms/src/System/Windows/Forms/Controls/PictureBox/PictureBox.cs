@@ -869,15 +869,14 @@ public partial class PictureBox : Control, ISupportInitialize
         }
     }
 
-    private static readonly object EVENT_SIZEMODECHANGED = new();
+    private static readonly object s_sizeModeChangedEvent = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
     public event EventHandler? SizeModeChanged
     {
-        add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
-
-        remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
+        add => Events.AddHandler(s_sizeModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_sizeModeChangedEvent, value);
     }
 
     internal override bool SupportsUiaProviders => true;
@@ -1191,7 +1190,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     protected virtual void OnSizeModeChanged(EventArgs e)
     {
-        if (Events[EVENT_SIZEMODECHANGED] is EventHandler eh)
+        if (Events[s_sizeModeChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }

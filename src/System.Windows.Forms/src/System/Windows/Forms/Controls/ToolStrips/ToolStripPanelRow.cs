@@ -727,9 +727,9 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     #region MouseStuff
 
 #if DEBUG
-    internal static readonly TraceSwitch ToolStripPanelMouseDebug = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
+    internal static TraceSwitch ToolStripPanelMouseDebug { get; } = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
 #else
-    internal static readonly TraceSwitch? ToolStripPanelMouseDebug;
+    internal static TraceSwitch? ToolStripPanelMouseDebug { get; }
 #endif
 
     internal Rectangle DragBounds

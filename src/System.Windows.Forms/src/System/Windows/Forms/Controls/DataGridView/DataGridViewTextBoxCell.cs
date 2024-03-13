@@ -11,8 +11,8 @@ namespace System.Windows.Forms;
 /// </summary>
 public partial class DataGridViewTextBoxCell : DataGridViewCell
 {
-    private static readonly int PropTextBoxCellMaxInputLength = PropertyStore.CreateKey();
-    private static readonly int PropTextBoxCellEditingTextBox = PropertyStore.CreateKey();
+    private static readonly int s_propTextBoxCellMaxInputLength = PropertyStore.CreateKey();
+    private static readonly int s_propTextBoxCellEditingTextBox = PropertyStore.CreateKey();
 
     private const byte DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick = 0x01;
     private const byte DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetLeft = 3;
@@ -48,12 +48,12 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private DataGridViewTextBoxEditingControl? EditingTextBox
     {
-        get => (DataGridViewTextBoxEditingControl?)Properties.GetObject(PropTextBoxCellEditingTextBox);
+        get => (DataGridViewTextBoxEditingControl?)Properties.GetObject(s_propTextBoxCellEditingTextBox);
         set
         {
-            if (value is not null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
+            if (value is not null || Properties.ContainsObject(s_propTextBoxCellEditingTextBox))
             {
-                Properties.SetObject(PropTextBoxCellEditingTextBox, value);
+                Properties.SetObject(s_propTextBoxCellEditingTextBox, value);
             }
         }
     }
@@ -72,7 +72,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         get
         {
-            int maxInputLength = Properties.GetInteger(PropTextBoxCellMaxInputLength, out bool found);
+            int maxInputLength = Properties.GetInteger(s_propTextBoxCellMaxInputLength, out bool found);
             if (found)
             {
                 return maxInputLength;
@@ -84,7 +84,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            Properties.SetInteger(PropTextBoxCellMaxInputLength, value);
+            Properties.SetInteger(s_propTextBoxCellMaxInputLength, value);
             if (OwnsEditingTextBox(RowIndex))
             {
                 EditingTextBox.MaxLength = value;

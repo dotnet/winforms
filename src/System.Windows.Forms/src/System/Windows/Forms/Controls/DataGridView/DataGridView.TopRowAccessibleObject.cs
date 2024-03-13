@@ -11,7 +11,7 @@ public partial class DataGridView
 {
     protected class DataGridViewTopRowAccessibleObject : AccessibleObject
     {
-        private int[]? runtimeId;
+        private int[]? _runtimeId;
         private DataGridView? _ownerDataGridView;
 
         public DataGridViewTopRowAccessibleObject()
@@ -84,7 +84,7 @@ public partial class DataGridView
             }
         }
 
-        internal override int[] RuntimeId => runtimeId ??=
+        internal override int[] RuntimeId => _runtimeId ??=
         [
             RuntimeIDFirstItem,
             Parent.GetHashCode(),

@@ -199,14 +199,11 @@ public unsafe partial class Control :
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
 
-#pragma warning disable IDE1006 // Naming Styles
     [ThreadStatic]
     private static bool t_inCrossThreadSafeCall;
 
     [ThreadStatic]
     internal static HelpInfo? t_currentHelpInfo;
-
-#pragma warning restore IDE1006
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 

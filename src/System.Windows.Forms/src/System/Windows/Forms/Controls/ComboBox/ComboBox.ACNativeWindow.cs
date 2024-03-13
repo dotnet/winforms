@@ -13,19 +13,19 @@ public partial class ComboBox
         internal static int s_inWndProcCnt;
 
         // This dictionary can contain null for those ACWindows we find, but are sure are not ours.
-        private static readonly Dictionary<HWND, ACNativeWindow?> s_ACWindows = [];
+        private static readonly Dictionary<HWND, ACNativeWindow?> s_acWindows = [];
 
         internal ACNativeWindow(HWND acHandle)
         {
-            Debug.Assert(!s_ACWindows.ContainsKey(acHandle));
+            Debug.Assert(!s_acWindows.ContainsKey(acHandle));
             AssignHandle(acHandle);
-            s_ACWindows.Add(acHandle, this);
+            s_acWindows.Add(acHandle, this);
             PInvoke.EnumChildWindows(new HandleRef<HWND>(this, acHandle), RegisterACWindowRecursive);
         }
 
         private static BOOL RegisterACWindowRecursive(HWND handle)
         {
-            if (!s_ACWindows.ContainsKey(handle))
+            if (!s_acWindows.ContainsKey(handle))
             {
                 ACNativeWindow newAC = new(handle);
             }
@@ -44,7 +44,7 @@ public partial class ComboBox
                     return true;
                 }
 
-                foreach (ACNativeWindow? window in s_ACWindows.Values)
+                foreach (ACNativeWindow? window in s_acWindows.Values)
                 {
                     if (window is not null && window.Visible)
                     {
@@ -70,22 +70,22 @@ public partial class ComboBox
 
             if (m.MsgInternal == PInvoke.WM_NCDESTROY)
             {
-                Debug.Assert(s_ACWindows.ContainsKey(HWND));
-                s_ACWindows.Remove(HWND);   // so we do not leak ac windows.
+                Debug.Assert(s_acWindows.ContainsKey(HWND));
+                s_acWindows.Remove(HWND);   // so we do not leak ac windows.
             }
         }
 
         internal static void RegisterACWindow(HWND acHandle, bool subclass)
         {
-            if (subclass && s_ACWindows.TryGetValue(acHandle, out ACNativeWindow? value))
+            if (subclass && s_acWindows.TryGetValue(acHandle, out ACNativeWindow? value))
             {
                 if (value is null)
                 {
-                    s_ACWindows.Remove(acHandle); // if an external handle got destroyed, don't let it stop us.
+                    s_acWindows.Remove(acHandle); // if an external handle got destroyed, don't let it stop us.
                 }
             }
 
-            if (!s_ACWindows.ContainsKey(acHandle))
+            if (!s_acWindows.ContainsKey(acHandle))
             {
                 if (subclass)
                 {
@@ -93,7 +93,7 @@ public partial class ComboBox
                 }
                 else
                 {
-                    s_ACWindows.Add(acHandle, null);
+                    s_acWindows.Add(acHandle, null);
                 }
             }
         }
@@ -105,7 +105,7 @@ public partial class ComboBox
         internal static void ClearNullACWindows()
         {
             List<HWND> toRemove = [];
-            foreach (var acNativeWindowByHandle in s_ACWindows)
+            foreach (var acNativeWindowByHandle in s_acWindows)
             {
                 if (acNativeWindowByHandle.Value is null)
                 {
@@ -115,7 +115,7 @@ public partial class ComboBox
 
             foreach (HWND handle in toRemove)
             {
-                s_ACWindows.Remove(handle);
+                s_acWindows.Remove(handle);
             }
         }
     }
