@@ -26,10 +26,10 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 # avoid this. unless absolutely necessary
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
-dotnet_style_qualification_for_method = false:suggestion
-dotnet_style_qualification_for_event = false:suggestion
+dotnet_style_qualification_for_field = false:error
+dotnet_style_qualification_for_property = false:error
+dotnet_style_qualification_for_method = false:error
+dotnet_style_qualification_for_event = false:error
 # use language keywords instead of BCL types
 dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
 dotnet_style_predefined_type_for_member_access = true:suggestion
@@ -89,7 +89,28 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 dotnet_style_prefer_collection_expression = true:suggestion
 
 # C# files
+
 [*.cs]
+
+# These two conflict with our usage of CsWin32
+
+# SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+dotnet_diagnostic.SYSLIB1054.severity = none
+
+# SYSLIB1096: Convert to 'GeneratedComInterface'
+dotnet_diagnostic.SYSLIB1096.severity = none
+
+# CA1725: Parameter names should match base declaration
+dotnet_diagnostic.CA1725.severity = error
+
+# DOC100: Place text in paragraphs
+dotnet_diagnostic.DOC100.severity = error
+
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = error
+
+# IDE0003: Remove qualification
+dotnet_diagnostic.IDE0003.severity = error
 
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
@@ -184,9 +205,6 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 
 # Visual Basic files
 
-# SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
-dotnet_diagnostic.SYSLIB1054.severity = none
-
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
@@ -233,3 +251,16 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
+
+# Test specific
+[**/tests/**/*.cs]
+
+# CA1861: Avoid constant arrays as arguments - expected to be inline for test readability (4000 hits)
+dotnet_diagnostic.CA1861.severity = silent
+
+# This should be fixed https://github.com/dotnet/winforms/issues/11041
+# xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
+dotnet_diagnostic.xUnit1042.severity = none
+
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = none

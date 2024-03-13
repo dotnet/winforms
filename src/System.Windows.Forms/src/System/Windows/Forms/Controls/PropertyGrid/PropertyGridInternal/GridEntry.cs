@@ -1439,8 +1439,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public virtual object[] GetPropertyValueList()
     {
-        ICollection? values = TypeConverter.GetStandardValues(this);
-        if (values is not null)
+        if (TypeConverter.GetStandardValues(this) is { } values)
         {
             object[] valueArray = new object[values.Count];
             values.CopyTo(valueArray, 0);

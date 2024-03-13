@@ -22,7 +22,7 @@ internal sealed class RTLAwareMessageBox
         MessageBoxDefaultButton defaultButton,
         MessageBoxOptions options)
     {
-        if (RTLAwareMessageBox.IsRTLResources)
+        if (IsRTLResources)
         {
             options |= (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
         }

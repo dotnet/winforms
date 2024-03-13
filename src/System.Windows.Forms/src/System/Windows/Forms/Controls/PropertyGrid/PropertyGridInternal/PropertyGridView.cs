@@ -83,7 +83,7 @@ internal sealed partial class PropertyGridView :
     private DropDownHolder? _dropDownHolder;
     private Rectangle _lastClientRect = Rectangle.Empty;
     private Control? _currentEditor;
-    private ScrollBar? _scrollBar;
+    private VScrollBar? _scrollBar;
     private GridToolTip? _toolTip;
     private GridErrorDialog? _errorDialog;
 
@@ -992,7 +992,7 @@ internal sealed partial class PropertyGridView :
 
             _topHelpService = null;
 
-            if (_helpService is not null && _helpService is IDisposable disposable)
+            if (_helpService is not null and IDisposable disposable)
             {
                 disposable.Dispose();
             }
@@ -1540,7 +1540,7 @@ internal sealed partial class PropertyGridView :
             {
                 object currentValue = values[(i + index + 1) % values.Length];
                 string text = gridEntry.GetPropertyTextValue(currentValue);
-                if (text is not null && text.Length > 0 && string.Equals(text.Substring(0, 1), letter, StringComparison.InvariantCultureIgnoreCase))
+                if (text is not null && text.Length > 0 && string.Equals(text[..1], letter, StringComparison.InvariantCultureIgnoreCase))
                 {
                     CommitValue(currentValue);
                     if (EditTextBox.Focused)
@@ -2853,7 +2853,7 @@ internal sealed partial class PropertyGridView :
                     }
 
                     SetFlag(Flags.IsSpecialKey, true);
-                    bool expand = keyCode == Keys.Add || keyCode == Keys.Oemplus;
+                    bool expand = keyCode is Keys.Add or Keys.Oemplus;
                     SetExpand(entry, expand);
                     Invalidate();
                     e.Handled = true;
@@ -3720,7 +3720,7 @@ internal sealed partial class PropertyGridView :
 
     private void OnSysColorChange(object sender, UserPreferenceChangedEventArgs e)
     {
-        if (e.Category == UserPreferenceCategory.Color || e.Category == UserPreferenceCategory.Accessibility)
+        if (e.Category is UserPreferenceCategory.Color or UserPreferenceCategory.Accessibility)
         {
             SetFlag(Flags.NeedUpdateUIBasedOnFont, true);
         }

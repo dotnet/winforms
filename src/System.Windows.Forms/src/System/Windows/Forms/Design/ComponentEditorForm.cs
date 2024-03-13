@@ -166,7 +166,7 @@ public partial class ComponentEditorForm : Form
     [MemberNotNull(nameof(_selector))]
     private void OnConfigureUI()
     {
-        Font? uiFont = Control.DefaultFont;
+        Font? uiFont = DefaultFont;
         if (_component.Site is not null)
         {
             IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));

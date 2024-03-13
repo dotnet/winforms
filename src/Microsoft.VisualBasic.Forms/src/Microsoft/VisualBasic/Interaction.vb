@@ -352,7 +352,8 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim parentWindow As IWin32Window = Nothing
+            Dim vbhost As IVbHost
+            Dim ParentWindow As IWin32Window = Nothing
 
             Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
@@ -382,13 +383,13 @@ Namespace Microsoft.VisualBasic
             Catch
                 Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
-
+            Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             Try
                 If Title Is Nothing Then
-                    If vbHost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
+                    If vbhost Is Nothing Then
+                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbHost.GetWindowTitle()
+                        sTitle = vbhost.GetWindowTitle()
                     End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
@@ -403,7 +404,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
+            Return CType(System.Windows.Forms.MessageBox.Show(ParentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),

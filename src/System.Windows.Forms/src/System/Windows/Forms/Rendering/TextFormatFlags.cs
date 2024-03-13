@@ -3,6 +3,8 @@
 
 namespace System.Windows.Forms;
 
+#pragma warning disable format
+
 /// <summary>
 ///  Specifies the display and layout information for text strings.
 /// </summary>
@@ -19,7 +21,7 @@ public enum TextFormatFlags
     Internal                            = (int)DRAW_TEXT_FORMAT.DT_INTERNAL,
 
     /// <remarks>
-    ///  This is the default.
+    ///  <para>This is the default.</para>
     /// </remarks>
     Left                                = (int)DRAW_TEXT_FORMAT.DT_LEFT,
 
@@ -36,7 +38,7 @@ public enum TextFormatFlags
     TextBoxControl                      = (int)DRAW_TEXT_FORMAT.DT_EDITCONTROL,
 
     /// <remarks>
-    ///  This is the default.
+    ///  <para>This is the default.</para>
     /// </remarks>
     Top                                 = (int)DRAW_TEXT_FORMAT.DT_TOP,
 
@@ -63,3 +65,5 @@ public enum TextFormatFlags
     NoPadding                           = 0x1000_0000,
     LeftAndRightPadding                 = 0x2000_0000
 }
+
+#pragma warning restore format

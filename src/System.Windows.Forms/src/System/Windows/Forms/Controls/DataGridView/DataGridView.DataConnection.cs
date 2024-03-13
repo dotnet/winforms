@@ -367,9 +367,9 @@ public partial class DataGridView
 
         private void ProcessListChanged(ListChangedEventArgs e)
         {
-            if (e.ListChangedType == ListChangedType.PropertyDescriptorAdded ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorDeleted ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorChanged)
+            if (e.ListChangedType is ListChangedType.PropertyDescriptorAdded
+                or ListChangedType.PropertyDescriptorDeleted
+                or ListChangedType.PropertyDescriptorChanged)
             {
                 _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges] = true;
                 try
@@ -1518,7 +1518,7 @@ public partial class DataGridView
                 return true;
             }
 
-            if (!(_owner.BindingContext[newDataSource] is CurrencyManager cm))
+            if (_owner.BindingContext[newDataSource] is not CurrencyManager cm)
             {
                 // if we don't have a currency manager then the data member can be valid
                 return false;

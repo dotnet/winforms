@@ -268,7 +268,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         Graphics g = e.Graphics;
 
-        if (!(e.Item is ToolStripSplitButton item))
+        if (e.Item is not ToolStripSplitButton item)
         {
             return;
         }
@@ -836,7 +836,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     // consider make public
     internal override Region? GetTransparentRegion(ToolStrip toolStrip)
     {
-        if (toolStrip is ToolStripDropDown || toolStrip is MenuStrip || toolStrip is StatusStrip)
+        if (toolStrip is ToolStripDropDown or MenuStrip or StatusStrip)
         {
             return null;
         }
@@ -1206,7 +1206,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
 
-            if (!(toolStripDropDown is ToolStripOverflow))
+            if (toolStripDropDown is not ToolStripOverflow)
             {
                 // make the neck connected.
                 using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrushScope();

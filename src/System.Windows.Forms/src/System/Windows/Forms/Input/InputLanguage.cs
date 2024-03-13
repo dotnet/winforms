@@ -196,10 +196,10 @@ public sealed class InputLanguage
             // https://github.com/dotnet/winforms/pull/8573#issuecomment-1542600949
             //
             // NOTE: this logic may break in future versions of Windows since it is not documented.
-            if (langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD1
-                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD2
-                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD3
-                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD4)
+            if (langId is (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1
+                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2
+                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3
+                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4)
             {
                 using RegistryKey? key = Registry.CurrentUser.OpenSubKey(UserProfileRegistryPath);
                 if (key is not null && key.GetValue("Languages") is string[] languages)

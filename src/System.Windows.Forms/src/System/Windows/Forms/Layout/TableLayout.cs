@@ -66,7 +66,7 @@ internal partial class TableLayout : LayoutEngine
 
         foreach (string? propertyName in _propertiesWhichInvalidateCache)
         {
-            if (object.ReferenceEquals(args.AffectedProperty, propertyName))
+            if (ReferenceEquals(args.AffectedProperty, propertyName))
             {
                 ClearCachedAssignments(containerInfo);
                 break;
@@ -692,7 +692,7 @@ internal partial class TableLayout : LayoutEngine
         {
             if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
             {
-                if (tlp.Dock == DockStyle.Top || tlp.Dock == DockStyle.Bottom || tlp.Dock == DockStyle.Fill)
+                if (tlp.Dock is DockStyle.Top or DockStyle.Bottom or DockStyle.Fill)
                 {
                     dontHonorConstraint = false; // we want to honor constraints
                 }
@@ -818,7 +818,7 @@ internal partial class TableLayout : LayoutEngine
         {
             if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
             {
-                if (tlp.Dock == DockStyle.Left || tlp.Dock == DockStyle.Right || tlp.Dock == DockStyle.Fill)
+                if (tlp.Dock is DockStyle.Left or DockStyle.Right or DockStyle.Fill)
                 {
                     dontHonorConstraint = false; // we want to honor constraints
                 }
@@ -1253,9 +1253,7 @@ internal partial class TableLayout : LayoutEngine
             Padding elementMargin = CommonProperties.GetMargin(element);
             if (isContainerRTL)
             {
-                int temp = elementMargin.Right;
-                elementMargin.Right = elementMargin.Left;
-                elementMargin.Left = temp;
+                (elementMargin.Left, elementMargin.Right) = (elementMargin.Right, elementMargin.Left);
             }
 
             cellBounds = LayoutUtils.DeflateRect(cellBounds, elementMargin);

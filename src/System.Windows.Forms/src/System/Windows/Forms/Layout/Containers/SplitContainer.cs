@@ -1146,7 +1146,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 IContainerControl? c = ParentInternal?.GetContainerControl();
                 if (c is not null)
                 {
-                    if (!(c is ContainerControl cc))
+                    if (c is not ContainerControl cc)
                     {
                         c.ActiveControl = this;
                     }
@@ -2023,31 +2023,30 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void SetInnerMostBorder(SplitContainer sc)
     {
-        foreach (Control ctl in sc.Controls)
+        foreach (Control control in sc.Controls)
         {
             bool foundChildSplitContainer = false;
-            if (ctl is SplitterPanel)
+            if (control is SplitterPanel panel)
             {
-                foreach (Control c in ctl.Controls)
+                foreach (Control child in control.Controls)
                 {
-                    if (c is SplitContainer c1 && c1.Dock == DockStyle.Fill)
+                    if (child is SplitContainer splitContainer && splitContainer.Dock == DockStyle.Fill)
                     {
-                        // We need to Overlay borders
-                        // if the Children have matching BorderStyles ...
-                        if (c1.BorderStyle != BorderStyle)
+                        // We need to overlay borders if the children have matching BorderStyles.
+                        if (splitContainer.BorderStyle != BorderStyle)
                         {
                             break;
                         }
 
-                       ((SplitterPanel)ctl).BorderStyle = BorderStyle.None;
-                        SetInnerMostBorder(c1);
+                        panel.BorderStyle = BorderStyle.None;
+                        SetInnerMostBorder(splitContainer);
                         foundChildSplitContainer = true;
                     }
                 }
 
                 if (!foundChildSplitContainer)
                 {
-                    ((SplitterPanel)ctl).BorderStyle = BorderStyle;
+                    panel.BorderStyle = BorderStyle;
                 }
             }
         }
@@ -2328,8 +2327,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 case Keys.Down:
                     if (!_splitterFocused)
                     {
-                        if (ProcessArrowKey(keyCode == Keys.Right ||
-                                        keyCode == Keys.Down))
+                        if (ProcessArrowKey(keyCode is Keys.Right or
+                                        Keys.Down))
                         {
                             return true;
                         }

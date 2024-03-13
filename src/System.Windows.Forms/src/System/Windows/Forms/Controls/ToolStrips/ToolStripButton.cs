@@ -95,7 +95,7 @@ public partial class ToolStripButton : ToolStripItem
         get => _checkState;
         set
         {
-            if (value < CheckState.Unchecked || value > CheckState.Indeterminate)
+            if (value is < CheckState.Unchecked or > CheckState.Indeterminate)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
             }
@@ -134,8 +134,10 @@ public partial class ToolStripButton : ToolStripItem
     protected override bool DefaultAutoToolTip => true;
 
     /// <remarks>
-    ///  This gets called via ToolStripItem.RescaleConstantsForDpi.
-    ///  It's practically calling Initialize on DpiChanging with the new Dpi value.
+    ///  <para>
+    ///   This gets called via ToolStripItem.RescaleConstantsForDpi.
+    ///   It's practically calling Initialize on DpiChanging with the new Dpi value.
+    ///  </para>
     /// </remarks>
     internal override int DeviceDpi
     {

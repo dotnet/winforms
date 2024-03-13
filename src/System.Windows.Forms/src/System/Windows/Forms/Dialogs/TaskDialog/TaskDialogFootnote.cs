@@ -146,7 +146,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
 
     internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, out TASKDIALOGCONFIG._Anonymous2_e__Union icon)
     {
-        TASKDIALOG_FLAGS result = base.Bind(page);
+        TASKDIALOG_FLAGS result = Bind(page);
 
         icon = TaskDialogPage.GetFooterIconValue(_icon).iconUnion;
 

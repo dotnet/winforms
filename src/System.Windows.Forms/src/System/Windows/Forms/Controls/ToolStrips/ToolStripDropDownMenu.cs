@@ -320,7 +320,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                     maxCheckSize.Height = Math.Max(checkedImageSize.Height, maxCheckSize.Height);
                 }
             }
-            else if (!(item is ToolStripSeparator))
+            else if (item is not ToolStripSeparator)
             {
                 maxNonMenuItemSize.Height = Math.Max(item.Bounds.Height, maxNonMenuItemSize.Height);
                 maxNonMenuItemSize.Width = Math.Max(item.Bounds.Width, maxNonMenuItemSize.Width);
@@ -531,8 +531,10 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         base.Initialize();
         Padding = DefaultPadding;
-        FlowLayoutSettings settings = new(this);
-        settings.FlowDirection = FlowDirection.TopDown;
+        FlowLayoutSettings settings = new(this)
+        {
+            FlowDirection = FlowDirection.TopDown
+        };
         _state[s_stateShowImageMargin] = true;
     }
 
@@ -616,11 +618,11 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             if (changed)
             {
                 UpdateScrollButtonLocations();
-                if (this.Items.Count > 0)
+                if (Items.Count > 0)
                 {
-                    int delta = this.Items[0].Bounds.Top - this.DisplayRectangle.Top;
-                    this.ScrollInternal(delta);
-                    this._scrollAmount -= delta;
+                    int delta = Items[0].Bounds.Top - DisplayRectangle.Top;
+                    ScrollInternal(delta);
+                    _scrollAmount -= delta;
                     if (value)
                     {
                         RestoreScrollPosition();
@@ -628,7 +630,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 }
                 else
                 {
-                    this._scrollAmount = 0;
+                    _scrollAmount = 0;
                 }
             }
         }

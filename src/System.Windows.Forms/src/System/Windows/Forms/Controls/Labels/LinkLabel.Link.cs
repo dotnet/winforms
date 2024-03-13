@@ -141,7 +141,7 @@ public partial class LinkLabel
 
                     if (Owner is not null)
                     {
-                        Owner._links.Sort(LinkLabel.s_linkComparer);
+                        Owner._links.Sort(s_linkComparer);
                         Owner.InvalidateTextLayout();
                         Owner.Invalidate();
                     }

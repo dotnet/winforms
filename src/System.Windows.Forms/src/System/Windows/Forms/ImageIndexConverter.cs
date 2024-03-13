@@ -21,16 +21,12 @@ public class ImageIndexConverter : Int32Converter
     ///  isn't valid in the standard values collection.
     /// </value>
     /// <remarks>
-    ///  <c>none</c> is the display name that is used when standard values are presented
-    ///  in the control UI and corresponds to a <c>null</c> value.
+    ///  <para>
+    ///   <c>none</c> is the display name that is used when standard values are presented
+    ///   in the control UI and corresponds to a <see langword="null"/> value.
+    ///  </para>
     /// </remarks>
-    protected virtual bool IncludeNoneAsStandardValue
-    {
-        get
-        {
-            return true;
-        }
-    }
+    protected virtual bool IncludeNoneAsStandardValue => true;
 
     /// <summary>
     ///  this is the property to look at when there is no ImageList property

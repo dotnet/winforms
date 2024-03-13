@@ -92,7 +92,7 @@ public partial class ToolStripPanelRow
                 return totalSize.Width < DisplayRectangle.Width;
             }
 
-            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("HorizontalRM.CanMove returns false - not enough room");
+            s_toolStripPanelRowCreationDebug.TraceVerbose("HorizontalRM.CanMove returns false - not enough room");
             return false;
         }
 

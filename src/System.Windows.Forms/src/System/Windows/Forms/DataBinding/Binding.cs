@@ -338,7 +338,7 @@ public partial class Binding
         set
         {
             // Try to compare logical values, not object references...
-            if (!object.Equals(_nullValue, value))
+            if (!Equals(_nullValue, value))
             {
                 _nullValue = value;
 
@@ -358,7 +358,7 @@ public partial class Binding
         set
         {
             // Try to compare logical values, not object references...
-            if (!object.Equals(_dsNullValue, value))
+            if (!Equals(_dsNullValue, value))
             {
                 // Save old Value
                 object? oldValue = _dsNullValue;
@@ -895,7 +895,7 @@ public partial class Binding
                 else
                 {
                     object? formattedObject = FormatObject(parsedValue);
-                    if (force || !FormattingEnabled || !object.Equals(formattedObject, value))
+                    if (force || !FormattingEnabled || !Equals(formattedObject, value))
                     {
                         SetPropValue(formattedObject);
                     }

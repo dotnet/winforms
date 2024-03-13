@@ -21,11 +21,13 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey>
         ///  Constructor to hold an uncached object. Used to wrap something not coming from the cache in a scope
         ///  so it can be abstracted for the end users of a given API.
         ///
-        ///  <see cref="GdiPlusCache.GetSolidBrushScope(Drawing.Color)"/> for an example.
+        ///  See <see cref="GdiPlusCache.GetSolidBrushScope(Drawing.Color)"/> for an example.
         /// </summary>
         /// <remarks>
-        ///  Currently we don't dispose the <paramref name="object"/> as we don't need to in our usages. If this
-        ///  becomes necessary we can add a bool to track whether or not we should dispose it.
+        ///  <para>
+        ///   Currently we don't dispose the <paramref name="object"/> as we don't need to in our usages. If this
+        ///   becomes necessary we can add a bool to track whether or not we should dispose it.
+        ///  </para>
         /// </remarks>
         public Scope(TObject @object)
         {
@@ -50,8 +52,10 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey>
         ///  Implicit conversion to the "target" type, i.e. <typeparamref name="TObject"/>.
         /// </summary>
         /// <remarks>
-        ///  This is somewhat dangerous as implicit casting in the using statement will leak the scope. Not doing
-        ///  this, however, makes usage with APIs difficult. We track in DEBUG to catch misuse as a mitigation.
+        ///  <para>
+        ///   This is somewhat dangerous as implicit casting in the using statement will leak the scope. Not doing
+        ///   this, however, makes usage with APIs difficult. We track in DEBUG to catch misuse as a mitigation.
+        ///  </para>
         /// </remarks>
         public static implicit operator TObject(in Scope scope)
         {

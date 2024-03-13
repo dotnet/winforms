@@ -2431,7 +2431,7 @@ public class ComboBoxTests
         public void ConfigureForCtrlBackspace(int cursorRelativeToEnd = 0)
         {
             Focus();
-            SelectionStart = this.Text.Length + cursorRelativeToEnd;
+            SelectionStart = Text.Length + cursorRelativeToEnd;
             SelectionLength = 0;
         }
 

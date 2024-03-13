@@ -95,23 +95,12 @@ public partial class Splitter : Control
         }
     }
 
-    protected override Cursor DefaultCursor
+    protected override Cursor DefaultCursor => Dock switch
     {
-        get
-        {
-            switch (Dock)
-            {
-                case DockStyle.Top:
-                case DockStyle.Bottom:
-                    return Cursors.HSplit;
-                case DockStyle.Left:
-                case DockStyle.Right:
-                    return Cursors.VSplit;
-            }
-
-            return base.DefaultCursor;
-        }
-    }
+        DockStyle.Top or DockStyle.Bottom => Cursors.HSplit,
+        DockStyle.Left or DockStyle.Right => Cursors.VSplit,
+        _ => base.DefaultCursor,
+    };
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -248,7 +237,7 @@ public partial class Splitter : Control
 
         set
         {
-            if (!(value == DockStyle.Top || value == DockStyle.Bottom || value == DockStyle.Left || value == DockStyle.Right))
+            if (value is not (DockStyle.Top or DockStyle.Bottom or DockStyle.Left or DockStyle.Right))
             {
                 throw new ArgumentException(SR.SplitterInvalidDockEnum);
             }
@@ -286,7 +275,7 @@ public partial class Splitter : Control
         get
         {
             DockStyle dock = Dock;
-            return dock == DockStyle.Left || dock == DockStyle.Right;
+            return dock is DockStyle.Left or DockStyle.Right;
         }
     }
 
@@ -616,17 +605,12 @@ public partial class Splitter : Control
         }
 
         Rectangle r = target.Bounds;
-        switch (Dock)
+        return Dock switch
         {
-            case DockStyle.Top:
-            case DockStyle.Bottom:
-                return r.Height;
-            case DockStyle.Left:
-            case DockStyle.Right:
-                return r.Width;
-            default:
-                return -1; // belts & braces
-        }
+            DockStyle.Top or DockStyle.Bottom => r.Height,
+            DockStyle.Left or DockStyle.Right => r.Width,
+            _ => -1, // belts & braces
+        };
     }
 
     /// <summary>

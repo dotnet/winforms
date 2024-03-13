@@ -831,14 +831,14 @@ Namespace Microsoft.VisualBasic.Logging
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
+                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
             If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
+                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
                 Return False
             End If

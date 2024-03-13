@@ -65,55 +65,24 @@ variables:
     value: ${{ contains(variables['Build.SourceBranch'], 'main') }}
   - name: NativeToolsOnMachine
     value: true
-  - name: isPublic
-    value: ${{ eq(variables['System.TeamProject'], 'public') }}
-  - name: isPR
-    value: ${{ eq(variables['Build.Reason'], 'PullRequest')}}
 
-  # used for post-build phases, internal builds only
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-    - group: DotNet-Winforms-SDLValidation-Params
-  - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
-    - name: _InternalRuntimeDownloadArgs
-      value: ''
-  - ${{ if eq(variables['System.TeamProject'], 'internal') }}:
-    - group: DotNetBuilds storage account read tokens
-    - group: AzureDevOps-Artifact-Feeds-Pats
-    - name: _InternalRuntimeDownloadArgs
-      value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
-             /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
+  # used for post-build phases, no value for non-internal build
+  - name: _InternalRuntimeDownloadArgs
+    value: ''
 
   # Produce test-signed build for PR and Public builds
-  - ${{ if or(eq(variables['isPublic'], 'true'), eq(variables['isPR'], 'true')) }}:
-    # needed for darc (dependency flow) publishing
-    - name: _PublishArgs
-      value: ''
-    - name: _OfficialBuildIdArgs
-      value: ''
-    # needed for signing
-    - name: _SignType
-      value: test
-    - name: _SignArgs
-      value: ''
-    - name: _Sign
-      value: false
-
-  # Set up non-PR build from internal project
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-    # needed for darc (dependency flow) publishing
-    - name: _PublishArgs
-      value: >-
-            /p:DotNetPublishUsingPipelines=true
-    - name: _OfficialBuildIdArgs
-      value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-    # needed for signing
-    - name: _SignType
-      value: real
-    - name: _SignArgs
-      value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
-    - name: _Sign
-      value: true
-
+  # needed for darc (dependency flow) publishing
+  - name: _PublishArgs
+    value: ''
+  - name: _OfficialBuildIdArgs
+    value: ''
+  # needed for signing
+  - name: _SignType
+    value: test
+  - name: _SignArgs
+    value: ''
+  - name: _Sign
+    value: false
 
 stages:
 
@@ -140,57 +109,3 @@ stages:
       name: Windows_arm64
       targetArchitecture: arm64
       skipTests: $(SkipTests)
-
-
-- ${{ if and(eq(variables['EnableLoc'], 'true'), ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - stage: OneLocBuild
-    displayName: Publish localizable content to OneLocBuild
-    jobs:
-    - template: /eng/common/templates/job/onelocbuild.yml
-      parameters:
-        MirrorRepo: winforms
-        UseCheckedInLocProjectJson: true
-        LclSource: lclFilesfromPackage
-        LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
-
-
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - stage: PublishAssetRegistry
-    displayName: Publish to Build Asset Registry
-    dependsOn: Build
-    variables:
-    - template: /eng/common/templates/variables/pool-providers.yml
-    jobs:
-    # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
-    - template: /eng/common/templates/job/publish-build-assets.yml
-      parameters:
-        publishUsingPipelines: true
-        pool:
-          name: $(DncEngInternalBuildPool)
-          demands: ImageOverride -equals windows.vs2022preview.amd64
-
-
-# Copied from the arcade repo and modified for winforms
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - template: /eng/common/templates/post-build/post-build.yml
-    parameters:
-      validateDependsOn: PublishAssetRegistry
-      publishingInfraVersion: 3
-      enableSymbolValidation: false
-      enableSigningValidation: false
-      enableNugetValidation: false
-      enableSourceLinkValidation: false
-      # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
-      SDLValidationParameters:
-        enable: false
-        params: ' -SourceToolsList $(_TsaSourceToolsList)
-        -TsaInstanceURL $(_TsaInstanceURL)
-        -TsaProjectName $(_TsaProjectName)
-        -TsaNotificationEmail $(_TsaNotificationEmail)
-        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
-        -TsaBugAreaPath $(_TsaBugAreaPath)
-        -TsaIterationPath $(_TsaIterationPath)
-        -TsaRepositoryName $(_TsaRepositoryName)
-        -TsaCodebaseName $(_TsaCodebaseName)
-        -TsaOnboard $(_TsaOnboard)
-        -TsaPublish $(_TsaPublish)'

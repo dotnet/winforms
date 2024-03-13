@@ -975,8 +975,10 @@ public partial class SendKeys
     ///  Sends the given keys to the active application, and then waits for the messages to be processed.
     /// </summary>
     /// <remarks>
-    ///  WARNING: this method will never work if control is not null, because while Windows journaling *looks* like it
-    ///  can be directed to a specific HWND, it can't.
+    ///  <para>
+    ///   WARNING: this method will never work if control is not null, because while Windows journaling *looks* like it
+    ///   can be directed to a specific HWND, it can't.
+    ///  </para>
     /// </remarks>
     private static void SendWait(string keys, Control? control)
     {

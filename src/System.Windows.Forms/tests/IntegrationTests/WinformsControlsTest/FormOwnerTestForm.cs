@@ -9,7 +9,7 @@ internal class FormOwnerTestForm : Form
 {
     public FormOwnerTestForm()
     {
-        this.Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
+        Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
     }
 
     /// <summary>
@@ -57,8 +57,8 @@ internal class FormOwnerTestForm : Form
         public Form CreateChildFormWithMemory()
         {
             // Create a byte array to consume memory on the parent so the leak is more obvious.
-            this.array = new byte[1024 * 1024];
-            Array.Clear(array, 0, this.array.Length);
+            array = new byte[1024 * 1024];
+            Array.Clear(array, 0, array.Length);
             Form child = new();
 
             // Show the child and pass the parent as the owner, this is where the leak can happen.

@@ -26,7 +26,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private int _helpPaneSizeRatio = -1;
     private int _commandsPaneSizeRatio = -1;
     private readonly CommandsPane _commandsPane;
-    private readonly ToolStrip _toolStrip;
+    private readonly PropertyGridToolStrip _toolStrip;
 
     private bool _helpVisible = true;
     private bool _toolbarVisible = true;
@@ -1706,7 +1706,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         return tab;
     }
 
-    private ToolStripButton CreatePushButton(
+    private PropertyGridToolStripButton CreatePushButton(
         string? toolTipText,
         int imageIndex,
         EventHandler eventHandler,

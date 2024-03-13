@@ -22,7 +22,7 @@ public static partial class ToolStripManager
     private static bool t_initialized;
 
     private static Font? s_defaultFont;
-    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new();
+    private static readonly ConcurrentDictionary<int, Font> s_defaultFontCache = new();
 
     // WARNING: When subscribing to static event handlers - make sure you unhook from them
     // otherwise you can leak USER objects on process shutdown.
@@ -432,9 +432,11 @@ public static partial class ToolStripManager
     }
 
     /// <remarks>
-    ///  This is thread static because we want separate instances for each thread.
-    ///  We don't want to guarantee thread safety and don't want to have to take
-    ///  locks in painting code.
+    ///  <para>
+    ///   This is thread static because we want separate instances for each thread.
+    ///   We don't want to guarantee thread safety and don't want to have to take
+    ///   locks in painting code.
+    ///  </para>
     /// </remarks>
     [ThreadStatic]
     private static ToolStripRenderer? t_defaultRenderer;
@@ -675,11 +677,11 @@ public static partial class ToolStripManager
         {
             return false;
         }
-        else if ((keyCode == Keys.Delete) || (keyCode == Keys.Insert))
+        else if (keyCode is Keys.Delete or Keys.Insert)
         {
             return true;
         }
-        else if (((int)keyCode >= (int)Keys.F1) && ((int)keyCode <= (int)Keys.F24))
+        else if ((int)keyCode is >= ((int)Keys.F1) and <= ((int)Keys.F24))
         {
             // Function keys by themselves are valid
             return true;
@@ -731,7 +733,7 @@ public static partial class ToolStripManager
     internal static bool ProcessCmdKey(ref Message m, Keys keyData)
     {
         Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - processing: [{keyData}]");
-        if (ToolStripManager.IsValidShortcut(keyData))
+        if (IsValidShortcut(keyData))
         {
             // If we're at the toplevel, check the toolstrips for matching shortcuts.
             // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
@@ -739,13 +741,13 @@ public static partial class ToolStripManager
             // per container, so this should hopefully be a quick search.
             Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - IsValidShortcut: [{keyData}]");
 
-            return ToolStripManager.ProcessShortcut(ref m, keyData);
+            return ProcessShortcut(ref m, keyData);
         }
 
         if (m.Msg == (int)PInvoke.WM_SYSKEYDOWN)
         {
             Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [{keyData}]");
-            ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
+            ModalMenuFilter.ProcessMenuKeyDown(ref m);
         }
 
         return false;
@@ -961,7 +963,7 @@ public static partial class ToolStripManager
                 // If it's Shift+F10 and we're already InMenuMode, then we
                 // need to cancel this message, otherwise we'll enter the native modal menu loop.
                 ToolStrip.s_snapFocusDebug.TraceVerbose($"[ProcessMenuKey] DETECTED SHIFT+F10{keyData}");
-                return ToolStripManager.ModalMenuFilter.InMenuMode;
+                return ModalMenuFilter.InMenuMode;
             }
             else
             {
@@ -1291,7 +1293,7 @@ public static partial class ToolStripManager
     }
 
     /// <remarks>
-    ///  Doesn't do a null check on source - if it's null we unmerge everything
+    ///  <para>Doesn't do a null check on source - if it's null we unmerge everything</para>
     /// </remarks>
     internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip? sourceToolStrip, bool revertMDIControls)
     {

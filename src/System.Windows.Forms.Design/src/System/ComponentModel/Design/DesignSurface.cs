@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignSurface : IDisposable, IServiceProvider
 {
-    private ServiceContainer _serviceContainer;
+    private DesignSurfaceServiceContainer _serviceContainer;
     private DesignerHost _host;
     private ICollection? _loadErrors;
 

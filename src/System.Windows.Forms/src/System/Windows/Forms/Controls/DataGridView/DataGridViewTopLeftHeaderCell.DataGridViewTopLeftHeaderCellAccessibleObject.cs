@@ -64,7 +64,7 @@ public partial class DataGridViewTopLeftHeaderCell
                 }
 
                 object? value = Owner.Value;
-                if (value is not null && !(value is string))
+                if (value is not null and not string)
                 {
                     // The user set the Value on the DataGridViewTopLeftHeaderCell and it did not set it to a string.
                     // Then the name of the DataGridViewTopLeftHeaderAccessibleObject is String.Empty;

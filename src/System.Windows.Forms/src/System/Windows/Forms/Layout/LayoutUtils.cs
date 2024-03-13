@@ -96,7 +96,7 @@ internal partial class LayoutUtils
         // zero isn't used, so we can subtract 1 and start with index 0.
         result--;
 
-        Debug.Assert(result >= 0x00 && result <= 0x0A, "ContentAlignmentToIndex result out of range.");
+        Debug.Assert(result is >= 0x00 and <= 0x0A, "ContentAlignmentToIndex result out of range.");
         Debug.Assert(result != 0x00 || alignment == ContentAlignment.TopLeft, "Error detected in ContentAlignmentToIndex.");
         Debug.Assert(result != 0x01 || alignment == ContentAlignment.TopCenter, "Error detected in ContentAlignmentToIndex.");
         Debug.Assert(result != 0x02 || alignment == ContentAlignment.TopRight, "Error detected in ContentAlignmentToIndex.");
@@ -115,7 +115,7 @@ internal partial class LayoutUtils
     // Converts 0x00, 0x01, 0x02, 0x04 (3b flag) to 0, 1, 2, 3 (2b index)
     private static byte xContentAlignmentToIndex(int threeBitFlag)
     {
-        Debug.Assert(threeBitFlag >= 0x00 && threeBitFlag <= 0x04 && threeBitFlag != 0x03, "threeBitFlag out of range.");
+        Debug.Assert(threeBitFlag is >= 0x00 and <= 0x04 and not 0x03, "threeBitFlag out of range.");
         byte result = threeBitFlag == 0x04 ? (byte)3 : (byte)threeBitFlag;
         Debug.Assert((result & 0x03) == result, "Result out of range.");
         return result;
@@ -433,9 +433,7 @@ internal partial class LayoutUtils
     public static Point FlipPoint(Point point)
     {
         // Point is a struct (passed by value, no need to make a copy)
-        int temp = point.X;
-        point.X = point.Y;
-        point.Y = temp;
+        (point.Y, point.X) = (point.X, point.Y);
         return point;
     }
 
@@ -455,9 +453,7 @@ internal partial class LayoutUtils
     public static Size FlipSize(Size size)
     {
         // Size is a struct (passed by value, no need to make a copy)
-        int temp = size.Width;
-        size.Width = size.Height;
-        size.Height = temp;
+        (size.Height, size.Width) = (size.Width, size.Height);
         return size;
     }
 

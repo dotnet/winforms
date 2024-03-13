@@ -48,7 +48,7 @@ public abstract partial class UpDownBase
         }
 
         /// <remarks>
-        ///  Called when the mouse button is pressed - we need to start spinning the value of the updown.
+        ///  <para>Called when the mouse button is pressed - we need to start spinning the value of the updown.</para>
         /// </remarks>
         private void BeginButtonPress(MouseEventArgs e)
         {
@@ -81,7 +81,7 @@ public abstract partial class UpDownBase
             => new UpDownButtonsAccessibleObject(this);
 
         /// <remarks>
-        ///  Called when the mouse button is released - we need to stop spinning the value of the updown.
+        ///  <para>Called when the mouse button is released - we need to stop spinning the value of the updown.</para>
         /// </remarks>
         private void EndButtonPress()
         {

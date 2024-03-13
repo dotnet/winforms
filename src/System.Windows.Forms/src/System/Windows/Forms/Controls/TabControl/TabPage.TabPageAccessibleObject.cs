@@ -79,7 +79,7 @@ public partial class TabPage
                 _ => base.IsPatternSupported(patternId)
             };
 
-        private IRawElementProviderFragment.Interface? GetNextSibling()
+        private TabAccessibleObject? GetNextSibling()
         {
             if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || OwningTabControl is null || owningTabPage != OwningTabControl.SelectedTab)
             {

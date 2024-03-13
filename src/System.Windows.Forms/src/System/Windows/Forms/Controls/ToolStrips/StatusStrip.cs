@@ -436,7 +436,7 @@ public partial class StatusStrip : ToolStrip
     internal override bool ShouldSerializeRenderMode()
     {
         // We should NEVER serialize custom.
-        return (RenderMode != ToolStripRenderMode.System && RenderMode != ToolStripRenderMode.Custom);
+        return (RenderMode is not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
     }
 
     /// <summary>
@@ -491,7 +491,7 @@ public partial class StatusStrip : ToolStrip
                     colStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                 }
 
-                if (TableLayoutSettings.RowStyles.Count > 1 || TableLayoutSettings.RowStyles.Count == 0)
+                if (TableLayoutSettings.RowStyles.Count is > 1 or 0)
                 {
                     TableLayoutSettings.RowStyles.Clear();
                     TableLayoutSettings.RowStyles.Add(new RowStyle());
@@ -540,7 +540,7 @@ public partial class StatusStrip : ToolStrip
 
                 TableLayoutSettings.ColumnCount = 1;
 
-                if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
+                if (TableLayoutSettings.ColumnStyles.Count is > 1 or 0)
                 {
                     TableLayoutSettings.ColumnStyles.Clear();
                     TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());

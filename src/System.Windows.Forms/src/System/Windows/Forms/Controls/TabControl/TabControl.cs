@@ -112,7 +112,7 @@ public partial class TabControl : Control
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _alignment = value;
-                if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
+                if (_alignment is TabAlignment.Left or TabAlignment.Right)
                 {
                     SetState(State.Multiline, true);
                 }
@@ -287,14 +287,14 @@ public partial class TabControl : Control
                 cp.Style |= (int)PInvoke.TCS_TOOLTIPS;
             }
 
-            if (_alignment == TabAlignment.Bottom ||
-                _alignment == TabAlignment.Right)
+            if (_alignment is TabAlignment.Bottom or
+                TabAlignment.Right)
             {
                 cp.Style |= (int)PInvoke.TCS_BOTTOM;
             }
 
-            if (_alignment == TabAlignment.Left ||
-                _alignment == TabAlignment.Right)
+            if (_alignment is TabAlignment.Left or
+                TabAlignment.Right)
             {
                 cp.Style |= (int)PInvoke.TCS_VERTICAL | (int)PInvoke.TCS_MULTILINE;
             }
@@ -1177,16 +1177,11 @@ public partial class TabControl : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     private static void NotifyAboutFocusState(TabPage? selectedTab, bool focused)
