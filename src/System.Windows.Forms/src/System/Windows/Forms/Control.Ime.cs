@@ -21,12 +21,12 @@ public partial class Control
     /// <summary>
     ///  The ImeMode value for controls with ImeMode = ImeMode.NoControl.  See PropagatingImeMode property.
     /// </summary>
-    private static ImeMode propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
+    private static ImeMode s_propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
 
     /// <summary>
     ///  This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
     /// </summary>
-    private static bool ignoreWmImeNotify;
+    private static bool s_ignoreWmImeNotify;
 
     /// <summary>
     ///  The ImeMode in the property store.
@@ -170,7 +170,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_IgnoreWmImeNotify()");
             Debug.Indent();
 
-            bool val = ignoreWmImeNotify;
+            bool val = s_ignoreWmImeNotify;
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value: {val}");
             Debug.Unindent();
@@ -180,7 +180,7 @@ public partial class Control
         set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside set_IgnoreWmImeNotify(): {value}");
-            ignoreWmImeNotify = value;
+            s_ignoreWmImeNotify = value;
         }
     }
 
@@ -377,7 +377,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_PropagatingImeMode()");
             Debug.Indent();
 
-            if (propagatingImeMode == ImeMode.Inherit)
+            if (s_propagatingImeMode == ImeMode.Inherit)
             {
                 // Initialize the propagating IME mode to the value the IME associated to the focused window currently has,
                 // this enables propagating the IME mode from/to unmanaged applications hosting winforms controls.
@@ -407,17 +407,17 @@ public partial class Control
                 PropagatingImeMode = imeMode;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {propagatingImeMode}");
+            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {s_propagatingImeMode}");
             Debug.Unindent();
 
-            return propagatingImeMode;
+            return s_propagatingImeMode;
         }
         private set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside set_PropagatingImeMode()");
             Debug.Indent();
 
-            if (propagatingImeMode != value)
+            if (s_propagatingImeMode != value)
             {
                 switch (value)
                 {
@@ -432,8 +432,8 @@ public partial class Control
                     default:
                         Debug.WriteLineIf(
                             CompModSwitches.ImeMode.Level >= TraceLevel.Warning,
-                            $"Setting PropagatingImeMode: Current value = {propagatingImeMode}, New value = {value}");
-                        propagatingImeMode = value;
+                            $"Setting PropagatingImeMode: Current value = {s_propagatingImeMode}, New value = {value}");
+                        s_propagatingImeMode = value;
                         break;
                 }
             }
@@ -847,7 +847,7 @@ public partial class Control
             // See the PropagatingImeMode property
 
             // Note: We need to check the static field here directly to avoid initialization of the property.
-            if (propagatingImeMode != ImeMode.Inherit)
+            if (s_propagatingImeMode != ImeMode.Inherit)
             {
                 // Setting the ime context of the top window will generate a WM_IME_NOTIFY on the focused control which will
                 // update its ImeMode, we need to prevent this temporarily.
@@ -881,7 +881,7 @@ public static class ImeContext
     /// <summary>
     ///  The IME context handle obtained when first associating an IME.
     /// </summary>
-    private static HIMC originalImeContext;
+    private static HIMC s_originalImeContext;
 
     /// <summary>
     ///  Disable the IME
@@ -906,7 +906,7 @@ public static class ImeContext
             HIMC oldContext = PInvoke.ImmAssociateContext((HWND)handle, (HIMC)IntPtr.Zero);
             if (oldContext != IntPtr.Zero)
             {
-                originalImeContext = oldContext;
+                s_originalImeContext = oldContext;
             }
         }
 
@@ -931,7 +931,7 @@ public static class ImeContext
             // Enable IME by associating the IME context to the window.
             if (inputContext == IntPtr.Zero)
             {
-                if (originalImeContext == IntPtr.Zero)
+                if (s_originalImeContext == IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmCreateContext()");
                     inputContext = PInvoke.ImmCreateContext();
@@ -944,7 +944,7 @@ public static class ImeContext
                 else
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext()");
-                    PInvoke.ImmAssociateContext((HWND)handle, originalImeContext);
+                    PInvoke.ImmAssociateContext((HWND)handle, s_originalImeContext);
                 }
             }
             else

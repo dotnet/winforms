@@ -194,7 +194,7 @@ public partial class ListView
             }
             else
             {
-                return this[displayIndex].ID;
+                return this[displayIndex]._id;
             }
         }
 
@@ -297,7 +297,7 @@ public partial class ListView
             _owner.ApplyUpdateCachedItems();
             if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
             {
-                return _owner._listItemsTable.TryGetValue(item.ID, out ListViewItem? itemOut)
+                return _owner._listItemsTable.TryGetValue(item._id, out ListViewItem? itemOut)
                     && itemOut == item;
             }
             else

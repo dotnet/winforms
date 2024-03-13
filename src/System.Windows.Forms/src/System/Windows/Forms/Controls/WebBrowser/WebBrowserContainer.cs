@@ -338,9 +338,9 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     {
         if (ctl is not null)
         {
-            if (ctl.container is not null)
+            if (ctl._container is not null)
             {
-                return ctl.container;
+                return ctl._container;
             }
 
             ScrollableControl? containingControl = ctl.ContainingControl;

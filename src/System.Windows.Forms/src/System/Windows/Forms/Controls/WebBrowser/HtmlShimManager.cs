@@ -14,8 +14,8 @@ namespace System.Windows.Forms;
 /// </summary>
 internal sealed class HtmlShimManager : IDisposable
 {
-    private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>? htmlWindowShims;
-    private Dictionary<HtmlElement, HtmlElement.HtmlElementShim>? htmlElementShims;
+    private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>? _htmlWindowShims;
+    private Dictionary<HtmlElement, HtmlElement.HtmlElementShim>? _htmlElementShims;
     private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>? _htmlDocumentShims;
 
     internal HtmlShimManager()
@@ -54,16 +54,16 @@ internal sealed class HtmlShimManager : IDisposable
     public void AddWindowShim(HtmlWindow window)
     {
         HtmlWindow.HtmlWindowShim? shim = null;
-        if (htmlWindowShims is null)
+        if (_htmlWindowShims is null)
         {
-            htmlWindowShims = [];
+            _htmlWindowShims = [];
             shim = new HtmlWindow.HtmlWindowShim(window);
-            htmlWindowShims[window] = shim;
+            _htmlWindowShims[window] = shim;
         }
-        else if (!htmlWindowShims.ContainsKey(window))
+        else if (!_htmlWindowShims.ContainsKey(window))
         {
             shim = new HtmlWindow.HtmlWindowShim(window);
-            htmlWindowShims[window] = shim;
+            _htmlWindowShims[window] = shim;
         }
 
         if (shim is not null)
@@ -80,16 +80,16 @@ internal sealed class HtmlShimManager : IDisposable
     {
         HtmlElement.HtmlElementShim? shim = null;
 
-        if (htmlElementShims is null)
+        if (_htmlElementShims is null)
         {
-            htmlElementShims = [];
+            _htmlElementShims = [];
             shim = new HtmlElement.HtmlElementShim(element);
-            htmlElementShims[element] = shim;
+            _htmlElementShims[element] = shim;
         }
-        else if (!htmlElementShims.ContainsKey(element))
+        else if (!_htmlElementShims.ContainsKey(element))
         {
             shim = new HtmlElement.HtmlElementShim(element);
-            htmlElementShims[element] = shim;
+            _htmlElementShims[element] = shim;
         }
 
         if (shim is not null)
@@ -115,12 +115,12 @@ internal sealed class HtmlShimManager : IDisposable
 
     internal HtmlElement.HtmlElementShim? GetElementShim(HtmlElement element)
     {
-        if (htmlElementShims is null)
+        if (_htmlElementShims is null)
         {
             return null;
         }
 
-        if (htmlElementShims.TryGetValue(element, out HtmlElement.HtmlElementShim? elementShim))
+        if (_htmlElementShims.TryGetValue(element, out HtmlElement.HtmlElementShim? elementShim))
         {
             return elementShim;
         }
@@ -130,12 +130,12 @@ internal sealed class HtmlShimManager : IDisposable
 
     internal HtmlWindow.HtmlWindowShim? GetWindowShim(HtmlWindow window)
     {
-        if (htmlWindowShims is null)
+        if (_htmlWindowShims is null)
         {
             return null;
         }
 
-        if (htmlWindowShims.TryGetValue(window, out HtmlWindow.HtmlWindowShim? windowShim))
+        if (_htmlWindowShims.TryGetValue(window, out HtmlWindow.HtmlWindowShim? windowShim))
         {
             return windowShim;
         }
@@ -186,25 +186,25 @@ internal sealed class HtmlShimManager : IDisposable
             //
             // prune elements
             //
-            if (htmlElementShims is not null)
+            if (_htmlElementShims is not null)
             {
-                HtmlElement.HtmlElementShim[] shims = new HtmlElement.HtmlElementShim[htmlElementShims.Count];
-                htmlElementShims.Values.CopyTo(shims, 0);
+                HtmlElement.HtmlElementShim[] shims = new HtmlElement.HtmlElementShim[_htmlElementShims.Count];
+                _htmlElementShims.Values.CopyTo(shims, 0);
 
                 foreach (HtmlElement.HtmlElementShim shim in shims)
                 {
                     if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
                     {
-                        htmlElementShims.Remove(shim.Element);
+                        _htmlElementShims.Remove(shim.Element);
                         shim.Dispose();
                     }
                 }
             }
 
             // Prune the particular window from the list.
-            if (htmlWindowShims is not null)
+            if (_htmlWindowShims is not null)
             {
-                if (htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
+                if (_htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
                 {
                     shim.Dispose();
                 }
@@ -221,9 +221,9 @@ internal sealed class HtmlShimManager : IDisposable
     {
         if (disposing)
         {
-            if (htmlElementShims is not null)
+            if (_htmlElementShims is not null)
             {
-                foreach (HtmlElement.HtmlElementShim shim in htmlElementShims.Values)
+                foreach (HtmlElement.HtmlElementShim shim in _htmlElementShims.Values)
                 {
                     shim.Dispose();
                 }
@@ -237,17 +237,17 @@ internal sealed class HtmlShimManager : IDisposable
                 }
             }
 
-            if (htmlWindowShims is not null)
+            if (_htmlWindowShims is not null)
             {
-                foreach (HtmlWindow.HtmlWindowShim shim in htmlWindowShims.Values)
+                foreach (HtmlWindow.HtmlWindowShim shim in _htmlWindowShims.Values)
                 {
                     shim.Dispose();
                 }
             }
 
-            htmlWindowShims = null;
+            _htmlWindowShims = null;
             _htmlDocumentShims = null;
-            htmlWindowShims = null;
+            _htmlWindowShims = null;
         }
     }
 }

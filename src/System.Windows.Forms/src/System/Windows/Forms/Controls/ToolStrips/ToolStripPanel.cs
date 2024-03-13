@@ -682,7 +682,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     #region Feedback
 
     [ThreadStatic]
-    private static FeedbackRectangle? feedbackRect;
+    private static FeedbackRectangle? t_feedbackRect;
 
     private void GiveToolStripPanelFeedback(ToolStrip toolStripToDrag, Point screenLocation)
     {
@@ -728,8 +728,8 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             Debug.WriteLine("FEEDBACK:  clearing old feedback at "/*+ new StackTrace().ToString()*/);
         }
 #endif
-        FeedbackRectangle? oldFeedback = feedbackRect;
-        feedbackRect = null;
+        FeedbackRectangle? oldFeedback = t_feedbackRect;
+        t_feedbackRect = null;
         oldFeedback?.Dispose();
     }
 
@@ -737,11 +737,11 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     {
         get
         {
-            return feedbackRect;
+            return t_feedbackRect;
         }
         set
         {
-            feedbackRect = value;
+            t_feedbackRect = value;
         }
     }
 

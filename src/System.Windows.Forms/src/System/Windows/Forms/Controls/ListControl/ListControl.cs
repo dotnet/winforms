@@ -29,7 +29,7 @@ public abstract class ListControl : Control
     private IFormatProvider? _formatInfo;
     private bool _formattingEnabled;
     private TypeConverter? _displayMemberConverter;
-    private static TypeConverter? _stringTypeConverter;
+    private static TypeConverter? s_stringTypeConverter;
 
     private bool _isDataSourceInitialized;
     private bool _isDataSourceInitEventHooked;
@@ -527,7 +527,7 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        _stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
 
         try
         {
@@ -535,7 +535,7 @@ public abstract class ListControl : Control
                 filteredItem,
                 typeof(string),
                 DisplayMemberConverter,
-                _stringTypeConverter,
+                s_stringTypeConverter,
                 _formatString,
                 _formatInfo,
                 formattedNullValue: null,

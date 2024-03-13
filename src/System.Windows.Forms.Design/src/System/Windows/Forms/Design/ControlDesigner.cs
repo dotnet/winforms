@@ -19,9 +19,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 public partial class ControlDesigner : ComponentDesigner
 {
-#pragma warning disable IDE1006 // Naming Styles - Public API
     protected static readonly Point InvalidPoint = new(int.MinValue, int.MinValue);
-#pragma warning restore IDE1006
 
     private static uint s_currentProcessId;
     private IDesignerHost _host;                        // the host for our designer

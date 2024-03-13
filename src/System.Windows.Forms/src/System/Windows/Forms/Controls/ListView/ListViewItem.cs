@@ -44,7 +44,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     private int _lastIndex = -1;
 
     // An ID unique relative to a given list view that comctl uses to identify items.
-    internal int ID = -1;
+    internal int _id = -1;
 
     private BitVector32 _state;
     private ListViewItemImageIndexer? _imageIndexer;
@@ -997,7 +997,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         Debug.Assert(_listView is null || !_listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
         Debug.Assert(parent is null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
 
-        ID = id;
+        _id = id;
         _listView = parent;
 
         // If the index is valid, then the handle has been created.
@@ -1174,7 +1174,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         ReleaseUiaProvider();
 
         // Make sure you do these last, as the first several lines depends on this information
-        ID = -1;
+        _id = -1;
         _listView = null;
     }
 

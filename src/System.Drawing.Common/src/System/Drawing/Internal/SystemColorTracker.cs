@@ -17,33 +17,33 @@ internal static class SystemColorTracker
     private const int EXPAND_FACTOR = 2;
 
     private static WeakReference<ISystemColorTracker>?[] s_list = new WeakReference<ISystemColorTracker>?[INITIAL_SIZE];
-    private static int count;
-    private static bool addedTracker;
-    private static readonly object lockObject = new();
+    private static int s_count;
+    private static bool s_addedTracker;
+    private static readonly object s_lockObject = new();
 
     internal static void Add(ISystemColorTracker obj)
     {
-        lock (lockObject)
+        lock (s_lockObject)
         {
             Debug.Assert(s_list is not null, "List is null");
             Debug.Assert(s_list.Length > 0, "INITIAL_SIZE was initialized after list");
 
-            if (s_list.Length == count)
+            if (s_list.Length == s_count)
             {
                 GarbageCollectList();
             }
 
-            if (!addedTracker)
+            if (!s_addedTracker)
             {
-                addedTracker = true;
+                s_addedTracker = true;
                 SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
             }
 
             // Strictly speaking, we should grab a lock on this class.  But since the chances
             // of a problem are so low, the consequences so minimal (something will get accidentally dropped
             // from the list), and the performance of locking so lousy, we'll risk it.
-            int index = count;
-            count++;
+            int index = s_count;
+            s_count++;
 
             // COM+ takes forever to Finalize() weak references, so it pays to reuse them.
             if (s_list[index] is not WeakReference<ISystemColorTracker> reference)
@@ -81,7 +81,7 @@ internal static class SystemColorTracker
 
             if (left >= right)
             {
-                count = left;
+                s_count = left;
                 break;
             }
 
@@ -91,7 +91,7 @@ internal static class SystemColorTracker
             right--;
         }
 
-        Debug.Assert(count >= 0 && count <= s_list.Length, "count not a legal index into list");
+        Debug.Assert(s_count >= 0 && s_count <= s_list.Length, "count not a legal index into list");
 
 #if DEBUG
         // Check loop invariant.
@@ -104,7 +104,7 @@ internal static class SystemColorTracker
         //     Debug.Assert(list[i].Target is not null, "Null found on the left side of the list");
         // }
 
-        for (int i = count; i < s_list.Length; i++)
+        for (int i = s_count; i < s_list.Length; i++)
         {
             Debug.Assert(s_list[i]?.TryGetTarget(out _) == false, "Partitioning didn't work");
         }
@@ -115,7 +115,7 @@ internal static class SystemColorTracker
     {
         CleanOutBrokenLinks();
 
-        if (count / (float)s_list.Length > EXPAND_THRESHOLD)
+        if (s_count / (float)s_list.Length > EXPAND_THRESHOLD)
         {
             Array.Resize(ref s_list, s_list.Length * EXPAND_FACTOR);
 
@@ -128,7 +128,7 @@ internal static class SystemColorTracker
         // Update pens and brushes
         if (e.Category == UserPreferenceCategory.Color)
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < s_count; i++)
             {
                 Debug.Assert(s_list[i] is not null, "null value in active part of list");
                 if (s_list[i]?.TryGetTarget(out ISystemColorTracker? target) == true)

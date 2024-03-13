@@ -516,7 +516,6 @@ internal class DataGridViewDesigner : ControlDesigner
         return similarSchema;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void RefreshColumnCollection()
     {
         DataGridView dataGridView = Control;
@@ -660,9 +659,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 //
                 // 5. IContainer.Add(newDataGridView.Columns
                 //
-#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
                 DataGridViewColumn? dataGridViewColumn = TypeDescriptor.CreateInstance(host, columnType, null, null) as DataGridViewColumn;
-#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
 
                 if (dataGridViewColumn is not null)
                 {
@@ -886,17 +883,9 @@ internal class DataGridViewDesigner : ControlDesigner
             return items;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-        public void EditColumns()
-        {
-            _owner.OnEditColumns(this, EventArgs.Empty);
-        }
+        public void EditColumns() => _owner.OnEditColumns(this, EventArgs.Empty);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-        public void AddColumn()
-        {
-            _owner.OnAddColumn(this, EventArgs.Empty);
-        }
+        public void AddColumn() => _owner.OnAddColumn(this, EventArgs.Empty);
     }
 
     private class DataGridViewPropertiesActionList : DesignerActionList

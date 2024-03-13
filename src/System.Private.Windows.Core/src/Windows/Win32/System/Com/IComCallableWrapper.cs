@@ -12,7 +12,7 @@ internal unsafe struct IComCallableWrapper : IComIID, IVTable<IComCallableWrappe
     private readonly void** _vtbl;
 
     // {73B17DAF-0480-4702-AF7C-AF3BD4715D71}
-    public static readonly Guid IID_Guid = new(0x73b17daf, 0x0480, 0x4702, 0xaf, 0x7c, 0xaf, 0x3b, 0xd4, 0x71, 0x5d, 0x71);
+    public static Guid IID_Guid { get; } = new(0x73b17daf, 0x0480, 0x4702, 0xaf, 0x7c, 0xaf, 0x3b, 0xd4, 0x71, 0x5d, 0x71);
 
     static ref readonly Guid IComIID.Guid
     {
@@ -58,9 +58,11 @@ internal unsafe struct IComCallableWrapper : IComIID, IVTable<IComCallableWrappe
 
     public struct Vtbl
     {
+#pragma warning disable IDE1006 // Naming Styles - Matching CsWin32 patterns
         internal delegate* unmanaged[Stdcall]<IEnumUnknown*, Guid*, void**, HRESULT> QueryInterface_1;
         internal delegate* unmanaged[Stdcall]<IEnumUnknown*, uint> AddRef_2;
         internal delegate* unmanaged[Stdcall]<IEnumUnknown*, uint> Release_3;
+#pragma warning restore IDE1006
     }
 
     /// <summary>
