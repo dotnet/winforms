@@ -22,7 +22,7 @@ public class RowStyle : TableLayoutStyle
 
     public float Height
     {
-        get => base.Size;
-        set => base.Size = value;
+        get => Size;
+        set => Size = value;
     }
 }

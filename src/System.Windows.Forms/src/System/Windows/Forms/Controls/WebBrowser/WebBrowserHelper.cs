@@ -104,10 +104,7 @@ internal static partial class WebBrowserHelper
     }
 
     /// <remarks>
-    ///  Returns a big clip RECT.
+    ///  <para>Returns a big clip RECT.</para>
     /// </remarks>
-    internal static RECT GetClipRect()
-    {
-        return new Rectangle(0, 0, 32000, 32000);
-    }
+    internal static RECT GetClipRect() => new Rectangle(0, 0, 32000, 32000);
 }

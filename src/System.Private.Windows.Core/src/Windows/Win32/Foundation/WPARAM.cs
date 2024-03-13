@@ -26,7 +26,7 @@ internal readonly partial struct WPARAM
     public static explicit operator nint(WPARAM value) => (nint)value.Value;
     public static explicit operator WPARAM(int value) => new((nuint)(nint)value);
 
-    public static explicit operator WPARAM(char value) => new((ushort)value);
+    public static explicit operator WPARAM(char value) => new(value);
 
     public static explicit operator WPARAM(Color value) => new((nuint)ColorTranslator.ToWin32(value));
 
@@ -41,6 +41,6 @@ internal readonly partial struct WPARAM
     // #define MAKEWPARAM(l, h)    ((WPARAM)(DWORD)MAKELONG(l, h))
     // #define MAKELONG(a, b)      ((LONG)(((WORD)(((DWORD_PTR)(a)) & 0xffff))
     //   | ((DWORD)((WORD)(((DWORD_PTR)(b)) & 0xffff))) << 16))
-    public static WPARAM MAKEWPARAM(int low, int high) => (WPARAM)(uint)((int)(((ushort)(((nuint)low) & 0xffff))
-|       ((uint)((ushort)(((nuint)high) & 0xffff))) << 16));
+    public static WPARAM MAKEWPARAM(int low, int high) =>
+        (WPARAM)(uint)((int)(((ushort)(((nuint)low) & 0xffff)) | ((uint)((ushort)(((nuint)high) & 0xffff))) << 16));
 }

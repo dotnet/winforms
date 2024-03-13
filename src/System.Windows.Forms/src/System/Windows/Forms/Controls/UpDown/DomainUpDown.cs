@@ -351,13 +351,13 @@ public partial class DomainUpDown : UpDownBase
             char[] character = [e.KeyChar];
             UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
-            if (uc == UnicodeCategory.LetterNumber
-                || uc == UnicodeCategory.LowercaseLetter
-                || uc == UnicodeCategory.DecimalDigitNumber
-                || uc == UnicodeCategory.MathSymbol
-                || uc == UnicodeCategory.OtherLetter
-                || uc == UnicodeCategory.OtherNumber
-                || uc == UnicodeCategory.UppercaseLetter)
+            if (uc is UnicodeCategory.LetterNumber
+                or UnicodeCategory.LowercaseLetter
+                or UnicodeCategory.DecimalDigitNumber
+                or UnicodeCategory.MathSymbol
+                or UnicodeCategory.OtherLetter
+                or UnicodeCategory.OtherNumber
+                or UnicodeCategory.UppercaseLetter)
             {
                 // Attempt to match the character to a domain item
                 int matchIndex = MatchIndex(new string(character), false, _domainIndex + 1);

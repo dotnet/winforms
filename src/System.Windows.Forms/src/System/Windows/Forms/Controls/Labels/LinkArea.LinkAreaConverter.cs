@@ -151,7 +151,7 @@ public partial struct LinkArea
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
-            return props.Sort([nameof(LinkArea.Start), nameof(LinkArea.Length)]);
+            return props.Sort([nameof(Start), nameof(Length)]);
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ public unsafe static class Helpers
         }
     }
 
-    private static Exception GetBitmapEqualFailureException(Bitmap bitmap, Color[][] colors, int firstFailureX, int firstFailureY)
+    private static EqualException GetBitmapEqualFailureException(Bitmap bitmap, Color[][] colors, int firstFailureX, int firstFailureY)
     {
         // Print out the whole bitmap to provide a view of the whole image, rather than just the difference between
         // a single pixel.

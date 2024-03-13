@@ -49,7 +49,7 @@ public abstract class ListControl : Control
         get => _dataSource;
         set
         {
-            if (value is not null && !(value is IList || value is IListSource))
+            if (value is not null and not (IList or IListSource))
             {
                 throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
             }
@@ -449,8 +449,9 @@ public abstract class ListControl : Control
     }
 
     /// <remarks>
-    ///  We use this to prevent getting the selected item when mouse is hovering
-    ///  over the dropdown.
+    ///  <para>
+    ///   We use this to prevent getting the selected item when mouse is hovering over the dropdown.
+    ///  </para>
     /// </remarks>
     private protected bool BindingFieldEmpty => _displayMember.BindingField.Length == 0;
 
@@ -557,16 +558,11 @@ public abstract class ListControl : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     protected override void OnBindingContextChanged(EventArgs e)

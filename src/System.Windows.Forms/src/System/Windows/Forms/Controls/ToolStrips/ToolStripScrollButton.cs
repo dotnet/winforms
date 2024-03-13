@@ -35,15 +35,13 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
         _up = up;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-       => Control.AccessibilityObject;
+    protected override AccessibleObject CreateAccessibilityInstance() => Control.AccessibilityObject;
 
-    private static Control CreateControlInstance(bool up)
-        => new StickyLabel(up)
-        {
-            ImageAlign = ContentAlignment.MiddleCenter,
-            Image = (up) ? UpImage : DownImage
-        };
+    private static StickyLabel CreateControlInstance(bool up) => new(up)
+    {
+        ImageAlign = ContentAlignment.MiddleCenter,
+        Image = (up) ? UpImage : DownImage
+    };
 
     protected internal override Padding DefaultMargin => Padding.Empty;
 

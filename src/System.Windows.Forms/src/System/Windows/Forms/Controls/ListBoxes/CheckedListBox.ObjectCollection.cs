@@ -34,7 +34,7 @@ public partial class CheckedListBox
             // Valid values are 0-2 inclusive.
             SourceGenerated.EnumValidator.Validate(check, nameof(check));
 
-            int index = base.Add(item);
+            int index = Add(item);
             _owner.SetItemCheckState(index, check);
 
             return index;

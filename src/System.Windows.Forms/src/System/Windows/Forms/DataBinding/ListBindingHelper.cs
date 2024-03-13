@@ -52,7 +52,7 @@ public static class ListBindingHelper
             return dataSource;
         }
 
-        PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
+        PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
         PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
         if (dmProp is null)
         {
@@ -189,7 +189,7 @@ public static class ListBindingHelper
         if (!string.IsNullOrEmpty(dataMember))
         {
             // Find the property on the data source specified by the data member
-            PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
+            PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
             PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
 
             // Add the data member property to the list accessors

@@ -267,7 +267,7 @@ public partial class DataGridView : Control, ISupportInitialize
     private object? _uneditedFormattedValue;
     private Control? _latestEditingControl;
     private Control? _cachedEditingControl;
-    private Panel? _editingPanel;
+    private DataGridViewEditingPanel? _editingPanel;
     private DataGridViewEditingPanelAccessibleObject? _editingPanelAccessibleObject;
     private Point _ptCurrentCell;
     private Point _ptCurrentCellCache = Point.Empty;
@@ -1443,29 +1443,15 @@ public partial class DataGridView : Control, ISupportInitialize
     [DefaultValue(DataGridViewHeaderBorderStyle.Raised)]
     public DataGridViewHeaderBorderStyle ColumnHeadersBorderStyle
     {
-        get
+        get => AdvancedColumnHeadersBorderStyle.All switch
         {
-            switch (AdvancedColumnHeadersBorderStyle.All)
-            {
-                case DataGridViewAdvancedCellBorderStyle.NotSet:
-                    return DataGridViewHeaderBorderStyle.Custom;
-
-                case DataGridViewAdvancedCellBorderStyle.None:
-                    return DataGridViewHeaderBorderStyle.None;
-
-                case DataGridViewAdvancedCellBorderStyle.Single:
-                    return DataGridViewHeaderBorderStyle.Single;
-
-                case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                    return DataGridViewHeaderBorderStyle.Sunken;
-
-                case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    return DataGridViewHeaderBorderStyle.Raised;
-
-                default:
-                    return DataGridViewHeaderBorderStyle.Custom;
-            }
-        }
+            DataGridViewAdvancedCellBorderStyle.NotSet => DataGridViewHeaderBorderStyle.Custom,
+            DataGridViewAdvancedCellBorderStyle.None => DataGridViewHeaderBorderStyle.None,
+            DataGridViewAdvancedCellBorderStyle.Single => DataGridViewHeaderBorderStyle.Single,
+            DataGridViewAdvancedCellBorderStyle.InsetDouble => DataGridViewHeaderBorderStyle.Sunken,
+            DataGridViewAdvancedCellBorderStyle.OutsetPartial => DataGridViewHeaderBorderStyle.Raised,
+            _ => DataGridViewHeaderBorderStyle.Custom,
+        };
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x4
@@ -2189,7 +2175,7 @@ public partial class DataGridView : Control, ISupportInitialize
         {
             if (EditingControl is not null)
             {
-                Point ptMouse = PointToClient(Control.MousePosition);
+                Point ptMouse = PointToClient(MousePosition);
                 return EditingControl.Bounds.Contains(ptMouse);
             }
 
@@ -2203,7 +2189,7 @@ public partial class DataGridView : Control, ISupportInitialize
         {
             if (_editingPanel is not null)
             {
-                Point ptMouse = PointToClient(Control.MousePosition);
+                Point ptMouse = PointToClient(MousePosition);
                 return _editingPanel.Bounds.Contains(ptMouse);
             }
 
@@ -2215,7 +2201,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            Point ptMouse = PointToClient(Control.MousePosition);
+            Point ptMouse = PointToClient(MousePosition);
             if (_vertScrollBar is not null && _vertScrollBar.Visible)
             {
                 if (_vertScrollBar.Bounds.Contains(ptMouse))
@@ -3244,29 +3230,15 @@ public partial class DataGridView : Control, ISupportInitialize
     [DefaultValue(DataGridViewHeaderBorderStyle.Raised)]
     public DataGridViewHeaderBorderStyle RowHeadersBorderStyle
     {
-        get
+        get => AdvancedRowHeadersBorderStyle.All switch
         {
-            switch (AdvancedRowHeadersBorderStyle.All)
-            {
-                case DataGridViewAdvancedCellBorderStyle.NotSet:
-                    return DataGridViewHeaderBorderStyle.Custom;
-
-                case DataGridViewAdvancedCellBorderStyle.None:
-                    return DataGridViewHeaderBorderStyle.None;
-
-                case DataGridViewAdvancedCellBorderStyle.Single:
-                    return DataGridViewHeaderBorderStyle.Single;
-
-                case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                    return DataGridViewHeaderBorderStyle.Sunken;
-
-                case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    return DataGridViewHeaderBorderStyle.Raised;
-
-                default:
-                    return DataGridViewHeaderBorderStyle.Custom;
-            }
-        }
+            DataGridViewAdvancedCellBorderStyle.NotSet => DataGridViewHeaderBorderStyle.Custom,
+            DataGridViewAdvancedCellBorderStyle.None => DataGridViewHeaderBorderStyle.None,
+            DataGridViewAdvancedCellBorderStyle.Single => DataGridViewHeaderBorderStyle.Single,
+            DataGridViewAdvancedCellBorderStyle.InsetDouble => DataGridViewHeaderBorderStyle.Sunken,
+            DataGridViewAdvancedCellBorderStyle.OutsetPartial => DataGridViewHeaderBorderStyle.Raised,
+            _ => DataGridViewHeaderBorderStyle.Custom,
+        };
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x4
@@ -3880,7 +3852,7 @@ public partial class DataGridView : Control, ISupportInitialize
                         if (!value)
                         {
                             bool activate = !string.IsNullOrEmpty(ToolTipPrivate);
-                            Point mouseCoord = System.Windows.Forms.Control.MousePosition;
+                            Point mouseCoord = MousePosition;
                             activate &= ClientRectangle.Contains(PointToClient(mouseCoord));
 
                             // Reset the tool tip
@@ -4181,9 +4153,8 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     private bool VisibleCellExists =>
-        Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null
-            ? false
-            : Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
+        Columns.GetFirstColumn(DataGridViewElementStates.Visible) is not null
+        && Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
 
     // Events start here
 
@@ -4990,7 +4961,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
 
         DataGridViewSelectionMode selectionMode = SelectionMode;
-        if (selectionMode == DataGridViewSelectionMode.FullColumnSelect || selectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
+        if (selectionMode is DataGridViewSelectionMode.FullColumnSelect or DataGridViewSelectionMode.ColumnHeaderSelect)
         {
             foreach (DataGridViewColumn dataGridViewColumn in Columns)
             {

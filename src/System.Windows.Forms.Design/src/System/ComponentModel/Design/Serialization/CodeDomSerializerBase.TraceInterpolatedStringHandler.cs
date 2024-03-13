@@ -36,8 +36,10 @@ public abstract partial class CodeDomSerializerBase
         /// <param name="level">The trace level of the message.</param>
         /// <param name="shouldAppend">A value indicating whether formatting should proceed.</param>
         /// <remarks>
-        ///  This is intended to be called only by compiler-generated code. Arguments are not validated as they'd
-        ///  otherwise be for members intended to be used directly.
+        ///  <para>
+        ///   This is intended to be called only by compiler-generated code. Arguments are not validated as they'd
+        ///   otherwise be for members intended to be used directly.
+        ///  </para>
         /// </remarks>
         public TraceInterpolatedStringHandler(int literalLength, int formattedCount, TraceLevel level, out bool shouldAppend)
         {

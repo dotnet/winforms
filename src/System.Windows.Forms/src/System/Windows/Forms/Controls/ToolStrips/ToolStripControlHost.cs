@@ -797,7 +797,7 @@ public partial class ToolStripControlHost : ToolStripItem
         => (ReadOnlyControlCollection?)toolStrip?.Controls;
 
     /// <remarks>
-    ///  Ensures the hosted Control is parented to the ToolStrip hosting this ToolStripItem.
+    ///  <para>Ensures the hosted Control is parented to the ToolStrip hosting this ToolStripItem.</para>
     /// </remarks>
     private void SyncControlParent()
     {

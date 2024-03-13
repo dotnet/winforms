@@ -664,9 +664,9 @@ public partial class CurrencyManager : BindingManagerBase
             }
 
             // we should still fire meta data change notification even when the list is empty
-            if (e.ListChangedType == ListChangedType.PropertyDescriptorAdded ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorDeleted ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorChanged)
+            if (e.ListChangedType is ListChangedType.PropertyDescriptorAdded or
+                ListChangedType.PropertyDescriptorDeleted or
+                ListChangedType.PropertyDescriptorChanged)
             {
                 OnMetaDataChanged(EventArgs.Empty);
             }

@@ -876,7 +876,7 @@ namespace System.Windows.Forms.Design
                 DataMemberNode dataMemberNode = new(this, dataSource, dataMember + "." + property.Name, property.Name, isSubList);
                 nodes.Add(dataMemberNode);
 
-                // Auto-select support...
+                // Auto-select support.
                 if (_selectedItem is not null && _selectedItem.DataSource == dataMemberNode.DataSource)
                 {
                     if (_selectedItem.Equals(dataSource, dataMemberNode.DataMember))
@@ -886,8 +886,8 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(_selectedItem.DataMember) &&
-                            _selectedItem.DataMember.IndexOf(dataMemberNode.DataMember) == 0)
+                        if (!string.IsNullOrEmpty(_selectedItem.DataMember)
+                            && _selectedItem.DataMember.StartsWith(dataMemberNode.DataMember, StringComparison.Ordinal))
                         {
                             // If this node is an ancestor of the selected item, recursively start
                             // filling out sub-member tree (so that node for selected item will

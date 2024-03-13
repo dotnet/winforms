@@ -2646,7 +2646,7 @@ public partial class TreeView : Control
     }
 
     /// <remarks>
-    ///  Setting the PInvoke.TVS_CHECKBOXES style clears the checked state
+    ///  <para>Setting the PInvoke.TVS_CHECKBOXES style clears the checked state</para>
     /// </remarks>
     private static void UpdateCheckedState(TreeNode node, bool update)
     {
@@ -3197,7 +3197,7 @@ public partial class TreeView : Control
                         PInvoke.SendMessage(this, PInvoke.TVM_GETITEMW, 0, ref item1);
 
                         TreeNode node = NodeFromHandle(item->hItem)!;
-                        node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
+                        node.CheckedStateInternal = (((int)item1.state >> SHIFTVAL) > 1);
                     }
                 }
 

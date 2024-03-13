@@ -5,15 +5,12 @@ using System.ComponentModel.Design;
 using System.Windows.Forms;
 
 namespace DesignSurfaceExt;
+
 public class PropertyGridExt : PropertyGrid
 {
     public IDesignerHost DesignerHost { get; set; }
 
     protected override void OnSelectedObjectsChanged(EventArgs e) => base.OnSelectedObjectsChanged(e);
 
-    protected override object GetService(Type serviceType)
-    {
-        object service = DesignerHost?.GetService(serviceType);
-        return service ?? base.GetService(serviceType);
-    }
+    protected override object GetService(Type service) => DesignerHost?.GetService(service) ?? base.GetService(service);
 }

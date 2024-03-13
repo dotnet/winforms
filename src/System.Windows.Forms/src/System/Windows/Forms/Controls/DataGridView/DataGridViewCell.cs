@@ -374,7 +374,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     bool IKeyboardToolTip.IsBeingTabbedTo() => IsBeingTabbedTo();
 
-    internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
+    internal virtual bool IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
     bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
     #endregion
@@ -874,25 +874,25 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         {
             X = (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1
         };
-        if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble || advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+        if (advancedBorderStyle.Left is DataGridViewAdvancedCellBorderStyle.OutsetDouble or DataGridViewAdvancedCellBorderStyle.InsetDouble)
         {
             rect.X++;
         }
 
         rect.Y = (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1;
-        if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetDouble || advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+        if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetDouble or DataGridViewAdvancedCellBorderStyle.InsetDouble)
         {
             rect.Y++;
         }
 
         rect.Width = (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1;
-        if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble || advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+        if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.OutsetDouble or DataGridViewAdvancedCellBorderStyle.InsetDouble)
         {
             rect.Width++;
         }
 
         rect.Height = (advancedBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.None) ? 0 : 1;
-        if (advancedBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble || advancedBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+        if (advancedBorderStyle.Bottom is DataGridViewAdvancedCellBorderStyle.OutsetDouble or DataGridViewAdvancedCellBorderStyle.InsetDouble)
         {
             rect.Height++;
         }
@@ -1304,7 +1304,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                     // The seemingly arbitrary 160 comes from RFC
                     // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
                     // Don't entity encode high chars (160 to 256)
-                    if (ch >= 160 && ch < 256)
+                    if (ch is >= (char)160 and < (char)256)
                     {
                         output.Write("&#");
                         output.Write(((int)ch).ToString(NumberFormatInfo.InvariantInfo));
@@ -2356,11 +2356,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(rightToLeft, cellStyle.Alignment, cellStyle.WrapMode);
         if (cellStyle.WrapMode == DataGridViewTriState.True)
         {
-            return DataGridViewCell.MeasureTextHeight(g, text, cellStyle.Font, maxWidth, flags, out widthTruncated);
+            return MeasureTextHeight(g, text, cellStyle.Font, maxWidth, flags, out widthTruncated);
         }
         else
         {
-            Size size = DataGridViewCell.MeasureTextSize(g, text, cellStyle.Font, flags);
+            Size size = MeasureTextSize(g, text, cellStyle.Font, flags);
             widthTruncated = size.Width > maxWidth;
             return size.Height;
         }
@@ -2611,7 +2611,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             return new Size(0, 0);
         }
 
-        Size textOneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
+        Size textOneLineSize = MeasureTextSize(graphics, text, font, flags);
         if (textOneLineSize.Width / textOneLineSize.Height <= maxRatio)
         {
             return textOneLineSize;
@@ -2665,7 +2665,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxHeight);
 
-        Size oneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
+        Size oneLineSize = MeasureTextSize(graphics, text, font, flags);
         if (oneLineSize.Height >= maxHeight || (flags & TextFormatFlags.SingleLine) != 0)
         {
             return oneLineSize.Width;
@@ -3259,8 +3259,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                 y1 = bounds.Y + 2;
                 y2 = bounds.Bottom - 3;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                    DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
                     y1++;
                 }
@@ -3276,8 +3276,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                 y1 = bounds.Y + 1;
                 y2 = bounds.Bottom - 1;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     y1--;
                 }
@@ -3294,8 +3294,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.InsetDouble:
                 y1 = bounds.Y + 1;
                 y2 = bounds.Bottom - 1;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     y1--;
                 }
@@ -3327,8 +3327,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                 y1 = bounds.Y + 2;
                 y2 = bounds.Bottom - 3;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                    DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
                     y1++;
                 }
@@ -3344,8 +3344,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                 y1 = bounds.Y + 1;
                 y2 = bounds.Bottom - 1;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     y1--;
                 }
@@ -3362,14 +3362,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.InsetDouble:
                 y1 = bounds.Y + 1;
                 y2 = bounds.Bottom - 1;
-                if (advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Top == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Top is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     y1--;
                 }
 
-                if (advancedBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Bottom == DataGridViewAdvancedCellBorderStyle.Inset)
+                if (advancedBorderStyle.Bottom is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.Inset)
                 {
                     y2++;
                 }
@@ -3389,14 +3389,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.Inset:
                 x1 = bounds.X;
                 x2 = bounds.Right - 1;
-                if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                    advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                if (advancedBorderStyle.Left is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                    DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
                     x1++;
                 }
 
-                if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Inset ||
-                    advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Outset)
+                if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.Inset or
+                    DataGridViewAdvancedCellBorderStyle.Outset)
                 {
                     x2--;
                 }
@@ -3407,14 +3407,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.Outset:
                 x1 = bounds.X;
                 x2 = bounds.Right - 1;
-                if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                    advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                if (advancedBorderStyle.Left is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                    DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
                     x1++;
                 }
 
-                if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Inset ||
-                    advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.Outset)
+                if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.Inset or
+                    DataGridViewAdvancedCellBorderStyle.Outset)
                 {
                     x2--;
                 }
@@ -3428,8 +3428,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x1++;
-                    if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                        advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                    if (advancedBorderStyle.Left is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                        DataGridViewAdvancedCellBorderStyle.InsetDouble)
                     {
                         x1++;
                     }
@@ -3438,8 +3438,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x2--;
-                    if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                        advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                    if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                        DataGridViewAdvancedCellBorderStyle.InsetDouble)
                     {
                         x2--;
                     }
@@ -3451,15 +3451,15 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
             case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
                 x1 = bounds.X;
-                if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial &&
-                    advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Left is not DataGridViewAdvancedCellBorderStyle.OutsetPartial and
+                    not DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x1++;
                 }
 
                 x2 = bounds.Right - 2;
-                if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x2++;
                 }
@@ -3470,15 +3470,15 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
             case DataGridViewAdvancedCellBorderStyle.InsetDouble:
                 x1 = bounds.X;
-                if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial &&
-                    advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Left is not DataGridViewAdvancedCellBorderStyle.OutsetPartial and
+                    not DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x1++;
                 }
 
                 x2 = bounds.Right - 2;
-                if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetPartial ||
-                    advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.None)
+                if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.OutsetPartial or
+                    DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x2++;
                 }
@@ -3507,8 +3507,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             case DataGridViewAdvancedCellBorderStyle.Outset:
                 x1 = bounds.X;
                 x2 = bounds.Right - 1;
-                if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.InsetDouble ||
-                    advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
+                if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.InsetDouble or
+                    DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                 {
                     x2--;
                 }
@@ -3522,8 +3522,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x1++;
-                    if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                        advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                    if (advancedBorderStyle.Left is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                        DataGridViewAdvancedCellBorderStyle.InsetDouble)
                     {
                         x1++;
                     }
@@ -3532,8 +3532,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                 {
                     x2--;
-                    if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
-                        advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.InsetDouble)
+                    if (advancedBorderStyle.Right is DataGridViewAdvancedCellBorderStyle.OutsetDouble or
+                        DataGridViewAdvancedCellBorderStyle.InsetDouble)
                     {
                         x2--;
                     }
@@ -3994,7 +3994,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     internal static bool TextFitsInBounds(Graphics graphics, string text, Font font, Size maxBounds, TextFormatFlags flags)
     {
-        int requiredHeight = DataGridViewCell.MeasureTextHeight(graphics, text, font, maxBounds.Width, flags, out bool widthTruncated);
+        int requiredHeight = MeasureTextHeight(graphics, text, font, maxBounds.Width, flags, out bool widthTruncated);
         return requiredHeight <= maxBounds.Height && !widthTruncated;
     }
 

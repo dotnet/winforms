@@ -184,7 +184,7 @@ internal class ListViewDesigner : ControlDesigner
         }
     }
 
-    private static void ShowErrorDialog(IUIService uiService, Exception ex, Control control)
+    private static void ShowErrorDialog(IUIService uiService, InvalidOperationException ex, Control control)
     {
         if (uiService is not null)
         {

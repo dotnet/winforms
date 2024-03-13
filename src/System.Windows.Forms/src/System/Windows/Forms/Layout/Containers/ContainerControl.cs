@@ -217,7 +217,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
         set
         {
-            if (value < AutoValidate.Inherit || value > AutoValidate.EnableAllowFocusChange)
+            if (value is < AutoValidate.Inherit or > AutoValidate.EnableAllowFocusChange)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoValidate));
             }
@@ -1239,8 +1239,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                    if (ProcessArrowKey(keyCode == Keys.Right ||
-                                        keyCode == Keys.Down))
+                    if (ProcessArrowKey(keyCode is Keys.Right or
+                                        Keys.Down))
                     {
                         return true;
                     }
@@ -1379,7 +1379,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     private static ScrollableControl? FindScrollableParent(Control ctl)
     {
         Control? current = ctl.ParentInternal;
-        while (current is not null && current is not ScrollableControl)
+        while (current is not null and not ScrollableControl)
         {
             current = current.ParentInternal;
         }
@@ -1658,7 +1658,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     if (innerMostFCC != this)
                     {
                         innerMostFCC._focusedControl = null;
-                        if (!(innerMostFCC.ParentInternal is not null && innerMostFCC.ParentInternal is MdiClient))
+                        if (innerMostFCC.ParentInternal is not (not null and MdiClient))
                         {
                             // Don't reset the active control of a MDIChild that loses the focus
                             innerMostFCC._activeControl = null;
@@ -1803,7 +1803,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
 
         // Get the effective AutoValidate mode for this control (based on its container control)
-        AutoValidate autoValidateMode = Control.GetAutoValidateForControl(_unvalidatedControl);
+        AutoValidate autoValidateMode = GetAutoValidateForControl(_unvalidatedControl);
 
         // Auto-validate has been turned off in container of unvalidated control - stop now
         if (autoValidateMode == AutoValidate.Disable)
@@ -1880,7 +1880,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
             if (controlToValidate is not null)
             {
                 // Get the effective AutoValidate mode for unvalidated control (based on its container control)
-                AutoValidate autoValidateMode = Control.GetAutoValidateForControl(controlToValidate);
+                AutoValidate autoValidateMode = GetAutoValidateForControl(controlToValidate);
 
                 // Auto-validate has been turned off in container of unvalidated control - stop now
                 if (checkAutoValidate && autoValidateMode == AutoValidate.Disable)
@@ -1915,7 +1915,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual bool ValidateChildren(ValidationConstraints validationConstraints)
     {
-        if ((int)validationConstraints < 0x00 || (int)validationConstraints > 0x1F)
+        if ((int)validationConstraints is < 0x00 or > 0x1F)
         {
             throw new InvalidEnumArgumentException(nameof(validationConstraints), (int)validationConstraints, typeof(ValidationConstraints));
         }

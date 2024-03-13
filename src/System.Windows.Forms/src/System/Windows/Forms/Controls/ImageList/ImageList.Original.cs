@@ -29,7 +29,7 @@ public sealed partial class ImageList
 
         internal Original(object image, OriginalOptions options, Color customTransparentColor)
         {
-            if (image is not Icon && image is not Image)
+            if (image is not Icon and not Image)
             {
                 throw new InvalidOperationException(SR.ImageListEntryType);
             }

@@ -1111,7 +1111,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (MaskedTextBox.systemPwdChar == '\0')
+            if (systemPwdChar == '\0')
             {
                 // We need to temporarily create an edit control to get the default password character.
                 // We cannot use this control because we would have to reset the native control's password char to use
@@ -1121,10 +1121,10 @@ public partial class MaskedTextBox : TextBoxBase
                 using TextBox txtBox = new();
                 txtBox.UseSystemPasswordChar = true; // this forces the creation of the control handle.
 
-                MaskedTextBox.systemPwdChar = txtBox.PasswordChar;
+                systemPwdChar = txtBox.PasswordChar;
             }
 
-            return MaskedTextBox.systemPwdChar;
+            return systemPwdChar;
         }
     }
 
@@ -1776,7 +1776,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out int selStart, out int selLength);
+        GetSelectionStartAndLength(out int selStart, out int selLength);
 
         if (selLength == 0)
         {
@@ -1817,7 +1817,7 @@ public partial class MaskedTextBox : TextBoxBase
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        base.SetSelectionOnHandle();
+        SetSelectionOnHandle();
 
         if (_flagState[IS_NULL_MASK] && _maskedTextProvider.IsPassword)
         {
@@ -1853,7 +1853,7 @@ public partial class MaskedTextBox : TextBoxBase
         Keys keyCode = e.KeyCode;
 
         // Special-case Return & Esc since they generate invalid characters we should not process OnKeyPress.
-        if (keyCode == Keys.Return || keyCode == Keys.Escape)
+        if (keyCode is Keys.Return or Keys.Escape)
         {
             _flagState[HANDLE_KEY_PRESS] = false;
         }
@@ -1895,11 +1895,11 @@ public partial class MaskedTextBox : TextBoxBase
             }
         }
 
-        if (keyCode == Keys.Delete || keyCode == Keys.Back) // Deletion keys.
+        if (keyCode is Keys.Delete or Keys.Back) // Deletion keys.
         {
             if (!ReadOnly)
             {
-                base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
+                GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
                 switch (e.Modifiers)
                 {
@@ -1980,7 +1980,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             // At this point the character needs to be processed ...
 
-            base.GetSelectionStartAndLength(out int selectionStart, out int selectionLen);
+            GetSelectionStartAndLength(out int selectionStart, out int selectionLen);
 
             string oldText = TextOutput;
             if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out MaskedTextResultHint hint))
@@ -2292,7 +2292,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out int selStart, out int selLength);
+        GetSelectionStartAndLength(out int selStart, out int selLength);
 
         if (string.IsNullOrEmpty(text))
         {
@@ -2441,7 +2441,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             if ((int)keyData == (int)Shortcut.CtrlA)
             {
-                base.SelectAll();
+                SelectAll();
                 msgProcessed = true; // This prevents generating a WM_CHAR for 'A'.
             }
         }
@@ -2468,7 +2468,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
         // the corresponding WM_IME_CHAR message.
-        if (m.Msg == PInvoke.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+        if (m.Msg == PInvoke.WM_CHAR && ImeWmCharsToIgnore > 0)
         {
             return true;    // meaning, we handled the message so it is not passed to the default WndProc.
         }
@@ -2716,7 +2716,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         if (!ReadOnly)
         {
-            base.GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int selStart, out int selLength);
             Delete(Keys.Delete, selStart, selLength);
             return true;
         }
@@ -2822,7 +2822,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         // Position the composition window in a valid place.
 
-        base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
+        GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
         int startEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition, forward);
 
@@ -3013,7 +3013,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out _caretTestPos, out _lastSelLength);
+        GetSelectionStartAndLength(out _caretTestPos, out _lastSelLength);
 
         if (HidePromptOnLeave && !MaskFull)
         {

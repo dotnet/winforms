@@ -1045,7 +1045,7 @@ public abstract class ToolStripRenderer
         return (control.RawBackColor == Color.Empty && control.BackgroundImage is null);
     }
 
-    private static Image CreateDisabledImage(Image normalImage, ImageAttributes? imgAttrib)
+    private static Bitmap CreateDisabledImage(Image normalImage, ImageAttributes? imgAttrib)
     {
         ArgumentNullException.ThrowIfNull(normalImage);
 

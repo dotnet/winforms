@@ -466,7 +466,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         set
         {
-            Debug.Assert(value >= DataGridViewTriState.NotSet && value <= DataGridViewTriState.False);
+            Debug.Assert(value is >= DataGridViewTriState.NotSet and <= DataGridViewTriState.False);
             if (WrapMode != value)
             {
                 Properties.SetInteger(PropWrapMode, (int)value);
@@ -554,9 +554,7 @@ public class DataGridViewCellStyle : ICloneable
     public virtual DataGridViewCellStyle Clone() => new(this);
 
     public override bool Equals(object? o) =>
-        o is DataGridViewCellStyle dgvcs
-            ? GetDifferencesFrom(dgvcs) == DataGridViewCellStyleDifferences.None
-            : false;
+        o is DataGridViewCellStyle dgvcs && GetDifferencesFrom(dgvcs) == DataGridViewCellStyleDifferences.None;
 
     internal DataGridViewCellStyleDifferences GetDifferencesFrom(DataGridViewCellStyle dgvcs)
     {
@@ -621,8 +619,8 @@ public class DataGridViewCellStyle : ICloneable
 
     internal void RemoveScope(DataGridViewCellStyleScopes scope)
     {
-        this.Scope &= ~scope;
-        if (this.Scope == DataGridViewCellStyleScopes.None)
+        Scope &= ~scope;
+        if (Scope == DataGridViewCellStyleScopes.None)
         {
             _dataGridView = null;
         }

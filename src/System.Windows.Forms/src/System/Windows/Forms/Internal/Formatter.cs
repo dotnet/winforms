@@ -42,7 +42,7 @@ internal static class Formatter
         // simple null reference.
         //
 
-        if (Formatter.IsNullData(value, dataSourceNullValue))
+        if (IsNullData(value, dataSourceNullValue))
         {
             value = DBNull.Value;
         }
@@ -248,7 +248,7 @@ internal static class Formatter
 
         if (result == DBNull.Value)
         {
-            return Formatter.NullData(oldTargetType, dataSourceNullValue);
+            return NullData(oldTargetType, dataSourceNullValue);
         }
 
         return result;
@@ -400,7 +400,7 @@ internal static class Formatter
         else
         {
             // Otherwise perform default comparison based on object types
-            return object.Equals(value, formattedNullValue);
+            return Equals(value, formattedNullValue);
         }
     }
 
@@ -483,7 +483,7 @@ internal static class Formatter
     {
         return value is null ||
                value == DBNull.Value ||
-               object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
+               Equals(value, NullData(value.GetType(), dataSourceNullValue));
     }
 
     /// <summary>
