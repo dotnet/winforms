@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#pragma warning disable CS0618,CA2252
-
 #if NETCOREAPP
 // This is required for back-compatibility with legacy Xamarin which had these types in System.Drawing.Common.dll
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Drawing.Color))]
@@ -161,5 +159,3 @@
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Drawing.TextureBrush))]
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Drawing.ToolboxBitmapAttribute))]
 #endif
-
-#pragma warning restore CS0618

@@ -122,7 +122,7 @@ public partial class ListView
         ///  We use an index here rather than control so that we don't have lifetime
         ///  issues by holding on to extra references.
         ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
-        private int lastAccessedIndex = -1;
+        private int _lastAccessedIndex = -1;
 
         /// <summary>
         ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
@@ -136,11 +136,11 @@ public partial class ListView
             }
 
             // step 1 - check the last cached item
-            if (IsValidIndex(lastAccessedIndex))
+            if (IsValidIndex(_lastAccessedIndex))
             {
-                if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                 {
-                    return lastAccessedIndex;
+                    return _lastAccessedIndex;
                 }
             }
 
@@ -149,13 +149,13 @@ public partial class ListView
             {
                 if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                 {
-                    lastAccessedIndex = i;
+                    _lastAccessedIndex = i;
                     return i;
                 }
             }
 
             // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-            lastAccessedIndex = -1;
+            _lastAccessedIndex = -1;
             return -1;
         }
 

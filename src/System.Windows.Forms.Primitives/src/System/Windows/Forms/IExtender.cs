@@ -81,7 +81,7 @@ internal unsafe struct IExtender : IComIID, IVTable<IExtender, IExtender.Vtbl>
 
     // 39088D7E-B71E-11D1-8F39-00C04FD946D0
     /// <summary>The IID guid for this interface.</summary>
-    public static readonly Guid IID_Guid = new(0x39088D7E, 0xB71E, 0x11D1, 0x8F, 0x39, 0x00, 0xC0, 0x4F, 0xD9, 0x46, 0xD0);
+    public static Guid IID_Guid { get; } = new(0x39088D7E, 0xB71E, 0x11D1, 0x8F, 0x39, 0x00, 0xC0, 0x4F, 0xD9, 0x46, 0xD0);
 
     static ref readonly Guid IComIID.Guid
     {

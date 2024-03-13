@@ -17,17 +17,17 @@ public sealed class Encoder
     public static readonly Encoder SaveFlag = new(new Guid(unchecked(0x292266fc), unchecked((short)0xac40), unchecked(0x47bf), [0x8c, 0xfc, 0xa8, 0x5b, 0x89, 0xa6, 0x55, 0xde]));
 
     /// <summary>
-    /// An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the color space category.
+    ///  An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the color space category.
     /// </summary>
     public static readonly Encoder ColorSpace = new(new Guid(unchecked((int)0xae7a62a0), unchecked((short)0xee2c), unchecked(0x49d8), [0x9d, 0x07, 0x1b, 0xa8, 0xa9, 0x27, 0x59, 0x6e]));
 
     /// <summary>
-    /// An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the image items category.
+    ///  An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the image items category.
     /// </summary>
     public static readonly Encoder ImageItems = new(new Guid(unchecked(0x63875e13), unchecked(0x1f1d), unchecked(0x45ab), [0x91, 0x95, 0xa2, 0x9b, 0x60, 0x66, 0xa6, 0x50]));
 
     /// <summary>
-    /// An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the save as CMYK category.
+    ///  An <see cref="Encoder" /> object that is initialized with the globally unique identifier for the save as CMYK category.
     /// </summary>
     public static readonly Encoder SaveAsCmyk = new(new Guid(unchecked((int)0xa219bbc9), unchecked(0x0a9d), unchecked(0x4005), [0xa3, 0xee, 0x3a, 0x42, 0x1b, 0x8b, 0xb0, 0x6c]));
 

@@ -968,9 +968,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         {
             if (flipHorizontal)
             {
-                Color temp = endColor;
-                endColor = beginColor;
-                beginColor = temp;
+                (beginColor, endColor) = (endColor, beginColor);
             }
 
             beginGradient.Width = firstGradientWidth;
@@ -1130,9 +1128,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     {
         if (control.RightToLeft == RightToLeft.Yes)
         {
-            Color temp = beginColor;
-            beginColor = endColor;
-            endColor = temp;
+            (endColor, beginColor) = (beginColor, endColor);
         }
 
         if (orientation != Orientation.Horizontal)
@@ -1608,7 +1604,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     {
         if (ScaleHelper.IsThreadPerMonitorV2Aware)
         {
-            if (previousDeviceDpi != currentDeviceDpi)
+            if (_previousDeviceDpi != currentDeviceDpi)
             {
                 ScaleArrowOffsetsIfNeeded(currentDeviceDpi);
                 overflowButtonWidth = ScaleHelper.ScaleToDpi(OVERFLOW_BUTTON_WIDTH, currentDeviceDpi);
@@ -1620,7 +1616,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 iconWellGradientWidth = ScaleHelper.ScaleToDpi(ICON_WELL_GRADIENT_WIDTH, currentDeviceDpi);
                 int scaledSize = ScaleHelper.ScaleToDpi(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, currentDeviceDpi);
                 scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
-                previousDeviceDpi = currentDeviceDpi;
+                _previousDeviceDpi = currentDeviceDpi;
                 isScalingInitialized = true;
                 return;
             }

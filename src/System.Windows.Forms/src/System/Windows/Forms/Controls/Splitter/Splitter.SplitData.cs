@@ -6,12 +6,12 @@ namespace System.Windows.Forms;
 public partial class Splitter
 {
     /// <summary>
-    ///  Return value holder...
+    ///  Return value holder.
     /// </summary>
     private class SplitData
     {
         public int dockWidth = -1;
         public int dockHeight = -1;
-        internal Control? target;
+        internal Control? _target;
     }
 }

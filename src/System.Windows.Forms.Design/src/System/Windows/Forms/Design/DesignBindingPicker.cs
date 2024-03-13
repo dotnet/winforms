@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Design
         // When binding to a business object, the DesignBindingPicker needs to create an instance of the business object.
         // However, Activator.CreateInstance works only with RuntimeType - it does not work w/ Virtual Types.
         // We use the runtimeType static to determine if the type of business object is a runtime type or not.
-        private static Type runtimeType = typeof(object).GetType().GetType();
+        private static readonly Type s_runtimeType = typeof(object).GetType().GetType();
 
         /// <summary>
         /// Rebuilding binding picker according to new dpi received.
@@ -1011,7 +1011,7 @@ namespace System.Windows.Forms.Design
 
             // vsw 477085: don't add the project data source if it points to a virtual type.
             Type? type = GetType(descriptor.TypeName, true, true);
-            if (type is not null && type.GetType() != runtimeType)
+            if (type is not null && type.GetType() != s_runtimeType)
             {
                 return;
             }
@@ -1151,7 +1151,7 @@ namespace System.Windows.Forms.Design
         {
             // vsw 477085: don't add the project data source if it points to a virtual type.
             Type? dsType = GetType(dataSourceDescriptor.TypeName, true, true);
-            if (dsType is not null && dsType.GetType() != runtimeType)
+            if (dsType is not null && dsType.GetType() != s_runtimeType)
             {
                 return;
             }
@@ -1238,7 +1238,6 @@ namespace System.Windows.Forms.Design
         /// <devdoc>
         ///  Puts a new BindingSource on the form, with the specified DataSource and DataMember values.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private BindingSource? CreateNewBindingSource(object dataSource, string dataMember)
         {
             if (_designerHost is null || _dataSourceProviderService is null)
@@ -2361,17 +2360,18 @@ namespace System.Windows.Forms.Design
 
         internal class DataMemberNode : DataSourceNode
         {
-            private bool isList;
-            private string dataMember;
+            private bool _isList;
+            private string _dataMember;
 
-            public DataMemberNode(DesignBindingPicker picker,
-                                  object? dataSource,
-                                  string dataMember,
-                                  string dataField,
-                                  bool isList) : base(picker, dataSource, dataField)
+            public DataMemberNode(
+                DesignBindingPicker picker,
+                object? dataSource,
+                string dataMember,
+                string dataField,
+                bool isList) : base(picker, dataSource, dataField)
             {
-                this.dataMember = dataMember;
-                this.isList = isList;
+                _dataMember = dataMember;
+                _isList = isList;
                 BindingImageIndex = (int)(isList ? BindingImage.ListMember : BindingImage.FieldMember);
             }
 
@@ -2379,7 +2379,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return dataMember;
+                    return _dataMember;
                 }
             }
 
@@ -2388,7 +2388,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return isList;
+                    return _isList;
                 }
             }
 

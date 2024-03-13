@@ -23,7 +23,7 @@ public partial class Splitter : Control
     private const int DRAW_MOVE = 2;
     private const int DRAW_END = 3;
 
-    private const int defaultWidth = 3;
+    private const int DefaultWidth = 3;
 
     private BorderStyle _borderStyle = BorderStyle.None;
     private int _minSize = 25;
@@ -35,8 +35,8 @@ public partial class Splitter : Control
     private int _initTargetSize;
     private int _lastDrawSplit = -1;
     private int _maxSize;
-    private static readonly object EVENT_MOVING = new();
-    private static readonly object EVENT_MOVED = new();
+    private static readonly object s_movingEvent = new();
+    private static readonly object s_movedEvent = new();
 
     // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
     private SplitterMessageFilter? _splitterMessageFilter;
@@ -44,8 +44,7 @@ public partial class Splitter : Control
     /// <summary>
     ///  Creates a new Splitter.
     /// </summary>
-    public Splitter()
-        : base()
+    public Splitter() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
         TabStop = false;
@@ -91,7 +90,7 @@ public partial class Splitter : Control
     {
         get
         {
-            return new Size(defaultWidth, defaultWidth);
+            return new Size(DefaultWidth, DefaultWidth);
         }
     }
 
@@ -387,13 +386,13 @@ public partial class Splitter : Control
             _splitSize = value;
             DrawSplitBar(DRAW_END);
 
-            if (spd.target is null)
+            if (spd._target is null)
             {
                 _splitSize = -1;
                 return;
             }
 
-            Rectangle bounds = spd.target.Bounds;
+            Rectangle bounds = spd._target.Bounds;
             switch (Dock)
             {
                 case DockStyle.Top:
@@ -412,7 +411,7 @@ public partial class Splitter : Control
                     break;
             }
 
-            spd.target.Bounds = bounds;
+            spd._target.Bounds = bounds;
             Application.DoEvents();
             OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
         }
@@ -499,16 +498,16 @@ public partial class Splitter : Control
     [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
     public event SplitterEventHandler? SplitterMoving
     {
-        add => Events.AddHandler(EVENT_MOVING, value);
-        remove => Events.RemoveHandler(EVENT_MOVING, value);
+        add => Events.AddHandler(s_movingEvent, value);
+        remove => Events.RemoveHandler(s_movingEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
     public event SplitterEventHandler? SplitterMoved
     {
-        add => Events.AddHandler(EVENT_MOVED, value);
-        remove => Events.RemoveHandler(EVENT_MOVED, value);
+        add => Events.AddHandler(s_movedEvent, value);
+        remove => Events.RemoveHandler(s_movedEvent, value);
     }
 
     /// <summary>
@@ -620,7 +619,7 @@ public partial class Splitter : Control
     {
         SplitData spd = new();
         Control? target = FindTarget();
-        spd.target = target;
+        spd._target = target;
         if (target is not null)
         {
             switch (target.Dock)
@@ -840,7 +839,7 @@ public partial class Splitter : Control
     /// </summary>
     protected virtual void OnSplitterMoving(SplitterEventArgs sevent)
     {
-        ((SplitterEventHandler?)Events[EVENT_MOVING])?.Invoke(this, sevent);
+        ((SplitterEventHandler?)Events[s_movingEvent])?.Invoke(this, sevent);
 
         if (_splitTarget is not null)
         {
@@ -855,7 +854,7 @@ public partial class Splitter : Control
     /// </summary>
     protected virtual void OnSplitterMoved(SplitterEventArgs sevent)
     {
-        ((SplitterEventHandler?)Events[EVENT_MOVED])?.Invoke(this, sevent);
+        ((SplitterEventHandler?)Events[s_movedEvent])?.Invoke(this, sevent);
 
         if (_splitTarget is not null)
         {
@@ -893,10 +892,10 @@ public partial class Splitter : Control
     private void SplitBegin(int x, int y)
     {
         SplitData spd = CalcSplitBounds();
-        if (spd.target is not null && (_minSize < _maxSize))
+        if (spd._target is not null && (_minSize < _maxSize))
         {
             _anchor = new Point(x, y);
-            _splitTarget = spd.target;
+            _splitTarget = spd._target;
             _splitSize = GetSplitSize(_splitTarget, x, y);
 
             if (_splitterMessageFilter is not null)

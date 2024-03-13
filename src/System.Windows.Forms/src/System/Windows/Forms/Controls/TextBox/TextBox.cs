@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTextBox))]
 public partial class TextBox : TextBoxBase
 {
-    private static readonly object EVENT_TEXTALIGNCHANGED = new();
+    private static readonly object s_textAlignChangedEvent = new();
 
     /// <summary>
     ///  Controls whether or not the edit box consumes/respects ENTER key
@@ -499,8 +499,8 @@ public partial class TextBox : TextBoxBase
     [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
     public event EventHandler? TextAlignChanged
     {
-        add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
+        add => Events.AddHandler(s_textAlignChangedEvent, value);
+        remove => Events.RemoveHandler(s_textAlignChangedEvent, value);
     }
 
     protected override void Dispose(bool disposing)
@@ -673,7 +673,7 @@ public partial class TextBox : TextBoxBase
 
     protected virtual void OnTextAlignChanged(EventArgs e)
     {
-        if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
+        if (Events[s_textAlignChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }

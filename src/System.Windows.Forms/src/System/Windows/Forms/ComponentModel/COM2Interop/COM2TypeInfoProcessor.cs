@@ -28,9 +28,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </summary>
 internal static unsafe partial class Com2TypeInfoProcessor
 {
-    private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new(
+    private static TraceSwitch DbgTypeInfoProcessorSwitch { get; } = new(
         "DbgTypeInfoProcessor",
-         "Com2TypeInfoProcessor: debug Com2 type info processing");
+        "Com2TypeInfoProcessor: debug Com2 type info processing");
 
     private static ModuleBuilder? s_moduleBuilder;
 

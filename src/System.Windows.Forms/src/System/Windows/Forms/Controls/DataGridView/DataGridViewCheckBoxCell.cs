@@ -20,12 +20,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     private const DataGridViewContentAlignment AnyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
     private const DataGridViewContentAlignment AnyMiddle = DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.MiddleLeft;
 
-    private static readonly VisualStyleElement CheckBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
-    private static readonly int PropButtonCellState = PropertyStore.CreateKey();
-    private static readonly int PropTrueValue = PropertyStore.CreateKey();
-    private static readonly int PropFalseValue = PropertyStore.CreateKey();
-    private static readonly int PropFlatStyle = PropertyStore.CreateKey();
-    private static readonly int PropIndeterminateValue = PropertyStore.CreateKey();
+    private static readonly VisualStyleElement s_checkBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
+    private static readonly int s_propButtonCellState = PropertyStore.CreateKey();
+    private static readonly int s_propTrueValue = PropertyStore.CreateKey();
+    private static readonly int s_propFalseValue = PropertyStore.CreateKey();
+    private static readonly int s_propFlatStyle = PropertyStore.CreateKey();
+    private static readonly int s_propIndeterminateValue = PropertyStore.CreateKey();
     private static Bitmap? s_checkImage;
 
     private const byte DATAGRIDVIEWCHECKBOXCELL_margin = 2;  // horizontal and vertical margins for preferred sizes
@@ -181,7 +181,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            int buttonState = Properties.GetInteger(PropButtonCellState, out bool found);
+            int buttonState = Properties.GetInteger(s_propButtonCellState, out bool found);
             if (found)
             {
                 return (ButtonState)buttonState;
@@ -196,7 +196,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.SetInteger(PropButtonCellState, (int)value);
+                Properties.SetInteger(s_propButtonCellState, (int)value);
             }
         }
     }
@@ -215,12 +215,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? FalseValue
     {
-        get => Properties.GetObject(PropFalseValue);
+        get => Properties.GetObject(s_propFalseValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(PropFalseValue))
+            if (value is not null || Properties.ContainsObject(s_propFalseValue))
             {
-                Properties.SetObject(PropFalseValue, value);
+                Properties.SetObject(s_propFalseValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -240,9 +240,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         set
         {
-            if (value is not null || Properties.ContainsObject(PropFalseValue))
+            if (value is not null || Properties.ContainsObject(s_propFalseValue))
             {
-                Properties.SetObject(PropFalseValue, value);
+                Properties.SetObject(s_propFalseValue, value);
             }
         }
     }
@@ -252,7 +252,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            int flatStyle = Properties.GetInteger(PropFlatStyle, out bool found);
+            int flatStyle = Properties.GetInteger(s_propFlatStyle, out bool found);
             if (found)
             {
                 return (FlatStyle)flatStyle;
@@ -266,7 +266,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(PropFlatStyle, (int)value);
+                Properties.SetInteger(s_propFlatStyle, (int)value);
                 OnCommonChange();
             }
         }
@@ -279,7 +279,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(PropFlatStyle, (int)value);
+                Properties.SetInteger(s_propFlatStyle, (int)value);
             }
         }
     }
@@ -289,12 +289,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? IndeterminateValue
     {
-        get => Properties.GetObject(PropIndeterminateValue);
+        get => Properties.GetObject(s_propIndeterminateValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(PropIndeterminateValue))
+            if (value is not null || Properties.ContainsObject(s_propIndeterminateValue))
             {
-                Properties.SetObject(PropIndeterminateValue, value);
+                Properties.SetObject(s_propIndeterminateValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -314,9 +314,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         set
         {
-            if (value is not null || Properties.ContainsObject(PropIndeterminateValue))
+            if (value is not null || Properties.ContainsObject(s_propIndeterminateValue))
             {
-                Properties.SetObject(PropIndeterminateValue, value);
+                Properties.SetObject(s_propIndeterminateValue, value);
             }
         }
     }
@@ -396,12 +396,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? TrueValue
     {
-        get => Properties.GetObject(PropTrueValue);
+        get => Properties.GetObject(s_propTrueValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(PropTrueValue))
+            if (value is not null || Properties.ContainsObject(s_propTrueValue))
             {
-                Properties.SetObject(PropTrueValue, value);
+                Properties.SetObject(s_propTrueValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -421,9 +421,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         set
         {
-            if (value is not null || Properties.ContainsObject(PropTrueValue))
+            if (value is not null || Properties.ContainsObject(s_propTrueValue))
             {
-                Properties.SetObject(PropTrueValue, value);
+                Properties.SetObject(s_propTrueValue, value);
             }
         }
     }

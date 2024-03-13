@@ -57,18 +57,18 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
     private bool _hrHidden;
 
     // Our event signatures.
-    private static readonly object EventGetBaseAttributes = new();
-    private static readonly object EventGetDynamicAttributes = new();
-    private static readonly object EventShouldRefresh = new();
-    private static readonly object EventGetDisplayName = new();
-    private static readonly object EventGetDisplayValue = new();
-    private static readonly object EventGetIsReadOnly = new();
-    private static readonly object EventGetTypeConverterAndTypeEditor = new();
-    private static readonly object EventShouldSerializeValue = new();
-    private static readonly object EventCanResetValue = new();
-    private static readonly object EventResetValue = new();
+    private static readonly object s_eventGetBaseAttributes = new();
+    private static readonly object s_eventGetDynamicAttributes = new();
+    private static readonly object s_eventShouldRefresh = new();
+    private static readonly object s_eventGetDisplayName = new();
+    private static readonly object s_eventGetDisplayValue = new();
+    private static readonly object s_eventGetIsReadOnly = new();
+    private static readonly object s_eventGetTypeConverterAndTypeEditor = new();
+    private static readonly object s_eventShouldSerializeValue = new();
+    private static readonly object s_eventCanResetValue = new();
+    private static readonly object s_eventResetValue = new();
 
-    private static readonly Guid GUID_COLOR = new("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
+    private static Guid GUID_COLOR { get; } = new("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
 
     private readonly Com2DataTypeToManagedDataTypeConverter? _valueConverter;
 
@@ -382,56 +382,56 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
 
     public event GetBoolValueEventHandler QueryCanResetValue
     {
-        add => Events.AddHandler(EventCanResetValue, value);
-        remove => Events.RemoveHandler(EventCanResetValue, value);
+        add => Events.AddHandler(s_eventCanResetValue, value);
+        remove => Events.RemoveHandler(s_eventCanResetValue, value);
     }
 
     public event GetAttributesEventHandler QueryGetBaseAttributes
     {
-        add => Events.AddHandler(EventGetBaseAttributes, value);
-        remove => Events.RemoveHandler(EventGetBaseAttributes, value);
+        add => Events.AddHandler(s_eventGetBaseAttributes, value);
+        remove => Events.RemoveHandler(s_eventGetBaseAttributes, value);
     }
 
     public event GetAttributesEventHandler QueryGetDynamicAttributes
     {
-        add => Events.AddHandler(EventGetDynamicAttributes, value);
-        remove => Events.RemoveHandler(EventGetDynamicAttributes, value);
+        add => Events.AddHandler(s_eventGetDynamicAttributes, value);
+        remove => Events.RemoveHandler(s_eventGetDynamicAttributes, value);
     }
 
     public event GetNameItemEventHandler QueryGetDisplayName
     {
-        add => Events.AddHandler(EventGetDisplayName, value);
-        remove => Events.RemoveHandler(EventGetDisplayName, value);
+        add => Events.AddHandler(s_eventGetDisplayName, value);
+        remove => Events.RemoveHandler(s_eventGetDisplayName, value);
     }
 
     public event GetNameItemEventHandler QueryGetDisplayValue
     {
-        add => Events.AddHandler(EventGetDisplayValue, value);
-        remove => Events.RemoveHandler(EventGetDisplayValue, value);
+        add => Events.AddHandler(s_eventGetDisplayValue, value);
+        remove => Events.RemoveHandler(s_eventGetDisplayValue, value);
     }
 
     public event GetBoolValueEventHandler QueryGetIsReadOnly
     {
-        add => Events.AddHandler(EventGetIsReadOnly, value);
-        remove => Events.RemoveHandler(EventGetIsReadOnly, value);
+        add => Events.AddHandler(s_eventGetIsReadOnly, value);
+        remove => Events.RemoveHandler(s_eventGetIsReadOnly, value);
     }
 
     public event GetTypeConverterAndTypeEditorEventHandler QueryGetTypeConverterAndTypeEditor
     {
-        add => Events.AddHandler(EventGetTypeConverterAndTypeEditor, value);
-        remove => Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
+        add => Events.AddHandler(s_eventGetTypeConverterAndTypeEditor, value);
+        remove => Events.RemoveHandler(s_eventGetTypeConverterAndTypeEditor, value);
     }
 
     public event Com2EventHandler QueryResetValue
     {
-        add => Events.AddHandler(EventResetValue, value);
-        remove => Events.RemoveHandler(EventResetValue, value);
+        add => Events.AddHandler(s_eventResetValue, value);
+        remove => Events.RemoveHandler(s_eventResetValue, value);
     }
 
     public event GetBoolValueEventHandler QueryShouldSerializeValue
     {
-        add => Events.AddHandler(EventShouldSerializeValue, value);
-        remove => Events.RemoveHandler(EventShouldSerializeValue, value);
+        add => Events.AddHandler(s_eventShouldSerializeValue, value);
+        remove => Events.RemoveHandler(s_eventShouldSerializeValue, value);
     }
 
     public override bool CanResetValue(object component)
@@ -730,37 +730,37 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
     /// </summary>
     internal bool IsLastKnownValue(object? value) => value == _lastValue;
 
-    protected void OnCanResetValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventCanResetValue, e);
+    protected void OnCanResetValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(s_eventCanResetValue, e);
 
     protected void OnGetBaseAttributes(GetAttributesEvent e)
     {
         using ValidityScope scope = new(PropertyManager);
-        ((GetAttributesEventHandler?)Events[EventGetBaseAttributes])?.Invoke(this, e);
+        ((GetAttributesEventHandler?)Events[s_eventGetBaseAttributes])?.Invoke(this, e);
     }
 
-    protected void OnGetDisplayName(GetNameItemEvent e) => RaiseGetNameItemEvent(EventGetDisplayName, e);
+    protected void OnGetDisplayName(GetNameItemEvent e) => RaiseGetNameItemEvent(s_eventGetDisplayName, e);
 
-    protected void OnGetDisplayValue(GetNameItemEvent e) => RaiseGetNameItemEvent(EventGetDisplayValue, e);
+    protected void OnGetDisplayValue(GetNameItemEvent e) => RaiseGetNameItemEvent(s_eventGetDisplayValue, e);
 
     protected void OnGetDynamicAttributes(GetAttributesEvent e)
     {
         using ValidityScope scope = new(PropertyManager);
-        ((GetAttributesEventHandler?)Events[EventGetDynamicAttributes])?.Invoke(this, e);
+        ((GetAttributesEventHandler?)Events[s_eventGetDynamicAttributes])?.Invoke(this, e);
     }
 
-    protected void OnGetIsReadOnly(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventGetIsReadOnly, e);
+    protected void OnGetIsReadOnly(GetBoolValueEvent e) => RaiseGetBoolValueEvent(s_eventGetIsReadOnly, e);
 
     protected void OnGetTypeConverterAndTypeEditor(GetTypeConverterAndTypeEditorEvent e)
     {
         using ValidityScope scope = new(PropertyManager);
-        ((GetTypeConverterAndTypeEditorEventHandler?)Events[EventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
+        ((GetTypeConverterAndTypeEditorEventHandler?)Events[s_eventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
     }
 
-    protected void OnResetValue(EventArgs e) => RaiseCom2Event(EventResetValue, e);
+    protected void OnResetValue(EventArgs e) => RaiseCom2Event(s_eventResetValue, e);
 
-    protected void OnShouldSerializeValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventShouldSerializeValue, e);
+    protected void OnShouldSerializeValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(s_eventShouldSerializeValue, e);
 
-    protected void OnShouldRefresh(GetRefreshStateEvent e) => RaiseGetBoolValueEvent(EventShouldRefresh, e);
+    protected void OnShouldRefresh(GetRefreshStateEvent e) => RaiseGetBoolValueEvent(s_eventShouldRefresh, e);
 
     private void RaiseGetBoolValueEvent(object key, GetBoolValueEvent e)
     {

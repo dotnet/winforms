@@ -9,19 +9,19 @@ namespace System.Windows.Forms;
 public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
 {
 #if DEBUG
-    internal static readonly TraceSwitch PopupLayoutDebug = new("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
+    internal static TraceSwitch PopupLayoutDebug { get; } = new("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
-    internal static readonly TraceSwitch? PopupLayoutDebug;
+    internal static TraceSwitch? PopupLayoutDebug { get; }
 #endif
 
-    private readonly ToolStripOverflowButton? ownerItem;
+    private readonly ToolStripOverflowButton? _ownerItem;
 
     public ToolStripOverflow(ToolStripItem parentItem)
         : base(parentItem)
     {
         ArgumentNullException.ThrowIfNull(parentItem);
 
-        ownerItem = parentItem as ToolStripOverflowButton;
+        _ownerItem = parentItem as ToolStripOverflowButton;
     }
 
     protected internal override ToolStripItemCollection DisplayedItems
@@ -50,9 +50,9 @@ public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
         get
         {
-            if (ownerItem is not null)
+            if (_ownerItem is not null)
             {
-                return ownerItem.ParentToolStrip;
+                return _ownerItem.ParentToolStrip;
             }
 
             return null;

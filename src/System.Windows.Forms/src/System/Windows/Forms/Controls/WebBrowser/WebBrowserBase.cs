@@ -61,7 +61,7 @@ public unsafe partial class WebBrowserBase : Control
     //
     // Internal fields:
     //
-    internal WebBrowserContainer? container;
+    internal WebBrowserContainer? _container;
     internal object? _activeXInstance;
 
     /// <summary>
@@ -726,15 +726,15 @@ public unsafe partial class WebBrowserBase : Control
 
     internal WebBrowserContainer GetParentContainer()
     {
-        container ??= WebBrowserContainer.FindContainerForControl(this);
+        _container ??= WebBrowserContainer.FindContainerForControl(this);
 
-        if (container is null)
+        if (_container is null)
         {
-            container = CreateWebBrowserContainer();
-            container.AddControl(this);
+            _container = CreateWebBrowserContainer();
+            _container.AddControl(this);
         }
 
-        return container;
+        return _container;
     }
 
     internal void SetEditMode(WebBrowserHelper.AXEditMode em)
