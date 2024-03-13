@@ -385,8 +385,8 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbhost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                    If vbHost Is Nothing Then
+                        sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
                         sTitle = vbHost.GetWindowTitle()
                     End If
@@ -403,7 +403,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(System.Windows.Forms.MessageBox.Show(parentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),
