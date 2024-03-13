@@ -35,7 +35,7 @@ internal partial class DesignerActionUI : IDisposable
     private IComponent? _lastPanelComponent;
 
     private readonly IWin32Window? _mainParentWindow;
-    internal DesignerActionToolStripDropDown? designerActionHost;
+    internal DesignerActionToolStripDropDown? _designerActionHost;
 
     private readonly MenuCommand? _cmdShowDesignerActions; // used to respond to the Alt+Shift+F10 command
     private bool _inTransaction;
@@ -47,9 +47,9 @@ internal partial class DesignerActionUI : IDisposable
 
     private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 #if DEBUG
-    internal static readonly TraceSwitch DropDownVisibilityDebug = new("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
+    internal static TraceSwitch DropDownVisibilityDebug { get; } = new("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
 #else
-    internal static readonly TraceSwitch? DropDownVisibilityDebug;
+    internal static TraceSwitch? DropDownVisibilityDebug { get; }
 #endif
     /// <summary>
     ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelectionService, as well as spin-up the DesignerActionService.
@@ -277,9 +277,9 @@ internal partial class DesignerActionUI : IDisposable
 
         // we check whether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
         IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
-        if (host is {InTransaction: true} and not IDesignerHostTransactionState {IsClosingTransaction: true})
+        if (host is { InTransaction: true } and not IDesignerHostTransactionState { IsClosingTransaction: true })
         {
-            host.TransactionClosed += new DesignerTransactionCloseEventHandler(DesignerTransactionClosed);
+            host.TransactionClosed += DesignerTransactionClosed;
             _inTransaction = true;
             _relatedComponentTransaction = comp;
             return;
@@ -326,12 +326,12 @@ internal partial class DesignerActionUI : IDisposable
         if (glyphWithPanelToRegen.Behavior is DesignerActionBehavior behaviorWithPanelToRegen)
         {
             Debug.Assert(behaviorWithPanelToRegen.RelatedComponent is not null, "could not find related component for this refresh");
-            DesignerActionPanel? dap = designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
+            DesignerActionPanel? dap = _designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
             dap?.UpdateTasks(behaviorWithPanelToRegen.ActionLists,
                 [],
                 string.Format(SR.DesignerActionPanel_DefaultPanelTitle, behaviorWithPanelToRegen.RelatedComponent.GetType().Name),
                 subtitle: null);
-            designerActionHost.UpdateContainerSize();
+            _designerActionHost.UpdateContainerSize();
         }
     }
 
@@ -542,14 +542,14 @@ internal partial class DesignerActionUI : IDisposable
     {
         if (IsDesignerActionPanelVisible)
         {
-            designerActionHost.Close();
+            _designerActionHost.Close();
         }
     }
 
-    [MemberNotNullWhen(true, nameof(designerActionHost))]
+    [MemberNotNullWhen(true, nameof(_designerActionHost))]
     internal bool IsDesignerActionPanelVisible
     {
-        get => (designerActionHost is not null && designerActionHost.Visible);
+        get => (_designerActionHost is not null && _designerActionHost.Visible);
     }
 
     internal IComponent? LastPanelComponent
@@ -614,14 +614,14 @@ internal partial class DesignerActionUI : IDisposable
     {
         component ??= _lastPanelComponent;
 
-        if (designerActionHost is null)
+        if (_designerActionHost is null)
         {
             return Point.Empty;
         }
 
         if (component is null || glyph is null)
         {
-            return designerActionHost.Location;
+            return _designerActionHost.Location;
         }
 
         // check that the glyph is still visible in the adorner window
@@ -629,14 +629,14 @@ internal partial class DesignerActionUI : IDisposable
             !_behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
         {
             HideDesignerActionPanel();
-            return designerActionHost.Location;
+            return _designerActionHost.Location;
         }
 
         Point glyphLocationScreenCoord = GetGlyphLocationScreenCoord(component, glyph);
         Rectangle rectGlyph = new(glyphLocationScreenCoord, glyph.Bounds.Size);
-        Point pt = DesignerActionPanel.ComputePreferredDesktopLocation(rectGlyph, designerActionHost.Size, out DockStyle edgeToDock);
+        Point pt = DesignerActionPanel.ComputePreferredDesktopLocation(rectGlyph, _designerActionHost.Size, out DockStyle edgeToDock);
         glyph.DockEdge = edgeToDock;
-        designerActionHost.Location = pt;
+        _designerActionHost.Location = pt;
         return pt;
     }
 
@@ -672,23 +672,23 @@ internal partial class DesignerActionUI : IDisposable
     /// </summary>
     internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
     {
-        if (designerActionHost is null)
+        if (_designerActionHost is null)
         {
-            designerActionHost = new DesignerActionToolStripDropDown(this, _mainParentWindow)
+            _designerActionHost = new DesignerActionToolStripDropDown(this, _mainParentWindow)
             {
                 AutoSize = false,
                 Padding = Padding.Empty,
                 Renderer = new NoBorderRenderer(),
                 Text = "DesignerActionTopLevelForm"
             };
-            designerActionHost.Closing += new ToolStripDropDownClosingEventHandler(ToolStripDropDown_Closing);
+            _designerActionHost.Closing += new ToolStripDropDownClosingEventHandler(ToolStripDropDown_Closing);
         }
 
         // set the accessible name of the panel to the same title as the panel header. do that every time
-        designerActionHost.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
+        _designerActionHost.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
         panel.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
 
-        designerActionHost.SetDesignerActionPanel(panel, glyph);
+        _designerActionHost.SetDesignerActionPanel(panel, glyph);
         Point location = UpdateDAPLocation(relatedComponent, glyph);
 
         // check that the panel will have at least it's parent glyph visible on the adorner window
@@ -700,21 +700,21 @@ internal partial class DesignerActionUI : IDisposable
                 Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                 DropDownVisibilityDebug.TraceVerbose("Assigning owner to mainParentWindow");
                 PInvoke.SetWindowLong(
-                    designerActionHost,
+                    _designerActionHost,
                     WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT,
                     new HandleRef<HWND>(_mainParentWindow, (HWND)_mainParentWindow.Handle));
             }
 
             _cancelClose = true;
-            designerActionHost.Show(location);
-            designerActionHost.Focus();
+            _designerActionHost.Show(location);
+            _designerActionHost.Focus();
             // when a control is drag and dropped and autoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
-            designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
+            _designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
             // invalidate the glyph to have it point the other way
             glyph.InvalidateOwnerLocation();
             _lastPanelComponent = relatedComponent;
             // push new behavior for keyboard handling on the behavior stack
-            _designerActionKeyboardBehavior = new DesignerActionKeyboardBehavior(designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
+            _designerActionKeyboardBehavior = new DesignerActionKeyboardBehavior(_designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
             _behaviorService.PushBehavior(_designerActionKeyboardBehavior);
         }
     }
@@ -723,10 +723,10 @@ internal partial class DesignerActionUI : IDisposable
     {
         _cancelClose = false;
         // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
-        if (designerActionHost is not null && designerActionHost.Handle != 0 && designerActionHost.Visible)
+        if (_designerActionHost is not null && _designerActionHost.Handle != 0 && _designerActionHost.Visible)
         {
-            PInvoke.SetActiveWindow(designerActionHost);
-            designerActionHost.CheckFocusIsRight();
+            PInvoke.SetActiveWindow(_designerActionHost);
+            _designerActionHost.CheckFocusIsRight();
         }
     }
 }

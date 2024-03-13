@@ -459,7 +459,7 @@ public partial class DragDrop : Form
         ContextMenuStrip = _catContextMenuStrip;
     }
 
-    void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
+    private void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
     {
         if (_catContextMenuStrip is null)
         {

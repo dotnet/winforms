@@ -247,7 +247,7 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _parentWindow As IWin32Window
             Private _exception As Exception
 
-            Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
+            Public Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
                 _prompt = Prompt
                 _title = Title
                 _defaultResponse = DefaultResponse

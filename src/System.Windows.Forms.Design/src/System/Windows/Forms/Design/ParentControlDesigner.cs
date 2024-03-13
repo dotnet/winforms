@@ -1041,16 +1041,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
             Rectangle translatedBounds = new(loc, ((Control)Component).Size);
 
-            int glyphOffset = (int)(DesignerUtils.CONTAINERGRABHANDLESIZE * .5);
+            int glyphOffset = (int)(DesignerUtils.s_containerGrabHandleSize * .5);
 
             // if the control is too small for our ideal position...
-            if (translatedBounds.Width < 2 * DesignerUtils.CONTAINERGRABHANDLESIZE)
+            if (translatedBounds.Width < 2 * DesignerUtils.s_containerGrabHandleSize)
             {
                 glyphOffset = -1 * glyphOffset;
             }
 
             ContainerSelectorBehavior behavior = new((Control)Component, Component.Site, true);
-            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
+            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.s_containerGrabHandleSize, glyphOffset, behavior);
 
             glyphs.Insert(0, containerSelectorGlyph);
         }

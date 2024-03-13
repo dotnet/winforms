@@ -278,12 +278,14 @@ public static partial class PlatformDetection
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private unsafe struct RTL_OSVERSIONINFOEX
     {
+#pragma warning disable IDE1006 // Naming Styles - matching OS
         internal uint dwOSVersionInfoSize;
         internal uint dwMajorVersion;
         internal uint dwMinorVersion;
         internal uint dwBuildNumber;
         internal uint dwPlatformId;
         internal fixed char szCSDVersion[128];
+#pragma warning restore IDE1006
     }
 
     private static unsafe int GetWindowsVersion()

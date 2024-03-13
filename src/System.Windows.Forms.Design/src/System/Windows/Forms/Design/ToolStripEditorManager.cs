@@ -84,7 +84,7 @@ internal class ToolStripEditorManager
                     _lastKnownEditorBounds = _editor.Bounds;
                     _editor.BringToFront();
                     // this is important since the ToolStripEditorControl listens    to textchanged messages from TextBox.
-                    _editorUI.ignoreFirstKeyUp = true;
+                    _editorUI._ignoreFirstKeyUp = true;
                     // Select the Editor... Put Text and Select it ...
                     _editorUI.FocusEditor(_currentItem);
                 }

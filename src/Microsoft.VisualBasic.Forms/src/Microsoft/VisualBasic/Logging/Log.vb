@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' TraceSource has other constructors, this is the only one we care about for this internal class
             ''' </summary>
             ''' <param name="name"></param>
-            Sub New(name As String)
+            Public Sub New(name As String)
                 MyBase.New(name)
             End Sub
 

@@ -10,23 +10,22 @@ namespace System.Windows.Forms;
 
 internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlaceFrame.Interface, IOleInPlaceUIWindow.Interface, IOleWindow.Interface
 {
-    private readonly WebBrowserBase parent;
-    private IContainer? assocContainer;  // associated IContainer...
-                                         // the assocContainer may be null, in which case all this container does is
-                                         // forward [de]activation messages to the requisite container...
-    private WebBrowserBase? siteUIActive;
-    private WebBrowserBase? siteActive;
-    private readonly HashSet<Control> containerCache = [];
-    private HashSet<Control>? components;
+    private readonly WebBrowserBase _parent;
+
+    /// <summary>
+    ///  May be null, in which case all this container does is forward [de]activation messages to the requisite container.
+    /// </summary>
+    private IContainer? _associatedContainer;
+    private WebBrowserBase? _siteUIActive;
+    private WebBrowserBase? _siteActive;
+    private readonly HashSet<Control> _containerCache = [];
+    private HashSet<Control>? _components;
     private WebBrowserBase? _controlInEditMode;
 
-    internal WebBrowserContainer(WebBrowserBase parent)
-    {
-        this.parent = parent;
-    }
+    internal WebBrowserContainer(WebBrowserBase parent) => _parent = parent;
 
-    HRESULT IParseDisplayName.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
-        => ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+    HRESULT IParseDisplayName.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut) =>
+        ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
 
     // IOleContainer methods:
     HRESULT IOleContainer.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
@@ -48,7 +47,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
         if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
         {
-            Debug.Assert(parent is not null);
+            Debug.Assert(_parent is not null);
             List<object> list = [];
             ListAXControls(list, true);
             if (list.Count > 0)
@@ -74,7 +73,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             return HRESULT.E_POINTER;
         }
 
-        *phwnd = parent.HWND;
+        *phwnd = _parent.HWND;
         return HRESULT.S_OK;
     }
 
@@ -188,20 +187,20 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     private HashSet<Control>? GetComponents()
     {
         FillComponentsTable(GetParentsContainer());
-        return components;
+        return _components;
     }
 
     private IContainer? GetParentsContainer()
     {
         IContainer? rval = GetParentIContainer();
-        Debug.Assert(rval is null || assocContainer is null || rval == assocContainer,
+        Debug.Assert(rval is null || _associatedContainer is null || rval == _associatedContainer,
                      "mismatch between getIPD & aContainer");
-        return rval ?? assocContainer;
+        return rval ?? _associatedContainer;
     }
 
     private IContainer? GetParentIContainer()
     {
-        ISite? site = parent.Site;
+        ISite? site = _parent.Site;
         return site is not null && site.DesignMode ? site.Container : null;
     }
 
@@ -212,12 +211,12 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             ComponentCollection comps = container.Components;
             if (comps is not null)
             {
-                components = [];
+                _components = [];
                 foreach (IComponent comp in comps)
                 {
-                    if (comp is Control ctrl && comp != parent && comp.Site is not null)
+                    if (comp is Control ctrl && comp != _parent && comp.Site is not null)
                     {
-                        components.Add(ctrl);
+                        _components.Add(ctrl);
                     }
                 }
 
@@ -225,15 +224,15 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             }
         }
 
-        Debug.Assert(parent.Site is null, "Parent is sited but we could not find IContainer!!!");
+        Debug.Assert(_parent.Site is null, "Parent is sited but we could not find IContainer!!!");
 
         bool checkHashSet = true;
-        Control[] ctls = [.. containerCache];
+        Control[] ctls = [.. _containerCache];
         if (ctls is not null)
         {
-            if (ctls.Length > 0 && components is null)
+            if (ctls.Length > 0 && _components is null)
             {
-                components = [];
+                _components = [];
                 checkHashSet = false;
             }
 
@@ -241,12 +240,12 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             {
                 if (checkHashSet)
                 {
-                    components?.Add(ctls[i]);
+                    _components?.Add(ctls[i]);
                 }
             }
         }
 
-        GetAllChildren(parent);
+        GetAllChildren(_parent);
     }
 
     private void GetAllChildren(Control ctl)
@@ -256,11 +255,11 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             return;
         }
 
-        components ??= [];
+        _components ??= [];
 
-        if (ctl != parent && !components.Contains(ctl))
+        if (ctl != _parent && !_components.Contains(ctl))
         {
-            components.Add(ctl);
+            _components.Add(ctl);
         }
 
         foreach (Control c in ctl.Controls)
@@ -275,13 +274,13 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         {
             if (site.Container is IContainer cont)
             {
-                if (assocContainer is not null)
+                if (_associatedContainer is not null)
                 {
-                    return cont == assocContainer;
+                    return cont == _associatedContainer;
                 }
                 else
                 {
-                    assocContainer = cont;
+                    _associatedContainer = cont;
                     if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
                     {
                         ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -297,7 +296,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     private void OnComponentRemoved(object? sender, ComponentEventArgs e)
     {
-        if (sender == assocContainer && e.Component is Control c)
+        if (sender == _associatedContainer && e.Component is Control c)
         {
             RemoveControl(c);
         }
@@ -308,18 +307,18 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     //
     internal void AddControl(Control ctl)
     {
-        if (containerCache.Contains(ctl))
+        if (_containerCache.Contains(ctl))
         {
             throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
         }
 
-        containerCache.Add(ctl);
+        _containerCache.Add(ctl);
 
-        if (assocContainer is null)
+        if (_associatedContainer is null)
         {
             if (ctl.Site is ISite site)
             {
-                assocContainer = site.Container;
+                _associatedContainer = site.Container;
                 if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
                 {
                     ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -331,7 +330,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     internal void RemoveControl(Control ctl)
     {
         // ctl may not be in containerCache: Remove is a no-op if it's not there.
-        containerCache.Remove(ctl);
+        _containerCache.Remove(ctl);
     }
 
     internal static WebBrowserContainer? FindContainerForControl(WebBrowserBase ctl)
@@ -366,20 +365,20 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         // The ShDocVw control repeatedly calls OnUIActivate() with the same
         // site. This causes the assert below to fire.
         //
-        if (siteUIActive == site)
+        if (_siteUIActive == site)
         {
             return;
         }
 
-        if (siteUIActive is not null && siteUIActive != site)
+        if (_siteUIActive is not null && _siteUIActive != site)
         {
-            WebBrowserBase tempSite = siteUIActive;
+            WebBrowserBase tempSite = _siteUIActive;
             tempSite.AXInPlaceObject!.UIDeactivate();
         }
 
         site.AddSelectionHandler();
-        Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
-        siteUIActive = site;
+        Debug.Assert(_siteUIActive is null, "Object did not call OnUIDeactivate");
+        _siteUIActive = site;
         ContainerControl? containingControl = site.ContainingControl;
         if (containingControl is not null && containingControl.Contains(site))
         {
@@ -390,13 +389,13 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     internal void OnUIDeactivate(WebBrowserBase site)
     {
 #if DEBUG
-        if (siteUIActive is not null)
+        if (_siteUIActive is not null)
         {
-            Debug.Assert(siteUIActive == site, "deactivating when not active...");
+            Debug.Assert(_siteUIActive == site, "deactivating when not active...");
         }
 #endif // DEBUG
 
-        siteUIActive = null;
+        _siteUIActive = null;
         site.RemoveSelectionHandler();
         site.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
         site.SetEditMode(WebBrowserHelper.AXEditMode.None);
@@ -404,10 +403,10 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     internal void OnInPlaceDeactivate(WebBrowserBase site)
     {
-        if (siteActive == site)
+        if (_siteActive == site)
         {
-            siteActive = null;
-            ContainerControl? parentContainer = parent.FindContainerControlInternal();
+            _siteActive = null;
+            ContainerControl? parentContainer = _parent.FindContainerControlInternal();
             parentContainer?.SetActiveControl(null);
         }
     }

@@ -85,7 +85,7 @@ public partial class SendKeys
     /// </summary>
     private static readonly Queue<SKEvent> s_events = new();
 
-    private static object s_lock = new();
+    private static readonly object s_lock = new();
     private static bool s_startNewChar;
     private static readonly SKWindow s_messageWindow;
 
@@ -98,11 +98,9 @@ public partial class SendKeys
     private static bool s_scrollLockChanged;
     private static bool s_kanaChanged;
 
-#pragma warning disable CA1810 // Initialize reference type static fields inline (False positive: https://github.com/dotnet/roslyn-analyzers/issues/3852)
     static SendKeys()
-#pragma warning restore CA1810 // Initialize reference type static fields inline
     {
-        Application.ThreadExit += new EventHandler(OnThreadExit);
+        Application.ThreadExit += OnThreadExit;
         s_messageWindow = new SKWindow();
         s_messageWindow.CreateControl();
     }
@@ -443,7 +441,7 @@ public partial class SendKeys
                     }
 
                     // Have our KEYWORD. Verify it's one we know about.
-                    string keyName = keys.Substring(i + 1, j - (i + 1));
+                    string keyName = keys[(i + 1)..j];
 
                     // See if we have a space, which would mean a repeat count.
                     if (char.IsWhiteSpace(keys[j]))
@@ -515,7 +513,7 @@ public partial class SendKeys
                     }
                     else
                     {
-                        throw new ArgumentException(string.Format(SR.InvalidSendKeysKeyword, keys.Substring(i + 1, j - (i + 1))));
+                        throw new ArgumentException(string.Format(SR.InvalidSendKeysKeyword, keys[(i + 1)..j]));
                     }
 
                     // don't forget to position ourselves at the end of the {...} group

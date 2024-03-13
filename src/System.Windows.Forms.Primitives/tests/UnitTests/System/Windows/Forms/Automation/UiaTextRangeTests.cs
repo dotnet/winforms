@@ -432,7 +432,6 @@ this is the third line.";
         }
     }
 
-#pragma warning disable CS8625 // FindText doesn't accept a text null parameter
     [StaFact]
     internal void UiaTextRange_ITextRangeProvider_FindText_ReturnsNull_IfTextNull()
     {
@@ -446,24 +445,23 @@ this is the third line.";
             Assert.True(actual.IsNull);
         }
     }
-#pragma warning restore CS8625
 
-    private static object? notSupportedValue;
+    private static object? s_notSupportedValue;
 
     internal static object UiaGetReservedNotSupportedValue()
     {
-        if (notSupportedValue is null)
+        if (s_notSupportedValue is null)
         {
             IUnknown* unknown;
             PInvoke.UiaGetReservedNotSupportedValue(&unknown).ThrowOnFailure();
-            notSupportedValue = new VARIANT()
+            s_notSupportedValue = new VARIANT()
             {
                 vt = VARENUM.VT_UNKNOWN,
                 data = new() { punkVal = unknown }
             }.ToObject()!;
         }
 
-        return notSupportedValue;
+        return s_notSupportedValue;
     }
 
     public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetAttributeValue_Returns_Correct_TestData()

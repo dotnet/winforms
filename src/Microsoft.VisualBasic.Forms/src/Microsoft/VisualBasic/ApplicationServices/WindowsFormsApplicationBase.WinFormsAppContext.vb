@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Private ReadOnly _app As WindowsFormsApplicationBase
 
-            Sub New(App As WindowsFormsApplicationBase)
+            Public Sub New(App As WindowsFormsApplicationBase)
                 _app = App
             End Sub
 

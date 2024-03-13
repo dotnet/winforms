@@ -14,7 +14,7 @@ internal class RelatedCurrencyManager : CurrencyManager
 {
     private BindingManagerBase _parentManager;
     private PropertyDescriptor _fieldInfo;
-    private static readonly List<BindingManagerBase> IgnoreItemChangedTable = [];
+    private static List<BindingManagerBase> IgnoreItemChangedTable { get; } = [];
 
     internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField)
         : base(dataSource: null)

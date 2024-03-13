@@ -15,15 +15,12 @@ public partial class ParentControlDesigner
     /// </summary>
     private class EscapeHandler : IMenuStatusHandler
     {
-        private readonly ParentControlDesigner designer;
+        private readonly ParentControlDesigner _designer;
 
         /// <summary>
         ///  Creates a new escape handler.
         /// </summary>
-        public EscapeHandler(ParentControlDesigner designer)
-        {
-            this.designer = designer;
-        }
+        public EscapeHandler(ParentControlDesigner designer) => _designer = designer;
 
         /// <summary>
         ///  CommandSet will check with this handler on each status update
@@ -34,7 +31,7 @@ public partial class ParentControlDesigner
         {
             if (cmd.CommandID.Equals(MenuCommands.KeyCancel))
             {
-                designer.OnMouseDragEnd(true);
+                _designer.OnMouseDragEnd(true);
                 return true;
             }
 

@@ -23,7 +23,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     private List<DesignerVerb>? _globalVerbs;
     private ISelectionService? _selectionService;
 
-    internal static TraceSwitch MENUSERVICE = new("MENUSERVICE", "MenuCommandService: Track menu command routing");
+    internal static TraceSwitch MenuService { get; } = new("MENUSERVICE", "MenuCommandService: Track menu command routing");
 
     // This is the set of verbs we offer through the Verbs property.
     // It consists of the global verbs + any verbs that the currently
@@ -114,7 +114,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         }
 
         command.CommandChanged += _commandChangedHandler;
-        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command added: {command}");
+        Debug.WriteLineIf(MenuService.TraceVerbose, $"Command added: {command}");
 
         // raise event
         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandAdded, command));
@@ -337,7 +337,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// </summary>
     protected MenuCommand? FindCommand(Guid guid, int id)
     {
-        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"MCS Searching for command: {guid} : {id}");
+        Debug.WriteLineIf(MenuService.TraceVerbose, $"MCS Searching for command: {guid} : {id}");
 
         // Search in the list of commands only if the command group is known
         List<MenuCommand>? commands;
@@ -348,12 +348,12 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
         if (commands is not null)
         {
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
+            Debug.WriteLineIf(MenuService.TraceVerbose, "\t...MCS Found group");
             foreach (MenuCommand command in commands)
             {
                 if (command.CommandID!.ID == id)
                 {
-                    Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t... MCS Found Command");
+                    Debug.WriteLineIf(MenuService.TraceVerbose, "\t... MCS Found Command");
                     return command;
                 }
             }
@@ -371,11 +371,11 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
                 if (cid.ID == id)
                 {
-                    Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found verb");
+                    Debug.WriteLineIf(MenuService.TraceVerbose, "\t...MCS Found verb");
 
                     if (cid.Guid.Equals(guid))
                     {
-                        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
+                        Debug.WriteLineIf(MenuService.TraceVerbose, "\t...MCS Found group");
                         return verb;
                     }
                 }
@@ -385,11 +385,11 @@ public class MenuCommandService : IMenuCommandService, IDisposable
                 //
                 if (currentID == id)
                 {
-                    Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found verb");
+                    Debug.WriteLineIf(MenuService.TraceVerbose, "\t...MCS Found verb");
 
                     if (cid.Guid.Equals(guid))
                     {
-                        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
+                        Debug.WriteLineIf(MenuService.TraceVerbose, "\t...MCS Found group");
                         return verb;
                     }
                 }
@@ -475,7 +475,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// </summary>
     private void OnCommandChanged(object? sender, EventArgs e)
     {
-        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command dirty: {((sender is not null) ? sender.ToString() : "(null sender)")}");
+        Debug.WriteLineIf(MenuService.TraceVerbose, $"Command dirty: {((sender is not null) ? sender.ToString() : "(null sender)")}");
         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, (MenuCommand?)sender));
     }
 
@@ -533,7 +533,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
                     command.CommandChanged -= _commandChangedHandler;
 
-                    Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command removed: {command}");
+                    Debug.WriteLineIf(MenuService.TraceVerbose, $"Command removed: {command}");
 
                     // raise event
                     OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, command));
@@ -543,7 +543,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             }
         }
 
-        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Unable to remove command: {command}");
+        Debug.WriteLineIf(MenuService.TraceVerbose, $"Unable to remove command: {command}");
     }
 
     /// <summary>

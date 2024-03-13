@@ -9,17 +9,9 @@ namespace System.Windows.Forms;
 
 public static class ListBindingHelper
 {
-    private static Attribute[]? browsableAttribute;
+    private static Attribute[]? s_browsableAttribute;
 
-    private static Attribute[] BrowsableAttributeList
-    {
-        get
-        {
-            browsableAttribute ??= [new BrowsableAttribute(true)];
-
-            return browsableAttribute;
-        }
-    }
+    private static Attribute[] BrowsableAttributeList => s_browsableAttribute ??= [new BrowsableAttribute(true)];
 
     public static object? GetList(object? list)
     {
@@ -53,11 +45,8 @@ public static class ListBindingHelper
         }
 
         PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
-        PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
-        if (dmProp is null)
-        {
-            throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
-        }
+        PropertyDescriptor? dmProp = dsProps.Find(dataMember, true)
+            ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
 
         object? currentItem;
 

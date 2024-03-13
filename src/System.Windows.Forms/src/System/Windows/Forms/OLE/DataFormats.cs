@@ -229,7 +229,7 @@ public static partial class DataFormats
                 int length = PInvoke.GetClipboardFormatName(id, pFormatName, 256);
                 if (length != 0)
                 {
-                    name = formatName.Slice(0, length).ToString();
+                    name = formatName[..length].ToString();
                 }
             }
 

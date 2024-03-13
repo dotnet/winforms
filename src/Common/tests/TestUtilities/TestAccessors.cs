@@ -15,7 +15,7 @@ public static partial class TestAccessors
     // Need to pass a null parameter when constructing a static instance
     // of TestAccessor. As this is pretty common and never changes, caching
     // the array here.
-    private static object?[] s_nullObjectParam = [null];
+    private static readonly object?[] s_nullObjectParam = [null];
 
     /// <summary>
     ///  Extension that creates a generic internals test accessor for a

@@ -1602,7 +1602,7 @@ public class BitmapTests : FileCleanupTestBase
     }
 
 #if NET9_0_OR_GREATER
-    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_Valid = new()
+    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_Valid { get; } = new()
     {
         // PaletteType is ignored for non-indexed formats
         { PixelFormat.Format16bppArgb1555, DitherType.None, PaletteType.FixedHalftone8 },
@@ -1622,7 +1622,7 @@ public class BitmapTests : FileCleanupTestBase
         { PixelFormat.Format16bppRgb565, DitherType.None, (PaletteType)(-1) },
     };
 
-    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_InvalidArgument = new()
+    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_InvalidArgument { get; } = new()
     {
         // Indexed formats MUST always have a specified ColorPalette
         { PixelFormat.Format1bppIndexed, (DitherType)(-1), PaletteType.FixedHalftone256 },
@@ -1661,7 +1661,7 @@ public class BitmapTests : FileCleanupTestBase
         bitmap.Invoking(b => b.ConvertFormat(format, dither, palette)).Should().Throw<ArgumentException>();
     }
 
-    public static TheoryData<PixelFormat> AllValidPixelFormats = new()
+    public static TheoryData<PixelFormat> AllValidPixelFormats { get; } = new()
     {
         PixelFormat.Format16bppArgb1555,
         PixelFormat.Format16bppRgb555,
@@ -1690,9 +1690,9 @@ public class BitmapTests : FileCleanupTestBase
 
     private class TestStream : Stream
     {
-        private Stream _stream;
-        private bool _canRead;
-        private bool _canSeek;
+        private readonly Stream _stream;
+        private readonly bool _canRead;
+        private readonly bool _canSeek;
 
         public TestStream(Stream stream, bool canRead = true, bool canSeek = true)
         {
