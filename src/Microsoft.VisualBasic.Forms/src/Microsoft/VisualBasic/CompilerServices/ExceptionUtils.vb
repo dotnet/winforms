@@ -3,6 +3,7 @@
 
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -23,7 +24,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Dim description As String
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
-                description = Utils.GetResourceString(CType(hr, vbErrors))
+                description = GetResourceString(CType(hr, vbErrors))
             Else
                 description = ""
             End If
