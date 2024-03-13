@@ -7,6 +7,7 @@ Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -352,12 +353,11 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbhost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
             Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
-                parentWindow = vbHost.GetParentWindow()
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -386,10 +386,10 @@ Namespace Microsoft.VisualBasic
             Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             Try
                 If Title Is Nothing Then
-                    If vbhost Is Nothing Then
+                    If vbHost Is Nothing Then
                         sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbhost.GetWindowTitle()
+                        sTitle = vbHost.GetWindowTitle()
                     End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
