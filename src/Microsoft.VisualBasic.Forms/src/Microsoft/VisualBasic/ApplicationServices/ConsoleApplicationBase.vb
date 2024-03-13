@@ -33,7 +33,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Get
                 If _commandLineArgs Is Nothing Then
                     'Get rid of Arg(0) which is the path of the executing program.  Main(args() as string) doesn't report the name of the app and neither will we
-                    Dim EnvArgs As String() = System.Environment.GetCommandLineArgs
+                    Dim EnvArgs As String() = Environment.GetCommandLineArgs
                     If EnvArgs.GetLength(0) >= 2 Then '1 element means no args, just the executing program.  >= 2 means executing program + one or more command line arguments
                         Dim NewArgs(EnvArgs.GetLength(0) - 2) As String 'dimming z(0) gives a z() of 1 element.
                         Array.Copy(EnvArgs, 1, NewArgs, 0, EnvArgs.GetLength(0) - 1) 'copy everything but the 0th element (the path of the executing program)

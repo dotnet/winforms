@@ -1176,7 +1176,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     /// </summary>
     private void SyncScrollbars(bool autoScroll)
     {
-        Rectangle displayRect = this._displayRect;
+        Rectangle displayRect = _displayRect;
 
         if (autoScroll)
         {

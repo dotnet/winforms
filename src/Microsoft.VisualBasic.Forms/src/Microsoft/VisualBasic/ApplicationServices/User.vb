@@ -71,10 +71,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Protected Overridable Property InternalPrincipal() As IPrincipal
             Get
-                Return System.Threading.Thread.CurrentPrincipal
+                Return Threading.Thread.CurrentPrincipal
             End Get
             Set(value As IPrincipal)
-                System.Threading.Thread.CurrentPrincipal = value
+                Threading.Thread.CurrentPrincipal = value
             End Set
         End Property
 

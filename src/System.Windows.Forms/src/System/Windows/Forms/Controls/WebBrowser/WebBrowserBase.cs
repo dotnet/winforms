@@ -747,7 +747,7 @@ public unsafe partial class WebBrowserBase : Control
         if (DesignMode)
         {
             ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
-            this._selectionStyle = selectionStyle;
+            _selectionStyle = selectionStyle;
             if (iss is not null && iss.GetComponentSelected(this))
             {
                 // The ActiveX Host designer will offer an extender property
@@ -1161,17 +1161,9 @@ public unsafe partial class WebBrowserBase : Control
     // Find the uppermost ContainerControl that this control lives in
     internal ContainerControl? FindContainerControlInternal()
     {
-        if (Site is not null)
+        if (Site.TryGetService(out IDesignerHost? host) && host.RootComponent is ContainerControl rootContainerControl)
         {
-            IDesignerHost? host = (IDesignerHost?)Site.GetService(typeof(IDesignerHost));
-            if (host is not null)
-            {
-                IComponent comp = host.RootComponent;
-                if (comp is not null and ContainerControl)
-                {
-                    return (ContainerControl)comp;
-                }
-            }
+            return rootContainerControl;
         }
 
         ContainerControl? containerControl = null;
