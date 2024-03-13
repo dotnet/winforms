@@ -3440,8 +3440,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     public void Restore(GraphicsState gstate)
     {
-        CheckStatus(PInvoke.GdipRestoreGraphics(NativeGraphics, (uint)gstate.nativeState));
-        PopContext(gstate.nativeState);
+        CheckStatus(PInvoke.GdipRestoreGraphics(NativeGraphics, (uint)gstate._nativeState));
+        PopContext(gstate._nativeState);
     }
 
     public GraphicsContainer BeginContainer(RectangleF dstrect, RectangleF srcrect, GraphicsUnit unit)
@@ -3486,8 +3486,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void EndContainer(GraphicsContainer container)
     {
         ArgumentNullException.ThrowIfNull(container);
-        CheckStatus(PInvoke.GdipEndContainer(NativeGraphics, (uint)container.nativeGraphicsContainer));
-        PopContext(container.nativeGraphicsContainer);
+        CheckStatus(PInvoke.GdipEndContainer(NativeGraphics, (uint)container._nativeGraphicsContainer));
+        PopContext(container._nativeGraphicsContainer);
     }
 
     public GraphicsContainer BeginContainer(Rectangle dstrect, Rectangle srcrect, GraphicsUnit unit)

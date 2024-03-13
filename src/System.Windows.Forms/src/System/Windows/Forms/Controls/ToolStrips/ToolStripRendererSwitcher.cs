@@ -9,8 +9,8 @@ namespace System.Windows.Forms;
 // be shared across classes.
 internal class ToolStripRendererSwitcher
 {
-    private static readonly int stateUseDefaultRenderer = BitVector32.CreateMask();
-    private static readonly int stateAttachedRendererChanged = BitVector32.CreateMask(stateUseDefaultRenderer);
+    private static readonly int s_stateUseDefaultRenderer = BitVector32.CreateMask();
+    private static readonly int s_stateAttachedRendererChanged = BitVector32.CreateMask(s_stateUseDefaultRenderer);
 
     private ToolStripRenderer? _renderer;
     private Type _currentRendererType = typeof(Type);
@@ -26,8 +26,8 @@ internal class ToolStripRendererSwitcher
 
     public ToolStripRendererSwitcher(Control owner)
     {
-        _state[stateUseDefaultRenderer] = true;
-        _state[stateAttachedRendererChanged] = false;
+        _state[s_stateUseDefaultRenderer] = true;
+        _state[s_stateAttachedRendererChanged] = false;
         owner.Disposed += new EventHandler(OnControlDisposed);
         owner.VisibleChanged += new EventHandler(OnControlVisibleChanged);
         if (owner.Visible)
@@ -48,7 +48,7 @@ internal class ToolStripRendererSwitcher
             // always return a valid renderer so our paint code
             // doesn't have to be bogged down by checks for null.
 
-            _state[stateUseDefaultRenderer] = false;
+            _state[s_stateUseDefaultRenderer] = false;
             if (_renderer is null)
             {
                 Renderer = ToolStripManager.CreateRenderer(RenderMode);
@@ -62,7 +62,7 @@ internal class ToolStripRendererSwitcher
             // will autogenerate a new ToolStripRenderer.
             if (_renderer != value)
             {
-                _state[stateUseDefaultRenderer] = value is null;
+                _state[s_stateUseDefaultRenderer] = value is null;
                 _renderer = value;
                 _currentRendererType = (_renderer is not null) ? _renderer.GetType() : typeof(Type);
 
@@ -75,7 +75,7 @@ internal class ToolStripRendererSwitcher
     {
         get
         {
-            if (_state[stateUseDefaultRenderer])
+            if (_state[s_stateUseDefaultRenderer])
             {
                 return ToolStripRenderMode.ManagerRenderMode;
             }
@@ -110,15 +110,15 @@ internal class ToolStripRendererSwitcher
 
             if (value == ToolStripRenderMode.ManagerRenderMode)
             {
-                if (!_state[stateUseDefaultRenderer])
+                if (!_state[s_stateUseDefaultRenderer])
                 {
-                    _state[stateUseDefaultRenderer] = true;
+                    _state[s_stateUseDefaultRenderer] = true;
                     OnRendererChanged(EventArgs.Empty);
                 }
             }
             else
             {
-                _state[stateUseDefaultRenderer] = false;
+                _state[s_stateUseDefaultRenderer] = false;
                 Renderer = ToolStripManager.CreateRenderer(value);
             }
         }
@@ -133,7 +133,7 @@ internal class ToolStripRendererSwitcher
 
     private void OnDefaultRendererChanged(object? sender, EventArgs e)
     {
-        if (_state[stateUseDefaultRenderer])
+        if (_state[s_stateUseDefaultRenderer])
         {
             OnRendererChanged(e);
         }
@@ -141,10 +141,10 @@ internal class ToolStripRendererSwitcher
 
     private void OnControlDisposed(object? sender, EventArgs e)
     {
-        if (_state[stateAttachedRendererChanged])
+        if (_state[s_stateAttachedRendererChanged])
         {
             ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
-            _state[stateAttachedRendererChanged] = false;
+            _state[s_stateAttachedRendererChanged] = false;
         }
     }
 
@@ -154,18 +154,18 @@ internal class ToolStripRendererSwitcher
         {
             if (control.Visible)
             {
-                if (!_state[stateAttachedRendererChanged])
+                if (!_state[s_stateAttachedRendererChanged])
                 {
                     ToolStripManager.RendererChanged += new EventHandler(OnDefaultRendererChanged);
-                    _state[stateAttachedRendererChanged] = true;
+                    _state[s_stateAttachedRendererChanged] = true;
                 }
             }
             else
             {
-                if (_state[stateAttachedRendererChanged])
+                if (_state[s_stateAttachedRendererChanged])
                 {
                     ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
-                    _state[stateAttachedRendererChanged] = false;
+                    _state[s_stateAttachedRendererChanged] = false;
                 }
             }
         }

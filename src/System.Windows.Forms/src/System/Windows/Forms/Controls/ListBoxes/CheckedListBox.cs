@@ -50,8 +50,8 @@ public partial class CheckedListBox : ListBox
     private CheckedItemCollection? _checkedItemCollection;
     private CheckedIndexCollection? _checkedIndexCollection;
 
-    private static readonly MessageId LBC_GETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
-    private static readonly MessageId LBC_SETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
+    private static uint LBC_GETCHECKSTATE { get; } = PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
+    private static uint LBC_SETCHECKSTATE { get; } = PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
 
     /// <summary>
     ///  Creates a new CheckedListBox for the user.

@@ -10,7 +10,7 @@ public partial class DataGridViewCheckBoxCell
 {
     protected class DataGridViewCheckBoxCellAccessibleObject : DataGridViewCellAccessibleObject
     {
-        private int[] runtimeId = null!; // Used by UIAutomation
+        private int[] _runtimeId = null!;
 
         public DataGridViewCheckBoxCellAccessibleObject(DataGridViewCell? owner) : base(owner)
         {
@@ -133,7 +133,7 @@ public partial class DataGridViewCheckBoxCell
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override int[] RuntimeId => runtimeId ??= [RuntimeIDFirstItem, GetHashCode()];
+        internal override int[] RuntimeId => _runtimeId ??= [RuntimeIDFirstItem, GetHashCode()];
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch

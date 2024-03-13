@@ -28,6 +28,7 @@ internal unsafe struct IMsoComponent : IComIID, IVTable<IMsoComponent, IMsoCompo
 
     internal struct Vtbl
     {
+#pragma warning disable IDE1006 // Naming Styles - Matching CsWin32 patterns
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, Guid*, void**, HRESULT> QueryInterface_1;
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, uint> AddRef_2;
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, uint> Release_3;
@@ -42,6 +43,7 @@ internal unsafe struct IMsoComponent : IComIID, IVTable<IMsoComponent, IMsoCompo
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, BOOL, BOOL> FQueryTerminate_12;
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, void> Terminate_13;
         internal delegate* unmanaged[Stdcall]<IMsoComponent*, msocWindow, uint, HWND> HwndGetWindow_14;
+#pragma warning restore IDE1006
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
@@ -98,7 +100,7 @@ internal unsafe struct IMsoComponent : IComIID, IVTable<IMsoComponent, IMsoCompo
         => UnwrapAndInvoke<IMsoComponent, Interface, HWND>(@this, o => o.HwndGetWindow(dwWhich, dwReserved));
 
     // 000C0600-0000-0000-C000-000000000046
-    internal static readonly Guid Guid = new(0x000C0600, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+    internal static Guid Guid { get; } = new(0x000C0600, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
     static ref readonly Guid IComIID.Guid
     {

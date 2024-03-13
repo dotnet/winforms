@@ -285,7 +285,7 @@ public sealed class FolderBrowserDialog : CommonDialog
             // Creating the Vista dialog can fail on Windows Server Core, even if the
             // Server Core App Compatibility FOD is installed.
             PInvokeCore.CoCreateInstance(
-                in CLSID.FileOpenDialog,
+                CLSID.FileOpenDialog,
                 pUnkOuter: null,
                 CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
                 out dialog).ThrowOnFailure();

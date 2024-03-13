@@ -521,7 +521,7 @@ internal static unsafe class DragDropHelper
         }
 
         HRESULT hr = PInvokeCore.CoCreateInstance(
-            in CLSID.DragDropHelper,
+            CLSID.DragDropHelper,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
             out *dragDropHelper);
