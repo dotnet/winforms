@@ -48,6 +48,7 @@ System.Windows.Forms.PopupOpeningEventArgs.PreferredNewSize.get -> System.Drawin
 System.Windows.Forms.PopupOpeningEventArgs.PreferredNewSize.set -> void
 System.Windows.Forms.PopupOpeningEventArgs.PreventResizing.get -> bool
 System.Windows.Forms.PopupOpeningEventArgs.PreventResizing.set -> void
+System.Windows.Forms.ToolStrip.GetGraphicsForItemAsync(System.Windows.Forms.ToolStripItem! toolStripItem) -> System.Threading.Tasks.Task<System.Drawing.Graphics!>!
 virtual System.Windows.Forms.Popup.OnPopupClosed(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Popup.OnPopupClosing(System.Windows.Forms.PopupCloseRequestEventArgs! e) -> void
 virtual System.Windows.Forms.Popup.OnPopupOpening(System.Windows.Forms.PopupOpeningEventArgs! e) -> void

@@ -74,10 +74,10 @@ public partial class Control
     ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
     /// </summary>
     /// <typeparam name="T">The return type of the synchronous function.</typeparam>
-    /// <param name="function">The synchronous function to execute.</param>
+    /// <param name="syncFunction">The synchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
-    public async Task<T> InvokeSyncAsync<T>(Func<T> function, CancellationToken cancellationToken)
+    public async Task<T> InvokeSyncAsync<T>(Func<T> syncFunction, CancellationToken cancellationToken)
     {
         var tcs = new TaskCompletionSource<T>();
 
@@ -89,7 +89,7 @@ public partial class Control
         }
 
         var result = await Task.Run(
-            () => Invoke(() => function()),
+            () => Invoke(() => syncFunction()),
             cancellationToken).ConfigureAwait(true);
 
         tcs.TrySetResult(result);
