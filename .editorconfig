@@ -70,16 +70,13 @@ dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 dotnet_sort_system_directives_first = true
 
 # Expression-level preferences
-dotnet_style_object_initializer = true:warning
+dotnet_style_object_initializer = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_coalesce_expression = true:warning
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_prefer_auto_properties = true:silent
-dotnet_style_prefer_simplified_boolean_expressions = true:warning
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
@@ -90,7 +87,7 @@ tab_width = 4
 end_of_line = crlf
 dotnet_style_allow_multiple_blank_lines_experimental = true:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
-dotnet_style_prefer_collection_expression = true:warning
+dotnet_style_prefer_collection_expression = true:suggestion
 
 # IDE0040: Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = error
@@ -107,20 +104,17 @@ dotnet_diagnostic.SYSLIB1054.severity = none
 # SYSLIB1096: Convert to 'GeneratedComInterface'
 dotnet_diagnostic.SYSLIB1096.severity = none
 
-# CA1310: Specify StringComparison for correctness
-dotnet_diagnostic.CA1310.severity = error
-
-# CA1510: Use ArgumentNullException throw helper
-dotnet_diagnostic.CA1510.severity = error
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = error
 
 # CA1725: Parameter names should match base declaration
 dotnet_diagnostic.CA1725.severity = error
 
-# CA1859: Use concrete types when possible for improved performance
-dotnet_diagnostic.CA1859.severity = error
-
 # DOC100: Place text in paragraphs
 dotnet_diagnostic.DOC100.severity = error
+
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = error
 
 # IDE0002: Simplify Member Access
 dotnet_diagnostic.IDE0002.severity = error
@@ -128,51 +122,20 @@ dotnet_diagnostic.IDE0002.severity = error
 # IDE0003: Remove qualification
 dotnet_diagnostic.IDE0003.severity = error
 
-# IDE0017: Simplify object initialization
-dotnet_diagnostic.IDE0017.severity = warning
-
-# IDE0019: Use pattern matching
-dotnet_diagnostic.IDE0019.severity = warning
-
-# IDE0038: Use pattern matching
-dotnet_diagnostic.IDE0038.severity = warning
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = error
 
 # IDE0044: Add readonly modifier
 dotnet_diagnostic.IDE0044.severity = warning
 
-# IDE0057: Use range operator
-dotnet_diagnostic.IDE0057.severity = error
-
-# IDE0063: Use simple 'using' statement
-dotnet_diagnostic.IDE0063.severity = warning
-
-# IDE0075: Simplify conditional expression
-dotnet_diagnostic.IDE0075.severity = warning
-
-# IDE0078: Use pattern matching
-dotnet_diagnostic.IDE0078.severity = warning
-
-# IDE0079: Remove unnecessary suppression
-dotnet_diagnostic.IDE0079.severity = error
-
-# IDE0180: Use tuple to swap values
-dotnet_diagnostic.IDE0180.severity = warning
-
-# IDE0251: Make member 'readonly'
-dotnet_diagnostic.IDE0251.severity = warning
-
-# IDE0270: Use coalesce expression
-dotnet_diagnostic.IDE0270.severity = warning
-
-# IDE0300: Simplify collection initialization
-dotnet_diagnostic.IDE0300.severity = warning
-
-# IDE1006: Naming Styles
-dotnet_diagnostic.IDE1006.severity = error
-
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
+
+# Expression-level preferences
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
 
 # New line preferences
 csharp_new_line_before_open_brace = all
@@ -208,8 +171,8 @@ csharp_style_expression_bodied_indexers = true:silent
 csharp_style_expression_bodied_accessors = true:silent
 
 # Pattern matching
-csharp_style_pattern_matching_over_is_with_cast_check = true:warning
-csharp_style_pattern_matching_over_as_with_null_check = true:warning
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
 csharp_style_inlined_variable_declaration = true:suggestion
 
 # Null checking preferences
@@ -240,7 +203,7 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_simple_using_statement = true:warning
+csharp_prefer_simple_using_statement = true:suggestion
 csharp_prefer_braces = true:silent
 csharp_style_namespace_declarations = file_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
@@ -260,6 +223,14 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
+
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = none
+
+# Expression-level preferences
+dotnet_style_coalesce_expression = false:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = false:suggestion
+dotnet_style_prefer_conditional_expression_over_return = false:suggestion
 
 # C++ Files
 [*.{cpp,h,in}]
@@ -300,9 +271,6 @@ end_of_line = crlf
 
 # CA1861: Avoid constant arrays as arguments - expected to be inline for test readability (4000 hits)
 dotnet_diagnostic.CA1861.severity = silent
-
-# This collides with TheoryData usage
-dotnet_style_prefer_collection_expression = true:silent
 
 # This should be fixed https://github.com/dotnet/winforms/issues/11041
 # xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
