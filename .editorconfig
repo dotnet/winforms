@@ -92,6 +92,9 @@ dotnet_style_allow_multiple_blank_lines_experimental = true:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 dotnet_style_prefer_collection_expression = true:suggestion
 
+# IDE0040: Add accessibility modifiers
+dotnet_diagnostic.IDE0040.severity = error
+
 # C# files
 
 [*.cs]
@@ -104,8 +107,8 @@ dotnet_diagnostic.SYSLIB1054.severity = none
 # SYSLIB1096: Convert to 'GeneratedComInterface'
 dotnet_diagnostic.SYSLIB1096.severity = none
 
-# IDE1006: Naming Styles (in progress)
-# dotnet_diagnostic.IDE1006.severity = error
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = error
 
 # CA1725: Parameter names should match base declaration
 dotnet_diagnostic.CA1725.severity = error
@@ -125,6 +128,8 @@ dotnet_diagnostic.IDE0003.severity = error
 # IDE0079: Remove unnecessary suppression
 dotnet_diagnostic.IDE0079.severity = error
 
+# IDE0044: Add readonly modifier
+dotnet_diagnostic.IDE0044.severity = warning
 
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none

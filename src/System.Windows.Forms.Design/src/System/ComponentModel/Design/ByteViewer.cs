@@ -34,11 +34,11 @@ public class ByteViewer : TableLayoutPanel
     private const int DUMP_START_X = HEX_START_X + HEX_WIDTH + HEX_DUMP_GAP;
     private const int SCROLLBAR_START_X = DUMP_START_X + DUMP_WIDTH + HEX_DUMP_GAP;
 
-    private static readonly Font ADDRESS_FONT = new("Microsoft Sans Serif", 8.0f);
-    private static readonly Font HEXDUMP_FONT = new("Courier New", 8.0f);
+    private static readonly Font s_addressFont = new("Microsoft Sans Serif", 8.0f);
+    private static readonly Font s_hexDumpFont = new("Courier New", 8.0f);
 
-    private int SCROLLBAR_HEIGHT;
-    private int SCROLLBAR_WIDTH;
+    private int _scrollbarHeight;
+    private int _scrollbarWidth;
     private VScrollBar _scrollBar;
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
@@ -121,7 +121,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void DrawAddress(Graphics g, int startLine, int line)
     {
-        Font font = ADDRESS_FONT;
+        Font font = s_addressFont;
 
         Span<char> hexChars = stackalloc char[8];
         bool success = ((startLine + line) * _columnCount).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
@@ -181,7 +181,7 @@ public class ByteViewer : TableLayoutPanel
             charsToDraw[i] = CharIsPrintable(c) ? c : '.';
         }
 
-        Font font = HEXDUMP_FONT;
+        Font font = s_hexDumpFont;
 
         using Brush foreground = new SolidBrush(ForeColor);
         g.DrawString(charsToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
@@ -193,7 +193,7 @@ public class ByteViewer : TableLayoutPanel
     /// <internalonly/>
     private void DrawHex(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
-        Font font = HEXDUMP_FONT;
+        Font font = s_hexDumpFont;
 
         Debug.Assert(charsBuffer.Length >= lineBuffer.Length * 3 + 1);
         int charsWritten = 0;
@@ -442,10 +442,10 @@ public class ByteViewer : TableLayoutPanel
     [MemberNotNull(nameof(_scrollBar))]
     private void InitUI()
     {
-        SCROLLBAR_HEIGHT = SystemInformation.HorizontalScrollBarHeight;
-        SCROLLBAR_WIDTH = SystemInformation.VerticalScrollBarWidth;
+        _scrollbarHeight = SystemInformation.HorizontalScrollBarHeight;
+        _scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
         // For backwards compat
-        Size = new Size(SCROLLBAR_START_X + SCROLLBAR_WIDTH + BORDER_GAP + INSET_GAP,
+        Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
                              2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
 
         _scrollBar = new VScrollBar();
@@ -562,7 +562,7 @@ public class ByteViewer : TableLayoutPanel
         if (Dock == DockStyle.None)
         {
             // For backwards compatibility
-            Size = new Size(SCROLLBAR_START_X + SCROLLBAR_WIDTH + BORDER_GAP + INSET_GAP,
+            Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
                             2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
         }
 

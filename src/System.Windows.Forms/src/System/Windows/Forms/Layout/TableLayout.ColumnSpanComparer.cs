@@ -7,16 +7,8 @@ internal partial class TableLayout
 {
     private class ColumnSpanComparer : SpanComparer
     {
-        private static readonly ColumnSpanComparer instance = new();
+        public override int GetSpan(LayoutInfo layoutInfo) => layoutInfo.ColumnSpan;
 
-        public override int GetSpan(LayoutInfo layoutInfo)
-        {
-            return layoutInfo.ColumnSpan;
-        }
-
-        public static ColumnSpanComparer GetInstance
-        {
-            get { return instance; }
-        }
+        public static ColumnSpanComparer GetInstance { get; } = new();
     }
 }

@@ -16,18 +16,13 @@ public class DesignerAttributeTests
     private const string AssemblyRef_SystemWinformsDesign = $"System.Windows.Forms.Design, Version={FXAssembly.Version}, Culture=neutral, PublicKeyToken={AssemblyRef.MicrosoftPublicKey}";
     private readonly ITestOutputHelper _output;
 
-    private static readonly ImmutableHashSet<string> SkipList = ImmutableHashSet.Create(new string[]
-    {
-        // https://github.com/dotnet/winforms/issues/2412
+    private static ImmutableHashSet<string> SkipList { get; } =
+    [
         "System.Windows.Forms.Design.ControlBindingsConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-
-        // https://github.com/dotnet/winforms/issues/2411
         "System.Windows.Forms.Design.AxDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.AxHostDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.StatusBarDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.WebBrowserDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-
-        // https://github.com/dotnet/winforms/issues/1115
         "System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataGridViewComponentEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
@@ -36,7 +31,7 @@ public class DesignerAttributeTests
         "System.Windows.Forms.Design.ToolStripCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.ToolStripImageIndexEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.TreeNodeCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-    });
+    ];
 
     public DesignerAttributeTests(ITestOutputHelper output)
     {

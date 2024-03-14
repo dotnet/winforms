@@ -877,9 +877,9 @@ public class WebBrowserBaseTests
 
     private class SubWebBrowserBase : WebBrowserBase
     {
-        private const string clsidString = "8856f961-340a-11d0-a96b-00c04fd705a2";
+        private const string ClsidString = "8856f961-340a-11d0-a96b-00c04fd705a2";
 
-        public SubWebBrowserBase() : base(clsidString)
+        public SubWebBrowserBase() : base(ClsidString)
         {
         }
 

@@ -104,7 +104,9 @@ public class BitmapEditorTests
 
     private class SubBitmapEditor : BitmapEditor
     {
+#pragma warning disable IDE1006 // Naming Styles
         public static new List<string> BitmapExtensions = BitmapEditor.BitmapExtensions;
+#pragma warning restore IDE1006
 
         public new string[] GetExtensions() => base.GetExtensions();
 

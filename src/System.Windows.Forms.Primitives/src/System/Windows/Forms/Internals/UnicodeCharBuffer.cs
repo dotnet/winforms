@@ -7,7 +7,7 @@ namespace System.Windows.Forms;
 
 internal sealed class UnicodeCharBuffer
 {
-    private char[] _buffer;
+    private readonly char[] _buffer;
     private int _offset;
 
     public UnicodeCharBuffer(int size)
