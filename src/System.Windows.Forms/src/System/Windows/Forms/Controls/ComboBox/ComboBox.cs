@@ -2595,19 +2595,11 @@ public partial class ComboBox : ListControl
         }
     }
 
-    private static bool ContainsNavigationKeyCode(Keys keyCode)
+    private static bool ContainsNavigationKeyCode(Keys keyCode) => keyCode switch
     {
-        switch (keyCode)
-        {
-            case Keys.Home:
-            case Keys.End:
-            case Keys.Left:
-            case Keys.Right:
-                return true;
-            default:
-                return false;
-        }
-    }
+        Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+        _ => false,
+    };
 
     /// <summary>
     ///  This is the code that actually fires the OnMeasureItem event.  Don't

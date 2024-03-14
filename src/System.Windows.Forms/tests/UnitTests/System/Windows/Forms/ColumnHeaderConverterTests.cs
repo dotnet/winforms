@@ -185,6 +185,7 @@ public class ColumnHeaderConverterTests
         public PrivateDefaultConstructor(int imageIndex) : base(imageIndex) { }
     }
 
+#pragma warning disable IDE0051 // Remove unused private members
     private class PrivateStringConstructor : ColumnHeader
     {
         public PrivateStringConstructor() : base() { }
@@ -202,4 +203,5 @@ public class ColumnHeaderConverterTests
 
         private PrivateIntConstructor(int imageIndex) : base(imageIndex) { }
     }
+#pragma warning restore IDE0051 // Remove unused private members
 }

@@ -25,7 +25,9 @@ public unsafe class ComScopeTests
     {
 #pragma warning disable CA1823 // Avoid unused private fields
 #pragma warning disable CS0169 // The field 'ComScopeTests.ITestObject._vtbl' is never used
+#pragma warning disable IDE0051 // Remove unused private members
         private readonly void** _vtbl;
+#pragma warning restore IDE0051
 #pragma warning restore CS0169
 #pragma warning restore CA1823
 

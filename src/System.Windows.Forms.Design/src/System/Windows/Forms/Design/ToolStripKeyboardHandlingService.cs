@@ -1067,8 +1067,8 @@ internal class ToolStripKeyboardHandlingService
     private void OnKeySelect(object sender, EventArgs e)
     {
         MenuCommand cmd = (MenuCommand)sender;
-        bool reverse = (cmd.CommandID.Equals(MenuCommands.KeySelectPrevious));
-        ProcessKeySelect(reverse, cmd);
+        bool reverse = cmd.CommandID.Equals(MenuCommands.KeySelectPrevious);
+        ProcessKeySelect(reverse);
     }
 
     /// <summary>
@@ -1134,7 +1134,7 @@ internal class ToolStripKeyboardHandlingService
     }
 
     // helper function to select the next item.
-    public void ProcessKeySelect(bool reverse, MenuCommand cmd)
+    public void ProcessKeySelect(bool reverse)
     {
         ISelectionService selSvc = SelectionService;
         if (selSvc is not null)

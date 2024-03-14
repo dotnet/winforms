@@ -16,7 +16,6 @@ public sealed partial class DockEditor
         private static int s_initialSystemDpi = -1;
 
         private readonly ContainerPlaceholder _container;
-        private readonly DockEditor _editor;
         private readonly RadioButton _fill;
         private readonly RadioButton _left;
         private readonly RadioButton[] _leftRightOrder;
@@ -27,10 +26,8 @@ public sealed partial class DockEditor
         private readonly RadioButton _bottom;
         private readonly RadioButton[] _upDownOrder;
 
-        public DockUI(DockEditor editor)
+        public DockUI()
         {
-            _editor = editor;
-
             if (s_initialSystemDpi == -1)
             {
                 s_initialSystemDpi = ScaleHelper.InitialSystemDpi;

@@ -169,17 +169,11 @@ public partial class ComboBox
 
         internal override bool IsSelectionRequired => true;
 
-        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
-            switch (patternId)
-            {
-                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
-                case UIA_PATTERN_ID.UIA_SelectionPatternId:
-                    return true;
-                default:
-                    return base.IsPatternSupported(patternId);
-            }
-        }
+            UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId or UIA_PATTERN_ID.UIA_SelectionPatternId => true,
+            _ => base.IsPatternSupported(patternId),
+        };
 
         internal override unsafe IRawElementProviderSimple* HostRawElementProvider
         {

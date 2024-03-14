@@ -7,7 +7,7 @@ using System.Collections;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Provides a base designer for data grid view columns.
+///  Provides a base designer for data grid view columns.
 /// </summary>
 internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
 {

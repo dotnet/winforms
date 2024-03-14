@@ -366,7 +366,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
 
         // setup the MINIToolStrip host...
-        _typeHereTemplateNode = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText, null);
+        _typeHereTemplateNode = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText);
         int width = _typeHereTemplateNode.EditorToolStrip.Width;
         _typeHereNode = new DesignerToolStripControlHost(_typeHereTemplateNode.EditorToolStrip);
         _typeHereTemplateNode.ControlHost = _typeHereNode;
@@ -745,9 +745,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// <summary>
     ///  This Function is called by EnterInSituEdit where in we Swap the typeHereNode by  the TemplateNode (the Insitu Editor). Since the TemplateNode had a EditorToolStrip we can just HOST that ToolStrip as a ToolStripControlHost and add it to the DropDown.
     /// </summary>
-    private void CreateDummyMenuItem(ToolStripItem item, string text, Image image)
+    private void CreateDummyMenuItem(ToolStripItem item, string text)
     {
-        _commitedTemplateNode = new ToolStripTemplateNode(Component, text, image)
+        _commitedTemplateNode = new ToolStripTemplateNode(Component, text)
         {
             ActiveItem = item
         };
@@ -1356,7 +1356,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             return;
         }
 
-        CreateDummyMenuItem(toolItem, toolItem.Text, toolItem.Image);
+        CreateDummyMenuItem(toolItem, toolItem.Text);
         int index = MenuItem.DropDownItems.IndexOf(toolItem);
         // swap in our insitu ToolStrip
         MenuItem.DropDownItems.Insert(index, _commitedEditorNode);
@@ -1422,7 +1422,6 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// <summary>
     ///  Helper function to Hide the Active Dropdown from the given DropDownItem.
     /// </summary>
-    // Standard 'catch all - rethrow critical' exception pattern
     private void HideAllDropDowns(ToolStripDropDownItem item)
     {
         try

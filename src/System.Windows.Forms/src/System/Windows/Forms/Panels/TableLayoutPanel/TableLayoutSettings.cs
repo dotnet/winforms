@@ -57,8 +57,6 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     public override LayoutEngine LayoutEngine => TableLayout.Instance;
 
-    private TableLayout TableLayout => (TableLayout)LayoutEngine;
-
     /// <summary>
     ///  Internal as this is a TableLayoutPanel feature only.
     /// </summary>

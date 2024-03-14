@@ -12,17 +12,13 @@ internal sealed unsafe class ListViewLabelEditAccessibleObject : LabelEditAccess
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
     private readonly WeakReference<ListView> _owningListView;
-    private readonly WeakReference<ListViewLabelEditNativeWindow> _labelEdit;
-    private readonly LabelEditUiaTextProvider _textProvider;
 
     public ListViewLabelEditAccessibleObject(ListView owningListView, ListViewLabelEditNativeWindow labelEdit) : base(owningListView, labelEdit)
     {
         ArgumentNullException.ThrowIfNull(owningListView);
 
         _owningListView = new(owningListView);
-        _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
-        _textProvider = new(owningListView, labelEdit, this);
     }
 
     private ListViewSubItemAccessibleObject? OwningSubItemAccessibleObject =>

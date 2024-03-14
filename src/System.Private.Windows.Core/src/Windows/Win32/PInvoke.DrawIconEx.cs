@@ -22,7 +22,7 @@ internal static partial class PInvokeCore
         //
         // DI_COMPAT is not used.
 
-        BOOL result = DrawIconEx(hDC, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, HBRUSH.Null, DI_FLAGS.DI_NORMAL);
+        BOOL result = DrawIconEx(hDC, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, HBRUSH.Null, diFlags);
         GC.KeepAlive(hIcon.Wrapper);
         return result;
     }

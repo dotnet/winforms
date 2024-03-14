@@ -482,7 +482,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
+    ///  Shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
     /// </summary>
     private string? SettingsKey
     {

@@ -31,8 +31,8 @@ dotnet_style_qualification_for_property = false:error
 dotnet_style_qualification_for_method = false:error
 dotnet_style_qualification_for_event = false:error
 # use language keywords instead of BCL types
-dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
-dotnet_style_predefined_type_for_member_access = true:suggestion
+dotnet_style_predefined_type_for_locals_parameters_members = true:warning
+dotnet_style_predefined_type_for_member_access = true:warning
 
 # name all constant fields using PascalCase
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
@@ -74,7 +74,7 @@ dotnet_style_object_initializer = true:warning
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_coalesce_expression = true:warning
-dotnet_style_null_propagation = true:suggestion
+dotnet_style_null_propagation = true:warning
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_prefer_auto_properties = true:silent
 dotnet_style_prefer_simplified_boolean_expressions = true:warning
@@ -101,11 +101,17 @@ dotnet_diagnostic.IDE0040.severity = error
 
 # These two conflict with our usage of CsWin32
 
+# SYSLIB1045: Convert to 'GeneratedRegexAttribute'.
+dotnet_diagnostic.SYSLIB1045.severity = error
+
 # SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 dotnet_diagnostic.SYSLIB1054.severity = none
 
 # SYSLIB1096: Convert to 'GeneratedComInterface'
 dotnet_diagnostic.SYSLIB1096.severity = none
+
+# CA1047: Do not declare protected members in sealed types
+dotnet_diagnostic.CA1047.severity = error
 
 # CA1310: Specify StringComparison for correctness
 dotnet_diagnostic.CA1310.severity = error
@@ -134,20 +140,47 @@ dotnet_diagnostic.IDE0017.severity = warning
 # IDE0019: Use pattern matching
 dotnet_diagnostic.IDE0019.severity = warning
 
+# IDE0031: Use null propagation
+dotnet_diagnostic.IDE0031.severity = warning
+
 # IDE0038: Use pattern matching
 dotnet_diagnostic.IDE0038.severity = warning
+
+# IDE0043: Invalid format string
+dotnet_diagnostic.IDE0043.severity = warning
 
 # IDE0044: Add readonly modifier
 dotnet_diagnostic.IDE0044.severity = warning
 
+# IDE0049: Simplify Names
+dotnet_diagnostic.IDE0049.severity = warning
+
+# IDE0051: Remove unused private members
+dotnet_diagnostic.IDE0051.severity = warning
+
+# IDE0052: Remove unread private members
+dotnet_diagnostic.IDE0052.severity = warning
+
 # IDE0057: Use range operator
 dotnet_diagnostic.IDE0057.severity = error
+
+# IDE0060: Remove unused parameter
+dotnet_diagnostic.IDE0060.severity = warning
 
 # IDE0063: Use simple 'using' statement
 dotnet_diagnostic.IDE0063.severity = warning
 
+# IDE0066: Convert switch statement to expression
+dotnet_diagnostic.IDE0066.severity = warning
+
 # IDE0075: Simplify conditional expression
 dotnet_diagnostic.IDE0075.severity = warning
+
+# IDE0076: Invalid global suppression
+dotnet_diagnostic.IDE0076.severity = warning
+
+# IDE0077: Avoid legacy global suppression format
+dotnet_diagnostic.IDE0077.severity = warning
 
 # IDE0078: Use pattern matching
 dotnet_diagnostic.IDE0078.severity = warning
