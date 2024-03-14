@@ -10370,7 +10370,9 @@ public unsafe partial class Control :
             // enumerate
             for (int i = 0; i < controlsCollection.Count; i++)
             {
-                controlsCollection[i].Scale(new SizeF(dx, dy));
+#pragma warning disable CS0618 // Type or member is obsolete - compat
+                controlsCollection[i].Scale(dx, dy);
+#pragma warning restore CS0618
             }
         }
     }
