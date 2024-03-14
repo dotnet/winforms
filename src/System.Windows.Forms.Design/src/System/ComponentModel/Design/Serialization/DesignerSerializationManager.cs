@@ -12,35 +12,35 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 public class DesignerSerializationManager : IDesignerSerializationManager
 {
-    private readonly IServiceProvider? provider;
-    private ITypeResolutionService? typeResolver;
-    private bool searchedTypeResolver;
-    private bool recycleInstances;
-    private bool validateRecycledTypes;
-    private bool preserveNames;
-    private IContainer? container;
-    private IDisposable? session;
-    private ResolveNameEventHandler? resolveNameEventHandler;
-    private EventHandler? serializationCompleteEventHandler;
-    private EventHandler? sessionCreatedEventHandler;
-    private EventHandler? sessionDisposedEventHandler;
-    private HashSet<IDesignerSerializationProvider>? designerSerializationProviders;
-    private HashSet<Type>? defaultProviderTable;
-    private Dictionary<string, object>? instancesByName;
-    private Dictionary<object, string>? namesByInstance;
-    private Dictionary<Type, object>? serializers;
-    private List<object>? errorList;
-    private ContextStack? contextStack;
-    private PropertyDescriptorCollection? properties;
-    private object? propertyProvider;
+    private readonly IServiceProvider? _provider;
+    private ITypeResolutionService? _typeResolver;
+    private bool _searchedTypeResolver;
+    private bool _recycleInstances;
+    private bool _validateRecycledTypes;
+    private bool _preserveNames;
+    private IContainer? _container;
+    private IDisposable? _session;
+    private ResolveNameEventHandler? _resolveNameEventHandler;
+    private EventHandler? _serializationCompleteEventHandler;
+    private EventHandler? _sessionCreatedEventHandler;
+    private EventHandler? _sessionDisposedEventHandler;
+    private HashSet<IDesignerSerializationProvider>? _designerSerializationProviders;
+    private HashSet<Type>? _defaultProviderTable;
+    private Dictionary<string, object>? _instancesByName;
+    private Dictionary<object, string>? _namesByInstance;
+    private Dictionary<Type, object>? _serializers;
+    private List<object>? _errorList;
+    private ContextStack? _contextStack;
+    private PropertyDescriptorCollection? _properties;
+    private object? _propertyProvider;
 
     /// <summary>
     ///  Creates a new serialization manager.
     /// </summary>
     public DesignerSerializationManager()
     {
-        preserveNames = true;
-        validateRecycledTypes = true;
+        _preserveNames = true;
+        _validateRecycledTypes = true;
     }
 
     /// <summary>
@@ -48,9 +48,9 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public DesignerSerializationManager(IServiceProvider? provider)
     {
-        this.provider = provider.OrThrowIfNull();
-        preserveNames = true;
-        validateRecycledTypes = true;
+        _provider = provider.OrThrowIfNull();
+        _preserveNames = true;
+        _validateRecycledTypes = true;
     }
 
     /// <summary>
@@ -60,20 +60,20 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     {
         get
         {
-            if (container is null)
+            if (_container is null)
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
-                    container = host.Container;
+                    _container = host.Container;
                 }
             }
 
-            return container;
+            return _container;
         }
         set
         {
             CheckNoSession();
-            container = value;
+            _container = value;
         }
     }
 
@@ -85,8 +85,8 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         get
         {
             CheckSession();
-            errorList ??= [];
-            return errorList;
+            _errorList ??= [];
+            return _errorList;
         }
     }
 
@@ -95,11 +95,11 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public bool PreserveNames
     {
-        get => preserveNames;
+        get => _preserveNames;
         set
         {
             CheckNoSession();
-            preserveNames = value;
+            _preserveNames = value;
         }
     }
 
@@ -108,13 +108,13 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public object? PropertyProvider
     {
-        get => propertyProvider;
+        get => _propertyProvider;
         set
         {
-            if (propertyProvider != value)
+            if (_propertyProvider != value)
             {
-                propertyProvider = value;
-                properties = null;
+                _propertyProvider = value;
+                _properties = null;
             }
         }
     }
@@ -124,11 +124,11 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public bool RecycleInstances
     {
-        get => recycleInstances;
+        get => _recycleInstances;
         set
         {
             CheckNoSession();
-            recycleInstances = value;
+            _recycleInstances = value;
         }
     }
 
@@ -137,11 +137,11 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public bool ValidateRecycledTypes
     {
-        get => validateRecycledTypes;
+        get => _validateRecycledTypes;
         set
         {
             CheckNoSession();
-            validateRecycledTypes = value;
+            _validateRecycledTypes = value;
         }
     }
 
@@ -150,8 +150,8 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public event EventHandler? SessionCreated
     {
-        add => sessionCreatedEventHandler += value;
-        remove => sessionCreatedEventHandler -= value;
+        add => _sessionCreatedEventHandler += value;
+        remove => _sessionCreatedEventHandler -= value;
     }
 
     /// <summary>
@@ -159,8 +159,8 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public event EventHandler? SessionDisposed
     {
-        add => sessionDisposedEventHandler += value;
-        remove => sessionDisposedEventHandler -= value;
+        add => _sessionDisposedEventHandler += value;
+        remove => _sessionDisposedEventHandler -= value;
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     private void CheckNoSession()
     {
-        if (session is not null)
+        if (_session is not null)
         {
             throw new InvalidOperationException(SR.SerializationManagerWithinSession);
         }
@@ -179,7 +179,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     private void CheckSession()
     {
-        if (session is null)
+        if (_session is null)
         {
             throw new InvalidOperationException(SR.SerializationManagerNoSession);
         }
@@ -206,7 +206,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
         if (RecycleInstances && name is not null)
         {
-            instancesByName?.TryGetValue(name, out instance);
+            _instancesByName?.TryGetValue(name, out instance);
 
             if (instance is null && addToContainer && Container is not null)
             {
@@ -255,7 +255,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 try
                 {
                     // First, just try to create the object directly with the arguments.  generally this should work.
-                    instance = TypeDescriptor.CreateInstance(provider, type, argTypes: null, argArray);
+                    instance = TypeDescriptor.CreateInstance(_provider, type, argTypes: null, argArray);
                 }
                 catch (MissingMethodException)
                 {
@@ -308,7 +308,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                                 // All of the parameters were converted or matched, so try the creation again.
                                 if (match)
                                 {
-                                    instance = TypeDescriptor.CreateInstance(provider, type, argTypes: null, tempArgs);
+                                    instance = TypeDescriptor.CreateInstance(_provider, type, argTypes: null, tempArgs);
                                     break;
                                 }
                             }
@@ -372,14 +372,14 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public IDisposable CreateSession()
     {
-        if (session is not null)
+        if (_session is not null)
         {
             throw new InvalidOperationException(SR.SerializationManagerAlreadyInSession);
         }
 
-        session = new SerializationSession(this);
+        _session = new SerializationSession(this);
         OnSessionCreated(EventArgs.Empty);
-        return session;
+        return _session;
     }
 
     /// <summary>
@@ -394,10 +394,10 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         object? serializer = null;
         if (objectType is not null)
         {
-            if (serializers is not null)
+            if (_serializers is not null)
             {
                 // I don't double hash here. It will be a very rare day where multiple types of serializers will be used in the same scheme. We still handle it, but we just don't cache.
-                if (serializers.TryGetValue(objectType, out serializer) && !serializerType.IsAssignableFrom(serializer.GetType()))
+                if (_serializers.TryGetValue(objectType, out serializer) && !serializerType.IsAssignableFrom(serializer.GetType()))
                 {
                     serializer = null;
                 }
@@ -438,16 +438,16 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 }
 
                 // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
-                if (serializer is not null && session is not null)
+                if (serializer is not null && _session is not null)
                 {
-                    serializers ??= [];
-                    serializers[objectType] = serializer;
+                    _serializers ??= [];
+                    _serializers[objectType] = serializer;
                 }
             }
         }
 
         // Check for a default serialization provider
-        if (defaultProviderTable is null || !defaultProviderTable.Contains(serializerType))
+        if (_defaultProviderTable is null || !_defaultProviderTable.Contains(serializerType))
         {
             Type? defaultSerializerType = null;
             DefaultSerializationProviderAttribute? attribute = (DefaultSerializationProviderAttribute?)TypeDescriptor.GetAttributes(serializerType)[typeof(DefaultSerializationProviderAttribute)];
@@ -470,18 +470,18 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 }
             }
 
-            defaultProviderTable ??= [];
-            defaultProviderTable.Add(serializerType);
+            _defaultProviderTable ??= [];
+            _defaultProviderTable.Add(serializerType);
         }
 
         // Designer serialization providers can override our metadata discovery. We loop until we reach steady state.  This breaks order dependencies by allowing all providers a chance to party on each other's serializers.
-        if (designerSerializationProviders is not null)
+        if (_designerSerializationProviders is not null)
         {
             bool continueLoop = true;
-            for (int i = 0; continueLoop && i < designerSerializationProviders.Count; i++)
+            for (int i = 0; continueLoop && i < _designerSerializationProviders.Count; i++)
             {
                 continueLoop = false;
-                foreach (IDesignerSerializationProvider provider in designerSerializationProviders)
+                foreach (IDesignerSerializationProvider provider in _designerSerializationProviders)
                 {
                     object? newSerializer = provider.GetSerializer(this, serializer, objectType, serializerType);
                     if (newSerializer is not null)
@@ -500,7 +500,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     ///  Provides access to the underlying IServiceProvider
     /// </summary>
     protected virtual object? GetService(Type serviceType)
-        => serviceType == typeof(IContainer) ? Container : provider?.GetService(serviceType);
+        => serviceType == typeof(IContainer) ? Container : _provider?.GetService(serviceType);
 
     /// <summary>
     ///  Retrieves the type for the given name using the type resolution service, if available.
@@ -529,13 +529,13 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     public Type? GetRuntimeType(string? typeName)
     {
-        if (typeResolver is null && !searchedTypeResolver)
+        if (_typeResolver is null && !_searchedTypeResolver)
         {
-            typeResolver = GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
-            searchedTypeResolver = true;
+            _typeResolver = GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
+            _searchedTypeResolver = true;
         }
 
-        return typeResolver is null ? Type.GetType(typeName!) : typeResolver.GetType(typeName!);
+        return _typeResolver is null ? Type.GetType(typeName!) : _typeResolver.GetType(typeName!);
     }
 
     /// <summary>
@@ -543,7 +543,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     protected virtual void OnResolveName(ResolveNameEventArgs e)
     {
-        resolveNameEventHandler?.Invoke(this, e);
+        _resolveNameEventHandler?.Invoke(this, e);
     }
 
     /// <summary>
@@ -551,7 +551,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     protected virtual void OnSessionCreated(EventArgs e)
     {
-        sessionCreatedEventHandler?.Invoke(this, e);
+        _sessionCreatedEventHandler?.Invoke(this, e);
     }
 
     /// <summary>
@@ -563,23 +563,23 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         {
             try
             {
-                sessionDisposedEventHandler?.Invoke(this, e);
+                _sessionDisposedEventHandler?.Invoke(this, e);
             }
             finally
             {
-                serializationCompleteEventHandler?.Invoke(this, e);
+                _serializationCompleteEventHandler?.Invoke(this, e);
             }
         }
         finally
         {
-            resolveNameEventHandler = null;
-            serializationCompleteEventHandler = null;
-            instancesByName = null;
-            namesByInstance = null;
-            serializers = null;
-            contextStack = null;
-            errorList = null;
-            session = null;
+            _resolveNameEventHandler = null;
+            _serializationCompleteEventHandler = null;
+            _instancesByName = null;
+            _namesByInstance = null;
+            _serializers = null;
+            _contextStack = null;
+            _errorList = null;
+            _session = null;
         }
     }
 
@@ -604,13 +604,13 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     {
         get
         {
-            if (contextStack is null)
+            if (_contextStack is null)
             {
                 CheckSession();
-                contextStack = new ContextStack();
+                _contextStack = new ContextStack();
             }
 
-            return contextStack;
+            return _contextStack;
         }
     }
 
@@ -622,7 +622,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     {
         get
         {
-            if (properties is null)
+            if (_properties is null)
             {
                 object? propObject = PropertyProvider;
                 PropertyDescriptor[] propArray;
@@ -640,10 +640,10 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                     }
                 }
 
-                properties = new PropertyDescriptorCollection(propArray);
+                _properties = new PropertyDescriptorCollection(propArray);
             }
 
-            return properties;
+            return _properties;
         }
     }
 
@@ -659,9 +659,9 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         add
         {
             CheckSession();
-            resolveNameEventHandler += value;
+            _resolveNameEventHandler += value;
         }
-        remove => resolveNameEventHandler -= value;
+        remove => _resolveNameEventHandler -= value;
     }
 
     /// <summary>
@@ -681,9 +681,9 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         add
         {
             CheckSession();
-            serializationCompleteEventHandler += value;
+            _serializationCompleteEventHandler += value;
         }
-        remove => serializationCompleteEventHandler -= value;
+        remove => _serializationCompleteEventHandler -= value;
     }
 
     /// <summary>
@@ -691,8 +691,8 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
     {
-        designerSerializationProviders ??= [];
-        designerSerializationProviders.Add(provider);
+        _designerSerializationProviders ??= [];
+        _designerSerializationProviders.Add(provider);
     }
 
     /// <summary>
@@ -707,7 +707,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         // If it didn't, the container itself will throw, so we're covered.
         if (name is not null)
         {
-            if (instancesByName is not null && instancesByName.ContainsKey(name))
+            if (_instancesByName is not null && _instancesByName.ContainsKey(name))
             {
                 Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
                 {
@@ -735,10 +735,10 @@ public class DesignerSerializationManager : IDesignerSerializationManager
             && (!(instance is IComponent) // And it's not an icomponent
                 || !RecycleInstances))
         { // Or it is an icomponent but recycle instances is turned off
-            instancesByName ??= new(StringComparer.CurrentCulture);
-            namesByInstance ??= new(new ReferenceComparer());
-            instancesByName[name] = instance;
-            namesByInstance[instance] = name;
+            _instancesByName ??= new(StringComparer.CurrentCulture);
+            _namesByInstance ??= new(new ReferenceComparer());
+            _instancesByName[name] = instance;
+            _namesByInstance[instance] = name;
         }
 
         return instance;
@@ -754,7 +754,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         CheckSession();
         // Check our local nametable first
         object? instance = null;
-        if (instancesByName is not null && instancesByName.TryGetValue(name, out instance))
+        if (_instancesByName is not null && _instancesByName.TryGetValue(name, out instance))
         {
             return instance;
         }
@@ -783,7 +783,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
 
         CheckSession();
         // Check our local nametable first
-        if (namesByInstance is not null && namesByInstance.TryGetValue(value, out string? name))
+        if (_namesByInstance is not null && _namesByInstance.TryGetValue(value, out string? name))
         {
             return name;
         }
@@ -841,7 +841,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     void IDesignerSerializationManager.RemoveSerializationProvider(IDesignerSerializationProvider provider)
     {
-        designerSerializationProviders?.Remove(provider);
+        _designerSerializationProviders?.Remove(provider);
     }
 
     /// <summary>
@@ -861,7 +861,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
 
     internal HashSet<IDesignerSerializationProvider> SerializationProviders
     {
-        get => designerSerializationProviders ??= [];
+        get => _designerSerializationProviders ??= [];
     }
 
     /// <summary>
@@ -877,24 +877,24 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         ArgumentNullException.ThrowIfNull(instance);
         ArgumentNullException.ThrowIfNull(name);
 
-        if (instancesByName is null || namesByInstance is null)
+        if (_instancesByName is null || _namesByInstance is null)
         {
-            instancesByName = new(StringComparer.CurrentCulture);
-            namesByInstance = new(new ReferenceComparer());
+            _instancesByName = new(StringComparer.CurrentCulture);
+            _namesByInstance = new(new ReferenceComparer());
         }
 
-        if (instancesByName.ContainsKey(name))
+        if (_instancesByName.ContainsKey(name))
         {
             throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
         }
 
-        if (namesByInstance.TryGetValue(instance, out string? instanceName))
+        if (_namesByInstance.TryGetValue(instance, out string? instanceName))
         {
             throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, instanceName), nameof(instance));
         }
 
-        instancesByName[name] = instance;
-        namesByInstance[instance] = name;
+        _instancesByName[name] = instance;
+        _namesByInstance[instance] = name;
     }
 
     /// <summary>
@@ -944,58 +944,58 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     /// </summary>
     private sealed class WrappedPropertyDescriptor : PropertyDescriptor
     {
-        private readonly object target;
-        private readonly PropertyDescriptor property;
+        private readonly object _target;
+        private readonly PropertyDescriptor _property;
 
         internal WrappedPropertyDescriptor(PropertyDescriptor property, object target) : base(property.Name, null)
         {
-            this.property = property;
-            this.target = target;
+            _property = property;
+            _target = target;
         }
 
         public override AttributeCollection Attributes
         {
-            get => property.Attributes;
+            get => _property.Attributes;
         }
 
         public override Type ComponentType
         {
-            get => property.ComponentType;
+            get => _property.ComponentType;
         }
 
         public override bool IsReadOnly
         {
-            get => property.IsReadOnly;
+            get => _property.IsReadOnly;
         }
 
         public override Type PropertyType
         {
-            get => property.PropertyType;
+            get => _property.PropertyType;
         }
 
         public override bool CanResetValue(object component)
         {
-            return property.CanResetValue(target);
+            return _property.CanResetValue(_target);
         }
 
         public override object? GetValue(object? component)
         {
-            return property.GetValue(target);
+            return _property.GetValue(_target);
         }
 
         public override void ResetValue(object component)
         {
-            property.ResetValue(target);
+            _property.ResetValue(_target);
         }
 
         public override void SetValue(object? component, object? value)
         {
-            property.SetValue(target, value);
+            _property.SetValue(_target, value);
         }
 
         public override bool ShouldSerializeValue(object component)
         {
-            return property.ShouldSerializeValue(target);
+            return _property.ShouldSerializeValue(_target);
         }
     }
 }

@@ -339,7 +339,7 @@ public unsafe class IMsoComponentManagerTests
 
     private class MockWrapper : IMsoComponent.Interface, IManagedWrapper<IMsoComponent>
     {
-        private IMsoComponent.Interface _mock;
+        private readonly IMsoComponent.Interface _mock;
         public MockWrapper(IMsoComponent.Interface mock) => _mock = mock;
 
         BOOL IMsoComponent.Interface.FDebugMessage(nint hInst, uint msg, WPARAM wParam, LPARAM lParam)

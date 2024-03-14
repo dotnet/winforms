@@ -9,9 +9,9 @@ namespace TestConsole;
 
 public partial class MainForm : Form
 {
-    ISelectionService _selectionService;
+    private ISelectionService _selectionService;
 
-    private List<IDesignSurfaceExt> _listOfDesignSurface = new();
+    private readonly List<IDesignSurfaceExt> _listOfDesignSurface = [];
 
     public MainForm()
     {

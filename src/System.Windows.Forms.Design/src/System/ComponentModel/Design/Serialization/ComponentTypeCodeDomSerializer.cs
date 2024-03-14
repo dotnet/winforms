@@ -10,8 +10,8 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
 {
-    private static readonly object _initMethodKey = new();
-    private const string _initMethodName = "InitializeComponent";
+    private static readonly object s_initMethodKey = new();
+    private const string InitMethodName = "InitializeComponent";
     private static ComponentTypeCodeDomSerializer? s_default;
 
     internal static new ComponentTypeCodeDomSerializer Default => s_default ??= new ComponentTypeCodeDomSerializer();
@@ -26,19 +26,19 @@ internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
         ArgumentNullException.ThrowIfNull(typeDecl);
         ArgumentNullException.ThrowIfNull(value);
 
-        if (typeDecl.UserData[_initMethodKey] is not CodeMemberMethod method)
+        if (typeDecl.UserData[s_initMethodKey] is not CodeMemberMethod method)
         {
             method = new CodeMemberMethod
             {
-                Name = _initMethodName,
+                Name = InitMethodName,
                 Attributes = MemberAttributes.Private
             };
-            typeDecl.UserData[_initMethodKey] = method;
+            typeDecl.UserData[s_initMethodKey] = method;
 
             // Now create a ctor that calls this method.
             CodeConstructor ctor = new();
 
-            ctor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), _initMethodName));
+            ctor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), InitMethodName));
             typeDecl.Members.Add(ctor);
         }
 
@@ -60,7 +60,7 @@ internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
             // method.Parameters causes OnMethodPopulateParameters callback and therefore it is much more
             // expensive than method.Name.Equals
 
-            if (member is CodeMemberMethod method && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0)
+            if (member is CodeMemberMethod method && method.Name.Equals(InitMethodName) && method.Parameters.Count == 0)
             {
                 return
                 [

@@ -8,7 +8,7 @@ namespace DesignSurfaceExt;
 
 public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 {
-    private const string _Name_ = "DesignSurfaceExt";
+    private const string Name = "DesignSurfaceExt";
 
     #region IDesignSurfaceExt Members
 
@@ -150,7 +150,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
+            throw new Exception($"{Name}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -186,7 +186,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::CreateControl() - Exception: (see Inner Exception)", ex);
+            throw new Exception($"{Name}::CreateControl() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -232,7 +232,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
+            throw new Exception($"{Name}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -390,7 +390,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
+            throw new Exception($"{Name}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
         }
     }
 }

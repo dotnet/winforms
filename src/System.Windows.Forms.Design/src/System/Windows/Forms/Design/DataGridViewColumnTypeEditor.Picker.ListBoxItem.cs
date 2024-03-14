@@ -7,11 +7,9 @@ internal partial class DataGridViewColumnTypePicker : ContainerControl
 {
     private class ListBoxItem
     {
-        private Type _columnType;
-        public ListBoxItem(Type columnType)
-        {
-            _columnType = columnType;
-        }
+        private readonly Type _columnType;
+
+        public ListBoxItem(Type columnType) => _columnType = columnType;
 
         public override string ToString() => _columnType.Name;
 

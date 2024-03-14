@@ -14,7 +14,7 @@ public class BitmapEditor : ImageEditor
 
     protected override string GetFileDialogDescription() => SR.bitmapFileDescription;
 
-    protected override string[] GetExtensions() => BitmapExtensions.ToArray();
+    protected override string[] GetExtensions() => [.. BitmapExtensions];
 
     protected override Image LoadFromStream(Stream stream) => new Bitmap(stream);
 }

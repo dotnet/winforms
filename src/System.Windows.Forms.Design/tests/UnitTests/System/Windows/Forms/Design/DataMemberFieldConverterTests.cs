@@ -9,8 +9,8 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class DataMemberFieldConverterTests
 {
-    private static DataMemberFieldConverter s_converter = new();
-    private static ITypeDescriptorContext s_context = new MyTypeDescriptorContext();
+    private static readonly DataMemberFieldConverter s_converter = new();
+    private static readonly ITypeDescriptorContext s_context = new MyTypeDescriptorContext();
 
     [Fact]
     public static void CanConvertFrom()

@@ -14,7 +14,7 @@ public class Control_ControlAccessibleObjectTests
     // These controls return an empty "AccessKey" property because they have a ControlStyles.UseTextForAccessibility flag
     // with "false" value, which prohibits the use of text to create the AccessKey.
     // This behavior is consistent with .NET Framework 4.7.2
-    private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
+    private static readonly Type[] s_controlsNotUseTextForAccessibility = new Type[]
     {
         typeof(CheckedListBox),
         typeof(ComboBox),
@@ -39,10 +39,10 @@ public class Control_ControlAccessibleObjectTests
     // These controls have special conditions for setting the Text property.
     // Please check if the control type isn't contained here in cases where text change is needed
     // otherwise an error can be thrown.
-    private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
-    {
+    private static readonly Type[] s_controlsIgnoringTextChangesForTests =
+    [
         typeof(DateTimePicker), typeof(WebBrowser)
-    };
+    ];
 
     [WinFormsFact]
     public void ControlAccessibleObject_Ctor_ControlWithoutHandle()

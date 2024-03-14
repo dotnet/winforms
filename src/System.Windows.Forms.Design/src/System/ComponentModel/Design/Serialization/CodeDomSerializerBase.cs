@@ -18,10 +18,12 @@ namespace System.ComponentModel.Design.Serialization;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class CodeDomSerializerBase
 {
-    private static readonly Attribute[] runTimeProperties = [DesignOnlyAttribute.No];
-    private static readonly TraceSwitch traceSerialization = new("DesignerSerialization", "Trace design time serialization");
+    private static readonly Attribute[] s_runTimeProperties = [DesignOnlyAttribute.No];
+    private static readonly TraceSwitch s_traceSerialization = new("DesignerSerialization", "Trace design time serialization");
 #pragma warning disable CS0649
-    private static Stack<string>? traceScope;
+#pragma warning disable IDE0044 // Add readonly modifier - can only be readonly in release, should probably refactor to only have this in debug
+    private static Stack<string>? s_traceScope;
+#pragma warning restore IDE0044
 #pragma warning restore CS0649
     /// <summary>
     ///  Internal constructor so only we can derive from this class.
@@ -404,10 +406,10 @@ public abstract partial class CodeDomSerializerBase
     internal static IDisposable TraceScope(string name)
     {
 #if DEBUG
-        traceScope ??= new Stack<string>();
+        s_traceScope ??= new Stack<string>();
 
         Trace(TraceLevel.Verbose, name);
-        traceScope.Push(name);
+        s_traceScope.Push(name);
 #endif
         return default(TracingScope);
     }
@@ -436,9 +438,9 @@ public abstract partial class CodeDomSerializerBase
 
     private struct TracingScope : IDisposable
     {
-        public void Dispose()
+        public readonly void Dispose()
         {
-            traceScope?.Pop();
+            s_traceScope?.Pop();
         }
     }
 
@@ -1675,7 +1677,7 @@ public abstract partial class CodeDomSerializerBase
     [Conditional("DEBUG")]
     internal static void Trace(TraceLevel level, string message)
     {
-        if (traceSerialization.Level < level)
+        if (s_traceSerialization.Level < level)
             return;
 
         switch (level)
@@ -1685,7 +1687,7 @@ public abstract partial class CodeDomSerializerBase
 
                 try
                 {
-                    Debug.IndentLevel = traceScope?.Count ?? 0;
+                    Debug.IndentLevel = s_traceScope?.Count ?? 0;
                     Debug.WriteLine(message);
                 }
                 finally
@@ -1720,7 +1722,7 @@ public abstract partial class CodeDomSerializerBase
     }
 
     private static string GetTraceScopeAsString() =>
-        traceScope is not null ? string.Join('/', traceScope.Reverse()) : string.Empty;
+        s_traceScope is not null ? string.Join('/', s_traceScope.Reverse()) : string.Empty;
 
     private bool DeserializePropertyAssignStatement(IDesignerSerializationManager manager, CodeAssignStatement statement,
         CodePropertyReferenceExpression propertyReferenceEx, bool reportError)
@@ -1731,7 +1733,7 @@ public abstract partial class CodeDomSerializerBase
         if (lhs is not null and not CodeExpression)
         {
             // Property assignments must go through our type descriptor system. However, we do not support parameterized properties.  If there are any parameters on the property, we do not perform the assignment.
-            PropertyDescriptorCollection properties = GetPropertiesHelper(manager, lhs, runTimeProperties);
+            PropertyDescriptorCollection properties = GetPropertiesHelper(manager, lhs, s_runTimeProperties);
             PropertyDescriptor? p = properties[propertyReferenceEx.PropertyName];
             if (p is not null)
             {
@@ -2813,7 +2815,7 @@ public abstract partial class CodeDomSerializerBase
         Trace(TraceLevel.Verbose, $"Set expression {expression} for object {value}");
         // in debug builds, save off who performed this set expression.  It's very valuable to know.
 #if DEBUG
-        if (traceSerialization.TraceVerbose)
+        if (s_traceSerialization.TraceVerbose)
         {
             expression.UserData["StackTrace"] = Environment.StackTrace;
         }

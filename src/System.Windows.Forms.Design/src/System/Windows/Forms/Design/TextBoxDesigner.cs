@@ -8,14 +8,14 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer for TextBox.</para>
+///  Provides a designer for TextBox.
 /// </summary>
 internal class TextBoxDesigner : TextBoxBaseDesigner
 {
-    private char passwordChar;
+    private char _passwordChar;
 
     private DesignerActionListCollection? _actionLists;
+
     public override DesignerActionListCollection ActionLists
     {
         get
@@ -77,7 +77,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
 
             if (tb.UseSystemPasswordChar)
             {
-                return passwordChar;
+                return _passwordChar;
             }
             else
             {
@@ -89,7 +89,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
             TextBox tb = (Control as TextBox)!;
             Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
-            passwordChar = value;
+            _passwordChar = value;
             tb.PasswordChar = value;
         }
     }

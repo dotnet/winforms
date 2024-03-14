@@ -10,7 +10,7 @@ namespace System.Windows.Forms.UITests;
 
 public class AnchorLayoutTests : ControlTestBase
 {
-    static AnchorStyles anchorAllDirection = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+    private const AnchorStyles AnchorAllDirection = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 
     public AnchorLayoutTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -61,7 +61,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void Control_NotParented_AnchorsNotComputed()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
         {
@@ -87,7 +87,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void Control_SuspendedLayout_AnchorsNotComputed()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
         {
@@ -110,7 +110,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void Control_ResumedLayout_AnchorsComputed()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
         {
@@ -137,7 +137,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void ConfigSwitch_Disabled_SuspendedLayout_AnchorsComputed()
     {
         int previousSwitchValue = SetAnchorLayoutV1();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
         {
@@ -158,7 +158,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void NestedContainer_AnchorsComputed()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
             using ContainerControl container = new();
@@ -189,7 +189,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void ParentChanged_AnchorsUpdated()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
             using ContainerControl container = new();
@@ -228,7 +228,7 @@ public class AnchorLayoutTests : ControlTestBase
     public void SetBoundsOnAnchoredControl_BoundsChanged()
     {
         int previousSwitchValue = SetAnchorLayoutV2();
-        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+        (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
             form.Controls.Add(button);

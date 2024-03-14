@@ -24,7 +24,7 @@ internal partial class ItemArray : IComparer<Entry>
     private static int s_lastMask = 1;
 
     private readonly ListControl _listControl;
-    private List<Entry> _entries;
+    private readonly List<Entry> _entries;
 
     public ItemArray(ListControl listControl)
     {

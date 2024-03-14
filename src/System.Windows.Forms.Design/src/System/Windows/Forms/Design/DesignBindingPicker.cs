@@ -90,9 +90,9 @@ namespace System.Windows.Forms.Design
     {
         private BindingPickerTree? _treeViewCtrl;   // Tree view that shows the available data sources and data members
         private BindingPickerLink _addNewCtrl;     // Link that invokes the "Add Project Data Source" wizard
-        private Panel _addNewPanel;    // Panel containing the "Add Project Data Source" link
+        private readonly Panel _addNewPanel;    // Panel containing the "Add Project Data Source" link
         private HelpTextLabel _helpTextCtrl;   // Label that displays helpful text as user mouses over tree view nodes
-        private Panel _helpTextPanel;  // Panel containing the help text label
+        private readonly Panel _helpTextPanel;  // Panel containing the help text label
 
         private IServiceProvider? _serviceProvider; // Current VS service provider
         private IWindowsFormsEditorService? _windowsFormsEditorService; // Service used to invoke the picker inside a modal dropdown
@@ -2282,7 +2282,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal class DataSourceNode : BindingPickerNode
         {
-            private object? _dataSource;
+            private readonly object? _dataSource;
 
             public DataSourceNode(DesignBindingPicker picker, object? dataSource, string? nodeName) : base(picker, nodeName)
             {
@@ -2360,8 +2360,8 @@ namespace System.Windows.Forms.Design
 
         internal class DataMemberNode : DataSourceNode
         {
-            private bool _isList;
-            private string _dataMember;
+            private readonly bool _isList;
+            private readonly string _dataMember;
 
             public DataMemberNode(
                 DesignBindingPicker picker,

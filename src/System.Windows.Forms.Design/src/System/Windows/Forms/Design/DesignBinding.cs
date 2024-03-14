@@ -5,64 +5,40 @@ namespace System.Windows.Forms.Design;
 
 internal class DesignBinding
 {
-    private object? dataSource;
-    private string? dataMember;
-
-    public static DesignBinding Null = new(null, null);
+    public static DesignBinding Null { get; } = new(null, null);
 
     public DesignBinding(object? dataSource, string? dataMember)
     {
-        this.dataSource = dataSource;
-        this.dataMember = dataMember;
+        DataSource = dataSource;
+        DataMember = dataMember;
     }
 
-    public bool IsNull
-    {
-        get
-        {
-            return (dataSource is null);
-        }
-    }
+    public bool IsNull => DataSource is null;
 
-    public object? DataSource
-    {
-        get
-        {
-            return dataSource;
-        }
-    }
+    public object? DataSource { get; }
 
-    public string? DataMember
-    {
-        get
-        {
-            return dataMember;
-        }
-    }
+    public string? DataMember { get; }
 
     public string DataField
     {
         get
         {
-            if (string.IsNullOrEmpty(dataMember))
+            if (string.IsNullOrEmpty(DataMember))
             {
                 return string.Empty;
             }
 
-            int lastDot = dataMember.LastIndexOf(".");
+            int lastDot = DataMember.LastIndexOf('.');
             if (lastDot == -1)
             {
-                return dataMember;
+                return DataMember;
             }
             else
             {
-                return dataMember.Substring(lastDot + 1);
+                return DataMember[(lastDot + 1)..];
             }
         }
     }
 
-    public bool Equals(object? dataSource, string dataMember)
-    {
-        return dataSource == this.dataSource && string.Equals(dataMember, this.dataMember, StringComparison.OrdinalIgnoreCase);
-    }
+    public bool Equals(object? dataSource, string dataMember) => dataSource == DataSource && string.Equals(dataMember, DataMember, StringComparison.OrdinalIgnoreCase);
 }

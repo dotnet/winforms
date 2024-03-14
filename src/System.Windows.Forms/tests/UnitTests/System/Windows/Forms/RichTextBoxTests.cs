@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests;
 
 public class RichTextBoxTests
 {
-    private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
+    private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
     [WinFormsFact]
     public void RichTextBox_Ctor_Default()

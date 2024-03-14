@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class GroupBoxDesigner : ParentControlDesigner
 {
-    private InheritanceUI inheritanceUI;
+    private InheritanceUI _inheritanceUI;
 
     /// <summary>
     /// Determines the default location for a control added to this designer.
@@ -86,9 +86,9 @@ internal class GroupBoxDesigner : ParentControlDesigner
         //
         if (Inherited)
         {
-            inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
+            _inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
 
-            if (inheritanceUI is not null)
+            if (_inheritanceUI is not null)
             {
                 pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
             }
