@@ -172,7 +172,7 @@ internal sealed class Com2Properties
         {
             // Check if the property is valid but don't dispose it if it's not.
             CheckAndGetTarget(checkVersions: false, callDispose: false);
-            return _touchedTime == 0 ? false : TicksSinceTouched > AgeThreshold;
+            return _touchedTime != 0 && TicksSinceTouched > AgeThreshold;
         }
     }
 

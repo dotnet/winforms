@@ -24,7 +24,7 @@ public class CollectionFormTests : CollectionEditor
         Assert.Null(form.Context);
         Assert.Null(form.EditValue);
         Assert.Empty(form.Items);
-        Assert.Equal(new Type[] { typeof(int) }, form.NewItemTypes);
+        Assert.Equal([typeof(int)], form.NewItemTypes);
     }
 
     [Fact]
@@ -85,19 +85,19 @@ public class CollectionFormTests : CollectionEditor
         SubCollectionEditor editor = new(typeof(List<int>));
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
-        };
-        form.OnEditValueChangedCallCount = 0;
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0,
 
-        form.Items = value;
+            Items = value
+        };
         Assert.Equal(new object[] { 1, 2 }, form.EditValue);
-        Assert.Equal(new object[] { 1, 2 }, form.Items);
+        Assert.Equal([1, 2], form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
 
         // Set same.
         form.Items = value;
         Assert.Equal(new object[] { 1, 2 }, form.EditValue);
-        Assert.Equal(new object[] { 1, 2 }, form.Items);
+        Assert.Equal([1, 2], form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
     }
 
@@ -196,11 +196,11 @@ public class CollectionFormTests : CollectionEditor
 
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
-        };
-        form.OnEditValueChangedCallCount = 0;
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0,
 
-        form.Items = value;
+            Items = value
+        };
         Assert.Equal(value ?? Array.Empty<object>(), form.EditValue);
         Assert.Equal(value ?? Array.Empty<object>(), form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
@@ -255,11 +255,11 @@ public class CollectionFormTests : CollectionEditor
 
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
-        };
-        form.OnEditValueChangedCallCount = 0;
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0,
 
-        form.Items = value;
+            Items = value
+        };
         Assert.Equal("CustomSetItems", form.EditValue);
         Assert.Empty(form.Items);
         Assert.Equal(1, form.OnEditValueChangedCallCount);
@@ -314,13 +314,13 @@ public class CollectionFormTests : CollectionEditor
 
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
-        };
-        form.OnEditValueChangedCallCount = 0;
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0,
 
-        form.Items = value;
+            Items = value
+        };
         Assert.Equal(new object[] { 1, 2 }, form.EditValue);
-        Assert.Equal(new object[] { 1, 2 }, form.Items);
+        Assert.Equal([1, 2], form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
         mockContext.Verify(c => c.OnComponentChanging(), Times.Once());
         mockContext.Verify(c => c.OnComponentChanged(), Times.Never());
@@ -328,7 +328,7 @@ public class CollectionFormTests : CollectionEditor
         // Set same.
         form.Items = value;
         Assert.Equal(new object[] { 1, 2 }, form.EditValue);
-        Assert.Equal(new object[] { 1, 2 }, form.Items);
+        Assert.Equal([1, 2], form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
         mockContext.Verify(c => c.OnComponentChanging(), Times.Exactly(2));
         mockContext.Verify(c => c.OnComponentChanged(), Times.Never());
@@ -373,9 +373,9 @@ public class CollectionFormTests : CollectionEditor
 
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0
         };
-        form.OnEditValueChangedCallCount = 0;
 
         Assert.Throws<StackOverflowException>(() => form.Items = value);
     }
@@ -428,13 +428,13 @@ public class CollectionFormTests : CollectionEditor
 
         SubCollectionForm form = new(editor)
         {
-            EditValue = new List<int> { 1, 2 }
-        };
-        form.OnEditValueChangedCallCount = 0;
+            EditValue = new List<int> { 1, 2 },
+            OnEditValueChangedCallCount = 0,
 
-        form.Items = value;
+            Items = value
+        };
         Assert.Equal(new object[] { 1, 2 }, form.EditValue);
-        Assert.Equal(new object[] { 1, 2 }, form.Items);
+        Assert.Equal([1, 2], form.Items);
         Assert.Equal(0, form.OnEditValueChangedCallCount);
         mockContext.Verify(c => c.OnComponentChanging(), Times.Once());
         mockContext.Verify(c => c.OnComponentChanged(), Times.Never());

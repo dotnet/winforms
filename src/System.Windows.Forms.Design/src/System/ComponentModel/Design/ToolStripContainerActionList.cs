@@ -160,8 +160,8 @@ internal class ToolStripContainerActionList : DesignerActionList
                 }
 
                 // We should not reparent inherited Controls
-                var inheritanceAttribute = TypeDescriptor.GetAttributes(control)?[typeof(InheritanceAttribute)] as InheritanceAttribute;
-                if (inheritanceAttribute is null || inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                if (TypeDescriptor.GetAttributes(control)?[typeof(InheritanceAttribute)] is not InheritanceAttribute inheritanceAttribute
+                    || inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                 {
                     continue;
                 }

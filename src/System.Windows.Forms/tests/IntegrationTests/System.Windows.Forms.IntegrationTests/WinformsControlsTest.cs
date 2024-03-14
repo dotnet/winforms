@@ -204,8 +204,10 @@ public partial class WinformsControlsTest
 #endif
     public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
     {
-        var mainObject = new Mocks.MainObject();
-        mainObject.Text = "Test text";
+        var mainObject = new Mocks.MainObject
+        {
+            Text = "Test text"
+        };
         Form form = new();
         TextBox textBox = new();
         Binding binding = new("Text", mainObject, "Text");

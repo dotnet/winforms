@@ -833,7 +833,7 @@ public class ListBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(1, dataSourceCallCount);
@@ -846,7 +846,7 @@ public class ListBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(2, dataSourceCallCount);
@@ -2439,8 +2439,8 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedIndex_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -2921,8 +2921,8 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedItem_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -3309,13 +3309,13 @@ public class ListBoxTests
 
         // Verify equal lengths.
         control.GetSelCountResult = (IntPtr)1;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 2 }, control.SelectedIndices.Cast<int>());
 
         // Verify truncated
         control.GetSelCountResult = (IntPtr)2;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 0, 2 }, control.SelectedIndices.Cast<int>());
 
@@ -4557,12 +4557,12 @@ public class ListBoxTests
         using SubListBox control = new();
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
@@ -4590,7 +4590,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(1, invalidatedCallCount);
@@ -4598,7 +4598,7 @@ public class ListBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(2, invalidatedCallCount);
@@ -4845,7 +4845,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4878,7 +4878,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight + 6, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -5815,8 +5815,8 @@ public class ListBoxTests
     [MemberData(nameof(OnSelectedIndexChanged_WithDataManager_TestData))]
     public void ListBox_OnSelectedIndexChanged_InvokeWithDataManager_CallsSelectedIndexChanged(bool formattingEnabled, int position, EventArgs eventArgs)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -6118,7 +6118,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
         listBox.SelectedItem = listBox.Items[0];
 
         Assert.Equal(3, listBox.Items.Count);
@@ -6159,7 +6159,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3", "4" });
+        listBox.Items.AddRange((object[])["1", "2", "3", "4"]);
         listBox.SelectedItems.Add(listBox.Items[0]);
         listBox.SelectedItems.Add(listBox.Items[1]);
 
@@ -6199,7 +6199,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {
@@ -6235,7 +6235,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {

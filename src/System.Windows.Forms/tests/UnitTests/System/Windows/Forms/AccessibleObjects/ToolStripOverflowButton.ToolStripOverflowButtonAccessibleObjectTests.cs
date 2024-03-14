@@ -65,8 +65,10 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
     public void ToolStripOverflowButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
         using ToolStrip toolStrip = new();
-        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip);
-        toolStripOverflowButton.AccessibleRole = role;
+        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip)
+        {
+            AccessibleRole = role
+        };
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);

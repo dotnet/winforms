@@ -27,7 +27,7 @@ public partial class IDispatchTests
             fixed (PWSTR* pRgszNames = rgszNames)
             {
                 picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvokeCore.GetThreadLocale(), pRgDispId);
-                Assert.Equal(new PWSTR[] { width, other }, rgszNames);
+                Assert.Equal([width, other], rgszNames);
 
                 Assert.Equal(new int[] { (int)PInvokeCore.DISPID_PICT_WIDTH, PInvokeCore.DISPID_UNKNOWN }, rgDispId);
             }

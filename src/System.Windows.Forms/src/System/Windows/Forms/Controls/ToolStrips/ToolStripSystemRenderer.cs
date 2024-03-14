@@ -512,8 +512,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             return;
         }
 
-        ToolStripSplitButton? splitButton = e.Item as ToolStripSplitButton;
-        if (splitButton is null)
+        if (e.Item is not ToolStripSplitButton splitButton)
         {
             return;
         }

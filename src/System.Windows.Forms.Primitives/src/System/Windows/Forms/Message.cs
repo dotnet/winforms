@@ -26,7 +26,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
     internal WPARAM WParamInternal;
     internal LPARAM LParamInternal;
     internal LRESULT ResultInternal;
-    internal HWND HWND => (HWND)HWnd;
+    internal readonly HWND HWND => (HWND)HWnd;
 #pragma warning restore IDE1006 // Naming Styles
 
     public int Msg
@@ -83,7 +83,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
         set => ResultInternal = (LRESULT)value;
     }
 
-    HWND IHandle<HWND>.Handle => HWND;
+    readonly HWND IHandle<HWND>.Handle => HWND;
 
     /// <summary>
     ///  Gets the <see cref="LParam"/> value, and converts the value to an object.

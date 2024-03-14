@@ -67,7 +67,7 @@ public abstract partial class ObjectSelectorEditor : UITypeEditor
         HWND hwnd = (HWND)treeView.Handle;
         uint exstyle = (uint)PInvoke.SendMessage(hwnd, PInvoke.TVM_GETEXTENDEDSTYLE);
         exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
-        PInvoke.SendMessage(hwnd, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)0, (LPARAM)(uint)exstyle);
+        PInvoke.SendMessage(hwnd, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)0, (LPARAM)exstyle);
     }
 
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;

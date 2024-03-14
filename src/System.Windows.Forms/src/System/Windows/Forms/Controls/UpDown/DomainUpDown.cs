@@ -55,15 +55,7 @@ public partial class DomainUpDown : UpDownBase
     [SRDescription(nameof(SR.DomainUpDownItemsDescr))]
     [Localizable(true)]
     [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
-    public DomainUpDownItemCollection Items
-    {
-        get
-        {
-            _domainItems ??= new DomainUpDownItemCollection(this);
-
-            return _domainItems;
-        }
-    }
+    public DomainUpDownItemCollection Items => _domainItems ??= new DomainUpDownItemCollection(this);
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -309,7 +301,7 @@ public partial class DomainUpDown : UpDownBase
             }
             else
             {
-                found = Items[index]!.ToString()!.ToUpper(CultureInfo.InvariantCulture).StartsWith(text);
+                found = Items[index]!.ToString()!.ToUpper(CultureInfo.InvariantCulture).StartsWith(text, StringComparison.Ordinal);
             }
 
             if (found)

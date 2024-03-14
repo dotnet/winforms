@@ -108,14 +108,9 @@ public partial class ResXFileRef
             if (toCreate == typeof(string))
             {
                 // We have a string, now we need to check the encoding.
-                Encoding textFileEncoding =
-                    parts.Length > 2
-                        ? Encoding.GetEncoding(parts[2])
-                        : Encoding.Default;
-                using (StreamReader sr = new(fileName, textFileEncoding))
-                {
-                    return sr.ReadToEnd();
-                }
+                Encoding textFileEncoding = parts.Length > 2 ? Encoding.GetEncoding(parts[2]) : Encoding.Default;
+                using StreamReader sr = new(fileName, textFileEncoding);
+                return sr.ReadToEnd();
             }
 
             // This is a regular file, we call its constructor with a stream as a parameter

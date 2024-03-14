@@ -2124,7 +2124,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_GetWithParent_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using Control parent = new()
         {
             BindingContext = bindingContext
@@ -2139,7 +2139,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             BindingContext = bindingContext
@@ -2180,7 +2180,7 @@ public partial class ControlTests
     {
         using Control control = new()
         {
-            BindingContext = new BindingContext()
+            BindingContext = []
         };
 
         control.BindingContext = value;
@@ -2207,7 +2207,7 @@ public partial class ControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -2218,7 +2218,7 @@ public partial class ControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -2270,7 +2270,7 @@ public partial class ControlTests
         child2.BindingContextChanged += childHandler2;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Same(context1, child1.BindingContext);
@@ -2289,7 +2289,7 @@ public partial class ControlTests
         Assert.Equal(1, childCallCount2);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Same(context2, child1.BindingContext);
@@ -2323,8 +2323,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_SetWithChildrenWithBindingContextWithHandler_CallsBindingContextChanged()
     {
-        BindingContext childContext1 = new();
-        BindingContext childContext2 = new();
+        BindingContext childContext1 = [];
+        BindingContext childContext2 = [];
         using Control child1 = new()
         {
             BindingContext = childContext1
@@ -2363,7 +2363,7 @@ public partial class ControlTests
         child2.BindingContextChanged += childHandler2;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Same(childContext1, child1.BindingContext);
@@ -2382,7 +2382,7 @@ public partial class ControlTests
         Assert.Equal(0, childCallCount2);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Same(childContext1, child1.BindingContext);

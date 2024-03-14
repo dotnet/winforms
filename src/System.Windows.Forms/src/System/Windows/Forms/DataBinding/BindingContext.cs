@@ -262,11 +262,8 @@ public partial class BindingContext : ICollection
 
             BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
-            PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true);
-            if (prop is null)
-            {
-                throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
-            }
+            PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true)
+                ?? throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
 
             bindingManagerBase = typeof(IList).IsAssignableFrom(prop.PropertyType)
                 ? new RelatedCurrencyManager(formerManager, dataField)

@@ -61,11 +61,9 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 
         s_toolStripPanelRowCreationDebug.TraceVerbose("Created new ToolStripPanelRow");
 
-        using (LayoutTransaction lt = new(parent, this, null))
-        {
-            Margin = DefaultMargin;
-            CommonProperties.SetAutoSize(this, true);
-        }
+        using LayoutTransaction lt = new(parent, this, null);
+        Margin = DefaultMargin;
+        CommonProperties.SetAutoSize(this, true);
     }
 
     public Rectangle Bounds

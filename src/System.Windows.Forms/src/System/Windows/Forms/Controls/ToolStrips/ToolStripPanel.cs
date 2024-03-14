@@ -867,8 +867,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         ToolStripPanelRow? currentToolStripPanelRow = draggedControl.ToolStripPanelRow;
 
 #if DEBUG
-        bool debugModeOnly_ChangedContainers = currentToolStripPanelRow is not null ?
-                            (currentToolStripPanelRow.ToolStripPanel != this) : true;
+        bool debugModeOnly_ChangedContainers = currentToolStripPanelRow is null || (currentToolStripPanelRow.ToolStripPanel != this);
 #endif
 
         bool pointInCurrentRow = false;

@@ -4888,8 +4888,10 @@ public class DataGridViewCellTests
     [StaFact]
     public void DataGridViewCell_GetNeighboringToolsRectangles_ReturnsCorrectRectangles()
     {
-        DataGridView control = new();
-        control.Size = new Size(600, 200);
+        DataGridView control = new()
+        {
+            Size = new Size(600, 200)
+        };
         control.CreateControl();
 
         DataGridViewTextBoxColumn column1 = new();

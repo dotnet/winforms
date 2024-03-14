@@ -27,5 +27,5 @@ internal struct EMRRECTRECORD
     public EMR emr;
     public RECT rect;
 
-    public override string ToString() => $"[EMR{emr.iType}] RECT: {rect}";
+    public override readonly string ToString() => $"[EMR{emr.iType}] RECT: {rect}";
 }

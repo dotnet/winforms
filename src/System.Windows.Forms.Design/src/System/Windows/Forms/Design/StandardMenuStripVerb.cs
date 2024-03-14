@@ -46,9 +46,9 @@ internal class StandardMenuStripVerb
         try
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (_designer.Component is MenuStrip)
+            if (_designer.Component is MenuStrip menuStrip)
             {
-                CreateStandardMenuStrip(_host, (MenuStrip)_designer.Component);
+                CreateStandardMenuStrip(_host, menuStrip);
             }
             else
             {
@@ -134,9 +134,9 @@ internal class StandardMenuStripVerb
                         // create the component.
                         item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                         IDesigner designer = _host.GetDesigner(item);
-                        if (designer is ComponentDesigner)
+                        if (designer is ComponentDesigner componentDesigner)
                         {
-                            ((ComponentDesigner)designer).InitializeNewComponent(null);
+                            componentDesigner.InitializeNewComponent(null);
                         }
 
                         item.Text = itemText;
@@ -146,18 +146,18 @@ internal class StandardMenuStripVerb
                         // create the component.
                         item = (ToolStripMenuItem)_host.CreateComponent(typeof(ToolStripMenuItem), name);
                         IDesigner designer = _host.GetDesigner(item);
-                        if (designer is ComponentDesigner)
+                        if (designer is ComponentDesigner componentDesigner)
                         {
-                            ((ComponentDesigner)designer).InitializeNewComponent(null);
+                            componentDesigner.InitializeNewComponent(null);
                         }
 
                         item.Text = itemText;
                         Keys shortcut = menuItemShortcuts[j][i];
-                        if ((item is ToolStripMenuItem) && shortcut != Keys.None)
+                        if ((item is ToolStripMenuItem menuItem) && shortcut != Keys.None)
                         {
                             if (!ToolStripManager.IsShortcutDefined(shortcut) && ToolStripManager.IsValidShortcut(shortcut))
                             {
-                                ((ToolStripMenuItem)item).ShortcutKeys = shortcut;
+                                menuItem.ShortcutKeys = shortcut;
                             }
                         }
 
@@ -304,9 +304,9 @@ internal class StandardMenuStripVerb
                     // create the component.
                     item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                     IDesigner designer = _host.GetDesigner(item);
-                    if (designer is ComponentDesigner)
+                    if (designer is ComponentDesigner componentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        componentDesigner.InitializeNewComponent(null);
                     }
                 }
                 else
@@ -314,9 +314,9 @@ internal class StandardMenuStripVerb
                     // create the component.
                     item = (ToolStripButton)_host.CreateComponent(typeof(ToolStripButton), name);
                     IDesigner designer = _host.GetDesigner(item);
-                    if (designer is ComponentDesigner)
+                    if (designer is ComponentDesigner componentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        componentDesigner.InitializeNewComponent(null);
                     }
 
                     PropertyDescriptor displayStyleProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
@@ -402,39 +402,39 @@ internal class StandardMenuStripVerb
     private static Bitmap GetImage(string name)
     {
         Bitmap image = null;
-        if (name.StartsWith("new"))
+        if (name.StartsWith("new", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "new").ToBitmap();
         }
-        else if (name.StartsWith("open"))
+        else if (name.StartsWith("open", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "open").ToBitmap();
         }
-        else if (name.StartsWith("save"))
+        else if (name.StartsWith("save", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "save").ToBitmap();
         }
-        else if (name.StartsWith("printPreview"))
+        else if (name.StartsWith("printPreview", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "printPreview").ToBitmap();
         }
-        else if (name.StartsWith("print"))
+        else if (name.StartsWith("print", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "print").ToBitmap();
         }
-        else if (name.StartsWith("cut"))
+        else if (name.StartsWith("cut", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "cut").ToBitmap();
         }
-        else if (name.StartsWith("copy"))
+        else if (name.StartsWith("copy", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "copy").ToBitmap();
         }
-        else if (name.StartsWith("paste"))
+        else if (name.StartsWith("paste", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "paste").ToBitmap();
         }
-        else if (name.StartsWith("help"))
+        else if (name.StartsWith("help", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "help").ToBitmap();
         }

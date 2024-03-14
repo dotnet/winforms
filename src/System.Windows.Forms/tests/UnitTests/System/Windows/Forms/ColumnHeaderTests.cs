@@ -1634,8 +1634,10 @@ public class ColumnHeaderTests
             };
             using ColumnHeader header = new();
             listView.Columns.Add(header);
-            var indexer = new ColumnHeader.ColumnHeaderImageListIndexer(header);
-            indexer.ImageList = imageList2;
+            var indexer = new ColumnHeader.ColumnHeaderImageListIndexer(header)
+            {
+                ImageList = imageList2
+            };
             Assert.Same(imageList, indexer.ImageList);
         }
     }

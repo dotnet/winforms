@@ -8,6 +8,6 @@ public enum TextMetricsPitchAndFamilyValues
 {
     FixedPitch = TMPF_FLAGS.TMPF_FIXED_PITCH,
     Vector = TMPF_FLAGS.TMPF_VECTOR,
-    TrueType =TMPF_FLAGS.TMPF_TRUETYPE,
+    TrueType = TMPF_FLAGS.TMPF_TRUETYPE,
     Device = TMPF_FLAGS.TMPF_DEVICE
 }

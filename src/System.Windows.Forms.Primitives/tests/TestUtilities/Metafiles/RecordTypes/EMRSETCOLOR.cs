@@ -22,7 +22,7 @@ internal struct EMRSETCOLOR
     public EMR emr;
     public COLORREF crColor;
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         return $"[EMR{emr.iType}] Color: {crColor.ToSystemColorString()}";
     }

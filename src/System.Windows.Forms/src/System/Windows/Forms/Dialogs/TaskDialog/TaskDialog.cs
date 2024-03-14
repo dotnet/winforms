@@ -297,7 +297,6 @@ public partial class TaskDialog : IWin32Window
         };
     }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
     /// <summary>
     ///   Shows the task dialog.
     /// </summary>
@@ -322,11 +321,10 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     /// The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    public static TaskDialogButton ShowDialog(TaskDialogPage page,
-                                              TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
-        => ShowDialog(IntPtr.Zero,
-                      page.OrThrowIfNull(),
-                      startupLocation);
+    public static TaskDialogButton ShowDialog(
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
+        => ShowDialog(IntPtr.Zero, page.OrThrowIfNull(), startupLocation);
 
     /// <summary>
     ///   Shows the task dialog with the specified owner.
@@ -355,11 +353,11 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     /// The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
-                                              TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
-        => ShowDialog(owner.OrThrowIfNull().Handle,
-                      page.OrThrowIfNull(),
-                      startupLocation);
+    public static TaskDialogButton ShowDialog(
+        IWin32Window owner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
+        => ShowDialog(owner.OrThrowIfNull().Handle, page.OrThrowIfNull(), startupLocation);
 
     /// <summary>
     ///   Shows the task dialog with the specified owner.
@@ -389,15 +387,16 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     /// The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
-                                              TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
+    public static unsafe TaskDialogButton ShowDialog(
+        IntPtr hwndOwner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
     {
         ArgumentNullException.ThrowIfNull(page);
 
         TaskDialog dialog = new();
         return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);
     }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
     /// <summary>
     ///   Shows the task dialog with the specified owner.
@@ -411,9 +410,10 @@ public partial class TaskDialog : IWin32Window
     /// <returns>
     ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
     /// </returns>
-    private unsafe TaskDialogButton ShowDialogInternal(IntPtr hwndOwner,
-                                              TaskDialogPage page,
-                                              TaskDialogStartupLocation startupLocation)
+    private unsafe TaskDialogButton ShowDialogInternal(
+        IntPtr hwndOwner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation)
     {
         // Recursive Show() is not possible because a TaskDialog instance can only
         // represent a single native dialog.
@@ -1215,7 +1215,7 @@ public partial class TaskDialog : IWin32Window
         TaskDialogPage page,
         IntPtr hwndOwner,
         TaskDialogStartupLocation startupLocation,
-        out IntPtr ptrToFree,
+        out nint ptrToFree,
         out TASKDIALOGCONFIG* ptrTaskDialogConfig)
     {
         page.Bind(
@@ -1293,7 +1293,7 @@ public partial class TaskDialog : IWin32Window
                 // Allocate the memory block. We add additional bytes to ensure we can
                 // align the returned pointer to IntPtr.Size (the biggest align size
                 // that we will use).
-                ptrToFree = Marshal.AllocHGlobal((IntPtr)(sizeToAllocate + (IntPtr.Size - 1)));
+                ptrToFree = Marshal.AllocHGlobal((nint)(sizeToAllocate + (IntPtr.Size - 1)));
                 try
                 {
                     // Align the pointer before using it. This is important since we also

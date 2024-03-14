@@ -175,13 +175,13 @@ public class MdiControlStripTests
         using Form form = new();
         using SubMdiControlStrip mdiControlStrip = new(form);
 
-        ToolStripMenuItem[] items = new ToolStripMenuItem[]
-        {
+        ToolStripMenuItem[] items =
+        [
             mdiControlStrip.TestAccessor().Dynamic._system,
             mdiControlStrip.TestAccessor().Dynamic._close,
             mdiControlStrip.TestAccessor().Dynamic._minimize,
             mdiControlStrip.TestAccessor().Dynamic._restore
-        };
+        ];
 
         foreach (ToolStripMenuItem item in items)
         {
@@ -198,7 +198,7 @@ public class MdiControlStripTests
         using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
         using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
         using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
-        menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+        menuStrip.Items.AddRange((ToolStripMenuItem[])[toolStripMenuItem1, toolStripMenuItem2]);
         using Form mdiParent = new()
         {
             IsMdiContainer = true,
@@ -244,7 +244,7 @@ public class MdiControlStripTests
         using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
         using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
         using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
-        menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+        menuStrip.Items.AddRange((ToolStripMenuItem[])[toolStripMenuItem1, toolStripMenuItem2]);
         using Form mdiParent = new()
         {
             IsMdiContainer = true,
@@ -289,7 +289,7 @@ public class MdiControlStripTests
         using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
         using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
         using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
-        menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+        menuStrip.Items.AddRange((ToolStripMenuItem[])[toolStripMenuItem1, toolStripMenuItem2]);
         using Form mdiParent = new() { IsMdiContainer = true };
         using Form mdiChild = new()
         {
@@ -337,15 +337,15 @@ public class MdiControlStripTests
 
     private class SubMdiControlStrip : MdiControlStrip
     {
-        public new const int ScrollStateAutoScrolling = MenuStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = MenuStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = MenuStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = MenuStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = MenuStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public SubMdiControlStrip(IWin32Window target) : base(target)
         {

@@ -37,7 +37,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
 
     private unsafe void MakeLink(RichTextBox control, string text)
     {
-        control.Select(control.Text.IndexOf(text), text.Length);
+        control.Select(control.Text.IndexOf(text, StringComparison.Ordinal), text.Length);
 
         var format = new Interop.Richedit.CHARFORMAT2W
         {
@@ -60,12 +60,12 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
         RichTextBox control = (RichTextBox)sender;
         string prefix = control.Text.Remove(e.LinkStart);
         string content = control.Text.Substring(e.LinkStart, e.LinkLength);
-        string suffix = control.Text.Substring(e.LinkStart + e.LinkLength);
+        string suffix = control.Text[(e.LinkStart + e.LinkLength)..];
 
         int index = prefix.LastIndexOf('\n');
         if (index >= 0)
         {
-            prefix = prefix.Substring(index + 1);
+            prefix = prefix[(index + 1)..];
         }
 
         index = suffix.IndexOf('\n');

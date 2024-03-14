@@ -23,8 +23,10 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Height_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new();
-        bd.Height = value;
+        BitmapData bd = new()
+        {
+            Height = value
+        };
         Assert.Equal(value, bd.Height);
     }
 
@@ -34,8 +36,10 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Width_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new();
-        bd.Width = value;
+        BitmapData bd = new()
+        {
+            Width = value
+        };
         Assert.Equal(value, bd.Width);
     }
 
@@ -45,8 +49,10 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Reserved_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new();
-        bd.Reserved = value;
+        BitmapData bd = new()
+        {
+            Reserved = value
+        };
         Assert.Equal(value, bd.Reserved);
     }
 
@@ -56,8 +62,10 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Scan0_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new();
-        bd.Scan0 = new IntPtr(value);
+        BitmapData bd = new()
+        {
+            Scan0 = new IntPtr(value)
+        };
         Assert.Equal(new IntPtr(value), bd.Scan0);
     }
 
@@ -67,8 +75,10 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Stride_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new();
-        bd.Stride = value;
+        BitmapData bd = new()
+        {
+            Stride = value
+        };
         Assert.Equal(value, bd.Stride);
     }
 
@@ -97,8 +107,10 @@ public class BitmapDataTests
     [InlineData(PixelFormat.Format64bppArgb)]
     public void PixelFormat_SetValid_ReturnsExpected(PixelFormat pixelFormat)
     {
-        BitmapData bd = new();
-        bd.PixelFormat = pixelFormat;
+        BitmapData bd = new()
+        {
+            PixelFormat = pixelFormat
+        };
         Assert.Equal(pixelFormat, bd.PixelFormat);
     }
 

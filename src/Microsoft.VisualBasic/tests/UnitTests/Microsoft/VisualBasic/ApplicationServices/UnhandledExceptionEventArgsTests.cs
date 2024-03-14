@@ -25,8 +25,10 @@ public class UnhandledExceptionEventArgsTests
     [InlineData(false)]
     public void ExitApplication_Set_GetReturnsExpected(bool value)
     {
-        UnhandledExceptionEventArgs args = new(true, null);
-        args.ExitApplication = value;
+        UnhandledExceptionEventArgs args = new(true, null)
+        {
+            ExitApplication = value
+        };
         Assert.Equal(value, args.ExitApplication);
     }
 }

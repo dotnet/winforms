@@ -162,7 +162,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(70, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -178,7 +178,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(70, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -231,7 +231,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(70, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -472,7 +472,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(70, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (ToolStripGripStyle grip in Enum.GetValues<ToolStripGripStyle>())
             foreach (bool canOverflow in canOverflowValues)
@@ -489,7 +489,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(140, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (ToolStripGripStyle grip in Enum.GetValues<ToolStripGripStyle>())
             foreach (bool canOverflow in canOverflowValues)

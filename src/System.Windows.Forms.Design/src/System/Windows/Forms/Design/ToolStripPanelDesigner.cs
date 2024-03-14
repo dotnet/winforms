@@ -65,7 +65,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             {
                 ISite? site = Component.Site;
 
-                if (site is not null )
+                if (site is not null)
                 {
                     _contextMenu = new BaseContextMenuStrip(site);
                     // If multiple Items Selected don't show the custom properties...
@@ -470,10 +470,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             && !ToolStripDesignerUtils.DisplayInformation.HighContrast
             && !ToolStripDesignerUtils.DisplayInformation.LowResolution)
         {
-            using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.White)))
-            {
-                paintEvent.Graphics.FillRectangle(brush, Control.ClientRectangle);
-            }
+            using Brush brush = new SolidBrush(Color.FromArgb(50, Color.White));
+            paintEvent.Graphics.FillRectangle(brush, Control.ClientRectangle);
         }
 
         DrawBorder(paintEvent.Graphics);

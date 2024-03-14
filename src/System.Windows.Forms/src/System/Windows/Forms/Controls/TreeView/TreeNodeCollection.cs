@@ -367,10 +367,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
-    bool IList.Contains(object? node) =>
-        node is TreeNode treeNode
-            ? Contains(treeNode)
-            : false;
+    bool IList.Contains(object? node) => node is TreeNode treeNode && Contains(treeNode);
 
     public int IndexOf(TreeNode node)
     {

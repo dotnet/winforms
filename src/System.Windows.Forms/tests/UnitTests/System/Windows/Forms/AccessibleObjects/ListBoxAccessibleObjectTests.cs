@@ -218,8 +218,8 @@ public class ListBoxAccessibleObjectTests
     private ListBox InitializeListBoxWithItems()
     {
         ListBox listBox = new();
-        listBox.Items.AddRange(new object[]
-        {
+        listBox.Items.AddRange((object[])
+        [
             "a",
             "b",
             "c",
@@ -227,7 +227,7 @@ public class ListBoxAccessibleObjectTests
             "e",
             "f",
             "g"
-        });
+        ]);
 
         return listBox;
     }

@@ -18,11 +18,11 @@ internal sealed partial class ComponentCache : IDisposable
         _serManager = manager;
         if (manager.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
         {
-            cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            cs.ComponentRemoving += new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentChanging += OnComponentChanging;
+            cs.ComponentChanged += OnComponentChanged;
+            cs.ComponentRemoving += OnComponentRemove;
+            cs.ComponentRemoved += OnComponentRemove;
+            cs.ComponentRename += OnComponentRename;
         }
 
         if (manager.TryGetService(out DesignerOptionService? options))
@@ -30,9 +30,9 @@ internal sealed partial class ComponentCache : IDisposable
             PropertyDescriptor? componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
             object? optionValue = componentCacheProp?.GetValue(null);
 
-            if (optionValue is bool)
+            if (optionValue is bool boolValue)
             {
-                Enabled = (bool)optionValue;
+                Enabled = boolValue;
             }
         }
     }

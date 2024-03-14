@@ -34,11 +34,13 @@ public class PageSettingsTests
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void Clone_Success()
     {
-        PageSettings ps = new();
-        ps.Color = false;
-        ps.Landscape = true;
-        ps.Margins = new Margins(120, 130, 140, 150);
-        ps.PaperSize = new PaperSize("My Custom Size", 222, 333);
+        PageSettings ps = new()
+        {
+            Color = false,
+            Landscape = true,
+            Margins = new Margins(120, 130, 140, 150),
+            PaperSize = new PaperSize("My Custom Size", 222, 333)
+        };
         PageSettings clone = (PageSettings)ps.Clone();
 
         Assert.Equal(ps.Color, clone.Color);

@@ -817,7 +817,7 @@ public class ImageCollectionTests
         };
         ImageList.ImageCollection collection = list.Images;
 
-        collection.AddRange(new Image[] { value, value });
+        collection.AddRange([value, value]);
         Assert.Equal(2, collection.Count);
         Assert.False(collection.Empty);
         Assert.Equal(new string[] { string.Empty, string.Empty }, collection.Keys.Cast<string>());
@@ -842,7 +842,7 @@ public class ImageCollectionTests
         ImageList.ImageCollection collection = list.Images;
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
-        collection.AddRange(new Image[] { value, value });
+        collection.AddRange([value, value]);
         Assert.Equal(2, collection.Count);
         Assert.False(collection.Empty);
         Assert.Equal(new string[] { string.Empty, string.Empty }, collection.Keys.Cast<string>());
@@ -869,7 +869,7 @@ public class ImageCollectionTests
     {
         using ImageList list = new();
         ImageList.ImageCollection collection = list.Images;
-        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(new Image[] { null }));
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange([null]));
     }
 
     [WinFormsFact]
@@ -879,7 +879,7 @@ public class ImageCollectionTests
         ImageList.ImageCollection collection = list.Images;
 
         using Metafile value = new("bitmaps/telescope_01.wmf");
-        Assert.Throws<ArgumentException>(() => collection.AddRange(new Image[] { value }));
+        Assert.Throws<ArgumentException>(() => collection.AddRange([value]));
     }
 
     public static IEnumerable<object[]> AddStrip_TestData()

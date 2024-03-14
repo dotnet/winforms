@@ -45,8 +45,10 @@ public class EncoderParametersTests
     [MemberData(nameof(Param_TestData))]
     public void Dispose_Success(EncoderParameter[] param)
     {
-        EncoderParameters ep = new();
-        ep.Param = param;
+        EncoderParameters ep = new()
+        {
+            Param = param
+        };
         ep.Dispose();
         Assert.Null(ep.Param);
     }

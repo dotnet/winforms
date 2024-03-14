@@ -12,8 +12,8 @@ namespace System.Windows.Forms.Generators.Tests;
 [UsesVerify]
 public partial class ApplicationConfigurationInitializeBuilderTests
 {
-    private static readonly string[] s_locales = new[]
-    {
+    private static readonly string[] s_locales =
+    [
         "ar-SA",
         "en-US",
         "es-ES",
@@ -23,7 +23,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         "ru-RU",
         "tr-TR",
         "zh-CN"
-    };
+    ];
 
     [Theory]
     [InlineData(null, "default_top_level")]

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -527,7 +527,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         if (component == _rootComponent)
         {
             string className = _rootComponentClassName!;
-            if (oldName is not null && className.EndsWith(oldName) // If oldName occurs at the end of className
+            if (oldName is not null && className.EndsWith(oldName, StringComparison.Ordinal) // If oldName occurs at the end of className
                 && (className.Length > oldName.Length && className[className.Length - oldName.Length - 1] == '.')) // and is preceeded by a period
             {
                 // We assume the preceeding chars are the namespace and preserve it.

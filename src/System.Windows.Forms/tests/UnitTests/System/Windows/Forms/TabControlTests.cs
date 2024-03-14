@@ -3844,7 +3844,7 @@ public class TabControlTests
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         object[] result = Assert.IsType<TabPage[]>(control.GetItems());
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems());
     }
 
@@ -3873,7 +3873,7 @@ public class TabControlTests
         control.TabPages.Add(page2);
         object[] result = control.GetItems(baseType);
         Assert.IsType(baseType.MakeArrayType(), result);
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems(baseType));
     }
 
@@ -3884,7 +3884,7 @@ public class TabControlTests
         using SubTabPage page = new();
         control.TabPages.Add(page);
         object[] result = Assert.IsType<SubTabPage[]>(control.GetItems(typeof(SubTabPage)));
-        Assert.Equal(new object[] { page }, result);
+        Assert.Equal([page], result);
         Assert.NotSame(result, control.GetItems(typeof(SubTabPage)));
     }
 

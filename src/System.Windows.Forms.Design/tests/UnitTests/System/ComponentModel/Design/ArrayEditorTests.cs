@@ -31,7 +31,7 @@ public class ArrayEditorTests
         Assert.Null(editor.Context);
         Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
         Assert.False(editor.IsDropDownResizable);
-        Assert.Equal(new Type[] { expectedItemType }, editor.NewItemTypes);
+        Assert.Equal([expectedItemType], editor.NewItemTypes);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class ArrayEditorTests
         Assert.Null(editor.Context);
         Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
         Assert.False(editor.IsDropDownResizable);
-        Assert.Equal(new Type[] { null }, editor.NewItemTypes);
+        Assert.Equal([null], editor.NewItemTypes);
     }
 
     public static IEnumerable<object[]> CanRemoveInstance_TestData()

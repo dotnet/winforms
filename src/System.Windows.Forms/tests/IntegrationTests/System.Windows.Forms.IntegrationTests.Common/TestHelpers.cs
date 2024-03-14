@@ -372,8 +372,7 @@ public static class TestHelpers
     /// <param name="form">The form</param>
     public static void BringToForeground(this Form form)
     {
-        if (form is null)
-            throw new ArgumentNullException(nameof(form));
+        ArgumentNullException.ThrowIfNull(form);
 
         form.WindowState = FormWindowState.Minimized;
         form.Show();

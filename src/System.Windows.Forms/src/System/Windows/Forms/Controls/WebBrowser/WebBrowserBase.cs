@@ -213,7 +213,7 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     protected override bool ProcessDialogKey(Keys keyData) =>
-        _ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
+        !_ignoreDialogKeys && base.ProcessDialogKey(keyData);
 
     public override unsafe bool PreProcessMessage(ref Message msg)
     {
@@ -532,8 +532,7 @@ public unsafe partial class WebBrowserBase : Control
     //
     internal override bool CanSelectCore()
     {
-        return ActiveXState >= WebBrowserHelper.AXState.InPlaceActive ?
-            base.CanSelectCore() : false;
+        return ActiveXState >= WebBrowserHelper.AXState.InPlaceActive && base.CanSelectCore();
     }
 
     internal override bool AllowsKeyboardToolTip()

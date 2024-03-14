@@ -30,7 +30,7 @@ internal struct EMRBITBLT
     public uint offBitsSrc;        // Offset to the source bitmap bits
     public uint cbBitsSrc;         // Size of the source bitmap bits
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         RECT dest = new Rectangle(xDest, yDest, cxDest, cyDest);
         return $@"[{nameof(EMRBITBLT)}] Bounds: {rclBounds} Destination: {dest} Rop: {dwRop}Source DC Color: {crBkColorSrc.ToSystemColorString()}";

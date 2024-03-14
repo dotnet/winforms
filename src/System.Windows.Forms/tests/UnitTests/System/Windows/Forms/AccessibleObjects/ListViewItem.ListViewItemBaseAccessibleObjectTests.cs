@@ -162,7 +162,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
     public void ListViewItemBaseAccessibleObject_FragmentNavigate_ToSibling_ReturnsNull()
     {
         using ListView control = new();
-        control.Items.AddRange(new ListViewItem[] { new(), new(), new() });
+        control.Items.AddRange((ListViewItem[])[new(), new(), new()]);
 
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Items[1].AccessibilityObject;
@@ -315,8 +315,10 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
     {
         using ListView listView = new();
         listView.CheckBoxes = true;
-        ListViewItem item = new();
-        item.Checked = itemIsChecked;
+        ListViewItem item = new()
+        {
+            Checked = itemIsChecked
+        };
         listView.Items.Add(item);
 
         AccessibleObject itemAccessibleObject = item.AccessibilityObject;

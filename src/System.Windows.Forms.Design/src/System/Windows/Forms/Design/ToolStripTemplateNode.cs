@@ -499,7 +499,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 // Remember the click position.
                 ToolStripDesigner.s_lastCursorPosition = Cursor.Position;
 
-                if (_designer is ToolStripDesigner)
+                if (_designer is ToolStripDesigner designer)
                 {
                     if (KeyboardService.TemplateNodeActive)
                     {
@@ -514,10 +514,10 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                     KeyboardService.SelectedDesignerControl = _controlHost;
                     SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-                    ((ToolStripDesigner)_designer).ShowEditNode(true);
+                    designer.ShowEditNode(true);
                 }
 
-                if (_designer is ToolStripMenuItemDesigner)
+                if (_designer is ToolStripMenuItemDesigner itemDesigner)
                 {
                     // cache the serviceProvider (Site) since the component can potential get disposed after the call to CommitAndSelect();
                     IServiceProvider svcProvider = _component.Site;
@@ -546,19 +546,19 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                     if (_designer is not null)
                     {
-                        ((ToolStripMenuItemDesigner)_designer).EditTemplateNode(true);
+                        itemDesigner.EditTemplateNode(true);
                     }
                     else
                     {
                         ISelectionService cachedSelSvc = (ISelectionService)svcProvider.GetService(typeof(ISelectionService));
                         if (cachedSelSvc.PrimarySelection is ToolStripItem selectedItem && _designerHost is not null)
                         {
-                            if (_designerHost.GetDesigner(selectedItem) is ToolStripMenuItemDesigner itemDesigner)
+                            if (_designerHost.GetDesigner(selectedItem) is ToolStripMenuItemDesigner menuItemDesigner)
                             {
                                 // Invalidate the item only if its toplevel.
                                 if (!selectedItem.IsOnDropDown)
                                 {
-                                    Rectangle bounds = itemDesigner.GetGlyphBounds();
+                                    Rectangle bounds = menuItemDesigner.GetGlyphBounds();
                                     ToolStripDesignerUtils.GetAdjustedBounds(selectedItem, ref bounds);
                                     if (svcProvider.GetService(typeof(BehaviorService)) is BehaviorService bSvc)
                                     {
@@ -566,7 +566,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                                     }
                                 }
 
-                                itemDesigner.EditTemplateNode(true);
+                                menuItemDesigner.EditTemplateNode(true);
                             }
                         }
                     }
@@ -778,18 +778,18 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 selectedType = supportedTypes[0];
             }
 
-            if (_designer is ToolStripDesigner)
+            if (_designer is ToolStripDesigner designer)
             {
-                ((ToolStripDesigner)_designer).AddNewItem(selectedType, text, enterKeyPressed, tabKeyPressed);
+                designer.AddNewItem(selectedType, text, enterKeyPressed, tabKeyPressed);
             }
             else
             {
                 ((ToolStripItemDesigner)_designer).CommitEdit(selectedType, text, commit, enterKeyPressed, tabKeyPressed);
             }
         }
-        else if (_designer is ToolStripItemDesigner)
+        else if (_designer is ToolStripItemDesigner designer)
         {
-            ((ToolStripItemDesigner)_designer).CommitEdit(_designer.Component.GetType(), text, commit, enterKeyPressed, tabKeyPressed);
+            designer.CommitEdit(_designer.Component.GetType(), text, commit, enterKeyPressed, tabKeyPressed);
         }
     }
 
@@ -1442,7 +1442,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         _miniToolStrip.Renderer = _renderer;
 
         // Add items to the Template ToolStrip depending upon the Parent Type...
-        if (currentItem is MenuStrip || currentItem is ToolStripDropDownItem)
+        if (currentItem is MenuStrip or ToolStripDropDownItem)
         {
             SetUpMenuTemplateNode(owner, text, image, currentItem);
             _miniToolStrip.AccessibleRole = AccessibleRole.ComboBox;
@@ -1796,7 +1796,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            if (_owner._component is MenuStrip || _owner._component is ToolStripDropDownItem)
+            if (_owner._component is MenuStrip or ToolStripDropDownItem)
             {
                 Graphics g = e.Graphics;
                 g.Clear(_toolStripBorderColor);
