@@ -6,7 +6,7 @@ namespace DesignSurfaceExt;
 
 internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationService
 {
-    private IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public DesignerSerializationServiceImpl(IServiceProvider serviceProvider)
     {

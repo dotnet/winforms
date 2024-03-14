@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Metafiles;
 
 internal sealed class SkipAllValidator : IEmfValidator
 {
-    public static IEmfValidator Instance = new SkipAllValidator();
+    public static IEmfValidator Instance { get; } = new SkipAllValidator();
 
     public bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => true;
 

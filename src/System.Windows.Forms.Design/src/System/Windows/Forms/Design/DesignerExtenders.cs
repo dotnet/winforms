@@ -14,24 +14,24 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class DesignerExtenders
 {
-    private IExtenderProvider[] providers;
-    private IExtenderProviderService extenderService;
+    private IExtenderProvider[] _providers;
+    private IExtenderProviderService _extenderService;
 
     /// <summary>
     ///  This is called by a root designer to add the correct extender providers.
     /// </summary>
     public DesignerExtenders(IExtenderProviderService ex)
     {
-        extenderService = ex;
-        providers ??=
-            [
-                new NameExtenderProvider(),
-                new NameInheritedExtenderProvider()
-            ];
+        _extenderService = ex;
+        _providers ??=
+        [
+            new NameExtenderProvider(),
+            new NameInheritedExtenderProvider()
+        ];
 
-        for (int i = 0; i < providers.Length; i++)
+        for (int i = 0; i < _providers.Length; i++)
         {
-            ex.AddExtenderProvider(providers[i]);
+            ex.AddExtenderProvider(_providers[i]);
         }
     }
 
@@ -41,15 +41,15 @@ internal partial class DesignerExtenders
     /// </summary>
     public void Dispose()
     {
-        if (extenderService is not null && providers is not null)
+        if (_extenderService is not null && _providers is not null)
         {
-            for (int i = 0; i < providers.Length; i++)
+            for (int i = 0; i < _providers.Length; i++)
             {
-                extenderService.RemoveExtenderProvider(providers[i]);
+                _extenderService.RemoveExtenderProvider(_providers[i]);
             }
 
-            providers = null;
-            extenderService = null;
+            _providers = null;
+            _extenderService = null;
         }
     }
 }

@@ -1303,9 +1303,8 @@ public static class ImeContext
         TraceImeStatus(handle);
         Debug.Unindent();
     }
-}// end ImeContext class
+}
 
-/////////////////////////////////////////////////////////  ImeModeConversion structure /////////////////////////////////////////////////////////
 /// <summary>
 ///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
 ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
@@ -1337,7 +1336,7 @@ public readonly struct ImeModeConversion
     ///              meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
     ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
     /// </summary>
-    private static readonly ImeMode[] japaneseTable =
+    private static readonly ImeMode[] s_japaneseTable =
     [
         ImeMode.Inherit,
         ImeMode.Disable,
@@ -1351,7 +1350,7 @@ public readonly struct ImeModeConversion
         ImeMode.Alpha
     ];
 
-    private static readonly ImeMode[] koreanTable =
+    private static readonly ImeMode[] s_koreanTable =
     [
         ImeMode.Inherit,
         ImeMode.Disable,
@@ -1365,7 +1364,7 @@ public readonly struct ImeModeConversion
         ImeMode.Alpha
     ];
 
-    private static readonly ImeMode[] chineseTable =
+    private static readonly ImeMode[] s_chineseTable =
     [
         ImeMode.Inherit,
         ImeMode.Disable,
@@ -1379,39 +1378,15 @@ public readonly struct ImeModeConversion
         ImeMode.Off
     ];
 
-    private static readonly ImeMode[] unsupportedTable = [];
+    private static readonly ImeMode[] s_unsupportedTable = [];
 
-    internal static ImeMode[] ChineseTable
-    {
-        get
-        {
-            return chineseTable;
-        }
-    }
+    internal static ImeMode[] ChineseTable => s_chineseTable;
 
-    internal static ImeMode[] JapaneseTable
-    {
-        get
-        {
-            return japaneseTable;
-        }
-    }
+    internal static ImeMode[] JapaneseTable => s_japaneseTable;
 
-    internal static ImeMode[] KoreanTable
-    {
-        get
-        {
-            return koreanTable;
-        }
-    }
+    internal static ImeMode[] KoreanTable => s_koreanTable;
 
-    internal static ImeMode[] UnsupportedTable
-    {
-        get
-        {
-            return unsupportedTable;
-        }
-    }
+    internal static ImeMode[] UnsupportedTable => s_unsupportedTable;
 
     /// <summary>
     ///  Gets the ImeMode table of the current input language.
@@ -1429,25 +1404,15 @@ public readonly struct ImeModeConversion
 
             int lcid = (int)(inputLanguage.Handle & (long)0xFFFF);
 
-            switch (lcid)
+            return lcid switch
             {
-                case 0x0404:
-                case 0x0804:
-                case 0x0c04:
-                case 0x1004:
-                case 0x1404:
-                    return chineseTable;
-
-                case 0x0412:    // Korean
-                case 0x0812:    // Korean (Johab)
-                    return koreanTable;
-
-                case 0x0411:    // Japanese
-                    return japaneseTable;
-
-                default:
-                    return unsupportedTable;
-            }
+                0x0404 or 0x0804 or 0x0c04 or 0x1004 or 0x1404 => s_chineseTable,
+                // Korean (Johab)
+                0x0412 or 0x0812 => s_koreanTable,
+                // Japanese
+                0x0411 => s_japaneseTable,
+                _ => s_unsupportedTable,
+            };
         }
     }
 
@@ -1540,11 +1505,5 @@ public readonly struct ImeModeConversion
         };
     }
 
-    public static bool IsCurrentConversionTableSupported
-    {
-        get
-        {
-            return InputLanguageTable != UnsupportedTable;
-        }
-    }
+    public static bool IsCurrentConversionTableSupported => InputLanguageTable != UnsupportedTable;
 }

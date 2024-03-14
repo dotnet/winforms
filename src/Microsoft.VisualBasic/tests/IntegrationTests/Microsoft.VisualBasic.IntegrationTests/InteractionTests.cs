@@ -88,7 +88,7 @@ public class InteractionTests
     [Fact]
     public void Shell()
     {
-        int processId = Interaction.Shell(_exePath);
+        int processId = Interaction.Shell(s_exePath);
         Process process = Process.GetProcessById(processId);
         process.Kill();
         process.WaitForExit();
@@ -109,11 +109,11 @@ public class InteractionTests
         _ = Assert.Throws<FileNotFoundException>(() => Interaction.Shell(path)).ToString();
     }
 
-    private static readonly string _exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
+    private static readonly string s_exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
 
     private static Process StartTestProcess(string arguments)
     {
-        ProcessStartInfo startInfo = new() { FileName = _exePath, Arguments = arguments };
+        ProcessStartInfo startInfo = new() { FileName = s_exePath, Arguments = arguments };
         return TestHelpers.StartProcess(startInfo);
     }
 

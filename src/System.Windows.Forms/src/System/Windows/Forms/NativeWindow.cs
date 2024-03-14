@@ -14,11 +14,11 @@ namespace System.Windows.Forms;
 public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle<HWND>
 {
 #if DEBUG
-    private static readonly BooleanSwitch AlwaysUseNormalWndProc
+    private static BooleanSwitch AlwaysUseNormalWndProc { get; }
         = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
 #endif
 
-    private static readonly TraceSwitch WndProcChoice = new("WndProcChoice", "Info about choice of WndProc");
+    private static TraceSwitch WndProcChoice { get; } = new("WndProcChoice", "Info about choice of WndProc");
 
     private const int InitializedFlags = 0x01;
     private const int UseDebuggableWndProc = 0x04;
@@ -453,7 +453,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                             // If it exceeds the max, we should take the substring....
                             if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
                             {
-                                cp.Caption = cp.Caption.Substring(0, short.MaxValue);
+                                cp.Caption = cp.Caption[..short.MaxValue];
                             }
 
                             createResult = PInvoke.CreateWindowEx(

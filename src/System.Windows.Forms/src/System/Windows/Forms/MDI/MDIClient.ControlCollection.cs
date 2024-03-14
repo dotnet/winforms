@@ -10,31 +10,29 @@ public sealed partial class MdiClient
     /// </summary>
     public new class ControlCollection : Control.ControlCollection
     {
-        private readonly MdiClient owner;
+        private readonly MdiClient _owner;
 
-        /*C#r: protected*/
-
-        public ControlCollection(MdiClient owner)
-        : base(owner)
+        public ControlCollection(MdiClient owner) : base(owner)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         /// <summary>
         ///  <para>
-        ///  Adds a control to the MDI Container. This child must be
-        ///  a Form that is marked as an MDI Child to be added to the
-        ///  container. You should not call this directly, but rather
-        ///  set the child form's (ctl) MDIParent property:
+        ///   Adds a control to the MDI Container. This child must be
+        ///   a Form that is marked as an MDI Child to be added to the
+        ///   container. You should not call this directly, but rather
+        ///   set the child form's (ctl) MDIParent property:
         ///  </para>
-        /// <code>
-        ///  //     wrong
-        ///  Form child = new ChildForm();
-        ///  this.getMdiClient().add(child);
-        ///  //     right
-        ///  Form child = new ChildForm();
-        ///  child.setMdiParent(this);
-        /// </code>
+        ///  <code>
+        ///   // Wrong
+        ///   Form child = new ChildForm();
+        ///   this.MdiClient.Add(child);
+        ///
+        ///   // Right
+        ///   Form child = new ChildForm();
+        ///   child.MdiParent = this;
+        ///  </code>
         /// </summary>
         public override void Add(Control? value)
         {
@@ -48,12 +46,12 @@ public sealed partial class MdiClient
                 throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
             }
 
-            if (owner.CreateThreadId != value.CreateThreadId)
+            if (_owner.CreateThreadId != value.CreateThreadId)
             {
                 throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
             }
 
-            owner._children.Add(form);
+            _owner._children.Add(form);
             base.Add(value);
         }
 
@@ -64,7 +62,7 @@ public sealed partial class MdiClient
         {
             if (value is Form form)
             {
-                owner._children.Remove(form);
+                _owner._children.Remove(form);
             }
 
             base.Remove(value);

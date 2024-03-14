@@ -7,17 +7,17 @@ namespace System.Windows.Forms.IntegrationTests.Mocks;
 
 public class MainObject : INotifyPropertyChanged
 {
-    private string text;
+    private string _text;
     private PropertyChangedEventHandler _propertyChanged;
 
     public string Text
     {
-        get { return text; }
+        get => _text;
         set
         {
-            if (text != value)
+            if (_text != value)
             {
-                text = value;
+                _text = value;
                 if (_propertyChanged is not null)
                 {
                     _propertyChanged(this, new PropertyChangedEventArgs(nameof(Text)));

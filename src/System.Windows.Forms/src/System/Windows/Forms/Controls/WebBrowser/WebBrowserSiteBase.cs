@@ -30,18 +30,15 @@ public unsafe class WebBrowserSiteBase :
     IPropertyNotifySink.Interface,
     IDisposable
 {
-    private readonly WebBrowserBase host;
-    private AxHost.ConnectionPointCookie? connectionPoint;
+    private readonly WebBrowserBase _host;
+    private AxHost.ConnectionPointCookie? _connectionPoint;
 
     //
     // The constructor takes an WebBrowserBase as a parameter, so unfortunately,
     // this cannot be used as a standalone site. It has to be used in conjunction
     // with WebBrowserBase. Perhaps we can change it in future.
     //
-    internal WebBrowserSiteBase(WebBrowserBase h)
-    {
-        host = h.OrThrowIfNull();
-    }
+    internal WebBrowserSiteBase(WebBrowserBase h) => _host = h.OrThrowIfNull();
 
     /// <summary>
     ///  Dispose(release the cookie)
@@ -65,7 +62,7 @@ public unsafe class WebBrowserSiteBase :
     /// <summary>
     ///  Retrieves the WebBrowserBase object set in the constructor.
     /// </summary>
-    internal WebBrowserBase Host => host;
+    internal WebBrowserBase Host => _host;
 
     // IOleControlSite methods:
     HRESULT IOleControlSite.Interface.OnControlInfoChanged() => HRESULT.S_OK;
@@ -140,8 +137,8 @@ public unsafe class WebBrowserSiteBase :
             return HRESULT.E_POINTER;
         }
 
-        Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
-        Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, true);
+        Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.s_siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
+        Host.SetAXHostState(WebBrowserHelper.s_siteProcessedInputKey, true);
 
         Message msg = *pMsg;
         try
@@ -151,7 +148,7 @@ public unsafe class WebBrowserSiteBase :
         }
         finally
         {
-            Host.SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            Host.SetAXHostState(WebBrowserHelper.s_siteProcessedInputKey, false);
         }
     }
 
@@ -374,7 +371,7 @@ public unsafe class WebBrowserSiteBase :
 
     internal void StartEvents()
     {
-        if (connectionPoint is not null)
+        if (_connectionPoint is not null)
         {
             return;
         }
@@ -384,7 +381,7 @@ public unsafe class WebBrowserSiteBase :
         {
             try
             {
-                connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
+                _connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -394,10 +391,10 @@ public unsafe class WebBrowserSiteBase :
 
     internal void StopEvents()
     {
-        if (connectionPoint is not null)
+        if (_connectionPoint is not null)
         {
-            connectionPoint.Disconnect();
-            connectionPoint = null;
+            _connectionPoint.Disconnect();
+            _connectionPoint = null;
         }
     }
 

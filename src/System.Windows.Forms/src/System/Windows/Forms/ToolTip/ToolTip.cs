@@ -39,7 +39,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     private bool _showAlways;
     private ToolTipNativeWindow _window;
     private Control? _topLevelControl;
-    private bool active = true;
+    private bool _active = true;
     private Color _backColor = SystemColors.Info;
     private Color _foreColor = SystemColors.InfoText;
     private bool _isBalloon;
@@ -104,12 +104,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     [DefaultValue(true)]
     public bool Active
     {
-        get => active;
+        get => _active;
         set
         {
-            if (active != value)
+            if (_active != value)
             {
-                active = value;
+                _active = value;
 
                 // Don't activate the tooltip if we're in the designer.
                 if (!DesignMode && GetHandleCreated())
@@ -768,7 +768,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
 
         // Set active status.
-        PInvoke.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)active);
+        PInvoke.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
         if (BackColor != SystemColors.Info)
         {
@@ -2217,14 +2217,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// </summary>
     private void WmPop()
     {
-        IWin32Window? window = GetCurrentToolWindow();
-        if (window is null)
+        if (GetCurrentToolWindow() is not IWin32Window window)
         {
             return;
         }
 
-        var control = window as Control;
-        if (control is null || !_tools.TryGetValue(control, out TipInfo? tipInfo))
+        if (window is not Control control || !_tools.TryGetValue(control, out TipInfo? tipInfo))
         {
             return;
         }

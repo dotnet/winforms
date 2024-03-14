@@ -121,7 +121,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
 
     private class TestGridEntry : GridEntry
     {
-        readonly PropertyGridView _propertyGridView;
+        private readonly PropertyGridView _propertyGridView;
 
         public TestGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyGridView propertyGridView)
             : base(ownerGrid, peParent)

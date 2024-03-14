@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 [AttributeUsage(AttributeTargets.All)]
 internal sealed class SRDescriptionAttribute : DescriptionAttribute
 {
-    private bool replaced;
+    private bool _replaced;
 
     public SRDescriptionAttribute(string description)
         : base(description)
@@ -19,9 +19,9 @@ internal sealed class SRDescriptionAttribute : DescriptionAttribute
     {
         get
         {
-            if (!replaced)
+            if (!_replaced)
             {
-                replaced = true;
+                _replaced = true;
                 DescriptionValue = SR.GetResourceString(base.Description);
             }
 

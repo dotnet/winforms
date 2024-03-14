@@ -10,7 +10,7 @@ internal partial class ToolStripScrollButton
 {
     internal sealed class StickyLabelAccessibleObject : Label.LabelAccessibleObject
     {
-        private StickyLabel _owner;
+        private readonly StickyLabel _owner;
 
         public StickyLabelAccessibleObject(StickyLabel owner) : base(owner)
         {

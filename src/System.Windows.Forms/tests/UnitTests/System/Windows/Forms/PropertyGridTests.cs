@@ -1687,7 +1687,7 @@ public partial class PropertyGridTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(PropertyGrid.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.
@@ -3981,15 +3981,15 @@ public partial class PropertyGridTests
 
     private class SubPropertyGrid : PropertyGrid
     {
-        public new const int ScrollStateAutoScrolling = PropertyGrid.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = PropertyGrid.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = PropertyGrid.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = PropertyGrid.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = PropertyGrid.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 
@@ -4119,7 +4119,7 @@ public partial class PropertyGridTests
 
     private class MySite : ISite
     {
-        private IComponentChangeService _componentChangeService = new ComponentChangeService();
+        private readonly IComponentChangeService _componentChangeService = new ComponentChangeService();
         public IComponent Component => null;
         public IContainer Container => null;
         public bool DesignMode => false;

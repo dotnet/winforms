@@ -2,11 +2,11 @@
 
 namespace TestConsole;
 
-class Program
+internal class Program
 {
     // - NOTE: the code needs to run under a thread with an STA ApartmentState
     [STAThread]
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

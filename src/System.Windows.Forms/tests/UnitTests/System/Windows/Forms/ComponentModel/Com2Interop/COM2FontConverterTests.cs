@@ -95,7 +95,7 @@ public unsafe class COM2FontConverterTests
 
     private class CustomGetNativeValueDescriptor : Com2PropertyDescriptor
     {
-        private ICustomTypeDescriptor _descriptor;
+        private readonly ICustomTypeDescriptor _descriptor;
 
         public CustomGetNativeValueDescriptor(VARIANT nativeValue)
             : base(default, "Foo", Array.Empty<Attribute>(), default, default, default, default)

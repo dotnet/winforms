@@ -7,7 +7,7 @@ namespace System.Drawing.Tests;
 
 public abstract class DrawingTest
 {
-    private static Security.Cryptography.SHA256 s_md5 = Security.Cryptography.SHA256.Create();
+    private static readonly Security.Cryptography.SHA256 s_md5 = Security.Cryptography.SHA256.Create();
 
     protected unsafe void ValidateBitmapContent(Bitmap bitmap, params byte[] expectedHash)
     {
