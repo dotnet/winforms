@@ -270,7 +270,7 @@ public class ToolboxItem : ISerializable
             }
         }
 
-        return comps.ToArray();
+        return [.. comps];
     }
 
     /// <summary>

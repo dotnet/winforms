@@ -20,18 +20,16 @@ public class DrawListViewItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData))]
     public void DrawListViewItemEventArgs_Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates(Rectangle bounds, int itemIndex, ListViewItemStates state)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            ListViewItem item = new();
-            DrawListViewItemEventArgs e = new(graphics, item, bounds, itemIndex, state);
-            Assert.Same(graphics, e.Graphics);
-            Assert.Same(item, e.Item);
-            Assert.Equal(bounds, e.Bounds);
-            Assert.Equal(itemIndex, e.ItemIndex);
-            Assert.Equal(state, e.State);
-            Assert.False(e.DrawDefault);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        ListViewItem item = new();
+        DrawListViewItemEventArgs e = new(graphics, item, bounds, itemIndex, state);
+        Assert.Same(graphics, e.Graphics);
+        Assert.Same(item, e.Item);
+        Assert.Equal(bounds, e.Bounds);
+        Assert.Equal(itemIndex, e.ItemIndex);
+        Assert.Equal(state, e.State);
+        Assert.False(e.DrawDefault);
     }
 
     [Fact]
@@ -43,34 +41,30 @@ public class DrawListViewItemEventArgsTests
     [Fact]
     public void DrawListViewItemEventArgs_Ctor_NullItem_ThrowsArgumentNullException()
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            Assert.Throws<ArgumentNullException>("item", () => new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, ListViewItemStates.Default));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        Assert.Throws<ArgumentNullException>("item", () => new DrawListViewItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, ListViewItemStates.Default));
     }
 
     [Theory]
     [BoolData]
     public void DrawListViewItemEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawListViewItemEventArgs e = new(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked)
         {
-            DrawListViewItemEventArgs e = new(graphics, new ListViewItem(), new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked)
-            {
-                DrawDefault = value
-            };
-            Assert.Equal(value, e.DrawDefault);
+            DrawDefault = value
+        };
+        Assert.Equal(value, e.DrawDefault);
 
-            // Set same.
-            e.DrawDefault = value;
-            Assert.Equal(value, e.DrawDefault);
+        // Set same.
+        e.DrawDefault = value;
+        Assert.Equal(value, e.DrawDefault);
 
-            // Set different.
-            e.DrawDefault = !value;
-            Assert.Equal(!value, e.DrawDefault);
-        }
+        // Set different.
+        e.DrawDefault = !value;
+        Assert.Equal(!value, e.DrawDefault);
     }
 
     public static IEnumerable<object[]> Draw_TestData()
@@ -115,47 +109,39 @@ public class DrawListViewItemEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewItemEventArgs_DrawBackground_Invoke_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
-            e.DrawBackground();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
+        e.DrawBackground();
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewItemEventArgs_DrawFocusRectangle_HasGraphicsFocused_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
-            e.DrawFocusRectangle();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
+        e.DrawFocusRectangle();
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewItemEventArgs_DrawText_Invoke_Success(ListViewItem item, Rectangle bounds, ListViewItemStates state)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
-            e.DrawText();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
+        e.DrawText();
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewItemEventArgs_DrawText_InvokeTextFormatFlags(ListViewItem item, Rectangle bounds, ListViewItemStates state)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
-            e.DrawText(TextFormatFlags.Bottom);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawListViewItemEventArgs e = new(graphics, item, bounds, -1, state);
+        e.DrawText(TextFormatFlags.Bottom);
     }
 }

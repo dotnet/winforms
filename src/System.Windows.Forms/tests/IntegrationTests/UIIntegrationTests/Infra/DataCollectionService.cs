@@ -87,7 +87,7 @@ internal static class DataCollectionService
         var testMethod = testCase.TestMethod.Method;
         string testClass = testCase.TestMethod.TestClass.Class.Name;
         int lastDot = testClass.LastIndexOf('.');
-        testClass = testClass.Substring(lastDot + 1);
+        testClass = testClass[(lastDot + 1)..];
         return $"{testClass}.{testMethod.Name}";
     }
 
@@ -211,7 +211,7 @@ internal static class DataCollectionService
         string path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
         if (path.Length > MaxPath)
         {
-            testName = testName.Substring(0, Math.Max(0, testName.Length - (path.Length - MaxPath)));
+            testName = testName[..Math.Max(0, testName.Length - (path.Length - MaxPath))];
             path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
         }
 

@@ -16,16 +16,20 @@ public class ColorMapTests
     [Fact]
     public void NewColor_SetValid_ReturnsExpected()
     {
-        ColorMap cm = new();
-        cm.NewColor = Color.AliceBlue;
+        ColorMap cm = new()
+        {
+            NewColor = Color.AliceBlue
+        };
         Assert.Equal(Color.AliceBlue, cm.NewColor);
     }
 
     [Fact]
     public void OldColor_SetValid_ReturnsExpected()
     {
-        ColorMap cm = new();
-        cm.OldColor = Color.AliceBlue;
+        ColorMap cm = new()
+        {
+            OldColor = Color.AliceBlue
+        };
         Assert.Equal(Color.AliceBlue, cm.OldColor);
     }
 }

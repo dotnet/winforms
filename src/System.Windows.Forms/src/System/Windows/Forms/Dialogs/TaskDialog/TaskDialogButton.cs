@@ -55,9 +55,7 @@ public class TaskDialogButton : TaskDialogControl
     ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class.
     /// </summary>
     // TODO: Find a way to avoid making the class inheritable
-#pragma warning disable RS0022 // Constructor make noninheritable base class inheritable
     public TaskDialogButton()
-#pragma warning restore RS0022 // Constructor make noninheritable base class inheritable
     {
     }
 
@@ -70,11 +68,7 @@ public class TaskDialogButton : TaskDialogControl
     /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
     ///   when this button is clicked.
     /// </param>
-    // TODO
-#pragma warning disable RS0022 // Constructor make noninheritable base class inheritable
-    public TaskDialogButton(string? text, bool enabled = true, bool allowCloseDialog = true)
-#pragma warning restore RS0022 // Constructor make noninheritable base class inheritable
-        : this()
+    public TaskDialogButton(string? text, bool enabled = true, bool allowCloseDialog = true) : this()
     {
         _text = text;
         Enabled = enabled;

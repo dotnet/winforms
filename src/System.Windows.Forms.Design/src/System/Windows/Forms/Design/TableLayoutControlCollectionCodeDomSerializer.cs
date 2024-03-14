@@ -57,8 +57,10 @@ internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDom
 
                 if (genCode)
                 {
-                    CodeMethodInvokeExpression statement = new();
-                    statement.Method = methodRef;
+                    CodeMethodInvokeExpression statement = new()
+                    {
+                        Method = methodRef
+                    };
                     CodeExpression? serializedObj = SerializeToExpression(manager, o);
 
                     if (serializedObj is not null && !typeof(Control).IsAssignableFrom(o.GetType()))

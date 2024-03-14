@@ -49,7 +49,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         Assert.Equal(1, collection[0]);
         Assert.Equal(2, collection[1]);
@@ -74,8 +74,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
 
@@ -84,7 +86,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Set first.
         collection[0] = 4;
@@ -110,7 +112,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Set first.
         collection[0] = 4;
@@ -136,7 +138,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -178,7 +180,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -233,8 +235,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_Item_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
 
@@ -462,7 +466,7 @@ public class ListBoxIntegerCollectionTests
         };
         var collection = new ListBox.IntegerCollection(owner);
 
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
@@ -490,7 +494,7 @@ public class ListBoxIntegerCollectionTests
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
 
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -525,7 +529,7 @@ public class ListBoxIntegerCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
@@ -566,7 +570,7 @@ public class ListBoxIntegerCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -602,7 +606,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange(new int[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((int[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -633,7 +637,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange(new int[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((int[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -671,7 +675,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange(new int[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((int[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -715,7 +719,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange(new int[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((int[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -759,10 +763,11 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_Contains_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.False(collection.Contains(0));
         Assert.True(collection.Contains(1));
         Assert.False(collection.Contains(2));
@@ -822,8 +827,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_Clear_InvokeNotEmpty_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
 
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -1042,8 +1049,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_CopyTo_NullArrayNotEmpty_ThrowsArgumentNullException()
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
     }
 
@@ -1061,10 +1070,11 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IndexOf_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(0, collection.IndexOf(1));
         Assert.Equal(-1, collection.IndexOf(2));
@@ -1091,7 +1101,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Remove middle.
         collection.Remove(2);
@@ -1135,7 +1145,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Remove middle.
         collection.Remove(2);
@@ -1179,7 +1189,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1242,7 +1252,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1305,7 +1315,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Remove middle.
         collection.RemoveAt(1);
@@ -1342,7 +1352,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
 
         // Remove middle.
         collection.RemoveAt(1);
@@ -1379,7 +1389,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1432,7 +1442,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange(new int[] { 2, 1, 1, 3 });
+        collection.AddRange((int[])[2, 1, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1490,8 +1500,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_RemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
 
@@ -1499,11 +1511,13 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListItem_Get_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         Assert.Equal(1, collection[0]);
         Assert.Equal(2, collection[1]);
@@ -1528,8 +1542,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListItem_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
 
@@ -1537,11 +1553,13 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListItem_Set_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         // Set first.
         collection[0] = 4;
@@ -1595,11 +1613,13 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListItem_SetWithHandle_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1699,8 +1719,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListItem_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
 
@@ -1954,10 +1976,11 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListContains_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.False(collection.Contains(0));
         Assert.True(collection.Contains(1));
         Assert.False(collection.Contains(2));
@@ -2021,8 +2044,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListClear_InvokeNotEmpty_Success()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
 
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -2232,8 +2257,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListGetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -2271,10 +2298,11 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListIndexOf_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(0, collection.IndexOf(1));
         Assert.Equal(-1, collection.IndexOf(2));
@@ -2304,11 +2332,13 @@ public class ListBoxIntegerCollectionTests
             Sorted = sorted,
             UseCustomTabOffsets = useCustomTabOffsets
         };
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         // Remove middle.
         collection.Remove(2);
@@ -2398,11 +2428,13 @@ public class ListBoxIntegerCollectionTests
             Sorted = sorted,
             UseCustomTabOffsets = useCustomTabOffset
         };
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2540,11 +2572,13 @@ public class ListBoxIntegerCollectionTests
             Sorted = sorted,
             UseCustomTabOffsets = useCustomTabOffsets
         };
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         // Remove middle.
         collection.RemoveAt(1);
@@ -2620,11 +2654,13 @@ public class ListBoxIntegerCollectionTests
             Sorted = sorted,
             UseCustomTabOffsets = useCustomTabOffset
         };
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2738,8 +2774,10 @@ public class ListBoxIntegerCollectionTests
     public void ListBoxIntegerCollection_IListRemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.IntegerCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
 }

@@ -663,7 +663,7 @@ internal partial class StyleCollectionEditor
 
             _sizeTypeGroupBox.Enabled = true;
             _insertButton.Enabled = true;
-            _removeButton.Enabled = coll.Count == _columnsAndRowsListView.Items.Count ? false : _columnsAndRowsListView.Items.Count > 1;
+            _removeButton.Enabled = coll.Count != _columnsAndRowsListView.Items.Count && _columnsAndRowsListView.Items.Count > 1;
 
             if (coll.Count == 1)
             {
@@ -1003,7 +1003,7 @@ internal partial class StyleCollectionEditor
                 }
             }
 
-            if (total == 100 || total == 0)
+            if (total is 100 or 0)
             {
                 return;
             }

@@ -21,28 +21,24 @@ public class ResXResourceWriterTests
         string key = "Some.Key.Name";
         string value = "Some.Key.Value";
 
-        using (MemoryStream stream = new())
+        using MemoryStream stream = new();
+        using (ResXResourceWriter writer = new(stream))
         {
-            using (ResXResourceWriter writer = new(stream))
-            {
-                writer.AddResource(key, value);
-            }
-
-            byte[] buffer = stream.ToArray();
-            using (ResXResourceReader reader = new(new MemoryStream(buffer)))
-            {
-                var dictionary = new Dictionary<object, object>();
-                IDictionaryEnumerator dictionaryEnumerator = reader.GetEnumerator();
-                while (dictionaryEnumerator.MoveNext())
-                {
-                    dictionary.Add(dictionaryEnumerator.Key, dictionaryEnumerator.Value);
-                }
-
-                KeyValuePair<object, object> pair = Assert.Single(dictionary);
-                Assert.Equal(key, pair.Key);
-                Assert.Equal(value, pair.Value);
-            }
+            writer.AddResource(key, value);
         }
+
+        byte[] buffer = stream.ToArray();
+        using ResXResourceReader reader = new(new MemoryStream(buffer));
+        var dictionary = new Dictionary<object, object>();
+        IDictionaryEnumerator dictionaryEnumerator = reader.GetEnumerator();
+        while (dictionaryEnumerator.MoveNext())
+        {
+            dictionary.Add(dictionaryEnumerator.Key, dictionaryEnumerator.Value);
+        }
+
+        KeyValuePair<object, object> pair = Assert.Single(dictionary);
+        Assert.Equal(key, pair.Key);
+        Assert.Equal(value, pair.Value);
     }
 
     [Fact]

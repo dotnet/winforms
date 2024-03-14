@@ -87,9 +87,7 @@ public partial class DataGridView
             }
         }
 
-        public bool AllowEdit => CurrencyManager is not null
-            ? CurrencyManager.AllowEdit
-            : false;
+        public bool AllowEdit => CurrencyManager is not null && CurrencyManager.AllowEdit;
 
         public bool AllowRemove
         {

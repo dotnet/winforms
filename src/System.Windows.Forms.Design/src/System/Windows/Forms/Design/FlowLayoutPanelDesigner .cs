@@ -82,7 +82,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private FlowLayoutPanel FlowLayoutPanel => (FlowLayoutPanel)Control;
+    private FlowLayoutPanel FlowLayoutPanel => Control;
 
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -116,15 +116,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Returns true if flow direction is right-to-left or left-to-right
     /// </summary>
-    private bool HorizontalFlow
-    {
-        get
-        {
-            var direction = FlowLayoutPanel.FlowDirection;
-            return direction == FlowDirection.RightToLeft
-                || direction == FlowDirection.LeftToRight;
-        }
-    }
+    private bool HorizontalFlow =>
+        FlowLayoutPanel.FlowDirection is FlowDirection.RightToLeft or FlowDirection.LeftToRight;
 
     /// <summary>
     ///  Get and cache the selection service

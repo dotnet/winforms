@@ -170,8 +170,7 @@ public partial class ControlDesigner : ComponentDesigner
         set
         {
             // don't do anything here during loading, if a refactor changed it we don't want to do anything
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host is null || (host is not null && !host.Loading))
+            if (GetService(typeof(IDesignerHost)) is not IDesignerHost host || (host is not null && !host.Loading))
             {
                 Component.Site.Name = value;
             }
@@ -515,7 +514,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // No designer means we must replace the window target in this control.
         IWindowTarget oldTarget = e.Control.WindowTarget;
-        if (!(oldTarget is ChildWindowTarget))
+        if (oldTarget is not ChildWindowTarget)
         {
             e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
@@ -543,7 +542,7 @@ public partial class ControlDesigner : ComponentDesigner
     private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
     {
         // It is possible to use the control designer with NON CONTROl types.
-        if (!(Component is Control ctl))
+        if (Component is not Control ctl)
         {
             return;
         }
@@ -1705,7 +1704,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            if (!(oldTarget is DesignerWindowTarget))
+            if (oldTarget is not DesignerWindowTarget)
             {
                 UnhookChildControls(child);
             }
@@ -2341,31 +2340,28 @@ public partial class ControlDesigner : ComponentDesigner
             return true;
         }
 
-        switch (msg)
+        return (uint)msg switch
         {
             // WM messages not covered by the above block
-            case PInvoke.WM_MOUSEHOVER:
-            case PInvoke.WM_MOUSELEAVE:
-            // WM_NC messages
-            case PInvoke.WM_NCMOUSEMOVE:
-            case PInvoke.WM_NCLBUTTONDOWN:
-            case PInvoke.WM_NCLBUTTONUP:
-            case PInvoke.WM_NCLBUTTONDBLCLK:
-            case PInvoke.WM_NCRBUTTONDOWN:
-            case PInvoke.WM_NCRBUTTONUP:
-            case PInvoke.WM_NCRBUTTONDBLCLK:
-            case PInvoke.WM_NCMBUTTONDOWN:
-            case PInvoke.WM_NCMBUTTONUP:
-            case PInvoke.WM_NCMBUTTONDBLCLK:
-            case PInvoke.WM_NCMOUSEHOVER:
-            case PInvoke.WM_NCMOUSELEAVE:
-            case PInvoke.WM_NCXBUTTONDOWN:
-            case PInvoke.WM_NCXBUTTONUP:
-            case PInvoke.WM_NCXBUTTONDBLCLK:
-                return true;
-            default:
-                return false;
-        }
+            PInvoke.WM_MOUSEHOVER
+                or PInvoke.WM_MOUSELEAVE
+                or PInvoke.WM_NCMOUSEMOVE
+                or PInvoke.WM_NCLBUTTONDOWN
+                or PInvoke.WM_NCLBUTTONUP
+                or PInvoke.WM_NCLBUTTONDBLCLK
+                or PInvoke.WM_NCRBUTTONDOWN
+                or PInvoke.WM_NCRBUTTONUP
+                or PInvoke.WM_NCRBUTTONDBLCLK
+                or PInvoke.WM_NCMBUTTONDOWN
+                or PInvoke.WM_NCMBUTTONUP
+                or PInvoke.WM_NCMBUTTONDBLCLK
+                or PInvoke.WM_NCMOUSEHOVER
+                or PInvoke.WM_NCMOUSELEAVE
+                or PInvoke.WM_NCXBUTTONDOWN
+                or PInvoke.WM_NCXBUTTONUP
+                or PInvoke.WM_NCXBUTTONDBLCLK => true,
+            _ => false,
+        };
     }
 
     private bool IsDoubleClick(int x, int y)

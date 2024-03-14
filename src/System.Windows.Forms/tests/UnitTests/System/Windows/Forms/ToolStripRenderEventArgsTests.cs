@@ -89,11 +89,9 @@ public class ToolStripRenderEventArgsTests
     [MemberData(nameof(ConnectedArea_Empty_TestData))]
     public void ToolStripRenderEventArgs_ConnectedArea_Get_ReturnsEmpty(ToolStrip toolStrip)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            ToolStripRenderEventArgs e = new(graphics, toolStrip, new Rectangle(1, 2, 3, 4), Color.Empty);
-            Assert.Equal(Rectangle.Empty, e.ConnectedArea);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        ToolStripRenderEventArgs e = new(graphics, toolStrip, new Rectangle(1, 2, 3, 4), Color.Empty);
+        Assert.Equal(Rectangle.Empty, e.ConnectedArea);
     }
 }

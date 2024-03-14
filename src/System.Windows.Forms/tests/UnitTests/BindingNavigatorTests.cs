@@ -20,8 +20,8 @@ public class BindingNavigatorTests
     [WinFormsFact]
     public void BindingNavigator_ConstructorBindingSource()
     {
-        using BindingSource bindingSource = new();
-        List<string> data = new() { "Foo", "Bar" };
+        using BindingSource bindingSource = [];
+        List<string> data = ["Foo", "Bar"];
         bindingSource.DataSource = data;
 
         using BindingNavigator bn = new(bindingSource);
@@ -65,35 +65,35 @@ public class BindingNavigatorTests
         Assert.False(bn.PositionItem.AutoToolTip);
         Assert.Equal(SR.BindingNavigatorPositionAccessibleName, bn.PositionItem.AccessibleName);
 
-        List<ToolStripItem> items = new()
-        {
+        List<ToolStripItem> items =
+        [
             bn.MoveFirstItem,
             bn.MovePreviousItem,
             bn.MoveNextItem,
             bn.MoveLastItem,
             bn.AddNewItem,
             bn.DeleteItem
-        };
+        ];
 
-        List<string> itemNames = new()
-        {
+        List<string> itemNames =
+        [
             "bindingNavigatorMoveFirstItem",
             "bindingNavigatorMovePreviousItem",
             "bindingNavigatorMoveNextItem",
             "bindingNavigatorMoveLastItem",
             "bindingNavigatorAddNewItem",
             "bindingNavigatorDeleteItem"
-        };
+        ];
 
-        List<string> itemTexts = new()
-        {
+        List<string> itemTexts =
+        [
             SR.BindingNavigatorMoveFirstItemText,
             SR.BindingNavigatorMovePreviousItemText,
             SR.BindingNavigatorMoveNextItemText,
             SR.BindingNavigatorMoveLastItemText,
             SR.BindingNavigatorAddNewItemText,
             SR.BindingNavigatorDeleteItemText
-        };
+        ];
 
         for (int i = 0; i < items.Count; i++)
         {

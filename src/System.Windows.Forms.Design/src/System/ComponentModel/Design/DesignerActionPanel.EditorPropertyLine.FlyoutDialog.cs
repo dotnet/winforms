@@ -121,9 +121,7 @@ internal sealed partial class DesignerActionPanel
 
             protected override bool ProcessDialogKey(Keys keyData)
             {
-                if ((keyData == (Keys.Alt | Keys.Down)) ||
-                    (keyData == (Keys.Alt | Keys.Up)) ||
-                    (keyData == Keys.F4))
+                if (keyData is (Keys.Alt | Keys.Down) or (Keys.Alt | Keys.Up) or Keys.F4)
                 {
                     // Any of these keys indicates the selection is accepted
                     Visible = false;

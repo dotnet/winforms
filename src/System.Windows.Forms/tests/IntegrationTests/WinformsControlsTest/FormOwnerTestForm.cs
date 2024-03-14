@@ -24,7 +24,7 @@ internal class FormOwnerTestForm : Form
     {
         long memoryStart = GC.GetTotalMemory(false);
 
-        List<Form> childForms = new();
+        List<Form> childForms = [];
         for (int i = 0; i < 500; i++)
         {
             MemoryTestParentForm parent = new();

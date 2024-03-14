@@ -207,7 +207,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
     public void LinkAccessibleObject_Name_IsExpected_ForSeveralLinks()
     {
         using LinkLabel linkLabel = new();
-        string[] names = { "Home", "About", "Help", "Details" };
+        string[] names = ["Home", "About", "Help", "Details"];
         linkLabel.Text = string.Join(' ', names);
         int start = 0;
 
@@ -273,7 +273,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(linkLabel.IsHandleCreated);
     }
 }

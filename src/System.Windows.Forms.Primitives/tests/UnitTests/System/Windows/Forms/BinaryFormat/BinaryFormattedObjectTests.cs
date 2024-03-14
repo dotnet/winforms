@@ -38,8 +38,8 @@ public class BinaryFormattedObjectTests
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.ObjectId.Should().Be(1);
         systemClass.Name.Should().Be("System.Collections.Hashtable");
-        systemClass.MemberNames.Should().BeEquivalentTo(new[]
-        {
+        systemClass.MemberNames.Should().BeEquivalentTo(
+        [
             "LoadFactor",
             "Version",
             "Comparer",
@@ -47,7 +47,7 @@ public class BinaryFormattedObjectTests
             "HashSize",
             "Keys",
             "Values"
-        });
+        ]);
 
         systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {
@@ -229,7 +229,7 @@ public class BinaryFormattedObjectTests
         ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(NestedSerializableObject).FullName);
-        @class.MemberNames.Should().BeEquivalentTo(new[] { "_object", "_meaning" });
+        @class.MemberNames.Should().BeEquivalentTo(["_object", "_meaning"]);
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {
@@ -264,7 +264,7 @@ public class BinaryFormattedObjectTests
         ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(TwoIntSerializableObject).FullName);
-        @class.MemberNames.Should().BeEquivalentTo(new[] { "_value", "_meaning" });
+        @class.MemberNames.Should().BeEquivalentTo(["_value", "_meaning"]);
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {

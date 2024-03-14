@@ -116,7 +116,7 @@ public static partial class PlatformDetection
                 bool nonZeroLowerBoundArraysSupported = false;
                 try
                 {
-                    Array.CreateInstance(typeof(int), new int[] { 5 }, new int[] { 5 });
+                    Array.CreateInstance(typeof(int), [5], [5]);
                     nonZeroLowerBoundArraysSupported = true;
                 }
                 catch (PlatformNotSupportedException)

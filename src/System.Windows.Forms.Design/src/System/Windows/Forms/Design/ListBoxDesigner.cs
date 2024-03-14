@@ -28,9 +28,9 @@ internal class ListBoxDesigner : ControlDesigner
             ShadowProperties[nameof(IntegralHeight)] = value;
 
             ListBox listBox = (ListBox)Component;
-            if ((listBox.Dock != DockStyle.Fill) &&
-                (listBox.Dock != DockStyle.Left) &&
-                (listBox.Dock != DockStyle.Right))
+            if (listBox.Dock is not DockStyle.Fill
+                and not DockStyle.Left
+                and not DockStyle.Right)
             {
                 listBox.IntegralHeight = value;
             }
@@ -46,7 +46,7 @@ internal class ListBoxDesigner : ControlDesigner
         set
         {
             ListBox listBox = (ListBox)Component;
-            if ((value == DockStyle.Fill) || (value == DockStyle.Left) || (value == DockStyle.Right))
+            if (value is DockStyle.Fill or DockStyle.Left or DockStyle.Right)
             {
                 // VSO 159543
                 // Allow partial listbox item displays so that we don't try to resize the listbox after we dock.

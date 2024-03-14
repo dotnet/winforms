@@ -291,11 +291,9 @@ internal sealed partial class DesignerActionPanel
                     int height = width - 1;
                     _swatch = new Bitmap(width, height);
                     Rectangle rect = new(1, 1, width - 2, height - 2);
-                    using (Graphics swatchGraphics = Graphics.FromImage(_swatch))
-                    {
-                        _editor.PaintValue(Value, swatchGraphics, rect);
-                        swatchGraphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(0, 0, width - 1, height - 1));
-                    }
+                    using Graphics swatchGraphics = Graphics.FromImage(_swatch);
+                    _editor.PaintValue(Value, swatchGraphics, rect);
+                    swatchGraphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(0, 0, width - 1, height - 1));
                 }
 
                 g.DrawImage(_swatch, new Point(EditRegionRelativeLocation.X + 2, EditorLineSwatchPadding + 5));

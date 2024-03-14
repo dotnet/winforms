@@ -16,7 +16,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.Null(accessibleObject.TestAccessor().Dynamic._controlItem);
         Assert.Null(accessibleObject.TestAccessor().Dynamic._window);
@@ -31,7 +31,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using Control control = new();
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, control, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, control, null]);
 
         Assert.Equal(Rectangle.Empty, accessibleObject.Bounds);
         Assert.False(control.IsHandleCreated);
@@ -51,7 +51,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { item, window, control, provider });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [item, window, control, provider]);
 
         Assert.NotEqual(Rectangle.Empty, accessibleObject.Bounds);
         Assert.True(control.IsHandleCreated);
@@ -66,7 +66,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, window, control, provider });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, window, control, provider]);
 
         Assert.Equal(window.AccessibilityObject, accessibleObject.Parent);
         Assert.False(control.IsHandleCreated);
@@ -81,7 +81,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, window, control, provider });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, window, control, provider]);
 
         Assert.Equal(window.AccessibilityObject, accessibleObject.FragmentRoot);
         Assert.False(control.IsHandleCreated);
@@ -92,7 +92,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.True(accessibleObject.IsReadOnly);
     }
@@ -102,7 +102,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.Equal(AccessibleStates.HasPopup | AccessibleStates.ReadOnly, accessibleObject.State);
     }
@@ -133,7 +133,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -149,7 +149,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { item, window, control, provider });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [item, window, control, provider]);
 
         Assert.NotNull(accessibleObject.TestAccessor().Dynamic._controlItem);
         Assert.True(accessibleObject.IsIAccessibleExSupported());
@@ -161,7 +161,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
@@ -171,7 +171,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     {
         Type type = typeof(ControlItem)
            .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
@@ -193,9 +193,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject1 = (AccessibleObject)Activator.CreateInstance(type, new object[] { item1, window, control, provider });
-        var accessibleObject2 = (AccessibleObject)Activator.CreateInstance(type, new object[] { item2, window, control, provider });
-        var accessibleObject3 = (AccessibleObject)Activator.CreateInstance(type, new object[] { item3, window, control, provider });
+        var accessibleObject1 = (AccessibleObject)Activator.CreateInstance(type, [item1, window, control, provider]);
+        var accessibleObject2 = (AccessibleObject)Activator.CreateInstance(type, [item2, window, control, provider]);
+        var accessibleObject3 = (AccessibleObject)Activator.CreateInstance(type, [item3, window, control, provider]);
 
         // Make sure that returns index in window.Items collection + 1
 
@@ -214,7 +214,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
 
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, window, control, provider });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, window, control, provider]);
 
         Assert.Equal(window.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);

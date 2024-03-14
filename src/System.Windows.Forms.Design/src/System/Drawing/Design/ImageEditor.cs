@@ -151,7 +151,7 @@ public class ImageEditor : UITypeEditor
             }
         }
 
-        return list.ToArray();
+        return [.. list];
     }
 
     /// <inheritdoc />

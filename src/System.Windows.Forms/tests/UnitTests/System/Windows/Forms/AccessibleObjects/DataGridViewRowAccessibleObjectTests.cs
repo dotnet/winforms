@@ -2374,8 +2374,10 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     {
         using DataGridView dataGridView = new();
         dataGridView.AutoGenerateColumns = false;
-        DataGridViewTextBoxColumn column = new();
-        column.DataPropertyName = "col1";
+        DataGridViewTextBoxColumn column = new()
+        {
+            DataPropertyName = "col1"
+        };
         dataGridView.Columns.Add(column);
         dataGridView.Rows.Add(new DataGridViewRow());
         dataGridView.Rows[0].Cells[0].Value = "test1";

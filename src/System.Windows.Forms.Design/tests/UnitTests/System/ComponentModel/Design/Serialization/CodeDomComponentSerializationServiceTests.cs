@@ -166,7 +166,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertAllNonCodeFieldsArNull(valueState2);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
-        Assert.Equal(new List<string> { "name1", "name2" }, names);
+        Assert.Equal(["name1", "name2"], names);
 
         AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);

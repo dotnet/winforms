@@ -4465,10 +4465,14 @@ public class ListViewTests
     {
         using ListView control = new();
         control.CheckBoxes = true;
-        ListViewItem item1 = new();
-        item1.Text = "First";
-        ListViewItem item2 = new();
-        item2.Text = "Second";
+        ListViewItem item1 = new()
+        {
+            Text = "First"
+        };
+        ListViewItem item2 = new()
+        {
+            Text = "Second"
+        };
 
         control.Items.Add(item1);
         control.Items.Add(item2);
@@ -4492,10 +4496,14 @@ public class ListViewTests
     public unsafe void ListView_WmReflectNotify_LVN_KEYDOWN_WithGroups_WithoutSelection_DoesntFocusGroup(Keys key)
     {
         using ListView control = new();
-        ListViewItem item1 = new();
-        item1.Text = "First";
-        ListViewItem item2 = new();
-        item2.Text = "Second";
+        ListViewItem item1 = new()
+        {
+            Text = "First"
+        };
+        ListViewItem item2 = new()
+        {
+            Text = "Second"
+        };
 
         ListViewGroup group = new("Test group");
         group.Items.Add(item1);
@@ -4526,12 +4534,18 @@ public class ListViewTests
             ListViewGroup group1 = new("Test group1");
             ListViewGroup group2 = new("Test group2");
             ListViewGroup group3 = new("Test group3");
-            ListViewItem item1 = new(group1);
-            item1.Text = "First";
-            ListViewItem item2 = new(group2);
-            item2.Text = "Second";
-            ListViewItem item3 = new(group3);
-            item3.Text = "Third";
+            ListViewItem item1 = new(group1)
+            {
+                Text = "First"
+            };
+            ListViewItem item2 = new(group2)
+            {
+                Text = "Second"
+            };
+            ListViewItem item3 = new(group3)
+            {
+                Text = "Third"
+            };
             control.Items.Add(item1);
             control.Items.Add(item2);
             control.Items.Add(item3);
@@ -4835,7 +4849,7 @@ public class ListViewTests
         ListViewItem listViewItem3 = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
-        listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
+        listView.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2, listViewItem3]);
 
         Assert.True(accessor.IsToolTracked(listViewItem1));
         Assert.True(accessor.IsToolTracked(listViewItem2));
@@ -4966,11 +4980,11 @@ public class ListViewTests
         using ColumnHeader columnHeader1 = new();
         using ColumnHeader columnHeader2 = new();
 
-        listView.Columns.AddRange(new ColumnHeader[]
-        {
+        listView.Columns.AddRange(
+        [
         columnHeader1,
         columnHeader2
-        });
+        ]);
         listView.HideSelection = false;
         var listItems = new ListViewItem[]
         {
@@ -5022,11 +5036,11 @@ public class ListViewTests
         using ColumnHeader columnHeader1 = new();
         using ColumnHeader columnHeader2 = new();
 
-        listView.Columns.AddRange(new ColumnHeader[]
-        {
+        listView.Columns.AddRange(
+        [
         columnHeader1,
         columnHeader2
-        });
+        ]);
         listView.HideSelection = false;
         var listItems = new ListViewItem[]
         {
@@ -5320,12 +5334,11 @@ public class ListViewTests
         };
 
         listView.Columns.AddRange(
-            new ColumnHeader[]
-            {
+            [
                 new() { Text = "Column 1", Width = 100 },
                 new() { Text = "Column 2", Width = 100 },
                 new() { Text = "Column 3", Width = 100 }
-            });
+            ]);
 
         ListViewItem item = new("Test");
         item.SubItems.Add("Sub1");
@@ -5419,7 +5432,7 @@ public class ListViewTests
     {
         using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         listView.Items[0].Selected = true;
 
@@ -5451,7 +5464,7 @@ public class ListViewTests
     {
         using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         for (int count = listView.Items.Count; count > 1; count -= 1)
         {
@@ -5481,7 +5494,7 @@ public class ListViewTests
     {
         using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         listView.Items[0].Checked = true;
 
@@ -5511,7 +5524,7 @@ public class ListViewTests
     {
         using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         for (int count = listView.Items.Count; count > 1; count -= 1)
         {
@@ -5544,7 +5557,7 @@ public class ListViewTests
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         listView.Items[0].Selected = true;
 
@@ -5582,7 +5595,7 @@ public class ListViewTests
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         int count = 3;
         for (int i = 0; i < 2; i++)
@@ -5619,7 +5632,7 @@ public class ListViewTests
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         listView.Items[0].Checked = true;
 
@@ -5655,7 +5668,7 @@ public class ListViewTests
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         int count = 3;
         for (int i = 0; i < 2; i++)

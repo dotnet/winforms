@@ -499,12 +499,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
+            ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
             Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
-                HighDpiMode)
+                HighDpiMode) With
+            {
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            }
 
-            ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then

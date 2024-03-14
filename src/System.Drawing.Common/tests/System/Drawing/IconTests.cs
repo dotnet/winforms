@@ -356,7 +356,7 @@ public class IconTests
     {
         string bitmapPath = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
         string bitmapPathRoot = Path.GetPathRoot(bitmapPath);
-        string bitmapUncPath = $"\\\\{Environment.MachineName}\\{bitmapPath.Substring(0, bitmapPathRoot.IndexOf(":"))}$\\{bitmapPath.Replace(bitmapPathRoot, "")}";
+        string bitmapUncPath = $"\\\\{Environment.MachineName}\\{bitmapPath[..bitmapPathRoot.IndexOf(':')]}$\\{bitmapPath.Replace(bitmapPathRoot, "")}";
 
         // Some path could not be accessible
         // if so we just pass the test
@@ -841,7 +841,7 @@ public class IconTests
         }
 
         // Recent builds of Windows have added a few more icons to regedit.
-        Assert.True(count == 7 || count == 5, $"count was {count}, expected 5 or 7");
+        Assert.True(count is 7 or 5, $"count was {count}, expected 5 or 7");
     }
 
     [Fact]

@@ -208,7 +208,7 @@ internal unsafe class ClassPropertyDispatchAdapter
                     bindingFlags,
                     binder: null,
                     target,
-                    new object?[] { value });
+                    [value]);
             }
             catch (Exception ex)
             {

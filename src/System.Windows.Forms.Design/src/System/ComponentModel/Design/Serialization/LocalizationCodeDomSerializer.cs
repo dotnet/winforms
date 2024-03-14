@@ -66,7 +66,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
         PropertyDescriptor? descriptor = (PropertyDescriptor?)manager.Context[typeof(PropertyDescriptor)];
         ExpressionContext? tree = (ExpressionContext?)manager.Context[typeof(ExpressionContext)];
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-        bool isSerializable = (value is not null) ? GetReflectionTypeHelper(manager, value).IsSerializable : true;
+        bool isSerializable = value is null || GetReflectionTypeHelper(manager, value).IsSerializable;
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
 
         // If value is not serializable, we have no option but to call the original serializer,

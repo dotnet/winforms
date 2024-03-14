@@ -585,7 +585,7 @@ public class ListViewGroupCollectionTests
         using ListView listView = new();
         ListViewGroupCollection collection = listView.Groups;
         ListViewGroup group = new();
-        Assert.Throws<ArgumentNullException>("group", () => collection.AddRange(new ListViewGroup[] { group, null }));
+        Assert.Throws<ArgumentNullException>("group", () => collection.AddRange((ListViewGroup[])[group, null]));
         Assert.Same(group, Assert.Single(collection.Cast<ListViewGroup>()));
     }
 
@@ -1093,7 +1093,7 @@ public class ListViewGroupCollectionTests
             listView.CreateControl();
         }
 
-        Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new() }));
+        Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange((ListViewGroup[])[new(), new()]));
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
 
@@ -1105,7 +1105,7 @@ public class ListViewGroupCollectionTests
         using ListView listView = new() { VirtualMode = true };
         using ListView listViewSource = new();
         ListViewGroupCollection sourceGroup = new(listViewSource);
-        sourceGroup.AddRange(new ListViewGroup[] { new(), new() });
+        sourceGroup.AddRange((ListViewGroup[])[new(), new()]);
 
         if (createControl)
         {

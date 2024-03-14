@@ -989,7 +989,7 @@ public class ToolboxItemTests
             new ToolboxItem
             {
                 Company = "Company",
-                DependentAssemblies = new AssemblyName[] { null },
+                DependentAssemblies = [null],
                 Description = "Description",
                 Filter = new ToolboxItemFilterAttribute[] { new("Filter") },
                 IsTransient = true
@@ -1380,62 +1380,58 @@ public class ToolboxItemTests
     [Fact]
     public void ToolboxItem_Initialize_ObjectType_Success()
     {
-        using (Bitmap bitmap = new(10, 10))
-        using (Bitmap originalBitmap = new(10, 10))
+        using Bitmap bitmap = new(10, 10);
+        using Bitmap originalBitmap = new(10, 10);
+        var filter = new ToolboxItemFilterAttribute[] { new("Filter") };
+        ToolboxItem item = new()
         {
-            var filter = new ToolboxItemFilterAttribute[] { new("Filter") };
-            ToolboxItem item = new()
-            {
-                AssemblyName = new AssemblyName("AssemblyName"),
-                Bitmap = bitmap,
-                Company = "Company",
-                Description = "Description",
-                DependentAssemblies = new AssemblyName[2],
-                DisplayName = "DisplayName",
-                Filter = filter,
-                OriginalBitmap = originalBitmap
-            };
-            item.Initialize(typeof(object));
-            Assert.NotEqual(bitmap, item.Bitmap);
-            Assert.Same(item.Bitmap, item.Bitmap);
-            Assert.Equal("Microsoft Corporation", item.Company);
-            Assert.Empty(item.Description);
-            Assert.Equal(typeof(object).Assembly.FullName, item.AssemblyName.FullName);
-            Assert.Equal(new string[] { typeof(object).Assembly.FullName }, item.DependentAssemblies.Select(a => a.FullName));
-            Assert.Equal("Object", item.DisplayName);
-            Assert.Equal(new string[] { "System.Object" }, item.Filter.Cast<ToolboxItemFilterAttribute>().Select(a => a.FilterString));
-            Assert.Same(item.OriginalBitmap, item.OriginalBitmap);
-        }
+            AssemblyName = new AssemblyName("AssemblyName"),
+            Bitmap = bitmap,
+            Company = "Company",
+            Description = "Description",
+            DependentAssemblies = new AssemblyName[2],
+            DisplayName = "DisplayName",
+            Filter = filter,
+            OriginalBitmap = originalBitmap
+        };
+        item.Initialize(typeof(object));
+        Assert.NotEqual(bitmap, item.Bitmap);
+        Assert.Same(item.Bitmap, item.Bitmap);
+        Assert.Equal("Microsoft Corporation", item.Company);
+        Assert.Empty(item.Description);
+        Assert.Equal(typeof(object).Assembly.FullName, item.AssemblyName.FullName);
+        Assert.Equal(new string[] { typeof(object).Assembly.FullName }, item.DependentAssemblies.Select(a => a.FullName));
+        Assert.Equal("Object", item.DisplayName);
+        Assert.Equal(new string[] { "System.Object" }, item.Filter.Cast<ToolboxItemFilterAttribute>().Select(a => a.FilterString));
+        Assert.Same(item.OriginalBitmap, item.OriginalBitmap);
     }
 
     [Fact]
     public void ToolboxItem_Initialize_NullType_Nop()
     {
-        using (Bitmap bitmap = new(10, 10))
-        using (Bitmap originalBitmap = new(10, 10))
+        using Bitmap bitmap = new(10, 10);
+        using Bitmap originalBitmap = new(10, 10);
+        var filter = new ToolboxItemFilterAttribute[] { new("Filter") };
+        ToolboxItem item = new()
         {
-            var filter = new ToolboxItemFilterAttribute[] { new("Filter") };
-            ToolboxItem item = new()
-            {
-                AssemblyName = new AssemblyName("AssemblyName"),
-                Bitmap = bitmap,
-                Company = "Company",
-                Description = "Description",
-                DependentAssemblies = new AssemblyName[2],
-                DisplayName = "DisplayName",
-                Filter = filter,
-                OriginalBitmap = originalBitmap
-            };
-            item.Initialize(null);
-            Assert.Equal("AssemblyName", item.AssemblyName.FullName);
-            Assert.Same(bitmap, item.Bitmap);
-            Assert.Equal("Company", item.Company);
-            Assert.Equal("Description", item.Description);
-            Assert.Equal(new AssemblyName[2], item.DependentAssemblies);
-            Assert.Equal("DisplayName", item.DisplayName);
-            Assert.Equal(filter, item.Filter);
-            Assert.Same(originalBitmap, item.OriginalBitmap);
-        }
+            AssemblyName = new AssemblyName("AssemblyName"),
+            Bitmap = bitmap,
+            Company = "Company",
+            Description = "Description",
+            DependentAssemblies = new AssemblyName[2],
+            DisplayName = "DisplayName",
+            Filter = filter,
+            OriginalBitmap = originalBitmap
+        };
+        item.Initialize(null);
+        Assert.Equal("AssemblyName", item.AssemblyName.FullName);
+        Assert.Same(bitmap, item.Bitmap);
+        Assert.Equal("Company", item.Company);
+        Assert.Equal("Description", item.Description);
+        Assert.Equal(new AssemblyName[2], item.DependentAssemblies);
+        Assert.Equal("DisplayName", item.DisplayName);
+        Assert.Equal(filter, item.Filter);
+        Assert.Same(originalBitmap, item.OriginalBitmap);
     }
 
     [Theory]
@@ -1719,7 +1715,7 @@ public class ToolboxItemTests
             throw new NotImplementedException();
         }
 
-        public List<AssemblyName> ReferenceAssemblies { get; } = new();
+        public List<AssemblyName> ReferenceAssemblies { get; } = [];
 
         public void ReferenceAssembly(AssemblyName name)
         {

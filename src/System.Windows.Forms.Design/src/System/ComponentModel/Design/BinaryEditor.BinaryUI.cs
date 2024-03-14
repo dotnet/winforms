@@ -103,10 +103,12 @@ public sealed partial class BinaryEditor
         {
             try
             {
-                SaveFileDialog sfd = new();
-                sfd.FileName = SR.BinaryEditorFileName;
-                sfd.Title = SR.BinaryEditorSaveFile;
-                sfd.Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*";
+                SaveFileDialog sfd = new()
+                {
+                    FileName = SR.BinaryEditorFileName,
+                    Title = SR.BinaryEditorSaveFile,
+                    Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*"
+                };
 
                 DialogResult result = sfd.ShowDialog();
                 if (result == DialogResult.OK)

@@ -262,10 +262,10 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new();
         Type type = dataGridView.AccessibilityObject.GetType();
 
-        ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(DataGridView) });
+        ConstructorInfo ctor = type.GetConstructor([typeof(DataGridView)]);
 
         Assert.NotNull(ctor);
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null }));
+        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null]));
     }
 
     [WinFormsFact]

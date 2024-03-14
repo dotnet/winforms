@@ -11,8 +11,7 @@ public static class DataHelpers
 {
     public static unsafe Point[] PointArray(params int[] values)
     {
-        if (values is null)
-            throw new ArgumentNullException(nameof(values));
+        ArgumentNullException.ThrowIfNull(values);
 
         if (values.Length % 2 != 0)
             throw new ArgumentOutOfRangeException(nameof(values));
