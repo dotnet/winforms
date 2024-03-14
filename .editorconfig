@@ -76,6 +76,7 @@ dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
@@ -90,8 +91,6 @@ dotnet_style_prefer_collection_expression = true:suggestion
 
 # IDE0040: Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = error
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 
 # C# files
 
@@ -230,8 +229,8 @@ dotnet_diagnostic.IDE0079.severity = none
 
 # Expression-level preferences
 dotnet_style_coalesce_expression = false:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = false:silent
-dotnet_style_prefer_conditional_expression_over_return = false:silent
+dotnet_style_prefer_conditional_expression_over_assignment = false:suggestion
+dotnet_style_prefer_conditional_expression_over_return = false:suggestion
 
 # C++ Files
 [*.{cpp,h,in}]
