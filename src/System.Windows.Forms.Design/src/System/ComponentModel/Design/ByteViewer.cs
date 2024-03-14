@@ -139,23 +139,30 @@ public class ByteViewer : TableLayoutPanel
     {
         using (Brush brush = new SolidBrush(SystemColors.ControlLightLight))
         {
-            g.FillRectangle(brush, new Rectangle(HEX_START_X,
-                                                 CLIENT_START_Y,
-                                                 HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP,
-                                                 _rowCount * CELL_HEIGHT));
+            g.FillRectangle(
+                brush,
+                new Rectangle(
+                    HEX_START_X,
+                    CLIENT_START_Y,
+                    HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP,
+                    _rowCount * CELL_HEIGHT));
         }
 
-        using (Pen pen = new(SystemColors.ControlDark))
-        {
-            g.DrawRectangle(pen, new Rectangle(HEX_START_X,
-                                               CLIENT_START_Y,
-                                               HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP - 1,
-                                               _rowCount * CELL_HEIGHT - 1));
-            g.DrawLine(pen, DUMP_START_X - HEX_DUMP_GAP,
-                            CLIENT_START_Y,
-                            DUMP_START_X - HEX_DUMP_GAP,
-                            CLIENT_START_Y + _rowCount * CELL_HEIGHT - 1);
-        }
+        using Pen pen = new(SystemColors.ControlDark);
+        g.DrawRectangle(
+            pen,
+            new Rectangle(
+                HEX_START_X,
+                CLIENT_START_Y,
+                HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP - 1,
+                _rowCount * CELL_HEIGHT - 1));
+
+        g.DrawLine(
+            pen,
+            DUMP_START_X - HEX_DUMP_GAP,
+            CLIENT_START_Y,
+            DUMP_START_X - HEX_DUMP_GAP,
+            CLIENT_START_Y + _rowCount * CELL_HEIGHT - 1);
     }
 
     // Char.IsPrintable is going away because it's a mostly meaningless concept.
@@ -163,9 +170,11 @@ public class ByteViewer : TableLayoutPanel
     private static bool CharIsPrintable(char c)
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);
-        return (!(uc == UnicodeCategory.Control) || (uc == UnicodeCategory.Format) ||
-                (uc == UnicodeCategory.LineSeparator) || (uc == UnicodeCategory.ParagraphSeparator) ||
-                (uc == UnicodeCategory.OtherNotAssigned));
+        return uc is not UnicodeCategory.Control
+            or UnicodeCategory.Format
+            or UnicodeCategory.LineSeparator
+            or UnicodeCategory.ParagraphSeparator
+            or UnicodeCategory.OtherNotAssigned;
     }
 
     /// <summary>
@@ -363,38 +372,22 @@ public class ByteViewer : TableLayoutPanel
     public virtual DisplayMode GetDisplayMode() => _displayMode;
 
     // Stole this code from  XmlScanner
-    private static int GetEncodingIndex(int c1)
+    private static int GetEncodingIndex(int c1) => c1 switch
     {
-        switch (c1)
-        {
-            case 0x0000:
-                return 1;
-            case 0xfeff:
-                return 2;
-            case 0xfffe:
-                return 3;
-            case 0xefbb:
-                return 4;
-            case 0x3c00:
-                return 5;
-            case 0x003c:
-                return 6;
-            case 0x3f00:
-                return 7;
-            case 0x003f:
-                return 8;
-            case 0x3c3f:
-                return 9;
-            case 0x786d:
-                return 10;
-            case 0x4c6f:
-                return 11;
-            case 0xa794:
-                return 12;
-            default:
-                return 0; // unknown
-        }
-    }
+        0x0000 => 1,
+        0xfeff => 2,
+        0xfffe => 3,
+        0xefbb => 4,
+        0x3c00 => 5,
+        0x003c => 6,
+        0x3f00 => 7,
+        0x003f => 8,
+        0x3c3f => 9,
+        0x786d => 10,
+        0x4c6f => 11,
+        0xa794 => 12,
+        _ => 0, // unknown
+    };
 
     /// <summary>
     ///  Initializes the ansi string variable that will be assigned to the edit box.
@@ -455,18 +448,20 @@ public class ByteViewer : TableLayoutPanel
         _scrollBar.Dock = DockStyle.Right;
         _scrollBar.Visible = false;
 
-        _edit = new TextBox();
-        _edit.AutoSize = false;
-        _edit.BorderStyle = BorderStyle.None;
-        _edit.Multiline = true;
-        _edit.ReadOnly = true;
-        _edit.ScrollBars = ScrollBars.Both;
-        _edit.AcceptsTab = true;
-        _edit.AcceptsReturn = true;
-        _edit.Dock = DockStyle.Fill;
-        _edit.Margin = Padding.Empty;
-        _edit.WordWrap = false;
-        _edit.Visible = false;
+        _edit = new TextBox
+        {
+            AutoSize = false,
+            BorderStyle = BorderStyle.None,
+            Multiline = true,
+            ReadOnly = true,
+            ScrollBars = ScrollBars.Both,
+            AcceptsTab = true,
+            AcceptsReturn = true,
+            Dock = DockStyle.Fill,
+            Margin = Padding.Empty,
+            WordWrap = false,
+            Visible = false
+        };
 
         Controls.Add(_scrollBar, 0, 0);
         Controls.Add(_edit, 0, 0);

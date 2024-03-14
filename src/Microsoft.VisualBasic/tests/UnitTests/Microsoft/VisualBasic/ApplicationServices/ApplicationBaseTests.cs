@@ -69,7 +69,7 @@ public class ApplicationBaseTests
             pairs.Add((key, (string)vars[key]));
         }
 
-        return pairs.OrderBy(pair => pair.Item1).ToArray();
+        return [.. pairs.OrderBy(pair => pair.Item1)];
     }
 
     [Fact]

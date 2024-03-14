@@ -192,7 +192,7 @@ public sealed partial class Application
                                 int firstDot = ns.IndexOf('.');
                                 if (firstDot != -1)
                                 {
-                                    s_companyName = ns.Substring(0, firstDot);
+                                    s_companyName = ns[..firstDot];
                                 }
                                 else
                                 {
@@ -317,7 +317,7 @@ public sealed partial class Application
                                 int lastDot = ns.LastIndexOf('.');
                                 if (lastDot != -1 && lastDot < ns.Length - 1)
                                 {
-                                    s_productName = ns.Substring(lastDot + 1);
+                                    s_productName = ns[(lastDot + 1)..];
                                 }
                                 else
                                 {
@@ -1114,8 +1114,11 @@ public sealed partial class Application
             string[] arguments = Environment.GetCommandLineArgs();
             Debug.Assert(arguments is not null && arguments.Length > 0);
 
-            ProcessStartInfo currentStartInfo = new();
-            currentStartInfo.FileName = ExecutablePath;
+            ProcessStartInfo currentStartInfo = new()
+            {
+                FileName = ExecutablePath
+            };
+
             if (arguments.Length >= 2)
             {
                 StringBuilder sb = new((arguments.Length - 1) * 16);

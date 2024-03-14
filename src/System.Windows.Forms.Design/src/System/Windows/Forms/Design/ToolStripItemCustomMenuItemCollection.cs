@@ -114,7 +114,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     private void PopulateList()
     {
         ToolStripItem selectedItem = _currentItem;
-        if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
+        if (selectedItem is not ToolStripControlHost and not ToolStripSeparator)
         {
             _imageToolStripMenuItem = new ToolStripMenuItem
             {
@@ -373,7 +373,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         {
             if (parent.OwnerItem is ToolStripDropDownItem ownerItem)
             {
-                if (ownerItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft || ownerItem.DropDownDirection == ToolStripDropDownDirection.AboveRight)
+                if (ownerItem.DropDownDirection is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
                 {
                     dummyIndex++;
                 }
@@ -386,9 +386,9 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
@@ -435,9 +435,9 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             Debug.Assert(dummyIndex != -1, "Why is item index negative?");
@@ -474,9 +474,9 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             Debug.Assert(dummyIndex != -1, "Why is item index negative?");
@@ -514,13 +514,13 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             // Set the Image property and DisplayStyle...
-            if (component is ToolStripButton || component is ToolStripSplitButton || component is ToolStripDropDownButton)
+            if (component is ToolStripButton or ToolStripSplitButton or ToolStripDropDownButton)
             {
                 Image image = null;
                 try
@@ -613,24 +613,24 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     private void RefreshAlignment()
     {
         ToolStripItemAlignment currentAlignmentValue = (ToolStripItemAlignment)GetProperty("Alignment");
-        _leftToolStripMenuItem.Checked = (currentAlignmentValue == ToolStripItemAlignment.Left) ? true : false;
-        _rightToolStripMenuItem.Checked = (currentAlignmentValue == ToolStripItemAlignment.Right) ? true : false;
+        _leftToolStripMenuItem.Checked = currentAlignmentValue == ToolStripItemAlignment.Left;
+        _rightToolStripMenuItem.Checked = currentAlignmentValue == ToolStripItemAlignment.Right;
     }
 
     private void RefreshDisplayStyle()
     {
         ToolStripItemDisplayStyle currentDisplayStyleValue = (ToolStripItemDisplayStyle)GetProperty("DisplayStyle");
-        _noneStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.None) ? true : false;
-        _textStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.Text) ? true : false;
-        _imageStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.Image) ? true : false;
-        _imageTextStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.ImageAndText) ? true : false;
+        _noneStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.None;
+        _textStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.Text;
+        _imageStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.Image;
+        _imageTextStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.ImageAndText;
     }
 
     public override void RefreshItems()
     {
         base.RefreshItems();
         ToolStripItem selectedItem = _currentItem;
-        if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
+        if (selectedItem is not ToolStripControlHost and not ToolStripSeparator)
         {
             _enabledToolStripMenuItem.Checked = (bool)GetProperty("Enabled");
             if (selectedItem is ToolStripMenuItem)

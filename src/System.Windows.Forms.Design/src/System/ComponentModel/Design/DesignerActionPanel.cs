@@ -465,17 +465,13 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         Rectangle rect = Bounds;
         if (RightToLeft == RightToLeft.Yes)
         {
-            using (LinearGradientBrush gradientBrush = new(rect, GradientDarkColor, GradientLightColor, LinearGradientMode.Horizontal))
-            {
-                e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
-            }
+            using LinearGradientBrush gradientBrush = new(rect, GradientDarkColor, GradientLightColor, LinearGradientMode.Horizontal);
+            e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
         }
         else
         {
-            using (LinearGradientBrush gradientBrush = new(rect, GradientLightColor, GradientDarkColor, LinearGradientMode.Horizontal))
-            {
-                e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
-            }
+            using LinearGradientBrush gradientBrush = new(rect, GradientLightColor, GradientDarkColor, LinearGradientMode.Horizontal);
+            e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
         }
 
         using (Pen borderPen = new(BorderColor))
@@ -660,11 +656,11 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
         else if (item is DesignerActionPropertyItem pti)
         {
-            PropertyDescriptor? pd = TypeDescriptor.GetProperties(list)[pti.MemberName];
-            if (pd is null)
-            {
-                throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindProperty, pti.MemberName, list.GetType().FullName));
-            }
+            PropertyDescriptor? pd = TypeDescriptor.GetProperties(list)[pti.MemberName]
+                ?? throw new InvalidOperationException(string.Format(
+                    SR.DesignerActionPanel_CouldNotFindProperty,
+                    pti.MemberName,
+                    list.GetType().FullName));
 
             TypeDescriptorContext context = new(_serviceProvider, pd, list);
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
@@ -873,7 +869,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                     Line newLine = newLineInfo.CreateLine(_serviceProvider, this);
                     Debug.Assert(newLine.GetType() == newLineInfo.LineType);
                     List<Control> newControlList = newLine.GetControls();
-                    Control[] controls = newControlList.ToArray();
+                    Control[] controls = [.. newControlList];
                     Controls.AddRange(controls);
 
                     newLine.UpdateActionItem(newLineInfo, _toolTip, ref currentTabIndex);

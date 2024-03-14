@@ -12,8 +12,5 @@ internal partial struct FILETIME
         dwHighDateTime = (uint)(ft >> 32);
     }
 
-    public DateTime ToDateTime()
-    {
-        return DateTime.FromFileTime(((long)dwHighDateTime << 32) + dwLowDateTime);
-    }
+    public readonly DateTime ToDateTime() => DateTime.FromFileTime(((long)dwHighDateTime << 32) + dwLowDateTime);
 }

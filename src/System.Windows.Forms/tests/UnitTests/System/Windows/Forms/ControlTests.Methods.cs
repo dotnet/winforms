@@ -4015,7 +4015,7 @@ public partial class ControlTests
             Assert.Equal(1, i);
             callCount++;
         };
-        control.Invoke(method, new object[] { 1 });
+        control.Invoke(method, [1]);
         Assert.Equal(1, callCount);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4042,7 +4042,7 @@ public partial class ControlTests
             callCount++;
             throw new DivideByZeroException();
         };
-        Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+        Assert.Throws<DivideByZeroException>(() => control.Invoke(method, [1]));
         Assert.Equal(1, callCount);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4106,7 +4106,7 @@ public partial class ControlTests
         };
         await Task.Run(() =>
         {
-            Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+            Assert.Throws<DivideByZeroException>(() => control.Invoke(method, [1]));
         });
         Assert.Equal(1, callCount);
         Assert.True(control.IsHandleCreated);

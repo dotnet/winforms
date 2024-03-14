@@ -44,7 +44,7 @@ internal unsafe partial struct IPicture
         {
             OLE_HANDLE paletteHandle = default;
 
-            PICTYPE type = (PICTYPE)picture->Type;
+            PICTYPE type = picture->Type;
             if (type == PICTYPE.PICTYPE_BITMAP)
             {
                 paletteHandle = picture->hPal;

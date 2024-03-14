@@ -27,5 +27,5 @@ internal struct EMRPOINTRECORD
     public EMR emr;
     public Point point;
 
-    public override string ToString() => $"[EMR{emr.iType}] Point: {point}";
+    public override readonly string ToString() => $"[EMR{emr.iType}] Point: {point}";
 }

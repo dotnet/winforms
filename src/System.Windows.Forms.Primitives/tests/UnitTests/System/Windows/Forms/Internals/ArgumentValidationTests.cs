@@ -220,9 +220,7 @@ public class ArgumentValidationTests
     public void OrThrowIfNullOrEmpty_ParamIsNull()
     {
         string? param = null;
-#pragma warning disable CS8604 // Possible null reference argument.
         var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullOrEmpty());
-#pragma warning restore CS8604 // Possible null reference argument.
         Assert.Equal(nameof(param), exception.ParamName);
     }
 
@@ -246,9 +244,7 @@ public class ArgumentValidationTests
     public void OrThrowIfNullOrEmpty_ParamIsNull_DifferentParamName()
     {
         string? param = null;
-#pragma warning disable CS8604 // Possible null reference argument.
         var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullOrEmpty("paramName"));
-#pragma warning restore CS8604 // Possible null reference argument.
         Assert.Equal("paramName", exception.ParamName);
     }
 

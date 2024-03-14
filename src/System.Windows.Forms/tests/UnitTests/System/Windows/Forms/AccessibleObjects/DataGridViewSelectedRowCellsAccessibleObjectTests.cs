@@ -13,7 +13,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
     {
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.Null(accessibleObject.TestAccessor().Dynamic._owningDataGridViewRow);
         Assert.Equal(AccessibleRole.Grouping, accessibleObject.Role);
@@ -24,7 +24,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
     {
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.Equal(SR.DataGridView_AccSelectedRowCellsName, accessibleObject.Name);
     }
@@ -34,7 +34,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
     {
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.Equal(SR.DataGridView_AccSelectedRowCellsName, accessibleObject.Value);
     }
@@ -44,7 +44,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
     {
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.Equal(AccessibleStates.Selected | AccessibleStates.Selectable, accessibleObject.State);
     }
@@ -58,7 +58,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
         DataGridViewRow row = control.Rows[0];
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [row], null);
 
         Assert.Equal(row.AccessibilityObject, accessibleObject.Parent);
         Assert.False(control.IsHandleCreated);
@@ -69,7 +69,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
     {
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.Equal(accessibleObject, accessibleObject.GetSelected());
     }
@@ -86,7 +86,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { control.Rows[0] }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [control.Rows[0]], null);
 
         Assert.NotNull(currentCell);
         Assert.Equal(currentCell.AccessibilityObject, accessibleObject.GetFocused());
@@ -104,7 +104,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { control.Rows[0] }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [control.Rows[0]], null);
 
         Assert.NotNull(currentCell);
         Assert.Null(accessibleObject.GetFocused());
@@ -129,7 +129,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [row], null);
 
         Assert.Equal(selecetedCellsCount, accessibleObject.GetChildCount());
         Assert.False(control.IsHandleCreated);
@@ -150,7 +150,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [row], null);
 
         Assert.Null(accessibleObject.GetChild(-1));
         Assert.Equal(selecetedCell1.AccessibilityObject, accessibleObject.GetChild(0));
@@ -167,7 +167,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { control.Rows[0] }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [control.Rows[0]], null);
 
         Assert.Equal(0, accessibleObject.GetChildCount());
         Assert.Null(accessibleObject.Navigate(AccessibleNavigation.FirstChild));
@@ -189,7 +189,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
 
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [row], null);
 
         Assert.Equal(1, accessibleObject.GetChildCount());
         Assert.Equal(selecetedCell1.AccessibilityObject, accessibleObject.Navigate(AccessibleNavigation.FirstChild));
@@ -209,7 +209,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
         selecetedCell1.Selected = true;
         Type type = typeof(DataGridViewRow)
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, [row], null);
 
         Assert.Equal("Selected Row Cells", ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(control.IsHandleCreated);

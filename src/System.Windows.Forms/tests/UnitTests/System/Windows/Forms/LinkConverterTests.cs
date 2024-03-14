@@ -82,7 +82,7 @@ public class LinkConverterTests
     {
         LinkConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new LinkLabel.Link(1, 2), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(LinkLabel.Link).GetConstructor([typeof(int), typeof(int)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2 }, descriptor.Arguments);
         Assert.True(descriptor.IsComplete);
     }
@@ -92,7 +92,7 @@ public class LinkConverterTests
     {
         LinkConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new LinkLabel.Link(1, 2, "linkData"), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(LinkLabel.Link).GetConstructor([typeof(int), typeof(int), typeof(object)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2, "linkData" }, descriptor.Arguments);
         Assert.True(descriptor.IsComplete);
     }

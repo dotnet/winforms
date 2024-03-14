@@ -51,7 +51,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -174,7 +174,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -334,7 +334,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -475,7 +475,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -732,7 +732,7 @@ public class TabControlControlCollectionTests
         using TabControl owner = new();
         TabControl.ControlCollection collection = Assert.IsType<TabControl.ControlCollection>(owner.Controls);
 
-        List<TabPage> items = new();
+        List<TabPage> items = [];
         for (int i = 0; i < 24; i++)
         {
             TabPage value = new();
@@ -893,16 +893,18 @@ public class TabControlControlCollectionTests
         };
         using TabPage value1 = new();
         using TabPage value2 = new();
-        var collection = new TabControl.ControlCollection(owner);
-        collection.Add(value1);
-        collection.Add(value2);
+        var collection = new TabControl.ControlCollection(owner)
+        {
+            value1,
+            value2
+        };
 
         int layoutCallCount1 = 0;
         value1.Layout += (sender, e) => layoutCallCount1++;
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -989,16 +991,18 @@ public class TabControlControlCollectionTests
         };
         using TabPage value1 = new();
         using TabPage value2 = new();
-        var collection = new TabControl.ControlCollection(owner);
-        collection.Add(value1);
-        collection.Add(value2);
+        var collection = new TabControl.ControlCollection(owner)
+        {
+            value1,
+            value2
+        };
 
         int layoutCallCount1 = 0;
         value1.Layout += (sender, e) => layoutCallCount1++;
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -1123,7 +1127,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -1235,7 +1239,7 @@ public class TabControlControlCollectionTests
         int layoutCallCount2 = 0;
         value2.Layout += (sender, e) => layoutCallCount2++;
         int parentLayoutCallCount = 0;
-        List<LayoutEventArgs> events = new();
+        List<LayoutEventArgs> events = [];
         void parentHandler(object sender, LayoutEventArgs e)
         {
             Assert.Same(owner, sender);
@@ -1423,7 +1427,7 @@ public class TabControlControlCollectionTests
         using TabControl owner = new();
         TabControl.ControlCollection collection = Assert.IsType<TabControl.ControlCollection>(owner.Controls);
 
-        List<TabPage> items = new();
+        List<TabPage> items = [];
         for (int i = 0; i < 24; i++)
         {
             TabPage value = new();

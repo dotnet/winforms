@@ -141,16 +141,20 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         if (_state[s_stateLoaded])
         {
-            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderAlreadyLoaded);
-            ex.HelpLink = SR.BasicDesignerLoaderAlreadyLoaded;
+            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderAlreadyLoaded)
+            {
+                HelpLink = SR.BasicDesignerLoaderAlreadyLoaded
+            };
 
             throw ex;
         }
 
         if (_host is not null && _host != host)
         {
-            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost);
-            ex.HelpLink = SR.BasicDesignerLoaderDifferentHost;
+            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost)
+            {
+                HelpLink = SR.BasicDesignerLoaderDifferentHost
+            };
 
             throw ex;
         }

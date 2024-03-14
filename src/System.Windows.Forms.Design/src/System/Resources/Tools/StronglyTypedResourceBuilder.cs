@@ -426,7 +426,7 @@ public static partial class StronglyTypedResourceBuilder
             }
         }
 
-        unmatchable = errors.ToArray();
+        unmatchable = [.. errors];
 
         // Validate the generated class now
         CodeGenerator.ValidateIdentifiers(codeCompileUnit);

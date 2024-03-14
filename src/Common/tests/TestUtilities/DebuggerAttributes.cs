@@ -128,7 +128,7 @@ internal static class DebuggerAttributes
         // Get the text of the DebuggerDisplayAttribute
         string attrText = (string)cad.ConstructorArguments[0].Value;
 
-        string[] segments = attrText.Split(new[] { '{', '}' });
+        string[] segments = attrText.Split(['{', '}']);
 
         if (segments.Length % 2 == 0)
         {
@@ -150,13 +150,12 @@ internal static class DebuggerAttributes
             if (i + 1 < segments.Length)
             {
                 string reference = segments[i + 1];
-                bool noQuotes = reference.EndsWith(",nq");
+                bool noQuotes = reference.EndsWith(",nq", StringComparison.Ordinal);
 
                 reference = reference.Replace(",nq", string.Empty);
 
                 // Evaluate the reference.
-                object member;
-                if (!TryEvaluateReference(obj, reference, out member))
+                if (!TryEvaluateReference(obj, reference, out object member))
                 {
                     throw new InvalidOperationException($"The DebuggerDisplayAttribute for {objType} contains the expression \"{reference}\".");
                 }

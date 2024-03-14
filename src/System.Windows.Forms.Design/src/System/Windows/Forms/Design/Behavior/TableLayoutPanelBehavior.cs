@@ -326,14 +326,14 @@ internal class TableLayoutPanelBehavior : Behavior
                     for (int j = 0; j < 2; j++)
                     {
                         int i = j == 0 ? rightIndex : leftIndex;
-                        float newSize = (float)newWidths[i] * 100 / (float)totalPercent;
-                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "NewSize " + newSize);
+                        float newSize = (float)newWidths[i] * 100 / totalPercent;
+                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"NewSize {newSize}");
 
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[i])[isColumn ? "Width" : "Height"];
                         if (prop is not null)
                         {
                             prop.SetValue(_styles[i], newSize);
-                            Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Resizing column (per) " + i.ToString(CultureInfo.InvariantCulture) + " to " + newSize.ToString(CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Resizing column (per) {i.ToString(CultureInfo.InvariantCulture)} to {newSize.ToString(CultureInfo.InvariantCulture)}");
                         }
                     }
                 }
@@ -342,7 +342,7 @@ internal class TableLayoutPanelBehavior : Behavior
 #if DEBUG
                     for (int i = 0; i < oldWidths.Length; i++)
                     {
-                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Col " + i + ": Old: " + oldWidths[i] + " New: " + newWidths[i]);
+                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Col {i}: Old: {oldWidths[i]} New: {newWidths[i]}");
                     }
 #endif
 

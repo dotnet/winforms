@@ -16,11 +16,8 @@ public class InputLanguageChangedEventArgs : EventArgs
     /// </summary>
     public InputLanguageChangedEventArgs(CultureInfo culture, byte charSet)
     {
-        InputLanguage? language = InputLanguage.FromCulture(culture);
-        if (language is null)
-        {
-            throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
-        }
+        InputLanguage? language = InputLanguage.FromCulture(culture)
+            ?? throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
 
         InputLanguage = language;
         Culture = culture;

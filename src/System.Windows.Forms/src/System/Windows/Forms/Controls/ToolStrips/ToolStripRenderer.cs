@@ -614,71 +614,55 @@ public abstract class ToolStripRenderer
 
         Graphics g = e.Graphics;
         Rectangle dropDownRect = e.ArrowRectangle;
-        using (var brush = e.ArrowColor.GetCachedSolidBrushScope())
+        using var brush = e.ArrowColor.GetCachedSolidBrushScope();
+        Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
+        // if the width is odd - favor pushing it over one pixel right.
+        // middle.X += (dropDownRect.Width % 2);
+
+        Point[]? arrow = null;
+
+        // We need to check for null here, since at design time at this point Item can be null.
+        if (e.Item is not null && e.Item.DeviceDpi != _previousDeviceDpi && ScaleHelper.IsThreadPerMonitorV2Aware)
         {
-            Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
-            // if the width is odd - favor pushing it over one pixel right.
-            // middle.X += (dropDownRect.Width % 2);
-
-            Point[]? arrow = null;
-
-            // We need to check for null here, since at design time at this point Item can be null.
-            if (e.Item is not null && e.Item.DeviceDpi != _previousDeviceDpi && ScaleHelper.IsThreadPerMonitorV2Aware)
-            {
-                _previousDeviceDpi = e.Item.DeviceDpi;
-                ScaleArrowOffsetsIfNeeded(e.Item.DeviceDpi);
-            }
-            else
-            {
-                ScaleArrowOffsetsIfNeeded();
-            }
-
-            // using (offset4X - Offset2X) instead of (Offset2X) to compensate for rounding error in scaling
-            int horizontalOffset = ScaleHelper.IsScalingRequirementMet ? s_offset4X - Offset2X : Offset2X;
-
-            switch (e.Direction)
-            {
-                case ArrowDirection.Up:
-
-                    arrow =
-                    [
-                        new(middle.X - Offset2X, middle.Y + 1),
-                        new(middle.X + Offset2X + 1, middle.Y + 1),
-                        new(middle.X, middle.Y - Offset2Y)
-                    ];
-
-                    break;
-                case ArrowDirection.Left:
-                    arrow =
-                    [
-                        new(middle.X + Offset2X, middle.Y - s_offset4Y),
-                        new(middle.X + Offset2X, middle.Y + s_offset4Y),
-                        new(middle.X - horizontalOffset, middle.Y)
-                    ];
-
-                    break;
-                case ArrowDirection.Right:
-                    arrow =
-                    [
-                        new(middle.X - Offset2X, middle.Y - s_offset4Y),
-                        new(middle.X - Offset2X, middle.Y + s_offset4Y),
-                        new(middle.X + horizontalOffset, middle.Y)
-                    ];
-
-                    break;
-                case ArrowDirection.Down:
-                default:
-                    arrow =
-                    [
-                        new(middle.X - Offset2X, middle.Y - 1),
-                        new(middle.X + Offset2X + 1, middle.Y - 1),
-                        new(middle.X, middle.Y + Offset2Y)
-                    ];
-                    break;
-            }
-
-            g.FillPolygon(brush, arrow);
+            _previousDeviceDpi = e.Item.DeviceDpi;
+            ScaleArrowOffsetsIfNeeded(e.Item.DeviceDpi);
         }
+        else
+        {
+            ScaleArrowOffsetsIfNeeded();
+        }
+
+        // using (offset4X - Offset2X) instead of (Offset2X) to compensate for rounding error in scaling
+        int horizontalOffset = ScaleHelper.IsScalingRequirementMet ? s_offset4X - Offset2X : Offset2X;
+
+        arrow = e.Direction switch
+        {
+            ArrowDirection.Up =>
+            [
+                new(middle.X - Offset2X, middle.Y + 1),
+                new(middle.X + Offset2X + 1, middle.Y + 1),
+                new(middle.X, middle.Y - Offset2Y)
+            ],
+            ArrowDirection.Left =>
+            [
+                new(middle.X + Offset2X, middle.Y - s_offset4Y),
+                new(middle.X + Offset2X, middle.Y + s_offset4Y),
+                new(middle.X - horizontalOffset, middle.Y)
+            ],
+            ArrowDirection.Right =>
+            [
+                new(middle.X - Offset2X, middle.Y - s_offset4Y),
+                new(middle.X - Offset2X, middle.Y + s_offset4Y),
+                new(middle.X + horizontalOffset, middle.Y)
+            ],
+            _ =>
+            [
+                new(middle.X - Offset2X, middle.Y - 1),
+                new(middle.X + Offset2X + 1, middle.Y - 1),
+                new(middle.X, middle.Y + Offset2Y)
+            ],
+        };
+        g.FillPolygon(brush, arrow);
     }
 
     /// <summary>
@@ -891,17 +875,13 @@ public abstract class ToolStripRenderer
         {
             // Perf: this is a bit heavy handed.. perhaps we can share the bitmap.
             Size textSize = LayoutUtils.FlipSize(textRect.Size);
-            using (Bitmap textBmp = new(textSize.Width, textSize.Height, PixelFormat.Format32bppPArgb))
-            {
-                using (Graphics textGraphics = Graphics.FromImage(textBmp))
-                {
-                    // now draw the text..
-                    textGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-                    TextRenderer.DrawText(textGraphics, text, textFont, new Rectangle(Point.Empty, textSize), textColor, textFormat);
-                    textBmp.RotateFlip((e.TextDirection == ToolStripTextDirection.Vertical90) ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipNone);
-                    g.DrawImage(textBmp, textRect);
-                }
-            }
+            using Bitmap textBmp = new(textSize.Width, textSize.Height, PixelFormat.Format32bppPArgb);
+            using Graphics textGraphics = Graphics.FromImage(textBmp);
+            // now draw the text..
+            textGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+            TextRenderer.DrawText(textGraphics, text, textFont, new Rectangle(Point.Empty, textSize), textColor, textFormat);
+            textBmp.RotateFlip((e.TextDirection == ToolStripTextDirection.Vertical90) ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipNone);
+            g.DrawImage(textBmp, textRect);
         }
         else
         {

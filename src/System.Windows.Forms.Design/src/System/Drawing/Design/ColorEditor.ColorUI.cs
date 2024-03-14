@@ -146,7 +146,7 @@ public partial class ColorEditor
                 colorList.Add(outColor);
             }
 
-            return colorList.ToArray();
+            return [.. colorList];
         }
 
         [MemberNotNull(

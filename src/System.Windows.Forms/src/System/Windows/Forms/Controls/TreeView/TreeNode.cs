@@ -585,7 +585,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero
+    public bool IsExpanded => HTREEITEMInternal == 0
         ? _expandOnRealization
         : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
@@ -593,9 +593,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero
-        ? false
-        : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
+    public bool IsSelected => HTREEITEMInternal != 0
+        && (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.

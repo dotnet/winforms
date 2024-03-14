@@ -100,7 +100,6 @@ public class CodeDomSerializerExceptionTests
         {
             Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
         }
-#pragma warning restore SYSLIB0011
     }
 
     [Fact]

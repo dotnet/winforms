@@ -54,17 +54,14 @@ internal partial class TableLayout
             ColumnPosition = ColumnPosition
         };
 
-        public override bool Equals(object? obj)
-        {
-            return obj is not LayoutInfo other
-                ? false
-                : other.RowStart == RowStart
+        public override bool Equals(object? obj) =>
+            obj is LayoutInfo other
+                && other.RowStart == RowStart
                 && other.ColumnStart == ColumnStart
                 && other.RowSpan == RowSpan
                 && other.ColumnSpan == ColumnSpan
                 && other.RowPosition == RowPosition
                 && other.ColumnPosition == ColumnPosition;
-        }
 
         public override int GetHashCode()
         {

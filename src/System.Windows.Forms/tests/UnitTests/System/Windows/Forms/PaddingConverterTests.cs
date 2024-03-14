@@ -87,7 +87,7 @@ public class PaddingConverterTests
     {
         PaddingConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new Padding(1, 2, 3, 4), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(Padding).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(Padding).GetConstructor([typeof(int), typeof(int), typeof(int), typeof(int)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2, 3, 4 }, descriptor.Arguments);
     }
 
@@ -96,7 +96,7 @@ public class PaddingConverterTests
     {
         PaddingConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new Padding(1, 1, 1, 1), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(Padding).GetConstructor(new Type[] { typeof(int) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(Padding).GetConstructor([typeof(int)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1 }, descriptor.Arguments);
     }
 

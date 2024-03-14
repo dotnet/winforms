@@ -80,7 +80,7 @@ public class EmbeddedResourceTests
             """;
 
     public static TheoryData ExpectedIconNames()
-        => ExpectedIconNamesString.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp")).ToTheoryData();
+        => ExpectedIconNamesString.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp", StringComparison.Ordinal)).ToTheoryData();
 
     public static TheoryData ExpectedBitmapNames()
         => ExpectedBitmapNamesString.Split(Environment.NewLine).ToTheoryData();

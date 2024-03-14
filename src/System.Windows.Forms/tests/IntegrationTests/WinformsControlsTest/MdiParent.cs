@@ -18,9 +18,11 @@ public partial class MdiParent : Form
         ToolStripMenuItem menu = new() { Text = "Open new child" };
         menu.Click += (s, e) =>
         {
-            Form child = new();
-            child.MdiParent = this;
-            child.WindowState = FormWindowState.Maximized;
+            Form child = new()
+            {
+                MdiParent = this,
+                WindowState = FormWindowState.Maximized
+            };
             child.Show();
         };
 
@@ -44,9 +46,11 @@ public partial class MdiParent : Form
     {
         base.OnLoad(e);
 
-        MdiChild frm = new();
-        frm.MdiParent = this;
-        frm.WindowState = FormWindowState.Maximized;
+        MdiChild frm = new()
+        {
+            MdiParent = this,
+            WindowState = FormWindowState.Maximized
+        };
         frm.Show();
     }
 }

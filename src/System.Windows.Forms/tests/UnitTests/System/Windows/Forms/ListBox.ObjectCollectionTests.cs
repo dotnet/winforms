@@ -22,7 +22,7 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Ctor_ListBox_ObjectArray()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner, new object[] { 3, 2, 1 });
+        var collection = new ListBox.ObjectCollection(owner, (object[])[3, 2, 1]);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new object[] { 3, 2, 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
@@ -33,7 +33,7 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Ctor_ListBox_ObjectCollection()
     {
         using ListBox otherOwner = new();
-        var otherCollection = new ListBox.ObjectCollection(otherOwner, new object[] { 3, 2, 1 });
+        var otherCollection = new ListBox.ObjectCollection(otherOwner, (object[])[3, 2, 1]);
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner, otherCollection);
         Assert.Equal(3, collection.Count);
@@ -106,7 +106,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
 
         Assert.Equal(2, collection[0]);
         Assert.Equal(1, collection[1]);
@@ -122,7 +122,7 @@ public class ListBoxObjectCollectionTests
             Sorted = true
         };
         var collection = new ListBox.ObjectCollection(owner);
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
 
         Assert.Equal(1, collection[0]);
         Assert.Equal(1, collection[1]);
@@ -148,8 +148,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
 
@@ -158,7 +160,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -199,7 +201,7 @@ public class ListBoxObjectCollectionTests
             Sorted = true
         };
         var collection = new ListBox.ObjectCollection(owner);
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -237,7 +239,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -278,7 +280,7 @@ public class ListBoxObjectCollectionTests
             Sorted = true
         };
         ListBox.ObjectCollection collection = owner.Items;
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -493,7 +495,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -582,7 +584,7 @@ public class ListBoxObjectCollectionTests
             Sorted = true
         };
         ListBox.ObjectCollection collection = owner.Items;
-        collection.AddRange(new object[] { 2, 1, 3 });
+        collection.AddRange((object[])[2, 1, 3]);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1259,8 +1261,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Item_SetNullValueNotEmpty_ThrowsArgumentNullException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
     }
 
@@ -1282,8 +1286,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Item_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
 
@@ -2136,11 +2142,13 @@ public class ListBoxObjectCollectionTests
     public unsafe void ListBoxObjectCollection_Add_CreateHandle_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
         char* textBuffer = stackalloc char[256];
 
         Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
@@ -2212,7 +2220,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
@@ -2236,7 +2244,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2263,7 +2271,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
@@ -2290,7 +2298,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -2320,7 +2328,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
@@ -2372,7 +2380,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2427,7 +2435,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
@@ -2482,7 +2490,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -2532,7 +2540,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 0, 5 });
+        collection.AddRange((object[])[0, 5]);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(0, owner.SelectedIndex);
@@ -2563,7 +2571,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 0, 5 });
+        collection.AddRange((object[])[0, 5]);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(1, owner.SelectedIndex);
@@ -2598,7 +2606,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 0, 2, 4 });
+        collection.AddRange((object[])[0, 2, 4]);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(0, owner.SelectedIndex);
@@ -2633,7 +2641,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        collection.AddRange(new object[] { 0, 2, 4 });
+        collection.AddRange((object[])[0, 2, 4]);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(1, owner.SelectedIndex);
@@ -2666,7 +2674,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new object[] { 0, 5 });
+        collection.AddRange((object[])[0, 5]);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(0, owner.SelectedIndex);
@@ -2710,7 +2718,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new object[] { 0, 5 });
+        collection.AddRange((object[])[0, 5]);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(1, owner.SelectedIndex);
@@ -2758,7 +2766,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new object[] { 0, 2, 4 });
+        collection.AddRange((object[])[0, 2, 4]);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(0, owner.SelectedIndex);
@@ -2806,7 +2814,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange(new object[] { 0, 2, 5 });
+        collection.AddRange((object[])[0, 2, 5]);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
         Assert.Equal(1, owner.SelectedIndex);
@@ -2833,7 +2841,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         char* textBuffer = stackalloc char[256];
 
         Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
@@ -2844,7 +2852,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
-        collection.AddRange(new object[] { 2, 1, 1, 3 });
+        collection.AddRange((object[])[2, 1, 1, 3]);
         char* textBuffer = stackalloc char[256];
 
         Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
@@ -2868,7 +2876,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
@@ -2897,7 +2905,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
@@ -2929,7 +2937,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
@@ -2961,7 +2969,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
@@ -2996,7 +3004,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
@@ -3053,7 +3061,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
@@ -3113,7 +3121,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
@@ -3173,7 +3181,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         Assert.Equal(4, collection.Count);
         Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
@@ -3228,7 +3236,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 5 });
+        otherCollection.AddRange((object[])[0, 5]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
@@ -3264,7 +3272,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 5 });
+        otherCollection.AddRange((object[])[0, 5]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -3304,7 +3312,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 2, 4 });
+        otherCollection.AddRange((object[])[0, 2, 4]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
@@ -3344,7 +3352,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 2, 4 });
+        otherCollection.AddRange((object[])[0, 2, 4]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
@@ -3382,7 +3390,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 5 });
+        otherCollection.AddRange((object[])[0, 5]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
@@ -3431,7 +3439,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 5 });
+        otherCollection.AddRange((object[])[0, 5]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -3484,7 +3492,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 2, 4 });
+        otherCollection.AddRange((object[])[0, 2, 4]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
@@ -3537,7 +3545,7 @@ public class ListBoxObjectCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 0, 2, 5 });
+        otherCollection.AddRange((object[])[0, 2, 5]);
         collection.AddRange(otherCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
         Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
@@ -3569,7 +3577,7 @@ public class ListBoxObjectCollectionTests
         var collection = new ListBox.ObjectCollection(owner);
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         char* textBuffer = stackalloc char[256];
 
@@ -3583,7 +3591,7 @@ public class ListBoxObjectCollectionTests
         ListBox.ObjectCollection collection = owner.Items;
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
+        otherCollection.AddRange((object[])[2, 1, 1, 3]);
         collection.AddRange(otherCollection);
         char* textBuffer = stackalloc char[256];
 
@@ -3611,8 +3619,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_AddRange_SameObjectCollectionNotEmptyOneValue_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<InvalidOperationException>(() => collection.AddRange(collection));
         Assert.Equal(new object[] { 1, 1 }, collection.Cast<object>());
     }
@@ -3621,9 +3631,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_AddRange_SameObjectCollectionNotEmptyMultipleValues_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
-        collection.Add(2);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1,
+            2
+        };
         Assert.Throws<InvalidOperationException>(() => collection.AddRange(collection));
         Assert.Equal(new object[] { 1, 2, 1 }, collection.Cast<object>());
     }
@@ -3642,7 +3654,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        Assert.Throws<ArgumentNullException>("item", () => collection.AddRange(new object[] { null }));
+        Assert.Throws<ArgumentNullException>("item", () => collection.AddRange((object[])[null]));
     }
 
     [WinFormsFact]
@@ -3674,10 +3686,12 @@ public class ListBoxObjectCollectionTests
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         using ListBox otherOwner = new();
-        var otherCollection = new ListBox.ObjectCollection(otherOwner);
-        otherCollection.Add(1);
+        var otherCollection = new ListBox.ObjectCollection(otherOwner)
+        {
+            1
+        };
 
-        Assert.Throws<OutOfMemoryException>(() => collection.AddRange(new object[] { 1 }));
+        Assert.Throws<OutOfMemoryException>(() => collection.AddRange((object[])[1]));
         Assert.Throws<OutOfMemoryException>(() => collection.AddRange(otherCollection));
     }
 
@@ -3727,8 +3741,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Clear_InvokeNotEmpty_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
 
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -3934,10 +3950,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Contains_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.False(collection.Contains(0));
         Assert.True(collection.Contains(1));
         Assert.False(collection.Contains(2));
@@ -3975,9 +3992,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_CopyTo_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
-        collection.Add(2);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1,
+            2
+        };
         object[] array = ["1", "2", "3"];
         collection.CopyTo(array, 1);
         Assert.Equal(["1", 1, 2], array);
@@ -3995,8 +4014,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_CopyTo_NullArrayNotEmpty_ThrowsArgumentNullException()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
     }
 
@@ -4027,8 +4048,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_GetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -4065,10 +4088,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IndexOf_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(0, collection.IndexOf(1));
         Assert.Equal(-1, collection.IndexOf(2));
@@ -4983,8 +5007,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Insert_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
     }
 
@@ -5028,10 +5054,12 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_Remove_NotSorted_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -5116,10 +5144,12 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -5971,10 +6001,12 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_RemoveAt_NotSorted_Success()
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -6044,10 +6076,12 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -6813,8 +6847,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_RemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        var collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        var collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
 
@@ -6844,11 +6880,13 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListItem_Get_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         Assert.Equal(2, collection[0]);
         Assert.Equal(1, collection[1]);
@@ -6863,11 +6901,13 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
 
         Assert.Equal(1, collection[0]);
         Assert.Equal(1, collection[1]);
@@ -6893,8 +6933,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListItem_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
 
@@ -6902,10 +6944,12 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListItem_SetNotSorted_GetReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -6945,10 +6989,12 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -8020,8 +8066,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListItem_SetNullValueNotEmpty_ThrowsArgumentNullException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
     }
 
@@ -8043,8 +8091,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListItem_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
 
@@ -8897,11 +8947,13 @@ public class ListBoxObjectCollectionTests
     public unsafe void ListBoxObjectCollection_IListAdd_CreateHandle_Success()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            1,
+            3
+        };
         char* textBuffer = stackalloc char[256];
 
         Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
@@ -9011,8 +9063,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListClear_InvokeNotEmpty_Success()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
 
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -9218,10 +9272,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListContains_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.False(collection.Contains(0));
         Assert.True(collection.Contains(1));
         Assert.False(collection.Contains(2));
@@ -9259,9 +9314,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListCopyTo_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
-        collection.Add(2);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1,
+            2
+        };
         object[] array = ["1", "2", "3"];
         collection.CopyTo(array, 1);
         Assert.Equal(["1", 1, 2], array);
@@ -9279,8 +9336,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListCopyTo_NullArrayNotEmpty_ThrowsArgumentNullException()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
     }
 
@@ -9311,8 +9370,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListGetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -9349,10 +9410,11 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListIndexOf_InvokeWithValues_ReturnsExpected()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-
-        // Add one.
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            // Add one.
+            1
+        };
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(0, collection.IndexOf(1));
         Assert.Equal(-1, collection.IndexOf(2));
@@ -10267,8 +10329,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListInsert_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
     }
 
@@ -10312,10 +10376,12 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListRemove_NotSorted_Success()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -10400,10 +10466,12 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -11255,10 +11323,12 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListRemoveAt_NotSorted_Success()
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -11328,10 +11398,12 @@ public class ListBoxObjectCollectionTests
         {
             Sorted = true
         };
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(2);
-        collection.Add(1);
-        collection.Add(3);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            2,
+            1,
+            3
+        };
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
@@ -12097,8 +12169,10 @@ public class ListBoxObjectCollectionTests
     public void ListBoxObjectCollection_IListRemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
         using ListBox owner = new();
-        IList collection = new ListBox.ObjectCollection(owner);
-        collection.Add(1);
+        IList collection = new ListBox.ObjectCollection(owner)
+        {
+            1
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
 

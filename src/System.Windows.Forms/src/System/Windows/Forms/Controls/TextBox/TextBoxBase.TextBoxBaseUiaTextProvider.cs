@@ -210,12 +210,12 @@ public abstract partial class TextBoxBase
                 ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_GETFIRSTVISIBLELINE)
                 : -1;
 
-        public override bool IsMultiline => Owner is not null ? Owner.Multiline : false;
+        public override bool IsMultiline => Owner is not null && Owner.Multiline;
 
         public override bool IsReadingRTL
-            => Owner is not null ? Owner.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING) : false;
+            => Owner is not null && Owner.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
-        public override bool IsReadOnly => Owner is not null ? Owner.ReadOnly : false;
+        public override bool IsReadOnly => Owner is not null && Owner.ReadOnly;
 
         public override bool IsScrollable
         {
@@ -274,8 +274,8 @@ public abstract partial class TextBoxBase
 
         private string PasswordString
             => Owner is not null
-                ? new string(Owner is TextBox
-                    ? ((TextBox)Owner).PasswordChar
+                ? new string(Owner is TextBox textBox
+                    ? textBox.PasswordChar
                     : ((MaskedTextBox)Owner).PasswordChar, Owner.Text.Length)
                 : string.Empty;
 

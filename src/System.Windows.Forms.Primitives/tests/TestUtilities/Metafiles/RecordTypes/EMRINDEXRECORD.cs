@@ -23,10 +23,10 @@ internal struct EMRINDEXRECORD
     public EMR emr;
     public uint index;
 
-    public bool IsStockObject => (index & 0x80000000) != 0;
-    public GET_STOCK_OBJECT_FLAGS StockObject => (GET_STOCK_OBJECT_FLAGS)(index & ~0x80000000);
+    public readonly bool IsStockObject => (index & 0x80000000) != 0;
+    public readonly GET_STOCK_OBJECT_FLAGS StockObject => (GET_STOCK_OBJECT_FLAGS)(index & ~0x80000000);
 
-    public override string ToString()
+    public override readonly string ToString()
         => IsStockObject
             ? $"[EMR{emr.iType}] StockObject: {StockObject}"
             : $"[EMR{emr.iType}] Index: {index}";

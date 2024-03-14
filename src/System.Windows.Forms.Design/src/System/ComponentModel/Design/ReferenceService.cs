@@ -292,7 +292,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
             }
         }
 
-        return results.ToArray();
+        return [.. results];
     }
 
     /// <summary>

@@ -77,7 +77,7 @@ internal class LabelDesigner : ControlDesigner
                         for (int i = 0; i < snapLines.Count; i++)
                         {
                             // remove previous padding snaplines
-                            SnapLine snapLine = snapLines[i] as SnapLine;
+                            SnapLine snapLine = snapLines[i];
                             if (snapLine is not null && snapLine.SnapLineType == (rtl ? SnapLineType.Right : SnapLineType.Left))
                             {
                                 snapLine.AdjustOffset(rtl ? -offset : offset);
@@ -105,7 +105,7 @@ internal class LabelDesigner : ControlDesigner
             {
                 return 0;
             }
-            else if ((borderStyle == BorderStyle.FixedSingle) || (borderStyle == BorderStyle.Fixed3D))
+            else if (borderStyle is BorderStyle.FixedSingle or BorderStyle.Fixed3D)
             {
                 return 1;
             }
@@ -121,7 +121,7 @@ internal class LabelDesigner : ControlDesigner
             {
                 return -1;
             }
-            else if ((borderStyle == BorderStyle.FixedSingle) || (borderStyle == BorderStyle.Fixed3D))
+            else if (borderStyle is BorderStyle.FixedSingle or BorderStyle.Fixed3D)
             {
                 return 0;
             }

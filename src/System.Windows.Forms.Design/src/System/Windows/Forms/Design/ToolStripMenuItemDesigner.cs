@@ -138,7 +138,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         foreach (ToolStripItem item in MenuItem.DropDownItems)
                         {
                             // Don't Serialize the DesignerToolStripControlHost...
-                            if (!(item is DesignerToolStripControlHost))
+                            if (item is not DesignerToolStripControlHost)
                             {
                                 serializationService.Serialize(_serializedDataForDropDownItems, item);
                             }
@@ -286,9 +286,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
 
                     // We need to return parent if we are on DropDown...
-                    if (toolItem.IsOnDropDown && toolItem.Owner is ToolStripDropDown)
+                    if (toolItem.IsOnDropDown && toolItem.Owner is ToolStripDropDown dropDown)
                     {
-                        ToolStripDropDownItem parentItem = ((ToolStripDropDown)toolItem.Owner).OwnerItem as ToolStripDropDownItem;
+                        ToolStripDropDownItem parentItem = dropDown.OwnerItem as ToolStripDropDownItem;
                         return (parentItem == MenuItem);
                     }
                     else
@@ -296,9 +296,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         return (toolItem == MenuItem);
                     }
                 }
-                else if (selectedItem is ContextMenuStrip &&
-                    ((ContextMenuStrip)selectedItem).OwnerItem == Component && // VSO 214130--SelectedItem must belong to this designer
-                    MenuItem.DropDown == selectedItem)
+                else if (selectedItem is ContextMenuStrip menuStrip
+                    // VSO 214130--SelectedItem must belong to this designer
+                    && menuStrip.OwnerItem == Component
+                    && MenuItem.DropDown == selectedItem)
                 {
                     return true;
                 }
@@ -353,9 +354,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         // Check if the DropDown contains a typeHereNode....
         foreach (ToolStripItem currentItem in dropDown.Items)
         {
-            if (currentItem is DesignerToolStripControlHost)
+            if (currentItem is DesignerToolStripControlHost host)
             {
-                _typeHereNode = (DesignerToolStripControlHost)currentItem;
+                _typeHereNode = host;
             }
         }
 
@@ -771,7 +772,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         ToolStripItem newItem = null;
         // For the "Upward DropDown" add at index +1...
-        if (MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft || MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveRight)
+        if (MenuItem.DropDownDirection is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
         {
             dummyIndex++;
         }
@@ -848,7 +849,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         ToolStripItem newItem = null;
         // For the "Upward DropDown" add at index +1...
-        if (MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft || MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveRight)
+        if (MenuItem.DropDownDirection is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
         {
             dummyIndex++;
         }
@@ -931,10 +932,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     {
         if (lastSelected is not null && currentSelected is not null)
         {
-            if (lastSelected.Owner is ToolStripDropDown && currentSelected.Owner is ToolStripDropDown)
+            if (lastSelected.Owner is ToolStripDropDown lastDropDown && currentSelected.Owner is ToolStripDropDown currentDropDown)
             {
-                ToolStripItem ownerLastSelected = ((ToolStripDropDown)(lastSelected.Owner)).OwnerItem;
-                ToolStripItem ownerCurrentSelected = ((ToolStripDropDown)(currentSelected.Owner)).OwnerItem;
+                ToolStripItem ownerLastSelected = lastDropDown.OwnerItem;
+                ToolStripItem ownerCurrentSelected = currentDropDown.OwnerItem;
                 return (ownerLastSelected == ownerCurrentSelected);
             }
         }
@@ -965,9 +966,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         // COMMIT ALL THE THE PARENT CHAIN ....
         ToolStripDropDownItem currentItem = MenuItem;
-        while (currentItem is not null && currentItem.Owner is ToolStripDropDown)
+        while (currentItem?.Owner is ToolStripDropDown dropDown)
         {
-            currentItem = (ToolStripDropDownItem)((ToolStripDropDown)(currentItem.Owner)).OwnerItem;
+            currentItem = (ToolStripDropDownItem)dropDown.OwnerItem;
             if (currentItem is not null)
             {
                 ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_designerHost.GetDesigner(currentItem);
@@ -1162,7 +1163,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 // Get Designer ... and call Remove on that Designer.
                 RemoveTypeHereNode(ddi);
             }
-            else _toolStripAdornerWindowService?.Invalidate(ddi.DropDown.Bounds);
+            else
+            {
+                _toolStripAdornerWindowService?.Invalidate(ddi.DropDown.Bounds);
+            }
         }
     }
 
@@ -1315,18 +1319,18 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     private void EnterInSituMode()
     {
         // we need to tell our parent that we want to enter insitu edit mode
-        if (MenuItem.Owner is ToolStripDropDown)
+        if (MenuItem.Owner is ToolStripDropDown dropDown)
         {
-            ToolStripItem ownerItem = ((ToolStripDropDown)(MenuItem.Owner)).OwnerItem;
+            ToolStripItem ownerItem = dropDown.OwnerItem;
             // need to inform the owner tha we want to enter insitu mode
             if (_designerHost is not null)
             {
                 IDesigner designer = _designerHost.GetDesigner(ownerItem);
-                if (designer is ToolStripMenuItemDesigner)
+                if (designer is ToolStripMenuItemDesigner menuItemDesigner)
                 {
                     // Need to Add Dummy Node For Direct Insitu..
                     MenuItem.HideDropDown();
-                    ((ToolStripMenuItemDesigner)designer).EnterInSituEdit(MenuItem);
+                    menuItemDesigner.EnterInSituEdit(MenuItem);
                 }
             }
         }
@@ -1356,9 +1360,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         int index = MenuItem.DropDownItems.IndexOf(toolItem);
         // swap in our insitu ToolStrip
         MenuItem.DropDownItems.Insert(index, _commitedEditorNode);
-        if (toolItem is ToolStripControlHost)
+        if (toolItem is ToolStripControlHost host)
         {
-            ((ToolStripControlHost)toolItem).Control.Visible = false;
+            host.Control.Visible = false;
         }
 
         toolItem.Visible = false;
@@ -1423,9 +1427,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     {
         try
         {
-            if (MenuItem.Owner is ToolStripDropDown)
+            if (MenuItem.Owner is ToolStripDropDown dropDown)
             {
-                ToolStripItem ownerItem = ((ToolStripDropDown)(MenuItem.Owner)).OwnerItem;
+                ToolStripItem ownerItem = dropDown.OwnerItem;
                 while (item != ownerItem)
                 {
                     if (item.DropDown.Visible)
@@ -1433,9 +1437,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         item.HideDropDown();
                     }
 
-                    if (item.Owner is ToolStripDropDown)
+                    if (item.Owner is ToolStripDropDown itemDropDown)
                     {
-                        item = (ToolStripDropDownItem)((ToolStripDropDown)(item.Owner)).OwnerItem;
+                        item = (ToolStripDropDownItem)itemDropDown.OwnerItem;
                     }
                     else
                     {
@@ -1460,9 +1464,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             while (item != ownerItem)
             {
                 item.HideDropDown();
-                if (item.Owner is ToolStripDropDown)
+                if (item.Owner is ToolStripDropDown dropDown)
                 {
-                    item = (ToolStripDropDownItem)((ToolStripDropDown)(item.Owner)).OwnerItem;
+                    item = (ToolStripDropDownItem)dropDown.OwnerItem;
                 }
                 else
                 {
@@ -1705,7 +1709,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     if (_selectionService.PrimarySelection is ToolStripItem selectedItem && selectedItem != MenuItem)
                     {
                         int index = MenuItem.DropDownItems.IndexOf(selectedItem);
-                        if (MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft || MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveRight)
+                        if (MenuItem.DropDownDirection is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
                         {
                             // Add at the next Index in case of "Up-Directed" dropDown.
                             if (IsOnContextMenu && MenuItem.DropDown.Site is not null)
@@ -1733,7 +1737,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     {
                         if (count > 0)
                         {
-                            if (MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveLeft && MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveRight)
+                            if (MenuItem.DropDownDirection is not ToolStripDropDownDirection.AboveLeft and not ToolStripDropDownDirection.AboveRight)
                             {
                                 // ADD at Last but one, the last one being the TemplateNode always...
                                 if (IsOnContextMenu && MenuItem.DropDown.Site is not null)
@@ -2020,8 +2024,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     private void OnItemAdded(object sender, ToolStripItemEventArgs e)
     {
-        // Reshuffle the TemplateNode only for "Downward" dropdowns...
-        if (MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveLeft && MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveRight)
+        // Reshuffle the TemplateNode only for "Downward" dropdowns.
+        if (MenuItem.DropDownDirection is not ToolStripDropDownDirection.AboveLeft and not ToolStripDropDownDirection.AboveRight)
         {
             if (_typeHereNode is not null && (e.Item != _typeHereNode))
             {
@@ -2429,7 +2433,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 if (KeyboardHandlingService is not null)
                 {
                     int count = 0;
-                    if (MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveLeft && MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveRight)
+                    if (MenuItem.DropDownDirection is not ToolStripDropDownDirection.AboveLeft and not ToolStripDropDownDirection.AboveRight)
                     {
                         // index to the last item.
                         count = MenuItem.DropDownItems.Count;
@@ -2483,16 +2487,16 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         try
         {
-            if (MenuItem.Owner is ToolStripDropDown)
+            if (MenuItem.Owner is ToolStripDropDown dropDown)
             {
-                _parentItem = ((ToolStripDropDown)(MenuItem.Owner)).OwnerItem;
+                _parentItem = dropDown.OwnerItem;
                 // need to inform the owner tha we want to enter insitu mode
                 if (_designerHost is not null)
                 {
                     IDesigner designer = _designerHost.GetDesigner(_parentItem);
-                    if (designer is ToolStripMenuItemDesigner)
+                    if (designer is ToolStripMenuItemDesigner menuItemDesigner)
                     {
-                        ((ToolStripMenuItemDesigner)designer).EnterInSituEdit(MenuItem);
+                        menuItemDesigner.EnterInSituEdit(MenuItem);
                     }
                 }
             }
@@ -2543,9 +2547,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     internal void ShowOwnerDropDown(ToolStripDropDownItem currentSelection)
     {
         // We MIGHT HAVE TO START TOP - DOWN Instead of BOTTOM-UP.  Sometimes we DON'T get the Owner POPUP and hence all the popup are parented to Wrong guy.
-        while (currentSelection is not null && currentSelection.Owner is ToolStripDropDown)
+        while (currentSelection is not null && currentSelection.Owner is ToolStripDropDown dropDown)
         {
-            ToolStripDropDown currentDropDown = (ToolStripDropDown)(currentSelection.Owner);
+            ToolStripDropDown currentDropDown = dropDown;
             currentSelection = (ToolStripDropDownItem)currentDropDown.OwnerItem;
             if (currentSelection is not null && !currentSelection.DropDown.Visible)
             {

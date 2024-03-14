@@ -205,5 +205,5 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
         return null; // don't understand this type of serializer.
     }
 
-#endregion
+    #endregion
 }

@@ -975,7 +975,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             return false; // nothing matching the given constraints
         }
 
-        objects = list.ToArray();
+        objects = [.. list];
         bool dragging = false;
         // We must setup state before calling QueryBeginDrag.  It is possible that QueryBeginDrag will cancel a drag (if it places a modal dialog, for example), so we must have the drag data all setup before it cancels.  Then, we will check again after QueryBeginDrag to see if a cancel happened.
         _dragComponents = objects;
@@ -1148,10 +1148,10 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 }
             }
 
-            selection = list.ToArray();
+            selection = [.. list];
         }
 
-        return selection ?? ([]);
+        return selection ?? [];
     }
 
     /// <summary>

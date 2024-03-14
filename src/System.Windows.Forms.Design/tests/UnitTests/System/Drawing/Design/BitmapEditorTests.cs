@@ -70,29 +70,25 @@ public class BitmapEditorTests
     public void BitmapEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
         SubBitmapEditor editor = new();
-        using (MemoryStream stream = new())
-        using (Bitmap image = new(10, 10))
-        {
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(10, 10), result.Size);
+        using MemoryStream stream = new();
+        using Bitmap image = new(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(10, 10), result.Size);
 
-            using MemoryStream resultStream = new();
-            result.Save(resultStream, ImageFormat.Bmp);
-            Assert.Equal(stream.Length, resultStream.Length);
-        }
+        using MemoryStream resultStream = new();
+        result.Save(resultStream, ImageFormat.Bmp);
+        Assert.Equal(stream.Length, resultStream.Length);
     }
 
     [Fact]
     public void BitmapEditor_LoadFromStream_MetafileStream_ReturnsExpected()
     {
         SubBitmapEditor editor = new();
-        using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
-        {
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(490, 654), result.Size);
-        }
+        using Stream stream = File.OpenRead("Resources/telescope_01.wmf");
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(490, 654), result.Size);
     }
 
     [Fact]
@@ -119,11 +115,11 @@ public class BitmapEditorTests
     {
         public new string[] GetExtensions() => base.GetExtensions();
 
-        protected override Type[] GetImageExtenders() => new Type[] { typeof(CustomGetExtensionsEditor) };
+        protected override Type[] GetImageExtenders() => [typeof(CustomGetExtensionsEditor)];
     }
 
     private class CustomGetExtensionsEditor : ImageEditor
     {
-        protected override string[] GetExtensions() => new string[] { "CustomGetExtensionsEditor" };
+        protected override string[] GetExtensions() => ["CustomGetExtensionsEditor"];
     }
 }

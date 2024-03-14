@@ -216,8 +216,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         // Add items to strip
         //
 
-        Items.AddRange((ToolStripItem[])
-        [
+        Items.AddRange(
             MoveFirstItem,
             MovePreviousItem,
             separator1,
@@ -228,8 +227,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
             MoveLastItem,
             separator3,
             AddNewItem,
-            DeleteItem,
-        ]);
+            DeleteItem);
     }
 
     /// <summary>

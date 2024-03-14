@@ -17,7 +17,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         using Form form = new()
         {
-            BindingContext = new BindingContext()
+            BindingContext = []
         };
 
         using ListBox control = new()
@@ -156,7 +156,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new(listBox);
         ListBox.ListBoxItemAccessibleObject accessibleObject = (ListBox.ListBoxItemAccessibleObject)listBoxAccessibleObject.GetChild(0);
         VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(listBox.IsHandleCreated);
     }
 }

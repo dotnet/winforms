@@ -732,10 +732,7 @@ Namespace Microsoft.VisualBasic.Logging
                         If Append Then
                             ' Try to get the file's actual encoding. If we get it, that trumps
                             ' the user specified value
-                            fileEncoding = GetFileEncoding(fileName)
-                            If fileEncoding Is Nothing Then
-                                fileEncoding = Encoding
-                            End If
+                            fileEncoding = If(GetFileEncoding(fileName), Encoding)
                         End If
 
                         Dim baseStreamWriter As New StreamWriter(fileName, Append, fileEncoding)
@@ -931,7 +928,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileLocation))
             End If
         End Sub
 
@@ -941,7 +938,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(DiskSpaceExhaustedOption))
             End If
         End Sub
 
@@ -951,7 +948,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileCreationScheduleOption))
             End If
         End Sub
 

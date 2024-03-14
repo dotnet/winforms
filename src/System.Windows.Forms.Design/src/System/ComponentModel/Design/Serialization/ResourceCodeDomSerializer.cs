@@ -38,7 +38,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
             {
                 name = methodInvokeEx.Parameters switch
                 {
-                    // We've found a call to the ApplyResources method on a ComponentResourceManager object. now we just need to figure out which component ApplyResources is being called for, and put it into that component's bucket.
+                    // We've found a call to the ApplyResources method on a ComponentResourceManager object. now we just need to figure out
+                    // which component ApplyResources is being called for, and put it into that component's bucket.
                     [CodeFieldReferenceExpression { TargetObject: CodeThisReferenceExpression } fieldReferenceEx, ..] => fieldReferenceEx.FieldName,
                     [CodeVariableReferenceExpression variableReferenceEx, ..] => variableReferenceEx.VariableName,
                     _ => null

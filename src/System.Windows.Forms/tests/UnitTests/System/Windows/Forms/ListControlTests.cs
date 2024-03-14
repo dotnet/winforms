@@ -166,7 +166,7 @@ public class ListControlTests
     {
         using SubListControl control = new()
         {
-            BindingContext = new BindingContext()
+            BindingContext = []
         };
 
         control.BindingContext = value;
@@ -188,8 +188,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_BindingContext_SetWithDataSource_GetReturnsExpected()
     {
-        BindingContext value = new();
-        List<DataClass> dataSource = new();
+        BindingContext value = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             DataSource = dataSource
@@ -214,8 +214,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_BindingContext_SetWithDataSourceAndDisplayMember_GetReturnsExpected()
     {
-        BindingContext value = new();
-        List<DataClass> dataSource = new();
+        BindingContext value = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             DataSource = dataSource,
@@ -241,9 +241,9 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_BindingContext_SetWithDataSourceWithBindingContext_GetReturnsExpected()
     {
-        BindingContext originalValue = new();
-        BindingContext value = new();
-        List<DataClass> dataSource = new();
+        BindingContext originalValue = [];
+        BindingContext value = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = originalValue,
@@ -269,9 +269,9 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_BindingContext_SetWithDataSourceAndDisplayMemberWithBindingContext_GetReturnsExpected()
     {
-        BindingContext originalValue = new();
-        BindingContext value = new();
-        List<DataClass> dataSource = new();
+        BindingContext originalValue = [];
+        BindingContext value = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = originalValue,
@@ -308,7 +308,7 @@ public class ListControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -319,7 +319,7 @@ public class ListControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -339,8 +339,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_ChangePosition_UpdatesSelectionIndex()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -354,8 +354,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_ChangePositionDoesNotAllowSelection_DoesNotUpdateSelectionIndex()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using AllowSelectionFalseListControl control = new()
         {
             SelectedIndex = -2,
@@ -370,8 +370,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_SuspendResumeBinding_CallsSetItemsCore()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using SubListControl control = new()
         {
             SelectedIndex = -1,
@@ -415,8 +415,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_SuspendResumeBindingAfterDataManagerChanged_DoesNotCallSetItemsCore()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using SubListControl control = new()
         {
             SelectedIndex = -1,
@@ -446,8 +446,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_SuspendResumeBindingDoesNotAllowSelection_CallsSetItemsCore()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using AllowSelectionFalseListControl control = new()
         {
             SelectedIndex = -1,
@@ -488,8 +488,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_CancelCurrentEdit_CallsSetItemCore()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using SubListControl control = new()
         {
             SelectedIndex = -1,
@@ -515,8 +515,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataManager_CancelCurrentEditAfterDataManagerChanged_DoesNotCallSetItemCore()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass(), new DataClass() };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass(), new DataClass()];
         using SubListControl control = new()
         {
             SelectedIndex = -1,
@@ -628,7 +628,7 @@ public class ListControlTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ListControl_DataSource_SetWithDataSourceNoSuchDisplayMemberAnymore_GetReturnsExpected(object value)
     {
-        List<int> originalValue = new();
+        List<int> originalValue = [];
         using SubListControl control = new()
         {
             DataSource = originalValue,
@@ -710,7 +710,7 @@ public class ListControlTests
     public void ListControl_DataSource_SetOverridenComponent_DisposeValue_DoesNotRemove()
     {
         ComponentList originalValue = new();
-        List<int> value = new();
+        List<int> value = [];
         using SubListControl control = new()
         {
             DataSource = originalValue,
@@ -832,7 +832,7 @@ public class ListControlTests
     public void ListControl_DataSource_SetOverridenSupportInitializeNotification_InitializeValue_Success(bool isInitialized)
     {
         SupportInitializeNotificationList originalValue = new();
-        List<int> value = new();
+        List<int> value = [];
         using SubListControl control = new()
         {
             DataSource = originalValue,
@@ -854,7 +854,7 @@ public class ListControlTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ListControl_DataSource_SetWithBindingContext_GetReturnsExpected(object value)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             BindingContext = context
@@ -890,7 +890,7 @@ public class ListControlTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ListControl_DataSource_SetWithBindingContextWithDataSource_GetReturnsExpected(object value)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -926,8 +926,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_DataSource_SetWithBindingContextWithDisplayMemberCanCreate_GetReturnsExpected()
     {
-        BindingContext context = new();
-        List<DataClass> value = new();
+        BindingContext context = [];
+        List<DataClass> value = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -950,7 +950,7 @@ public class ListControlTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ListControl_DataSource_SetWithBindingContextWithDisplayMemberCantCreate_GetReturnsExpected(object value)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1005,7 +1005,7 @@ public class ListControlTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(1, dataSourceCallCount);
@@ -1018,7 +1018,7 @@ public class ListControlTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(2, dataSourceCallCount);
@@ -1051,7 +1051,7 @@ public class ListControlTests
         };
         control.DataSourceChanged += handler;
 
-        List<int> value = new();
+        List<int> value = [];
         control.DataSource = value;
         Assert.Same(value, control.DataSource);
         Assert.Empty(control.DisplayMember);
@@ -1113,7 +1113,7 @@ public class ListControlTests
     [StringData]
     public void ListControl_DisplayMember_SetWithDataSource_GetReturnsExpected(string value)
     {
-        List<int> dataSource = new();
+        List<int> dataSource = [];
         using SubListControl control = new()
         {
             DataSource = dataSource
@@ -1137,7 +1137,7 @@ public class ListControlTests
     [NormalizedStringData]
     public void ListControl_DisplayMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             BindingContext = context
@@ -1161,8 +1161,8 @@ public class ListControlTests
     [StringData]
     public void ListControl_DisplayMember_SetWithBindingContextWithDataSource_GetReturnsExpected(string value)
     {
-        BindingContext context = new();
-        List<int> dataSource = new();
+        BindingContext context = [];
+        List<int> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1190,8 +1190,8 @@ public class ListControlTests
     [InlineData("value", "value")]
     public void ListControl_DisplayMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value, string expected)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1217,8 +1217,8 @@ public class ListControlTests
     [InlineData("ListValue")]
     public void ListControl_DisplayMember_SetWithBindingContextWithDataSourceCantCreate_GetReturnsExpected(string value)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1729,7 +1729,7 @@ public class ListControlTests
     [NormalizedStringData]
     public void ListControl_ValueMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             BindingContext = context
@@ -1758,8 +1758,8 @@ public class ListControlTests
     [InlineData("value", "value")]
     public void ListControl_ValueMember_SetWithBindingContextWithDataSourceCanCreate_GetReturnsExpected(string value, string expected)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1785,8 +1785,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_ValueMember_SetWithBindingContextWithDataSourceCantCreate_ThrowsArgumentException()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1805,8 +1805,8 @@ public class ListControlTests
     [InlineData("value", "value")]
     public void ListControl_ValueMember_SetWithBindingContextWithDataSourceWithDisplayMemberCanCreate_GetReturnsExpected(string value, string expected)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1833,8 +1833,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_ValueMember_SetWithBindingContextWithDataSourceWithDisplayMemberCantCreate_ThrowsArgumentException()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             BindingContext = context,
@@ -1913,8 +1913,8 @@ public class ListControlTests
     [InlineData("value")]
     public void ListControl_SelectedValue_SetWithMatchingValue_Success(string valueMember)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass { Value = "StringValue" } };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass { Value = "StringValue" }];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -1947,7 +1947,7 @@ public class ListControlTests
     [MemberData(nameof(SelectedValue_NoMatchingValue_TestData))]
     public void ListControl_SelectedValue_SetWithNoMatchingValue_Success(object dataSource, string value)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -1971,8 +1971,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_SelectedValue_SetWithChangedDataManager_Success()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -2007,7 +2007,7 @@ public class ListControlTests
         Assert.Null(control.SelectedValue);
 
         // Not set even when given a DataManager.
-        control.BindingContext = new BindingContext();
+        control.BindingContext = [];
         control.DataSource = new List<int>();
         Assert.Equal(0, control.SelectedIndex);
         Assert.Throws<IndexOutOfRangeException>(() => control.SelectedValue);
@@ -2016,8 +2016,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_SelectedValue_SetWithHandler_DoesNotCallSelectedValueChanged()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new() { new DataClass { Value = "StringValue" } };
+        BindingContext context = [];
+        List<DataClass> dataSource = [new DataClass { Value = "StringValue" }];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -2055,8 +2055,8 @@ public class ListControlTests
     [WinFormsFact]
     public void ListControl_SelectedValue_SetNull_ThrowsArgumentNullException()
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -2074,8 +2074,8 @@ public class ListControlTests
     [InlineData(1)]
     public void ListControl_SelectedValue_SetWithoutValueMember_ThrowsInvalidOperationException(object value)
     {
-        BindingContext context = new();
-        List<DataClass> dataSource = new();
+        BindingContext context = [];
+        List<DataClass> dataSource = [];
         using SubListControl control = new()
         {
             SelectedIndex = 0,
@@ -2144,7 +2144,7 @@ public class ListControlTests
         };
 
         DataClass dataClass = new() { Value = 10 };
-        List<DataClass> list = new() { dataClass };
+        List<DataClass> list = [dataClass];
         yield return new object[]
         {
             new SubListControl
@@ -2159,7 +2159,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             list,
@@ -2169,7 +2169,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list,
                 DisplayMember = "Value"
             },
@@ -2180,7 +2180,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list,
                 DisplayMember = "Value"
             },
@@ -2191,7 +2191,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list,
                 DisplayMember = "value"
             },
@@ -2202,7 +2202,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list,
                 DisplayMember = "NoSuchProperty"
             },
@@ -2267,12 +2267,12 @@ public class ListControlTests
         };
 
         DataClass dataClass = new() { Value = 10 };
-        List<DataClass> list = new() { dataClass };
+        List<DataClass> list = [dataClass];
         yield return new object[]
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             list,
@@ -2283,7 +2283,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             list,
@@ -2294,7 +2294,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             dataClass,
@@ -2305,7 +2305,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             dataClass,
@@ -2316,7 +2316,7 @@ public class ListControlTests
         {
             new SubListControl
             {
-                BindingContext = new BindingContext(),
+                BindingContext = [],
                 DataSource = list
             },
             dataClass,
@@ -2474,7 +2474,7 @@ public class ListControlTests
         using SubListControl control = new()
         {
             FormattingEnabled = true,
-            BindingContext = new BindingContext(),
+            BindingContext = [],
             DataSource = new List<CustomTypeConverterDataClass> { item },
             DisplayMember = "Value"
         };
@@ -2491,7 +2491,7 @@ public class ListControlTests
         using SubListControl control = new()
         {
             FormattingEnabled = false,
-            BindingContext = new BindingContext(),
+            BindingContext = [],
             DataSource = new List<CustomTypeConverterDataClass> { item },
             DisplayMember = "Value"
         };
@@ -2524,7 +2524,7 @@ public class ListControlTests
         using SubListControl control = new()
         {
             FormattingEnabled = true,
-            BindingContext = new BindingContext(),
+            BindingContext = [],
             DataSource = new List<NonCriticalThrowingTypeConverterDataClass> { item },
             DisplayMember = "Value"
         };
@@ -2541,7 +2541,7 @@ public class ListControlTests
         using SubListControl control = new()
         {
             FormattingEnabled = true,
-            BindingContext = new BindingContext(),
+            BindingContext = [],
             DataSource = new List<CriticalThrowingTypeConverterDataClass> { item },
             DisplayMember = "Value"
         };

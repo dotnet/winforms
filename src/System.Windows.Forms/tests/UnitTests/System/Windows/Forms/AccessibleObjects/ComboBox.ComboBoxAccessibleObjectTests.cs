@@ -299,7 +299,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         ComboBox.ComboBoxAccessibleObject accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -486,8 +486,8 @@ public class ComboBox_ComboBoxAccessibleObjectTests
     private ComboBox CreateComboBoxWithItems()
     {
         ComboBox comboBox = new();
-        comboBox.Items.AddRange(new object[]
-        {
+        comboBox.Items.AddRange(
+        [
             "a",
             "b",
             "c",
@@ -495,7 +495,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
             "e",
             "f",
             "g"
-        });
+        ]);
 
         return comboBox;
     }

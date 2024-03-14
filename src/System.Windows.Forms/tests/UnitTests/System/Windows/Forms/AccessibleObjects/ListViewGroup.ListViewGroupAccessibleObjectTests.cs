@@ -22,13 +22,13 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         list.Groups.Add(listGroup);
 
         Type type = listGroup.AccessibilityObject.GetType();
-        ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(ListViewGroup), typeof(bool) });
+        ConstructorInfo ctor = type.GetConstructor([typeof(ListViewGroup), typeof(bool)]);
         Assert.NotNull(ctor);
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null, false }));
+        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null, false]));
 
         // group without parent ListView
         ListViewGroup listGroupWithoutList = new("Group2");
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { listGroupWithoutList, false }));
+        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([listGroupWithoutList, false]));
     }
 
     [WinFormsFact]
@@ -793,17 +793,17 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         ListViewGroup group1 = new("Group 1") { CollapsedState = firstGroupSate };
         ListViewGroup group2 = new("Group 2") { CollapsedState = ListViewGroupCollapsedState.Expanded };
         ListViewGroup group3 = new("Group 3") { CollapsedState = ListViewGroupCollapsedState.Expanded };
-        listView.Groups.AddRange(new[] { group1, group2, group3 });
+        listView.Groups.AddRange((ListViewGroup[])[group1, group2, group3]);
         ListViewItem item1 = new("Item 1", group1);
         ListViewItem item2 = new("Item 2", group2);
         ListViewItem item3 = new("Item 2", group3);
-        listView.Items.AddRange(new[] { item1, item2, item3 });
+        listView.Items.AddRange((ListViewItem[])[item1, item2, item3]);
         listView.CreateControl();
         item1.Focused = true;
 
         // Keep indices of groups, that GroupCollapsedStateChanged event was raised for.
         // It will help to understand if the event was raised for a correct group and was raised at all.
-        List<int> eventGroupIndices = new();
+        List<int> eventGroupIndices = [];
         listView.GroupCollapsedStateChanged += (_, e) => eventGroupIndices.Add(e.GroupIndex);
 
         // Navigate to the second group
@@ -1326,8 +1326,10 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         };
 
         listView.Groups.Add(listGroup);
-        ListViewItem item = new("Test");
-        item.Group = listGroup;
+        ListViewItem item = new("Test")
+        {
+            Group = listGroup
+        };
         listView.Items.Add(item);
         ListViewGroupAccessibleObject accessibleObject = new(listGroup, false);
 
@@ -1403,12 +1405,12 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         ListViewItem listViewVisibleItem2 = new("Visible item 1");
 
         listView.Groups.Add(listViewGroup);
-        listView.Items.AddRange(new ListViewItem[] { listViewVisibleItem1, listViewVisibleItem2 });
-        listViewGroup.Items.AddRange(new ListViewItem[]
-        {
+        listView.Items.AddRange((ListViewItem[])[listViewVisibleItem1, listViewVisibleItem2]);
+        listViewGroup.Items.AddRange((ListViewItem[])
+        [
             listViewInvisibleItem1, listViewVisibleItem1,
             listViewVisibleItem2, listViewInvisibleItem2
-        });
+        ]);
 
         return listView;
     }

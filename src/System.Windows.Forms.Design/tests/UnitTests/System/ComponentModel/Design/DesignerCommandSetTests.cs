@@ -26,7 +26,7 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_Verbs_OverridenGetCommands_ReturnsExpected()
     {
-        DesignerVerbCollection collection = new();
+        DesignerVerbCollection collection = [];
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("Verbs"))
@@ -47,7 +47,7 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_ActionLists_OverridenGetCommands_ReturnsExpected()
     {
-        DesignerActionListCollection collection = new();
+        DesignerActionListCollection collection = [];
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("ActionLists"))

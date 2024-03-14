@@ -82,7 +82,8 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
                         new EditorAttribute(typeof(UITypeEditor), typeof(UITypeEditor)),
                         new TypeConverterAttribute(typeof(ReadOnlyCollectionConverter))
                     };
-                    AttributeArray = attributes.ToArray();
+
+                    AttributeArray = [.. attributes];
                     readOnlyCollection = true;
                 }
             }
@@ -97,7 +98,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
                     new DefaultValueAttribute(_defaultValue)
                 };
 
-                AttributeArray = attributes.ToArray();
+                AttributeArray = [.. attributes];
             }
         }
     }

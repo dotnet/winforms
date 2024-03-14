@@ -529,11 +529,11 @@ public partial class PropertyGridTests
 
     public static IEnumerable<object[]> BrowsableAttributes_Set_TestData()
     {
-        yield return new object[] { null, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { AttributeCollection.Empty, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
+        yield return new object[] { null, new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { AttributeCollection.Empty, new AttributeCollection([BrowsableAttribute.Yes]) };
         yield return new object[] { new AttributeCollection(), new AttributeCollection() };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]) };
     }
 
     [WinFormsTheory]
@@ -585,7 +585,7 @@ public partial class PropertyGridTests
     {
         using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 },
+            SelectedObjects = [1],
             BrowsableAttributes = value
         };
         Assert.Equal(expected, control.BrowsableAttributes);
@@ -2647,7 +2647,7 @@ public partial class PropertyGridTests
     {
         using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 }
+            SelectedObjects = [1]
         };
 
         control.SelectedObjects = value;
@@ -2705,7 +2705,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedObjects_SetNullInValue_ThrowsArgumentException()
     {
         using SubPropertyGrid control = new();
-        Assert.Throws<ArgumentException>(() => control.SelectedObjects = new object[] { null });
+        Assert.Throws<ArgumentException>(() => control.SelectedObjects = [null]);
     }
 
     private ISite CreateISiteObject()

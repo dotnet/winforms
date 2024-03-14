@@ -349,8 +349,10 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             {
                 CodeExpression? field = SerializeToExpression(manager, control);
                 CodeMethodReferenceExpression method = new(field, methodName);
-                CodeMethodInvokeExpression methodInvoke = new();
-                methodInvoke.Method = method;
+                CodeMethodInvokeExpression methodInvoke = new()
+                {
+                    Method = method
+                };
 
                 if (parameters is not null)
                 {
@@ -426,8 +428,10 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                 // Create the "control.Controls.SetChildIndex" call
                 CodeExpression controlsCollection = new CodePropertyReferenceExpression(SerializeToExpression(manager, control), "Controls");
                 CodeMethodReferenceExpression method = new(controlsCollection, "SetChildIndex");
-                CodeMethodInvokeExpression methodInvoke = new();
-                methodInvoke.Method = method;
+                CodeMethodInvokeExpression methodInvoke = new()
+                {
+                    Method = method
+                };
 
                 // Fill in parameters
                 CodeExpression? childControl = SerializeToExpression(manager, child);

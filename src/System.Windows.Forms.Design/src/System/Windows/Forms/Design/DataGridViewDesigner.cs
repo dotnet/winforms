@@ -818,8 +818,10 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             DesignerActionItemCollection items = [];
             DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
-                                                               SR.DataGridViewChooseDataSource);// displayName
-            chooseDataSource.RelatedComponent = _owner.Component;
+                                                               SR.DataGridViewChooseDataSource)
+            {
+                RelatedComponent = _owner.Component
+            };// displayName
             items.Add(chooseDataSource);
             return items;
         }

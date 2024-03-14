@@ -83,7 +83,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
             IDesignerHost host = (IDesignerHost)_sp.GetService(typeof(IDesignerHost));
             if (selectionService is not null && host is not null)
             {
-                if (!(selectionService.PrimarySelection is IComponent comp))
+                if (selectionService.PrimarySelection is not IComponent comp)
                 {
                     comp = (IComponent)ToolStripKeyBoardService.SelectedDesignerControl;
                 }

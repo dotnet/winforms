@@ -34,7 +34,7 @@ public class AxSystemMonitorTests : IDisposable
         Assembly assembly = Assembly.GetAssembly(assemblyType);
         string assemblyNameFromType = assembly.GetName().Name;
 
-        List<string> testingControlProps = new();
+        List<string> testingControlProps = [];
         foreach(PropertyDescriptor prop in properties)
         {
             string assemblyFromTestingControl = prop.ComponentType.Assembly.GetName().Name;
@@ -45,7 +45,7 @@ public class AxSystemMonitorTests : IDisposable
             }
         }
 
-        List<string> testingControlEvents = new();
+        List<string> testingControlEvents = [];
         foreach(EventDescriptor singleEvent in events)
         {
             string assemblyFromTestingControl = singleEvent.ComponentType.Assembly.GetName().Name;

@@ -1828,7 +1828,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         if (text.Length > MaximumLengthOfPropertyString)
         {
-            text = text.Substring(0, MaximumLengthOfPropertyString);
+            text = text[..MaximumLengthOfPropertyString];
         }
 
         int textWidth = GetValueTextWidth(text, g, GetFont(valueModified));

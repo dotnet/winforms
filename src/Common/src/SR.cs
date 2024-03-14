@@ -7,7 +7,8 @@ namespace System;
 
 internal static partial class SR
 {
-    private static readonly bool s_usingResourceKeys = AppContext.TryGetSwitch("System.Resources.UseSystemResourceKeys", out bool usingResourceKeys) ? usingResourceKeys : false;
+    private static readonly bool s_usingResourceKeys =
+        AppContext.TryGetSwitch("System.Resources.UseSystemResourceKeys", out bool usingResourceKeys) && usingResourceKeys;
 
     // This method is used to decide if we need to append the exception message parameters to the message when calling SR.Format.
     // by default it returns the value of System.Resources.UseSystemResourceKeys AppContext switch or false if not specified.

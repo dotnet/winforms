@@ -626,8 +626,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Add_OverridenProperties_TestData()
     {
-        BindingContext parentContext = new();
-        BindingContext childContext = new();
+        BindingContext parentContext = [];
+        BindingContext childContext = [];
         yield return new object[] { parentContext, childContext, childContext };
         yield return new object[] { parentContext, null, parentContext };
         yield return new object[] { null, childContext, childContext };
@@ -776,8 +776,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Add_OverridenPropertiesWithHandle_TestData()
     {
-        BindingContext parentContext = new();
-        BindingContext childContext = new();
+        BindingContext parentContext = [];
+        BindingContext childContext = [];
         yield return new object[] { parentContext, childContext, childContext, 0 };
         yield return new object[] { parentContext, null, parentContext, 1 };
         yield return new object[] { null, childContext, childContext, 0 };
@@ -1212,7 +1212,7 @@ public class ControlControlCollectionTests
         {
             affectedControl = child3;
             affectedProperty = "Parent";
-            collection.AddRange(new Control[] { child1, child2, null, child3 });
+            collection.AddRange([child1, child2, null, child3]);
             Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
             Assert.Same(owner, child1.Parent);
             Assert.Same(owner, child2.Parent);
@@ -1226,7 +1226,7 @@ public class ControlControlCollectionTests
 
             affectedControl = child1;
             affectedProperty = "ChildIndex";
-            collection.AddRange(new Control[] { child1, child2, null, child3 });
+            collection.AddRange([child1, child2, null, child3]);
             Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
             Assert.Same(owner, child1.Parent);
             Assert.Same(owner, child2.Parent);
@@ -1272,10 +1272,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
         int parentLayoutCallCount = 0;
         owner.Layout += (sender, e) =>
         {
@@ -1397,10 +1399,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         Assert.Equal(expected, collection.ContainsKey(key));
 
@@ -1448,16 +1452,16 @@ public class ControlControlCollectionTests
         collection.Add(child3);
 
         // Search all children.
-        Assert.Equal(new Control[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
+        Assert.Equal([child2, child3, grandchild2, grandchild3], collection.Find(key, searchAllChildren: true));
 
         // Call again.
-        Assert.Equal(new Control[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
+        Assert.Equal([child2, child3, grandchild2, grandchild3], collection.Find(key, searchAllChildren: true));
 
         // Don't search all children.
-        Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllChildren: false));
 
         // Call again.
-        Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllChildren: false));
     }
 
     [WinFormsTheory]
@@ -1592,10 +1596,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -1652,10 +1658,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         collection.Remove(child1);
@@ -1683,10 +1691,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         IEnumerator enumerator = collection.GetEnumerator();
         Assert.Null(enumerator.Current);
@@ -1755,10 +1765,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         Assert.Equal(expected, collection.IndexOfKey(key));
 
@@ -1786,10 +1798,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         Assert.Equal(collection[expectedIndex], collection[key]);
 
@@ -1820,10 +1834,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         Assert.Null(collection[key]);
 
@@ -1839,10 +1855,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         Assert.Same(child1, collection[0]);
         Assert.Same(child2, collection[1]);
@@ -1868,8 +1886,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control child = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
 
@@ -1879,9 +1899,11 @@ public class ControlControlCollectionTests
         using Control owner = new();
         using Control child1 = new();
         using Control child2 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2
+        };
 
         int layoutCallCount = 0;
         child1.Layout += (sender, e) => layoutCallCount++;
@@ -1939,9 +1961,11 @@ public class ControlControlCollectionTests
         using ContainerControl owner = new();
         using Control child1 = new();
         using Control child2 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2
+        };
         owner.ActiveControl = child1;
         Assert.Same(child1, owner.ActiveControl);
 
@@ -2198,8 +2222,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control control = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
 
         int parentChangedCallCount = 0;
         int enabledChangedCallCount = 0;
@@ -2242,8 +2268,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control control = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int parentChangedCallCount = 0;
@@ -2284,8 +2312,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Remove_OverridenProperties_TestData()
     {
-        BindingContext parentContext = new();
-        BindingContext childContext = new();
+        BindingContext parentContext = [];
+        BindingContext childContext = [];
         yield return new object[] { parentContext, childContext, childContext };
         yield return new object[] { parentContext, null, parentContext };
         yield return new object[] { null, childContext, childContext };
@@ -2298,8 +2326,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control control = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
 
         owner.Enabled = false;
         Assert.False(control.Enabled);
@@ -2426,8 +2456,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Remove_OverridenPropertiesWithHandle_TestData()
     {
-        BindingContext parentContext = new();
-        BindingContext childContext = new();
+        BindingContext parentContext = [];
+        BindingContext childContext = [];
         yield return new object[] { parentContext, childContext, childContext, 0 };
         yield return new object[] { parentContext, null, parentContext, 1 };
         yield return new object[] { null, childContext, childContext, 0 };
@@ -2440,8 +2470,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control control = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
 
         owner.Enabled = false;
         Assert.False(control.Enabled);
@@ -2570,8 +2602,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
 
         owner.Enabled = false;
         Assert.False(control.Enabled);
@@ -2632,8 +2666,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(control);
+        var collection = new Control.ControlCollection(owner)
+        {
+            control
+        };
 
         owner.Enabled = false;
         Assert.False(control.Enabled);
@@ -2717,9 +2753,11 @@ public class ControlControlCollectionTests
         using Control owner = new();
         using Control child1 = new();
         using Control child2 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2
+        };
 
         int parentChangedCallCount = 0;
         int callCount = 0;
@@ -2793,9 +2831,11 @@ public class ControlControlCollectionTests
         using Control owner = new();
         using Control child1 = new();
         using Control child2 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2
+        };
 
         int layoutCallCount = 0;
         child1.Layout += (sender, e) => layoutCallCount++;
@@ -2859,8 +2899,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control child = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
 
@@ -2882,10 +2924,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         int layoutCallCount = 0;
         child2.Layout += (sender, e) => layoutCallCount++;
@@ -2956,10 +3000,12 @@ public class ControlControlCollectionTests
         {
             Name = "name2"
         };
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         collection.RemoveByKey(key);
         Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -2976,10 +3022,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         int layoutCallCount = 0;
         child1.Layout += (sender, e) => layoutCallCount++;
@@ -3042,10 +3090,12 @@ public class ControlControlCollectionTests
         using Control child1 = new();
         using Control child2 = new();
         using Control child3 = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
-        collection.Add(child3);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2,
+            child3
+        };
 
         int layoutCallCount = 0;
         child1.Layout += (sender, e) => layoutCallCount++;
@@ -3354,8 +3404,10 @@ public class ControlControlCollectionTests
     {
         using Control owner = new();
         using Control child = new();
-        var collection = new Control.ControlCollection(owner);
-        collection.Add(child);
+        var collection = new Control.ControlCollection(owner)
+        {
+            child
+        };
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.SetChildIndex(child, -2));
     }
 
@@ -3448,9 +3500,11 @@ public class ControlControlCollectionTests
         using Control owner = new();
         using Control child1 = new();
         using Control child2 = new();
-        IList collection = new Control.ControlCollection(owner);
-        collection.Add(child1);
-        collection.Add(child2);
+        IList collection = new Control.ControlCollection(owner)
+        {
+            child1,
+            child2
+        };
 
         int layoutCallCount = 0;
         child1.Layout += (sender, e) => layoutCallCount++;

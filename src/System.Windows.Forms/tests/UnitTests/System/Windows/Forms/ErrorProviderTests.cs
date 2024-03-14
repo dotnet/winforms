@@ -1137,78 +1137,76 @@ public class ErrorProviderTests
         using Control originalParent = new();
         using Control newParent = new();
 
-        using (ErrorProvider provider = new()
+        using ErrorProvider provider = new()
         {
             BlinkStyle = blinkStyle
-        })
-        {
-            provider.SetError(control, error);
-            Assert.Equal(expected, provider.GetError(control));
+        };
+        provider.SetError(control, error);
+        Assert.Equal(expected, provider.GetError(control));
 
-            // Call event properties - without handle.
-            control.Location = new Point(1, 2);
-            Assert.Equal(new Point(1, 2), control.Location);
+        // Call event properties - without handle.
+        control.Location = new Point(1, 2);
+        Assert.Equal(new Point(1, 2), control.Location);
 
-            control.Size = new Size(2, 3);
-            Assert.Equal(new Size(2, 3), control.Size);
+        control.Size = new Size(2, 3);
+        Assert.Equal(new Size(2, 3), control.Size);
 
-            control.Visible = !originalVisible;
-            Assert.Equal(!originalVisible, control.Visible);
+        control.Visible = !originalVisible;
+        Assert.Equal(!originalVisible, control.Visible);
 
-            control.Visible = originalVisible;
-            Assert.Equal(originalVisible, control.Visible);
+        control.Visible = originalVisible;
+        Assert.Equal(originalVisible, control.Visible);
 
-            control.Parent = newParent;
-            Assert.Same(newParent, control.Parent);
+        control.Parent = newParent;
+        Assert.Same(newParent, control.Parent);
 
-            control.Parent = null;
-            Assert.Null(control.Parent);
+        control.Parent = null;
+        Assert.Null(control.Parent);
 
-            control.Parent = originalParent;
-            Assert.Same(originalParent, control.Parent);
+        control.Parent = originalParent;
+        Assert.Same(originalParent, control.Parent);
 
-            // Call event methods - without handle.
-            control.OnHandleCreated(EventArgs.Empty);
-            control.OnHandleDestroyed(EventArgs.Empty);
-            control.OnLocationChanged(EventArgs.Empty);
-            control.OnSizeChanged(EventArgs.Empty);
-            control.OnVisibleChanged(EventArgs.Empty);
-            control.OnParentChanged(EventArgs.Empty);
+        // Call event methods - without handle.
+        control.OnHandleCreated(EventArgs.Empty);
+        control.OnHandleDestroyed(EventArgs.Empty);
+        control.OnLocationChanged(EventArgs.Empty);
+        control.OnSizeChanged(EventArgs.Empty);
+        control.OnVisibleChanged(EventArgs.Empty);
+        control.OnParentChanged(EventArgs.Empty);
 
-            // Call event properties - with handle.
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        // Call event properties - with handle.
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-            control.Location = new Point(2, 3);
-            Assert.Equal(new Point(2, 3), control.Location);
+        control.Location = new Point(2, 3);
+        Assert.Equal(new Point(2, 3), control.Location);
 
-            control.Size = new Size(4, 5);
-            Assert.Equal(new Size(4, 5), control.Size);
+        control.Size = new Size(4, 5);
+        Assert.Equal(new Size(4, 5), control.Size);
 
-            control.Visible = !originalVisible;
-            Assert.Equal(!originalVisible, control.Visible);
+        control.Visible = !originalVisible;
+        Assert.Equal(!originalVisible, control.Visible);
 
-            control.Visible = originalVisible;
-            Assert.Equal(originalVisible, control.Visible);
+        control.Visible = originalVisible;
+        Assert.Equal(originalVisible, control.Visible);
 
-            control.Parent = newParent;
-            Assert.Same(newParent, control.Parent);
+        control.Parent = newParent;
+        Assert.Same(newParent, control.Parent);
 
-            control.Parent = null;
-            Assert.Null(control.Parent);
+        control.Parent = null;
+        Assert.Null(control.Parent);
 
-            control.Parent = originalParent;
-            Assert.Same(originalParent, control.Parent);
+        control.Parent = originalParent;
+        Assert.Same(originalParent, control.Parent);
 
-            // Call event methods - with handle.
-            control.OnHandleCreated(EventArgs.Empty);
-            control.OnHandleDestroyed(EventArgs.Empty);
-            control.OnLocationChanged(EventArgs.Empty);
-            control.OnSizeChanged(EventArgs.Empty);
-            control.OnVisibleChanged(EventArgs.Empty);
-            control.OnParentChanged(EventArgs.Empty);
+        // Call event methods - with handle.
+        control.OnHandleCreated(EventArgs.Empty);
+        control.OnHandleDestroyed(EventArgs.Empty);
+        control.OnLocationChanged(EventArgs.Empty);
+        control.OnSizeChanged(EventArgs.Empty);
+        control.OnVisibleChanged(EventArgs.Empty);
+        control.OnParentChanged(EventArgs.Empty);
 
-            control.Dispose();
-        }
+        control.Dispose();
     }
 
     [WinFormsFact]

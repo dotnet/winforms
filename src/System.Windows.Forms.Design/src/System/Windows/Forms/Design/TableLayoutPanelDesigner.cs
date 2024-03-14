@@ -168,13 +168,17 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 ToolStripDropDownMenu rowMenu = BuildMenu(true);
                 ToolStripDropDownMenu colMenu = BuildMenu(false);
 
-                _contextMenuRow = new ToolStripMenuItem();
-                _contextMenuRow.DropDown = rowMenu;
-                _contextMenuRow.Text = SR.TableLayoutPanelDesignerRowMenu;
+                _contextMenuRow = new ToolStripMenuItem
+                {
+                    DropDown = rowMenu,
+                    Text = SR.TableLayoutPanelDesignerRowMenu
+                };
 
-                _contextMenuCol = new ToolStripMenuItem();
-                _contextMenuCol.DropDown = colMenu;
-                _contextMenuCol.Text = SR.TableLayoutPanelDesignerColMenu;
+                _contextMenuCol = new ToolStripMenuItem
+                {
+                    DropDown = colMenu,
+                    Text = SR.TableLayoutPanelDesignerColMenu
+                };
 
                 group.Items.Insert(0, _contextMenuCol);
                 group.Items.Insert(0, _contextMenuRow);
@@ -1078,7 +1082,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         GlyphCollection glyphs = base.GetGlyphs(selectionType);
 
         PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["Locked"];
-        bool locked = (prop is not null) ? ((bool)prop.GetValue(Component)) : false;
+        bool locked = (prop is not null) && ((bool)prop.GetValue(Component));
 
         // Before adding glyphs for every row/column, make sure we have a column/rowstyle for every column/row
         bool safeToRefresh = EnsureAvailableStyles();
@@ -1156,7 +1160,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         continue;
                     }
 
-                    Debug.Assert(Table.RowStyles[i] is not null, "Table's RowStyle[" + i + "] is null!");
+                    Debug.Assert(Table.RowStyles[i] is not null, $"Table's RowStyle[{i}] is null!");
                     if (Table.RowStyles[i] is not null)
                     {
                         TableLayoutPanelResizeGlyph g = new(gBounds, Table.RowStyles[i], Cursors.HSplit, Behavior);
