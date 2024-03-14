@@ -10370,7 +10370,7 @@ public unsafe partial class Control :
             // enumerate
             for (int i = 0; i < controlsCollection.Count; i++)
             {
-                controlsCollection[i].Scale(dx, dy);
+                controlsCollection[i].Scale(new SizeF(dx, dy));
             }
         }
     }
