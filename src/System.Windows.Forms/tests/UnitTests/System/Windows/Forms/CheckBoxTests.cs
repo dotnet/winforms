@@ -10,7 +10,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class CheckBoxTests
+public class CheckBoxTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void CheckBox_Ctor_Default()
@@ -493,6 +493,9 @@ public class CheckBoxTests
         public new bool GetTopLevel() => base.GetTopLevel();
 
         public new void OnClick(EventArgs e) => base.OnClick(e);
+        public new void OnMouseUp(MouseEventArgs e) => base.OnMouseUp(e);
+        internal new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
+        internal new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);
     }
 
     private class TestCheckBox : CheckBox
@@ -527,4 +530,133 @@ public class CheckBoxTests
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }
+
+    [WinFormsFact]
+    public void CheckBox_CheckedChangedEvent_Raised()
+    {
+        using CheckBox checkBox = (CheckBox)CreateButton();
+        bool eventFired = false;
+
+        checkBox.CheckedChanged += (sender, args) => eventFired = true;
+        checkBox.Checked = !checkBox.Checked;
+
+        eventFired.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CheckBox_CheckStateChangedEvent_Raised()
+    {
+        using CheckBox checkBox = (CheckBox)CreateButton();
+        bool eventFired = false;
+
+        checkBox.CheckStateChanged += (sender, args) => eventFired = true;
+        checkBox.CheckState = checkBox.CheckState == CheckState.Checked ? CheckState.Unchecked : CheckState.Checked;
+
+        eventFired.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [InlineData(Appearance.Button, FlatStyle.Standard)]
+    [InlineData(Appearance.Button, FlatStyle.Flat)]
+    [InlineData(Appearance.Button, FlatStyle.Popup)]
+    [InlineData(Appearance.Button, FlatStyle.System)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat)]
+    [InlineData(Appearance.Normal, FlatStyle.Popup)]
+    [InlineData(Appearance.Normal, FlatStyle.System)]
+    public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
+
+    [WinFormsTheory]
+    [InlineData(Appearance.Button, FlatStyle.Standard)]
+    [InlineData(Appearance.Button, FlatStyle.Flat)]
+    [InlineData(Appearance.Button, FlatStyle.Popup)]
+    [InlineData(Appearance.Button, FlatStyle.System)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat)]
+    [InlineData(Appearance.Normal, FlatStyle.Popup)]
+    [InlineData(Appearance.Normal, FlatStyle.System)]
+    public void CheckBox_DownChangeRectangle_ReturnsExpectedRectangle(Appearance appearance, FlatStyle flatStyle)
+    {
+        CheckBox checkBox = (CheckBox)CreateButton();
+        checkBox.Appearance = appearance;
+        checkBox.FlatStyle = flatStyle;
+
+        Rectangle downChangeRectangle = checkBox.DownChangeRectangle;
+
+        if (appearance == Appearance.Button || flatStyle == FlatStyle.System)
+        {
+            downChangeRectangle.Should().Be(checkBox.ClientRectangle);
+        }
+        else
+        {
+            downChangeRectangle.Should().Be(checkBox.Adapter.CommonLayout().Layout().CheckBounds);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void CheckBox_LeftClick_MouseUpCounts(bool capture)
+    {
+        using Form form = new();
+        using SubCheckBox control = (SubCheckBox)CreateButton();
+        control.Capture = capture;
+        form.Controls.Add(control);
+        control.TabIndex = 9999;
+        form.Show();
+
+        MouseEventArgs eventArgs = new(MouseButtons.Left, 1, new Point(0, 0), 0);
+
+        int callCountOnMouseUp = 0;
+
+        control.MouseUp += (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(eventArgs);
+            callCountOnMouseUp++;
+        };
+
+        control.OnMouseUp(eventArgs);
+        callCountOnMouseUp.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, '&', "&MnemonicText")]
+    [InlineData(true, 'N', "NonMnemonicText")]
+    [InlineData(true, 'M', "&MnemonicText")]
+    [InlineData(false, 'M', "&MnemonicText")]
+    public void CheckBox_ProcessMnemonic_ValidCases(bool useMnemonic, char charCode, string buttonText)
+    {
+        // Arrange
+        using Form form = new();
+        using SubCheckBox checkBox = new()
+        {
+            UseMnemonic = useMnemonic,
+            Text = buttonText,
+        };
+        form.Controls.Add(checkBox);
+        form.Show();
+
+        // Act
+        bool result = checkBox.ProcessMnemonic(charCode);
+
+        // Assert
+        // Requirements for SUT to process mnemonic
+        bool requirements = (
+            useMnemonic
+            && charCode != '&'
+            && buttonText.Contains($"&{charCode}", StringComparison.OrdinalIgnoreCase)
+        );
+
+        if (!requirements)
+        {
+            return;
+        }
+
+        result.Should().BeTrue();
+        checkBox.Focused.Should().BeTrue();
+        checkBox.CheckState.Should().Be(CheckState.Checked);
+    }
+
+    protected override ButtonBase CreateButton() => new SubCheckBox();
 }

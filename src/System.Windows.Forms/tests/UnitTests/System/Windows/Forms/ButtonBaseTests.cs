@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class ButtonBaseTests
+public class ButtonBaseTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void ButtonBase_Ctor_Default()
@@ -9335,7 +9335,7 @@ public class ButtonBaseTests
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
         public new bool GetTopLevel() => base.GetTopLevel();
-        
+
         public new void OnClick(EventArgs e) => base.OnClick(e);
 
         public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
@@ -9376,4 +9376,6 @@ public class ButtonBaseTests
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
+
+    protected override ButtonBase CreateButton() => new Button();
 }
