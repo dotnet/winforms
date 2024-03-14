@@ -263,7 +263,7 @@ internal partial class CommandSet : IDisposable
                 // instantiate our snapline timer
                 _snapLineTimer = new Timer
                 {
-                    Interval = DesignerUtils.SNAPELINEDELAY
+                    Interval = DesignerUtils.s_snapLineDelay
                 };
                 _snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
             }
@@ -3598,9 +3598,10 @@ internal partial class CommandSet : IDisposable
 
     private class TabIndexComparer : IComparer<Control>
     {
-        public static readonly TabIndexComparer Instance = new();
+        public static TabIndexComparer Instance { get; } = new();
 
         private TabIndexComparer() { }
+
         public int Compare(Control? c1, Control? c2)
         {
             if (c1 == c2)

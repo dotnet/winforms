@@ -19,7 +19,7 @@ public class OSFeature : FeatureSupport
     /// </summary>
     public static readonly object Themes = new();
 
-    private static OSFeature? _feature;
+    private static OSFeature? s_feature;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="OSFeature"/> class.
@@ -32,7 +32,7 @@ public class OSFeature : FeatureSupport
     ///  Represents the <see langword="static"/> instance of <see cref="OSFeature"/>
     ///  to use for feature queries. This property is read-only.
     /// </summary>
-    public static OSFeature Feature => _feature ??= new OSFeature();
+    public static OSFeature Feature => s_feature ??= new OSFeature();
 
     /// <summary>
     ///  Retrieves the version of the specified feature currently available on the system.
@@ -51,24 +51,19 @@ public class OSFeature : FeatureSupport
     /// <summary>
     ///  Retrieves whether SystemParameterType is supported on the Current OS version.
     /// </summary>
-    public static bool IsPresent(SystemParameter enumVal)
+    public static bool IsPresent(SystemParameter enumVal) => enumVal switch
     {
-        switch (enumVal)
-        {
-            case SystemParameter.DropShadow:
-            case SystemParameter.FlatMenu:
-            case SystemParameter.FontSmoothingContrastMetric:
-            case SystemParameter.FontSmoothingTypeMetric:
-            case SystemParameter.MenuFadeEnabled:
-            case SystemParameter.SelectionFade:
-            case SystemParameter.ToolTipAnimationMetric:
-            case SystemParameter.UIEffects:
-            case SystemParameter.CaretWidthMetric:
-            case SystemParameter.VerticalFocusThicknessMetric:
-            case SystemParameter.HorizontalFocusThicknessMetric:
-                return true;
-        }
-
-        return false;
-    }
+        SystemParameter.DropShadow
+            or SystemParameter.FlatMenu
+            or SystemParameter.FontSmoothingContrastMetric
+            or SystemParameter.FontSmoothingTypeMetric
+            or SystemParameter.MenuFadeEnabled
+            or SystemParameter.SelectionFade
+            or SystemParameter.ToolTipAnimationMetric
+            or SystemParameter.UIEffects
+            or SystemParameter.CaretWidthMetric
+            or SystemParameter.VerticalFocusThicknessMetric
+            or SystemParameter.HorizontalFocusThicknessMetric => true,
+        _ => false,
+    };
 }

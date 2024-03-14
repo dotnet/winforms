@@ -28,7 +28,7 @@ public partial class BorderSidesEditor
         private TableLayoutPanel _tableLayoutPanel;
         private CheckBox _topCheckBox;
 
-        private bool updateCurrentValue;
+        private bool _updateCurrentValue;
 
         public BorderSidesEditorUI(BorderSidesEditor editor)
         {
@@ -57,7 +57,7 @@ public partial class BorderSidesEditor
             EditorService = null;
             _originalValue = null;
             Value = null;
-            updateCurrentValue = false;
+            _updateCurrentValue = false;
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ public partial class BorderSidesEditor
             if (value is ToolStripStatusLabelBorderSides currentSides)
             {
                 SetCheckBoxCheckState(currentSides);
-                updateCurrentValue = true;
+                _updateCurrentValue = true;
             }
         }
 
@@ -388,7 +388,7 @@ public partial class BorderSidesEditor
         /// </summary>
         private void UpdateCurrentValue()
         {
-            if (!updateCurrentValue)
+            if (!_updateCurrentValue)
             {
                 return;
             }

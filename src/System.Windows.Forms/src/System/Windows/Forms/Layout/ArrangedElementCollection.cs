@@ -7,22 +7,15 @@ namespace System.Windows.Forms.Layout;
 
 public class ArrangedElementCollection : IList
 {
-    internal static ArrangedElementCollection Empty = new(0);
+    internal static ArrangedElementCollection Empty { get; } = new(0);
 
-    internal ArrangedElementCollection()
-        : this(4)
+    internal ArrangedElementCollection() : this(4)
     {
     }
 
-    internal ArrangedElementCollection(List<IArrangedElement> innerList)
-    {
-        InnerList = innerList;
-    }
+    internal ArrangedElementCollection(List<IArrangedElement> innerList) => InnerList = innerList;
 
-    private ArrangedElementCollection(int size)
-    {
-        InnerList = new List<IArrangedElement>(size);
-    }
+    private ArrangedElementCollection(int size) => InnerList = new List<IArrangedElement>(size);
 
     private protected List<IArrangedElement> InnerList { get; }
 
@@ -30,7 +23,7 @@ public class ArrangedElementCollection : IList
 
     public override bool Equals(object? obj)
     {
-        if (!(obj is ArrangedElementCollection other) || Count != other.Count)
+        if (obj is not ArrangedElementCollection other || Count != other.Count)
         {
             return false;
         }

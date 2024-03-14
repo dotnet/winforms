@@ -200,13 +200,13 @@ internal class FormDocumentDesigner : DocumentDesigner
                     {
                         if (snapLine.Filter.Equals(SnapLine.PaddingLeft) || snapLine.Filter.Equals(SnapLine.PaddingTop))
                         {
-                            snapLine.AdjustOffset(DesignerUtils.DEFAULTFORMPADDING);
+                            snapLine.AdjustOffset(DesignerUtils.s_defaultFormPadding);
                             paddingsFound++;
                         }
 
                         if (snapLine.Filter.Equals(SnapLine.PaddingRight) || snapLine.Filter.Equals(SnapLine.PaddingBottom))
                         {
-                            snapLine.AdjustOffset(-DesignerUtils.DEFAULTFORMPADDING);
+                            snapLine.AdjustOffset(-DesignerUtils.s_defaultFormPadding);
                             paddingsFound++;
                         }
 

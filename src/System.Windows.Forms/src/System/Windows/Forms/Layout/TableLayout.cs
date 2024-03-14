@@ -34,12 +34,12 @@ internal partial class TableLayout : LayoutEngine
     // End of sorting code
 
     // Singleton instance shared by all containers.
-    internal static readonly TableLayout Instance = new();
+    internal static TableLayout Instance { get; } = new();
 
-    private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
-    private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
+    private static readonly int s_containerInfoProperty = PropertyStore.CreateKey();
+    private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
 
-    private static readonly string?[] _propertiesWhichInvalidateCache =
+    private static readonly string?[] s_propertiesWhichInvalidateCache =
     [
        // suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
 
@@ -64,7 +64,7 @@ internal partial class TableLayout : LayoutEngine
     {
         ContainerInfo containerInfo = GetContainerInfo(container);
 
-        foreach (string? propertyName in _propertiesWhichInvalidateCache)
+        foreach (string? propertyName in s_propertiesWhichInvalidateCache)
         {
             if (ReferenceEquals(args.AffectedProperty, propertyName))
             {
@@ -1348,7 +1348,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
     {
-        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(_layoutInfoProperty);
+        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(s_layoutInfoProperty);
         if (layoutInfo is null)
         {
             layoutInfo = new LayoutInfo(element);
@@ -1360,7 +1360,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static void SetLayoutInfo(IArrangedElement element, LayoutInfo value)
     {
-        element.Properties.SetObject(_layoutInfoProperty, value);
+        element.Properties.SetObject(s_layoutInfoProperty, value);
         Debug.Assert(GetLayoutInfo(element) == value, "GetLayoutInfo should return the same value as we set it to");
     }
 
@@ -1374,11 +1374,11 @@ internal partial class TableLayout : LayoutEngine
     // store.
     internal static ContainerInfo GetContainerInfo(IArrangedElement container)
     {
-        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(_containerInfoProperty);
+        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(s_containerInfoProperty);
         if (containerInfo is null)
         {
             containerInfo = new ContainerInfo(container);
-            container.Properties.SetObject(_containerInfoProperty, containerInfo);
+            container.Properties.SetObject(s_containerInfoProperty, containerInfo);
         }
 
         return containerInfo;

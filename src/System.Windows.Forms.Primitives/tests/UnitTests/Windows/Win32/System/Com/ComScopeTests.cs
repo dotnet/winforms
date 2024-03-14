@@ -32,10 +32,12 @@ public unsafe class ComScopeTests
         internal struct Vtbl
         {
 #pragma warning disable CS0649 // Field never assigned to
+#pragma warning disable IDE1006 // Naming Styles - matching CsWin32 patterns
             internal delegate* unmanaged[Stdcall]<ITestObject*, Guid*, void**, HRESULT> QueryInterface_1;
             internal delegate* unmanaged[Stdcall]<ITestObject*, uint> AddRef_2;
             internal delegate* unmanaged[Stdcall]<ITestObject*, uint> Release_3;
-#pragma warning restore CS0649 // Field never assigned to
+#pragma warning restore CS0649
+#pragma warning restore IDE1006
         }
 
         [ComImport]

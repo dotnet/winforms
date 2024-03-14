@@ -842,7 +842,7 @@ internal class ToolStripKeyboardHandlingService
                                     itemDesigner.EditTemplateNode(true);
                                     if (ActiveTemplateNode is not null)
                                     {
-                                        ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                        ActiveTemplateNode._ignoreFirstKeyUp = true;
                                     }
                                 }
                             }
@@ -854,7 +854,7 @@ internal class ToolStripKeyboardHandlingService
                                 tooldesigner.ShowEditNode(true);
                                 if (ActiveTemplateNode is not null)
                                 {
-                                    ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                    ActiveTemplateNode._ignoreFirstKeyUp = true;
                                 }
                             }
                         }
@@ -877,7 +877,7 @@ internal class ToolStripKeyboardHandlingService
                             tooldesigner.ShowEditNode(false);
                             if (ActiveTemplateNode is not null)
                             {
-                                ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                ActiveTemplateNode._ignoreFirstKeyUp = true;
                             }
                         }
                     }

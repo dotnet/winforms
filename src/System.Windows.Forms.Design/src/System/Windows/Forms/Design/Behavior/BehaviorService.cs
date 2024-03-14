@@ -50,8 +50,9 @@ public sealed partial class BehaviorService : IDisposable
         = new("BSDRAGDROP", "Behavior service drag & drop messages");
 
     // test hooks for SnapLines
-    private static MessageId WM_GETALLSNAPLINES;
-    private static MessageId WM_GETRECENTSNAPLINES;
+    private static MessageId WM_GETALLSNAPLINES { get; } = PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
+    private static MessageId WM_GETRECENTSNAPLINES { get; } = PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
     internal BehaviorService(IServiceProvider serviceProvider, DesignerFrame windowFrame)
@@ -91,10 +92,6 @@ public sealed partial class BehaviorService : IDisposable
         // Default layoutmode is SnapToGrid.
         _useSnapLines = false;
         _queriedSnapLines = false;
-
-        // Test hooks
-        WM_GETALLSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
-        WM_GETRECENTSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -790,8 +787,8 @@ public sealed partial class BehaviorService : IDisposable
         byte[] nullBytes;
         byte[] bytes;
 
-        bytes = Text.Encoding.Unicode.GetBytes(text);
-        nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
+        bytes = Encoding.Unicode.GetBytes(text);
+        nullBytes = Encoding.Unicode.GetBytes(nullChar);
 
         Marshal.Copy(bytes, 0, m.LParamInternal, bytes.Length);
         Marshal.Copy(nullBytes, 0, m.LParamInternal + (nint)bytes.Length, nullBytes.Length);

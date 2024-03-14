@@ -19,7 +19,7 @@ public partial class ErrorProvider
         private readonly ErrorProvider _provider;
         private int _iconPadding;
         private ErrorIconAlignment _iconAlignment;
-        private const int _startingBlinkPhase = 10; // We want to blink 5 times
+        private const int StartingBlinkPhase = 10; // We want to blink 5 times
         private AccessibleObject? _accessibleObject;
 
         /// <summary>
@@ -255,7 +255,7 @@ public partial class ErrorProvider
         {
             if (_window is not null)
             {
-                BlinkPhase = _startingBlinkPhase;
+                BlinkPhase = StartingBlinkPhase;
                 _window.StartBlinking();
             }
         }

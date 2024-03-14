@@ -35,14 +35,14 @@ public partial class ComboBox : ListControl
     private static readonly object s_textUpdateEvent = new();
     private static readonly object s_dropDownClosedEvent = new();
 
-    private static int s_propMaxLength = PropertyStore.CreateKey();
-    private static int s_propItemHeight = PropertyStore.CreateKey();
-    private static int s_propDropDownWidth = PropertyStore.CreateKey();
-    private static int s_propDropDownHeight = PropertyStore.CreateKey();
-    private static int s_propStyle = PropertyStore.CreateKey();
-    private static int s_propDrawMode = PropertyStore.CreateKey();
-    private static int s_propMatchingText = PropertyStore.CreateKey();
-    private static int s_propFlatComboAdapter = PropertyStore.CreateKey();
+    private static readonly int s_propMaxLength = PropertyStore.CreateKey();
+    private static readonly int s_propItemHeight = PropertyStore.CreateKey();
+    private static readonly int s_propDropDownWidth = PropertyStore.CreateKey();
+    private static readonly int s_propDropDownHeight = PropertyStore.CreateKey();
+    private static readonly int s_propStyle = PropertyStore.CreateKey();
+    private static readonly int s_propDrawMode = PropertyStore.CreateKey();
+    private static readonly int s_propMatchingText = PropertyStore.CreateKey();
+    private static readonly int s_propFlatComboAdapter = PropertyStore.CreateKey();
 
     private const int DefaultSimpleStyleHeight = 150;
     private const int DefaultDropDownHeight = 106;

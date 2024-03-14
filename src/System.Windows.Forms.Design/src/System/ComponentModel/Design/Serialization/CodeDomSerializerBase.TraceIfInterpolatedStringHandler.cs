@@ -26,7 +26,7 @@ public abstract partial class CodeDomSerializerBase
         /// <summary>
         ///  The underlying <see cref="StringBuilder"/> instance used by <see cref="_stringBuilderHandler"/>, if any.
         /// </summary>
-        private StringBuilder? _builder;
+        private readonly StringBuilder? _builder;
 
         /// <summary>
         ///  Creates an instance of the handler.
@@ -45,7 +45,7 @@ public abstract partial class CodeDomSerializerBase
         /// </remarks>
         public TraceIfInterpolatedStringHandler(int literalLength, int formattedCount, bool condition, TraceLevel level, out bool shouldAppend)
         {
-            if (condition && traceSerialization.Level >= level)
+            if (condition && s_traceSerialization.Level >= level)
             {
                 _builder = new StringBuilder();
                 _stringBuilderHandler = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount,

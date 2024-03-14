@@ -20,7 +20,7 @@ public partial class DataGridViewInVirtualModeTest : Form
 
     // Declare a variable to indicate the commit scope.
     // Set this value to false to use cell-level commit scope
-    private bool _rowScopeCommit = true;
+    private readonly bool _rowScopeCommit = true;
 
     public DataGridViewInVirtualModeTest()
     {

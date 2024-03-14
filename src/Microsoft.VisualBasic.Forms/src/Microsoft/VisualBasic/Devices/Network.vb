@@ -275,7 +275,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -297,7 +297,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -322,7 +322,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,
@@ -344,7 +344,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,

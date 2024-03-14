@@ -151,5 +151,5 @@ public class TabControlTests : ControlTestBase
     }
 
     // Bug https://github.com/dotnet/winforms/issues/7837 occured only when TabControl was subclassed.
-    class SubclassedTabControl : TabControl { }
+    private class SubclassedTabControl : TabControl { }
 }

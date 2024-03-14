@@ -11,7 +11,7 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 internal class ContainerCodeDomSerializer : CodeDomSerializer
 {
-    private const string _containerName = "components";
+    private const string ContainerName = "components";
     private static ContainerCodeDomSerializer? s_defaultSerializer;
 
     /// <summary>
@@ -51,19 +51,19 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
 
         if (manager.TryGetContext(out CodeTypeDeclaration? typeDecl) && manager.TryGetContext(out RootContext? rootCtx))
         {
-            CodeMemberField field = new(typeof(IContainer), _containerName)
+            CodeMemberField field = new(typeof(IContainer), ContainerName)
             {
                 Attributes = MemberAttributes.Private
             };
             typeDecl.Members.Add(field);
-            lhs = new CodeFieldReferenceExpression(rootCtx.Expression, _containerName);
+            lhs = new CodeFieldReferenceExpression(rootCtx.Expression, ContainerName);
         }
         else
         {
-            CodeVariableDeclarationStatement var = new(typeof(IContainer), _containerName);
+            CodeVariableDeclarationStatement var = new(typeof(IContainer), ContainerName);
 
             statements.Add(var);
-            lhs = new CodeVariableReferenceExpression(_containerName);
+            lhs = new CodeVariableReferenceExpression(ContainerName);
         }
 
         // Now create the container

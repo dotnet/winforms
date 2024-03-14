@@ -9,8 +9,7 @@ namespace System.ComponentModel.Design.Serialization;
 public abstract partial class CodeDomSerializerBase
 {
     /// <summary>
-    ///  Provides an interpolated string handler for <see
-    ///  cref="CodeDomSerializerBase.Trace(TraceLevel, ref TraceInterpolatedStringHandler)"/>
+    ///  Provides an interpolated string handler for <see cref="Trace(TraceLevel, ref TraceInterpolatedStringHandler)"/>
     ///  that only performs formatting if tracing is set to a level higher or equal to the level of the message.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -25,7 +24,7 @@ public abstract partial class CodeDomSerializerBase
         /// <summary>
         ///  The underlying <see cref="StringBuilder"/> instance used by <see cref="_stringBuilderHandler"/>, if any.
         /// </summary>
-        private StringBuilder? _builder;
+        private readonly StringBuilder? _builder;
 
         /// <summary>
         ///  Creates an instance of the handler.
@@ -43,7 +42,7 @@ public abstract partial class CodeDomSerializerBase
         /// </remarks>
         public TraceInterpolatedStringHandler(int literalLength, int formattedCount, TraceLevel level, out bool shouldAppend)
         {
-            if (traceSerialization.Level >= level)
+            if (s_traceSerialization.Level >= level)
             {
                 _builder = new StringBuilder();
                 _stringBuilderHandler = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount,

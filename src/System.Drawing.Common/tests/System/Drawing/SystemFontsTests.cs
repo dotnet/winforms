@@ -134,7 +134,7 @@ public class SystemFontsTests
 
     // Do not test DefaultFont and DialogFont, as we can't reliably determine from LCID
     // https://github.com/dotnet/runtime/issues/28830#issuecomment-473556522
-    class SystemFontList
+    private class SystemFontList
     {
         public SystemFontList(string c_it_m_mb_scFonts)
         {

@@ -7,7 +7,7 @@ namespace System.Drawing.Tests;
 
 public class ImageAnimatorManualTests
 {
-    public static string OutputFolder = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+    public static string OutputFolder { get; } = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
 
     [Fact(Skip = "Manual Test")]
     public void AnimateAndCaptureFrames()

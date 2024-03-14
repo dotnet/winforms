@@ -35,12 +35,12 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// </summary>
     private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = [];
 
-    private const int s_invalidIndex = -1;
+    private const int InvalidIndex = -1;
 
     /// <summary>
     ///  The index which we will re-insert a newly added child.
     /// </summary>
-    private int _insertionIndex = s_invalidIndex;
+    private int _insertionIndex = InvalidIndex;
 
     /// <summary>
     ///  Tracks the top or left last rendered I-bar location.
@@ -613,7 +613,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             else
             {
                 // We are inserting past the last control.
-                _insertionIndex = s_invalidIndex;
+                _insertionIndex = InvalidIndex;
             }
 
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
@@ -659,7 +659,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
                 }
             }
 
-            if (_insertionIndex == s_invalidIndex)
+            if (_insertionIndex == InvalidIndex)
             {
                 // Either _insertionIndex was _childInfo.Length (inserting past the end) or
                 // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
@@ -725,7 +725,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         try
         {
-            if (_insertionIndex == s_invalidIndex)
+            if (_insertionIndex == InvalidIndex)
             {
                 return;
             }
@@ -748,7 +748,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         finally
         {
             Control.ControlAdded -= OnChildControlAdded;
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
     }
 
@@ -760,7 +760,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragEnter(de);
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _lastMouseLocation = Point.Empty;
         _primaryDragControl = null;
 
@@ -779,7 +779,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         EraseIBar();
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _primaryDragControl = null;
         _dragControls?.Clear();
 
@@ -816,7 +816,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             controlOffset.X += Control.Width;
         }
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
 
         // Brute force hit testing to first determine if we're over one
         // of our margin bounds.
@@ -889,7 +889,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             }
         }
 
-        if (_insertionIndex == s_invalidIndex)
+        if (_insertionIndex == InvalidIndex)
         {
             // Here, we're at the 'end' of the FlowLayoutPanel - not over
             // any controls and not in a row/column.
@@ -914,7 +914,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             // Manipulating our controls. We do it ourselves, so that we can set the indices right.
             ReorderControls(de);
 
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
         else
         {
