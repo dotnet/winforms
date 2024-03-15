@@ -70,8 +70,10 @@ public partial class PrintPreviewDialog : Form
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new bool AutoScale
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         get => base.AutoScale;
         set => base.AutoScale = value;
+#pragma warning restore CS0618
     }
 
     [Browsable(false)]
