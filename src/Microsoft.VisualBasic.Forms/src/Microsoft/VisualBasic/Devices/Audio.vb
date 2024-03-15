@@ -12,8 +12,10 @@ Namespace Microsoft.VisualBasic
     '''  Enum for three ways to play a .wav file
     ''' </summary>
     Public Enum AudioPlayMode
+
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
         WaitToComplete = 0 'Synchronous
+
         Background = 1     'Asynchronous
         BackgroundLoop = 2 'Asynchronous and looping
     End Enum
@@ -153,7 +155,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
                 If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
-                    Throw New ComponentModel.InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
+                    Throw New InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
                 End If
             End Sub
 
@@ -161,5 +163,7 @@ Namespace Microsoft.VisualBasic
             Private _sound As Media.SoundPlayer
 
         End Class 'Audio
+
     End Namespace
+
 End Namespace
