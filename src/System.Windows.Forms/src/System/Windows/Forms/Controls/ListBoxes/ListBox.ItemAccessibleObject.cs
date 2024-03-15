@@ -172,18 +172,13 @@ public partial class ListBox
                  _ => base.GetPropertyValue(propertyID)
              };
 
-        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
-            switch (patternId)
-            {
-                case UIA_PATTERN_ID.UIA_ScrollItemPatternId:
-                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
-                case UIA_PATTERN_ID.UIA_SelectionItemPatternId:
-                    return true;
-                default:
-                    return base.IsPatternSupported(patternId);
-            }
-        }
+            UIA_PATTERN_ID.UIA_ScrollItemPatternId
+                or UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId
+                or UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
+            _ => base.IsPatternSupported(patternId),
+        };
 
         internal override void RemoveFromSelection()
         {

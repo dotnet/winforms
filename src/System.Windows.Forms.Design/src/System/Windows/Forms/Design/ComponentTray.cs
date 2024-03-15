@@ -169,7 +169,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         if (GetService(typeof(BehaviorService)) is BehaviorService behSvc)
         {
             // this object will manage any glyphs that get added to our tray
-            _glyphManager = new ComponentTrayGlyphManager(selSvc, behSvc);
+            _glyphManager = new ComponentTrayGlyphManager(behSvc);
         }
     }
 
@@ -586,7 +586,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
     void ISelectionUIHandler.EndDrag(object[] components, bool cancel)
     {
         DragHandler.EndDrag(components, cancel);
-        GetOleDragHandler().DoEndDrag(components, cancel);
+        GetOleDragHandler().DoEndDrag();
         // Here, after the drag is finished and after we have resumed layout, adjust the location of the components we dragged by the scroll offset
         if (!_autoScrollPosBeforeDragging.IsEmpty)
         {
@@ -630,7 +630,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
     }
 
     bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
-        => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
+        => DragHandler.QueryBeginDrag(components);
 
     void ISelectionUIHandler.ShowContextMenu(IComponent component) => OnContextMenu(MousePosition);
 
@@ -1453,7 +1453,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                         gr.FillRectangle(selectionBorderBrush, DesignerUtils.GetBoundsForNoResizeSelectionType(innerRect, SelectionBorderGlyphType.Left));
                         gr.FillRectangle(selectionBorderBrush, DesignerUtils.GetBoundsForNoResizeSelectionType(innerRect, SelectionBorderGlyphType.Right));
                         // Need to draw this one last
-                        DesignerUtils.DrawNoResizeHandle(gr, glyph.Bounds, first, glyph);
+                        DesignerUtils.DrawNoResizeHandle(gr, glyph.Bounds, first);
                     }
 
                     first = false;
@@ -1648,12 +1648,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 }
             }
 
-            if (_tabOrderCommand is not null)
-            {
-                return _tabOrderCommand.Checked;
-            }
-
-            return false;
+            return _tabOrderCommand is not null && _tabOrderCommand.Checked;
         }
     }
 
@@ -2585,15 +2580,13 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
     {
         private Adorner _traySelectionAdorner; // we'll use a single adorner to manage the glyphs
         private Glyph _hitTestedGlyph; // the last glyph we hit tested (can be null)
-        private readonly ISelectionService _selSvc; // we need the selection service fo r the hover behavior
         private readonly BehaviorService _behaviorSvc;
 
         /// <summary>
         ///  Constructor that simply creates an empty adorner.
         /// </summary>
-        public ComponentTrayGlyphManager(ISelectionService selSvc, BehaviorService behaviorSvc)
+        public ComponentTrayGlyphManager(BehaviorService behaviorSvc)
         {
-            _selSvc = selSvc;
             _behaviorSvc = behaviorSvc;
             _traySelectionAdorner = new Adorner();
         }

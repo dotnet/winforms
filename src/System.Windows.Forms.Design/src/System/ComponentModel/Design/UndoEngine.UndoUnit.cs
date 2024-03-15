@@ -73,7 +73,7 @@ public abstract partial class UndoEngine
             {
                 foreach (ChangeUndoEvent e in _changeEvents)
                 {
-                    e.Commit(UndoEngine);
+                    e.Commit();
                 }
             }
 
@@ -81,7 +81,7 @@ public abstract partial class UndoEngine
             {
                 foreach (AddRemoveUndoEvent e in _removeEvents)
                 {
-                    e.Commit(UndoEngine);
+                    e.Commit();
                 }
             }
 
@@ -285,7 +285,7 @@ public abstract partial class UndoEngine
 
                     if (_events[idx] is AddRemoveUndoEvent evt && evt.OpenComponent == e.Component)
                     {
-                        evt.Commit(UndoEngine);
+                        evt.Commit();
                         // We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
                         // If there are other events (such as AddRemoving), the serialization  done in OnComponentRemoving might refer to components that aren't available.
                         if (idx != _events.Count - 1 && changeEvt is not null)

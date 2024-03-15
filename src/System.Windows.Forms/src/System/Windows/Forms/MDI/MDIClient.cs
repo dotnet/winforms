@@ -309,20 +309,11 @@ public sealed partial class MdiClient : Control
         }
     }
 
-    internal override bool ShouldSerializeBackColor()
-    {
-        return BackColor != SystemColors.AppWorkspace;
-    }
+    internal override bool ShouldSerializeBackColor() => BackColor != SystemColors.AppWorkspace;
 
-    private static bool ShouldSerializeLocation()
-    {
-        return false;
-    }
+    private static bool ShouldSerializeLocation() => false;
 
-    internal override bool ShouldSerializeSize()
-    {
-        return false;
-    }
+    internal override bool ShouldSerializeSize() => false;
 
     /// <summary>
     ///  Processes Windows messages.

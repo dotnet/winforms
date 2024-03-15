@@ -6,7 +6,7 @@ internal class Program
 {
     // - NOTE: the code needs to run under a thread with an STA ApartmentState
     [STAThread]
-    private static void Main(string[] args)
+    private static void Main()
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

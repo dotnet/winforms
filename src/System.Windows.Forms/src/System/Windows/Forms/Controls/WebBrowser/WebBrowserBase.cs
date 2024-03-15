@@ -38,7 +38,6 @@ public unsafe partial class WebBrowserBase : Control
     private WebBrowserHelper.SelectionStyle _selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
     private WebBrowserSiteBase? _axSite;
     private ContainerControl? _containingControl;
-    private HWND _hwndFocus;
     private EventHandler? _selectionChangeHandler;
     private readonly Guid _clsid;
     // Pointers to the ActiveX object: Interface pointers are cached for perf.
@@ -416,19 +415,6 @@ public unsafe partial class WebBrowserBase : Control
                 }
 
                 DefWndProc(ref m);
-                break;
-
-            case PInvoke.WM_KILLFOCUS:
-                _hwndFocus = (HWND)m.WParamInternal;
-                try
-                {
-                    base.WndProc(ref m);
-                }
-                finally
-                {
-                    _hwndFocus = HWND.Null;
-                }
-
                 break;
 
             case PInvoke.WM_DESTROY:

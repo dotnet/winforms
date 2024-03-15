@@ -86,7 +86,7 @@ internal sealed class SiteNestedContainer : NestedContainer
         }
 
         RemoveWithoutUnsiting(component);
-        _host.RemoveFromContainerPostProcess(component, this);
+        _host.RemoveFromContainerPostProcess(component);
     }
 
     protected override object? GetService(Type serviceType)

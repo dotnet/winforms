@@ -46,11 +46,6 @@ public partial class ScrollableControl : Control, IArrangedElement
     /// </summary>
     private Size _requestedScrollMargin = Size.Empty;
 
-    /// <summary>
-    ///  User requested autoscroll position - used for form creation only.
-    /// </summary>
-    private Point _scrollPosition = Point.Empty;
-
     private DockPaddingEdges? _dockPadding;
 
     private int _scrollState;
@@ -141,8 +136,6 @@ public partial class ScrollableControl : Control, IArrangedElement
                 SetDisplayRectLocation(-value.X, -value.Y);
                 SyncScrollbars(true);
             }
-
-            _scrollPosition = value;
         }
     }
 

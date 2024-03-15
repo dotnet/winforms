@@ -99,13 +99,7 @@ internal partial class FormatControl
 
         public override string FormatString => _owner._customStringTextBox.Text;
 
-        public static bool ParseStatic(string formatString)
-        {
-            // anything goes...
-            return true;
-        }
-
-        public override bool Parse(string formatString) => ParseStatic(formatString);
+        public override bool Parse(string formatString) => true;
 
         public override void PushFormatStringIntoFormatType(string formatString) =>
             _owner._customStringTextBox.Text = formatString;

@@ -18,7 +18,6 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 {
     private readonly IServiceProvider _serviceProvider; // used for snaplines
     private readonly BehaviorService _behaviorService; // pointer to our big & bad service
-    private readonly ControlDesigner _designer; // used for snaplines as well
     private bool _isPushed; // used to track if this is currently on the stack or not
     private Rectangle _lastRectangle; // cache the last mouse loc - so we can ignore when mouse doesn't move
     private Point _lastOffset; // cache the last snap so we know where to create our control if dropped
@@ -35,7 +34,6 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     {
         _serviceProvider = serviceProvider;
         _behaviorService = behaviorService;
-        _designer = null;
         _isPushed = false;
         _lastRectangle = Rectangle.Empty;
         _lastOffset = Point.Empty;
@@ -47,8 +45,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     public ToolboxItemSnapLineBehavior(IServiceProvider serviceProvider, BehaviorService behaviorService, ControlDesigner controlDesigner)
         : this(serviceProvider, behaviorService)
     {
-        _designer = controlDesigner;
-        // check to see if the current designer participate with SnapLines
+        // Check to see if the current designer participate with SnapLines
         if (controlDesigner is not null && !controlDesigner.ParticipatesWithSnapLines)
         {
             _targetAllowsSnapLines = false;
@@ -58,7 +55,6 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     public ToolboxItemSnapLineBehavior(IServiceProvider serviceProvider, BehaviorService behaviorService, ControlDesigner controlDesigner, bool allowDragBox)
         : this(serviceProvider, behaviorService, controlDesigner)
     {
-        _designer = controlDesigner;
         _targetAllowsDragBox = allowDragBox;
     }
 

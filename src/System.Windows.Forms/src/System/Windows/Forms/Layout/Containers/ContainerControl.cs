@@ -1157,7 +1157,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 // Top-level window may be already scaled by WM_DPICHANGE message. So, we skip it in such case.
                 if (!_isScaledByDpiChangedEvent)
                 {
-                    ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
+                    ScaleControl(includedFactor, ourExternalContainerFactor);
                 }
 
                 if (!_doNotScaleChildren)
