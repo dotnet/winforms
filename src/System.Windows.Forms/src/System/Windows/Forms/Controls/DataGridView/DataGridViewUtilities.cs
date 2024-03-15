@@ -443,6 +443,7 @@ internal static class DataGridViewUtilities
 
     internal static bool ValidTextFormatFlags(TextFormatFlags flags)
     {
+#pragma warning disable CS0618 // Type or member is obsolete - for the ModifyString flag
         return (flags & ~(TextFormatFlags.Bottom |
                           TextFormatFlags.Default |
                           TextFormatFlags.EndEllipsis |
@@ -468,5 +469,6 @@ internal static class DataGridViewUtilities
                           TextFormatFlags.VerticalCenter |
                           TextFormatFlags.WordBreak |
                           TextFormatFlags.WordEllipsis)) == 0;
+#pragma warning restore CS0618
     }
 }

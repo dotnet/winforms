@@ -368,10 +368,12 @@ public static class TextRenderer
 
     private static TextFormatFlags BlockModifyString(TextFormatFlags flags)
     {
+#pragma warning disable CS0618 // Type or member is obsolete - ModifyString is obsolete
         if (flags.HasFlag(TextFormatFlags.ModifyString))
         {
             throw new ArgumentOutOfRangeException(nameof(flags), SR.TextFormatFlagsModifyStringNotAllowed);
         }
+#pragma warning restore CS0618
 
         return flags;
     }
