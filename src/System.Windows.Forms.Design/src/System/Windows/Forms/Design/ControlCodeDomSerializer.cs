@@ -336,46 +336,42 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
     /// </summary>
     private void SerializeMethodInvocation(IDesignerSerializationManager manager, CodeStatementCollection statements, object control, string methodName, CodeExpressionCollection? parameters, Type[] paramTypes, StatementOrdering ordering)
     {
-        using (TraceScope($"ControlCodeDomSerializer::SerializeMethodInvocation({methodName})"))
+        string? name = manager.GetName(control);
+
+        // Use IReflect to see if this method name exists on the control.
+        paramTypes = ToTargetTypes(control, paramTypes);
+        MethodInfo? mi = TypeDescriptor.GetReflectionType(control).GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance, binder: null, paramTypes, modifiers: null);
+
+        if (mi is not null)
         {
-            string? name = manager.GetName(control);
-            Trace(TraceLevel.Verbose, $"{name}.{methodName}");
-
-            // Use IReflect to see if this method name exists on the control.
-            paramTypes = ToTargetTypes(control, paramTypes);
-            MethodInfo? mi = TypeDescriptor.GetReflectionType(control).GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance, binder: null, paramTypes, modifiers: null);
-
-            if (mi is not null)
+            CodeExpression? field = SerializeToExpression(manager, control);
+            CodeMethodReferenceExpression method = new(field, methodName);
+            CodeMethodInvokeExpression methodInvoke = new()
             {
-                CodeExpression? field = SerializeToExpression(manager, control);
-                CodeMethodReferenceExpression method = new(field, methodName);
-                CodeMethodInvokeExpression methodInvoke = new()
-                {
-                    Method = method
-                };
+                Method = method
+            };
 
-                if (parameters is not null)
-                {
-                    methodInvoke.Parameters.AddRange(parameters);
-                }
-
-                CodeExpressionStatement statement = new(methodInvoke);
-
-                switch (ordering)
-                {
-                    case StatementOrdering.Prepend:
-                        statement.UserData["statement-ordering"] = "begin";
-                        break;
-                    case StatementOrdering.Append:
-                        statement.UserData["statement-ordering"] = "end";
-                        break;
-                    default:
-                        Debug.Fail($"Unsupported statement ordering: {ordering}");
-                        break;
-                }
-
-                statements.Add(statement);
+            if (parameters is not null)
+            {
+                methodInvoke.Parameters.AddRange(parameters);
             }
+
+            CodeExpressionStatement statement = new(methodInvoke);
+
+            switch (ordering)
+            {
+                case StatementOrdering.Prepend:
+                    statement.UserData["statement-ordering"] = "begin";
+                    break;
+                case StatementOrdering.Append:
+                    statement.UserData["statement-ordering"] = "end";
+                    break;
+                default:
+                    Debug.Fail($"Unsupported statement ordering: {ordering}");
+                    break;
+            }
+
+            statements.Add(statement);
         }
     }
 
@@ -403,43 +399,40 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
     /// </summary>
     private void SerializeZOrder(IDesignerSerializationManager manager, CodeStatementCollection statements, Control control)
     {
-        using (TraceScope("ControlCodeDomSerializer::SerializeZOrder()"))
+        // Push statements in reverse order so the first guy in the
+        // collection is the last one to be brought to the front.
+        for (int i = control.Controls.Count - 1; i >= 0; i--)
         {
-            // Push statements in reverse order so the first guy in the
-            // collection is the last one to be brought to the front.
-            for (int i = control.Controls.Count - 1; i >= 0; i--)
+            // Only serialize this control if it is (a) sited and
+            // (b) not being privately inherited
+            Control child = control.Controls[i];
+
+            if (child.Site is null || child.Site.Container != control.Site!.Container)
             {
-                // Only serialize this control if it is (a) sited and
-                // (b) not being privately inherited
-                Control child = control.Controls[i];
-
-                if (child.Site is null || child.Site.Container != control.Site!.Container)
-                {
-                    continue;
-                }
-
-                InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(child)[typeof(InheritanceAttribute)]!;
-
-                if (inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
-                {
-                    continue;
-                }
-
-                // Create the "control.Controls.SetChildIndex" call
-                CodeExpression controlsCollection = new CodePropertyReferenceExpression(SerializeToExpression(manager, control), "Controls");
-                CodeMethodReferenceExpression method = new(controlsCollection, "SetChildIndex");
-                CodeMethodInvokeExpression methodInvoke = new()
-                {
-                    Method = method
-                };
-
-                // Fill in parameters
-                CodeExpression? childControl = SerializeToExpression(manager, child);
-                methodInvoke.Parameters.Add(childControl);
-                methodInvoke.Parameters.Add(SerializeToExpression(manager, 0));
-                CodeExpressionStatement statement = new(methodInvoke);
-                statements.Add(statement);
+                continue;
             }
+
+            InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(child)[typeof(InheritanceAttribute)]!;
+
+            if (inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+            {
+                continue;
+            }
+
+            // Create the "control.Controls.SetChildIndex" call
+            CodeExpression controlsCollection = new CodePropertyReferenceExpression(SerializeToExpression(manager, control), "Controls");
+            CodeMethodReferenceExpression method = new(controlsCollection, "SetChildIndex");
+            CodeMethodInvokeExpression methodInvoke = new()
+            {
+                Method = method
+            };
+
+            // Fill in parameters
+            CodeExpression? childControl = SerializeToExpression(manager, child);
+            methodInvoke.Parameters.Add(childControl);
+            methodInvoke.Parameters.Add(SerializeToExpression(manager, 0));
+            CodeExpressionStatement statement = new(methodInvoke);
+            statements.Add(statement);
         }
     }
 }

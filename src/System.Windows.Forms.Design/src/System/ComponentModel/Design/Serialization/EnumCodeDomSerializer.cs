@@ -24,71 +24,62 @@ internal class EnumCodeDomSerializer : CodeDomSerializer
     {
         CodeExpression? expression = null;
 
-        using (TraceScope($"EnumCodeDomSerializer::{nameof(Serialize)}"))
+        if (value is not Enum enumValue)
         {
-            Trace(TraceLevel.Verbose, $"Type: {(value is null ? "(null)" : value.GetType().Name)}");
-            if (value is not Enum enumValue)
+            Debug.Fail("Enum serializer called for non-enum object.");
+            return null!;
+        }
+
+        bool needCast = false;
+        Enum[] values;
+        TypeConverter? converter = TypeDescriptor.GetConverter(enumValue);
+        if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
+        {
+            values = (Enum[])converter.ConvertTo(enumValue, typeof(Enum[]))!;
+            needCast = (values.Length > 1);
+        }
+        else
+        {
+            values = [enumValue];
+            needCast = true;
+        }
+
+        // EnumConverter (and anything that is overridden to support enums)
+        // should be providing us a conversion to Enum[] for flag styles.
+        // If it doesn't, we will emit a warning and just do a cast from the enum value.
+
+        CodeTypeReferenceExpression enumType = new(enumValue.GetType());
+
+        // If names is of length 1, then this is a simple field reference. Otherwise,
+        // it is an or-d combination of expressions.
+
+        // We now need to serialize the enum terms as fields. We new up an EnumConverter to do
+        // that. We cannot use the type's own converter since it might have a different string
+        // representation for its values. Hardcoding is okay in this case, since all we want is
+        // the enum's field name. Simply doing ToString() will not give us any validation.
+        TypeConverter enumConverter = new EnumConverter(enumValue.GetType());
+        foreach (Enum term in values)
+        {
+            string? termString = enumConverter?.ConvertToString(term);
+
+            if (!string.IsNullOrEmpty(termString))
             {
-                Debug.Fail("Enum serializer called for non-enum object.");
-                Trace(TraceLevel.Error, $"Enum serializer called for non-enum object {(value is null ? "(null)" : value.GetType().Name)}");
-                return null!;
-            }
-
-            bool needCast = false;
-            Enum[] values;
-            TypeConverter? converter = TypeDescriptor.GetConverter(enumValue);
-            if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
-            {
-                values = (Enum[])converter.ConvertTo(enumValue, typeof(Enum[]))!;
-                needCast = (values.Length > 1);
-            }
-            else
-            {
-                values = [enumValue];
-                needCast = true;
-            }
-
-            // EnumConverter (and anything that is overridden to support enums)
-            // should be providing us a conversion to Enum[] for flag styles.
-            // If it doesn't, we will emit a warning and just do a cast from the enum value.
-
-            CodeTypeReferenceExpression enumType = new(enumValue.GetType());
-
-            // If names is of length 1, then this is a simple field reference. Otherwise,
-            // it is an or-d combination of expressions.
-            //
-            TraceIf(TraceLevel.Verbose, values.Length == 1, "Single field entity.");
-            TraceIf(TraceLevel.Verbose, values.Length > 1, "Multi field entity.");
-
-            // We now need to serialize the enum terms as fields. We new up an EnumConverter to do
-            // that. We cannot use the type's own converter since it might have a different string
-            // representation for its values. Hardcoding is okay in this case, since all we want is
-            // the enum's field name. Simply doing ToString() will not give us any validation.
-            TypeConverter enumConverter = new EnumConverter(enumValue.GetType());
-            foreach (Enum term in values)
-            {
-                string? termString = enumConverter?.ConvertToString(term);
-
-                if (!string.IsNullOrEmpty(termString))
+                CodeExpression newExpression = new CodeFieldReferenceExpression(enumType, termString);
+                if (expression is null)
                 {
-                    CodeExpression newExpression = new CodeFieldReferenceExpression(enumType, termString);
-                    if (expression is null)
-                    {
-                        expression = newExpression;
-                    }
-                    else
-                    {
-                        expression = new CodeBinaryOperatorExpression(expression, CodeBinaryOperatorType.BitwiseOr, newExpression);
-                    }
+                    expression = newExpression;
+                }
+                else
+                {
+                    expression = new CodeBinaryOperatorExpression(expression, CodeBinaryOperatorType.BitwiseOr, newExpression);
                 }
             }
+        }
 
-            // If we had to combine multiple names, wrap the result in an appropriate cast.
-            //
-            if (expression is not null && needCast)
-            {
-                expression = new CodeCastExpression(enumValue.GetType(), expression);
-            }
+        // If we had to combine multiple names, wrap the result in an appropriate cast.
+        if (expression is not null && needCast)
+        {
+            expression = new CodeCastExpression(enumValue.GetType(), expression);
         }
 
         return expression!;

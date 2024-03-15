@@ -20,20 +20,12 @@ internal class PrimitiveCodeDomSerializer : CodeDomSerializer
     /// <summary>
     ///  Serializes the given object into a CodeDom object.
     /// </summary>
-    public override object Serialize(IDesignerSerializationManager manager, object? value)
+    public override object Serialize(IDesignerSerializationManager manager, object? value) => value switch
     {
-        using (TraceScope($"PrimitiveCodeDomSerializer::{nameof(Serialize)}"))
-        {
-            Trace(TraceLevel.Verbose, $"Value: {(value is null ? "(null)" : value.ToString())}");
-        }
-
-        return value switch
-        {
-            string { Length: > 200 } stringValue => SerializeToResourceExpression(manager, stringValue)!,
-            null or bool or char or int or float or double or string => new CodePrimitiveExpression(value),
-            // Generate a cast for all other types because we won't parse them properly otherwise
-            // because we won't know to convert them to the narrow form.
-            _ => new CodeCastExpression(new CodeTypeReference(value.GetType()), new CodePrimitiveExpression(value)),
-        };
-    }
+        string { Length: > 200 } stringValue => SerializeToResourceExpression(manager, stringValue)!,
+        null or bool or char or int or float or double or string => new CodePrimitiveExpression(value),
+        // Generate a cast for all other types because we won't parse them properly otherwise
+        // because we won't know to convert them to the narrow form.
+        _ => new CodeCastExpression(new CodeTypeReference(value.GetType()), new CodePrimitiveExpression(value)),
+    };
 }
