@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -11,12 +11,11 @@ internal static class Formatter
 {
     internal const string ComponentModelTrimIncompatibilityMessage = "ComponentModel APIs are trim incompatible.";
 
-    private static readonly Type stringType = typeof(string);
-    private static readonly Type booleanType = typeof(bool);
-    private static readonly Type checkStateType = typeof(CheckState);
-    private static readonly object parseMethodNotFound = new();
-    private static readonly object defaultDataSourceNullValue = DBNull.Value;
-
+    private static readonly Type s_stringType = typeof(string);
+    private static readonly Type s_booleanType = typeof(bool);
+    private static readonly Type s_checkStateType = typeof(CheckState);
+    private static readonly object s_parseMethodNotFound = new();
+    private static readonly object s_defaultDataSourceNullValue = DBNull.Value;
     /// <summary>
     ///  Converts a binary value into a format suitable for display to the end user.
     ///  Used when pushing a value from a back-end data source into a data-bound property on a control.
