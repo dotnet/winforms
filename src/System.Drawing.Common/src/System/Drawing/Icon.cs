@@ -17,10 +17,6 @@ namespace System.Drawing;
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     private static int s_bitDepth;
 
     // The PNG signature is specified at http://www.w3.org/TR/PNG/#5PNG-file-signature
@@ -260,23 +256,12 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
 
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
         if (!_handle.IsNull)
         {
-#if FINALIZATION_WATCH
-            Debug.WriteLineIf(!disposing, $"""
-                **********************
-                Disposed through finalization:
-                {allocationSite}
-                """);
-#endif
             DestroyHandle();
         }
+
+        GC.SuppressFinalize(this);
     }
 
     // Draws this image to a graphics object.  The drawing command originates on the graphics
@@ -402,7 +387,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         DrawIcon(hdc, Rectangle.Empty, copy, false);
     }
 
-    ~Icon() => Dispose(disposing: false);
+    ~Icon() => Dispose();
 
     public static Icon FromHandle(IntPtr handle)
     {
