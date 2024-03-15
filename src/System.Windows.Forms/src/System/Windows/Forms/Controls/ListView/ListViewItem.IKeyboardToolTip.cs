@@ -96,16 +96,12 @@ public partial class ListViewItem : IKeyboardToolTip
         Rectangle listviewBounds = _listView.AccessibilityObject.Bounds;
         Point point = new(listviewBounds.X + itemBounds.X, listviewBounds.Y + itemBounds.Y);
 
-        switch (_listView.View)
+        return _listView.View switch
         {
-            case View.Details:
-            case View.List:
-                return GetDetailsListRectangle(point, item, itemBounds);
-            case View.Tile:
-                return GetTileRectangle(point, item, itemBounds);
-            default:
-                return new Rectangle(point, new Size(itemBounds.Width, itemBounds.Height));
-        }
+            View.Details or View.List => GetDetailsListRectangle(point, item, itemBounds),
+            View.Tile => GetTileRectangle(point, item, itemBounds),
+            _ => new Rectangle(point, new Size(itemBounds.Width, itemBounds.Height)),
+        };
     }
 
     private static Rectangle GetDetailsListRectangle(Point point, ListViewItem item, Rectangle itemBounds)

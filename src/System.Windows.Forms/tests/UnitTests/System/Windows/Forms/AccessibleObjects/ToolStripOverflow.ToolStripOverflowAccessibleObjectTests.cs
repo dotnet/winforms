@@ -204,12 +204,12 @@ public class ToolStripOverflow_ToolStripOverflowAccessibleObjectTests
 
         for (int i = 0; i < itemCount; i++)
         {
-            toolStrip.Items.Add(CreateItem(i, ToolStripItemAlignment.Left));
+            toolStrip.Items.Add(CreateItem(ToolStripItemAlignment.Left));
         }
 
         return toolStrip;
 
-        ToolStripItem CreateItem(int index, ToolStripItemAlignment align)
+        ToolStripItem CreateItem(ToolStripItemAlignment align)
         {
             return new ToolStripButton
             {

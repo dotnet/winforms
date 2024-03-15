@@ -102,6 +102,6 @@ internal class GrabHandleGlyph : SelectionGlyphBase
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        DesignerUtils.DrawGrabHandle(pe.Graphics, bounds, _isPrimary, this);
+        DesignerUtils.DrawGrabHandle(pe.Graphics, bounds, _isPrimary);
     }
 }

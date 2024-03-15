@@ -212,3 +212,6 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Matches native naming", Scope = "member", Target = "~F:System.Windows.Forms.Control.WM_GETCONTROLTYPE")]
 
 [assembly: SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "CreatesAmbiguity", Scope = "member", Target = "~M:System.Windows.Forms.ListViewGroupConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext)~System.ComponentModel.TypeConverter.StandardValuesCollection")]
+
+[assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.Label.GetLeadingTextPaddingFromTextFormatFlags~System.Int32")]
+[assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.MdiClient.ShouldSerializeLocation~System.Boolean")]

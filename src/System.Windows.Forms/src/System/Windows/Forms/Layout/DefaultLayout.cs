@@ -366,7 +366,7 @@ internal partial class DefaultLayout : LayoutEngine
         return LocalAppContextSwitches.AnchorLayoutV2 && element is Control;
     }
 
-    private static void LayoutAnchoredControls(IArrangedElement container, bool updateAnchorInfoIfNeeded = false)
+    private static void LayoutAnchoredControls(IArrangedElement container)
     {
         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\tdisplayRect: {container.DisplayRectangle}");

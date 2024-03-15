@@ -586,7 +586,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         int hitTest = hti.hitTest;
         if (hitTest != SelectionUIItem.CONTAINER_SELECTOR && hti.selectionUIHit is not null)
         {
-            OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
+            OnContainerSelectorActive(new ContainerSelectorActiveEventArgs());
         }
 
         if (_lastMoveScreenCoord == screenCoord)
@@ -712,7 +712,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
 
                 if (me.Button == MouseButtons.Right && oldContainerDrag is not null && !oldDragMoved)
                 {
-                    OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(oldContainerDrag, ContainerSelectorActiveEventArgsType.Contextmenu));
+                    OnContainerSelectorActive(new ContainerSelectorActiveEventArgs());
                 }
             }
         }
@@ -1157,28 +1157,23 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
     /// </summary>
-    Size ISelectionUIService.GetAdornmentDimensions(AdornmentType adornmentType)
+    Size ISelectionUIService.GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
-        switch (adornmentType)
-        {
-            case AdornmentType.GrabHandle:
-                return new Size(SelectionUIItem.GRABHANDLE_WIDTH, SelectionUIItem.GRABHANDLE_HEIGHT);
-            case AdornmentType.ContainerSelector:
-            case AdornmentType.Maximum:
-                return new Size(ContainerSelectionUIItem.CONTAINER_WIDTH, ContainerSelectionUIItem.CONTAINER_HEIGHT);
-        }
-
-        return new Size(0, 0);
-    }
+        AdornmentType.GrabHandle => new Size(SelectionUIItem.GRABHANDLE_WIDTH, SelectionUIItem.GRABHANDLE_HEIGHT),
+        AdornmentType.ContainerSelector or AdornmentType.Maximum => new Size(ContainerSelectionUIItem.CONTAINER_WIDTH, ContainerSelectionUIItem.CONTAINER_HEIGHT),
+        _ => new Size(0, 0),
+    };
 
     /// <summary>
-    ///  Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
+    ///  Tests to determine if the given screen coordinate is over an adornment for the specified component.
+    ///  This will only return true if the adornment, and selection UI, is visible.
     /// </summary>
-    bool ISelectionUIService.GetAdornmentHitTest(object component, Point value)
-        => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
+    bool ISelectionUIService.GetAdornmentHitTest(object component, Point value) =>
+        GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
 
     /// <summary>
-    ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
+    ///  Determines if the component is currently "container" selected. Container selection is a visual aid for
+    ///  selecting containers. It doesn't affect the normal "component" selection.
     /// </summary>
     bool ISelectionUIService.GetContainerSelected([NotNullWhen(true)] object? component)
         => (component is not null

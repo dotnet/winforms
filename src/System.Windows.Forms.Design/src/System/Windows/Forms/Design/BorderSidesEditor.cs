@@ -14,7 +14,6 @@ public partial class BorderSidesEditor : UITypeEditor
 {
     private BorderSidesEditorUI? _borderSidesEditorUI;
 
-    /// <inheritdoc />
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
@@ -22,7 +21,7 @@ public partial class BorderSidesEditor : UITypeEditor
             return value;
         }
 
-        _borderSidesEditorUI ??= new BorderSidesEditorUI(this);
+        _borderSidesEditorUI ??= new BorderSidesEditorUI();
 
         _borderSidesEditorUI.Start(editorService, value);
         editorService.DropDownControl(_borderSidesEditorUI);

@@ -55,7 +55,6 @@ public partial class ControlDesigner : ComponentDesigner
     private int _lastClickMessagePositionX;
     private int _lastClickMessagePositionY;
 
-    private Point _downPos = Point.Empty;               // point used to track first down of a double click
     private event EventHandler DisposingHandler;
     private CollectionChangeEventHandler _dataBindingsCollectionChanged;
     private Exception _thrownException;
@@ -71,7 +70,6 @@ public partial class ControlDesigner : ComponentDesigner
     private static bool s_inContextMenu;
 
     private DockingActionList _dockingAction;
-    private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
     private Dictionary<IntPtr, bool> _subclassedChildren;
 
     protected BehaviorService BehaviorService => _behaviorService ??= GetService<BehaviorService>();
@@ -163,13 +161,10 @@ public partial class ControlDesigner : ComponentDesigner
 
     private string Name
     {
-        get
-        {
-            return Component.Site.Name;
-        }
+        get => Component.Site.Name;
         set
         {
-            // don't do anything here during loading, if a refactor changed it we don't want to do anything
+            // Don't do anything here during loading, if a refactor changed it we don't want to do anything.
             if (GetService(typeof(IDesignerHost)) is not IDesignerHost host || (host is not null && !host.Loading))
             {
                 Component.Site.Name = value;
@@ -182,18 +177,8 @@ public partial class ControlDesigner : ComponentDesigner
     ///  the component being designed is a control, and if it is it returns its parent.  This property can return
     ///  null if there is no parent component.
     /// </summary>
-    protected override IComponent ParentComponent
-    {
-        get
-        {
-            if (Component is Control c && c.Parent is not null)
-            {
-                return c.Parent;
-            }
-
-            return base.ParentComponent;
-        }
-    }
+    protected override IComponent ParentComponent =>
+        Component is Control c && c.Parent is not null ? c.Parent : base.ParentComponent;
 
     /// <summary>
     ///  Determines whether or not the ControlDesigner will allow SnapLine alignment during a drag operation when
@@ -489,16 +474,14 @@ public partial class ControlDesigner : ComponentDesigner
 
             DesignerTarget?.Dispose();
 
-            _downPos = Point.Empty;
-
             if (HasComponent)
             {
-                Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
-                Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
-                Control.ParentChanged -= new EventHandler(OnParentChanged);
-                Control.SizeChanged -= new EventHandler(OnSizeChanged);
-                Control.LocationChanged -= new EventHandler(OnLocationChanged);
-                Control.EnabledChanged -= new EventHandler(OnEnabledChanged);
+                Control.ControlAdded -= OnControlAdded;
+                Control.ControlRemoved -= OnControlRemoved;
+                Control.ParentChanged -= OnParentChanged;
+                Control.SizeChanged -= OnSizeChanged;
+                Control.LocationChanged -= OnLocationChanged;
+                Control.EnabledChanged -= OnEnabledChanged;
             }
         }
 
@@ -1000,9 +983,6 @@ public partial class ControlDesigner : ComponentDesigner
 
         // And force some shadow properties that we change in the course of initializing the form.
         AllowDrop = Control.AllowDrop;
-
-        // update the Status Command
-        _statusCommandUI = new StatusCommandUI(component.Site);
     }
 
     // This is a workaround to some problems with the ComponentCache that we should fix. When this is removed

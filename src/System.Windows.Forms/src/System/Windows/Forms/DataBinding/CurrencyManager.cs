@@ -151,10 +151,10 @@ public partial class CurrencyManager : BindingManagerBase
         finalType = null;
 
         object? tempList = dataSource;
-        if (tempList is Array)
+        if (tempList is Array array)
         {
             finalType = tempList.GetType();
-            tempList = (Array)tempList;
+            tempList = array;
         }
 
         if (tempList is IListSource listSource)
@@ -552,7 +552,7 @@ public partial class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Find the position of a desired list item.
     /// </summary>
-    internal int Find(PropertyDescriptor? property, object key, bool keepIndex)
+    internal int Find(PropertyDescriptor? property, object key)
     {
         ArgumentNullException.ThrowIfNull(key);
 

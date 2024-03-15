@@ -375,10 +375,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// </summary>
     private FlowDirection FlowDirection
     {
-        get
-        {
-            return Control.FlowDirection;
-        }
+        get => Control.FlowDirection;
         set
         {
             if (value != Control.FlowDirection)

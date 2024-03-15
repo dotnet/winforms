@@ -116,7 +116,13 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextP
     internal static VARIANT BoundingRectangleAsVariant(Rectangle bounds)
         => (VARIANT)BoundingRectangleAsArray(bounds);
 
-    public static int SendInput(int inputs, ref INPUT input, int size) => (int)PInvoke.SendInput([input], size);
+    public static int SendInput(ref INPUT input)
+    {
+        fixed (INPUT* i = &input)
+        {
+            return (int)PInvoke.SendInput(1, i, sizeof(INPUT));
+        }
+    }
 
     public static unsafe int SendKeyboardInputVK(VIRTUAL_KEY vk, bool press)
     {
@@ -135,7 +141,7 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextP
         keyboardInput.Anonymous.ki.time = 0;
         keyboardInput.Anonymous.ki.dwExtraInfo = UIntPtr.Zero;
 
-        return SendInput(1, ref keyboardInput, sizeof(INPUT));
+        return SendInput(ref keyboardInput);
     }
 
     public abstract HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal);
