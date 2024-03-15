@@ -8,9 +8,9 @@ Windows Forms also provides one of the most productive ways to create desktop ap
 
 ## Windows Forms Out-Of-Process Designer
 
-For information about the WinForms Designer supporting the .NET runtime and the changes between the .NET Framework Designer (supporting .NET Framework up to version 4.8.1) vs. the .NET Designer (supporting .NET 6, 7, 8, 9+), please see [Windows Forms Designer Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/controls-design/designer-differences-framework?view=netdesktop-8.0) as an starting point.
+For information about the WinForms Designer supporting the .NET runtime and the changes between the .NET Framework Designer (supporting .NET Framework up to version 4.8.1) vs. the .NET Designer (supporting .NET 6, 7, 8, 9+), please see [Windows Forms Designer Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/controls-design/designer-differences-framework?view=netdesktop-8.0).
 
-**Important:** As a Third Party Control Vendor, when you migrated controls from .NET Framework to .NET, you're control libraries _at runtime_ are expected to work as before in the context of the respective new TFM (special modernization or security changes in the TFM kept aside, but those are rare breaking changes). Depending on the richness of your control's design-time support, the migration of control designers from .NET Framework to .NET might need to take a series of areas with breaking changes into account. The provided link points out additional resources which help in that migration process.
+**Important:** As a Third Party Control Vendor, when you migrate controls from .NET Framework to .NET, your control libraries _at runtime_ are expected to work as before in the context of the respective new TFM (special modernization or security changes in the TFM kept aside, but those are rare breaking changes). Depending on the richness of your control's design-time support, the migration of control designers from .NET Framework to .NET might need to take a series of areas with breaking changes into account. The provided link points out additional resources which help in that migration process.
 
 ## Relationship to .NET Framework
 
@@ -19,16 +19,16 @@ We started the migration process by targeting .NET Core 3.0, when we've strived 
 
 ## The bar for innovation and new features
 
-WinForms is a technology which was originally introduced as a part of .NET Framework 1.0 on February 13th, 2002. It's primary and foremost trait was and is to be a Rapid Application Tool for Windows based Apps, and that principle sentiment has not changed over the years. WinForms at the time addressed perfectly developer's request for
+WinForms is a technology which was originally introduced as a part of .NET Framework 1.0 on February 13th, 2002. It's primary focus was and is to be a Rapid Application Tool for Windows based Apps, and that principal sentiment has not changed over the years. WinForms at the time addressed developer's requests for
 
-* A Framework to carrie stable, monolithic Line of Business Apps, even with extremely complicated and complex domain-specific workflows
-* The ability to easy provide rich and accessibility-complient UIs according to the Zeitgeist at the time (realisticly from .NET Framework 2.0 on)
+* A framework for stable, monolithic Line of Business Apps, even with extremely complicated and complex domain-specific workflows
+* The ability to easily provide rich and accessibility-compliant UIs
 * A safe and - over the first 3 versions of .NET Framework - increasingly performant way to communicate accros process boundaries via .NET Remoting and later Windows Communication Services, or access on-site databases via ADO.NET providers.
-* A very easy to use, visual what-you-see-is-what-you-get-Designer, which requires next to none ramp-up time, and was primarily focused to support 96 DPI resolution-based, pixel-coordinated drag & drop design strategies.
-* An incredible flexibel, .NET reflection-based Designer extensibility model, utilizing the .NET Component Model to its extremes.
-* A special concept for visual Controls and Components, which provide their own design-time functionality through Control Designers
+* A very easy to use, visual what-you-see-is-what-you-get designer, which requires little ramp-up time, and was primarily focused to support 96 DPI resolution-based, pixel-coordinated drag & drop design strategies.
+* A flexible, .NET reflection-based Designer extensibility model, utilizing the .NET Component Model.
+* Visual Controls and Components, which provide their own design-time functionality through Control Designers
 
-Over time though, and with a growing need to address working scenarios with multi-monitor work places, monitors with way higher resolution, remoting technologies, which were no longer safe enough for Line-of-Business Apps in certain areas, a changing processor technology, which provided more processor cores rather than higher clock-frequencies, and much more, certain areas in WinForms needed to modernized. But that's just one aspect. 
+Over time, and with a growing need to address working scenarios with multi-monitor, high resolution monitors, significantly more powerful hardware, and much more, WinForms has continued to be modernized.
 
 The other one is Windows itself: When WinForms came out, it needed Windows 2000 as a reasonable choice for the operating system to run the Developer tools on. Keep in mind, even WinForms .NET Framework 2.0 was able to run under Windows 98! Internal Memory-Management at the time had to be completely different, than it is today. But not only that: From Windows 98/Windows 2000 there were Windows XP, Windows XP SP3 (which was actually a new OS), Windows Vista, Windows 7, Windows 8 until we arrived in the current Windows 10/11 era. The challenge with all that: WinForms is a wrapper around Windows' Win32-API, and that API lived extremely over the time. So, the Window's teams primary tasks was almost to make sure, that WinForms kepts running in the same quality and performance to not degrade the security, responsiveness and process-times of its existing apps.
 
