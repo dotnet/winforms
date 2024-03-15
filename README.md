@@ -23,14 +23,14 @@ WinForms is a technology which was originally introduced as a part of .NET Frame
 
 * A framework for stable, monolithic Line of Business Apps, even with extremely complicated and complex domain-specific workflows
 * The ability to easily provide rich and accessibility-compliant UIs
-* A safe and - over the first 3 versions of .NET Framework - increasingly performant way to communicate accros process boundaries via .NET Remoting and later Windows Communication Services, or access on-site databases via ADO.NET providers.
+* A safe and - over the first 3 versions of .NET Framework - increasingly performant way to communicate across process boundaries via various Windows Communication Services, or access on-site databases via ADO.NET providers.
 * A very easy to use, visual what-you-see-is-what-you-get designer, which requires little ramp-up time, and was primarily focused to support 96 DPI resolution-based, pixel-coordinated drag & drop design strategies.
 * A flexible, .NET reflection-based Designer extensibility model, utilizing the .NET Component Model.
 * Visual Controls and Components, which provide their own design-time functionality through Control Designers
 
 Over time, and with a growing need to address working scenarios with multi-monitor, high resolution monitors, significantly more powerful hardware, and much more, WinForms has continued to be modernized.
 
-The other one is Windows itself: When WinForms came out, it needed Windows 2000 as a reasonable choice for the operating system to run the Developer tools on. Keep in mind, even WinForms .NET Framework 2.0 was able to run under Windows 98! Internal Memory-Management at the time had to be completely different, than it is today. But not only that: From Windows 98/Windows 2000 there were Windows XP, Windows XP SP3 (which was actually a new OS), Windows Vista, Windows 7, Windows 8 until we arrived in the current Windows 10/11 era. The challenge with all that: WinForms is a wrapper around Windows' Win32-API, and that API lived extremely over the time. So, the Window's teams primary tasks was almost to make sure, that WinForms kepts running in the same quality and performance to not degrade the security, responsiveness and process-times of its existing apps.
+And then there is the evolution of Windows: When new versions of Windows introduce new or change existing APIs or technologies - WinForms needs to keep up and adjust their APIs accordingly.
 
 And exactly **that** is still the primary motivation for once to modernize and innovate, but also the bar to reach for potential innovation areas we either need or want to consider:
 
