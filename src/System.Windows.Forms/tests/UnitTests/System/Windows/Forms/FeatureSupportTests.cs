@@ -187,10 +187,12 @@ public class FeatureSupportTests
         public static object s_zeroVersionField = new();
         public static object s_nonZeroVersionField = new();
 
-#pragma warning disable CA1823 // Unused field
+#pragma warning disable CA1823  // Unused field
+#pragma warning disable IDE0052 // Remove unread private members
         private readonly object _privateField = new();
         private static readonly object s_privateField = new();
-#pragma warning restore CA1823 // Unused field
+#pragma warning restore CA1823
+#pragma warning restore IDE0052
     }
 
     private class NonIFeatureSupportClass

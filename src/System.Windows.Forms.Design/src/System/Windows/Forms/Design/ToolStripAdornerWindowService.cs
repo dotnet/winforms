@@ -14,7 +14,6 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal sealed class ToolStripAdornerWindowService : IDisposable
 {
-    private readonly IServiceProvider _serviceProvider; // standard service provider
     private readonly ToolStripAdornerWindow _toolStripAdornerWindow; // the transparent window all glyphs are drawn to
     private BehaviorService _behaviorService;
     private Adorner _dropDownAdorner;
@@ -26,13 +25,12 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     /// </summary>
     internal ToolStripAdornerWindowService(IServiceProvider serviceProvider, Control windowFrame)
     {
-        _serviceProvider = serviceProvider;
-        // create the AdornerWindow
+        // Create the AdornerWindow
         _toolStripAdornerWindow = new ToolStripAdornerWindow(windowFrame);
         _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
         int indexToInsert = _behaviorService.AdornerWindowIndex;
 
-        // use the adornerWindow as an overlay
+        // Use the adornerWindow as an overlay
         _overlayService = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
         _overlayService?.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
 

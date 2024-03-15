@@ -240,7 +240,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used for drawing the grab handles around sizeable selected controls and components.
     /// </summary>
-    public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
@@ -255,7 +255,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used for drawing the no-resize handle for non-resizeable selected controls and components.
     /// </summary>
-    public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
@@ -270,7 +270,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used for drawing the lock handle for locked selected controls and components.
     /// </summary>
-    public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 

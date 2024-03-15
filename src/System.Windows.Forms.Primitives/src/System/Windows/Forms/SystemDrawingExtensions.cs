@@ -91,7 +91,7 @@ internal static class SystemDrawingExtensions
     ///  Creates a <see cref="Pen"/>. If <paramref name="color"/> is a system color, makes a static copy of the
     ///  current color value to avoid having the pen hook itself against <see cref="SystemEvents"/>.
     /// </summary>
-    internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle, float size = 1.0f)
+    internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle)
     {
         if (dashStyle == DashStyle.Solid)
         {

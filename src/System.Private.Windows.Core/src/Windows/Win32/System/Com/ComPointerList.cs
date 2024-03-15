@@ -29,10 +29,7 @@ internal unsafe class ComPointerList<T> where T : unmanaged, IComIID
 
     public bool Remove(T* item)
     {
-        if (item is null)
-            throw new ArgumentNullException(nameof(item));
-
-        return _pointers.Remove((nint)item);
+        return item is null ? throw new ArgumentNullException(nameof(item)) : _pointers.Remove((nint)item);
     }
 
     public void RemoveAt(int index) => _pointers.RemoveAt(index);

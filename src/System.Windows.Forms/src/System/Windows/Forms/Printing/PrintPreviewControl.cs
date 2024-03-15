@@ -345,7 +345,7 @@ public partial class PrintPreviewControl : Control
         Color backColor = GetBackColor(isHighContrast);
         using var backBrush = backColor.GetCachedSolidBrushScope();
 
-        PaintResizeBox(pevent, isHighContrast);
+        PaintResizeBox(pevent);
         PaintFocus(pevent, isHighContrast);
 
         if (_pageInfo is null || _pageInfo.Length == 0)
@@ -356,7 +356,7 @@ public partial class PrintPreviewControl : Control
 
             if (_pageInfo is not null || _exceptionPrinting)
             {
-                DrawMessage(pevent.Graphics, rect, _exceptionPrinting, isHighContrast);
+                DrawMessage(pevent.Graphics, rect, _exceptionPrinting);
             }
             else
             {
@@ -590,7 +590,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting, bool isHighContrast)
+    private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
         using var brush = ForeColor.GetCachedSolidBrushScope();
 
@@ -696,7 +696,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private void PaintResizeBox(PaintEventArgs e, bool isHighContrast)
+    private void PaintResizeBox(PaintEventArgs e)
     {
         if (!_hScrollBar.Visible || !_vScrollBar.Visible)
         {

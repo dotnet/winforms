@@ -28,8 +28,8 @@ public class SkipOnArchitectureDiscoverer : ITraitDiscoverer
             testArchitectures = architectures;
         }
 
-        if ((testArchitectures.HasFlag(TestArchitectures.X86) && RuntimeInformation.ProcessArchitecture == Architecture.X86) ||
-            (testArchitectures.HasFlag(TestArchitectures.X64) && RuntimeInformation.ProcessArchitecture == Architecture.X64))
+        if ((testArchitectures.HasFlag(TestArchitectures.X86) && RuntimeInformation.ProcessArchitecture == Architecture.X86)
+            || (testArchitectures.HasFlag(TestArchitectures.X64) && RuntimeInformation.ProcessArchitecture == Architecture.X64))
         {
             return new[] { new KeyValuePair<string, string>(XunitConstants.Category, XunitConstants.IgnoreForCI) };
         }

@@ -89,7 +89,7 @@ public abstract partial class UndoEngine
             /// <summary>
             ///  Commits the unit.  Committing the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
             /// </summary>
-            public void Commit(UndoEngine engine)
+            public void Commit()
             {
                 if (!Committed)
                 {

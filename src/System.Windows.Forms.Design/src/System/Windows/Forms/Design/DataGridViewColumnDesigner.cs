@@ -24,14 +24,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         get
         {
             DataGridViewColumn col = (DataGridViewColumn)Component;
-            if (col.Site is not null)
-            {
-                return col.Site.Name;
-            }
-            else
-            {
-                return col.Name;
-            }
+            return col.Site is not null ? col.Site.Name : col.Name;
         }
 
         set
@@ -121,14 +114,8 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     /// </devdoc>
     private bool UserAddedColumn
     {
-        get
-        {
-            return _userAddedColumn;
-        }
-        set
-        {
-            _userAddedColumn = value;
-        }
+        get => _userAddedColumn;
+        set => _userAddedColumn = value;
     }
 
     private int Width
