@@ -1626,7 +1626,9 @@ public partial class ToolStripDropDown : ToolStrip
 
             foreach (Control control in Controls)
             {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 control?.Scale(dx, dy);
+#pragma warning restore CS0618
             }
         }
         finally
