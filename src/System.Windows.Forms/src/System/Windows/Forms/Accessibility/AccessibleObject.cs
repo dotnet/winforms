@@ -652,51 +652,46 @@ public unsafe partial class AccessibleObject :
             // MSAA Proxy determines the availability of invoke pattern based
             // on Role/DefaultAction properties.
             // Below code emulates the same rules.
-            switch (Role)
+            return Role switch
             {
-                case AccessibleRole.MenuItem:
-                case AccessibleRole.Link:
-                case AccessibleRole.PushButton:
-                case AccessibleRole.ButtonDropDown:
-                case AccessibleRole.ButtonMenu:
-                case AccessibleRole.ButtonDropDownGrid:
-                case AccessibleRole.Clock:
-                case AccessibleRole.SplitButton:
-                case AccessibleRole.CheckButton:
-                case AccessibleRole.Cell:
-                case AccessibleRole.ListItem:
-                    return true;
-
-                case AccessibleRole.Default:
-                case AccessibleRole.None:
-                case AccessibleRole.Sound:
-                case AccessibleRole.Cursor:
-                case AccessibleRole.Caret:
-                case AccessibleRole.Alert:
-                case AccessibleRole.Client:
-                case AccessibleRole.Chart:
-                case AccessibleRole.Dialog:
-                case AccessibleRole.Border:
-                case AccessibleRole.Column:
-                case AccessibleRole.Row:
-                case AccessibleRole.HelpBalloon:
-                case AccessibleRole.Character:
-                case AccessibleRole.PageTab:
-                case AccessibleRole.PropertyPage:
-                case AccessibleRole.DropList:
-                case AccessibleRole.Dial:
-                case AccessibleRole.HotkeyField:
-                case AccessibleRole.Diagram:
-                case AccessibleRole.Animation:
-                case AccessibleRole.Equation:
-                case AccessibleRole.WhiteSpace:
-                case AccessibleRole.IpAddress:
-                case AccessibleRole.OutlineButton:
-                    return false;
-
-                default:
-                    return !string.IsNullOrEmpty(DefaultAction);
-            }
+                AccessibleRole.MenuItem
+                    or AccessibleRole.Link
+                    or AccessibleRole.PushButton
+                    or AccessibleRole.ButtonDropDown
+                    or AccessibleRole.ButtonMenu
+                    or AccessibleRole.ButtonDropDownGrid
+                    or AccessibleRole.Clock
+                    or AccessibleRole.SplitButton
+                    or AccessibleRole.CheckButton
+                    or AccessibleRole.Cell
+                    or AccessibleRole.ListItem => true,
+                AccessibleRole.Default
+                    or AccessibleRole.None
+                    or AccessibleRole.Sound
+                    or AccessibleRole.Cursor
+                    or AccessibleRole.Caret
+                    or AccessibleRole.Alert
+                    or AccessibleRole.Client
+                    or AccessibleRole.Chart
+                    or AccessibleRole.Dialog
+                    or AccessibleRole.Border
+                    or AccessibleRole.Column
+                    or AccessibleRole.Row
+                    or AccessibleRole.HelpBalloon
+                    or AccessibleRole.Character
+                    or AccessibleRole.PageTab
+                    or AccessibleRole.PropertyPage
+                    or AccessibleRole.DropList
+                    or AccessibleRole.Dial
+                    or AccessibleRole.HotkeyField
+                    or AccessibleRole.Diagram
+                    or AccessibleRole.Animation
+                    or AccessibleRole.Equation
+                    or AccessibleRole.WhiteSpace
+                    or AccessibleRole.IpAddress
+                    or AccessibleRole.OutlineButton => false,
+                _ => !string.IsNullOrEmpty(DefaultAction),
+            };
         }
     }
 

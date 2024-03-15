@@ -1,4 +1,4 @@
-﻿﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -742,7 +742,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // child modal dialog -launching in System Aware mode
         DataGridViewColumnCollectionDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
-            () => new DataGridViewColumnCollectionDialog(Control.Site));
+            () => new DataGridViewColumnCollectionDialog());
         dialog.SetLiveDataGridView(Control);
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;

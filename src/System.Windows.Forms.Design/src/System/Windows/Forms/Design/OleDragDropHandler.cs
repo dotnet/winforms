@@ -315,10 +315,12 @@ internal partial class OleDragDropHandler
         }
     }
 
-    private Point DrawDragFrames(object[]? comps,
-                                 Point oldOffset, DragDropEffects oldEffect,
-                                 Point newOffset, DragDropEffects newEffect,
-                                 bool drawAtNewOffset)
+    private Point DrawDragFrames(
+        object[]? comps,
+        Point oldOffset,
+        DragDropEffects oldEffect,
+        Point newOffset,
+        bool drawAtNewOffset)
     {
         Control parentControl = Destination.GetDesignerControl();
 
@@ -486,7 +488,7 @@ internal partial class OleDragDropHandler
         // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)PInvoke.WM_PAINT, (uint)PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvoke.PeekMessage(&msg, HWND.Null, PInvoke.WM_PAINT, PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);
@@ -565,8 +567,7 @@ internal partial class OleDragDropHandler
 
         if (!_localDragOffset.IsEmpty && effect != DragDropEffects.None)
         {
-            DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
-                           Point.Empty, DragDropEffects.None, false);
+            DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect, Point.Empty, drawAtNewOffset: false);
         }
 
         _localDragOffset = Point.Empty;
@@ -574,43 +575,10 @@ internal partial class OleDragDropHandler
         Dragging = _localDragInside = false;
         _dragBase = Point.Empty;
 
-        /*if (!isLocalMove && isMove){
-            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            IUndoService  undoService = (IUndoService)GetService(typeof(IUndoService));
-            IActionUnit unit = null;
-
-            if (host != null) {
-                DesignerTransaction trans = host.CreateTransaction("Drag/drop");
-                try{
-                    // delete the components
-                    try{
-                        for (int i = 0; i < components.Length; i++){
-                           if (components[i] is IComponent){
-                              if (undoService != null){
-                                  unit = new CreateControlActionUnit(host, (IComponent)components[i], true);
-                              }
-                              host.DestroyComponent((IComponent)components[i]);
-                              if (undoService != null){
-                                   undoService.AddAction(unit, false);
-                              }
-                           }
-                        }
-                    }catch(CheckoutException ex){
-                        if (ex != CheckoutException.Canceled){
-                            throw ex;
-                        }
-                    }
-                }
-                finally{
-                    trans.Commit();
-                }
-            }
-        }*/
-
         return false;
     }
 
-    public void DoEndDrag(object[] components, bool cancel)
+    public void DoEndDrag()
     {
         _dragComps = null;
         Dragging = false;
@@ -676,9 +644,14 @@ internal partial class OleDragDropHandler
 
         if (_forceDrawFrames || _localDragInside)
         {
-            // undraw the drag rect
-            _localDragOffset = DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
-                                             Point.Empty, DragDropEffects.None, _forceDrawFrames);
+            // Undraw the drag rect
+            _localDragOffset = DrawDragFrames(
+                _dragComps,
+                _localDragOffset,
+                _localDragEffect,
+                Point.Empty,
+                _forceDrawFrames);
+
             _forceDrawFrames = false;
         }
 
@@ -951,8 +924,12 @@ internal partial class OleDragDropHandler
         if (Dragging || _forceDrawFrames)
         {
             _localDragInside = false;
-            _localDragOffset = DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
-                                             Point.Empty, DragDropEffects.None, _forceDrawFrames);
+            _localDragOffset = DrawDragFrames(
+                _dragComps,
+                _localDragOffset,
+                _localDragEffect,
+                Point.Empty,
+                _forceDrawFrames);
 
             if (_forceDrawFrames && _dragOk)
             {
@@ -1011,8 +988,7 @@ internal partial class OleDragDropHandler
             if (newOffset != _localDragOffset)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
-                DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
-                               newOffset, de.Effect, _forceDrawFrames);
+                DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect, newOffset, _forceDrawFrames);
                 _localDragOffset = newOffset;
                 _localDragEffect = de.Effect;
             }

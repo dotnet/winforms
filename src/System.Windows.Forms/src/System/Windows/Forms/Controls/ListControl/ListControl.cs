@@ -368,7 +368,7 @@ public abstract class ListControl : Control
 
                 PropertyDescriptorCollection props = _dataManager.GetItemProperties();
                 PropertyDescriptor? property = props.Find(propertyName, true);
-                int index = _dataManager.Find(property, value, true);
+                int index = _dataManager.Find(property, value);
                 SelectedIndex = index;
             }
         }

@@ -94,25 +94,20 @@ public partial class ListBox
 
         internal override IRawElementProviderFragment.Interface? GetFocus() => this.IsOwnerHandleCreated(out ListBox? _) ? GetFocused() : null;
 
-        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
-            switch (propertyID)
-            {
-                case UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId:
-                    return UiaTextProvider.BoundingRectangleAsVariant(BoundingRectangle);
-                case UIA_PROPERTY_ID.UIA_ControlTypePropertyId:
-                    // If we don't set a default role for the accessible object
-                    // it will be retrieved from Windows.
-                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    return this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                           ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId
-                           : base.GetPropertyValue(propertyID);
-                case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId:
-                    return this.TryGetOwnerAs(out ListBox? owner) ? (VARIANT)(GetChildCount() == 0 && owner.Focused) : base.GetPropertyValue(propertyID);
-                default:
-                    return base.GetPropertyValue(propertyID);
-            }
-        }
+            UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId => UiaTextProvider.BoundingRectangleAsVariant(BoundingRectangle),
+
+            // If we don't set a default role for the accessible object it will be retrieved from Windows.
+            // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => this.GetOwnerAccessibleRole() == AccessibleRole.Default
+                ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId
+                : base.GetPropertyValue(propertyID),
+            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ListBox? owner)
+                ? (VARIANT)(GetChildCount() == 0 && owner.Focused)
+                : base.GetPropertyValue(propertyID),
+            _ => base.GetPropertyValue(propertyID),
+        };
 
         internal override IRawElementProviderSimple.Interface[] GetSelection()
         {

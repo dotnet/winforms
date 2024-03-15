@@ -88,7 +88,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             }
 
             _colorDepth = value;
-            PerformRecreateHandle(nameof(ColorDepth));
+            PerformRecreateHandle();
         }
     }
 
@@ -166,7 +166,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             if (_imageSize.Width != value.Width || _imageSize.Height != value.Height)
             {
                 _imageSize = new Size(value.Width, value.Height);
-                PerformRecreateHandle(nameof(ImageSize));
+                PerformRecreateHandle();
             }
         }
     }
@@ -733,7 +733,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
     // Thus, if you add a new Property to ImageList which ends up calling
     // PerformRecreateHandle, you must shadow the property in ImageListDesigner.
-    private void PerformRecreateHandle(string reason)
+    private void PerformRecreateHandle()
     {
         if (!HandleCreated)
         {

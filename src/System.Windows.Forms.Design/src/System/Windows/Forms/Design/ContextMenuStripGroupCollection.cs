@@ -17,7 +17,7 @@ internal class ContextMenuStripGroupCollection : DictionaryBase
         {
             if (!InnerHashtable.ContainsKey(key))
             {
-                InnerHashtable[key] = new ContextMenuStripGroup(key);
+                InnerHashtable[key] = new ContextMenuStripGroup();
             }
 
             return (ContextMenuStripGroup)InnerHashtable[key]!;

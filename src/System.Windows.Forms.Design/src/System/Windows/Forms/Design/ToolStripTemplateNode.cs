@@ -104,7 +104,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     // delay population of custom menu items until ready to open the drop down
     private bool _isPopulated;
 
-    public ToolStripTemplateNode(IComponent component, string text, Image image)
+    public ToolStripTemplateNode(IComponent component, string text)
     {
         _component = component;
 
@@ -134,7 +134,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             s_isScalingInitialized = true;
         }
 
-        SetupNewEditNode(this, text, image, component);
+        SetupNewEditNode(this, text, component);
         _commands = [];
         _addCommands = [];
     }
@@ -1318,7 +1318,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     /// <summary>
     ///  This function sets up the MenuStrip specific TemplateNode.
     /// </summary>
-    private void SetUpMenuTemplateNode(ToolStripTemplateNode owner, string text, Image image, IComponent currentItem)
+    private void SetUpMenuTemplateNode(string text, IComponent currentItem)
     {
         _centerLabel = new ToolStripLabel
         {
@@ -1350,7 +1350,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     /// <summary>
     ///  This function sets up TemplateNode for ToolStrip, StatusStrip, ContextMenuStrip.
     /// </summary>
-    private void SetUpToolTemplateNode(ToolStripTemplateNode owner, string text, Image image, IComponent component)
+    private void SetUpToolTemplateNode(IComponent component)
     {
         _addItemButton = new ToolStripSplitButton
         {
@@ -1412,7 +1412,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     /// <summary>
     ///  This method does actual edit node creation.
     /// </summary>
-    private void SetupNewEditNode(ToolStripTemplateNode owner, string text, Image image, IComponent currentItem)
+    private void SetupNewEditNode(ToolStripTemplateNode owner, string text, IComponent currentItem)
     {
         // setup the MINIToolStrip host...
         _renderer = new MiniToolStripRenderer(owner);
@@ -1444,13 +1444,13 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         // Add items to the Template ToolStrip depending upon the Parent Type...
         if (currentItem is MenuStrip or ToolStripDropDownItem)
         {
-            SetUpMenuTemplateNode(owner, text, image, currentItem);
+            SetUpMenuTemplateNode(text, currentItem);
             _miniToolStrip.AccessibleRole = AccessibleRole.ComboBox;
             _miniToolStrip.Text = text;
         }
         else
         {
-            SetUpToolTemplateNode(owner, text, image, currentItem);
+            SetUpToolTemplateNode(currentItem);
             _miniToolStrip.AccessibleRole = AccessibleRole.ButtonDropDown;
         }
 
@@ -1598,8 +1598,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         /// </summary>
         private void CommitAndSelectNext(bool forward)
         {
-            _owner.Commit(false, true);
-            _owner.KeyboardService?.ProcessKeySelect(!forward, null);
+            _owner.Commit(enterKeyPressed: false, tabKeyPressed: true);
+            _owner.KeyboardService?.ProcessKeySelect(reverse: !forward);
         }
 
         /// <summary>

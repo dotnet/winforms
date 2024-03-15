@@ -44,6 +44,6 @@ internal class NoResizeHandleGlyph : SelectionGlyphBase
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary, this);
+        DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary);
     }
 }

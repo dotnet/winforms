@@ -160,7 +160,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     private static GpImage* LoadGdipImageFromStream(Stream stream, bool useEmbeddedColorManagement)
     {
         using var iStream = stream.ToIStream(makeSeekable: true);
-        return LoadGdipImageFromStream(iStream, useEmbeddedColorManagement: false);
+        return LoadGdipImageFromStream(iStream, useEmbeddedColorManagement);
     }
 
     private static unsafe GpImage* LoadGdipImageFromStream(IStream* stream, bool useEmbeddedColorManagement)

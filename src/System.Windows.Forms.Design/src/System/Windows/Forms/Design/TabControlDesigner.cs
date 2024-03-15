@@ -49,10 +49,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
     private int SelectedIndex
     {
-        get
-        {
-            return _persistedSelectedIndex;
-        }
+        get => _persistedSelectedIndex;
         set
         {
             // TabBase.SelectedIndex has no validation logic, so neither do we

@@ -395,23 +395,13 @@ public class BitmapTests
 
     public string RotateIndexedBmp(Bitmap src, RotateFlipType type)
     {
-        int pixels_per_byte;
-
-        switch (src.PixelFormat)
+        int pixels_per_byte = src.PixelFormat switch
         {
-            case PixelFormat.Format1bppIndexed:
-                pixels_per_byte = 8;
-                break;
-            case PixelFormat.Format4bppIndexed:
-                pixels_per_byte = 2;
-                break;
-            case PixelFormat.Format8bppIndexed:
-                pixels_per_byte = 1;
-                break;
-
-            default:
-                throw new Exception($"Cannot pass a bitmap of format {src.PixelFormat} to RotateIndexedBmp");
-        }
+            PixelFormat.Format1bppIndexed => 8,
+            PixelFormat.Format4bppIndexed => 2,
+            PixelFormat.Format8bppIndexed => 1,
+            _ => throw new Exception($"Cannot pass a bitmap of format {src.PixelFormat} to RotateIndexedBmp"),
+        };
 
         using Bitmap test = src.Clone() as Bitmap;
         test.RotateFlip(type);
@@ -1189,8 +1179,9 @@ public class BitmapTests
 
     private void HiconTest(string msg, Bitmap b, int size)
     {
-        Assert.Equal(PixelFormat.Format32bppArgb, b.PixelFormat);
-        // unlike the GDI+ icon decoder the palette isn't kept
+        b.PixelFormat.Should().Be(PixelFormat.Format32bppArgb, msg);
+
+        // Unlike the GDI+ icon decoder the palette isn't kept
         Assert.Equal(0, b.Palette.Entries.Length);
         Assert.Equal(size, b.Height);
         Assert.Equal(size, b.Width);

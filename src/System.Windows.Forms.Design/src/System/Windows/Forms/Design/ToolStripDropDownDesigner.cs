@@ -25,7 +25,6 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     private bool _selected;
     private ControlBodyGlyph _dummyToolStripGlyph;
     private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
-    private FormDocumentDesigner _parentFormDesigner;
     internal ToolStripMenuItem _currentParent;
     private INestedContainer _nestedContainer; // NestedContainer for our DesignTime MenuItem.
     private UndoEngine _undoEngine;
@@ -576,7 +575,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripDropDown AutoClose to be the default padding
+    ///  Resets the ToolStripDropDown AutoClose to be the default padding
     /// </summary>
     private void ResetAutoClose()
     {
@@ -584,7 +583,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
+    ///  Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
     /// </summary>
     private void RestoreAutoClose()
     {
@@ -592,7 +591,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripDropDown AllowDrop to be the default padding
+    ///  Resets the ToolStripDropDown AllowDrop to be the default padding
     /// </summary>
     private void ResetAllowDrop()
     {
@@ -632,7 +631,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown
+    ///  item through the PG or Document outline. The input toolstrip item will be selected.
     /// </summary>
     public void ShowMenu(ToolStripItem selectedItem)
     {
@@ -642,10 +642,6 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         }
 
         Control parent = _designMenu.Parent;
-        if (parent is Form parentForm)
-        {
-            _parentFormDesigner = _host.GetDesigner(parentForm) as FormDocumentDesigner;
-        }
 
         _selected = true;
         _designMenu.Visible = true;
@@ -696,7 +692,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 Point loc = behaviorService.ControlToAdornerWindow(_designMenu);
                 Rectangle r = _designMenu.Bounds;
                 r.Offset(loc);
-                _dummyToolStripGlyph = new ControlBodyGlyph(r, Cursor.Current, _menuItem, new ContextMenuStripBehavior(_menuItem));
+                _dummyToolStripGlyph = new ControlBodyGlyph(r, Cursor.Current, _menuItem, new ContextMenuStripBehavior());
                 GetService<SelectionManager>()?.BodyGlyphAdorner.Glyphs.Insert(0, _dummyToolStripGlyph);
             }
 
@@ -708,7 +704,9 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     // Should the designer serialize the settings?
-    private bool ShouldSerializeSettingsKey() => (Component is IPersistComponentSettings persistableComponent && persistableComponent.SaveSettings && SettingsKey is not null);
+    private bool ShouldSerializeSettingsKey() => Component is IPersistComponentSettings persistableComponent
+        && persistableComponent.SaveSettings
+        && SettingsKey is not null;
 
     /// <summary>
     /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
@@ -738,24 +736,15 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
+    ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph.
+    ///  This will just eat the MouseUps.
     /// </summary>
     internal class ContextMenuStripBehavior : Behavior.Behavior
     {
-        private readonly ToolStripMenuItem _item;
-        internal ContextMenuStripBehavior(ToolStripMenuItem menuItem)
+        internal ContextMenuStripBehavior()
         {
-            _item = menuItem;
         }
 
-        public override bool OnMouseUp(Glyph g, MouseButtons button)
-        {
-            if (button == MouseButtons.Left)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public override bool OnMouseUp(Glyph g, MouseButtons button) => button == MouseButtons.Left;
     }
 }

@@ -16,7 +16,6 @@ internal sealed partial class DragAssistanceManager
     private readonly BehaviorService _behaviorService;
     private readonly IServiceProvider _serviceProvider;
     private readonly Graphics _graphics; // graphics to the adornerwindow
-    private readonly IntPtr _rootComponentHandle; // used for mapping window points of nested controls
     private Point _dragOffset; // the offset from the new drag pos compared to the last
     private Rectangle _cachedDragRect; // used to store drag rect between erasing & waiting to render
     private readonly Pen _edgePen = SystemPens.Highlight;
@@ -156,7 +155,6 @@ internal sealed partial class DragAssistanceManager
         }
 
         _backgroundImage = backgroundImage;
-        _rootComponentHandle = host.RootComponent is Control control ? control.Handle : IntPtr.Zero;
         _resizing = resizing;
         _ctrlDrag = ctrlDrag;
         Initialize(dragComponents, host);

@@ -13,25 +13,14 @@ internal static class ArgumentValidation
         return argument;
     }
 
-    internal static T OrThrowIfNullWithMessage<T>([NotNull] this T? argument, string message, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-    {
-        if (argument is null)
-        {
-            throw new ArgumentNullException(paramName, message);
-        }
+    internal static T OrThrowIfNullWithMessage<T>(
+        [NotNull] this T? argument,
+        string message,
+        [CallerArgumentExpression(nameof(argument))] string? paramName = null) =>
+        argument is null ? throw new ArgumentNullException(paramName, message) : argument;
 
-        return argument;
-    }
-
-    internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-    {
-        if (argument == IntPtr.Zero)
-        {
-            throw new ArgumentNullException(paramName);
-        }
-
-        return argument;
-    }
+    internal static nint OrThrowIfZero(this nint argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null) =>
+        argument == 0 ? throw new ArgumentNullException(paramName) : argument;
 
     internal static string OrThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {

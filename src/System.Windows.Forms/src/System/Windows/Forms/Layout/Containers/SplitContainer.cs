@@ -52,7 +52,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     // Properties used using drawing a moving splitter
     private int _lastDrawSplit = 1;
     private int _initialSplitterDistance;
-    private Rectangle _initialSplitterRectangle;
     private Point _anchor = Point.Empty;
     private bool _splitBegin;
     private bool _splitMove;
@@ -2091,7 +2090,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         _anchor = new Point(x, y);
         _splitterDistance = GetSplitterDistance(x, y);
         _initialSplitterDistance = _splitterDistance;
-        _initialSplitterRectangle = SplitterRectangle;
 
         _splitContainerMessageFilter ??= new SplitContainerMessageFilter(this);
 
