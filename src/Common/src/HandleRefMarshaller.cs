@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Runtime.InteropServices.Marshalling;
@@ -15,10 +15,10 @@ internal static class HandleRefMarshaller
             _handle = handle;
         }
 
-        public IntPtr ToUnmanaged() => _handle.Handle;
+        public readonly IntPtr ToUnmanaged() => _handle.Handle;
 
-        public void OnInvoked() => GC.KeepAlive(_handle.Wrapper);
+        public readonly void OnInvoked() => GC.KeepAlive(_handle.Wrapper);
 
-        public void Free() { }
+        public readonly void Free() { }
     }
 }

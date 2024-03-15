@@ -28,5 +28,5 @@ internal struct EMRENUMRECORD<T> where T : Enum
     public EMR emr;
     public T iMode;
 
-    public override string ToString() => $"[EMR{emr.iType}] Mode: {typeof(T).Name}_{iMode}";
+    public override readonly string ToString() => $"[EMR{emr.iType}] Mode: {typeof(T).Name}_{iMode}";
 }

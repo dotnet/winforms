@@ -939,7 +939,7 @@ public class ToolStripDropDownTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -950,7 +950,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);

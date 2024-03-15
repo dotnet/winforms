@@ -423,7 +423,7 @@ public class ColumnHeaderCollectionTests
     {
         using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        Assert.Throws<ArgumentNullException>("values", () => collection.AddRange(new ColumnHeader[] { null }));
+        Assert.Throws<ArgumentNullException>("values", () => collection.AddRange([null]));
     }
 
     [WinFormsFact]

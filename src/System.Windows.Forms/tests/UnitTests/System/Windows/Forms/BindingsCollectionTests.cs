@@ -21,7 +21,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_Invoke_Success()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
@@ -33,7 +33,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_InvokeWithCollectionChanging_CallsHandler()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
@@ -80,7 +80,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_NullDataBinding_ThrowsArgumentNullException()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Add(null));
     }
 
@@ -153,7 +153,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Clear_Invoke_Success()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
@@ -168,7 +168,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Clear_InvokeWithCollectionChanging_CallsHandler()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
@@ -277,7 +277,7 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveAt_Invoke_Success()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
@@ -299,7 +299,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_InvokeWithCollectionChanging_CallsHandler()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
@@ -355,7 +355,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_NullDataBinding_Nop()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
@@ -366,7 +366,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_NoSuchDataBinding_Nop()
     {
-        BindingsCollection collection = new();
+        BindingsCollection collection = [];
         Binding binding1 = new(null, new object(), "member");
         Binding binding2 = new(null, new object(), "member");
         collection.Add(binding1);
@@ -378,8 +378,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_DataBindingFromOtherCollection_Nop()
     {
-        BindingsCollection collection1 = new();
-        BindingsCollection collection2 = new();
+        BindingsCollection collection1 = [];
+        BindingsCollection collection2 = [];
         Binding binding1 = new(null, new object(), "member");
         Binding binding2 = new(null, new object(), "member");
         collection1.Add(binding1);

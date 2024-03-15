@@ -214,7 +214,7 @@ public sealed partial class MdiClient : Control
     protected override unsafe void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
         if (!IsHandleCreated
-            || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false
+            || ParentInternal is Form { MdiChildrenMinimizedAnchorBottom: false }
             || ParentInternal?.Site?.DesignMode == true)
         {
             base.SetBoundsCore(x, y, width, height, specified);

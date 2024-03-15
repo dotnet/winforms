@@ -46,16 +46,14 @@ public class ToolStripArrowRenderEventArgsTests
     [MemberData(nameof(ArrowRectangle_TestData))]
     public void ArrowRectangle_Set_GetReturnsExpected(Rectangle value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using ToolStripButton button = new();
+        ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
         {
-            using ToolStripButton button = new();
-            ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
-            {
-                ArrowRectangle = value
-            };
-            Assert.Equal(value, e.ArrowRectangle);
-        }
+            ArrowRectangle = value
+        };
+        Assert.Equal(value, e.ArrowRectangle);
     }
 
     public static IEnumerable<object[]> ArrowColor_TestData()
@@ -68,16 +66,14 @@ public class ToolStripArrowRenderEventArgsTests
     [MemberData(nameof(ArrowColor_TestData))]
     public void ArrowColor_Set_GetReturnsExpected(Color value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using ToolStripButton button = new();
+        ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
         {
-            using ToolStripButton button = new();
-            ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
-            {
-                ArrowColor = value
-            };
-            Assert.Equal(value, e.ArrowColor);
-        }
+            ArrowColor = value
+        };
+        Assert.Equal(value, e.ArrowColor);
     }
 
     [WinFormsTheory]
@@ -85,15 +81,13 @@ public class ToolStripArrowRenderEventArgsTests
     [InlineData(ArrowDirection.Up)]
     public void Direction_Set_GetReturnsExpected(ArrowDirection value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using ToolStripButton button = new();
+        ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
         {
-            using ToolStripButton button = new();
-            ToolStripArrowRenderEventArgs e = new(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
-            {
-                Direction = value
-            };
-            Assert.Equal(value, e.Direction);
-        }
+            Direction = value
+        };
+        Assert.Equal(value, e.Direction);
     }
 }

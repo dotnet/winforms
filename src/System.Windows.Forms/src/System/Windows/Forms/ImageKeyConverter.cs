@@ -84,7 +84,7 @@ public class ImageKeyConverter : StringConverter
     {
         ArgumentNullException.ThrowIfNull(destinationType);
 
-        if (destinationType == typeof(string) && value is not null && value is string && ((string)value).Length == 0)
+        if (destinationType == typeof(string) && value is not null && value is string stringValue && stringValue.Length == 0)
         {
             return SR.toStringNone;
         }

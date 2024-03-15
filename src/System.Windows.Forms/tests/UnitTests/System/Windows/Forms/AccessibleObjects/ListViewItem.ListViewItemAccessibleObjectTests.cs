@@ -18,15 +18,15 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         list.Items.Add(listItem);
 
         Type type = listItem.AccessibilityObject.GetType();
-        ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(ListViewItem) });
+        ConstructorInfo ctor = type.GetConstructor([typeof(ListViewItem)]);
 
         Assert.NotNull(ctor);
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null }));
+        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null]));
 
         // item without parent ListView
         ListViewItem itemWithoutList = new();
 
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { itemWithoutList }));
+        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([itemWithoutList]));
     }
 
     [WinFormsFact]
@@ -1173,7 +1173,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         }
         else
         {
-            listView.Items.AddRange(new ListViewItem[] { listItem1, listItem2 });
+            listView.Items.AddRange((ListViewItem[])[listItem1, listItem2]);
         }
 
         if (createControl)
@@ -1260,12 +1260,12 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         ListViewItem listViewVisibleItem2 = new("Visible item 1");
 
         listView.Groups.Add(listViewGroup);
-        listView.Items.AddRange(new ListViewItem[] { listViewVisibleItem1, listViewVisibleItem2 });
-        listViewGroup.Items.AddRange(new ListViewItem[]
-        {
+        listView.Items.AddRange((ListViewItem[])[listViewVisibleItem1, listViewVisibleItem2]);
+        listViewGroup.Items.AddRange((ListViewItem[])
+        [
             listViewInvisibleItem1, listViewVisibleItem1,
             listViewVisibleItem2, listViewInvisibleItem2
-        });
+        ]);
 
         return listView;
     }
@@ -1531,7 +1531,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
     public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected(View view)
     {
         using ListView listView = new() { View = view };
-        listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1", "SubItem 2" }));
+        listView.Items.Add(new ListViewItem(["Item 1", "SubItem 1", "SubItem 2"]));
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
         AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
@@ -1561,7 +1561,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
     public void ListViewItemAccessibleObject_GetChildIndex_ReturnsMinusOne_IfChildIsNull(View view)
     {
         using ListView listView = new() { View = view };
-        listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1", "SubItem 2" }));
+        listView.Items.Add(new ListViewItem(["Item 1", "SubItem 1", "SubItem 2"]));
 
         Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(null));
         Assert.False(listView.IsHandleCreated);
@@ -1579,8 +1579,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
-        listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 11", "SubItem 12" }));
-        listView.Items.Add(new ListViewItem(new string[] { "Item 2", "SubItem 21", "SubItem 22" }));
+        listView.Items.Add(new ListViewItem(["Item 1", "SubItem 11", "SubItem 12"]));
+        listView.Items.Add(new ListViewItem(["Item 2", "SubItem 21", "SubItem 22"]));
 
         Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(listView.Items[1].SubItems[1].AccessibilityObject));
         Assert.False(listView.IsHandleCreated);
@@ -1594,7 +1594,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
-        listView.Items.Add(new ListViewItem(new string[] { "Item 1" }));
+        listView.Items.Add(new ListViewItem(["Item 1"]));
         ListViewItemDetailsAccessibleObject accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
 
         Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
@@ -1638,7 +1638,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
         listView.Columns.Add(new ColumnHeader());
-        listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 11", "SubItem 12" }));
+        listView.Items.Add(new ListViewItem(["Item 1", "SubItem 11", "SubItem 12"]));
 
         Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(listView.AccessibilityObject));
         Assert.False(listView.IsHandleCreated);
@@ -1748,7 +1748,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
     public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChangingView(View oldView, View newView)
     {
         using ListView listView = new() { View = oldView };
-        listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
+        listView.Items.Add(new ListViewItem(["1", "2"]));
         AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
         Assert.Null(accessibleObject.GetChild(0));
 
@@ -1781,7 +1781,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
     public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChangingView(View oldView, View newView)
     {
         using ListView listView = new() { View = oldView };
-        listView.Items.Add(new ListViewItem(new string[] { "1" }));
+        listView.Items.Add(new ListViewItem(["1"]));
         AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
         Assert.NotEqual(2, accessibleObject.GetChildCount());
 

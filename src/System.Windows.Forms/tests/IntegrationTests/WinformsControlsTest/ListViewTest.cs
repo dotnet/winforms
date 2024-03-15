@@ -114,10 +114,10 @@ public partial class ListViewTest : Form
         ImageList imageListLarge = new(components);
 
         // Initialize the ImageList objects with bitmaps.
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallA.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeA.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeABlue.bmp"));
 
         // Assign the ImageList objects to the ListView.
         listView2.LargeImageList = imageListLarge;
@@ -199,8 +199,7 @@ public partial class ListViewTest : Form
     {
         // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
 
-        var listView2 = sender as ListView;
-        if (listView2 is null)
+        if (sender is not ListView listView2)
         {
             return;
         }
@@ -227,7 +226,7 @@ public partial class ListViewTest : Form
 
         foreach (string file in openFileDialog1.FileNames)
         {
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+            Bitmap bitmap = (Bitmap)Image.FromFile(file);
             LargeImageList.Images.Add(file, bitmap);
 
             ListViewItem item = new ListViewItem
@@ -258,7 +257,7 @@ public partial class ListViewTest : Form
         }
 
         string file = openFileDialog1.FileName;
-        Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+        Bitmap bitmap = (Bitmap)Image.FromFile(file);
         LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
 
         listView1.Refresh();

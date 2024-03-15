@@ -62,7 +62,7 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_CurrentInputLanguage_SetInvalidValue_ThrowsArgumentException()
     {
-        InputLanguage language = Assert.IsType<InputLanguage>(Activator.CreateInstance(typeof(InputLanguage), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { (IntPtr)250 }, null));
+        InputLanguage language = Assert.IsType<InputLanguage>(Activator.CreateInstance(typeof(InputLanguage), BindingFlags.Instance | BindingFlags.NonPublic, null, [(IntPtr)250], null));
         Assert.Throws<ArgumentException>("value", () => InputLanguage.CurrentInputLanguage = language);
     }
 

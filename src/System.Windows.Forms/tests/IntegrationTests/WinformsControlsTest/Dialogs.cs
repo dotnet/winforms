@@ -83,11 +83,8 @@ public partial class Dialogs : Form
         DisposeIfNeeded();
         propertyGrid1.SelectedObject = null;
 
-        Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog");
-        if (typeCustomColorDialog is null)
-        {
-            throw new Exception("Unable to locate 'CustomColorDialog' type.");
-        }
+        Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog")
+            ?? throw new Exception("Unable to locate 'CustomColorDialog' type.");
 
         using ColorDialog dialog = (ColorDialog)Activator.CreateInstance(typeCustomColorDialog)!;
         dialog.ShowDialog(this);

@@ -227,8 +227,10 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         await RunFormAsync(
             () =>
             {
-                Form form = new();
-                form.TopMost = true;
+                Form form = new()
+                {
+                    TopMost = true
+                };
 
                 T control = new();
                 form.Controls.Add(control);
@@ -273,15 +275,19 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         await RunFormAsync(
             () =>
             {
-                Form form = new();
-                form.TopMost = true;
+                Form form = new()
+                {
+                    TopMost = true
+                };
 
                 var control1 = new T1();
                 var control2 = new T2();
 
-                TableLayoutPanel tableLayout = new();
-                tableLayout.ColumnCount = 2;
-                tableLayout.RowCount = 1;
+                TableLayoutPanel tableLayout = new()
+                {
+                    ColumnCount = 2,
+                    RowCount = 1
+                };
                 tableLayout.Controls.Add(control1, 0, 0);
                 tableLayout.Controls.Add(control2, 1, 0);
                 form.Controls.Add(tableLayout);

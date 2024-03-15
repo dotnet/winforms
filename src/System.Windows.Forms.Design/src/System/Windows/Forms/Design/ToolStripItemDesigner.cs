@@ -698,7 +698,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
         base.InitializeNewComponent(defaultValues);
         // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
-        if (Component is ToolStripTextBox || Component is ToolStripComboBox)
+        if (Component is ToolStripTextBox or ToolStripComboBox)
         {
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
@@ -934,7 +934,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
     {
-        if (!(sender is ISelectionService sSvc))
+        if (sender is not ISelectionService sSvc)
         {
             return;
         }
@@ -1148,7 +1148,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         foreach (ToolStripItem item in parent.DropDownItems)
         {
             // Don't Serialize the DesignerToolStripControlHost...
-            if (!(item is DesignerToolStripControlHost))
+            if (item is not DesignerToolStripControlHost)
             {
                 _serializationService.Serialize(_serializedDataForDropDownItems, item);
                 if (item is ToolStripDropDownItem dropDownItem)

@@ -173,16 +173,16 @@ public class TreeNodeCollectionTests
         collection.Add(child3);
 
         // Search all children.
-        Assert.Equal(new TreeNode[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
+        Assert.Equal([child2, child3, grandchild2, grandchild3], collection.Find(key, searchAllChildren: true));
 
         // Call again.
-        Assert.Equal(new TreeNode[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
+        Assert.Equal([child2, child3, grandchild2, grandchild3], collection.Find(key, searchAllChildren: true));
 
         // Don't search all children.
-        Assert.Equal(new TreeNode[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllChildren: false));
 
         // Call again.
-        Assert.Equal(new TreeNode[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllChildren: false));
     }
 
     [WinFormsTheory]

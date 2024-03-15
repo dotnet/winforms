@@ -24,12 +24,15 @@ public class MetaHeaderTests
     [InlineData(short.MinValue)]
     public void ShortProperties_SetValues_ReturnsExpected(short value)
     {
-        MetaHeader mh = new();
-        mh.HeaderSize = value;
-        mh.NoObjects = value;
-        mh.NoParameters = value;
-        mh.Type = value;
-        mh.Version = value;
+        MetaHeader mh = new()
+        {
+            HeaderSize = value,
+            NoObjects = value,
+            NoParameters = value,
+            Type = value,
+            Version = value
+        };
+
         Assert.Equal(value, mh.HeaderSize);
         Assert.Equal(value, mh.NoObjects);
         Assert.Equal(value, mh.NoParameters);
@@ -43,9 +46,11 @@ public class MetaHeaderTests
     [InlineData(int.MinValue)]
     public void IntProperties_SetValues_ReturnsExpected(int value)
     {
-        MetaHeader mh = new();
-        mh.Size = value;
-        mh.MaxRecord = value;
+        MetaHeader mh = new()
+        {
+            Size = value,
+            MaxRecord = value
+        };
         Assert.Equal(value, mh.Size);
         Assert.Equal(value, mh.MaxRecord);
     }

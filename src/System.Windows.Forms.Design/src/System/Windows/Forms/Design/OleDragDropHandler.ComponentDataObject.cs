@@ -254,7 +254,7 @@ internal partial class OleDragDropHandler
                     }
                 }
 
-                _components = topComponents.ToArray();
+                _components = [.. topComponents];
             }
             finally
             {

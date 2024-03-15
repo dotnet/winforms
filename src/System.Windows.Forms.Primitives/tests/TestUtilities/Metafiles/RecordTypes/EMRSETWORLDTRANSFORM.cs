@@ -14,5 +14,5 @@ internal struct EMRSETWORLDTRANSFORM
     public EMR emr;
     public Matrix3x2 xform;
 
-    public override string ToString() => $"[{nameof(EMRSETWORLDTRANSFORM)}] Transform: {xform}";
+    public override readonly string ToString() => $"[{nameof(EMRSETWORLDTRANSFORM)}] Transform: {xform}";
 }

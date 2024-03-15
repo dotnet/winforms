@@ -107,12 +107,10 @@ public class UITypeEditorTests
     [MemberData(nameof(PaintValue_PaintValueEventArgs_TestData))]
     public void UITypeEditor_PaintValue_Invoke_Nop(PaintValueEventArgs e)
     {
-        using (Bitmap image = new(10, 10))
-        using (var graphics = Graphics.FromImage(image))
-        {
-            UITypeEditor editor = new();
-            editor.PaintValue(e);
-        }
+        using Bitmap image = new(10, 10);
+        using var graphics = Graphics.FromImage(image);
+        UITypeEditor editor = new();
+        editor.PaintValue(e);
     }
 
     public static IEnumerable<object[]> PaintValue_Object_Graphics_Rectangle_TestData()

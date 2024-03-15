@@ -35,7 +35,7 @@ public class RichTextBoxTests : ControlTestBase
             richTextBox.LinkClicked += handler;
             try
             {
-                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(richTextBox.Text.IndexOf("Click link #2")));
+                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(richTextBox.Text.IndexOf("Click link #2", StringComparison.Ordinal)));
 
                 // Adjust point a bit to make sure we are clicking inside the character cell instead of on its edge.
                 pt.X += 2;
@@ -95,7 +95,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             richTextBox.LinkClicked += handler;
             try
             {
-                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(richTextBox.Text.IndexOf("#link2#custom link")));
+                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(richTextBox.Text.IndexOf("#link2#custom link", StringComparison.Ordinal)));
 
                 // Adjust point a bit to make sure we are clicking inside the character cell instead of on its edge.
                 pt.X += 2;
@@ -155,7 +155,8 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             richTextBox.LinkClicked += handler;
             try
             {
-                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(richTextBox.Text.IndexOf("custom link#link2#")));
+                Point pt = richTextBox.PointToScreen(richTextBox.GetPositionFromCharIndex(
+                    richTextBox.Text.IndexOf("custom link#link2#", StringComparison.Ordinal)));
 
                 // Adjust point a bit to make sure we are clicking inside the character cell instead of on its edge.
                 pt.X += 2;
@@ -194,7 +195,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
 
     private unsafe void MakeLink(RichTextBox control, string text)
     {
-        control.Select(control.Text.IndexOf(text), text.Length);
+        control.Select(control.Text.IndexOf(text, StringComparison.Ordinal), text.Length);
 
         var format = new Richedit.CHARFORMAT2W
         {

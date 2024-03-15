@@ -334,19 +334,12 @@ internal static class DesignerUtils
     /// <summary>
     ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
     /// </summary>
-    public static Size GetAdornmentDimensions(AdornmentType adornmentType)
+    public static Size GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
-        switch (adornmentType)
-        {
-            case AdornmentType.GrabHandle:
-                return new Size(s_handleSize, s_handleSize);
-            case AdornmentType.ContainerSelector:
-            case AdornmentType.Maximum:
-                return new Size(s_containerGrabHandleSize, s_containerGrabHandleSize);
-        }
-
-        return new Size(0, 0);
-    }
+        AdornmentType.GrabHandle => new Size(s_handleSize, s_handleSize),
+        AdornmentType.ContainerSelector or AdornmentType.Maximum => new Size(s_containerGrabHandleSize, s_containerGrabHandleSize),
+        _ => new Size(0, 0),
+    };
 
     public static bool UseSnapLines(IServiceProvider provider)
     {
@@ -867,7 +860,7 @@ internal static class DesignerUtils
         PInvoke.SendMessage(
             listView,
             PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
-            (WPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER,
-            (LPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER);
+            (WPARAM)PInvoke.LVS_EX_DOUBLEBUFFER,
+            (LPARAM)PInvoke.LVS_EX_DOUBLEBUFFER);
     }
 }

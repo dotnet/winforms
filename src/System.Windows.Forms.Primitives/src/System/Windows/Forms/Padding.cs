@@ -132,7 +132,7 @@ public struct Padding : IEquatable<Padding>
     public static Padding Subtract(Padding p1, Padding p2) => p1 - p2;
 
 #pragma warning disable CA1725 // Parameter names should match base declaration. Shipped API.
-    public override readonly bool Equals(object? other) => other is not Padding otherPadding ? false : Equals(otherPadding);
+    public override readonly bool Equals(object? other) => other is Padding otherPadding && Equals(otherPadding);
 #pragma warning restore CA1725
 
     public readonly bool Equals(Padding other) =>

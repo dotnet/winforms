@@ -9,7 +9,7 @@ public class ToolboxItemCollectionTests
     public void ToolboxItemCollection_Ctor_ToolboxItemArray()
     {
         ToolboxItem item = new();
-        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
+        ToolboxItemCollection collection = new((ToolboxItem[])[item]);
         Assert.Same(item, Assert.Single(collection));
         Assert.Same(item, collection[0]);
         Assert.True(collection.Contains(item));
@@ -26,7 +26,7 @@ public class ToolboxItemCollectionTests
     public void ToolboxItemCollection_Ctor_ToolboxItemCollection()
     {
         ToolboxItem item = new();
-        ToolboxItemCollection value = new(new ToolboxItem[] { item });
+        ToolboxItemCollection value = new((ToolboxItem[])[item]);
         ToolboxItemCollection collection = new(value);
         Assert.Same(item, Assert.Single(collection));
         Assert.Same(item, collection[0]);
@@ -44,7 +44,7 @@ public class ToolboxItemCollectionTests
     public void ToolboxItemCollection_Contains_NoSuchValue_ReturnsFalse()
     {
         ToolboxItem item = new();
-        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
+        ToolboxItemCollection collection = new((ToolboxItem[])[item]);
         Assert.False(collection.Contains(new ToolboxItem { DisplayName = "Other" }));
         Assert.False(collection.Contains(null));
     }
@@ -53,7 +53,7 @@ public class ToolboxItemCollectionTests
     public void ToolboxItemCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
         ToolboxItem item = new();
-        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
+        ToolboxItemCollection collection = new((ToolboxItem[])[item]);
         Assert.Equal(-1, collection.IndexOf(new ToolboxItem { DisplayName = "Other" }));
         Assert.Equal(-1, collection.IndexOf(null));
     }
@@ -62,10 +62,10 @@ public class ToolboxItemCollectionTests
     public void ToolboxItemCollection_CopyTo_Invoke_Success()
     {
         ToolboxItem item = new();
-        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
+        ToolboxItemCollection collection = new((ToolboxItem[])[item]);
 
         var array = new ToolboxItem[3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new ToolboxItem[] { null, item, null }, array);
+        Assert.Equal([null, item, null], array);
     }
 }

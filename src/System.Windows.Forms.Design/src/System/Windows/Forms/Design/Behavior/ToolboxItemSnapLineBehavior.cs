@@ -163,8 +163,8 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                         verticalComponentIdentified = true;
                     }
                 }
-                else if ((line.LineType == DragAssistanceManager.LineType.Margin) ||
-                            (line.LineType == DragAssistanceManager.LineType.Padding))
+                else if (line.LineType is DragAssistanceManager.LineType.Margin
+                    or DragAssistanceManager.LineType.Padding)
                 {
                     if (!verticalComponentIdentified && line.X1 == line.X2)
                     {

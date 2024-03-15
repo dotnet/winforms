@@ -141,7 +141,7 @@ internal partial class OleDragDropHandler
                 }
             }
 
-            return components.ToArray();
+            return [.. components];
         }
 
         protected override IComponent[]? CreateComponentsCore(IDesignerHost? host) => CreateComponentsCore(host, null);

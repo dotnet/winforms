@@ -330,7 +330,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Ctor_NullValueInItems_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>("value", () => new ToolStrip(new ToolStripItem[] { null }));
+        Assert.Throws<ArgumentNullException>("value", () => new ToolStrip([null]));
     }
 
     [WinFormsFact]
@@ -1081,7 +1081,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_BindingContext_GetWithParent_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using Control parent = new()
         {
             BindingContext = bindingContext
@@ -1096,7 +1096,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_BindingContext_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             BindingContext = bindingContext
@@ -1137,7 +1137,7 @@ public partial class ToolStripTests
     {
         using ToolStrip control = new()
         {
-            BindingContext = new BindingContext()
+            BindingContext = []
         };
 
         control.BindingContext = value;
@@ -1164,7 +1164,7 @@ public partial class ToolStripTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -1175,7 +1175,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -2472,7 +2472,7 @@ public partial class ToolStripTests
         int parentLayoutCallCount = 0;
         void parentHandler(object sender, LayoutEventArgs e)
         {
-            if (e.AffectedProperty == "Dock" || e.AffectedProperty == "Orientation")
+            if (e.AffectedProperty is "Dock" or "Orientation")
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
@@ -2578,7 +2578,7 @@ public partial class ToolStripTests
         int parentLayoutCallCount = 0;
         void parentHandler(object sender, LayoutEventArgs e)
         {
-            if (e.AffectedProperty == "Dock" || e.AffectedProperty == "Orientation")
+            if (e.AffectedProperty is "Dock" or "Orientation")
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
@@ -4805,7 +4805,7 @@ public partial class ToolStripTests
         using ToolStripButton toolStripButton1 = new();
         using ToolStripButton toolStripButton2 = new();
         using ToolStripButton toolStripButton3 = new();
-        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+        toolStrip.Items.AddRange((ToolStripButton[])[toolStripButton1, toolStripButton2, toolStripButton3]);
 
         if (useTabKey)
         {
@@ -4826,7 +4826,7 @@ public partial class ToolStripTests
         using ToolStripButton toolStripButton1 = new();
         using ToolStripButton toolStripButton2 = new();
         using ToolStripButton toolStripButton3 = new();
-        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+        toolStrip.Items.AddRange((ToolStripButton[])[toolStripButton1, toolStripButton2, toolStripButton3]);
 
         if (useTabKey)
         {
@@ -4851,7 +4851,7 @@ public partial class ToolStripTests
         using ToolStripButton toolStripButton1 = new();
         using ToolStripButton toolStripButton2 = new();
         using ToolStripButton toolStripButton3 = new();
-        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+        toolStrip.Items.AddRange((ToolStripButton[])[toolStripButton1, toolStripButton2, toolStripButton3]);
 
         if (useTabKey)
         {
@@ -4872,7 +4872,7 @@ public partial class ToolStripTests
         using ToolStripButton toolStripButton1 = new();
         using ToolStripButton toolStripButton2 = new();
         using ToolStripButton toolStripButton3 = new();
-        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+        toolStrip.Items.AddRange((ToolStripButton[])[toolStripButton1, toolStripButton2, toolStripButton3]);
 
         if (useTabKey)
         {
@@ -7274,7 +7274,7 @@ public partial class ToolStripTests
         using ToolStripMenuItem toolStripMenuItem1 = new();
         using ToolStripMenuItem toolStripMenuItem2 = new();
         using ToolStripMenuItem toolStripMenuItem3 = new();
-        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
+        toolStrip.Items.AddRange((ToolStripItem[])[toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3]);
 
         toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Left;
         ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(start: null, ArrowDirection.Left);
@@ -7333,15 +7333,15 @@ public partial class ToolStripTests
 
     private class SubToolStrip : ToolStrip
     {
-        public new const int ScrollStateAutoScrolling = ToolStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = ToolStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = ToolStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = ToolStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = ToolStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public SubToolStrip() : base()
         {

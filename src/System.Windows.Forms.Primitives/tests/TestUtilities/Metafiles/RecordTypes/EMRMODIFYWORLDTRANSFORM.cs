@@ -15,5 +15,5 @@ internal struct EMRMODIFYWORLDTRANSFORM
     public Matrix3x2 xform;
     public MODIFY_WORLD_TRANSFORM_MODE iMode;
 
-    public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
+    public override readonly string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
 }

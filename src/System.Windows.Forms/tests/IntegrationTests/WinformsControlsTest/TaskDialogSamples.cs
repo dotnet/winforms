@@ -216,36 +216,35 @@ public class TaskDialogSamples : Form
         };
 
         // Create a WinForms timer that raises the Tick event every tenth second.
-        using (Timer timer = new()
+        using Timer timer = new()
         {
             Enabled = true,
             Interval = 100
-        })
-        {
-            timer.Tick += (s, e) =>
-            {
-                remainingTenthSeconds--;
-                if (remainingTenthSeconds > 0)
-                {
-                    // Update the remaining time and progress bar.
-                    page.Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...";
-                    page.ProgressBar.Value = 100 - remainingTenthSeconds * 2;
-                }
-                else
-                {
-                    // Stop the timer and click the "Reconnect" button - this will
-                    // close the dialog.
-                    timer.Enabled = false;
-                    reconnectButton.PerformClick();
-                }
-            };
+        };
 
-            TaskDialogButton result = TaskDialog.ShowDialog(this, page);
-            if (result == reconnectButton)
-                Console.WriteLine("Reconnecting.");
+        timer.Tick += (s, e) =>
+        {
+            remainingTenthSeconds--;
+            if (remainingTenthSeconds > 0)
+            {
+                // Update the remaining time and progress bar.
+                page.Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...";
+                page.ProgressBar.Value = 100 - remainingTenthSeconds * 2;
+            }
             else
-                Console.WriteLine("Not reconnecting.");
-        }
+            {
+                // Stop the timer and click the "Reconnect" button - this will
+                // close the dialog.
+                timer.Enabled = false;
+                reconnectButton.PerformClick();
+            }
+        };
+
+        TaskDialogButton result = TaskDialog.ShowDialog(this, page);
+        if (result == reconnectButton)
+            Console.WriteLine("Reconnecting.");
+        else
+            Console.WriteLine("Not reconnecting.");
     }
 
     private void ShowMultiPageTaskDialog()

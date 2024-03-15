@@ -1755,7 +1755,7 @@ public class TableLayoutSettingsTests
     {
         using TableLayoutPanel control = new();
         TableLayoutSettings settings = control.LayoutSettings;
-        TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
+        TypeDescriptor.AddAttributes(settings, [new TypeConverterAttribute(type)]);
 
         ISerializable iSerializable = settings;
         SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
@@ -1782,27 +1782,25 @@ public class TableLayoutSettingsTests
         settings.ColumnStyles.Add(columnStyle);
         settings.RowStyles.Add(rowStyle);
 
-        using (MemoryStream stream = new())
-        {
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            // cs/binary-formatter-without-binder
-            BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
-            formatter.Serialize(stream, settings);
-            stream.Seek(0, SeekOrigin.Begin);
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        formatter.Serialize(stream, settings);
+        stream.Seek(0, SeekOrigin.Begin);
 
-            // cs/dangerous-binary-deserialization
-            TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        // cs/dangerous-binary-deserialization
+        TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-            Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
-            Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);
-            Assert.Equal(rowStyle.SizeType, ((RowStyle)Assert.Single(result.RowStyles)).SizeType);
-            Assert.Equal(rowStyle.Height, ((RowStyle)Assert.Single(result.RowStyles)).Height);
+        Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
+        Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);
+        Assert.Equal(rowStyle.SizeType, ((RowStyle)Assert.Single(result.RowStyles)).SizeType);
+        Assert.Equal(rowStyle.Height, ((RowStyle)Assert.Single(result.RowStyles)).Height);
 
-            Assert.Equal(1, result.GetColumnSpan(controlWithName));
-            Assert.Equal(1, result.GetRowSpan(controlWithName));
-            Assert.Equal(-1, result.GetColumn(controlWithName));
-            Assert.Equal(-1, result.GetRow(controlWithName));
-        }
+        Assert.Equal(1, result.GetColumnSpan(controlWithName));
+        Assert.Equal(1, result.GetRowSpan(controlWithName));
+        Assert.Equal(-1, result.GetColumn(controlWithName));
+        Assert.Equal(-1, result.GetRow(controlWithName));
     }
 
     [WinFormsTheory]
@@ -1813,19 +1811,18 @@ public class TableLayoutSettingsTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using TableLayoutPanel control = new();
         TableLayoutSettings settings = control.LayoutSettings;
-        TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
-        using (MemoryStream stream = new())
-        {
+        TypeDescriptor.AddAttributes(settings, [new TypeConverterAttribute(type)]);
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            // cs/binary-formatter-without-binder
-            BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
-            formatter.Serialize(stream, settings);
-            stream.Seek(0, SeekOrigin.Begin);
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        formatter.Serialize(stream, settings);
+        stream.Seek(0, SeekOrigin.Begin);
 
-            // cs/dangerous-binary-deserialization
-            Assert.Throws<SerializationException>(() => formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        // cs/dangerous-binary-deserialization
+        Assert.Throws<SerializationException>(() => formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-        }
     }
 
     [WinFormsTheory]
@@ -1836,27 +1833,25 @@ public class TableLayoutSettingsTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using TableLayoutPanel control = new();
         TableLayoutSettings settings = control.LayoutSettings;
-        TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
-        using (MemoryStream stream = new())
-        {
+        TypeDescriptor.AddAttributes(settings, [new TypeConverterAttribute(type)]);
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            // cs/binary-formatter-without-binder
-            BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated. 
-            formatter.Serialize(stream, settings);
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated. 
+        formatter.Serialize(stream, settings);
 
-            stream.Seek(0, SeekOrigin.Begin);
+        stream.Seek(0, SeekOrigin.Begin);
 
-            // cs/dangerous-binary-deserialization
-            TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        // cs/dangerous-binary-deserialization
+        TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-            Assert.NotNull(result.LayoutEngine);
-            Assert.Same(result.LayoutEngine, result.LayoutEngine);
-            Assert.Throws<NullReferenceException>(() => result.ColumnCount);
-            Assert.Throws<NullReferenceException>(() => result.RowCount);
-            Assert.Empty(result.ColumnStyles);
-            Assert.Empty(result.RowStyles);
-            Assert.Throws<NullReferenceException>(() => result.GrowStyle);
-        }
+        Assert.NotNull(result.LayoutEngine);
+        Assert.Same(result.LayoutEngine, result.LayoutEngine);
+        Assert.Throws<NullReferenceException>(() => result.ColumnCount);
+        Assert.Throws<NullReferenceException>(() => result.RowCount);
+        Assert.Empty(result.ColumnStyles);
+        Assert.Empty(result.RowStyles);
+        Assert.Throws<NullReferenceException>(() => result.GrowStyle);
     }
 
     private class NullStringConverter : TypeConverter

@@ -11,7 +11,8 @@ namespace System;
 
 public static class AssertExtensions
 {
-    private static bool IsNetFramework => RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework");
+    private static bool IsNetFramework =>
+        RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework", StringComparison.Ordinal);
 
     internal static void True(AccessibleObject accessibleObject, UIA_PROPERTY_ID propertyId)
     {
@@ -159,12 +160,12 @@ public static class AssertExtensions
             }
             else
             {
-                AssertExtensions.Throws<TNetFxExceptionType>(action);
+                Throws<TNetFxExceptionType>(action);
             }
         }
         else
         {
-            AssertExtensions.Throws<TNetCoreExceptionType>(expectedParamName, action);
+            Throws<TNetCoreExceptionType>(expectedParamName, action);
         }
     }
 

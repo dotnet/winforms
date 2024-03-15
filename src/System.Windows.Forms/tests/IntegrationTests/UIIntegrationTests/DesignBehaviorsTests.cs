@@ -303,7 +303,7 @@ public class DesignBehaviorsTests : ControlTestBase
             if (LoaderHost is null)
                 return;
 
-            ArrayList errors = new();
+            ArrayList errors = [];
 
             LoaderHost.CreateComponent(typeof(Form));
 

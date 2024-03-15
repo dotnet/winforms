@@ -231,7 +231,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
                 _nativeFormat,
                 firstTabOffset,
                 tabStops.Length,
-                ts is null ? &stub :ts).ThrowIfFailed();
+                ts is null ? &stub : ts).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }

@@ -5799,7 +5799,7 @@ public unsafe class VARIANTTests
 
         using (VARIANT variant = new())
         {
-            byte[] bytes = { 1, 2, 3 };
+            byte[] bytes = [1, 2, 3];
             Marshal.GetNativeVariantForObject(bytes, (nint)(void*)&variant);
             Assert.Equal(VT_UI1 | VT_ARRAY, variant.vt);
         }

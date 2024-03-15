@@ -28,14 +28,14 @@ public partial class DragDrop : Form
         InitializeComponent();
 
         _nyanCatAscii = ReadAsciiText();
-        _pictureBoxList = new()
-        {
+        _pictureBoxList =
+        [
             pictureBox1,
             pictureBox2,
             pictureBox3,
             pictureBox4,
             pictureBox5
-        };
+        ];
 
         AllowDrop = true;
         DragEnter += DragDrop_DragEnter;

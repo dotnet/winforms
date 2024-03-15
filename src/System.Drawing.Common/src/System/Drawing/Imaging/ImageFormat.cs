@@ -128,18 +128,66 @@ public sealed class ImageFormat
     /// </summary>
     public override string ToString()
     {
-        if (Guid == PInvokeCore.ImageFormatMemoryBMP) return "MemoryBMP";
-        if (Guid == PInvokeCore.ImageFormatBMP) return "Bmp";
-        if (Guid == PInvokeCore.ImageFormatEMF) return "Emf";
-        if (Guid == PInvokeCore.ImageFormatWMF) return "Wmf";
-        if (Guid == PInvokeCore.ImageFormatGIF) return "Gif";
-        if (Guid == PInvokeCore.ImageFormatJPEG) return "Jpeg";
-        if (Guid == PInvokeCore.ImageFormatPNG) return "Png";
-        if (Guid == PInvokeCore.ImageFormatTIFF) return "Tiff";
-        if (Guid == PInvokeCore.ImageFormatEXIF) return "Exif";
-        if (Guid == PInvokeCore.ImageFormatIcon) return "Icon";
-        if (Guid == PInvokeCore.ImageFormatHEIF) return "Heif";
-        if (Guid == PInvokeCore.ImageFormatWEBP) return "Webp";
+        if (Guid == PInvokeCore.ImageFormatMemoryBMP)
+        {
+            return "MemoryBMP";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatBMP)
+        {
+            return "Bmp";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatEMF)
+        {
+            return "Emf";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatWMF)
+        {
+            return "Wmf";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatGIF)
+        {
+            return "Gif";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatJPEG)
+        {
+            return "Jpeg";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatPNG)
+        {
+            return "Png";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatTIFF)
+        {
+            return "Tiff";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatEXIF)
+        {
+            return "Exif";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatIcon)
+        {
+            return "Icon";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatHEIF)
+        {
+            return "Heif";
+        }
+
+        if (Guid == PInvokeCore.ImageFormatWEBP)
+        {
+            return "Webp";
+        }
+
         return $"[ImageFormat: {_guid}]";
     }
 }

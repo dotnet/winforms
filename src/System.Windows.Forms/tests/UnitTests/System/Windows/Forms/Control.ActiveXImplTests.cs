@@ -113,7 +113,7 @@ public unsafe class Control_ActiveXImplTests
     {
         public string? Value { get; set; }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        public readonly void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Value), Value, typeof(string));
         }

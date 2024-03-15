@@ -47,16 +47,16 @@ public class ListView_ListViewItemCollectionTests
         collection.Add(child3);
 
         // Search all subitems.
-        Assert.Equal(new ListViewItem[] { child2, child3 }, collection.Find(key, searchAllSubItems: true));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllSubItems: true));
 
         // Call again.
-        Assert.Equal(new ListViewItem[] { child2, child3 }, collection.Find(key, searchAllSubItems: true));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllSubItems: true));
 
         // Don't search all subitems.
-        Assert.Equal(new ListViewItem[] { child2, child3 }, collection.Find(key, searchAllSubItems: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllSubItems: false));
 
         // Call again.
-        Assert.Equal(new ListViewItem[] { child2, child3 }, collection.Find(key, searchAllSubItems: false));
+        Assert.Equal([child2, child3], collection.Find(key, searchAllSubItems: false));
     }
 
     [WinFormsTheory]

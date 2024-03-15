@@ -304,9 +304,9 @@ public class DataGridViewSelectedRowCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        object[] array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -323,9 +323,9 @@ public class DataGridViewSelectedRowCollectionTests
 
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        object[] array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Rows[2], control.Rows[0] }, array);
+        Assert.Equal([1, control.Rows[2], control.Rows[0]], array);
     }
 
     public static IEnumerable<object[]> IListContains_TestData()

@@ -600,33 +600,36 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         TypeConverter? formattedValueTypeConverter,
         DataGridViewDataErrorContexts context)
     {
-        if (value is not null)
+        if (value is int intValue)
         {
             if (ThreeState)
             {
-                if (value.Equals(TrueValue) || (value is int && (int)value == (int)CheckState.Checked))
+                value = (CheckState)intValue switch
                 {
-                    value = CheckState.Checked;
-                }
-                else if (value.Equals(FalseValue) || (value is int && (int)value == (int)CheckState.Unchecked))
-                {
-                    value = CheckState.Unchecked;
-                }
-                else if (value.Equals(IndeterminateValue) || (value is int && (int)value == (int)CheckState.Indeterminate))
-                {
-                    value = CheckState.Indeterminate;
-                }
+                    CheckState.Checked => CheckState.Checked,
+                    CheckState.Unchecked => CheckState.Unchecked,
+                    CheckState.Indeterminate => CheckState.Indeterminate,
+                    _ => value
+                };
             }
             else
             {
-                if (value.Equals(TrueValue) || (value is int && (int)value != 0))
-                {
-                    value = true;
-                }
-                else if (value.Equals(FalseValue) || (value is int && (int)value == 0))
-                {
-                    value = false;
-                }
+                value = intValue != 0;
+            }
+        }
+        else if (value is not null)
+        {
+            if (value.Equals(TrueValue))
+            {
+                value = CheckState.Checked;
+            }
+            else if (value.Equals(FalseValue))
+            {
+                value = CheckState.Unchecked;
+            }
+            else if (ThreeState && value.Equals(IndeterminateValue))
+            {
+                value = CheckState.Indeterminate;
             }
         }
 
@@ -637,6 +640,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             valueTypeConverter,
             formattedValueTypeConverter,
             context);
+
         if (ret is not null && (context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
         {
             if (ret is bool retBool)

@@ -6671,7 +6671,7 @@ public class TreeViewTests
         TreeNode treeNode3 = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
-        treeView.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+        treeView.Nodes.AddRange([treeNode1, treeNode2, treeNode3]);
 
         Assert.True(accessor.IsToolTracked(treeNode1));
         Assert.True(accessor.IsToolTracked(treeNode2));
@@ -6830,7 +6830,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
         treeView.CreateControl();
-        treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeView.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeView.SelectedNode = treeView.Nodes[0];
 
@@ -6856,7 +6856,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
         treeView.CreateControl();
-        treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeView.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeView.SelectedNode = treeView.Nodes[0];
 
@@ -6893,7 +6893,7 @@ public class TreeViewTests
 
         treeView.Nodes.Add("Test");
         TreeNode treeNode = treeView.Nodes[0];
-        treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeNode.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeView.SelectedNode = treeNode.Nodes[0];
 
@@ -6922,7 +6922,7 @@ public class TreeViewTests
 
         treeView.Nodes.Add("Test");
         TreeNode treeNode = treeView.Nodes[0];
-        treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeNode.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeView.SelectedNode = treeNode.Nodes[0];
 
@@ -6982,7 +6982,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new() { CheckBoxes = checkBoxes };
         treeView.CreateControl();
-        treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeView.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeView.Nodes[0].Checked = true;
 
@@ -7007,7 +7007,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new() { CheckBoxes = checkBoxes };
         treeView.CreateControl();
-        treeView.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeView.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         for (int count = treeView.Nodes.Count; count > 1; count -= 1)
         {
@@ -7035,7 +7035,7 @@ public class TreeViewTests
 
         treeView.Nodes.Add("Test");
         TreeNode treeNode = treeView.Nodes[0];
-        treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeNode.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         treeNode.Nodes[0].Checked = true;
 
@@ -7063,7 +7063,7 @@ public class TreeViewTests
 
         treeView.Nodes.Add("Test");
         TreeNode treeNode = treeView.Nodes[0];
-        treeNode.Nodes.AddRange(new TreeNode[] { new("Test 1"), new("Test 2"), new("Test 3") });
+        treeNode.Nodes.AddRange([new("Test 1"), new("Test 2"), new("Test 3")]);
 
         for (int count = treeNode.Nodes.Count; count > 1; count -= 1)
         {
@@ -7192,12 +7192,12 @@ public class TreeViewTests
         TreeNode treeNode1 = new("Node1");
         TreeNode treeNode2 = new("Node0");
         TreeNode treeNode3 = new("Node2");
-        TreeNode treeNode4 = new("SubNode1-1-1-1", new[] { treeNode1, treeNode2, treeNode3 });
-        TreeNode treeNode5 = new("SubNode1-1-1", new[] { treeNode4 });
-        TreeNode treeNode6 = new("SubNode1-1", new[] { treeNode5 });
-        TreeNode treeNode7 = new("SubNode1", new[] { treeNode6 });
-        TreeNode treeNode8 = new("Parent", new[] { treeNode7 });
-        parent.Nodes.AddRange(new TreeNode[] { treeNode8 });
+        TreeNode treeNode4 = new("SubNode1-1-1-1", [treeNode1, treeNode2, treeNode3]);
+        TreeNode treeNode5 = new("SubNode1-1-1", [treeNode4]);
+        TreeNode treeNode6 = new("SubNode1-1", [treeNode5]);
+        TreeNode treeNode7 = new("SubNode1", [treeNode6]);
+        TreeNode treeNode8 = new("Parent", [treeNode7]);
+        parent.Nodes.AddRange([treeNode8]);
 
         treeView.Sort();
 
@@ -7227,16 +7227,16 @@ public class TreeViewTests
         TreeNode lastSubNode1 = new("Node1");
         TreeNode lastSubNode2 = new("Node2");
         TreeNode lastSubNode3 = new("Node3");
-        TreeNode fifthSubNode1 = new("SubNode1-1-1-1", new[] { lastSubNode2, lastSubNode3, lastSubNode1 });
+        TreeNode fifthSubNode1 = new("SubNode1-1-1-1", [lastSubNode2, lastSubNode3, lastSubNode1]);
         TreeNode fifthSubNode2 = new("SubNode1-1-1-2");
-        TreeNode fourthSubNode1 = new("SubNode1-1-1", new[] { fifthSubNode1, fifthSubNode2 });
+        TreeNode fourthSubNode1 = new("SubNode1-1-1", [fifthSubNode1, fifthSubNode2]);
         TreeNode fourthSubNode2 = new("SubNode1-1-2");
-        TreeNode thirdSubNode1 = new("SubNode1-1", new[] { fourthSubNode2, fourthSubNode1 });
+        TreeNode thirdSubNode1 = new("SubNode1-1", [fourthSubNode2, fourthSubNode1]);
         TreeNode thirdSubNode2 = new("SubNode1-2");
-        TreeNode secondSubNode1 = new("SubNode1", new[] { thirdSubNode2, thirdSubNode1 });
+        TreeNode secondSubNode1 = new("SubNode1", [thirdSubNode2, thirdSubNode1]);
         TreeNode secondSubNode2 = new("SubNode2");
-        TreeNode firstSubNode = new("Parent", new[] { secondSubNode1, secondSubNode2 });
-        parent.Nodes.AddRange(new TreeNode[] { firstSubNode });
+        TreeNode firstSubNode = new("Parent", [secondSubNode1, secondSubNode2]);
+        parent.Nodes.AddRange([firstSubNode]);
 
         // Make sure all nodes have been added as expected.
         Assert.Equal(3, fifthSubNode1.Nodes.Count);

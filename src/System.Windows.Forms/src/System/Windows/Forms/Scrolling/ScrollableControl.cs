@@ -646,9 +646,9 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             SetDisplayRectLocation(_displayRect.X, -pos);
             SyncScrollbars(AutoScroll);
-            if (e is HandledMouseEventArgs)
+            if (e is HandledMouseEventArgs args)
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                args.Handled = true;
             }
         }
         else if (HScroll)
@@ -662,9 +662,9 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             SetDisplayRectLocation(-pos, _displayRect.Y);
             SyncScrollbars(AutoScroll);
-            if (e is HandledMouseEventArgs)
+            if (e is HandledMouseEventArgs args)
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                args.Handled = true;
             }
         }
 

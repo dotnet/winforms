@@ -732,10 +732,7 @@ Namespace Microsoft.VisualBasic.Logging
                         If Append Then
                             ' Try to get the file's actual encoding. If we get it, that trumps
                             ' the user specified value
-                            fileEncoding = GetFileEncoding(fileName)
-                            If fileEncoding Is Nothing Then
-                                fileEncoding = Encoding
-                            End If
+                            fileEncoding = If(GetFileEncoding(fileName), Encoding)
                         End If
 
                         Dim baseStreamWriter As New StreamWriter(fileName, Append, fileEncoding)

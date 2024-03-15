@@ -199,7 +199,7 @@ public partial class MonthCalendar
 
         internal DayOfWeek FirstDayOfWeek => this.TryGetOwnerAs(out MonthCalendar? owner) ? CastDayToDayOfWeek(owner.FirstDayOfWeek) : CastDayToDayOfWeek(Day.Default);
 
-        internal bool Focused => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.Focused : false;
+        internal bool Focused => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.Focused;
 
         internal CalendarCellAccessibleObject? FocusedCell
             => _focusedCellAccessibleObject ??= this.TryGetOwnerAs(out MonthCalendar? owner) ? GetCellByDate(owner._focusedDate) : null;
@@ -555,9 +555,9 @@ public partial class MonthCalendar
             }
         }
 
-        internal bool ShowToday => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.ShowToday : false;
+        internal bool ShowToday => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.ShowToday;
 
-        internal bool ShowWeekNumbers => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.ShowWeekNumbers : false;
+        internal bool ShowWeekNumbers => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.ShowWeekNumbers;
 
         internal DateTime TodayDate => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.TodayDate : DateTime.Today;
 

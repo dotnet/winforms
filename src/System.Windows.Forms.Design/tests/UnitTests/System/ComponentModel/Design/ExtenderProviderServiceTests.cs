@@ -27,11 +27,11 @@ public class ExtenderProviderServiceTests
         Mock<IExtenderProvider> mockExtenderProvider2 = new(MockBehavior.Strict);
 
         providerService.AddExtenderProvider(mockExtenderProvider1.Object);
-        Assert.Equal(new IExtenderProvider[] { mockExtenderProvider1.Object }, listService.GetExtenderProviders());
+        Assert.Equal([mockExtenderProvider1.Object], listService.GetExtenderProviders());
 
         // Add another.
         providerService.AddExtenderProvider(mockExtenderProvider2.Object);
-        Assert.Equal(new IExtenderProvider[] { mockExtenderProvider1.Object, mockExtenderProvider2.Object }, listService.GetExtenderProviders());
+        Assert.Equal([mockExtenderProvider1.Object, mockExtenderProvider2.Object], listService.GetExtenderProviders());
     }
 
     [Fact]
@@ -70,11 +70,11 @@ public class ExtenderProviderServiceTests
         providerService.AddExtenderProvider(mockExtenderProvider2.Object);
 
         providerService.RemoveExtenderProvider(mockExtenderProvider1.Object);
-        Assert.Equal(new IExtenderProvider[] { mockExtenderProvider2.Object }, listService.GetExtenderProviders());
+        Assert.Equal([mockExtenderProvider2.Object], listService.GetExtenderProviders());
 
         // Remove again.
         providerService.RemoveExtenderProvider(mockExtenderProvider1.Object);
-        Assert.Equal(new IExtenderProvider[] { mockExtenderProvider2.Object }, listService.GetExtenderProviders());
+        Assert.Equal([mockExtenderProvider2.Object], listService.GetExtenderProviders());
 
         // Remove other.
         providerService.RemoveExtenderProvider(mockExtenderProvider2.Object);

@@ -18,10 +18,10 @@ public partial class ToolStripComboBox
 
             private static bool UseBaseAdapter(ComboBox comboBox)
             {
-                ToolStripComboBoxControl? toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                if (toolStripComboBox is null || toolStripComboBox.Owner?.Renderer is not ToolStripProfessionalRenderer)
+                if (comboBox is not ToolStripComboBoxControl toolStripComboBox
+                    || toolStripComboBox.Owner?.Renderer is not ToolStripProfessionalRenderer)
                 {
-                    Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
+                    Debug.Assert(comboBox is ToolStripComboBoxControl, "Why are we here and not a toolstrip combo?");
                     return true;
                 }
 

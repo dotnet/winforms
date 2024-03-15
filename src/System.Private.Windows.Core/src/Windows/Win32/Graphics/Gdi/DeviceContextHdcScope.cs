@@ -75,16 +75,18 @@ internal readonly ref struct DeviceContextHdcScope
         ApplyGraphicsProperties applyGraphicsState,
         bool saveHdcState = false)
     {
+#if DEBUG
         if (deviceContext is null)
         {
             // As we're throwing in the constructor, `this` will never be passed back and as such .Dispose()
             // can't be called. We don't have anything to release at this point so there is no point in having
             // the finalizer run.
-#if DEBUG
             DisposalTracking.SuppressFinalize(this!);
-#endif
             throw new ArgumentNullException(nameof(deviceContext));
         }
+#else
+        ArgumentNullException.ThrowIfNull(deviceContext);
+#endif
 
         DeviceContext = deviceContext;
         _savedHdcState = 0;

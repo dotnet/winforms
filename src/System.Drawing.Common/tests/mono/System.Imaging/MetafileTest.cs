@@ -362,8 +362,10 @@ public class MetafileFulltrustTest
             SizeF size = g.MeasureString(text, test_font);
             Assert.False(size.IsEmpty);
 
-            StringFormat sf = new();
-            sf.FormatFlags = StringFormatFlags.NoClip;
+            StringFormat sf = new()
+            {
+                FormatFlags = StringFormatFlags.NoClip
+            };
             sf.SetMeasurableCharacterRanges(ranges);
 
             RectangleF rect = new(0, 0, size.Width, size.Height);

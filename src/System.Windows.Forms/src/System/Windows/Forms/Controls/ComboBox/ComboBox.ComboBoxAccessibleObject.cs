@@ -41,7 +41,7 @@ public partial class ComboBox
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId && this.TryGetOwnerAs(out ComboBox? owner)
                 ? owner.DropDownStyle != ComboBoxStyle.Simple
-                : patternId == UIA_PATTERN_ID.UIA_ValuePatternId ? true : base.IsPatternSupported(patternId);
+                : patternId == UIA_PATTERN_ID.UIA_ValuePatternId || base.IsPatternSupported(patternId);
 
         internal override void Expand() => ComboBoxDefaultAction(true);
 

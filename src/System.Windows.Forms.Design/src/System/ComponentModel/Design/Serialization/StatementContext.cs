@@ -56,7 +56,7 @@ public sealed class ObjectStatementCollection : IEnumerable
         {
             for (int idx = 0; idx < _table.Count; idx++)
             {
-                if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
+                if (ReferenceEquals(_table[idx].Owner, statementOwner))
                 {
                     if (_table[idx].Statements is not null)
                     {
@@ -93,7 +93,7 @@ public sealed class ObjectStatementCollection : IEnumerable
             {
                 for (int idx = 0; idx < _table.Count; idx++)
                 {
-                    if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
+                    if (ReferenceEquals(_table[idx].Owner, statementOwner))
                     {
                         if (_table[idx].Statements is null)
                         {
@@ -106,7 +106,7 @@ public sealed class ObjectStatementCollection : IEnumerable
 
                 foreach (TableEntry e in _table)
                 {
-                    if (object.ReferenceEquals(e.Owner, statementOwner))
+                    if (ReferenceEquals(e.Owner, statementOwner))
                     {
                         return e.Statements;
                     }
@@ -195,9 +195,9 @@ public sealed class ObjectStatementCollection : IEnumerable
             _position = -1;
         }
 
-        public object Current => Entry;
+        public readonly object Current => Entry;
 
-        public DictionaryEntry Entry
+        public readonly DictionaryEntry Entry
         {
             get
             {
@@ -221,9 +221,9 @@ public sealed class ObjectStatementCollection : IEnumerable
             }
         }
 
-        public object Key => Entry.Key;
+        public readonly object Key => Entry.Key;
 
-        public object? Value => Entry.Value;
+        public readonly object? Value => Entry.Value;
 
         public bool MoveNext()
         {

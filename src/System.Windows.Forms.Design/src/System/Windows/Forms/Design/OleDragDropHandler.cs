@@ -1107,7 +1107,7 @@ internal partial class OleDragDropHandler
             }
         }
 
-        return topLevel.ToArray();
+        return [.. topLevel];
     }
 
     protected object? GetService(Type t)

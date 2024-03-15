@@ -500,13 +500,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
-
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
             Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
-                    MinimumSplashScreenDisplayTime,
-                    HighDpiMode) With {
-                                    .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
-                    }
+                MinimumSplashScreenDisplayTime,
+                HighDpiMode) With
+            {
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            }
+
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
@@ -930,6 +931,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
+
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions
@@ -1028,7 +1030,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Return Entry.ManifestModule.ModuleVersionId.ToString()
         End Function
-
     End Class
-
 End Namespace

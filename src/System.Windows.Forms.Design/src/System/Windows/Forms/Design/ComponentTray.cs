@@ -121,20 +121,20 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         if (GetService(typeof(IUIService)) is IUIService uiService)
         {
             Color styleColor;
-            if (uiService.Styles["ArtboardBackground"] is Color)
+            if (uiService.Styles["ArtboardBackground"] is Color backgroundColor)
             {
-                styleColor = (Color)uiService.Styles["ArtboardBackground"];
+                styleColor = backgroundColor;
             }
 
             // Can't use 'as' here since Color is a value type
-            else if (uiService.Styles["VsColorDesignerTray"] is Color)
+            else if (uiService.Styles["VsColorDesignerTray"] is Color designerTrayColor)
             {
-                styleColor = (Color)uiService.Styles["VsColorDesignerTray"];
+                styleColor = designerTrayColor;
             }
-            else if (uiService.Styles["HighlightColor"] is Color)
+            else if (uiService.Styles["HighlightColor"] is Color highlightColor)
             {
                 // Since v1, we have had code here that checks for HighlightColor, so some hosts (like WinRes) have been setting it. If VsColorDesignerTray isn't present, we look for HighlightColor for backward compat.
-                styleColor = (Color)uiService.Styles["HighlightColor"];
+                styleColor = highlightColor;
             }
             else
             {
@@ -142,13 +142,13 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 styleColor = SystemColors.Info;
             }
 
-            if (uiService.Styles["ArtboardBackgroundText"] is Color)
+            if (uiService.Styles["ArtboardBackgroundText"] is Color backgroundTextColor)
             {
-                ForeColor = (Color)uiService.Styles["ArtboardBackgroundText"];
+                ForeColor = backgroundTextColor;
             }
-            else if (uiService.Styles["VsColorPanelText"] is Color)
+            else if (uiService.Styles["VsColorPanelText"] is Color panelTextColor)
             {
-                ForeColor = (Color)uiService.Styles["VsColorPanelText"];
+                ForeColor = panelTextColor;
             }
 
             BackColor = styleColor;
@@ -1373,7 +1373,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             }
         }
 
-        return list.ToArray();
+        return [.. list];
     }
 
     protected override void OnPaint(PaintEventArgs pe)
@@ -1386,20 +1386,20 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             if (uiService is not null)
             {
                 Color styleColor;
-                if (uiService.Styles["ArtboardBackground"] is Color)
+                if (uiService.Styles["ArtboardBackground"] is Color backgroundColor)
                 {
-                    styleColor = (Color)uiService.Styles["ArtboardBackground"];
+                    styleColor = backgroundColor;
                 }
 
                 // Can't use 'as' here since Color is a value type
-                else if (uiService.Styles["VsColorDesignerTray"] is Color)
+                else if (uiService.Styles["VsColorDesignerTray"] is Color trayColor)
                 {
-                    styleColor = (Color)uiService.Styles["VsColorDesignerTray"];
+                    styleColor = trayColor;
                 }
-                else if (uiService.Styles["HighlightColor"] is Color)
+                else if (uiService.Styles["HighlightColor"] is Color highlightColor)
                 {
                     // Since v1, we have had code here that checks for HighlightColor, so some hosts (like WinRes) have been setting it. If VsColorDesignerTray isn't present, we look for HighlightColor for backward compat.
-                    styleColor = (Color)uiService.Styles["HighlightColor"];
+                    styleColor = highlightColor;
                 }
                 else
                 {
@@ -2917,7 +2917,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                         continue;
                     }
 
-                    if (comp is Control || !(comp is IComponent))
+                    if (comp is Control or not IComponent)
                     {
                         return false;
                     }

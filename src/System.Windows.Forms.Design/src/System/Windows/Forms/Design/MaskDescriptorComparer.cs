@@ -59,7 +59,7 @@ internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
                 break;
         }
 
-        int retVal = string.Compare(textA, textB);
+        int retVal = string.Compare(textA, textB, StringComparison.CurrentCulture);
 
         return _sortOrder == SortOrder.Descending ? -retVal : retVal;
     }

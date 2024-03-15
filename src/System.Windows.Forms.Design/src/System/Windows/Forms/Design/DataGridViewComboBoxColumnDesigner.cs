@@ -91,9 +91,8 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
             return false;
         }
 
-        return bindingManagerBase is null
-            ? false
-            : (bindingManagerBase.GetItemProperties()?[bindingMemberInfo.BindingField]) is not null;
+        return bindingManagerBase is not null
+            && (bindingManagerBase.GetItemProperties()?[bindingMemberInfo.BindingField]) is not null;
     }
 
     protected override void PreFilterProperties(IDictionary properties)

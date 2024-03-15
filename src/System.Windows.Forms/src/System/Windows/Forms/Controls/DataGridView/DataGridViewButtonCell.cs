@@ -118,7 +118,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             int useColumnTextForButtonValue = Properties.GetInteger(s_propButtonCellUseColumnTextForButtonValue, out bool found);
             if (found)
             {
-                return useColumnTextForButtonValue == 0 ? false : true;
+                return useColumnTextForButtonValue != 0;
             }
 
             return false;

@@ -37,7 +37,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_Ctor_ArguementException()
     {
-        ArrayList exceptions = new() { 1, 2, 3 };
+        ArrayList exceptions = [1, 2, 3];
         Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
     }
 

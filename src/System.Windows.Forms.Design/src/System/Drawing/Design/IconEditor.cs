@@ -99,7 +99,7 @@ public class IconEditor : UITypeEditor
 
     protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
 
-    protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
+    protected virtual string[] GetExtensions() => [.. s_iconExtensions];
 
     /// <inheritdoc />
     public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;

@@ -105,8 +105,10 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
-        textRange.End = end;
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0)
+        {
+            End = end
+        };
         int actual = textRange.End < textRange.Start ? textRange.Start : textRange.End;
         Assert.Equal(end, actual);
     }
@@ -116,8 +118,10 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new(enclosingElement, provider, start: 5, end: 10);
-        textRange.End = 3;  /*Incorrect value*/
+        UiaTextRange textRange = new(enclosingElement, provider, start: 5, end: 10)
+        {
+            End = 3  /*Incorrect value*/
+        };
         Assert.Equal(textRange.Start, textRange.End);
 
         textRange.End = 6;
@@ -182,8 +186,10 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
-        textRange.Start = start;
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0)
+        {
+            Start = start
+        };
         int actual = textRange.Start < textRange.End ? textRange.End : textRange.Start;
         Assert.Equal(start, actual);
     }
@@ -193,8 +199,10 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 8);
-        textRange.Start = -10;
+        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 8)
+        {
+            Start = -10
+        };
         Assert.Equal(0, textRange.Start);
         Assert.Equal(8, textRange.End);
     }
@@ -204,8 +212,10 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 10);
-        textRange.Start = 15; // More than End = 10
+        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 10)
+        {
+            Start = 15 // More than End = 10
+        };
         Assert.True(textRange.Start <= textRange.End);
     }
 

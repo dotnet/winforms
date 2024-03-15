@@ -198,8 +198,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
             if (_documentCompileUnit is null)
             {
-                Exception ex = new NotSupportedException(SR.CodeDomDesignerLoaderNoLanguageSupport);
-                ex.HelpLink = SR.CodeDomDesignerLoaderNoLanguageSupport;
+                Exception ex = new NotSupportedException(SR.CodeDomDesignerLoaderNoLanguageSupport)
+                {
+                    HelpLink = SR.CodeDomDesignerLoaderNoLanguageSupport
+                };
 
                 throw ex;
             }
@@ -349,13 +351,17 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                     StringBuilder builder = new(Environment.NewLine);
                     builder.AppendJoin(Environment.NewLine, failures);
 
-                    ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder));
-                    ex.HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer;
+                    ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder))
+                    {
+                        HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer
+                    };
                 }
                 else
                 {
-                    ex = new InvalidOperationException(SR.CodeDomDesignerLoaderNoRootSerializer);
-                    ex.HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer;
+                    ex = new InvalidOperationException(SR.CodeDomDesignerLoaderNoRootSerializer)
+                    {
+                        HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer
+                    };
                 }
 
                 throw ex;
@@ -987,8 +993,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (serializationData is not SerializationStore data)
         {
-            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderBadSerializationObject);
-            ex.HelpLink = SR.CodeDomDesignerLoaderBadSerializationObject;
+            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderBadSerializationObject)
+            {
+                HelpLink = SR.CodeDomDesignerLoaderBadSerializationObject
+            };
 
             throw ex;
         }
@@ -1044,7 +1052,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 }
                 else
                 {
-                    baseName.AsSpan(i).Replace(span.Slice(i), '`', '_');
+                    baseName.AsSpan(i).Replace(span[i..], '`', '_');
                     break;
                 }
             }
@@ -1199,8 +1207,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (name.Length == 0)
         {
-            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderInvalidBlankIdentifier);
-            ex.HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier;
+            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderInvalidBlankIdentifier)
+            {
+                HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier
+            };
 
             throw ex;
         }
@@ -1230,8 +1240,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             catch
             {
                 // we have to change the exception back to the original name
-                Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderInvalidIdentifier, name));
-                ex.HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier;
+                Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderInvalidIdentifier, name))
+                {
+                    HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier
+                };
 
                 throw ex;
             }
@@ -1271,8 +1283,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (dup)
         {
-            Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderDupComponentName, name));
-            ex.HelpLink = SR.CodeDomDesignerLoaderDupComponentName;
+            Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderDupComponentName, name))
+            {
+                HelpLink = SR.CodeDomDesignerLoaderDupComponentName
+            };
 
             throw ex;
         }

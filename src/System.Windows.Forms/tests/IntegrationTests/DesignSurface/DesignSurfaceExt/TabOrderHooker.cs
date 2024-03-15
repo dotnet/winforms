@@ -50,7 +50,7 @@ public class TabOrderHooker
         {
             Assembly designAssembly = Assembly.Load("System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             Type tabOrderType = designAssembly.GetType("System.Windows.Forms.Design.TabOrder");
-            tabOrderType.InvokeMember("Dispose", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, _tabOrder, new object[] { true });
+            tabOrderType.InvokeMember("Dispose", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, _tabOrder, [true]);
             _tabOrder = null;
         }
         catch (Exception ex)

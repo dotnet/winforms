@@ -25,7 +25,7 @@ public class SingleInstanceTests
         {
             var received = _received;
             Interlocked.CompareExchange(ref _received, null, received);
-            return received.ToImmutableArray();
+            return [.. received];
         }
     }
 

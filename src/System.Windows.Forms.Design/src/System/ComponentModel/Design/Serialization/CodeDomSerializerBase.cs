@@ -21,9 +21,11 @@ public abstract partial class CodeDomSerializerBase
     private static readonly Attribute[] s_runTimeProperties = [DesignOnlyAttribute.No];
     private static readonly TraceSwitch s_traceSerialization = new("DesignerSerialization", "Trace design time serialization");
 #pragma warning disable CS0649
-#pragma warning disable IDE0044 // Add readonly modifier - can only be readonly in release, should probably refactor to only have this in debug
+#if DEBUG
     private static Stack<string>? s_traceScope;
-#pragma warning restore IDE0044
+#else
+    private static readonly Stack<string>? s_traceScope;
+#endif
 #pragma warning restore CS0649
     /// <summary>
     ///  Internal constructor so only we can derive from this class.
@@ -375,7 +377,7 @@ public abstract partial class CodeDomSerializerBase
                         continue;
                     }
 
-                    string propertyName = resourceName.Substring(dotIndex + 1);
+                    string propertyName = resourceName[(dotIndex + 1)..];
 
                     // Now locate the property by this name.
                     PropertyDescriptor? property = ourProperties[propertyName];
@@ -1002,9 +1004,9 @@ public abstract partial class CodeDomSerializerBase
                         {
                             string methodName = methodInvokeEx.Method.MethodName;
 
-                            if (methodName.StartsWith("add_"))
+                            if (methodName.StartsWith("add_", StringComparison.Ordinal))
                             {
-                                methodName = methodName.Substring(4);
+                                methodName = methodName[4..];
                                 DeserializeAttachEventStatement(manager, new CodeAttachEventStatement(methodInvokeEx.Method.TargetObject, methodName, codeDelegateCreateExpression));
                                 result = null;
                             }
@@ -2676,7 +2678,7 @@ public abstract partial class CodeDomSerializerBase
                             if (referenceName && dotIndex >= 0)
                             {
                                 // if it's a reference name with a dot, we've actually got a property here...
-                                expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(root.Expression, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
+                                expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(root.Expression, name[..dotIndex]), name[(dotIndex + 1)..]);
                             }
                             else
                             {
@@ -2692,7 +2694,7 @@ public abstract partial class CodeDomSerializerBase
                         if (referenceName && dotIndex >= 0)
                         {
                             // if it's a reference name with a dot, we've actually got a property here...
-                            expression = new CodePropertyReferenceExpression(new CodeVariableReferenceExpression(name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
+                            expression = new CodePropertyReferenceExpression(new CodeVariableReferenceExpression(name[..dotIndex]), name[(dotIndex + 1)..]);
                         }
                         else
                         {
