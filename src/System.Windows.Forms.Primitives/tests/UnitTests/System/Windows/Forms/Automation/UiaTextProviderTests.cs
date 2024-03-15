@@ -106,8 +106,7 @@ public unsafe class UiaTextProviderTests
     public unsafe void UiaTextProvider_SendInput_SendsOneInput()
     {
         INPUT keyboardInput = new();
-
-        int actual = UiaTextProvider.SendInput(1, ref keyboardInput, sizeof(INPUT));
+        int actual = UiaTextProvider.SendInput(ref keyboardInput);
         Assert.Equal(1, actual);
     }
 

@@ -88,7 +88,7 @@ public class ArrayEditorTests
         Assert.True(editor.CanSelectMultipleInstances());
     }
 
-    public static IEnumerable<Object[]> GetDisplayText_TestData()
+    public static IEnumerable<object[]> GetDisplayText_TestData()
     {
         yield return new object[] { null, null, string.Empty };
         yield return new object[] { null, string.Empty, "String" };
@@ -245,6 +245,7 @@ public class ArrayEditorTests
         public int Item { get; set; }
     }
 
+#pragma warning disable IDE0051 // Remove unused private members
     private class ClassWithPrivateItem
     {
         private int Item { get; set; }
@@ -291,7 +292,7 @@ public class ArrayEditorTests
         public override string ToString() => null;
     }
 
-    [DefaultProperty(nameof(ClassWithStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithStringDefaultProperty
     {
         public string DefaultProperty { get; set; }
@@ -299,7 +300,7 @@ public class ArrayEditorTests
         public override string ToString() => nameof(ClassWithStringDefaultProperty);
     }
 
-    [DefaultProperty(nameof(ClassWithNonStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithNonStringDefaultProperty
     {
         public int DefaultProperty { get; set; }
@@ -314,4 +315,7 @@ public class ArrayEditorTests
 
         public override string ToString() => nameof(ClassWithNoSuchDefaultProperty);
     }
+
+#pragma warning restore IDE0051 // Remove unused private members
+
 }

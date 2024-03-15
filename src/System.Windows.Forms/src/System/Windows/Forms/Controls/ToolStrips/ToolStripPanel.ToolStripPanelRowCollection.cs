@@ -41,7 +41,7 @@ public partial class ToolStripPanel
             ArgumentNullException.ThrowIfNull(value);
 
             int retVal = ((IList)InnerList).Add(value);
-            OnAdd(value, retVal);
+            OnAdd(value);
             return retVal;
         }
 
@@ -134,10 +134,10 @@ public partial class ToolStripPanel
             ArgumentNullException.ThrowIfNull(value);
 
             InnerList.Insert(index, value);
-            OnAdd(value, index);
+            OnAdd(value);
         }
 
-        private void OnAdd(ToolStripPanelRow value, int index)
+        private void OnAdd(ToolStripPanelRow value)
         {
             if (_owner is not null)
             {

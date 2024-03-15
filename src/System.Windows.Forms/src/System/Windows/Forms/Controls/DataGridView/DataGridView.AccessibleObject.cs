@@ -189,18 +189,12 @@ public partial class DataGridView
             }
         }
 
-        public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
+        public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection) => navigationDirection switch
         {
-            switch (navigationDirection)
-            {
-                case AccessibleNavigation.FirstChild:
-                    return GetChild(0);
-                case AccessibleNavigation.LastChild:
-                    return GetChild(GetChildCount() - 1);
-                default:
-                    return null;
-            }
-        }
+            AccessibleNavigation.FirstChild => GetChild(0),
+            AccessibleNavigation.LastChild => GetChild(GetChildCount() - 1),
+            _ => null,
+        };
 
         internal override int[] RuntimeId => _runtimeId ??=
         [

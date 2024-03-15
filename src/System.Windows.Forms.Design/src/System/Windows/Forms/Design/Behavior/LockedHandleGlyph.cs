@@ -32,6 +32,6 @@ internal class LockedHandleGlyph : SelectionGlyphBase
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        DesignerUtils.DrawLockedHandle(pe.Graphics, bounds, _isPrimary, this);
+        DesignerUtils.DrawLockedHandle(pe.Graphics, bounds, _isPrimary);
     }
 }

@@ -1821,6 +1821,9 @@ public class DesignSurfaceTests
         }
     }
 
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0051 // Remove unused private members
+
     private class ClassWithPrivateDefaultConstructor
     {
         private ClassWithPrivateDefaultConstructor()
@@ -1892,4 +1895,6 @@ public class DesignSurfaceTests
         {
         }
     }
+#pragma warning restore IDE0051
+#pragma warning restore IDE0060
 }

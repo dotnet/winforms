@@ -54,7 +54,7 @@ public abstract partial class UndoEngine
             /// <summary>
             ///  Commits this event.
             /// </summary>
-            internal void Commit(UndoEngine engine)
+            internal void Commit()
             {
                 if (!Committed)
                 {

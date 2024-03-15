@@ -13,7 +13,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
     internal override void PaintUp(PaintEventArgs e, CheckState state)
     {
         ColorData colors = PaintPopupRender(e).Calculate();
-        LayoutData layout = PaintPopupLayout(e, state == CheckState.Unchecked, 1).Layout();
+        LayoutData layout = PaintPopupLayout(state == CheckState.Unchecked, 1).Layout();
 
         Rectangle r = Control.ClientRectangle;
 
@@ -59,7 +59,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
     internal override void PaintOver(PaintEventArgs e, CheckState state)
     {
         ColorData colors = PaintPopupRender(e).Calculate();
-        LayoutData layout = PaintPopupLayout(e, state == CheckState.Unchecked, SystemInformation.HighContrast ? 2 : 1).Layout();
+        LayoutData layout = PaintPopupLayout(state == CheckState.Unchecked, SystemInformation.HighContrast ? 2 : 1).Layout();
 
         Rectangle r = Control.ClientRectangle;
 
@@ -117,7 +117,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
     internal override void PaintDown(PaintEventArgs e, CheckState state)
     {
         ColorData colors = PaintPopupRender(e).Calculate();
-        LayoutData layout = PaintPopupLayout(e, up: false, SystemInformation.HighContrast ? 2 : 1).Layout();
+        LayoutData layout = PaintPopupLayout(up: false, SystemInformation.HighContrast ? 2 : 1).Layout();
 
         Rectangle r = Control.ClientRectangle;
         PaintButtonBackground(e, r, background: null);
@@ -138,9 +138,9 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
-        LayoutOptions layout = PaintPopupLayout(e, up: false, 0);
+        LayoutOptions layout = PaintPopupLayout(up: false, 0);
         Debug.Assert(
-            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintPopupLayout(up: true, 2).GetPreferredSizeCore(LayoutUtils.s_maxSize),
             "The state of up should not effect PreferredSize");
         return layout;
     }
@@ -171,7 +171,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         return layout;
     }
 
-    private LayoutOptions PaintPopupLayout(PaintEventArgs e, bool up, int paintedBorder)
+    private LayoutOptions PaintPopupLayout(bool up, int paintedBorder)
     {
         LayoutOptions layout = CommonLayout();
         layout.BorderSize = paintedBorder;

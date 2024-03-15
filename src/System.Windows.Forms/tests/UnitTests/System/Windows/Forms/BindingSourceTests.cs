@@ -856,7 +856,9 @@ public class BindingSourceTests
 
     private class NoDefaultConstructor : List<int>, ITypedList
     {
+#pragma warning disable IDE0060 // Remove unused parameter
         public NoDefaultConstructor(int i) { }
+#pragma warning restore IDE0060 // Remove unused parameter
 
         public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {

@@ -8,22 +8,10 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ContainerSelectorActiveEventArgs : EventArgs
 {
-    private readonly object _component;
-    private readonly ContainerSelectorActiveEventArgsType _eventType;
-
     /// <summary>
     ///  Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
     /// </summary>
-    public ContainerSelectorActiveEventArgs(object component) : this(component, ContainerSelectorActiveEventArgsType.Mouse)
+    public ContainerSelectorActiveEventArgs()
     {
-    }
-
-    /// <summary>
-    ///  Initializes a new instance of the 'ContainerSelectorActiveEventArgs' class.
-    /// </summary>
-    public ContainerSelectorActiveEventArgs(object component, ContainerSelectorActiveEventArgsType eventType)
-    {
-        _component = component;
-        _eventType = eventType;
     }
 }

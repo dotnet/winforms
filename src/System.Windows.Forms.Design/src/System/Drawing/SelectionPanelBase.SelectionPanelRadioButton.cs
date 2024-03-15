@@ -16,19 +16,10 @@ internal abstract partial class SelectionPanelBase
 
         protected override bool ShowFocusCues => true;
 
-        protected override bool IsInputKey(Keys keyData)
+        protected override bool IsInputKey(Keys keyData) => keyData switch
         {
-            switch (keyData)
-            {
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Return:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
-        }
+            Keys.Left or Keys.Right or Keys.Up or Keys.Down or Keys.Return => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 }
