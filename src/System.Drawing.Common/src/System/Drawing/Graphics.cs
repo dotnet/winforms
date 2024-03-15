@@ -18,19 +18,6 @@ namespace System.Drawing;
 /// </summary>
 public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, IDeviceContext, IGraphics
 {
-#if FINALIZATION_WATCH
-    static readonly TraceSwitch GraphicsFinalization = new("GraphicsFinalization", "Tracks the creation and destruction of finalization");
-    internal static string GetAllocationStack() {
-        if (GraphicsFinalization.TraceVerbose) {
-            return Environment.StackTrace;
-        }
-        else {
-            return "Enabled 'GraphicsFinalization' switch to see stack of allocation";
-        }
-    }
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     /// <summary>
     ///  The context state previous to the current Graphics context (the head of the stack).
     ///  We don't keep a GraphicsContext for the current context since it is available at any time from GDI+ and
@@ -166,52 +153,33 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     private void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && NativeGraphics is not null, $"""
-            System.Drawing.Graphics: ***************************************************
-            System.Drawing.Graphics: Object Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-        while (_previousContext is not null)
+        if (disposing)
         {
-            // Dispose entire stack.
-            GraphicsContext? context = _previousContext.Previous;
-            _previousContext.Dispose();
-            _previousContext = context;
+            while (_previousContext is not null)
+            {
+                // Dispose entire stack.
+                GraphicsContext? context = _previousContext.Previous;
+                _previousContext.Dispose();
+                _previousContext = context;
+            }
+
+            if (PrintingHelper is HdcHandle printerDC)
+            {
+                printerDC.Dispose();
+                _printingHelper = null;
+            }
+        }
+
+        if (!_nativeHdc.IsNull)
+        {
+            ReleaseHdc();
         }
 
         if (NativeGraphics is not null)
         {
-            try
-            {
-                if (_nativeHdc != IntPtr.Zero) // avoid a handle leak.
-                {
-                    ReleaseHdc();
-                }
-
-                if (PrintingHelper is HdcHandle printerDC)
-                {
-                    printerDC.Dispose();
-                    _printingHelper = null;
-                }
-
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvokeCore.GdipDeleteGraphics(NativeGraphics);
-
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                NativeGraphics = null;
-            }
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeCore.GdipDeleteGraphics(NativeGraphics);
+            NativeGraphics = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 
