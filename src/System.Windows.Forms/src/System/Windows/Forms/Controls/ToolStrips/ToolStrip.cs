@@ -412,6 +412,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // we don't have a binding context
             return null;
         }
+
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set
         {
             if (Properties.GetObject(s_propBindingContext) != value)

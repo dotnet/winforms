@@ -684,6 +684,11 @@ public abstract class ListControl : Control
                     CurrencyManager? newDataManager = null;
                     if (newDataSource is not null && BindingContext is not null && newDataSource != Convert.DBNull)
                     {
+                        if (!Binding.IsSupported)
+                        {
+                            throw new NotSupportedException(SR.BindingNotSupported);
+                        }
+
                         newDataManager = (CurrencyManager)BindingContext[newDataSource, newDisplayMember.BindingPath];
                     }
 

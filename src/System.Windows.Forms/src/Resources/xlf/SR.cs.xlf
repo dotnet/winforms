@@ -412,6 +412,11 @@
         <target state="translated">Navigátor vazby</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding is not supported in trimming</source>
+        <target state="new">Binding is not supported in trimming</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Událost aktivovaná při volání metody AddNew objektu BindingSource</target>

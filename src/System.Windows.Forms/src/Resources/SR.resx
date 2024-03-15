@@ -6964,4 +6964,7 @@ Stack trace where the illegal operation occurred was:
   <data name="FolderBrowserDialogMultiSelectDescr" xml:space="preserve">
     <value>Controls whether multiple folders can be selected in the dialog.</value>
   </data>
+  <data name="BindingNotSupported" xml:space="preserve">
+    <value>Binding is not supported in trimming</value>
+  </data>
 </root>

@@ -412,6 +412,11 @@
         <target state="translated">BindingNavigator</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding is not supported in trimming</source>
+        <target state="new">Binding is not supported in trimming</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Das ausgelöste Ereignis, wenn der Benutzer AddNew für die BindingSource aufruft.</target>

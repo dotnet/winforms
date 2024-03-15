@@ -412,6 +412,11 @@
         <target state="translated">繫結導覽</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding is not supported in trimming</source>
+        <target state="new">Binding is not supported in trimming</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">使用者呼叫 BindingSource 上的 AddNew 時引發的事件</target>

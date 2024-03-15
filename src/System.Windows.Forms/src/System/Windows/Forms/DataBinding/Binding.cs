@@ -12,6 +12,9 @@ namespace System.Windows.Forms;
 [TypeConverter(typeof(ListBindingConverter))]
 public partial class Binding
 {
+    [FeatureSwitchDefinition("System.Windows.Forms.Binding.IsSupported")]
+    internal static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.Binding.IsSupported", out bool isSupported) ? isSupported : true;
+
     private BindingManagerBase? _bindingManagerBase;
 
     private readonly BindToObject _bindToObject;

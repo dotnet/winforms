@@ -216,7 +216,6 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
-    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     public static object? ParseObject(
         object? value,
         Type targetType,
@@ -268,7 +267,6 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException if no suitable conversion can be found
     /// </summary>
-    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     private static object? ParseObjectInternal(
         object? value,
         Type targetType,

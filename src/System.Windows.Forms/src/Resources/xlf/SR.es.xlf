@@ -412,6 +412,11 @@
         <target state="translated">Examinador de enlaces</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding is not supported in trimming</source>
+        <target state="new">Binding is not supported in trimming</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Evento que se desencadena cuando el usuario llama a AddNew en BindingSource</target>

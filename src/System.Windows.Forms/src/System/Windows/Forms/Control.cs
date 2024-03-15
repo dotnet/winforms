@@ -1105,6 +1105,7 @@ public unsafe partial class Control :
     public virtual BindingContext? BindingContext
     {
         get => BindingContextInternal;
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => BindingContextInternal = value;
     }
 
@@ -7055,6 +7056,11 @@ public unsafe partial class Control :
     {
         if (Properties.ContainsObjectThatIsNotNull(s_bindingsProperty))
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             UpdateBindings();
         }
 
