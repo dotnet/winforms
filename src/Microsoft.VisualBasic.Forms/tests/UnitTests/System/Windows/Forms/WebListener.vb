@@ -14,12 +14,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private _userName As String
         Private _password As String
 
+        ''' <summary>
+        ''' The name of the function that creates the server is uses to establish the file to be downloaded
+        ''' </summary>
+        ''' <param name="fileSize">Is used to create the file name and the size of download</param>
+        ''' <param name="memberName">Used to establish the file path to be downloaded</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
             _fileSize = fileSize
             _downloadFileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
             Address = $"{_downloadFileUrlPrefix}T{fileSize}"
         End Sub
 
+        ''' <summary>
+        ''' Used for authenticated download
+        ''' </summary>
+        ''' <param name="fileSize">Passed to Me.New</param>
+        ''' <param name="userName">Name to match for authorization</param>
+        ''' <param name="password">Password to match for authorization</param>
+        ''' <param name="memberName">Passed to Me.New</param>
         Public Sub New(fileSize As Integer, userName As String, password As String, <CallerMemberName> Optional memberName As String = Nothing)
             Me.New(fileSize, memberName)
             _userName = userName
