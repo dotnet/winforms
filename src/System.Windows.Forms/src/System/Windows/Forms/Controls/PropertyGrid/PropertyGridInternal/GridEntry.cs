@@ -1439,8 +1439,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public virtual object[] GetPropertyValueList()
     {
-        ICollection? values = TypeConverter.GetStandardValues(this);
-        if (values is not null)
+        if (TypeConverter.GetStandardValues(this) is { } values)
         {
             object[] valueArray = new object[values.Count];
             values.CopyTo(valueArray, 0);
@@ -1829,7 +1828,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         if (text.Length > MaximumLengthOfPropertyString)
         {
-            text = text.Substring(0, MaximumLengthOfPropertyString);
+            text = text[..MaximumLengthOfPropertyString];
         }
 
         int textWidth = GetValueTextWidth(text, g, GetFont(valueModified));

@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests;
 
 public partial class TextBoxBaseTests
 {
-    private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
+    private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
     [WinFormsFact]
     public void TextBoxBase_CreateParams_GetDefault_ReturnsExpected()
@@ -4558,7 +4558,7 @@ public partial class TextBoxBaseTests
         };
 
         int index = control.GetCharIndexFromPosition(new Point(10, 2));
-        Assert.True(index > 0 && index < 4);
+        Assert.True(index is > 0 and < 4);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -4618,7 +4618,7 @@ public partial class TextBoxBaseTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         int index = control.GetCharIndexFromPosition(new Point(10, 2));
-        Assert.True(index > 0 && index < 4);
+        Assert.True(index is > 0 and < 4);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);

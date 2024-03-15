@@ -263,7 +263,7 @@ internal partial class CommandSet : IDisposable
                 // instantiate our snapline timer
                 _snapLineTimer = new Timer
                 {
-                    Interval = DesignerUtils.SNAPELINEDELAY
+                    Interval = DesignerUtils.s_snapLineDelay
                 };
                 _snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
             }
@@ -470,7 +470,7 @@ internal partial class CommandSet : IDisposable
                     }
                 }
 
-                return list.ToArray();
+                return [.. list];
             }
         }
 
@@ -1888,325 +1888,319 @@ internal partial class CommandSet : IDisposable
                 int numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                 // We understand two things:  CF_DESIGNER, and toolbox items.
-                //
                 object? data = dataObj?.GetData(CF_DESIGNER);
 
-                using (DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste))
+                using DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste);
+                if (data is byte[] bytes)
                 {
-                    if (data is byte[] bytes)
+                    MemoryStream s = new(bytes);
+
+                    // CF_DESIGNER was put on the clipboard by us using the designer serialization service.
+                    if (TryGetService(out IDesignerSerializationService? ds))
                     {
-                        MemoryStream s = new(bytes);
-                        // CF_DESIGNER was put on the clipboard by us using the designer
-                        // serialization service.
-                        //
-                        if (TryGetService(out IDesignerSerializationService? ds))
-                        {
-                            s.Seek(0, SeekOrigin.Begin);
+                        s.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                            object serializationData = new BinaryFormatter().Deserialize(s);
+                        object serializationData = new BinaryFormatter().Deserialize(s);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
-                            {
-                                components = ds.Deserialize(serializationData);
-                            }
+                        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                        {
+                            components = ds.Deserialize(serializationData);
                         }
                     }
-                    else if (TryGetService(out IToolboxService? ts) && ts.IsSupported(dataObj, host))
+                }
+                else if (TryGetService(out IToolboxService? ts) && ts.IsSupported(dataObj, host))
+                {
+                    // Now check for a toolbox item.
+                    ToolboxItem? ti = ts.DeserializeToolboxItem(dataObj, host);
+                    if (ti is not null)
                     {
-                        // Now check for a toolbox item.
-                        //
-
-                        ToolboxItem? ti = ts.DeserializeToolboxItem(dataObj, host);
-                        if (ti is not null)
+                        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                         {
-                            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
-                            {
-                                components = ti.CreateComponents(host);
-                            }
-
-                            createdItems = true;
+                            components = ti.CreateComponents(host);
                         }
+
+                        createdItems = true;
+                    }
+                }
+
+                // Now, if we got some components, hook 'em up!
+                //
+                if (components is not null && components.Count > 0)
+                {
+                    // Make copy of Items in Array..
+                    object[] allComponents = new object[components.Count];
+                    components.CopyTo(allComponents, 0);
+
+                    List<IComponent> selectComps = [];
+                    List<Control> controls = [];
+                    string[]? componentNames = null;
+                    int idx = 0;
+
+                    // if the selected item is a frame designer, add to that, otherwise
+                    // add to the form
+                    IOleDragClient? designer = null;
+                    bool dragClient = false;
+
+                    IComponent baseComponent = host.RootComponent;
+                    IComponent? selectedComponent = (IComponent?)SelectionService?.PrimarySelection;
+
+                    selectedComponent ??= baseComponent;
+
+                    ITreeDesigner? tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
+
+                    while (tree is not null)
+                    {
+                        if (tree is IOleDragClient oleDragClient)
+                        {
+                            designer = oleDragClient;
+                            break;
+                        }
+
+                        if (tree == tree.Parent)
+                        {
+                            break;
+                        }
+
+                        tree = tree.Parent as ITreeDesigner;
                     }
 
-                    // Now, if we got some components, hook 'em up!
-                    //
-                    if (components is not null && components.Count > 0)
+                    foreach (object obj in components)
                     {
-                        // Make copy of Items in Array..
-                        object[] allComponents = new object[components.Count];
-                        components.CopyTo(allComponents, 0);
+                        string? name = null;
 
-                        List<IComponent> selectComps = [];
-                        List<Control> controls = [];
-                        string[]? componentNames = null;
-                        int idx = 0;
-
-                        // if the selected item is a frame designer, add to that, otherwise
-                        // add to the form
-                        IOleDragClient? designer = null;
-                        bool dragClient = false;
-
-                        IComponent baseComponent = host.RootComponent;
-                        IComponent? selectedComponent = (IComponent?)SelectionService?.PrimarySelection;
-
-                        selectedComponent ??= baseComponent;
-
-                        ITreeDesigner? tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
-
-                        while (tree is not null)
+                        // see if we can fish out the original name.  When we
+                        // serialized, we serialized an array of names at the
+                        // head of the list.  This array matches the components
+                        // that were created.
+                        if (obj is IComponent curComp)
                         {
-                            if (tree is IOleDragClient oleDragClient)
+                            if (componentNames is not null && idx < componentNames.Length)
                             {
-                                designer = oleDragClient;
-                                break;
+                                name = componentNames[idx++];
+                            }
+                        }
+                        else
+                        {
+                            if (componentNames is null && obj is string[] sa)
+                            {
+                                componentNames = sa;
+                                idx = 0;
                             }
 
-                            if (tree == tree.Parent)
-                            {
-                                break;
-                            }
-
-                            tree = tree.Parent as ITreeDesigner;
+                            continue;
                         }
 
-                        foreach (object obj in components)
+                        if (TryGetService(out IEventBindingService? evs))
                         {
-                            string? name = null;
-
-                            // see if we can fish out the original name.  When we
-                            // serialized, we serialized an array of names at the
-                            // head of the list.  This array matches the components
-                            // that were created.
-                            if (obj is IComponent curComp)
+                            PropertyDescriptorCollection eventProps = evs.GetEventProperties(TypeDescriptor.GetEvents(curComp));
+                            foreach (PropertyDescriptor pd in eventProps)
                             {
-                                if (componentNames is not null && idx < componentNames.Length)
-                                {
-                                    name = componentNames[idx++];
-                                }
-                            }
-                            else
-                            {
-                                if (componentNames is null && obj is string[] sa)
-                                {
-                                    componentNames = sa;
-                                    idx = 0;
-                                }
-
-                                continue;
-                            }
-
-                            if (TryGetService(out IEventBindingService? evs))
-                            {
-                                PropertyDescriptorCollection eventProps = evs.GetEventProperties(TypeDescriptor.GetEvents(curComp));
-                                foreach (PropertyDescriptor pd in eventProps)
-                                {
-                                    // If we couldn't find a property for this event, or of the property is read only, then
-                                    // abort.
-                                    //
-                                    if (pd is null || pd.IsReadOnly)
-                                    {
-                                        continue;
-                                    }
-
-                                    if (pd.GetValue(curComp) is string)
-                                    {
-                                        pd.SetValue(curComp, null);
-                                    }
-                                }
-                            }
-
-                            if (dragClient)
-                            {
-                                // If we have failed to add a control in this Paste operation ...
-                                if (associatedCompsOfFailedControl is not null)
-                                {
-                                    bool foundAssociatedControl = false;
-
-                                    // then don't add its children controls.
-                                    foreach (Component comp in associatedCompsOfFailedControl)
-                                    {
-                                        if (comp == obj as Component)
-                                        {
-                                            foundAssociatedControl = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (foundAssociatedControl)
-                                    {
-                                        continue; // continue from here so that we don't add the associated component of a control that failed paste operation.
-                                    }
-                                }
-
-                                // VSWhidbey 390442 - DGV has columns which are sited IComponents that don't
-                                // have designers.  in this case, ignore them.
-
-                                if (host.GetDesigner(curComp) is not ComponentDesigner cDesigner)
+                                // If we couldn't find a property for this event, or of the property is read only, then
+                                // abort.
+                                //
+                                if (pd is null || pd.IsReadOnly)
                                 {
                                     continue;
                                 }
 
-                                // store associatedComponents.
-                                ICollection? designerComps = cDesigner.AssociatedComponents;
+                                if (pd.GetValue(curComp) is string)
+                                {
+                                    pd.SetValue(curComp, null);
+                                }
+                            }
+                        }
 
-                                ComponentDesigner? parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
-                                Component? parentComp = parentCompDesigner?.Component as Component;
+                        if (dragClient)
+                        {
+                            // If we have failed to add a control in this Paste operation ...
+                            if (associatedCompsOfFailedControl is not null)
+                            {
+                                bool foundAssociatedControl = false;
 
-                                List<IComponent> associatedComps = [];
+                                // then don't add its children controls.
+                                foreach (Component comp in associatedCompsOfFailedControl)
+                                {
+                                    if (comp == obj as Component)
+                                    {
+                                        foundAssociatedControl = true;
+                                        break;
+                                    }
+                                }
 
+                                if (foundAssociatedControl)
+                                {
+                                    continue; // continue from here so that we don't add the associated component of a control that failed paste operation.
+                                }
+                            }
+
+                            // VSWhidbey 390442 - DGV has columns which are sited IComponents that don't
+                            // have designers.  in this case, ignore them.
+
+                            if (host.GetDesigner(curComp) is not ComponentDesigner cDesigner)
+                            {
+                                continue;
+                            }
+
+                            // store associatedComponents.
+                            ICollection? designerComps = cDesigner.AssociatedComponents;
+
+                            ComponentDesigner? parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
+                            Component? parentComp = parentCompDesigner?.Component as Component;
+
+                            List<IComponent> associatedComps = [];
+
+                            if (parentComp is not null)
+                            {
+                                foreach (IComponent childComp in parentCompDesigner!.AssociatedComponents)
+                                {
+                                    associatedComps.Add(childComp);
+                                }
+                            }
+
+                            if (parentComp is null || !(associatedComps.Contains(curComp)))
+                            {
                                 if (parentComp is not null)
                                 {
-                                    foreach (IComponent childComp in parentCompDesigner!.AssociatedComponents)
+                                    if (host.GetDesigner(parentComp) is ParentControlDesigner parentDesigner && !designerList.Contains(parentDesigner))
                                     {
-                                        associatedComps.Add(childComp);
+                                        parentDesigner.SuspendChangingEvents();
+                                        designerList.Add(parentDesigner);
+                                        parentDesigner.ForceComponentChanging();
                                     }
                                 }
 
-                                if (parentComp is null || !(associatedComps.Contains(curComp)))
+                                if (!designer!.AddComponent(curComp, name!, createdItems))
                                 {
-                                    if (parentComp is not null)
-                                    {
-                                        if (host.GetDesigner(parentComp) is ParentControlDesigner parentDesigner && !designerList.Contains(parentDesigner))
-                                        {
-                                            parentDesigner.SuspendChangingEvents();
-                                            designerList.Add(parentDesigner);
-                                            parentDesigner.ForceComponentChanging();
-                                        }
-                                    }
-
-                                    if (!designer!.AddComponent(curComp, name!, createdItems))
-                                    {
-                                        // cache the associatedComponents only for FAILED control.
-                                        associatedCompsOfFailedControl = designerComps;
-                                        // now we will jump out of the using block and call trans.Dispose()
-                                        // which in turn calls trans.Cancel for an uncommitted transaction,
-                                        // We want to cancel the transaction because otherwise we'll have
-                                        // un-parented controls
-                                        return;
-                                    }
-
-                                    Control designerControl = designer.GetControlForComponent(curComp);
-                                    if (designerControl is not null)
-                                    {
-                                        controls.Add(designerControl);
-                                    }
-
-                                    // Select the newly Added top level component
-                                    if ((TypeDescriptor.GetAttributes(curComp).Contains(DesignTimeVisibleAttribute.Yes)) || curComp is ToolStripItem)
-                                    {
-                                        selectComps.Add(curComp);
-                                    }
+                                    // cache the associatedComponents only for FAILED control.
+                                    associatedCompsOfFailedControl = designerComps;
+                                    // now we will jump out of the using block and call trans.Dispose()
+                                    // which in turn calls trans.Cancel for an uncommitted transaction,
+                                    // We want to cancel the transaction because otherwise we'll have
+                                    // un-parented controls
+                                    return;
                                 }
 
-                                // if Parent is not selected... select the curcomp.
-                                else if (associatedComps.Contains(curComp) && Array.IndexOf(allComponents, parentComp) == -1)
+                                Control designerControl = designer.GetControlForComponent(curComp);
+                                if (designerControl is not null)
+                                {
+                                    controls.Add(designerControl);
+                                }
+
+                                // Select the newly Added top level component
+                                if ((TypeDescriptor.GetAttributes(curComp).Contains(DesignTimeVisibleAttribute.Yes)) || curComp is ToolStripItem)
                                 {
                                     selectComps.Add(curComp);
                                 }
+                            }
 
-                                bool changeName = false;
+                            // if Parent is not selected... select the curcomp.
+                            else if (associatedComps.Contains(curComp) && Array.IndexOf(allComponents, parentComp) == -1)
+                            {
+                                selectComps.Add(curComp);
+                            }
 
-                                if (curComp is Control c)
+                            bool changeName = false;
+
+                            if (curComp is Control c)
+                            {
+                                // if the text is the same as the name, remember it.
+                                // After we add the control, we'll update the text with
+                                // the new name.
+                                //
+                                if (name is not null && name.Equals(c.Text))
                                 {
-                                    // if the text is the same as the name, remember it.
-                                    // After we add the control, we'll update the text with
-                                    // the new name.
-                                    //
-                                    if (name is not null && name.Equals(c.Text))
-                                    {
-                                        changeName = true;
-                                    }
+                                    changeName = true;
                                 }
+                            }
 
-                                if (changeName)
+                            if (changeName)
+                            {
+                                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
+                                PropertyDescriptor? nameProp = props["Name"];
+                                if (nameProp is not null && nameProp.TryGetValue(curComp, out string? newName))
                                 {
-                                    PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
-                                    PropertyDescriptor? nameProp = props["Name"];
-                                    if (nameProp is not null && nameProp.TryGetValue(curComp, out string? newName))
+                                    if (newName != name)
                                     {
-                                        if (newName != name)
+                                        PropertyDescriptor? textProp = props["Text"];
+                                        if (textProp is not null && textProp.PropertyType == typeof(string))
                                         {
-                                            PropertyDescriptor? textProp = props["Text"];
-                                            if (textProp is not null && textProp.PropertyType == typeof(string))
-                                            {
-                                                textProp.SetValue(curComp, newName);
-                                            }
+                                            textProp.SetValue(curComp, newName);
                                         }
                                     }
                                 }
                             }
                         }
-
-                        // Find those controls that have ControlDesigners and center them on the designer surface
-                        List<Control> compsWithControlDesigners = [];
-                        foreach (Control c in controls)
-                        {
-                            IDesigner? des = host.GetDesigner(c);
-                            if (des is ControlDesigner)
-                            {
-                                compsWithControlDesigners.Add(c);
-                            }
-                        }
-
-                        if (compsWithControlDesigners.Count > 0)
-                        {
-                            // Update the control positions.  We want to keep the entire block
-                            // of controls relative to each other, but relocate them within
-                            // the container.
-                            //
-                            UpdatePastePositions(compsWithControlDesigners);
-                        }
-
-                        // Figure out if we added components to the component tray, and have the
-                        // tray adjust their position.
-                        // MartinTh - removed the old check, since ToolStrips breaks the scenario.
-                        // ToolStrips have a ControlDesigner, but also add a component to the tray.
-                        // The old code wouldn't detect that, so the tray location wouldn't get adjusted.
-                        // Rather than fixing this up in ToolStripKeyboardHandlingService.OnCommandPaste,
-                        // we do it here, since doing it in the service, wouldn't handle cross-form paste.
-
-                        // the paste target did not have a tray already, so let's go get it - if there is one
-                        tray ??= GetService<ComponentTray>();
-
-                        if (tray is not null)
-                        {
-                            int numberOfTrayControlsAdded = tray.Controls.Count - numberOfOriginalTrayControls;
-
-                            if (numberOfTrayControlsAdded > 0)
-                            {
-                                List<Control> listOfTrayControls = [];
-                                for (int i = 0; i < numberOfTrayControlsAdded; i++)
-                                {
-                                    listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
-                                }
-
-                                tray.UpdatePastePositions(listOfTrayControls);
-                            }
-                        }
-
-                        // Update the tab indices of all the components.  We must first sort the
-                        // components by their existing tab indices or else we will not preserve their
-                        // original intent.
-                        //
-                        controls.Sort(TabIndexComparer.Instance);
-                        foreach (Control c in controls)
-                        {
-                            UpdatePasteTabIndex(c, c.Parent);
-                        }
-
-                        // finally select all the components we added
-                        SelectionService?.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
-
-                        // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
-                        if (designer is ParentControlDesigner parentControlDesigner
-                            && parentControlDesigner.AllowSetChildIndexOnDrop)
-                        {
-                            MenuCommand? btf = MenuService?.FindCommand(StandardCommands.BringToFront);
-                            btf?.Invoke();
-                        }
-
-                        trans.Commit();
                     }
+
+                    // Find those controls that have ControlDesigners and center them on the designer surface
+                    List<Control> compsWithControlDesigners = [];
+                    foreach (Control c in controls)
+                    {
+                        IDesigner? des = host.GetDesigner(c);
+                        if (des is ControlDesigner)
+                        {
+                            compsWithControlDesigners.Add(c);
+                        }
+                    }
+
+                    if (compsWithControlDesigners.Count > 0)
+                    {
+                        // Update the control positions.  We want to keep the entire block
+                        // of controls relative to each other, but relocate them within
+                        // the container.
+                        //
+                        UpdatePastePositions(compsWithControlDesigners);
+                    }
+
+                    // Figure out if we added components to the component tray, and have the
+                    // tray adjust their position.
+                    // MartinTh - removed the old check, since ToolStrips breaks the scenario.
+                    // ToolStrips have a ControlDesigner, but also add a component to the tray.
+                    // The old code wouldn't detect that, so the tray location wouldn't get adjusted.
+                    // Rather than fixing this up in ToolStripKeyboardHandlingService.OnCommandPaste,
+                    // we do it here, since doing it in the service, wouldn't handle cross-form paste.
+
+                    // the paste target did not have a tray already, so let's go get it - if there is one
+                    tray ??= GetService<ComponentTray>();
+
+                    if (tray is not null)
+                    {
+                        int numberOfTrayControlsAdded = tray.Controls.Count - numberOfOriginalTrayControls;
+
+                        if (numberOfTrayControlsAdded > 0)
+                        {
+                            List<Control> listOfTrayControls = [];
+                            for (int i = 0; i < numberOfTrayControlsAdded; i++)
+                            {
+                                listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
+                            }
+
+                            tray.UpdatePastePositions(listOfTrayControls);
+                        }
+                    }
+
+                    // Update the tab indices of all the components.  We must first sort the
+                    // components by their existing tab indices or else we will not preserve their
+                    // original intent.
+                    //
+                    controls.Sort(TabIndexComparer.Instance);
+                    foreach (Control c in controls)
+                    {
+                        UpdatePasteTabIndex(c, c.Parent);
+                    }
+
+                    // finally select all the components we added
+                    SelectionService?.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
+
+                    // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
+                    if (designer is ParentControlDesigner parentControlDesigner
+                        && parentControlDesigner.AllowSetChildIndexOnDrop)
+                    {
+                        MenuCommand? btf = MenuService?.FindCommand(StandardCommands.BringToFront);
+                        btf?.Invoke();
+                    }
+
+                    trans.Commit();
                 }
             }
             else
@@ -3058,7 +3052,7 @@ internal partial class CommandSet : IDisposable
                     {
                         // if the object is not sited to the same thing as the host container
                         // then don't allow copy. VSWhidbey# 275790
-                        if (obj is IComponent { Site: { } objSite} && objSite.Container == host.Container)
+                        if (obj is IComponent { Site: { } objSite } && objSite.Container == host.Container)
                         {
                             enable = true;
                             break;
@@ -3598,9 +3592,10 @@ internal partial class CommandSet : IDisposable
 
     private class TabIndexComparer : IComparer<Control>
     {
-        public static readonly TabIndexComparer Instance = new();
+        public static TabIndexComparer Instance { get; } = new();
 
         private TabIndexComparer() { }
+
         public int Compare(Control? c1, Control? c2)
         {
             if (c1 == c2)

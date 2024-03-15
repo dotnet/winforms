@@ -3,6 +3,8 @@
 
 namespace Windows.Win32;
 
+#pragma warning disable format
+
 internal static partial class PInvoke
 {
     // https://github.com/microsoft/win32metadata/issues/1301
@@ -20,3 +22,5 @@ internal static partial class PInvoke
     public const uint CDN_TYPECHANGE        = unchecked(CDN_FIRST - 0x0006);
     public const uint CDN_INCLUDEITEM       = unchecked(CDN_FIRST - 0x0007);
 }
+
+#pragma warning restore format

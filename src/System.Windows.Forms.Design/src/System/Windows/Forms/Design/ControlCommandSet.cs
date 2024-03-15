@@ -12,15 +12,14 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class implements menu commands that are specific to designers that
-///  manipulate controls.
+///  This class implements menu commands that are specific to designers that manipulate controls.
 /// </summary>
 internal class ControlCommandSet : CommandSet
 {
-    private readonly CommandSetItem[] commandSet;
-    private TabOrder tabOrder;
-    private readonly Control baseControl;
-    private StatusCommandUI statusCommandUI; // used to update the StatusBarInfo.
+    private readonly CommandSetItem[] _commandSet;
+    private TabOrder _tabOrder;
+    private readonly Control _baseControl;
+    private StatusCommandUI _statusCommandUI; // used to update the StatusBarInfo.
 
     /// <summary>
     ///  Creates a new CommandSet object.  This object implements the set
@@ -30,11 +29,11 @@ internal class ControlCommandSet : CommandSet
     // Since we don't override GetService it is okay to suppress this.
     public ControlCommandSet(ISite site) : base(site)
     {
-        statusCommandUI = new StatusCommandUI(site);
+        _statusCommandUI = new StatusCommandUI(site);
 
         // Establish our set of commands
         //
-        commandSet =
+        _commandSet =
         [
             // Alignment commands
             new(
@@ -268,9 +267,9 @@ internal class ControlCommandSet : CommandSet
 
         if (MenuService is not null)
         {
-            for (int i = 0; i < commandSet.Length; i++)
+            for (int i = 0; i < _commandSet.Length; i++)
             {
-                MenuService.AddCommand(commandSet[i]);
+                MenuService.AddCommand(_commandSet[i]);
             }
         }
 
@@ -282,7 +281,7 @@ internal class ControlCommandSet : CommandSet
             Control comp = host.RootComponent as Control;
             if (comp is not null)
             {
-                baseControl = comp;
+                _baseControl = comp;
             }
         }
     }
@@ -345,20 +344,20 @@ internal class ControlCommandSet : CommandSet
     {
         if (MenuService is not null)
         {
-            for (int i = 0; i < commandSet.Length; i++)
+            for (int i = 0; i < _commandSet.Length; i++)
             {
-                MenuService.RemoveCommand(commandSet[i]);
-                commandSet[i].Dispose();
+                MenuService.RemoveCommand(_commandSet[i]);
+                _commandSet[i].Dispose();
             }
         }
 
-        if (tabOrder is not null)
+        if (_tabOrder is not null)
         {
-            tabOrder.Dispose();
-            tabOrder = null;
+            _tabOrder.Dispose();
+            _tabOrder = null;
         }
 
-        statusCommandUI = null;
+        _statusCommandUI = null;
         base.Dispose();
     }
 
@@ -535,7 +534,7 @@ internal class ControlCommandSet : CommandSet
                         if (dockProp is not null)
                         {
                             DockStyle docked = (DockStyle)dockProp.GetValue(comp);
-                            flipOffset = (docked == DockStyle.Bottom) || (docked == DockStyle.Right);
+                            flipOffset = docked is DockStyle.Bottom or DockStyle.Right;
                         }
 
                         SelectionRules rules = SelectionRules.Visible;
@@ -680,10 +679,8 @@ internal class ControlCommandSet : CommandSet
                                 {
                                     bool snapOn = false;
                                     Size snapSize = Size.Empty;
-                                    IComponent snapComponent = null;
-                                    PropertyDescriptor snapProperty = null;
 
-                                    GetSnapInformation(host, comp, out snapSize, out snapComponent, out snapProperty);
+                                    GetSnapInformation(host, comp, out snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
 
                                     if (snapProperty is not null)
                                     {
@@ -772,7 +769,7 @@ internal class ControlCommandSet : CommandSet
                                             if (propIntegralHeight is not null)
                                             {
                                                 object value = propIntegralHeight.GetValue(component);
-                                                if (value is bool && (bool)value)
+                                                if (value is bool boolValue && boolValue)
                                                 {
                                                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
                                                     if (propItemHeight is not null)
@@ -793,9 +790,9 @@ internal class ControlCommandSet : CommandSet
                                     }
 
                                     // change the Status information ....
-                                    if (control == selSvc.PrimarySelection && statusCommandUI is not null)
+                                    if (control == selSvc.PrimarySelection && _statusCommandUI is not null)
                                     {
-                                        statusCommandUI.SetStatusInformation(control);
+                                        _statusCommandUI.SetStatusInformation(control);
                                     }
                                 }
                             }
@@ -925,11 +922,11 @@ internal class ControlCommandSet : CommandSet
         MenuCommand cmd = (MenuCommand)sender;
         if (cmd.Checked)
         {
-            Debug.Assert(tabOrder is not null, "Tab order and menu enabling are out of sync");
-            if (tabOrder is not null)
+            Debug.Assert(_tabOrder is not null, "Tab order and menu enabling are out of sync");
+            if (_tabOrder is not null)
             {
-                tabOrder.Dispose();
-                tabOrder = null;
+                _tabOrder.Dispose();
+                _tabOrder = null;
             }
 
             cmd.Checked = false;
@@ -952,7 +949,7 @@ internal class ControlCommandSet : CommandSet
 
             using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
-                tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
+                _tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
             }
 
             cmd.Checked = true;
@@ -1140,7 +1137,7 @@ internal class ControlCommandSet : CommandSet
     {
         MenuCommand cmd = (MenuCommand)sender;
         bool enabled = false;
-        if (baseControl is not null && baseControl.Controls.Count > 0)
+        if (_baseControl is not null && _baseControl.Controls.Count > 0)
         {
             enabled = true;
         }
@@ -1174,7 +1171,7 @@ internal class ControlCommandSet : CommandSet
     {
         MenuCommand cmd = (MenuCommand)sender;
 
-        if (baseControl is null)
+        if (_baseControl is null)
         {
             cmd.Enabled = false;
             return;
@@ -1185,8 +1182,8 @@ internal class ControlCommandSet : CommandSet
 
         // Get the locked property of the base control first...
         //
-        PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
-        if (lockedProp is not null && ((bool)lockedProp.GetValue(baseControl)))
+        PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(_baseControl)["Locked"];
+        if (lockedProp is not null && ((bool)lockedProp.GetValue(_baseControl)))
         {
             cmd.Checked = true;
             return;
@@ -1199,7 +1196,7 @@ internal class ControlCommandSet : CommandSet
             return;
         }
 
-        ComponentDesigner baseDesigner = host.GetDesigner(baseControl) as ComponentDesigner;
+        ComponentDesigner baseDesigner = host.GetDesigner(_baseControl) as ComponentDesigner;
 
         foreach (object component in baseDesigner.AssociatedComponents)
         {
@@ -1257,19 +1254,15 @@ internal class ControlCommandSet : CommandSet
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-            if (host is not null)
+            if (host?.RootComponent is Control baseComponent)
             {
-                IComponent baseComponent = host.RootComponent;
-                if (baseComponent is not null && baseComponent is Control)
+                PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
+                if (prop is not null)
                 {
-                    PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
-                    if (prop is not null)
-                    {
-                        bool drawGrid = (bool)prop.GetValue(baseComponent);
-                        MenuCommand cmd = (MenuCommand)sender;
-                        cmd.Enabled = true;
-                        cmd.Checked = drawGrid;
-                    }
+                    bool drawGrid = (bool)prop.GetValue(baseComponent);
+                    MenuCommand cmd = (MenuCommand)sender;
+                    cmd.Enabled = true;
+                    cmd.Checked = drawGrid;
                 }
             }
         }
@@ -1286,19 +1279,15 @@ internal class ControlCommandSet : CommandSet
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-            if (host is not null)
+            if (host?.RootComponent is Control baseComponent)
             {
-                IComponent baseComponent = host.RootComponent;
-                if (baseComponent is not null && baseComponent is Control)
+                PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
+                if (prop is not null)
                 {
-                    PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
-                    if (prop is not null)
-                    {
-                        bool snapToGrid = (bool)prop.GetValue(baseComponent);
-                        MenuCommand cmd = (MenuCommand)sender;
-                        cmd.Enabled = controlsOnlySelection;
-                        cmd.Checked = snapToGrid;
-                    }
+                    bool snapToGrid = (bool)prop.GetValue(baseComponent);
+                    MenuCommand cmd = (MenuCommand)sender;
+                    cmd.Enabled = controlsOnlySelection;
+                    cmd.Checked = snapToGrid;
                 }
             }
         }
@@ -1374,9 +1363,9 @@ internal class ControlCommandSet : CommandSet
     {
         // Now whip through all of the commands and ask them to update.
         //
-        for (int i = 0; i < commandSet.Length; i++)
+        for (int i = 0; i < _commandSet.Length; i++)
         {
-            commandSet[i].UpdateStatus();
+            _commandSet[i].UpdateStatus();
         }
 
         base.OnUpdateCommandStatus();

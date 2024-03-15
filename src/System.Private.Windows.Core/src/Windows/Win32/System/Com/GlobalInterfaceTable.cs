@@ -15,11 +15,12 @@ internal static unsafe partial class GlobalInterfaceTable
 
     static GlobalInterfaceTable()
     {
+        Guid guid = CLSID.StdGlobalInterfaceTable;
+
         fixed (IGlobalInterfaceTable** git = &s_globalInterfaceTable)
-        fixed (Guid* g = &CLSID.StdGlobalInterfaceTable)
         {
             PInvokeCore.CoCreateInstance(
-                g,
+                &guid,
                 pUnkOuter: null,
                 CLSCTX.CLSCTX_INPROC_SERVER,
                 IID.Get<IGlobalInterfaceTable>(),

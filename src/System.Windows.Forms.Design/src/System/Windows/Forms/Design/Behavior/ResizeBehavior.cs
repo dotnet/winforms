@@ -190,7 +190,7 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        return lines.ToArray();
+        return [.. lines];
     }
 
     /// <summary>
@@ -373,17 +373,15 @@ internal class ResizeBehavior : Behavior
                         Rectangle borderRect = BehaviorService.ControlRectInAdornerWindow(control);
                         if (!borderRect.IsEmpty)
                         {
-                            using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
+                            using Graphics graphics = BehaviorService.AdornerWindowGraphics;
+                            graphics.SetClip(borderRect);
+                            using (Region newRegion = new(borderRect))
                             {
-                                graphics.SetClip(borderRect);
-                                using (Region newRegion = new(borderRect))
-                                {
-                                    newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
-                                    BehaviorService.Invalidate(newRegion);
-                                }
-
-                                graphics.ResetClip();
+                                newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
+                                BehaviorService.Invalidate(newRegion);
                             }
+
+                            graphics.ResetClip();
                         }
                     }
 
@@ -421,7 +419,7 @@ internal class ResizeBehavior : Behavior
         if (propIntegralHeight is not null)
         {
             object value = propIntegralHeight.GetValue(control);
-            if (value is bool && (bool)value)
+            if (value is bool boolValue && boolValue)
             {
                 PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
                 if (propItemHeight is not null)
@@ -557,7 +555,7 @@ internal class ResizeBehavior : Behavior
             if (propIntegralHeight is not null)
             {
                 object value = propIntegralHeight.GetValue(targetControl);
-                if (value is bool && (bool)value)
+                if (value is bool boolValue && boolValue)
                 {
                     shouldSnapHorizontally = false;
                 }
@@ -783,40 +781,36 @@ internal class ResizeBehavior : Behavior
                 // render the resize border
                 if (!newBorderRect.IsEmpty)
                 {
-                    using (Region newRegion = new(newBorderRect))
+                    using Region newRegion = new(newBorderRect);
+                    newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
+                    // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
+                    if (needToUpdate)
                     {
-                        newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
-                        // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
-                        if (needToUpdate)
-                        {
-                            using (Region oldRegion = new(oldBorderRect))
-                            {
-                                oldRegion.Exclude(Rectangle.Inflate(oldBorderRect, -BorderSize, -BorderSize));
-                                BehaviorService.Invalidate(oldRegion);
-                            }
-                        }
+                        using Region oldRegion = new(oldBorderRect);
+                        oldRegion.Exclude(Rectangle.Inflate(oldBorderRect, -BorderSize, -BorderSize));
+                        BehaviorService.Invalidate(oldRegion);
+                    }
 
-                        // draw the new border captureLost could be true if a popup came up and caused a lose focus
-                        if (!_captureLost)
+                    // draw the new border captureLost could be true if a popup came up and caused a lose focus
+                    if (!_captureLost)
+                    {
+                        using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
                         {
-                            using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
+                            if (_lastResizeRegion is not null)
                             {
-                                if (_lastResizeRegion is not null)
+                                if (!_lastResizeRegion.Equals(newRegion, graphics))
                                 {
-                                    if (!_lastResizeRegion.Equals(newRegion, graphics))
-                                    {
-                                        _lastResizeRegion.Exclude(newRegion); // we don't want to invalidate this region.
-                                        BehaviorService.Invalidate(_lastResizeRegion); // might be the same, might not.
-                                        _lastResizeRegion.Dispose();
-                                        _lastResizeRegion = null;
-                                    }
+                                    _lastResizeRegion.Exclude(newRegion); // we don't want to invalidate this region.
+                                    BehaviorService.Invalidate(_lastResizeRegion); // might be the same, might not.
+                                    _lastResizeRegion.Dispose();
+                                    _lastResizeRegion = null;
                                 }
-
-                                DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                             }
 
-                            _lastResizeRegion ??= newRegion.Clone(); // we will need to dispose it later.
+                            DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                         }
+
+                        _lastResizeRegion ??= newRegion.Clone(); // we will need to dispose it later.
                     }
                 }
             }

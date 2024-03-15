@@ -2784,8 +2784,10 @@ public partial class DataGridViewTests
         using DataGridView control = new();
         int rowsCount = 5;
         BindingSource bindingSource = GetTestBindingSource(rowsCount);
-        BindingContext context = new();
-        context.Add(bindingSource, bindingSource.CurrencyManager);
+        BindingContext context = new()
+        {
+            { bindingSource, bindingSource.CurrencyManager }
+        };
         control.BindingContext = context;
         control.DataSource = bindingSource;
 
@@ -2823,8 +2825,10 @@ public partial class DataGridViewTests
         BindingSource bindingSource1 = GetTestBindingSource(rowsCount1);
         int rowsCount2 = 5;
         BindingSource bindingSource2 = GetTestBindingSource(rowsCount2);
-        BindingContext context = new();
-        context.Add(bindingSource1, bindingSource1.CurrencyManager);
+        BindingContext context = new()
+        {
+            { bindingSource1, bindingSource1.CurrencyManager }
+        };
         control.BindingContext = context;
         control.DataSource = bindingSource1;
 

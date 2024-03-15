@@ -12,13 +12,13 @@ namespace System.Windows.Forms;
 /// </summary>
 internal partial class ToolStripSettingsManager
 {
-    private readonly Form form;
-    private readonly string formKey;
+    private readonly Form _form;
+    private readonly string _formKey;
 
     internal ToolStripSettingsManager(Form owner, string formKey)
     {
-        form = owner;
-        this.formKey = formKey;
+        _form = owner;
+        _formKey = formKey;
     }
 
     internal void Load()
@@ -26,7 +26,7 @@ internal partial class ToolStripSettingsManager
         List<SettingsStub> savedToolStripSettingsObjects = [];
 
         List<ToolStrip> toolStripControls = [];
-        FindControls(true, form.Controls, toolStripControls);
+        FindControls(true, _form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)
         {
@@ -48,7 +48,7 @@ internal partial class ToolStripSettingsManager
     internal void Save()
     {
         List<ToolStrip> toolStripControls = [];
-        FindControls(true, form.Controls, toolStripControls);
+        FindControls(true, _form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)
         {
@@ -94,7 +94,7 @@ internal partial class ToolStripSettingsManager
             return;
         }
 
-        SuspendAllLayout(form);
+        SuspendAllLayout(_form);
 
         // iterate through all the toolstrips and build up a hash of where the items
         // are right now.
@@ -113,7 +113,7 @@ internal partial class ToolStripSettingsManager
                 if (!string.IsNullOrEmpty(toolStripSettings.Name))
                 {
                     // apply the toolstrip settings.
-                    ToolStrip? toolStrip = ToolStripManager.FindToolStrip(form, toolStripSettings.Name);
+                    ToolStrip? toolStrip = ToolStripManager.FindToolStrip(_form, toolStripSettings.Name);
                     ApplyToolStripSettings(toolStrip, toolStripSettings, itemLocationHash);
                 }
             }
@@ -132,7 +132,7 @@ internal partial class ToolStripSettingsManager
 
         // Build up a list of the toolstrippanels to party on.
         List<ToolStripPanel> toolStripPanels = [];
-        FindControls(true, form.Controls, toolStripPanels);
+        FindControls(true, _form.Controls, toolStripPanels);
         foreach (ToolStripPanel toolStripPanel in toolStripPanels)
         {
             // Set all the controls to visible false.
@@ -158,7 +158,7 @@ internal partial class ToolStripSettingsManager
                     if (!string.IsNullOrEmpty(settings.Name))
                     {
                         // apply the toolstrip settings.
-                        ToolStrip? toolStrip = ToolStripManager.FindToolStrip(form, settings.Name);
+                        ToolStrip? toolStrip = ToolStripManager.FindToolStrip(_form, settings.Name);
                         ApplyToolStripSettings(toolStrip, settings, itemLocationHash);
                         toolStripPanel.Join(toolStrip!, settings.Location);
                     }
@@ -168,7 +168,7 @@ internal partial class ToolStripSettingsManager
             toolStripPanel.EndInit();
         }
 
-        ResumeAllLayout(form, true);
+        ResumeAllLayout(_form, true);
     }
 
     private static void ApplyToolStripSettings(ToolStrip? toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
@@ -212,7 +212,7 @@ internal partial class ToolStripSettingsManager
         Dictionary<string, ToolStrip> itemLocationHash = [];
 
         List<ToolStrip> toolStripControls = [];
-        FindControls(true, form.Controls, toolStripControls);
+        FindControls(true, _form.Controls, toolStripControls);
 
         foreach (ToolStrip toolStrip in toolStripControls)
         {
@@ -254,7 +254,7 @@ internal partial class ToolStripSettingsManager
             {
                 for (int i = 0; i < controlsToLookIn.Count; i++)
                 {
-                    if (controlsToLookIn[i] is null || controlsToLookIn[i] is Form)
+                    if (controlsToLookIn[i] is null or Form)
                     {
                         continue;
                     }
@@ -276,7 +276,7 @@ internal partial class ToolStripSettingsManager
     {
         if (toolStrip is not null)
         {
-            return $"{formKey}.{toolStrip.Name}";
+            return $"{_formKey}.{toolStrip.Name}";
         }
 
         return string.Empty;

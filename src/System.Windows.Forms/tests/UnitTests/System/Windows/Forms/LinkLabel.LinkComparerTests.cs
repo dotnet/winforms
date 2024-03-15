@@ -21,6 +21,6 @@ public class LinkLabel_LinkComparerTests
         using LinkLabel linkLabel = new();
         var comparer = linkLabel.TestAccessor().Dynamic.s_linkComparer;
         var compareMethod = comparer.GetType().GetMethod("Compare");
-        Assert.Equal(expectedValue, compareMethod.Invoke(comparer, new object[] { link1, link2 }));
+        Assert.Equal(expectedValue, compareMethod.Invoke(comparer, (object[])[link1, link2]));
     }
 }

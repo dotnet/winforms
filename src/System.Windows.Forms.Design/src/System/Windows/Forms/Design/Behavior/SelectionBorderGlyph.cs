@@ -42,8 +42,8 @@ internal class SelectionBorderGlyph : SelectionGlyphBase
                 }
 
                 // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
-                hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
-                hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
+                hitBounds.Y -= (DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize) / 2;
+                hitBounds.Height += DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize;
                 break;
             case SelectionBorderGlyphType.Bottom:
                 if ((selRules & SelectionRules.BottomSizeable) != 0)
@@ -53,8 +53,8 @@ internal class SelectionBorderGlyph : SelectionGlyphBase
                 }
 
                 // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
-                hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
-                hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
+                hitBounds.Y -= (DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize) / 2;
+                hitBounds.Height += DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize;
                 break;
             case SelectionBorderGlyphType.Left:
                 if ((selRules & SelectionRules.LeftSizeable) != 0)
@@ -64,8 +64,8 @@ internal class SelectionBorderGlyph : SelectionGlyphBase
                 }
 
                 // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
-                hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
-                hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
+                hitBounds.X -= (DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize) / 2;
+                hitBounds.Width += DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize;
                 break;
             case SelectionBorderGlyphType.Right:
                 if ((selRules & SelectionRules.RightSizeable) != 0)
@@ -75,8 +75,8 @@ internal class SelectionBorderGlyph : SelectionGlyphBase
                 }
 
                 // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
-                hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
-                hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
+                hitBounds.X -= (DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize) / 2;
+                hitBounds.Width += DesignerUtils.s_selectionBorderHitArea - DesignerUtils.s_selectionBorderSize;
                 break;
         }
     }

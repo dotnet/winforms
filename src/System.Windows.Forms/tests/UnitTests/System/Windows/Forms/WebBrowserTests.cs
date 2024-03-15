@@ -4654,11 +4654,9 @@ public class WebBrowserTests
     {
     }
 
-#pragma warning disable CS0618
     // This class must be ComVisible because WebBrowser scripting requires IDispatch and ITypeInfo support.
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-#pragma warning restore CS0618
     public class CustomScriptingObject
     {
     }

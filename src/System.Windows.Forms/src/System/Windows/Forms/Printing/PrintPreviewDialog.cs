@@ -70,8 +70,10 @@ public partial class PrintPreviewDialog : Form
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new bool AutoScale
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         get => base.AutoScale;
         set => base.AutoScale = value;
+#pragma warning restore CS0618
     }
 
     [Browsable(false)]
@@ -781,8 +783,7 @@ public partial class PrintPreviewDialog : Form
         SuspendLayout();
 
         resources.ApplyResources(_toolStrip1, "toolStrip1");
-        _toolStrip1.Items.AddRange((ToolStripItem[])
-        [
+        _toolStrip1.Items.AddRange(
             _printToolStripButton,
             _zoomToolStripSplitButton,
             _separatorToolStripSeparator,
@@ -792,8 +793,7 @@ public partial class PrintPreviewDialog : Form
             _fourPagesToolStripButton,
             _sixPagesToolStripButton,
             _separatorToolStripSeparator1,
-            _closeToolStripButton
-        ]);
+            _closeToolStripButton);
 
         _toolStrip1.Name = "toolStrip1";
 
@@ -812,8 +812,7 @@ public partial class PrintPreviewDialog : Form
 
         _zoomToolStripSplitButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
         _zoomToolStripSplitButton.DoubleClickEnabled = true;
-        _zoomToolStripSplitButton.DropDownItems.AddRange((ToolStripItem[])
-        [
+        _zoomToolStripSplitButton.DropDownItems.AddRange(
             _autoToolStripMenuItem,
             _toolStripMenuItem1,
             _toolStripMenuItem2,
@@ -822,8 +821,7 @@ public partial class PrintPreviewDialog : Form
             _toolStripMenuItem5,
             _toolStripMenuItem6,
             _toolStripMenuItem7,
-            _toolStripMenuItem8
-        ]);
+            _toolStripMenuItem8);
 
         _zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
         _zoomToolStripSplitButton.SplitterWidth = 1;

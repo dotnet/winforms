@@ -216,8 +216,8 @@ public partial class DataGridViewRow : DataGridViewBand
     [AllowNull]
     public DataGridViewRowHeaderCell HeaderCell
     {
-        get => (DataGridViewRowHeaderCell)base.HeaderCellCore;
-        set => base.HeaderCellCore = value;
+        get => (DataGridViewRowHeaderCell)HeaderCellCore;
+        set => HeaderCellCore = value;
     }
 
     [NotifyParentProperty(true)]
@@ -1064,7 +1064,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
         if (dataGridViewRow is not null)
         {
-            base.CloneInternal(dataGridViewRow);
+            CloneInternal(dataGridViewRow);
             if (HasErrorText)
             {
                 dataGridViewRow.ErrorText = ErrorTextInternal;
@@ -1508,7 +1508,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
         ArgumentNullException.ThrowIfNull(graphics);
 
-        if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
+        if (paintParts is < DataGridViewPaintParts.None or > DataGridViewPaintParts.All)
         {
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
         }
@@ -1701,7 +1701,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
         ArgumentNullException.ThrowIfNull(graphics);
 
-        if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
+        if (paintParts is < DataGridViewPaintParts.None or > DataGridViewPaintParts.All)
         {
             throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
         }

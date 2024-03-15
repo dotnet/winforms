@@ -42,7 +42,7 @@ public class SendInput
                                     nextIndex = text.Length;
                                 }
 
-                                inputSimulator.Keyboard.TextEntry(text.Substring(index, nextIndex - index));
+                                inputSimulator.Keyboard.TextEntry(text[index..nextIndex]);
                                 index = nextIndex;
                             }
                         }
@@ -69,10 +69,7 @@ public class SendInput
 
     internal async Task SendAsync(Form window, Action<InputSimulator> actions)
     {
-        if (actions is null)
-        {
-            throw new ArgumentNullException(nameof(actions));
-        }
+        ArgumentNullException.ThrowIfNull(actions);
 
         SetForegroundWindow(window);
         await Task.Run(() => actions(new InputSimulator()));

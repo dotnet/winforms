@@ -138,7 +138,7 @@ public class TreeNodeAccessibleObjectTests
     {
         using TreeView control = new();
         TreeNode node = new();
-        control.Nodes.Add(new TreeNode("Root node", new[] { node }));
+        control.Nodes.Add(new TreeNode("Root node", [node]));
 
         var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
@@ -188,7 +188,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         AccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
@@ -204,7 +204,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         AccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
@@ -318,7 +318,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new();
 
-        control.Nodes.Add(new TreeNode("Root node", new[] { node }));
+        control.Nodes.Add(new TreeNode("Root node", [node]));
 
         Assert.Equal(node.Parent.AccessibilityObject, node.AccessibilityObject.Parent);
         Assert.False(control.IsHandleCreated);
@@ -348,7 +348,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Expand_WorksExpected_IfNodeIsCollapsed()
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 
@@ -380,7 +380,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Collapse_WorksExpected_IfNodeIsExpanded()
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 
@@ -408,7 +408,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_ExpandCollapseState_ReturnsExpected(bool isExpanded)
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 

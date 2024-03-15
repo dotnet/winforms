@@ -12,20 +12,12 @@ internal partial class DesignBindingValueUIHandler
 {
     private class LocalUIItem : PropertyValueUIItem
     {
-        private readonly Binding binding;
-
         internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
         {
-            this.binding = binding;
+            Binding = binding;
         }
 
-        internal Binding Binding
-        {
-            get
-            {
-                return binding;
-            }
-        }
+        internal Binding Binding { get; }
 
         private static string GetToolTip(Binding binding)
         {

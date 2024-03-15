@@ -29,8 +29,8 @@ public unsafe class COM2PictureConverterTests
 
     private unsafe class TestIPicture : IPictureMock
     {
-        private nint _handle;
-        private PICTYPE _type;
+        private readonly nint _handle;
+        private readonly PICTYPE _type;
 
         public TestIPicture(nint handle, PICTYPE type = PICTYPE.PICTYPE_NONE)
         {

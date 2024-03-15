@@ -373,12 +373,12 @@ public abstract partial class DataGridViewCell
         {
             // If this is one of our types, use the shortcut provided by ParentPrivate property.
             // Otherwise, use the Parent property.
-            if (_owner is DataGridViewButtonCell ||
-                _owner is DataGridViewCheckBoxCell ||
-                _owner is DataGridViewComboBoxCell ||
-                _owner is DataGridViewImageCell ||
-                _owner is DataGridViewLinkCell ||
-                _owner is DataGridViewTextBoxCell)
+            if (_owner is DataGridViewButtonCell
+                or DataGridViewCheckBoxCell
+                or DataGridViewComboBoxCell
+                or DataGridViewImageCell
+                or DataGridViewLinkCell
+                or DataGridViewTextBoxCell)
             {
                 return ParentPrivate;
             }

@@ -293,6 +293,6 @@ public class InheritanceService : IInheritanceService, IDisposable
 
     private static TypeDescriptionProvider? GetTargetFrameworkProviderForType(Type type)
     {
-        return DocumentDesigner.manager?.GetService<TypeDescriptionProviderService>()?.GetProvider(type);
+        return DocumentDesigner.s_manager?.GetService<TypeDescriptionProviderService>()?.GetProvider(type);
     }
 }

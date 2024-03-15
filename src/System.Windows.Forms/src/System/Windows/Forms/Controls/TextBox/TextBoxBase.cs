@@ -26,26 +26,26 @@ public abstract partial class TextBoxBase : Control
     // The boolean properties for this control are contained in the textBoxFlags bit
     // vector.  We can store up to 32 boolean values in this one vector.  Here we
     // create the bitmasks for each bit in the vector.
-    //
-    private static readonly int autoSize = BitVector32.CreateMask();
-    private static readonly int hideSelection = BitVector32.CreateMask(autoSize);
-    private static readonly int multiline = BitVector32.CreateMask(hideSelection);
-    private static readonly int modified = BitVector32.CreateMask(multiline);
-    private static readonly int readOnly = BitVector32.CreateMask(modified);
-    private static readonly int acceptsTab = BitVector32.CreateMask(readOnly);
-    private static readonly int wordWrap = BitVector32.CreateMask(acceptsTab);
-    private static readonly int creatingHandle = BitVector32.CreateMask(wordWrap);
-    private static readonly int codeUpdateText = BitVector32.CreateMask(creatingHandle);
-    private static readonly int shortcutsEnabled = BitVector32.CreateMask(codeUpdateText);
-    private static readonly int scrollToCaretOnHandleCreated = BitVector32.CreateMask(shortcutsEnabled);
-    private static readonly int setSelectionOnHandleCreated = BitVector32.CreateMask(scrollToCaretOnHandleCreated);
 
-    private static readonly object EVENT_ACCEPTSTABCHANGED = new();
-    private static readonly object EVENT_BORDERSTYLECHANGED = new();
-    private static readonly object EVENT_HIDESELECTIONCHANGED = new();
-    private static readonly object EVENT_MODIFIEDCHANGED = new();
-    private static readonly object EVENT_MULTILINECHANGED = new();
-    private static readonly object EVENT_READONLYCHANGED = new();
+    private static readonly int s_autoSize = BitVector32.CreateMask();
+    private static readonly int s_hideSelection = BitVector32.CreateMask(s_autoSize);
+    private static readonly int s_multiline = BitVector32.CreateMask(s_hideSelection);
+    private static readonly int s_modified = BitVector32.CreateMask(s_multiline);
+    private static readonly int s_readOnly = BitVector32.CreateMask(s_modified);
+    private static readonly int s_acceptsTab = BitVector32.CreateMask(s_readOnly);
+    private static readonly int s_wordWrap = BitVector32.CreateMask(s_acceptsTab);
+    private static readonly int s_creatingHandle = BitVector32.CreateMask(s_wordWrap);
+    private static readonly int s_codeUpdateText = BitVector32.CreateMask(s_creatingHandle);
+    private static readonly int s_shortcutsEnabled = BitVector32.CreateMask(s_codeUpdateText);
+    private static readonly int s_scrollToCaretOnHandleCreated = BitVector32.CreateMask(s_shortcutsEnabled);
+    private static readonly int s_setSelectionOnHandleCreated = BitVector32.CreateMask(s_scrollToCaretOnHandleCreated);
+
+    private static readonly object s_acceptsTabChangedEvent = new();
+    private static readonly object s_borderStyleChangedEvent = new();
+    private static readonly object s_hideSelectionChangedEvent = new();
+    private static readonly object s_modifiedChangedEvent = new();
+    private static readonly object s_multilineChangedEvent = new();
+    private static readonly object s_readOnlyChangedEvent = new();
 
     /// <summary>
     ///  The current border for this edit control.
@@ -91,8 +91,8 @@ public abstract partial class TextBoxBase : Control
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
-        _textBoxFlags[autoSize | hideSelection | wordWrap | shortcutsEnabled] = true;
-        SetStyle(ControlStyles.FixedHeight, _textBoxFlags[autoSize]);
+        _textBoxFlags[s_autoSize | s_hideSelection | s_wordWrap | s_shortcutsEnabled] = true;
+        SetStyle(ControlStyles.FixedHeight, _textBoxFlags[s_autoSize]);
         SetStyle(ControlStyles.StandardClick
                 | ControlStyles.StandardDoubleClick
                 | ControlStyles.UseTextForAccessibility
@@ -118,13 +118,13 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[acceptsTab];
+            return _textBoxFlags[s_acceptsTab];
         }
         set
         {
-            if (_textBoxFlags[acceptsTab] != value)
+            if (_textBoxFlags[s_acceptsTab] != value)
             {
-                _textBoxFlags[acceptsTab] = value;
+                _textBoxFlags[s_acceptsTab] = value;
                 OnAcceptsTabChanged(EventArgs.Empty);
             }
         }
@@ -134,8 +134,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
     public event EventHandler? AcceptsTabChanged
     {
-        add => Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
+        add => Events.AddHandler(s_acceptsTabChangedEvent, value);
+        remove => Events.RemoveHandler(s_acceptsTabChangedEvent, value);
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[shortcutsEnabled];
+            return _textBoxFlags[s_shortcutsEnabled];
         }
         set
         {
@@ -162,7 +162,7 @@ public abstract partial class TextBoxBase : Control
                     (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
                 ];
 
-            _textBoxFlags[shortcutsEnabled] = value;
+            _textBoxFlags[s_shortcutsEnabled] = value;
         }
     }
 
@@ -187,18 +187,17 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
-        //
         // There are a few keys that change the alignment of the text, but that
         // are not ignored by the native control when the ReadOnly property is set.
         // We need to workaround that.
-        if (_textBoxFlags[readOnly])
+        if (_textBoxFlags[s_readOnly])
         {
             int k = (int)keyData;
-            if (k == (int)Shortcut.CtrlL        // align left
-                || k == (int)Shortcut.CtrlR     // align right
-                || k == (int)Shortcut.CtrlE     // align centre
-                || k == (int)Shortcut.CtrlJ)
-            {  // align justified
+            if (k is ((int)Shortcut.CtrlL)        // align left
+                or ((int)Shortcut.CtrlR)          // align right
+                or ((int)Shortcut.CtrlE)          // align center
+                or ((int)Shortcut.CtrlJ))         // align justified
+            {
                 return true;
             }
         }
@@ -245,7 +244,7 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[autoSize];
+            return _textBoxFlags[s_autoSize];
         }
         set
         {
@@ -253,9 +252,9 @@ public abstract partial class TextBoxBase : Control
             // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
             // continue to return false to keep our LayoutEngines from messing with TextBoxes.
             // This is done for backwards compatibility since the new AutoSize behavior differs.
-            if (_textBoxFlags[autoSize] != value)
+            if (_textBoxFlags[s_autoSize] != value)
             {
-                _textBoxFlags[autoSize] = value;
+                _textBoxFlags[s_autoSize] = value;
 
                 // AutoSize's effects are ignored for a multi-line textbox
                 //
@@ -371,8 +370,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
     public event EventHandler? BorderStyleChanged
     {
-        add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
+        add => Events.AddHandler(s_borderStyleChangedEvent, value);
+        remove => Events.RemoveHandler(s_borderStyleChangedEvent, value);
     }
 
     internal virtual bool CanRaiseTextChangedEvent => true;
@@ -415,12 +414,12 @@ public abstract partial class TextBoxBase : Control
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
-            if (!_textBoxFlags[hideSelection])
+            if (!_textBoxFlags[s_hideSelection])
             {
                 cp.Style |= PInvoke.ES_NOHIDESEL;
             }
 
-            if (_textBoxFlags[readOnly])
+            if (_textBoxFlags[s_readOnly])
             {
                 cp.Style |= PInvoke.ES_READONLY;
             }
@@ -438,10 +437,10 @@ public abstract partial class TextBoxBase : Control
                     break;
             }
 
-            if (_textBoxFlags[multiline])
+            if (_textBoxFlags[s_multiline])
             {
                 cp.Style |= PInvoke.ES_MULTILINE;
-                if (_textBoxFlags[wordWrap])
+                if (_textBoxFlags[s_wordWrap])
                 {
                     cp.Style &= ~PInvoke.ES_AUTOHSCROLL;
                 }
@@ -531,14 +530,14 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[hideSelection];
+            return _textBoxFlags[s_hideSelection];
         }
 
         set
         {
-            if (_textBoxFlags[hideSelection] != value)
+            if (_textBoxFlags[s_hideSelection] != value)
             {
-                _textBoxFlags[hideSelection] = value;
+                _textBoxFlags[s_hideSelection] = value;
                 RecreateHandle();
                 OnHideSelectionChanged(EventArgs.Empty);
             }
@@ -549,8 +548,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
     public event EventHandler? HideSelectionChanged
     {
-        add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
+        add => Events.AddHandler(s_hideSelectionChangedEvent, value);
+        remove => Events.RemoveHandler(s_hideSelectionChangedEvent, value);
     }
 
     /// <summary>
@@ -605,13 +604,13 @@ public abstract partial class TextBoxBase : Control
                 for (; lineEnd < text.Length; lineEnd++)
                 {
                     char c = text[lineEnd];
-                    if (c == '\r' || c == '\n')
+                    if (c is '\r' or '\n')
                     {
                         break;
                     }
                 }
 
-                string line = text.Substring(lineStart, lineEnd - lineStart);
+                string line = text[lineStart..lineEnd];
                 list.Add(line);
 
                 // Treat "\r", "\r\n", and "\n" as new lines
@@ -691,10 +690,10 @@ public abstract partial class TextBoxBase : Control
             if (IsHandleCreated)
             {
                 bool curState = (int)PInvoke.SendMessage(this, PInvoke.EM_GETMODIFY) != 0;
-                if (_textBoxFlags[modified] != curState)
+                if (_textBoxFlags[s_modified] != curState)
                 {
                     // Raise ModifiedChanged event.  See WmReflectCommand for more info.
-                    _textBoxFlags[modified] = curState;
+                    _textBoxFlags[s_modified] = curState;
                     OnModifiedChanged(EventArgs.Empty);
                 }
 
@@ -702,7 +701,7 @@ public abstract partial class TextBoxBase : Control
             }
             else
             {
-                return _textBoxFlags[modified];
+                return _textBoxFlags[s_modified];
             }
         }
 
@@ -717,7 +716,7 @@ public abstract partial class TextBoxBase : Control
                     // test in the Get method to work properly.
                 }
 
-                _textBoxFlags[modified] = value;
+                _textBoxFlags[s_modified] = value;
                 OnModifiedChanged(EventArgs.Empty);
             }
         }
@@ -727,8 +726,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
     public event EventHandler? ModifiedChanged
     {
-        add => Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
+        add => Events.AddHandler(s_modifiedChangedEvent, value);
+        remove => Events.RemoveHandler(s_modifiedChangedEvent, value);
     }
 
     /// <summary>
@@ -744,15 +743,15 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[multiline];
+            return _textBoxFlags[s_multiline];
         }
         set
         {
-            if (_textBoxFlags[multiline] != value)
+            if (_textBoxFlags[s_multiline] != value)
             {
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Multiline))
                 {
-                    _textBoxFlags[multiline] = value;
+                    _textBoxFlags[s_multiline] = value;
 
                     if (value)
                     {
@@ -777,8 +776,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
     public event EventHandler? MultilineChanged
     {
-        add => Events.AddHandler(EVENT_MULTILINECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
+        add => Events.AddHandler(s_multilineChangedEvent, value);
+        remove => Events.RemoveHandler(s_multilineChangedEvent, value);
     }
 
     [Browsable(false)]
@@ -950,13 +949,13 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[readOnly];
+            return _textBoxFlags[s_readOnly];
         }
         set
         {
-            if (_textBoxFlags[readOnly] != value)
+            if (_textBoxFlags[s_readOnly] != value)
             {
-                _textBoxFlags[readOnly] = value;
+                _textBoxFlags[s_readOnly] = value;
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.EM_SETREADONLY, (WPARAM)(BOOL)value);
@@ -973,8 +972,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
     public event EventHandler? ReadOnlyChanged
     {
-        add => Events.AddHandler(EVENT_READONLYCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
+        add => Events.AddHandler(s_readOnlyChangedEvent, value);
+        remove => Events.RemoveHandler(s_readOnlyChangedEvent, value);
     }
 
     /// <summary>
@@ -1130,14 +1129,14 @@ public abstract partial class TextBoxBase : Control
 
             if (!WindowText.Equals(value))
             {
-                _textBoxFlags[codeUpdateText] = true;
+                _textBoxFlags[s_codeUpdateText] = true;
                 try
                 {
                     base.WindowText = value;
                 }
                 finally
                 {
-                    _textBoxFlags[codeUpdateText] = false;
+                    _textBoxFlags[s_codeUpdateText] = false;
                 }
             }
         }
@@ -1146,13 +1145,13 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     ///  In certain circumstances we might have to force text into the window whether or not the text is the same.
     ///  Make this a method on <see cref="TextBoxBase"/> rather than <see cref="RichTextBox"/> (which is the only
-    ///  control that needs this at this point), since we need to set <see cref="codeUpdateText"/>.
+    ///  control that needs this at this point), since we need to set <see cref="s_codeUpdateText"/>.
     /// </summary>
     internal void ForceWindowText(string? value)
     {
         value ??= string.Empty;
 
-        _textBoxFlags[codeUpdateText] = true;
+        _textBoxFlags[s_codeUpdateText] = true;
         try
         {
             if (IsHandleCreated)
@@ -1166,7 +1165,7 @@ public abstract partial class TextBoxBase : Control
         }
         finally
         {
-            _textBoxFlags[codeUpdateText] = false;
+            _textBoxFlags[s_codeUpdateText] = false;
         }
     }
 
@@ -1182,15 +1181,15 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            return _textBoxFlags[wordWrap];
+            return _textBoxFlags[s_wordWrap];
         }
         set
         {
             using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.WordWrap))
             {
-                if (_textBoxFlags[wordWrap] != value)
+                if (_textBoxFlags[s_wordWrap] != value)
                 {
-                    _textBoxFlags[wordWrap] = value;
+                    _textBoxFlags[s_wordWrap] = value;
                     RecreateHandle();
                 }
             }
@@ -1213,7 +1212,7 @@ public abstract partial class TextBoxBase : Control
         int saveHeight = _requestedHeight;
         try
         {
-            if (_textBoxFlags[autoSize] && !_textBoxFlags[multiline])
+            if (_textBoxFlags[s_autoSize] && !_textBoxFlags[s_multiline])
             {
                 Height = PreferredHeight;
             }
@@ -1224,7 +1223,7 @@ public abstract partial class TextBoxBase : Control
                 // Changing the font of a multi-line textbox can sometimes cause a painting problem
                 // The only workaround I can find is to size the textbox big enough for the font, and
                 // then restore its correct size.
-                if (_textBoxFlags[multiline])
+                if (_textBoxFlags[s_multiline])
                 {
                     Height = Math.Max(saveHeight, PreferredHeight + 2); // 2 = fudge factor
                 }
@@ -1299,23 +1298,11 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    protected bool ContainsNavigationKeyCode(Keys keyCode)
+    protected bool ContainsNavigationKeyCode(Keys keyCode) => keyCode switch
     {
-        switch (keyCode)
-        {
-            case Keys.Up:
-            case Keys.Down:
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-            case Keys.Left:
-            case Keys.Right:
-                return true;
-            default:
-                return false;
-        }
-    }
+        Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+        _ => false,
+    };
 
     /// <summary>
     ///  Copies the current selection in the text box to the Clipboard.
@@ -1328,7 +1315,7 @@ public abstract partial class TextBoxBase : Control
     {
         // This "creatingHandle" stuff is to avoid property change events
         // when we set the Text property.
-        _textBoxFlags[creatingHandle] = true;
+        _textBoxFlags[s_creatingHandle] = true;
         try
         {
             base.CreateHandle();
@@ -1338,7 +1325,7 @@ public abstract partial class TextBoxBase : Control
         }
         finally
         {
-            _textBoxFlags[creatingHandle] = false;
+            _textBoxFlags[s_creatingHandle] = false;
         }
     }
 
@@ -1369,7 +1356,7 @@ public abstract partial class TextBoxBase : Control
                 case Keys.Tab:
                     // Single-line RichEd's want tab characters (see WM_GETDLGCODE),
                     // so we don't ask it
-                    return Multiline && _textBoxFlags[acceptsTab] && ((keyData & Keys.Control) == 0);
+                    return Multiline && _textBoxFlags[s_acceptsTab] && ((keyData & Keys.Control) == 0);
                 case Keys.Escape:
                     if (Multiline)
                     {
@@ -1414,22 +1401,22 @@ public abstract partial class TextBoxBase : Control
         AdjustHeight(true);
 
         UpdateMaxLength();
-        if (_textBoxFlags[modified])
+        if (_textBoxFlags[s_modified])
         {
             PInvoke.SendMessage(this, PInvoke.EM_SETMODIFY, (WPARAM)(BOOL)true);
         }
 
-        if (_textBoxFlags[scrollToCaretOnHandleCreated])
+        if (_textBoxFlags[s_scrollToCaretOnHandleCreated])
         {
             ScrollToCaret();
-            _textBoxFlags[scrollToCaretOnHandleCreated] = false;
+            _textBoxFlags[s_scrollToCaretOnHandleCreated] = false;
         }
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        _textBoxFlags[modified] = Modified;
-        _textBoxFlags[setSelectionOnHandleCreated] = true;
+        _textBoxFlags[s_modified] = Modified;
+        _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         // Update text selection cached values to be restored when recreating the handle.
         GetSelectionStartAndLength(out _selectionStart, out _selectionLength);
         base.OnHandleDestroyed(e);
@@ -1468,7 +1455,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnAcceptsTabChanged(EventArgs e)
     {
-        if (Events[EVENT_ACCEPTSTABCHANGED] is EventHandler eh)
+        if (Events[s_acceptsTabChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1476,7 +1463,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnBorderStyleChanged(EventArgs e)
     {
-        if (Events[EVENT_BORDERSTYLECHANGED] is EventHandler eh)
+        if (Events[s_borderStyleChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1490,7 +1477,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnHideSelectionChanged(EventArgs e)
     {
-        if (Events[EVENT_HIDESELECTIONCHANGED] is EventHandler eh)
+        if (Events[s_hideSelectionChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1498,7 +1485,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnModifiedChanged(EventArgs e)
     {
-        if (Events[EVENT_MODIFIEDCHANGED] is EventHandler eh)
+        if (Events[s_modifiedChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1535,7 +1522,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnMultilineChanged(EventArgs e)
     {
-        if (Events[EVENT_MULTILINECHANGED] is EventHandler eh)
+        if (Events[s_multilineChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1549,7 +1536,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void OnReadOnlyChanged(EventArgs e)
     {
-        if (Events[EVENT_READONLYCHANGED] is EventHandler eh)
+        if (Events[s_readOnlyChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1664,7 +1651,7 @@ public abstract partial class TextBoxBase : Control
     {
         if (!IsHandleCreated)
         {
-            _textBoxFlags[scrollToCaretOnHandleCreated] = true;
+            _textBoxFlags[s_scrollToCaretOnHandleCreated] = true;
             return;
         }
 
@@ -1790,7 +1777,7 @@ public abstract partial class TextBoxBase : Control
             // Store the indices until then...
             _selectionStart = start;
             _selectionLength = length;
-            _textBoxFlags[setSelectionOnHandleCreated] = true;
+            _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         }
     }
 
@@ -1813,7 +1800,7 @@ public abstract partial class TextBoxBase : Control
             _requestedHeight = height;
         }
 
-        if (_textBoxFlags[autoSize] && !_textBoxFlags[multiline])
+        if (_textBoxFlags[s_autoSize] && !_textBoxFlags[s_multiline])
         {
             height = PreferredHeight;
         }
@@ -1821,14 +1808,8 @@ public abstract partial class TextBoxBase : Control
         base.SetBoundsCore(x, y, width, height, specified);
     }
 
-    private static void Swap(ref int n1, ref int n2)
-    {
-        int temp = n2;
-        n2 = n1;
-        n1 = temp;
-    }
+    private static void Swap(ref int n1, ref int n2) => (n1, n2) = (n2, n1);
 
-    //
     // Send in -1 if you don't have the text length cached
     // when calling this method. It will be computed. If not,
     // please pass in the text length as the last parameter.
@@ -1890,9 +1871,9 @@ public abstract partial class TextBoxBase : Control
     internal void SetSelectionOnHandle()
     {
         Debug.Assert(IsHandleCreated, "Don't call this method until the handle is created.");
-        if (_textBoxFlags[setSelectionOnHandleCreated])
+        if (_textBoxFlags[s_setSelectionOnHandleCreated])
         {
-            _textBoxFlags[setSelectionOnHandleCreated] = false;
+            _textBoxFlags[s_setSelectionOnHandleCreated] = false;
             AdjustSelectionStartAndEnd(_selectionStart, _selectionLength, out int start, out int end, -1);
             PInvoke.SendMessage(this, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
@@ -2044,7 +2025,7 @@ public abstract partial class TextBoxBase : Control
 
     private void WmReflectCommand(ref Message m)
     {
-        if (!_textBoxFlags[codeUpdateText] && !_textBoxFlags[creatingHandle])
+        if (!_textBoxFlags[s_codeUpdateText] && !_textBoxFlags[s_creatingHandle])
         {
             uint hiword = m.WParamInternal.HIWORD;
             if (hiword == PInvoke.EN_CHANGE && CanRaiseTextChangedEvent)
@@ -2062,7 +2043,7 @@ public abstract partial class TextBoxBase : Control
     private void WmSetFont(ref Message m)
     {
         base.WndProc(ref m);
-        if (!_textBoxFlags[multiline])
+        if (!_textBoxFlags[s_multiline])
         {
             PInvoke.SendMessage(this, PInvoke.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
         }

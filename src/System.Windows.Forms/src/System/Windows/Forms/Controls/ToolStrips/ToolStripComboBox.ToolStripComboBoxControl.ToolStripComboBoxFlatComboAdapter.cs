@@ -18,10 +18,10 @@ public partial class ToolStripComboBox
 
             private static bool UseBaseAdapter(ComboBox comboBox)
             {
-                ToolStripComboBoxControl? toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                if (toolStripComboBox is null || toolStripComboBox.Owner?.Renderer is not ToolStripProfessionalRenderer)
+                if (comboBox is not ToolStripComboBoxControl toolStripComboBox
+                    || toolStripComboBox.Owner?.Renderer is not ToolStripProfessionalRenderer)
                 {
-                    Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
+                    Debug.Assert(comboBox is ToolStripComboBoxControl, "Why are we here and not a toolstrip combo?");
                     return true;
                 }
 
@@ -145,9 +145,9 @@ public partial class ToolStripComboBox
                 middle.X += (dropDownRect.Width % 2);
                 g.FillPolygon(brush, new Point[]
                 {
-                    new(middle.X - FlatComboAdapter.s_offsetPixels, middle.Y - 1),
-                    new(middle.X + FlatComboAdapter.s_offsetPixels + 1, middle.Y - 1),
-                    new(middle.X, middle.Y + FlatComboAdapter.s_offsetPixels)
+                    new(middle.X - s_offsetPixels, middle.Y - 1),
+                    new(middle.X + s_offsetPixels + 1, middle.Y - 1),
+                    new(middle.X, middle.Y + s_offsetPixels)
                 });
             }
         }

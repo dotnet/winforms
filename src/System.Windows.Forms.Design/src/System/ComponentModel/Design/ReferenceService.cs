@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal sealed class ReferenceService : IReferenceService, IDisposable
 {
-    private static readonly Attribute[] _attributes = [DesignerSerializationVisibilityAttribute.Content];
+    private static readonly Attribute[] s_attributes = [DesignerSerializationVisibilityAttribute.Content];
 
     private IServiceProvider _provider; // service provider we use to get to other services
     private List<IComponent>? _addedComponents; // list of newly added components
@@ -44,7 +44,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
 
         references.Add(new ReferenceHolder(trailingName, reference, sitedComponent));
 
-        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(reference, _attributes))
+        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(reference, s_attributes))
         {
             if (property.IsReadOnly)
             {
@@ -292,7 +292,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
             }
         }
 
-        return results.ToArray();
+        return [.. results];
     }
 
     /// <summary>

@@ -673,7 +673,7 @@ public class LinearGradientBrushTests
         using Matrix matrix = new(1, 2, 3, 4, 5, 6);
         Matrix expectedTransform = brush.Transform;
 
-        if (order == MatrixOrder.Append || order == MatrixOrder.Prepend)
+        if (order is MatrixOrder.Append or MatrixOrder.Prepend)
         {
             expectedTransform.Multiply(matrix, order);
         }

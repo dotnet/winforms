@@ -143,7 +143,7 @@ public partial class ScrollBar
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out ScrollBar? owner) && owner.Focused),
                 UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId => (VARIANT)RangeValue,
                 UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => (VARIANT)IsReadOnly,
                 UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => (VARIANT)LargeChange,

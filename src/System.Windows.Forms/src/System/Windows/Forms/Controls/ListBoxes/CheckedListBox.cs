@@ -50,8 +50,8 @@ public partial class CheckedListBox : ListBox
     private CheckedItemCollection? _checkedItemCollection;
     private CheckedIndexCollection? _checkedIndexCollection;
 
-    private static readonly MessageId LBC_GETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
-    private static readonly MessageId LBC_SETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
+    private static uint LBC_GETCHECKSTATE { get; } = PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
+    private static uint LBC_SETCHECKSTATE { get; } = PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
 
     /// <summary>
     ///  Creates a new CheckedListBox for the user.
@@ -243,8 +243,8 @@ public partial class CheckedListBox : ListBox
     [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
     public bool UseCompatibleTextRendering
     {
-        get => base.UseCompatibleTextRenderingInternal;
-        set => base.UseCompatibleTextRenderingInternal = value;
+        get => UseCompatibleTextRenderingInternal;
+        set => UseCompatibleTextRenderingInternal = value;
     }
 
     /// <summary>
@@ -477,7 +477,7 @@ public partial class CheckedListBox : ListBox
 
         if (Font.Height < 0)
         {
-            Font = Control.DefaultFont;
+            Font = DefaultFont;
         }
 
         if (e.Index >= 0)
@@ -914,22 +914,11 @@ public partial class CheckedListBox : ListBox
     private void WmReflectVKeyToItem(ref Message m)
     {
         Keys keycode = (Keys)m.WParamInternal.LOWORD;
-        switch (keycode)
+        _killNextSelect = keycode switch
         {
-            case Keys.Up:
-            case Keys.Down:
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-            case Keys.Left:
-            case Keys.Right:
-                _killNextSelect = true;
-                break;
-            default:
-                _killNextSelect = false;
-                break;
-        }
+            Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+            _ => false,
+        };
 
         m.ResultInternal = (LRESULT)(-1);
     }

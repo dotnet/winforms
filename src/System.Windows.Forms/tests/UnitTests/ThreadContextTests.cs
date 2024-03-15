@@ -10,9 +10,9 @@ public class ThreadContextTests
     private delegate bool MessageCallback(ref Message m);
 
     // WM_USER is 0x400, just need to be above that
-    const uint TestMessageId1 = 0x441;
-    const uint TestMessageId2 = 0x442;
-    const uint TestMessageId3 = 0x443;
+    private const uint TestMessageId1 = 0x441;
+    private const uint TestMessageId2 = 0x442;
+    private const uint TestMessageId3 = 0x443;
 
     [StaFact]
     public void ThreadContext_EmptyProcessFiltersWorks()

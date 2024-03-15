@@ -494,23 +494,23 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 return settingsKeyName;
             }
 
-            IComponent? rootComponent = this.GetService<IDesignerHost>()?.RootComponent;
+            IComponent? rootComponent = GetService<IDesignerHost>()?.RootComponent;
 
-            if (this.Component is IPersistComponentSettings persistableComponent && rootComponent is not null)
+            if (Component is IPersistComponentSettings persistableComponent && rootComponent is not null)
             {
                 if (string.IsNullOrEmpty(persistableComponent.SettingsKey))
                 {
-                    Debug.Assert(this.Component.Site is not null);
+                    Debug.Assert(Component.Site is not null);
                     if (rootComponent != persistableComponent)
                     {
-                        settingsKeyName = $"{rootComponent.Site!.Name}.{this.Component.Site.Name}";
+                        settingsKeyName = $"{rootComponent.Site!.Name}.{Component.Site.Name}";
                     }
                     else
                     {
-                        settingsKeyName = this.Component.Site.Name;
+                        settingsKeyName = Component.Site.Name;
                     }
 
-                    this.ShadowProperties[SettingsKeyName] = settingsKeyName;
+                    ShadowProperties[SettingsKeyName] = settingsKeyName;
                 }
 
                 persistableComponent.SettingsKey = settingsKeyName;

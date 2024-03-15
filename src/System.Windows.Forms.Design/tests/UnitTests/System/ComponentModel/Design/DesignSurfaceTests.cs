@@ -1762,7 +1762,7 @@ public class DesignSurfaceTests
     {
         public static object View { get; } = new();
 
-        public ViewTechnology[] SupportedTechnologies => new ViewTechnology[] { ViewTechnology.Default + 1 };
+        public ViewTechnology[] SupportedTechnologies => [ViewTechnology.Default + 1];
         public object GetView(ViewTechnology technology)
         {
             Assert.Equal(ViewTechnology.Default + 1, technology);

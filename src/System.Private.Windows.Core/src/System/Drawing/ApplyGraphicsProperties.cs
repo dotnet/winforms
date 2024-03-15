@@ -3,6 +3,8 @@
 
 namespace System.Drawing;
 
+#pragma warning disable format
+
 /// <summary>
 ///  Enumeration defining the different Graphics properties to apply to an <see cref="HDC"/> when creating it
 ///  from a Graphics object.
@@ -27,3 +29,5 @@ internal enum ApplyGraphicsProperties
     /// </summary>
     All                 = Clipping | TranslateTransform
 }
+
+#pragma warning restore format

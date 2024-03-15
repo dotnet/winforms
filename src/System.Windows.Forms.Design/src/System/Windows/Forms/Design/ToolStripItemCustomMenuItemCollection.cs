@@ -14,41 +14,41 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
 {
-    private readonly ToolStripItem currentItem;
-    private readonly IServiceProvider serviceProvider;
+    private readonly ToolStripItem _currentItem;
+    private readonly IServiceProvider _serviceProvider;
 
-    private ToolStripMenuItem imageToolStripMenuItem;
-    private ToolStripMenuItem enabledToolStripMenuItem;
+    private ToolStripMenuItem _imageToolStripMenuItem;
+    private ToolStripMenuItem _enabledToolStripMenuItem;
 
-    private ToolStripMenuItem isLinkToolStripMenuItem;
-    private ToolStripMenuItem springToolStripMenuItem;
+    private ToolStripMenuItem _isLinkToolStripMenuItem;
+    private ToolStripMenuItem _springToolStripMenuItem;
 
-    private ToolStripMenuItem checkedToolStripMenuItem;
-    private ToolStripMenuItem showShortcutKeysToolStripMenuItem;
+    private ToolStripMenuItem _checkedToolStripMenuItem;
+    private ToolStripMenuItem _showShortcutKeysToolStripMenuItem;
 
-    private ToolStripMenuItem alignmentToolStripMenuItem;
-    private ToolStripMenuItem displayStyleToolStripMenuItem;
+    private ToolStripMenuItem _alignmentToolStripMenuItem;
+    private ToolStripMenuItem _displayStyleToolStripMenuItem;
 
-    private ToolStripSeparator toolStripSeparator1;
+    private ToolStripSeparator _toolStripSeparator1;
 
-    private ToolStripMenuItem convertToolStripMenuItem;
-    private ToolStripMenuItem insertToolStripMenuItem;
+    private ToolStripMenuItem _convertToolStripMenuItem;
+    private ToolStripMenuItem _insertToolStripMenuItem;
 
-    private ToolStripMenuItem leftToolStripMenuItem;
-    private ToolStripMenuItem rightToolStripMenuItem;
+    private ToolStripMenuItem _leftToolStripMenuItem;
+    private ToolStripMenuItem _rightToolStripMenuItem;
 
-    private ToolStripMenuItem noneStyleToolStripMenuItem;
-    private ToolStripMenuItem textStyleToolStripMenuItem;
-    private ToolStripMenuItem imageStyleToolStripMenuItem;
-    private ToolStripMenuItem imageTextStyleToolStripMenuItem;
+    private ToolStripMenuItem _noneStyleToolStripMenuItem;
+    private ToolStripMenuItem _textStyleToolStripMenuItem;
+    private ToolStripMenuItem _imageStyleToolStripMenuItem;
+    private ToolStripMenuItem _imageTextStyleToolStripMenuItem;
 
-    private ToolStripMenuItem editItemsToolStripMenuItem;
-    private CollectionEditVerbManager verbManager;
+    private ToolStripMenuItem _editItemsToolStripMenuItem;
+    private CollectionEditVerbManager _verbManager;
 
     public ToolStripItemCustomMenuItemCollection(IServiceProvider provider, Component currentItem) : base()
     {
-        serviceProvider = provider;
-        this.currentItem = currentItem as ToolStripItem;
+        _serviceProvider = provider;
+        _currentItem = currentItem as ToolStripItem;
         PopulateList();
     }
 
@@ -57,7 +57,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private ToolStrip ParentTool
     {
-        get => currentItem.Owner;
+        get => _currentItem.Owner;
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 item.ImageTransparentColor = Color.Magenta;
             }
 
-            if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
+            if (_serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
             {
                 item.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
                 item.DropDown.Font = (Font)uis.Styles["DialogFont"];
@@ -113,108 +113,108 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     // Property names are hard-coded intentionally
     private void PopulateList()
     {
-        ToolStripItem selectedItem = currentItem;
-        if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
+        ToolStripItem selectedItem = _currentItem;
+        if (selectedItem is not ToolStripControlHost and not ToolStripSeparator)
         {
-            imageToolStripMenuItem = new ToolStripMenuItem
+            _imageToolStripMenuItem = new ToolStripMenuItem
             {
                 Text = SR.ToolStripItemContextMenuSetImage,
                 Image = new Icon(typeof(ToolStripMenuItem), "image").ToBitmap(),
                 ImageTransparentColor = Color.Magenta
             };
             // Add event Handlers
-            imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
-            enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
-            AddRange([imageToolStripMenuItem, enabledToolStripMenuItem]);
+            _imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
+            _enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
+            AddRange([_imageToolStripMenuItem, _enabledToolStripMenuItem]);
             if (selectedItem is ToolStripMenuItem)
             {
-                checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
-                showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                AddRange([checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem]);
+                _checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
+                _showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
+                AddRange([_checkedToolStripMenuItem, _showShortcutKeysToolStripMenuItem]);
             }
             else
             {
                 if (selectedItem is ToolStripLabel)
                 {
-                    isLinkToolStripMenuItem = CreateBooleanItem("IsLin&k", "IsLink");
-                    Add(isLinkToolStripMenuItem);
+                    _isLinkToolStripMenuItem = CreateBooleanItem("IsLin&k", "IsLink");
+                    Add(_isLinkToolStripMenuItem);
                 }
 
                 if (selectedItem is ToolStripStatusLabel)
                 {
-                    springToolStripMenuItem = CreateBooleanItem("Sprin&g", "Spring");
-                    Add(springToolStripMenuItem);
+                    _springToolStripMenuItem = CreateBooleanItem("Sprin&g", "Spring");
+                    Add(_springToolStripMenuItem);
                 }
 
-                leftToolStripMenuItem = CreateEnumValueItem("Alignment", "Left", ToolStripItemAlignment.Left);
-                rightToolStripMenuItem = CreateEnumValueItem("Alignment", "Right", ToolStripItemAlignment.Right);
-                noneStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "None", ToolStripItemDisplayStyle.None);
-                textStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Text", ToolStripItemDisplayStyle.Text);
-                imageStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Image", ToolStripItemDisplayStyle.Image);
-                imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
+                _leftToolStripMenuItem = CreateEnumValueItem("Alignment", "Left", ToolStripItemAlignment.Left);
+                _rightToolStripMenuItem = CreateEnumValueItem("Alignment", "Right", ToolStripItemAlignment.Right);
+                _noneStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "None", ToolStripItemDisplayStyle.None);
+                _textStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Text", ToolStripItemDisplayStyle.Text);
+                _imageStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Image", ToolStripItemDisplayStyle.Image);
+                _imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                 // alignmentToolStripMenuItem
-                alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
-                alignmentToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[leftToolStripMenuItem, rightToolStripMenuItem]);
+                _alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
+                _alignmentToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[_leftToolStripMenuItem, _rightToolStripMenuItem]);
                 // displayStyleToolStripMenuItem
-                displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
-                displayStyleToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem]);
+                _displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
+                _displayStyleToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[_noneStyleToolStripMenuItem, _textStyleToolStripMenuItem, _imageStyleToolStripMenuItem, _imageTextStyleToolStripMenuItem]);
 
-                if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
+                if (_serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                 {
                     // We already have code which expects VsRenderer and DialogFont to be always available without the need for null checks
                     ToolStripProfessionalRenderer renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
-                    alignmentToolStripMenuItem.DropDown.Renderer = renderer;
-                    displayStyleToolStripMenuItem.DropDown.Renderer = renderer;
+                    _alignmentToolStripMenuItem.DropDown.Renderer = renderer;
+                    _displayStyleToolStripMenuItem.DropDown.Renderer = renderer;
 
                     Font font = (Font)uis.Styles["DialogFont"];
-                    alignmentToolStripMenuItem.DropDown.Font = font;
-                    displayStyleToolStripMenuItem.DropDown.Font = font;
+                    _alignmentToolStripMenuItem.DropDown.Font = font;
+                    _displayStyleToolStripMenuItem.DropDown.Font = font;
 
                     // VsColorPanelText may be undefined, so we do need the check for Color here
                     object panelTextObject = uis.Styles["VsColorPanelText"];
                     if (panelTextObject is Color panelTextColor)
                     {
-                        alignmentToolStripMenuItem.DropDown.ForeColor = panelTextColor;
-                        displayStyleToolStripMenuItem.DropDown.ForeColor = panelTextColor;
+                        _alignmentToolStripMenuItem.DropDown.ForeColor = panelTextColor;
+                        _displayStyleToolStripMenuItem.DropDown.ForeColor = panelTextColor;
                     }
                 }
 
-                AddRange([alignmentToolStripMenuItem, displayStyleToolStripMenuItem,]);
+                AddRange([_alignmentToolStripMenuItem, _displayStyleToolStripMenuItem,]);
             }
 
-            toolStripSeparator1 = new ToolStripSeparator();
-            Add(toolStripSeparator1);
+            _toolStripSeparator1 = new ToolStripSeparator();
+            Add(_toolStripSeparator1);
         }
 
-        convertToolStripMenuItem = new ToolStripMenuItem
+        _convertToolStripMenuItem = new ToolStripMenuItem
         {
             Text = SR.ToolStripItemContextMenuConvertTo,
-            DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), true, serviceProvider, true)
+            DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, _currentItem, new EventHandler(AddNewItemClick), true, _serviceProvider, true)
         };
-        insertToolStripMenuItem = new ToolStripMenuItem
+        _insertToolStripMenuItem = new ToolStripMenuItem
         {
             Text = SR.ToolStripItemContextMenuInsert,
-            DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
+            DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, _currentItem, new EventHandler(AddNewItemClick), false, _serviceProvider, true)
         };
 
-        AddRange([convertToolStripMenuItem, insertToolStripMenuItem]);
+        AddRange([_convertToolStripMenuItem, _insertToolStripMenuItem]);
 
-        if (currentItem is ToolStripDropDownItem)
+        if (_currentItem is ToolStripDropDownItem)
         {
-            IDesignerHost _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+            IDesignerHost _designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
             if (_designerHost is not null)
             {
-                if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
+                if (_designerHost.GetDesigner(_currentItem) is ToolStripItemDesigner itemDesigner)
                 {
-                    verbManager = new CollectionEditVerbManager(SR.ToolStripDropDownItemCollectionEditorVerb, itemDesigner, TypeDescriptor.GetProperties(currentItem)["DropDownItems"], false);
-                    editItemsToolStripMenuItem = new ToolStripMenuItem
+                    _verbManager = new CollectionEditVerbManager(SR.ToolStripDropDownItemCollectionEditorVerb, itemDesigner, TypeDescriptor.GetProperties(_currentItem)["DropDownItems"], false);
+                    _editItemsToolStripMenuItem = new ToolStripMenuItem
                     {
                         Text = SR.ToolStripDropDownItemCollectionEditorVerb
                     };
-                    editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
-                    editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist").ToBitmap();
-                    editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
-                    Add(editItemsToolStripMenuItem);
+                    _editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
+                    _editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist").ToBitmap();
+                    _editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+                    Add(_editItemsToolStripMenuItem);
                 }
             }
         }
@@ -222,24 +222,24 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
 
     private void OnEditItemsMenuItemClick(object sender, EventArgs e)
     {
-        verbManager?.EditItemsVerb.Invoke();
+        _verbManager?.EditItemsVerb.Invoke();
     }
 
     private void OnImageToolStripMenuItemClick(object sender, EventArgs e)
     {
-        IDesignerHost _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        IDesignerHost _designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         if (_designerHost is not null)
         {
-            if (_designerHost.GetDesigner(currentItem) is ToolStripItemDesigner itemDesigner)
+            if (_designerHost.GetDesigner(_currentItem) is ToolStripItemDesigner itemDesigner)
             {
                 try
                 {
                     // EditorServiceContext will check if the user has changed the property and set it for us.
-                    EditorServiceContext.EditValue(itemDesigner, currentItem, "Image");
+                    EditorServiceContext.EditValue(itemDesigner, _currentItem, "Image");
                 }
                 catch (InvalidOperationException ex)
                 {
-                    IUIService uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
+                    IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
                     uiService.ShowError(ex.Message);
                 }
             }
@@ -296,17 +296,17 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     private void MorphToolStripItem(Type t)
     {
         // Go thru morphing routine only if we have different type.
-        if (t != currentItem.GetType())
+        if (t != _currentItem.GetType())
         {
-            IDesignerHost _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-            ToolStripItemDesigner _designer = (ToolStripItemDesigner)_designerHost.GetDesigner(currentItem);
+            IDesignerHost _designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
+            ToolStripItemDesigner _designer = (ToolStripItemDesigner)_designerHost.GetDesigner(_currentItem);
             _designer.MorphCurrentItem(t);
         }
     }
 
     private void InsertItem(Type t)
     {
-        if (currentItem is ToolStripMenuItem)
+        if (_currentItem is ToolStripMenuItem)
         {
             InsertMenuItem(t);
         }
@@ -342,7 +342,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         }
         else
         {
-            InsertIntoDropDown((ToolStripDropDown)currentItem.Owner, t);
+            InsertIntoDropDown((ToolStripDropDown)_currentItem.Owner, t);
         }
     }
 
@@ -366,14 +366,14 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private void InsertIntoDropDown(ToolStripDropDown parent, Type t)
     {
-        IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
-        int dummyIndex = parent.Items.IndexOf(currentItem);
+        int dummyIndex = parent.Items.IndexOf(_currentItem);
         if (parent is not null)
         {
             if (parent.OwnerItem is ToolStripDropDownItem ownerItem)
             {
-                if (ownerItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft || ownerItem.DropDownDirection == ToolStripDropDownDirection.AboveRight)
+                if (ownerItem.DropDownDirection is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
                 {
                     dummyIndex++;
                 }
@@ -386,14 +386,14 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
             // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
-            ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
+            ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
         }
         catch (Exception ex)
@@ -426,24 +426,24 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private void InsertIntoMainMenu(MenuStrip parent, Type t)
     {
-        IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
-        int dummyIndex = parent.Items.IndexOf(currentItem);
+        int dummyIndex = parent.Items.IndexOf(_currentItem);
         DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);
         try
         {
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             Debug.Assert(dummyIndex != -1, "Why is item index negative?");
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
             // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
-            ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
+            ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
         }
         catch (Exception ex)
@@ -465,24 +465,24 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private void InsertIntoStatusStrip(StatusStrip parent, Type t)
     {
-        IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
-        int dummyIndex = parent.Items.IndexOf(currentItem);
+        int dummyIndex = parent.Items.IndexOf(_currentItem);
         DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);
         try
         {
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             Debug.Assert(dummyIndex != -1, "Why is item index negative?");
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
             // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
-            ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
+            ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
         }
         catch (Exception ex)
@@ -504,23 +504,23 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private void InsertToolStripItem(Type t)
     {
-        IDesignerHost designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
         ToolStrip parent = ParentTool;
-        int dummyIndex = parent.Items.IndexOf(currentItem);
+        int dummyIndex = parent.Items.IndexOf(_currentItem);
         DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);
         try
         {
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             // Set the Image property and DisplayStyle...
-            if (component is ToolStripButton || component is ToolStripSplitButton || component is ToolStripDropDownButton)
+            if (component is ToolStripButton or ToolStripSplitButton or ToolStripDropDownButton)
             {
                 Image image = null;
                 try
@@ -539,7 +539,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             Debug.Assert(dummyIndex != -1, "Why is item index negative?");
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
             // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
-            ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
+            ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
         }
         catch (Exception ex)
@@ -563,7 +563,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
 
     private bool IsPropertyBrowsable(string propertyName)
     {
-        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(currentItem)[propertyName];
+        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_currentItem)[propertyName];
         Debug.Assert(getProperty is not null, "Could not find given property in control.");
         if (getProperty is not null)
         {
@@ -579,11 +579,11 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     // helper function to get the property on the actual Control
     private object GetProperty(string propertyName)
     {
-        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(currentItem)[propertyName];
+        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_currentItem)[propertyName];
         Debug.Assert(getProperty is not null, "Could not find given property in control.");
         if (getProperty is not null)
         {
-            return getProperty.GetValue(currentItem);
+            return getProperty.GetValue(_currentItem);
         }
 
         return null;
@@ -592,7 +592,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     // helper function to change the property on the actual Control
     protected void ChangeProperty(string propertyName, object value)
     {
-        ChangeProperty(currentItem, propertyName, value);
+        ChangeProperty(_currentItem, propertyName, value);
     }
 
     protected void ChangeProperty(IComponent target, string propertyName, object value)
@@ -605,7 +605,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         }
         catch (InvalidOperationException ex)
         {
-            IUIService uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
+            IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
             uiService.ShowError(ex.Message);
         }
     }
@@ -613,36 +613,36 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     private void RefreshAlignment()
     {
         ToolStripItemAlignment currentAlignmentValue = (ToolStripItemAlignment)GetProperty("Alignment");
-        leftToolStripMenuItem.Checked = (currentAlignmentValue == ToolStripItemAlignment.Left) ? true : false;
-        rightToolStripMenuItem.Checked = (currentAlignmentValue == ToolStripItemAlignment.Right) ? true : false;
+        _leftToolStripMenuItem.Checked = currentAlignmentValue == ToolStripItemAlignment.Left;
+        _rightToolStripMenuItem.Checked = currentAlignmentValue == ToolStripItemAlignment.Right;
     }
 
     private void RefreshDisplayStyle()
     {
         ToolStripItemDisplayStyle currentDisplayStyleValue = (ToolStripItemDisplayStyle)GetProperty("DisplayStyle");
-        noneStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.None) ? true : false;
-        textStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.Text) ? true : false;
-        imageStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.Image) ? true : false;
-        imageTextStyleToolStripMenuItem.Checked = (currentDisplayStyleValue == ToolStripItemDisplayStyle.ImageAndText) ? true : false;
+        _noneStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.None;
+        _textStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.Text;
+        _imageStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.Image;
+        _imageTextStyleToolStripMenuItem.Checked = currentDisplayStyleValue == ToolStripItemDisplayStyle.ImageAndText;
     }
 
     public override void RefreshItems()
     {
         base.RefreshItems();
-        ToolStripItem selectedItem = currentItem;
-        if (!(selectedItem is ToolStripControlHost) && !(selectedItem is ToolStripSeparator))
+        ToolStripItem selectedItem = _currentItem;
+        if (selectedItem is not ToolStripControlHost and not ToolStripSeparator)
         {
-            enabledToolStripMenuItem.Checked = (bool)GetProperty("Enabled");
+            _enabledToolStripMenuItem.Checked = (bool)GetProperty("Enabled");
             if (selectedItem is ToolStripMenuItem)
             {
-                checkedToolStripMenuItem.Checked = (bool)GetProperty("Checked");
-                showShortcutKeysToolStripMenuItem.Checked = (bool)GetProperty("ShowShortcutKeys");
+                _checkedToolStripMenuItem.Checked = (bool)GetProperty("Checked");
+                _showShortcutKeysToolStripMenuItem.Checked = (bool)GetProperty("ShowShortcutKeys");
             }
             else
             {
                 if (selectedItem is ToolStripLabel)
                 {
-                    isLinkToolStripMenuItem.Checked = (bool)GetProperty("IsLink");
+                    _isLinkToolStripMenuItem.Checked = (bool)GetProperty("IsLink");
                 }
 
                 RefreshAlignment();

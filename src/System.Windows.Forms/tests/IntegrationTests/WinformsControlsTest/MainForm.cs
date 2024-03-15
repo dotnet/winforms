@@ -244,7 +244,7 @@ public partial class MainForm : Form
         Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
         Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
 
-        List<Button> buttons = new();
+        List<Button> buttons = [];
         foreach (Control control in overarchingFlowLayoutPanel.Controls)
         {
             if (control is Button button)

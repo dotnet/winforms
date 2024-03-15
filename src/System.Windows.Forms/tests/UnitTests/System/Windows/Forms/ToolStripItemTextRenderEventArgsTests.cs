@@ -61,12 +61,10 @@ public class ToolStripItemTextRenderEventArgsTests
     [Fact]
     public void Ctor_NullItem_ThrowsArgumentNullException()
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top));
-            Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.TopLeft));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top));
+        Assert.Throws<ArgumentNullException>("item", () => new ToolStripItemTextRenderEventArgs(graphics, null, "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.TopLeft));
     }
 
     public static IEnumerable<object[]> TextColor_TestData()
@@ -79,14 +77,12 @@ public class ToolStripItemTextRenderEventArgsTests
     [MemberData(nameof(TextColor_TestData))]
     public void TextColor_Set_GetReturnsExpected(Color value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        ToolStripItemTextRenderEventArgs e = new(graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Blue, SystemFonts.DefaultFont, TextFormatFlags.Top)
         {
-            ToolStripItemTextRenderEventArgs e = new(graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Blue, SystemFonts.DefaultFont, TextFormatFlags.Top)
-            {
-                TextColor = value
-            };
-            Assert.Equal(value, e.TextColor);
-        }
+            TextColor = value
+        };
+        Assert.Equal(value, e.TextColor);
     }
 }

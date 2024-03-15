@@ -12,12 +12,12 @@ namespace System.Windows.Forms.Design;
 [DesignTimeVisible(false)]
 internal partial class DataGridViewColumnTypePicker : ContainerControl
 {
-    private ListBox _typesListBox;
+    private readonly ListBox _typesListBox;
     private Type? _selectedType;
 
     // The current editor service that we need to close the drop down.
     private IWindowsFormsEditorService? _windowsFormsEditorService;
-    private static Type _dataGridViewColumnType = typeof(DataGridViewColumn);
+    private static readonly Type s_dataGridViewColumnType = typeof(DataGridViewColumn);
 
     private const int MinimumHeight = 90;
     private const int MinimumWidth = 100;
@@ -80,11 +80,11 @@ internal partial class DataGridViewColumnTypePicker : ContainerControl
 
         _typesListBox.Items.Clear();
 
-        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(_dataGridViewColumnType, excludeGlobalTypes: false));
+        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(s_dataGridViewColumnType, excludeGlobalTypes: false));
 
         foreach (Type t in columnTypes)
         {
-            if (t == _dataGridViewColumnType)
+            if (t == s_dataGridViewColumnType)
             {
                 continue;
             }

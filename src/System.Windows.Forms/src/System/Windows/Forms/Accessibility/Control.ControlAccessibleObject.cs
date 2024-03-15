@@ -505,12 +505,11 @@ public partial class Control
         }
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
-            => this.TryGetOwnerAs(out Control? owner) && owner.SupportsUiaProviders && patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId
-                ? true
-                : base.IsPatternSupported(patternId);
+            => (this.TryGetOwnerAs(out Control? owner) && owner.SupportsUiaProviders && patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)
+                || base.IsPatternSupported(patternId);
 
         internal override bool IsIAccessibleExSupported()
-            => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
+            => Owner is IAutomationLiveRegion || base.IsIAccessibleExSupported();
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

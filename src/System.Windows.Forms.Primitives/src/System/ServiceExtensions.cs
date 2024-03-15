@@ -78,15 +78,11 @@ internal static class ServiceExtensions
         where TService : class
         where TInterface : class
     {
-        var service = provider.GetService<TService, TInterface>();
-
-        if (service is null)
-        {
-            throw new InvalidOperationException(string.Format(SR.General_MissingService, typeof(TInterface).FullName))
+        TInterface service = provider.GetService<TService, TInterface>()
+            ?? throw new InvalidOperationException(string.Format(SR.General_MissingService, typeof(TInterface).FullName))
             {
                 HelpLink = SR.General_MissingService
             };
-        }
 
         return service;
     }

@@ -58,27 +58,19 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     {
         if (_nativeFontCollection is null)
         {
-#pragma warning disable CA2208 // Instantiate argument exceptions correctly
             // This is the default behavior on Desktop. The ArgumentException originates from GdipPrivateAddFontFile which would
             // refuse the null pointer.
             throw new ArgumentException();
-#pragma warning restore CA2208
         }
 
-        if (filename is null)
-        {
-            throw new ArgumentNullException(nameof(filename));
-        }
+        ArgumentNullException.ThrowIfNull(filename);
 
-        // this ensure the filename is valid (or throw the correct exception)
-        string fullPath = Path.GetFullPath(filename);
-
-        if (!File.Exists(fullPath))
+        if (!File.Exists(filename))
         {
             throw new FileNotFoundException();
         }
 
-        fixed (char* p = fullPath)
+        fixed (char* p = filename)
         {
             PInvoke.GdipPrivateAddFontFile(_nativeFontCollection, p).ThrowIfFailed();
             GC.KeepAlive(this);

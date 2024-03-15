@@ -12,72 +12,72 @@ namespace System.Windows.Forms.Design.Behavior;
 
 internal class TableLayoutPanelBehavior : Behavior
 {
-    private TableLayoutPanelDesigner designer; // pointer back to our designer.
-    private Point lastMouseLoc; // used to track mouse movement deltas
-    private bool pushedBehavior; // tracks if we've pushed ourself onto the stack
-    private BehaviorService behaviorService; // used for bounds translation
-    private IServiceProvider serviceProvider; // cached to allow our behavior to get services
-    private TableLayoutPanelResizeGlyph tableGlyph; // the glyph being resized
-    private DesignerTransaction resizeTransaction; // used to make size adjustments within transaction
-    private PropertyDescriptor resizeProp; // cached property descriptor representing either the row or column styles
-    private PropertyDescriptor changedProp;  // cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
-    private TableLayoutPanel table;
-    private StyleHelper rightStyle;
-    private StyleHelper leftStyle;
+    private readonly TableLayoutPanelDesigner _designer; // pointer back to our designer.
+    private Point _lastMouseLoc; // used to track mouse movement deltas
+    private bool _pushedBehavior; // tracks if we've pushed ourself onto the stack
+    private readonly BehaviorService _behaviorService; // used for bounds translation
+    private readonly IServiceProvider _serviceProvider; // cached to allow our behavior to get services
+    private TableLayoutPanelResizeGlyph _tableGlyph; // the glyph being resized
+    private DesignerTransaction _resizeTransaction; // used to make size adjustments within transaction
+    private PropertyDescriptor _resizeProp; // cached property descriptor representing either the row or column styles
+    private PropertyDescriptor _changedProp;  // cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
+    private readonly TableLayoutPanel _table;
+    private StyleHelper _rightStyle;
+    private StyleHelper _leftStyle;
     private List<TableLayoutStyle> _styles;
-    private bool currentColumnStyles; // is Styles for Columns or Rows
-    private static readonly TraceSwitch tlpResizeSwitch = new("TLPRESIZE", "Behavior service drag & drop messages");
+    private bool _currentColumnStyles; // is Styles for Columns or Rows
+    private static TraceSwitch ResizeSwitch { get; } = new("TLPRESIZE", "Behavior service drag & drop messages");
 
     internal TableLayoutPanelBehavior(TableLayoutPanel panel, TableLayoutPanelDesigner designer, IServiceProvider serviceProvider)
     {
-        table = panel;
-        this.designer = designer;
-        this.serviceProvider = serviceProvider;
+        _table = panel;
+        _designer = designer;
+        _serviceProvider = serviceProvider;
 
-        behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
+        _behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
 
-        if (behaviorService is null)
+        if (_behaviorService is null)
         {
             Debug.Fail("BehaviorService could not be found!");
             return;
         }
 
-        pushedBehavior = false;
-        lastMouseLoc = Point.Empty;
+        _pushedBehavior = false;
+        _lastMouseLoc = Point.Empty;
     }
 
     private void FinishResize()
     {
         // clear state
-        pushedBehavior = false;
-        behaviorService.PopBehavior(this);
-        lastMouseLoc = Point.Empty;
+        _pushedBehavior = false;
+        _behaviorService.PopBehavior(this);
+        _lastMouseLoc = Point.Empty;
         _styles = null;
 
         // fire ComponentChange events so this event is undoable
-        IComponentChangeService cs = serviceProvider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-        if (cs is not null && changedProp is not null)
+        IComponentChangeService cs = _serviceProvider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+        if (cs is not null && _changedProp is not null)
         {
-            cs.OnComponentChanged(table, changedProp, null, null);
-            changedProp = null;
+            cs.OnComponentChanged(_table, _changedProp, null, null);
+            _changedProp = null;
         }
 
         // attempt to refresh the selection
-        SelectionManager selManager = serviceProvider.GetService(typeof(SelectionManager)) as SelectionManager;
+        SelectionManager selManager = _serviceProvider.GetService(typeof(SelectionManager)) as SelectionManager;
         selManager?.Refresh();
     }
 
     public override void OnLoseCapture(Glyph g, EventArgs e)
     {
-        if (pushedBehavior)
+        if (_pushedBehavior)
         {
             FinishResize();
 
             // If we still have a transaction, roll it back.
-            if (resizeTransaction is not null)
+            if (_resizeTransaction is not null)
             {
-                DesignerTransaction t = resizeTransaction;
-                resizeTransaction = null;
+                DesignerTransaction t = _resizeTransaction;
+                _resizeTransaction = null;
                 using (t)
                 {
                     t.Cancel();
@@ -91,58 +91,58 @@ internal class TableLayoutPanelBehavior : Behavior
         // we only care about the right mouse button for resizing
         if (button == MouseButtons.Left && g is TableLayoutPanelResizeGlyph)
         {
-            tableGlyph = g as TableLayoutPanelResizeGlyph;
+            _tableGlyph = g as TableLayoutPanelResizeGlyph;
 
             // select the table
-            ISelectionService selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
-            selSvc?.SetSelectedComponents(new object[] { designer.Component }, SelectionTypes.Primary);
+            ISelectionService selSvc = _serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
+            selSvc?.SetSelectedComponents(new object[] { _designer.Component }, SelectionTypes.Primary);
 
-            bool isColumn = tableGlyph.Type == TableLayoutPanelResizeGlyph.TableLayoutResizeType.Column;
+            bool isColumn = _tableGlyph.Type == TableLayoutPanelResizeGlyph.TableLayoutResizeType.Column;
 
             // cache some state
-            lastMouseLoc = mouseLoc;
-            resizeProp = TypeDescriptor.GetProperties(tableGlyph.Style)[isColumn ? "Width" : "Height"];
-            Debug.Assert(resizeProp is not null, "Unable to get the resize property for tableGlyph's Style");
+            _lastMouseLoc = mouseLoc;
+            _resizeProp = TypeDescriptor.GetProperties(_tableGlyph.Style)[isColumn ? "Width" : "Height"];
+            Debug.Assert(_resizeProp is not null, "Unable to get the resize property for tableGlyph's Style");
 
-            IComponentChangeService cs = serviceProvider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            IComponentChangeService cs = _serviceProvider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
             if (cs is not null)
             {
-                changedProp = TypeDescriptor.GetProperties(table)[isColumn ? "ColumnStyles" : "RowStyles"];
-                int[] widths = isColumn ? table.GetColumnWidths() : table.GetRowHeights();
+                _changedProp = TypeDescriptor.GetProperties(_table)[isColumn ? "ColumnStyles" : "RowStyles"];
+                int[] widths = isColumn ? _table.GetColumnWidths() : _table.GetRowHeights();
 
-                if (changedProp is not null)
+                if (_changedProp is not null)
                 {
                     GetActiveStyleCollection(isColumn);
                     if (_styles is not null && CanResizeStyle(widths))
                     {
-                        IDesignerHost host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                        IDesignerHost host = _serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
                         if (host is not null)
                         {
-                            resizeTransaction = host.CreateTransaction(string.Format(SR.TableLayoutPanelRowColResize, (isColumn ? "Column" : "Row"), designer.Control.Site.Name));
+                            _resizeTransaction = host.CreateTransaction(string.Format(SR.TableLayoutPanelRowColResize, (isColumn ? "Column" : "Row"), _designer.Control.Site.Name));
                         }
 
                         try
                         {
-                            int moveIndex = _styles.IndexOf(tableGlyph.Style);
-                            rightStyle.index = IndexOfNextStealableStyle(true /*forward*/, moveIndex, widths);
-                            rightStyle.style = _styles[rightStyle.index];
-                            rightStyle.styleProp = TypeDescriptor.GetProperties(rightStyle.style)[isColumn ? "Width" : "Height"];
+                            int moveIndex = _styles.IndexOf(_tableGlyph.Style);
+                            _rightStyle.index = IndexOfNextStealableStyle(true /*forward*/, moveIndex, widths);
+                            _rightStyle.style = _styles[_rightStyle.index];
+                            _rightStyle.styleProp = TypeDescriptor.GetProperties(_rightStyle.style)[isColumn ? "Width" : "Height"];
 
-                            leftStyle.index = IndexOfNextStealableStyle(false /*backwards*/, moveIndex, widths);
-                            leftStyle.style = _styles[leftStyle.index];
-                            leftStyle.styleProp = TypeDescriptor.GetProperties(leftStyle.style)[isColumn ? "Width" : "Height"];
+                            _leftStyle.index = IndexOfNextStealableStyle(false /*backwards*/, moveIndex, widths);
+                            _leftStyle.style = _styles[_leftStyle.index];
+                            _leftStyle.styleProp = TypeDescriptor.GetProperties(_leftStyle.style)[isColumn ? "Width" : "Height"];
 
-                            Debug.Assert(leftStyle.styleProp is not null && rightStyle.styleProp is not null, "Couldn't find property descriptor for width or height");
+                            Debug.Assert(_leftStyle.styleProp is not null && _rightStyle.styleProp is not null, "Couldn't find property descriptor for width or height");
 
-                            cs.OnComponentChanging(table, changedProp);
+                            cs.OnComponentChanging(_table, _changedProp);
                         }
                         catch (CheckoutException checkoutException)
                         {
                             if (CheckoutException.Canceled.Equals(checkoutException))
                             {
-                                if ((resizeTransaction is not null) && (!resizeTransaction.Canceled))
+                                if ((_resizeTransaction is not null) && (!_resizeTransaction.Canceled))
                                 {
-                                    resizeTransaction.Cancel();
+                                    _resizeTransaction.Cancel();
                                 }
                             }
 
@@ -157,8 +157,8 @@ internal class TableLayoutPanelBehavior : Behavior
             }
 
             // push this resizebehavior
-            behaviorService.PushCaptureBehavior(this);
-            pushedBehavior = true;
+            _behaviorService.PushCaptureBehavior(this);
+            _pushedBehavior = true;
         }
 
         return false;
@@ -166,10 +166,10 @@ internal class TableLayoutPanelBehavior : Behavior
 
     private void GetActiveStyleCollection(bool isColumn)
     {
-        if ((_styles is null || isColumn != currentColumnStyles) && table is not null)
+        if ((_styles is null || isColumn != _currentColumnStyles) && _table is not null)
         {
-            _styles = ((TableLayoutStyleCollection)changedProp.GetValue(table)).Cast<TableLayoutStyle>().ToList();
-            currentColumnStyles = isColumn;
+            _styles = ((TableLayoutStyleCollection)_changedProp.GetValue(_table)).Cast<TableLayoutStyle>().ToList();
+            _currentColumnStyles = isColumn;
         }
     }
 
@@ -178,9 +178,9 @@ internal class TableLayoutPanelBehavior : Behavior
         get
         {
             bool ret = false;
-            if (tableGlyph is not null)
+            if (_tableGlyph is not null)
             {
-                ret = tableGlyph.Type == TableLayoutPanelResizeGlyph.TableLayoutResizeType.Column;
+                ret = _tableGlyph.Type == TableLayoutPanelResizeGlyph.TableLayoutResizeType.Column;
             }
 
             return ret;
@@ -189,7 +189,7 @@ internal class TableLayoutPanelBehavior : Behavior
 
     private bool CanResizeStyle(int[] widths)
     {
-        int moveIndex = _styles.IndexOf(tableGlyph.Style);
+        int moveIndex = _styles.IndexOf(_tableGlyph.Style);
         if (moveIndex <= -1 || moveIndex == _styles.Count)
         {
             Debug.Fail($"Can't find style {moveIndex}");
@@ -212,7 +212,7 @@ internal class TableLayoutPanelBehavior : Behavior
             {
                 for (int i = startIndex + 1; ((i < _styles.Count) && (i < widths.Length)); i++)
                 {
-                    if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
+                    if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.s_minimumSizeDrag)
                     {
                         stealIndex = i;
                         break;
@@ -225,7 +225,7 @@ internal class TableLayoutPanelBehavior : Behavior
                 {
                     for (int i = startIndex; i >= 0; i--)
                     {
-                        if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
+                        if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.s_minimumSizeDrag)
                         {
                             stealIndex = i;
                             break;
@@ -240,47 +240,47 @@ internal class TableLayoutPanelBehavior : Behavior
 
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
-        if (pushedBehavior)
+        if (_pushedBehavior)
         {
             bool isColumn = ColumnResize;
             GetActiveStyleCollection(isColumn);
             if (_styles is not null)
             {
-                int rightIndex = rightStyle.index;
-                int leftIndex = leftStyle.index;
+                int rightIndex = _rightStyle.index;
+                int leftIndex = _leftStyle.index;
 
-                int delta = isColumn ? mouseLoc.X - lastMouseLoc.X : mouseLoc.Y - lastMouseLoc.Y;
-                if (isColumn && table.RightToLeft == RightToLeft.Yes)
+                int delta = isColumn ? mouseLoc.X - _lastMouseLoc.X : mouseLoc.Y - _lastMouseLoc.Y;
+                if (isColumn && _table.RightToLeft == RightToLeft.Yes)
                 {
                     delta *= -1;
                 }
 
                 if (delta == 0)
                 {
-                    Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "0 mouse delta");
+                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "0 mouse delta");
                     return false;
                 }
 
-                Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "BEGIN RESIZE");
-                Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "mouse delta: " + delta);
+                Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "BEGIN RESIZE");
+                Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "mouse delta: " + delta);
 
-                int[] oldWidths = isColumn ? table.GetColumnWidths() : table.GetRowHeights();
+                int[] oldWidths = isColumn ? _table.GetColumnWidths() : _table.GetRowHeights();
 
                 int[] newWidths = oldWidths.Clone() as int[];
 
                 newWidths[rightIndex] -= delta;
                 newWidths[leftIndex] += delta;
 
-                if (newWidths[rightIndex] < DesignerUtils.MINUMUMSTYLESIZEDRAG ||
-                    newWidths[leftIndex] < DesignerUtils.MINUMUMSTYLESIZEDRAG)
+                if (newWidths[rightIndex] < DesignerUtils.s_minimumSizeDrag ||
+                    newWidths[leftIndex] < DesignerUtils.s_minimumSizeDrag)
                 {
-                    Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "Bottomed out.");
-                    Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "END RESIZE\n");
+                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Bottomed out.");
+                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "END RESIZE\n");
                     return false;
                 }
 
                 // now we must renormalize our new widths into the correct sizes
-                table.SuspendLayout();
+                _table.SuspendLayout();
 
                 int totalPercent = 0;
 
@@ -294,23 +294,23 @@ internal class TableLayoutPanelBehavior : Behavior
                     // of always setting the new size directly based on the reported
                     // sizes, we now base them on the style size if necessary.
                     float newRightSize = newWidths[rightIndex];
-                    float rightStyleSize = (float)rightStyle.styleProp.GetValue(rightStyle.style);
+                    float rightStyleSize = (float)_rightStyle.styleProp.GetValue(_rightStyle.style);
 
                     if (rightStyleSize != oldWidths[rightIndex])
                     {
-                        newRightSize = Math.Max(rightStyleSize - delta, DesignerUtils.MINUMUMSTYLESIZEDRAG);
+                        newRightSize = Math.Max(rightStyleSize - delta, DesignerUtils.s_minimumSizeDrag);
                     }
 
                     float newLeftSize = newWidths[leftIndex];
-                    float leftStyleSize = (float)leftStyle.styleProp.GetValue(leftStyle.style);
+                    float leftStyleSize = (float)_leftStyle.styleProp.GetValue(_leftStyle.style);
 
                     if (leftStyleSize != oldWidths[leftIndex])
                     {
-                        newLeftSize = Math.Max(leftStyleSize + delta, DesignerUtils.MINUMUMSTYLESIZEDRAG);
+                        newLeftSize = Math.Max(leftStyleSize + delta, DesignerUtils.s_minimumSizeDrag);
                     }
 
-                    rightStyle.styleProp.SetValue(rightStyle.style, newRightSize);
-                    leftStyle.styleProp.SetValue(leftStyle.style, newLeftSize);
+                    _rightStyle.styleProp.SetValue(_rightStyle.style, newRightSize);
+                    _leftStyle.styleProp.SetValue(_leftStyle.style, newLeftSize);
                 }
                 else if (_styles[rightIndex].SizeType == SizeType.Percent &&
                     _styles[leftIndex].SizeType == SizeType.Percent)
@@ -326,14 +326,14 @@ internal class TableLayoutPanelBehavior : Behavior
                     for (int j = 0; j < 2; j++)
                     {
                         int i = j == 0 ? rightIndex : leftIndex;
-                        float newSize = (float)newWidths[i] * 100 / (float)totalPercent;
-                        Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "NewSize " + newSize);
+                        float newSize = (float)newWidths[i] * 100 / totalPercent;
+                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"NewSize {newSize}");
 
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[i])[isColumn ? "Width" : "Height"];
                         if (prop is not null)
                         {
                             prop.SetValue(_styles[i], newSize);
-                            Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "Resizing column (per) " + i.ToString(CultureInfo.InvariantCulture) + " to " + newSize.ToString(CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Resizing column (per) {i.ToString(CultureInfo.InvariantCulture)} to {newSize.ToString(CultureInfo.InvariantCulture)}");
                         }
                     }
                 }
@@ -342,7 +342,7 @@ internal class TableLayoutPanelBehavior : Behavior
 #if DEBUG
                     for (int i = 0; i < oldWidths.Length; i++)
                     {
-                        Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "Col " + i + ": Old: " + oldWidths[i] + " New: " + newWidths[i]);
+                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Col {i}: Old: {oldWidths[i]} New: {newWidths[i]}");
                     }
 #endif
 
@@ -362,11 +362,11 @@ internal class TableLayoutPanelBehavior : Behavior
                         if (curAbsStyleSize != oldWidths[absIndex])
                         {
                             newAbsSize = Math.Max(absIndex == rightIndex ? curAbsStyleSize - delta : curAbsStyleSize + delta,
-                                                    DesignerUtils.MINUMUMSTYLESIZEDRAG);
+                                                    DesignerUtils.s_minimumSizeDrag);
                         }
 
                         prop.SetValue(_styles[absIndex], newAbsSize);
-                        Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose, "Resizing column (abs) " + absIndex.ToString(CultureInfo.InvariantCulture) + " to " + newWidths[absIndex]);
+                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Resizing column (abs) " + absIndex.ToString(CultureInfo.InvariantCulture) + " to " + newWidths[absIndex]);
                     }
                     else
                     {
@@ -374,14 +374,14 @@ internal class TableLayoutPanelBehavior : Behavior
                     }
                 }
 
-                table.ResumeLayout(true);
+                _table.ResumeLayout(true);
 
                 // now determine if the values we pushed into the TLP
                 // actually had any effect.  If they didn't,
                 // we delay updating the last mouse position so that
                 // next time a mouse move message comes in the delta is larger.
                 bool updatedSize = true;
-                int[] updatedWidths = isColumn ? table.GetColumnWidths() : table.GetRowHeights();
+                int[] updatedWidths = isColumn ? _table.GetColumnWidths() : _table.GetRowHeights();
 
                 for (int i = 0; i < updatedWidths.Length; i++)
                 {
@@ -393,35 +393,35 @@ internal class TableLayoutPanelBehavior : Behavior
 
                 if (updatedSize)
                 {
-                    lastMouseLoc = mouseLoc;
+                    _lastMouseLoc = mouseLoc;
                 }
             }
             else
             {
-                lastMouseLoc = mouseLoc;
+                _lastMouseLoc = mouseLoc;
             }
         }
 
-        Debug.WriteLineIf(tlpResizeSwitch.TraceVerbose && pushedBehavior, "END RESIZE\n");
+        Debug.WriteLineIf(ResizeSwitch.TraceVerbose && _pushedBehavior, "END RESIZE\n");
         return false;
     }
 
     public override bool OnMouseUp(Glyph g, MouseButtons button)
     {
-        if (pushedBehavior)
+        if (_pushedBehavior)
         {
             FinishResize();
             // commit transaction
-            if (resizeTransaction is not null)
+            if (_resizeTransaction is not null)
             {
-                DesignerTransaction t = resizeTransaction;
-                resizeTransaction = null;
+                DesignerTransaction t = _resizeTransaction;
+                _resizeTransaction = null;
                 using (t)
                 {
                     t.Commit();
                 }
 
-                resizeProp = null;
+                _resizeProp = null;
             }
         }
 

@@ -26,7 +26,7 @@ public class SendKeysTests
 
     private class CaptureForm : Form
     {
-        public List<KeyEventArgs> KeyEvents { get; } = new();
+        public List<KeyEventArgs> KeyEvents { get; } = [];
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

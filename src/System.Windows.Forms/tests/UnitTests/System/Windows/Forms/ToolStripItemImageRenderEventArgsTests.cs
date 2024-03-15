@@ -71,22 +71,20 @@ public class ToolStripItemImageRenderEventArgsTests
     [WinFormsFact]
     public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Rectangle_MirroredImage()
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics g = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics g = Graphics.FromImage(image);
+        ToolStripButton item = new()
         {
-            ToolStripButton item = new()
-            {
-                RightToLeftAutoMirrorImage = true,
-                RightToLeft = RightToLeft.Yes,
-                Image = image
-            };
-            ToolStripItemImageRenderEventArgs e = new(g, item, new Rectangle(1, 2, 3, 4));
-            Assert.Equal(g, e.Graphics);
-            Assert.Equal(item, e.Item);
-            Assert.Equal(new Rectangle(1, 2, 3, 4), e.ImageRectangle);
-            Assert.NotSame(image, e.Image);
-            Assert.Equal(image.Size, e.Image.Size);
-        }
+            RightToLeftAutoMirrorImage = true,
+            RightToLeft = RightToLeft.Yes,
+            Image = image
+        };
+        ToolStripItemImageRenderEventArgs e = new(g, item, new Rectangle(1, 2, 3, 4));
+        Assert.Equal(g, e.Graphics);
+        Assert.Equal(item, e.Item);
+        Assert.Equal(new Rectangle(1, 2, 3, 4), e.ImageRectangle);
+        Assert.NotSame(image, e.Image);
+        Assert.Equal(image.Size, e.Image.Size);
     }
 
     public static IEnumerable<object[]> Ctor_ToolStripItem_Image_Rectangle_TestData()

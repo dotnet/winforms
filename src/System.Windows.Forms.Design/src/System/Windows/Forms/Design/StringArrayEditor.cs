@@ -39,7 +39,7 @@ internal class StringArrayEditor : StringCollectionEditor
     /// </summary>
     protected override object SetItems(object editValue, object[] value)
     {
-        if (editValue is Array || editValue is null)
+        if (editValue is Array or null)
         {
             Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
             Array.Copy(value, newArray, value.Length);

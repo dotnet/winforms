@@ -10,6 +10,7 @@ namespace Microsoft.Office;
 /// </summary>
 internal enum msoloop : uint
 {
+#pragma warning disable format
     FocusWait    = 1,  // component is activating host
     DoEvents     = 2,  // component is asking host to process messages
     Debug        = 3,  // component has entered debug mode
@@ -22,4 +23,5 @@ internal enum msoloop : uint
     // Unofficial msoloop messages
     DoEventsModal = unchecked((uint)(-2)),
     Main = unchecked((uint)(-1))
+#pragma warning restore format
 }

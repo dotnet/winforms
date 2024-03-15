@@ -9,29 +9,28 @@ namespace System.Windows.Forms.Design;
 
 internal partial class PbrsForward : IWindowTarget
 {
-    private readonly Control target;
-    private readonly IWindowTarget oldTarget;
+    private readonly Control _target;
+    private readonly IWindowTarget _oldTarget;
 
-    // we save the last key down so we can recreate the last message if we need to activate
-    // the properties window...
-    //
-    private Message lastKeyDown;
-    private List<BufferedKey> bufferedChars;
+    // We save the last key down so we can recreate the last message if we need to activate
+    // the properties window.
+    private Message _lastKeyDown;
+    private List<BufferedKey> _bufferedChars;
 
     private const int WM_PRIVATE_POSTCHAR = (int)PInvoke.WM_USER + 0x1598;
-    private bool postCharMessage;
+    private bool _postCharMessage;
 
-    private IMenuCommandService menuCommandSvc;
+    private IMenuCommandService _menuCommandSvc;
 
-    private readonly IServiceProvider sp;
+    private readonly IServiceProvider _sp;
 
-    private bool ignoreMessages;
+    private bool _ignoreMessages;
 
     public PbrsForward(Control target, IServiceProvider sp)
     {
-        this.target = target;
-        oldTarget = target.WindowTarget;
-        this.sp = sp;
+        _target = target;
+        _oldTarget = target.WindowTarget;
+        _sp = sp;
         target.WindowTarget = this;
     }
 
@@ -39,19 +38,19 @@ internal partial class PbrsForward : IWindowTarget
     {
         get
         {
-            if (menuCommandSvc is null && sp is not null)
+            if (_menuCommandSvc is null && _sp is not null)
             {
-                menuCommandSvc = (IMenuCommandService)sp.GetService(typeof(IMenuCommandService));
+                _menuCommandSvc = (IMenuCommandService)_sp.GetService(typeof(IMenuCommandService));
             }
 
-            return menuCommandSvc;
+            return _menuCommandSvc;
         }
     }
 
     private ISupportInSituService InSituSupportService
-        => (ISupportInSituService)sp.GetService(typeof(ISupportInSituService));
+        => (ISupportInSituService)_sp.GetService(typeof(ISupportInSituService));
 
-    public void Dispose() => target.WindowTarget = oldTarget;
+    public void Dispose() => _target.WindowTarget = _oldTarget;
 
     /// <summary>
     ///  Called when the window handle of the control has changed.
@@ -67,17 +66,18 @@ internal partial class PbrsForward : IWindowTarget
     {
         // Get the Designer for the currently selected item on the Designer...
         // SET STATE ..
-        ignoreMessages = false;
+        _ignoreMessages = false;
 
         // Here lets query for the ISupportInSituService.
         // If we find the service then ask if it has a designer which is interested
         // in getting the keychars by querying the IgnoreMessages.
-        if ((m.Msg >= (int)PInvoke.WM_KEYFIRST && m.Msg <= (int)PInvoke.WM_KEYLAST)
-           || (m.Msg >= (int)PInvoke.WM_IME_STARTCOMPOSITION && m.Msg <= (int)PInvoke.WM_IME_COMPOSITION))
+        if (m.Msg is >= ((int)PInvoke.WM_KEYFIRST)
+            and <= ((int)PInvoke.WM_KEYLAST) or >= ((int)PInvoke.WM_IME_STARTCOMPOSITION)
+            and <= ((int)PInvoke.WM_IME_COMPOSITION))
         {
             if (InSituSupportService is not null)
             {
-                ignoreMessages = InSituSupportService.IgnoreMessages;
+                _ignoreMessages = InSituSupportService.IgnoreMessages;
             }
         }
 
@@ -85,20 +85,20 @@ internal partial class PbrsForward : IWindowTarget
         {
             case WM_PRIVATE_POSTCHAR:
 
-                if (bufferedChars is null)
+                if (_bufferedChars is null)
                 {
                     return;
                 }
 
                 // recreate the keystroke to the newly activated window
                 HWND hwnd;
-                hwnd = !ignoreMessages || InSituSupportService is null
+                hwnd = !_ignoreMessages || InSituSupportService is null
                     ? PInvoke.GetFocus()
                     : (HWND)InSituSupportService.GetEditWindow();
 
                 if (hwnd != m.HWnd)
                 {
-                    foreach (BufferedKey bk in bufferedChars)
+                    foreach (BufferedKey bk in _bufferedChars)
                     {
                         if (bk.KeyChar.MsgInternal == PInvoke.WM_CHAR)
                         {
@@ -120,16 +120,16 @@ internal partial class PbrsForward : IWindowTarget
                     }
                 }
 
-                bufferedChars.Clear();
+                _bufferedChars.Clear();
                 return;
 
             case (int)PInvoke.WM_KEYDOWN:
-                lastKeyDown = m;
+                _lastKeyDown = m;
                 break;
 
             case (int)PInvoke.WM_IME_ENDCOMPOSITION:
             case (int)PInvoke.WM_KEYUP:
-                lastKeyDown.Msg = 0;
+                _lastKeyDown.Msg = 0;
                 break;
 
             case (int)PInvoke.WM_CHAR:
@@ -140,26 +140,26 @@ internal partial class PbrsForward : IWindowTarget
                     break;
                 }
 
-                bufferedChars ??= [];
-                bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
+                _bufferedChars ??= [];
+                _bufferedChars.Add(new BufferedKey(_lastKeyDown, m, _lastKeyDown));
 
-                if (!ignoreMessages && MenuCommandService is not null)
+                if (!_ignoreMessages && MenuCommandService is not null)
                 {
                     // throw the properties window command, we will redo the keystroke when we actually
                     // lose focus
-                    postCharMessage = true;
+                    _postCharMessage = true;
                     MenuCommandService.GlobalInvoke(StandardCommands.PropertiesWindow);
                 }
-                else if (ignoreMessages && m.Msg != (int)PInvoke.WM_IME_COMPOSITION)
+                else if (_ignoreMessages && m.Msg != (int)PInvoke.WM_IME_COMPOSITION)
                 {
                     if (InSituSupportService is not null)
                     {
-                        postCharMessage = true;
+                        _postCharMessage = true;
                         InSituSupportService.HandleKeyChar();
                     }
                 }
 
-                if (postCharMessage)
+                if (_postCharMessage)
                 {
                     // If copy of message has been buffered for forwarding, eat the original now
                     return;
@@ -168,7 +168,7 @@ internal partial class PbrsForward : IWindowTarget
                 break;
 
             case (int)PInvoke.WM_KILLFOCUS:
-                if (postCharMessage)
+                if (_postCharMessage)
                 {
                     // Now that we've actually lost focus, post this message to the queue. This allows any activity
                     // that's in the queue to settle down before our characters are posted to the queue.
@@ -178,13 +178,13 @@ internal partial class PbrsForward : IWindowTarget
                     //
                     // We can't use the wParam here because it may not be the actual window that needs to pick up
                     // the strokes.
-                    PInvoke.PostMessage(target, (MessageId)WM_PRIVATE_POSTCHAR);
-                    postCharMessage = false;
+                    PInvoke.PostMessage(_target, (MessageId)WM_PRIVATE_POSTCHAR);
+                    _postCharMessage = false;
                 }
 
                 break;
         }
 
-        oldTarget?.OnMessage(ref m);
+        _oldTarget?.OnMessage(ref m);
     }
 }

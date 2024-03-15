@@ -148,7 +148,7 @@ public class FontConverter : TypeConverter
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        if (!(value is string font))
+        if (value is not string font)
         {
             return base.ConvertFrom(context, culture, value);
         }
@@ -181,7 +181,7 @@ public class FontConverter : TypeConverter
         }
 
         // Some parameters are provided in addition to name.
-        fontName = font.Substring(0, nameIndex);
+        fontName = font[..nameIndex];
 
         if (nameIndex < font.Length - 1)
         {
@@ -192,7 +192,7 @@ public class FontConverter : TypeConverter
             if (styleIndex != -1)
             {
                 // style found.
-                style = font.Substring(styleIndex);
+                style = font[styleIndex..];
 
                 // Get the mid-substring containing the size information.
                 sizeStr = font.Substring(nameIndex + 1, styleIndex - nameIndex - 1);
@@ -200,17 +200,17 @@ public class FontConverter : TypeConverter
             else
             {
                 // no style.
-                sizeStr = font.Substring(nameIndex + 1);
+                sizeStr = font[(nameIndex + 1)..];
             }
 
             // Parse size.
-            (string? size, string? unit) unitTokens = ParseSizeTokens(sizeStr, separator);
+            (string? size, string? unit) = ParseSizeTokens(sizeStr, separator);
 
-            if (unitTokens.size is not null)
+            if (size is not null)
             {
                 try
                 {
-                    fontSize = (float)GetFloatConverter().ConvertFromString(context, culture, unitTokens.size)!;
+                    fontSize = (float)GetFloatConverter().ConvertFromString(context, culture, size)!;
                 }
                 catch
                 {
@@ -219,16 +219,16 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            if (unitTokens.unit is not null)
+            if (unit is not null)
             {
                 // ParseGraphicsUnits throws an ArgumentException if format is invalid.
-                units = ParseGraphicsUnits(unitTokens.unit);
+                units = ParseGraphicsUnits(unit);
             }
 
             if (style is not null)
             {
                 // Parse FontStyle
-                style = style.Substring(6); // style string always starts with style=
+                style = style[6..]; // style string always starts with style=
                 string[] styleTokens = style.Split(separator);
 
                 for (int tokenCount = 0; tokenCount < styleTokens.Length; tokenCount++)
@@ -281,14 +281,14 @@ public class FontConverter : TypeConverter
 
             if (splitPoint > 0)
             {
-                size = text.Substring(0, splitPoint);
+                size = text[..splitPoint];
                 // Trimming spaces between size and units.
                 size = size.Trim(trimChars);
             }
 
             if (splitPoint < length)
             {
-                units = text.Substring(splitPoint);
+                units = text[splitPoint..];
                 units = units.TrimEnd(trimChars);
             }
         }
@@ -412,7 +412,7 @@ public class FontConverter : TypeConverter
             return base.GetProperties(context, value, attributes);
 
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
-        return props.Sort(new string[] { nameof(Font.Name), nameof(Font.Size), nameof(Font.Unit) });
+        return props.Sort([nameof(Font.Name), nameof(Font.Size), nameof(Font.Unit)]);
     }
 
     public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
@@ -430,15 +430,11 @@ public class FontConverter : TypeConverter
         {
         }
 
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        {
-            return sourceType == typeof(string) ? true : base.CanConvertFrom(context, sourceType);
-        }
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
+            sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
-        {
-            return value is string strValue ? MatchFontName(strValue, context) : base.ConvertFrom(context, culture, value);
-        }
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value) =>
+            value is string strValue ? MatchFontName(strValue, context) : base.ConvertFrom(context, culture, value);
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {

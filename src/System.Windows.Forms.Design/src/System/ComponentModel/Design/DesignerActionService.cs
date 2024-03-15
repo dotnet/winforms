@@ -90,7 +90,7 @@ public class DesignerActionService : IDisposable
         }
 
         // Get list of components
-        IComponent[] compsRemoved = _designerActionLists.Keys.ToArray();
+        IComponent[] compsRemoved = [.. _designerActionLists.Keys];
 
         // Actually clear our dictionary.
         _designerActionLists.Clear();
@@ -203,7 +203,7 @@ public class DesignerActionService : IDisposable
 
                     if (verbsArray.Count != 0)
                     {
-                        actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
+                        actionLists.Add(new DesignerActionVerbList([.. verbsArray]));
                     }
                 }
             }

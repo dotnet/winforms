@@ -22,7 +22,7 @@ public partial class ToolStripPanelRow
             {
                 if (toolStripToDragAsRaftingControl.Stretch)
                 {
-                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the item moving is stretched.");
+                    s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the item moving is stretched.");
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ public partial class ToolStripPanelRow
                 {
                     if (controlAsRaftingControl.Stretch)
                     {
-                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the row already contains a stretched item.");
+                        s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the row already contains a stretched item.");
                         return false;
                     }
                 }

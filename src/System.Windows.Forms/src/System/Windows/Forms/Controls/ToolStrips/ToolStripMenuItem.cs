@@ -659,7 +659,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         return text;
     }
 
-    private unsafe Image? GetNativeMenuItemImage()
+    private unsafe Bitmap? GetNativeMenuItemImage()
     {
         if (_nativeMenuCommandID == -1 || _nativeMenuHandle.IsNull)
         {
@@ -917,7 +917,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         // If we are in a submenu pop down the submenu.
         if (ParentInternal is not null && ParentInternal.MenuAutoExpand && Selected)
         {
-            ToolStripItem.s_mouseDebugging.TraceVerbose("received mouse enter - calling drop down");
+            s_mouseDebugging.TraceVerbose("received mouse enter - calling drop down");
 
             ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
 

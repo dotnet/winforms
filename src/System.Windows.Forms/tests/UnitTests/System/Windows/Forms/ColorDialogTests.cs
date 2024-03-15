@@ -325,7 +325,7 @@ public class ColorDialogTests
             AllowFullOpen = false,
             AnyColor = true,
             Color = Color.Red,
-            CustomColors = new int[] { 1, 2, 3 },
+            CustomColors = [1, 2, 3],
             FullOpen = true,
             ShowHelp = true,
             SolidColorOnly = true,

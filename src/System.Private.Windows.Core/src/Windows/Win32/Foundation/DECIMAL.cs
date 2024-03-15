@@ -5,7 +5,7 @@ namespace Windows.Win32.Foundation;
 
 internal partial struct DECIMAL
 {
-    public decimal ToDecimal()
+    public readonly decimal ToDecimal()
     {
         return new decimal(
             (int)Anonymous2.Anonymous.Lo32,

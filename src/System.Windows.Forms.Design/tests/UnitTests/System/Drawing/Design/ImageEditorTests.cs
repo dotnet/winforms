@@ -39,7 +39,7 @@ public class ImageEditorTests
     {
         CustomGetImageExtendersEditor editor = new()
         {
-            GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor) }
+            GetImageExtendersResult = [typeof(PublicImageEditor), typeof(PrivateImageEditor)]
         };
         Assert.Equal("CustomGetImageExtendersEditor(*.PublicImageEditor,*.PrivateImageEditor)|*.PublicImageEditor;*.PrivateImageEditor", SubImageEditor.CreateFilterEntry(editor));
         Assert.Equal(1, editor.GetImageExtendersCallCount);
@@ -81,7 +81,7 @@ public class ImageEditorTests
     {
         CustomGetImageExtendersEditor editor = new()
         {
-            GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor), typeof(ImageEditor), typeof(NullExtensionsImageEditor) }
+            GetImageExtendersResult = [typeof(PublicImageEditor), typeof(PrivateImageEditor), typeof(ImageEditor), typeof(NullExtensionsImageEditor)]
         };
         Assert.Equal(new string[] { "PublicImageEditor", "PrivateImageEditor" }, editor.GetExtensions());
         Assert.Equal(1, editor.GetImageExtendersCallCount);
@@ -92,7 +92,7 @@ public class ImageEditorTests
     {
         CustomGetImageExtendersEditor editor = new()
         {
-            GetImageExtendersResult = new Type[] { typeof(object), null }
+            GetImageExtendersResult = [typeof(object), null]
         };
         Assert.Empty(editor.GetExtensions());
         Assert.Equal(1, editor.GetImageExtendersCallCount);
@@ -110,7 +110,7 @@ public class ImageEditorTests
     {
         SubImageEditor editor = new();
         Type[] extenders = editor.GetImageExtenders();
-        Assert.Equal(new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) }, extenders);
+        Assert.Equal([typeof(BitmapEditor), typeof(MetafileEditor)], extenders);
         Assert.Same(extenders, editor.GetImageExtenders());
     }
 
@@ -126,28 +126,24 @@ public class ImageEditorTests
     public void ImageEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
         SubImageEditor editor = new();
-        using (MemoryStream stream = new())
-        using (Bitmap image = new(10, 10))
-        {
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(10, 10), result.Size);
+        using MemoryStream stream = new();
+        using Bitmap image = new(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(10, 10), result.Size);
 
-            using MemoryStream resultStream = new();
-            result.Save(resultStream, ImageFormat.Bmp);
-            Assert.Equal(stream.Length, resultStream.Length);
-        }
+        using MemoryStream resultStream = new();
+        result.Save(resultStream, ImageFormat.Bmp);
+        Assert.Equal(stream.Length, resultStream.Length);
     }
 
     [Fact]
     public void ImageEditor_LoadFromStream_MetafileStream_ThrowsArgumentException()
     {
         SubImageEditor editor = new();
-        using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
-        {
-            Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
-        }
+        using Stream stream = File.OpenRead("Resources/telescope_01.wmf");
+        Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
     }
 
     [Fact]
@@ -161,20 +157,18 @@ public class ImageEditorTests
     public void ImageEditor_PaintValue_Invoke_Success()
     {
         ImageEditor editor = new();
-        using (Bitmap image = new(10, 10))
-        using (Bitmap otherImage = new(3, 2))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            otherImage.SetPixel(0, 0, Color.Red);
-            otherImage.SetPixel(1, 0, Color.Red);
-            otherImage.SetPixel(2, 0, Color.Red);
-            otherImage.SetPixel(0, 1, Color.Red);
-            otherImage.SetPixel(1, 1, Color.Red);
-            otherImage.SetPixel(2, 1, Color.Red);
+        using Bitmap image = new(10, 10);
+        using Bitmap otherImage = new(3, 2);
+        using Graphics graphics = Graphics.FromImage(image);
+        otherImage.SetPixel(0, 0, Color.Red);
+        otherImage.SetPixel(1, 0, Color.Red);
+        otherImage.SetPixel(2, 0, Color.Red);
+        otherImage.SetPixel(0, 1, Color.Red);
+        otherImage.SetPixel(1, 1, Color.Red);
+        otherImage.SetPixel(2, 1, Color.Red);
 
-            PaintValueEventArgs e = new(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
-            editor.PaintValue(e);
-        }
+        PaintValueEventArgs e = new(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
+        editor.PaintValue(e);
     }
 
     public static IEnumerable<object[]> PaintValue_InvalidArgsValue_TestData()
@@ -188,12 +182,10 @@ public class ImageEditorTests
     public void ImageEditor_PaintValue_InvalidArgsValue_Nop(object value)
     {
         ImageEditor editor = new();
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            PaintValueEventArgs e = new(null, value, graphics, new Rectangle(1, 2, 3, 4));
-            editor.PaintValue(e);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        PaintValueEventArgs e = new(null, value, graphics, new Rectangle(1, 2, 3, 4));
+        editor.PaintValue(e);
     }
 
     [Fact]
@@ -247,7 +239,7 @@ public class ImageEditorTests
         {
         }
 
-        protected override string[] GetExtensions() => new string[] { "PublicImageEditor" };
+        protected override string[] GetExtensions() => ["PublicImageEditor"];
     }
 
     private class PrivateImageEditor : ImageEditor
@@ -256,7 +248,7 @@ public class ImageEditorTests
         {
         }
 
-        protected override string[] GetExtensions() => new string[] { "PrivateImageEditor" };
+        protected override string[] GetExtensions() => ["PrivateImageEditor"];
     }
 
     private class NullExtensionsImageEditor : ImageEditor

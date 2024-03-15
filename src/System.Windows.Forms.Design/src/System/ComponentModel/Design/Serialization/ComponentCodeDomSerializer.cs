@@ -10,8 +10,8 @@ namespace System.ComponentModel.Design.Serialization;
 internal class ComponentCodeDomSerializer : CodeDomSerializer
 {
     private Type[]? _containerConstructor;
-    private static readonly Attribute[] _runTimeFilter = [DesignOnlyAttribute.No];
-    private static readonly Attribute[] _designTimeFilter = [DesignOnlyAttribute.Yes];
+    private static readonly Attribute[] s_runTimeFilter = [DesignOnlyAttribute.No];
+    private static readonly Attribute[] s_designTimeFilter = [DesignOnlyAttribute.Yes];
     private static WeakReference<ComponentCodeDomSerializer>? s_defaultSerializerRef;
 
     private Type[] GetContainerConstructor(IDesignerSerializationManager manager)
@@ -91,7 +91,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
         if (instance is not null)
         {
             Trace(TraceLevel.Verbose, $"Deserializing design time properties for {manager.GetName(instance)}");
-            DeserializePropertiesFromResources(manager, instance, _designTimeFilter);
+            DeserializePropertiesFromResources(manager, instance, s_designTimeFilter);
         }
 
         return instance!;
@@ -369,7 +369,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             SerializeSupportInitialize(statements, assignLhs, "BeginInit");
                         }
 
-                        SerializePropertiesToResources(manager, statements, value, _designTimeFilter);
+                        SerializePropertiesToResources(manager, statements, value, s_designTimeFilter);
 
                         // Writing out properties is expensive.  But, we're very smart and we cache the results
                         // in ComponentCache.  See if we have cached results.  If so, use 'em.  If not, generate
@@ -437,7 +437,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
 
                             try
                             {
-                                SerializeProperties(manager, entry.Statements, value, _runTimeFilter);
+                                SerializeProperties(manager, entry.Statements, value, s_runTimeFilter);
                                 SerializeEvents(manager, entry.Statements, value, null);
 
                                 foreach (CodeStatement statement in entry.Statements)

@@ -1734,7 +1734,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
             else
             {
-                return _axState[s_siteProcessedInputKey] ? base.PreProcessMessage(ref msg) : false;
+                return _axState[s_siteProcessedInputKey] && base.PreProcessMessage(ref msg);
             }
         }
         finally
@@ -3046,7 +3046,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return;
         }
 
-        IDesignerHost? host = (IDesignerHost?)Site?.GetService(typeof(IDesignerHost));
+        Site.TryGetService(out IDesignerHost? host);
 
         DesignerTransaction? transaction = null;
         try

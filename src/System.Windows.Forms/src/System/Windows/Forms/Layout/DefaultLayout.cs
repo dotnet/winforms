@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class DefaultLayout : LayoutEngine
 {
-    internal static readonly DefaultLayout Instance = new();
+    internal static DefaultLayout Instance { get; } = new();
 
     private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
     private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();
@@ -513,12 +513,12 @@ internal partial class DefaultLayout : LayoutEngine
                 Math.Max(0, newElementBounds.Height - remainingBounds.Height));
 
             DockStyle dockStyle = GetDock(element);
-            if ((dockStyle == DockStyle.Top) || (dockStyle == DockStyle.Bottom))
+            if (dockStyle is DockStyle.Top or DockStyle.Bottom)
             {
                 neededSize.Width = 0;
             }
 
-            if ((dockStyle == DockStyle.Left) || (dockStyle == DockStyle.Right))
+            if (dockStyle is DockStyle.Left or DockStyle.Right)
             {
                 neededSize.Height = 0;
             }
@@ -616,7 +616,7 @@ internal partial class DefaultLayout : LayoutEngine
     }
 
     /// <remarks>
-    ///  PreferredSize is only computed if measureOnly = true.
+    ///  <para>PreferredSize is only computed if measureOnly = true.</para>
     /// </remarks>
     private static bool TryCalculatePreferredSize(IArrangedElement container, bool measureOnly, out Size preferredSize)
     {

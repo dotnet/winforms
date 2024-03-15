@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Metafiles;
 /// <summary>
 ///  Record that just has a single point value.
 /// </summary>
-/// <remarks>
+/// <devdoc>
 ///   Not an actual Win32 define, encapsulates:
 ///
 ///    - EMRLINETO
@@ -20,12 +20,12 @@ namespace System.Windows.Forms.Metafiles;
 ///    - EMRSETVIEWPORTORGEX
 ///    - EMRSETWINDOWORGEX
 ///    - EMRSETBRUSHORGEX
-/// </remarks>
+/// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRPOINTRECORD
 {
     public EMR emr;
     public Point point;
 
-    public override string ToString() => $"[EMR{emr.iType}] Point: {point}";
+    public override readonly string ToString() => $"[EMR{emr.iType}] Point: {point}";
 }

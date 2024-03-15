@@ -18,22 +18,22 @@ internal class ToolStripItemDesigner : ComponentDesigner
     // Cached in value of the TemplateNode (which is the InSitu Editor)
     private ToolStripTemplateNode _editorNode;
     // Used by the ParentDesigner (ToolStripDesigner) to know whether there is any active Editor.
-    private bool isEditorActive;
+    private bool _isEditorActive;
     // this property is used in the InitializeNewComponent not to set the text for the ToolstripItem
-    private bool internalCreate;
+    private bool _internalCreate;
     // hook to SelectionService to listen to SelectionChanged
     private ISelectionService _selectionService;
     // ToolStripItems Visibility needs to be WYSIWYG.
-    private bool currentVisible;
+    private bool _currentVisible;
     // Required to remove Body Glyphs...
-    internal ControlBodyGlyph bodyGlyph;
+    internal ControlBodyGlyph _bodyGlyph;
     // bool which is set if we Add Dummy Item
-    internal bool dummyItemAdded;
+    internal bool _dummyItemAdded;
     // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
-    internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
+    internal Rectangle _dragBoxFromMouseDown = Rectangle.Empty;
     // defaulted to invalid index. this will be set by the behaviour.
-    internal int indexOfItemUnderMouseToDrag = -1;
-    private ToolStripItemCustomMenuItemCollection toolStripItemCustomMenuItemCollection;
+    internal int _indexOfItemUnderMouseToDrag = -1;
+    private ToolStripItemCustomMenuItemCollection _toolStripItemCustomMenuItemCollection;
 
     internal bool AutoSize
     {
@@ -89,16 +89,16 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 toolStripContextMenu.GroupOrdering.Clear();
                 toolStripContextMenu.GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
                 toolStripContextMenu.Text = "CustomContextMenu";
-                toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
+                _toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
 
-                foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
+                foreach (ToolStripItem item in _toolStripItemCustomMenuItemCollection)
                 {
                     toolStripContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
                 }
             }
 
             // Refresh the list on every show..
-            toolStripItemCustomMenuItemCollection?.RefreshItems();
+            _toolStripItemCustomMenuItemCollection?.RefreshItems();
 
             toolStripContextMenu.Populated = false;
             return toolStripContextMenu;
@@ -133,8 +133,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     internal bool IsEditorActive
     {
-        get => isEditorActive;
-        set => isEditorActive = value;
+        get => _isEditorActive;
+        set => _isEditorActive = value;
     }
 
     /// <summary>
@@ -142,8 +142,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     internal bool InternalCreate
     {
-        get => internalCreate;
-        set => internalCreate = value;
+        get => _internalCreate;
+        set => _internalCreate = value;
     }
 
     protected IComponent ImmediateParent
@@ -235,7 +235,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         set
         {
             ShadowProperties[nameof(Visible)] = value;
-            currentVisible = value;
+            _currentVisible = value;
         }
     }
 
@@ -350,7 +350,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
         if (commit)
         {
-            if (dummyItemAdded)
+            if (_dummyItemAdded)
             {
                 try
                 {
@@ -407,14 +407,14 @@ internal class ToolStripItemDesigner : ComponentDesigner
             }
 
             // Reset the DummyItem flag
-            dummyItemAdded = false;
+            _dummyItemAdded = false;
         }
         else
         {
             // Refresh on SelectionManager... To Change Glyph Size.
-            if (dummyItemAdded)
+            if (_dummyItemAdded)
             {
-                dummyItemAdded = false;
+                _dummyItemAdded = false;
                 RemoveItem();
 
                 if (designer.NewItemTransaction is not null)
@@ -480,24 +480,24 @@ internal class ToolStripItemDesigner : ComponentDesigner
             }
 
             // Clean up the ToolStripItem Glyph if Any
-            if (bodyGlyph is not null && TryGetService(out ToolStripAdornerWindowService toolStripAdornerWindowService)
-                && toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(bodyGlyph))
+            if (_bodyGlyph is not null && TryGetService(out ToolStripAdornerWindowService toolStripAdornerWindowService)
+                && toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(_bodyGlyph))
             {
-                toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(bodyGlyph);
+                toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(_bodyGlyph);
             }
 
             // Remove the Collection
-            if (toolStripItemCustomMenuItemCollection is not null && toolStripItemCustomMenuItemCollection.Count > 0)
+            if (_toolStripItemCustomMenuItemCollection is not null && _toolStripItemCustomMenuItemCollection.Count > 0)
             {
-                foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
+                foreach (ToolStripItem item in _toolStripItemCustomMenuItemCollection)
                 {
                     item.Dispose();
                 }
 
-                toolStripItemCustomMenuItemCollection.Clear();
+                _toolStripItemCustomMenuItemCollection.Clear();
             }
 
-            toolStripItemCustomMenuItemCollection = null;
+            _toolStripItemCustomMenuItemCollection = null;
         }
 
         base.Dispose(disposing);
@@ -647,7 +647,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         // Shadow AutoSize
         AutoSize = ToolStripItem.AutoSize;
         Visible = true;
-        currentVisible = Visible;
+        _currentVisible = Visible;
 
         // Shadow the AccessibleName as we are going to change it at DesignTime
         AccessibleName = ToolStripItem.AccessibleName;
@@ -674,7 +674,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
         // Set the Text only if the item is not created internally (via InSitu Edit)
-        if (!internalCreate)
+        if (!_internalCreate)
         {
             ISite site = Component.Site;
             if (site is not null && Component is ToolStripDropDownItem)
@@ -698,7 +698,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
         base.InitializeNewComponent(defaultValues);
         // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
-        if (Component is ToolStripTextBox || Component is ToolStripComboBox)
+        if (Component is ToolStripTextBox or ToolStripComboBox)
         {
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
@@ -934,7 +934,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
     {
-        if (!(sender is ISelectionService sSvc))
+        if (sender is not ISelectionService sSvc)
         {
             return;
         }
@@ -1052,7 +1052,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     // CALLED ONLY IF THE EDIT ACTION WAS ROLLED BACK!!!
     public void RemoveItem()
     {
-        dummyItemAdded = false;
+        _dummyItemAdded = false;
         if (!TryGetService(out IDesignerHost host))
         {
             Debug.Fail("Couldn't get designer host!");
@@ -1148,7 +1148,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         foreach (ToolStripItem item in parent.DropDownItems)
         {
             // Don't Serialize the DesignerToolStripControlHost...
-            if (!(item is DesignerToolStripControlHost))
+            if (item is not DesignerToolStripControlHost)
             {
                 _serializationService.Serialize(_serializedDataForDropDownItems, item);
                 if (item is ToolStripDropDownItem dropDownItem)
@@ -1165,7 +1165,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         if (toolStripSelected)
         {
             // Set the Visiblity if different.
-            if (!currentVisible)
+            if (!_currentVisible)
             {
                 ToolStripItem.Visible = true;
                 if (designer is not null && !designer.FireSyncSelection)
@@ -1176,9 +1176,9 @@ internal class ToolStripItemDesigner : ComponentDesigner
         }
         else
         {
-            if (!currentVisible)
+            if (!_currentVisible)
             {
-                ToolStripItem.Visible = currentVisible;
+                ToolStripItem.Visible = _currentVisible;
             }
         }
     }
@@ -1237,7 +1237,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 }
 
                 // Refresh the glyphs.
-                if (!dummyItemAdded)
+                if (!_dummyItemAdded)
                 {
                     behaviorService.SyncSelection();
                 }
@@ -1273,9 +1273,9 @@ internal class ToolStripItemDesigner : ComponentDesigner
                     }
 
                     SelectionManager selectionManager = GetService<SelectionManager>();
-                    if (bodyGlyph is not null)
+                    if (_bodyGlyph is not null)
                     {
-                        selectionManager.BodyGlyphAdorner.Glyphs.Remove(bodyGlyph);
+                        selectionManager.BodyGlyphAdorner.Glyphs.Remove(_bodyGlyph);
                     }
                 }
                 else

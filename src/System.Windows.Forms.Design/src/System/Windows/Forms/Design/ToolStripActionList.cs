@@ -156,7 +156,7 @@ internal class ToolStripActionList : DesignerActionList
 
         if (CanAddItems)
         {
-            if (!(_toolStrip is StatusStrip))
+            if (_toolStrip is not StatusStrip)
             {
                 items.Add(new DesignerActionMethodItem(this, "InvokeInsertStandardItemsVerb", SR.ToolStripDesignerStandardItemsVerb, "", SR.ToolStripDesignerStandardItemsVerbDesc, true));
             }
@@ -164,12 +164,12 @@ internal class ToolStripActionList : DesignerActionList
             items.Add(new DesignerActionPropertyItem("RenderMode", SR.ToolStripActionList_RenderMode, SR.ToolStripActionList_Layout, SR.ToolStripActionList_RenderModeDesc));
         }
 
-        if (!(_toolStrip.Parent is ToolStripPanel))
+        if (_toolStrip.Parent is not ToolStripPanel)
         {
             items.Add(new DesignerActionPropertyItem("Dock", SR.ToolStripActionList_Dock, SR.ToolStripActionList_Layout, SR.ToolStripActionList_DockDesc));
         }
 
-        if (!(_toolStrip is StatusStrip))
+        if (_toolStrip is not StatusStrip)
         {
             items.Add(new DesignerActionPropertyItem("GripStyle", SR.ToolStripActionList_GripStyle, SR.ToolStripActionList_Layout, SR.ToolStripActionList_GripStyleDesc));
         }

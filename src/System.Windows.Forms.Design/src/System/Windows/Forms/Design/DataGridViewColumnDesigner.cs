@@ -311,32 +311,40 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             MenuCommand command;
             if ((commandId.ID == StandardCommands.Copy.ID) && (commandId.Guid == StandardCommands.Copy.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Copy);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Copy)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Paste.ID) && (commandId.Guid == StandardCommands.Paste.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Paste);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Paste)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Delete.ID) && (commandId.Guid == StandardCommands.Delete.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Delete);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Delete)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Cut.ID) && (commandId.Guid == StandardCommands.Cut.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Cut);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Cut)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }

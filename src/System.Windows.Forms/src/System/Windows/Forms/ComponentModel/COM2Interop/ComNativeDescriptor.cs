@@ -166,7 +166,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     internal static bool IsNameDispId(object? @object, int dispid)
     {
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(@object, out HRESULT hr);
-        return hr.Failed ? false : dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
+        return !hr.Failed && dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
     }
 
     /// <summary>

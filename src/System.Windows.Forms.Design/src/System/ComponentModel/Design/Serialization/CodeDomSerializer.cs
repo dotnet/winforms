@@ -333,7 +333,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
                         if (referenceName && dotIndex != -1)
                         {
                             // if it's a reference name with a dot, we've actually got a property here...
-                            expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(s_thisRef, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
+                            expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(s_thisRef, name[..dotIndex]), name[(dotIndex + 1)..]);
                         }
                         else
                         {

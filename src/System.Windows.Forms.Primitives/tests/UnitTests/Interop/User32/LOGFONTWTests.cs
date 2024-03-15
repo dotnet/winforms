@@ -27,7 +27,7 @@ public class LOGFONTWTests
         string bigString = new('*', 32);
 
         logFont.FaceName = bigString;
-        Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));
+        Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan()[1..]));
     }
 
     [Fact]

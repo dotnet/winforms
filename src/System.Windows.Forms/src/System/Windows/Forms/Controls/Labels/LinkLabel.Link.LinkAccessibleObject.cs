@@ -100,8 +100,7 @@ public partial class LinkLabel
 
             internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             {
-                if (patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId ||
-                    patternId == UIA_PATTERN_ID.UIA_InvokePatternId)
+                if (patternId is UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId or UIA_PATTERN_ID.UIA_InvokePatternId)
                 {
                     return true;
                 }
@@ -114,9 +113,9 @@ public partial class LinkLabel
                 get
                 {
                     string? text = _owningLinkLabel.Text;
-                    int start = LinkLabel.ConvertToCharIndex(_owningLink.Start, text);
-                    int end = LinkLabel.ConvertToCharIndex(_owningLink.Start + _owningLink.Length, text);
-                    string? name = text.Substring(start, end - start);
+                    int start = ConvertToCharIndex(_owningLink.Start, text);
+                    int end = ConvertToCharIndex(_owningLink.Start + _owningLink.Length, text);
+                    string? name = text[start..end];
 
                     return _owningLinkLabel.UseMnemonic ? name = WindowsFormsUtils.TextWithoutMnemonics(name) : name;
                 }

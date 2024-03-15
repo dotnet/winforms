@@ -13,8 +13,8 @@ public partial class ProjectFileReaderTests
 {
     public class FontConverterTest
     {
-        private static readonly string[] s_locales = new[]
-        {
+        private static readonly string[] s_locales =
+        [
             "ar-SA",
             "en-US",
             "es-ES",
@@ -24,7 +24,7 @@ public partial class ProjectFileReaderTests
             "ru-RU",
             "tr-TR",
             "zh-CN"
-        };
+        ];
 
         public static IEnumerable<object[]> TestConvertFormData()
         {

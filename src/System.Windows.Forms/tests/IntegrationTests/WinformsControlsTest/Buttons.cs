@@ -8,12 +8,12 @@ namespace WinformsControlsTest;
 public partial class Buttons : Form
 {
     private readonly FlatStyle[] _styles =
-    {
+    [
         FlatStyle.Flat,
         FlatStyle.Popup,
         FlatStyle.Standard,
         FlatStyle.System
-    };
+    ];
 
     public Buttons()
     {

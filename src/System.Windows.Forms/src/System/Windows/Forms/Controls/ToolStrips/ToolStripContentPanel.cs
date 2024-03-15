@@ -18,8 +18,8 @@ public class ToolStripContentPanel : Panel
     private BitVector32 _state;
     private static readonly int s_stateLastDoubleBuffer = BitVector32.CreateMask();
 
-    private static readonly object EventRendererChanged = new();
-    private static readonly object EventLoad = new();
+    private static readonly object s_rendererChangedEvent = new();
+    private static readonly object s_loadEvent = new();
 
     public ToolStripContentPanel()
     {
@@ -155,8 +155,8 @@ public class ToolStripContentPanel : Panel
     [SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
     public event EventHandler? Load
     {
-        add => Events.AddHandler(EventLoad, value);
-        remove => Events.RemoveHandler(EventLoad, value);
+        add => Events.AddHandler(s_loadEvent, value);
+        remove => Events.RemoveHandler(s_loadEvent, value);
     }
 
     [Browsable(false)]
@@ -286,8 +286,8 @@ public class ToolStripContentPanel : Panel
     [SRDescription(nameof(SR.ToolStripRendererChanged))]
     public event EventHandler? RendererChanged
     {
-        add => Events.AddHandler(EventRendererChanged, value);
-        remove => Events.RemoveHandler(EventRendererChanged, value);
+        add => Events.AddHandler(s_rendererChangedEvent, value);
+        remove => Events.RemoveHandler(s_rendererChangedEvent, value);
     }
 
     private void HandleRendererChanged(object? sender, EventArgs e)
@@ -309,7 +309,7 @@ public class ToolStripContentPanel : Panel
     {
         // There is no good way to explain this event except to say
         // that it's just another name for OnControlCreated.
-        ((EventHandler?)Events[EventLoad])?.Invoke(this, e);
+        ((EventHandler?)Events[s_loadEvent])?.Invoke(this, e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -344,7 +344,7 @@ public class ToolStripContentPanel : Panel
 
         Invalidate();
 
-        ((EventHandler?)Events[EventRendererChanged])?.Invoke(this, e);
+        ((EventHandler?)Events[s_rendererChangedEvent])?.Invoke(this, e);
     }
 
     private void ResetRenderMode()

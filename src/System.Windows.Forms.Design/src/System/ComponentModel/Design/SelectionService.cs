@@ -399,9 +399,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         {
             if (primaryIndex != 0)
             {
-                IComponent tmp = _selection[0];
-                _selection[0] = _selection[primaryIndex];
-                _selection[primaryIndex] = tmp;
+                (_selection[primaryIndex], _selection[0]) = (_selection[0], _selection[primaryIndex]);
                 fChanged = true;
             }
         }

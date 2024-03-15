@@ -14,25 +14,25 @@ public partial class ColorEditor
     /// </summary>
     private sealed partial class ColorUI : Control
     {
-        private readonly ColorEditor editor;
-        private IWindowsFormsEditorService? edSvc;
-        private object? value;
-        private ColorEditorTabControl tabControl;
-        private TabPage systemTabPage;
-        private TabPage commonTabPage;
-        private TabPage paletteTabPage;
-        private ListBox lbSystem;
-        private ListBox lbCommon;
-        private ColorPalette pal;
-        private Color[]? systemColorConstants;
-        private Color[]? colorConstants;
-        private Color[]? customColors;
-        private bool commonHeightSet;
-        private bool systemHeightSet;
+        private readonly ColorEditor _editor;
+        private IWindowsFormsEditorService? _edSvc;
+        private object? _value;
+        private ColorEditorTabControl _tabControl;
+        private TabPage _systemTabPage;
+        private TabPage _commonTabPage;
+        private TabPage _paletteTabPage;
+        private ListBox _lbSystem;
+        private ListBox _lbCommon;
+        private ColorPalette _pal;
+        private Color[]? _systemColorConstants;
+        private Color[]? _colorConstants;
+        private Color[]? _customColors;
+        private bool _commonHeightSet;
+        private bool _systemHeightSet;
 
         public ColorUI(ColorEditor editor)
         {
-            this.editor = editor;
+            _editor = editor;
             InitializeComponent();
             AdjustListBoxItemHeight();
         }
@@ -40,7 +40,7 @@ public partial class ColorEditor
         /// <summary>
         ///  Array of standard colors.
         /// </summary>
-        private Color[] ColorValues => colorConstants ??= GetConstants(typeof(Color));
+        private Color[] ColorValues => _colorConstants ??= GetConstants(typeof(Color));
 
         /// <summary>
         ///  Retrieves the array of custom colors for our use.
@@ -49,51 +49,51 @@ public partial class ColorEditor
         {
             get
             {
-                if (customColors is null)
+                if (_customColors is null)
                 {
-                    customColors = new Color[ColorPalette.CellsCustom];
+                    _customColors = new Color[ColorPalette.CellsCustom];
                     for (int i = 0; i < ColorPalette.CellsCustom; i++)
                     {
-                        customColors[i] = Color.White;
+                        _customColors[i] = Color.White;
                     }
                 }
 
-                return customColors;
+                return _customColors;
             }
         }
 
         /// <summary>
         ///  Allows someone else to close our dropdown.
         /// </summary>
-        public IWindowsFormsEditorService? EditorService => edSvc;
+        public IWindowsFormsEditorService? EditorService => _edSvc;
 
         /// <summary>
         ///  Array of system colors.
         /// </summary>
-        private Color[] SystemColorValues => systemColorConstants ??= GetConstants(typeof(SystemColors));
+        private Color[] SystemColorValues => _systemColorConstants ??= GetConstants(typeof(SystemColors));
 
-        public object? Value => value;
+        public object? Value => _value;
 
         public void End()
         {
-            edSvc = null;
-            value = null;
+            _edSvc = null;
+            _value = null;
         }
 
         private void AdjustColorUIHeight()
         {
             // Compute the default size for the color UI
-            Size size = pal.Size;
-            Rectangle rectItemSize = tabControl.GetTabRect(0);
+            Size size = _pal.Size;
+            Rectangle rectItemSize = _tabControl.GetTabRect(0);
             int CMARGIN = 0;
             Size = new Size(size.Width + 2 * CMARGIN, size.Height + 2 * CMARGIN + rectItemSize.Height);
-            tabControl.Size = Size;
+            _tabControl.Size = Size;
         }
 
         private void AdjustListBoxItemHeight()
         {
-            lbSystem.ItemHeight = Font.Height + 2;
-            lbCommon.ItemHeight = Font.Height + 2;
+            _lbSystem.ItemHeight = Font.Height + 2;
+            _lbCommon.ItemHeight = Font.Height + 2;
         }
 
         /// <summary>
@@ -146,83 +146,83 @@ public partial class ColorEditor
                 colorList.Add(outColor);
             }
 
-            return colorList.ToArray();
+            return [.. colorList];
         }
 
         [MemberNotNull(
-            nameof(tabControl),
-            nameof(pal),
-            nameof(paletteTabPage),
-            nameof(commonTabPage),
-            nameof(systemTabPage),
-            nameof(lbSystem),
-            nameof(lbCommon))]
+            nameof(_tabControl),
+            nameof(_pal),
+            nameof(_paletteTabPage),
+            nameof(_commonTabPage),
+            nameof(_systemTabPage),
+            nameof(_lbSystem),
+            nameof(_lbCommon))]
         private void InitializeComponent()
         {
-            paletteTabPage = new TabPage(SR.ColorEditorPaletteTab);
-            commonTabPage = new TabPage(SR.ColorEditorStandardTab);
-            systemTabPage = new TabPage(SR.ColorEditorSystemTab);
+            _paletteTabPage = new TabPage(SR.ColorEditorPaletteTab);
+            _commonTabPage = new TabPage(SR.ColorEditorStandardTab);
+            _systemTabPage = new TabPage(SR.ColorEditorSystemTab);
 
             AccessibleName = SR.ColorEditorAccName;
 
-            tabControl = new ColorEditorTabControl();
-            tabControl.TabPages.Add(paletteTabPage);
-            tabControl.TabPages.Add(commonTabPage);
-            tabControl.TabPages.Add(systemTabPage);
-            tabControl.TabStop = false;
-            tabControl.SelectedTab = systemTabPage;
-            tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
-            tabControl.Dock = DockStyle.Fill;
-            tabControl.Resize += new EventHandler(OnTabControlResize);
+            _tabControl = new ColorEditorTabControl();
+            _tabControl.TabPages.Add(_paletteTabPage);
+            _tabControl.TabPages.Add(_commonTabPage);
+            _tabControl.TabPages.Add(_systemTabPage);
+            _tabControl.TabStop = false;
+            _tabControl.SelectedTab = _systemTabPage;
+            _tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
+            _tabControl.Dock = DockStyle.Fill;
+            _tabControl.Resize += new EventHandler(OnTabControlResize);
 
-            lbSystem = new ColorEditorListBox
+            _lbSystem = new ColorEditorListBox
             {
                 DrawMode = DrawMode.OwnerDrawFixed,
                 BorderStyle = BorderStyle.FixedSingle,
                 IntegralHeight = false,
                 Sorted = false
             };
-            lbSystem.Click += new EventHandler(OnListClick);
-            lbSystem.DrawItem += new DrawItemEventHandler(OnListDrawItem);
-            lbSystem.KeyDown += new KeyEventHandler(OnListKeyDown);
-            lbSystem.Dock = DockStyle.Fill;
-            lbSystem.FontChanged += new EventHandler(OnFontChanged);
+            _lbSystem.Click += new EventHandler(OnListClick);
+            _lbSystem.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+            _lbSystem.KeyDown += new KeyEventHandler(OnListKeyDown);
+            _lbSystem.Dock = DockStyle.Fill;
+            _lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
-            lbCommon = new ColorEditorListBox
+            _lbCommon = new ColorEditorListBox
             {
                 DrawMode = DrawMode.OwnerDrawFixed,
                 BorderStyle = BorderStyle.FixedSingle,
                 IntegralHeight = false,
                 Sorted = false
             };
-            lbCommon.Click += new EventHandler(OnListClick);
-            lbCommon.DrawItem += new DrawItemEventHandler(OnListDrawItem);
-            lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
-            lbCommon.Dock = DockStyle.Fill;
+            _lbCommon.Click += new EventHandler(OnListClick);
+            _lbCommon.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+            _lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
+            _lbCommon.Dock = DockStyle.Fill;
 
             Array.Sort(ColorValues, StandardColorComparer.Instance);
             Array.Sort(SystemColorValues, comparer: new SystemColorComparer());
 
-            lbCommon.Items.Clear();
+            _lbCommon.Items.Clear();
             foreach (Color color in ColorValues)
             {
-                lbCommon.Items.Add(color);
+                _lbCommon.Items.Add(color);
             }
 
-            lbSystem.Items.Clear();
+            _lbSystem.Items.Clear();
             foreach (Color color in SystemColorValues)
             {
-                lbSystem.Items.Add(color);
+                _lbSystem.Items.Add(color);
             }
 
-            pal = new ColorPalette(this, CustomColors);
-            pal.Picked += new EventHandler(OnPalettePick);
+            _pal = new ColorPalette(this, CustomColors);
+            _pal.Picked += new EventHandler(OnPalettePick);
 
-            paletteTabPage.Controls.Add(pal);
-            systemTabPage.Controls.Add(lbSystem);
-            commonTabPage.Controls.Add(lbCommon);
+            _paletteTabPage.Controls.Add(_pal);
+            _systemTabPage.Controls.Add(_lbSystem);
+            _commonTabPage.Controls.Add(_lbCommon);
 
-            Controls.Add(tabControl);
+            Controls.Add(_tabControl);
         }
 
         protected override void OnGotFocus(EventArgs e)
@@ -233,17 +233,17 @@ public partial class ColorEditor
 
         private void OnFontChanged(object? sender, EventArgs e)
         {
-            commonHeightSet = systemHeightSet = false;
+            _commonHeightSet = _systemHeightSet = false;
         }
 
         private void OnListClick(object? sender, EventArgs e)
         {
             if (sender is ListBox lb && lb.SelectedItem is Color selectedColor)
             {
-                value = selectedColor;
+                _value = selectedColor;
             }
 
-            edSvc?.CloseDropDown();
+            _edSvc?.CloseDropDown();
         }
 
         private void OnListDrawItem(object? sender, DrawItemEventArgs die)
@@ -256,21 +256,21 @@ public partial class ColorEditor
             Color value = (Color)lb.Items[die.Index];
             Font font = Font;
 
-            if (lb == lbCommon && !commonHeightSet)
+            if (lb == _lbCommon && !_commonHeightSet)
             {
                 lb.ItemHeight = lb.Font.Height;
-                commonHeightSet = true;
+                _commonHeightSet = true;
             }
-            else if (lb == lbSystem && !systemHeightSet)
+            else if (lb == _lbSystem && !_systemHeightSet)
             {
                 lb.ItemHeight = lb.Font.Height;
-                systemHeightSet = true;
+                _systemHeightSet = true;
             }
 
             Graphics graphics = die.Graphics;
             die.DrawBackground();
 
-            editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
+            _editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
             graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22 - 1, die.Bounds.Height - 4 - 1));
             Brush foreBrush = new SolidBrush(die.ForeColor);
             graphics.DrawString(value.Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
@@ -289,10 +289,10 @@ public partial class ColorEditor
         {
             if (sender is ColorPalette palette)
             {
-                value = GetBestColor(palette.SelectedColor);
+                _value = GetBestColor(palette.SelectedColor);
             }
 
-            edSvc?.CloseDropDown();
+            _edSvc?.CloseDropDown();
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -304,21 +304,21 @@ public partial class ColorEditor
 
         private void OnTabControlResize(object? sender, EventArgs e)
         {
-            Rectangle rectTabControl = tabControl.TabPages[0].ClientRectangle;
-            Rectangle rectItemSize = tabControl.GetTabRect(1);
+            Rectangle rectTabControl = _tabControl.TabPages[0].ClientRectangle;
+            Rectangle rectItemSize = _tabControl.GetTabRect(1);
             rectTabControl.Y = 0;
             rectTabControl.Height -= rectTabControl.Y;
             int CMARGIN = 2;
-            lbSystem.SetBounds(CMARGIN, rectTabControl.Y + 2 * CMARGIN,
+            _lbSystem.SetBounds(CMARGIN, rectTabControl.Y + 2 * CMARGIN,
                                rectTabControl.Width - CMARGIN,
-                               pal.Size.Height - rectItemSize.Height + 2 * CMARGIN);
-            lbCommon.Bounds = lbSystem.Bounds;
-            pal.Location = new Point(0, rectTabControl.Y);
+                               _pal.Size.Height - rectItemSize.Height + 2 * CMARGIN);
+            _lbCommon.Bounds = _lbSystem.Bounds;
+            _pal.Location = new Point(0, rectTabControl.Y);
         }
 
         private void OnTabControlSelChange(object? sender, EventArgs e)
         {
-            TabPage? selectedPage = tabControl.SelectedTab;
+            TabPage? selectedPage = _tabControl.SelectedTab;
 
             if (selectedPage is not null && selectedPage.Controls.Count > 0)
             {
@@ -337,12 +337,12 @@ public partial class ColorEditor
             {
                 // Logic taken straight out of TabBase
                 bool forward = (keyData & Keys.Shift) == 0;
-                int sel = tabControl.SelectedIndex;
+                int sel = _tabControl.SelectedIndex;
                 if (sel != -1)
                 {
-                    int count = tabControl.TabPages.Count;
+                    int count = _tabControl.TabPages.Count;
                     sel = forward ? (sel + 1) % count : (sel + count - 1) % count;
-                    tabControl.SelectedTab = tabControl.TabPages[sel];
+                    _tabControl.SelectedTab = _tabControl.TabPages[sel];
                     return true;
                 }
             }
@@ -352,8 +352,8 @@ public partial class ColorEditor
 
         public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
-            this.edSvc = edSvc;
-            this.value = value;
+            _edSvc = edSvc;
+            _value = value;
 
             AdjustColorUIHeight();
 
@@ -361,33 +361,33 @@ public partial class ColorEditor
             if (value is not null)
             {
                 Color[] values = ColorValues;
-                TabPage selectedTab = paletteTabPage;
+                TabPage selectedTab = _paletteTabPage;
 
                 for (int i = 0; i < values.Length; i++)
                 {
                     if (values[i].Equals(value))
                     {
-                        lbCommon.SelectedItem = value;
-                        selectedTab = commonTabPage;
+                        _lbCommon.SelectedItem = value;
+                        selectedTab = _commonTabPage;
                         break;
                     }
                 }
 
-                if (selectedTab == paletteTabPage)
+                if (selectedTab == _paletteTabPage)
                 {
                     values = SystemColorValues;
                     for (int i = 0; i < values.Length; i++)
                     {
                         if (values[i].Equals(value))
                         {
-                            lbSystem.SelectedItem = value;
-                            selectedTab = systemTabPage;
+                            _lbSystem.SelectedItem = value;
+                            selectedTab = _systemTabPage;
                             break;
                         }
                     }
                 }
 
-                tabControl.SelectedTab = selectedTab;
+                _tabControl.SelectedTab = selectedTab;
             }
         }
     }

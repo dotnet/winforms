@@ -72,7 +72,7 @@ public class ImageListImageEditor : ImageEditor
                 foreach (string name in _fileDialog.FileNames)
                 {
                     using FileStream file = new(name, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    ImageListImage image = LoadImageFromStream(file, name.EndsWith(".ico"));
+                    ImageListImage image = LoadImageFromStream(file, name.EndsWith(".ico", StringComparison.Ordinal));
                     image.Name = Path.GetFileName(name);
                     images.Add(image);
                 }

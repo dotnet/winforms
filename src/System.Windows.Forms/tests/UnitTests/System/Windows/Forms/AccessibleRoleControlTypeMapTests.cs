@@ -25,7 +25,7 @@ public class AccessibleRoleControlTypeMapTests
         // If so the map returns an exist UIA_ControlTypeId
         UIA_CONTROLTYPE_ID actual = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.True(actual >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId && actual <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
+        Assert.True(actual is >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId and <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
     }
 
     [WinFormsFact]

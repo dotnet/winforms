@@ -10,9 +10,9 @@ namespace System.Windows.Forms.UITests;
 
 public class MonthCalendarTests : ControlTestBase
 {
-    private static readonly DateTime CurrentDate = new(2021, 12, 1);
-    private static readonly DateTime MaxDate = new(2021, 12, 3, 18, 0, 0);
-    private static readonly DateTime MinDate = new(2021, 11, 30, 17, 0, 0);
+    private static readonly DateTime s_currentDate = new(2021, 12, 1);
+    private static readonly DateTime s_maxDate = new(2021, 12, 3, 18, 0, 0);
+    private static readonly DateTime s_minDate = new(2021, 11, 30, 17, 0, 0);
 
     public MonthCalendarTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -85,8 +85,8 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunClickTestAsync(async (form, calendar) =>
         {
-            calendar.SetDate(CurrentDate);
-            DateTime newDate = CurrentDate.Date.AddDays(delta);
+            calendar.SetDate(s_currentDate);
+            DateTime newDate = s_currentDate.Date.AddDays(delta);
             int callDateSelectedCount = 0;
             int callDateChangedCount = 0;
             calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
@@ -107,8 +107,8 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunClickTestAsync(async (form, calendar) =>
         {
-            calendar.SetDate(CurrentDate);
-            DateTime newDate = CurrentDate.Date.AddDays(delta);
+            calendar.SetDate(s_currentDate);
+            DateTime newDate = s_currentDate.Date.AddDays(delta);
             int callDateSelectedCount = 0;
             int callDateChangedCount = 0;
             calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
@@ -206,8 +206,8 @@ public class MonthCalendarTests : ControlTestBase
                 MonthCalendar control = new()
                 {
                     Location = new Point(0, 0),
-                    MinDate = MinDate,
-                    MaxDate = MaxDate
+                    MinDate = s_minDate,
+                    MaxDate = s_maxDate
                 };
 
                 return control;

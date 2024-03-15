@@ -94,7 +94,7 @@ public partial class ToolStripPanelRow
                 return totalSize.Height < DisplayRectangle.Height;
             }
 
-            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("VerticalRM.CanMove returns false - not enough room");
+            s_toolStripPanelRowCreationDebug.TraceVerbose("VerticalRM.CanMove returns false - not enough room");
             return false;
         }
 

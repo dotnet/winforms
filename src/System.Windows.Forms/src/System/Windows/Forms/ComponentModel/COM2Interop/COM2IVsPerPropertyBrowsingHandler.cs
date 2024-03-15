@@ -113,7 +113,7 @@ internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBro
             return;
         }
 
-        BOOL canReset = e.Value ? true : false;
+        BOOL canReset = e.Value;
         hr = propertyBrowsing.Value->CanResetPropertyValue(sender.DISPID, &canReset);
         if (hr.Succeeded)
         {

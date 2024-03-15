@@ -56,14 +56,13 @@ public partial class RichTextBox : TextBoxBase
     private const int CHAR_BUFFER_LEN = 512;
 
     // Event objects
-    //
-    private static readonly object EVENT_HSCROLL = new();
-    private static readonly object EVENT_LINKACTIVATE = new();
-    private static readonly object EVENT_IMECHANGE = new();
-    private static readonly object EVENT_PROTECTED = new();
-    private static readonly object EVENT_REQUESTRESIZE = new();
-    private static readonly object EVENT_SELCHANGE = new();
-    private static readonly object EVENT_VSCROLL = new();
+    private static readonly object s_hscrollEvent = new();
+    private static readonly object s_linkActivateEvent = new();
+    private static readonly object s_imeChangeEvent = new();
+    private static readonly object s_protectedEvent = new();
+    private static readonly object s_requestSizeEvent = new();
+    private static readonly object s_selectionChangeEvent = new();
+    private static readonly object s_vscrollEvent = new();
 
     // Persistent state
     //
@@ -91,19 +90,19 @@ public partial class RichTextBox : TextBoxBase
     private static int s_richEditMajorVersion = 3;
 
     private BitVector32 _richTextBoxFlags;
-    private static readonly BitVector32.Section autoWordSelectionSection = BitVector32.CreateSection(1);
-    private static readonly BitVector32.Section showSelBarSection = BitVector32.CreateSection(1, autoWordSelectionSection);
-    private static readonly BitVector32.Section autoUrlDetectSection = BitVector32.CreateSection(1, showSelBarSection);
-    private static readonly BitVector32.Section fInCtorSection = BitVector32.CreateSection(1, autoUrlDetectSection);
-    private static readonly BitVector32.Section protectedErrorSection = BitVector32.CreateSection(1, fInCtorSection);
-    private static readonly BitVector32.Section linkcursorSection = BitVector32.CreateSection(1, protectedErrorSection);
-    private static readonly BitVector32.Section allowOleDropSection = BitVector32.CreateSection(1, linkcursorSection);
-    private static readonly BitVector32.Section suppressTextChangedEventSection = BitVector32.CreateSection(1, allowOleDropSection);
-    private static readonly BitVector32.Section callOnContentsResizedSection = BitVector32.CreateSection(1, suppressTextChangedEventSection);
-    private static readonly BitVector32.Section richTextShortcutsEnabledSection = BitVector32.CreateSection(1, callOnContentsResizedSection);
-    private static readonly BitVector32.Section allowOleObjectsSection = BitVector32.CreateSection(1, richTextShortcutsEnabledSection);
-    private static readonly BitVector32.Section scrollBarsSection = BitVector32.CreateSection((short)RichTextBoxScrollBars.ForcedBoth, allowOleObjectsSection);
-    private static readonly BitVector32.Section enableAutoDragDropSection = BitVector32.CreateSection(1, scrollBarsSection);
+    private static readonly BitVector32.Section s_autoWordSelectionSection = BitVector32.CreateSection(1);
+    private static readonly BitVector32.Section s_showSelBarSection = BitVector32.CreateSection(1, s_autoWordSelectionSection);
+    private static readonly BitVector32.Section s_autoUrlDetectSection = BitVector32.CreateSection(1, s_showSelBarSection);
+    private static readonly BitVector32.Section s_fInCtorSection = BitVector32.CreateSection(1, s_autoUrlDetectSection);
+    private static readonly BitVector32.Section s_protectedErrorSection = BitVector32.CreateSection(1, s_fInCtorSection);
+    private static readonly BitVector32.Section s_linkcursorSection = BitVector32.CreateSection(1, s_protectedErrorSection);
+    private static readonly BitVector32.Section s_allowOleDropSection = BitVector32.CreateSection(1, s_linkcursorSection);
+    private static readonly BitVector32.Section s_suppressTextChangedEventSection = BitVector32.CreateSection(1, s_allowOleDropSection);
+    private static readonly BitVector32.Section s_callOnContentsResizedSection = BitVector32.CreateSection(1, s_suppressTextChangedEventSection);
+    private static readonly BitVector32.Section s_richTextShortcutsEnabledSection = BitVector32.CreateSection(1, s_callOnContentsResizedSection);
+    private static readonly BitVector32.Section s_allowOleObjectsSection = BitVector32.CreateSection(1, s_richTextShortcutsEnabledSection);
+    private static readonly BitVector32.Section s_scrollBarsSection = BitVector32.CreateSection((short)RichTextBoxScrollBars.ForcedBoth, s_allowOleObjectsSection);
+    private static readonly BitVector32.Section s_enableAutoDragDropSection = BitVector32.CreateSection(1, s_scrollBarsSection);
 
     /// <summary>
     ///  Constructs a new RichTextBox.
@@ -111,7 +110,7 @@ public partial class RichTextBox : TextBoxBase
     public RichTextBox()
     {
         InConstructor = true;
-        _richTextBoxFlags[autoWordSelectionSection] = 0; // This is false by default
+        _richTextBoxFlags[s_autoWordSelectionSection] = 0; // This is false by default
         DetectUrls = true;
         ScrollBars = RichTextBoxScrollBars.Both;
         RichTextShortcutsEnabled = true;
@@ -129,20 +128,20 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     public override bool AllowDrop
     {
-        get => _richTextBoxFlags[allowOleDropSection] != 0;
+        get => _richTextBoxFlags[s_allowOleDropSection] != 0;
         set
         {
-            _richTextBoxFlags[allowOleDropSection] = value ? 1 : 0;
+            _richTextBoxFlags[s_allowOleDropSection] = value ? 1 : 0;
             UpdateOleCallback();
         }
     }
 
     internal bool AllowOleObjects
     {
-        get => _richTextBoxFlags[allowOleObjectsSection] != 0;
+        get => _richTextBoxFlags[s_allowOleObjectsSection] != 0;
         set
         {
-            _richTextBoxFlags[allowOleObjectsSection] = value ? 1 : 0;
+            _richTextBoxFlags[s_allowOleObjectsSection] = value ? 1 : 0;
         }
     }
 
@@ -173,10 +172,10 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxAutoWordSelection))]
     public bool AutoWordSelection
     {
-        get => _richTextBoxFlags[autoWordSelectionSection] != 0;
+        get => _richTextBoxFlags[s_autoWordSelectionSection] != 0;
         set
         {
-            _richTextBoxFlags[autoWordSelectionSection] = value ? 1 : 0;
+            _richTextBoxFlags[s_autoWordSelectionSection] = value ? 1 : 0;
             if (IsHandleCreated)
             {
                 PInvoke.SendMessage(
@@ -248,8 +247,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool CallOnContentsResized
     {
-        get => _richTextBoxFlags[callOnContentsResizedSection] != 0;
-        set => _richTextBoxFlags[callOnContentsResizedSection] = value ? 1 : 0;
+        get => _richTextBoxFlags[s_callOnContentsResizedSection] != 0;
+        set => _richTextBoxFlags[s_callOnContentsResizedSection] = value ? 1 : 0;
     }
 
     internal override bool CanRaiseTextChangedEvent => !SuppressTextChangedEvent;
@@ -345,12 +344,12 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxDetectURLs))]
     public bool DetectUrls
     {
-        get => _richTextBoxFlags[autoUrlDetectSection] != 0;
+        get => _richTextBoxFlags[s_autoUrlDetectSection] != 0;
         set
         {
             if (value != DetectUrls)
             {
-                _richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
+                _richTextBoxFlags[s_autoUrlDetectSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.EM_AUTOURLDETECT, (WPARAM)(BOOL)(value));
@@ -371,10 +370,10 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxEnableAutoDragDrop))]
     public bool EnableAutoDragDrop
     {
-        get => _richTextBoxFlags[enableAutoDragDropSection] != 0;
+        get => _richTextBoxFlags[s_enableAutoDragDropSection] != 0;
         set
         {
-            _richTextBoxFlags[enableAutoDragDropSection] = value ? 1 : 0;
+            _richTextBoxFlags[s_enableAutoDragDropSection] = value ? 1 : 0;
             UpdateOleCallback();
         }
     }
@@ -461,8 +460,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool InConstructor
     {
-        get => _richTextBoxFlags[fInCtorSection] != 0;
-        set => _richTextBoxFlags[fInCtorSection] = value ? 1 : 0;
+        get => _richTextBoxFlags[s_fInCtorSection] != 0;
+        set => _richTextBoxFlags[s_fInCtorSection] = value ? 1 : 0;
     }
 
     /// <summary>
@@ -492,8 +491,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool LinkCursor
     {
-        get => _richTextBoxFlags[linkcursorSection] != 0;
-        set => _richTextBoxFlags[linkcursorSection] = value ? 1 : 0;
+        get => _richTextBoxFlags[s_linkcursorSection] != 0;
+        set => _richTextBoxFlags[s_linkcursorSection] = value ? 1 : 0;
     }
 
     [DefaultValue(int.MaxValue)]
@@ -512,8 +511,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool ProtectedError
     {
-        get => _richTextBoxFlags[protectedErrorSection] != 0;
-        set => _richTextBoxFlags[protectedErrorSection] = value ? 1 : 0;
+        get => _richTextBoxFlags[s_protectedErrorSection] != 0;
+        set => _richTextBoxFlags[s_protectedErrorSection] = value ? 1 : 0;
     }
 
     private protected override void RaiseAccessibilityTextChangedEvent()
@@ -552,12 +551,12 @@ public partial class RichTextBox : TextBoxBase
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool RichTextShortcutsEnabled
     {
-        get => _richTextBoxFlags[richTextShortcutsEnabledSection] != 0;
+        get => _richTextBoxFlags[s_richTextShortcutsEnabledSection] != 0;
         set
         {
             s_shortcutsToDisable ??= [(int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ];
 
-            _richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
+            _richTextBoxFlags[s_richTextShortcutsEnabledSection] = value ? 1 : 0;
         }
     }
 
@@ -648,7 +647,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxScrollBars))]
     public RichTextBoxScrollBars ScrollBars
     {
-        get => (RichTextBoxScrollBars)_richTextBoxFlags[scrollBarsSection];
+        get => (RichTextBoxScrollBars)_richTextBoxFlags[s_scrollBarsSection];
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -657,7 +656,7 @@ public partial class RichTextBox : TextBoxBase
             {
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                 {
-                    _richTextBoxFlags[scrollBarsSection] = (int)value;
+                    _richTextBoxFlags[s_scrollBarsSection] = (int)value;
                     RecreateHandle();
                 }
             }
@@ -1295,12 +1294,12 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxSelMargin))]
     public bool ShowSelectionMargin
     {
-        get { return _richTextBoxFlags[showSelBarSection] != 0; }
+        get { return _richTextBoxFlags[s_showSelBarSection] != 0; }
         set
         {
             if (value != ShowSelectionMargin)
             {
-                _richTextBoxFlags[showSelBarSection] = value ? 1 : 0;
+                _richTextBoxFlags[s_showSelBarSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(
@@ -1378,13 +1377,13 @@ public partial class RichTextBox : TextBoxBase
 
     private bool SuppressTextChangedEvent
     {
-        get { return _richTextBoxFlags[suppressTextChangedEventSection] != 0; }
+        get { return _richTextBoxFlags[s_suppressTextChangedEventSection] != 0; }
         set
         {
             bool oldValue = SuppressTextChangedEvent;
             if (value != oldValue)
             {
-                _richTextBoxFlags[suppressTextChangedEventSection] = value ? 1 : 0;
+                _richTextBoxFlags[s_suppressTextChangedEventSection] = value ? 1 : 0;
                 CommonProperties.xClearPreferredSizeCache(this);
             }
         }
@@ -1506,8 +1505,8 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxContentsResized))]
     public event ContentsResizedEventHandler? ContentsResized
     {
-        add => Events.AddHandler(EVENT_REQUESTRESIZE, value);
-        remove => Events.RemoveHandler(EVENT_REQUESTRESIZE, value);
+        add => Events.AddHandler(s_requestSizeEvent, value);
+        remove => Events.RemoveHandler(s_requestSizeEvent, value);
     }
 
     /// <summary>
@@ -1568,48 +1567,48 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxHScroll))]
     public event EventHandler? HScroll
     {
-        add => Events.AddHandler(EVENT_HSCROLL, value);
-        remove => Events.RemoveHandler(EVENT_HSCROLL, value);
+        add => Events.AddHandler(s_hscrollEvent, value);
+        remove => Events.RemoveHandler(s_hscrollEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxLinkClick))]
     public event LinkClickedEventHandler? LinkClicked
     {
-        add => Events.AddHandler(EVENT_LINKACTIVATE, value);
-        remove => Events.RemoveHandler(EVENT_LINKACTIVATE, value);
+        add => Events.AddHandler(s_linkActivateEvent, value);
+        remove => Events.RemoveHandler(s_linkActivateEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxIMEChange))]
     public event EventHandler? ImeChange
     {
-        add => Events.AddHandler(EVENT_IMECHANGE, value);
-        remove => Events.RemoveHandler(EVENT_IMECHANGE, value);
+        add => Events.AddHandler(s_imeChangeEvent, value);
+        remove => Events.RemoveHandler(s_imeChangeEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxProtected))]
     public event EventHandler? Protected
     {
-        add => Events.AddHandler(EVENT_PROTECTED, value);
-        remove => Events.RemoveHandler(EVENT_PROTECTED, value);
+        add => Events.AddHandler(s_protectedEvent, value);
+        remove => Events.RemoveHandler(s_protectedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxSelChange))]
     public event EventHandler? SelectionChanged
     {
-        add => Events.AddHandler(EVENT_SELCHANGE, value);
-        remove => Events.RemoveHandler(EVENT_SELCHANGE, value);
+        add => Events.AddHandler(s_selectionChangeEvent, value);
+        remove => Events.RemoveHandler(s_selectionChangeEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxVScroll))]
     public event EventHandler? VScroll
     {
-        add => Events.AddHandler(EVENT_VSCROLL, value);
-        remove => Events.RemoveHandler(EVENT_VSCROLL, value);
+        add => Events.AddHandler(s_vscrollEvent, value);
+        remove => Events.RemoveHandler(s_vscrollEvent, value);
     }
 
     /// <summary>
@@ -1640,18 +1639,18 @@ public partial class RichTextBox : TextBoxBase
         {
             switch (cookieVal & DIRECTIONMASK)
             {
-                case RichTextBox.OUTPUT:
+                case OUTPUT:
                     {
                         _editStream ??= new MemoryStream();
 
                         switch (cookieVal & KINDMASK)
                         {
-                            case RichTextBox.RTF:
-                            case RichTextBox.TEXTCRLF:
+                            case RTF:
+                            case TEXTCRLF:
                                 Marshal.Copy(buf, bytes, 0, cb);
                                 _editStream.Write(bytes, 0, cb);
                                 break;
-                            case RichTextBox.TEXTLF:
+                            case TEXTLF:
                                 // Strip out \r characters so that we consistently return
                                 // \n for linefeeds. In a future version the RichEdit control
                                 // may support a SF_NOXLATCRLF flag which would do this for
@@ -1722,7 +1721,7 @@ public partial class RichTextBox : TextBoxBase
                         break;
                     }
 
-                case RichTextBox.INPUT:
+                case INPUT:
                     {
                         // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
                         // We had a case of a customer using Everett bits and another case of a customer using Whidbey Beta1 bits.
@@ -2407,7 +2406,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnContentsResized(ContentsResizedEventArgs e)
     {
-        ((ContentsResizedEventHandler?)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
+        ((ContentsResizedEventHandler?)Events[s_requestSizeEvent])?.Invoke(this, e);
     }
 
     protected override void OnGotFocus(EventArgs e)
@@ -2546,7 +2545,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnHScroll(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_HSCROLL])?.Invoke(this, e);
+        ((EventHandler?)Events[s_hscrollEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2555,7 +2554,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnLinkClicked(LinkClickedEventArgs e)
     {
-        ((LinkClickedEventHandler?)Events[EVENT_LINKACTIVATE])?.Invoke(this, e);
+        ((LinkClickedEventHandler?)Events[s_linkActivateEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2563,7 +2562,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnImeChange(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_IMECHANGE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_imeChangeEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2573,7 +2572,7 @@ public partial class RichTextBox : TextBoxBase
     protected virtual void OnProtected(EventArgs e)
     {
         ProtectedError = true;
-        ((EventHandler?)Events[EVENT_PROTECTED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_protectedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2582,7 +2581,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnSelectionChanged(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_SELCHANGE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectionChangeEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2591,7 +2590,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnVScroll(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_VSCROLL])?.Invoke(this, e);
+        ((EventHandler?)Events[s_vscrollEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2657,29 +2656,17 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void SaveFile(Stream data, RichTextBoxStreamType fileType)
     {
-        uint flags;
-        switch (fileType)
+        uint flags = fileType switch
         {
-            case RichTextBoxStreamType.RichText:
-                flags = PInvoke.SF_RTF;
-                break;
-            case RichTextBoxStreamType.PlainText:
-                flags = PInvoke.SF_TEXT;
-                break;
-            case RichTextBoxStreamType.UnicodePlainText:
-                flags = PInvoke.SF_UNICODE | PInvoke.SF_TEXT;
-                break;
-            case RichTextBoxStreamType.RichNoOleObjs:
-                flags = PInvoke.SF_RTFNOOBJS;
-                break;
-            case RichTextBoxStreamType.TextTextOleObjs:
-                flags = PInvoke.SF_TEXTIZED;
-                break;
-            default:
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-        }
+            RichTextBoxStreamType.RichText => PInvoke.SF_RTF,
+            RichTextBoxStreamType.PlainText => PInvoke.SF_TEXT,
+            RichTextBoxStreamType.UnicodePlainText => PInvoke.SF_UNICODE | PInvoke.SF_TEXT,
+            RichTextBoxStreamType.RichNoOleObjs => PInvoke.SF_RTFNOOBJS,
+            RichTextBoxStreamType.TextTextOleObjs => PInvoke.SF_TEXTIZED,
+            _ => throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType)),
+        };
 
-        StreamOut(data, flags, true);
+        StreamOut(data, flags, includeCrLfs: true);
     }
 
     /// <summary>
@@ -2729,20 +2716,14 @@ public partial class RichTextBox : TextBoxBase
             CHARFORMAT2W cf = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
-                dwMask = mask
+                dwMask = mask,
+                dwEffects = charFormat switch
+                {
+                    RichTextBoxSelectionAttribute.All => effect,
+                    RichTextBoxSelectionAttribute.None => 0,
+                    _ => throw new ArgumentException(SR.UnknownAttr),
+                }
             };
-
-            switch (charFormat)
-            {
-                case RichTextBoxSelectionAttribute.All:
-                    cf.dwEffects = effect;
-                    break;
-                case RichTextBoxSelectionAttribute.None:
-                    cf.dwEffects = 0;
-                    break;
-                default:
-                    throw new ArgumentException(SR.UnknownAttr);
-            }
 
             // Set the format information.
             return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf) != 0;
@@ -3419,7 +3400,7 @@ public partial class RichTextBox : TextBoxBase
         // remove the last completed character typed.
 
         // Is either the Hangul or HangulFull IME currently in use?
-        if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
+        if (ImeMode is ImeMode.Hangul or ImeMode.HangulFull)
         {
             // Is the IME CompositionWindow open?
             LRESULT compMode = PInvoke.SendMessage(this, PInvoke.EM_GETIMECOMPMODE);

@@ -15,14 +15,14 @@ public partial class StatusStrip : ToolStrip
     private const AnchorStyles HorizontalAnchor = AnchorStyles.Left | AnchorStyles.Right;
     private const AnchorStyles VerticalAnchor = AnchorStyles.Top | AnchorStyles.Bottom;
 
-    private BitVector32 state;
+    private BitVector32 _state;
 
-    private static readonly int stateSizingGrip = BitVector32.CreateMask();
-    private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);
+    private static readonly int s_stateSizingGrip = BitVector32.CreateMask();
+    private static readonly int s_stateCalledSpringTableLayout = BitVector32.CreateMask(s_stateSizingGrip);
 
-    private const int gripWidth = 12;
-    private RightToLeftLayoutGrip? rtlLayoutGrip;
-    private Orientation lastOrientation = Orientation.Horizontal;
+    private const int GripWidth = 12;
+    private RightToLeftLayoutGrip? _rtlLayoutGrip;
+    private Orientation _lastOrientation = Orientation.Horizontal;
 
     public StatusStrip()
     {
@@ -34,7 +34,7 @@ public partial class StatusStrip : ToolStrip
 
         SetStyle(ControlStyles.ResizeRedraw, true);
         Stretch = true;
-        state[stateSizingGrip] = true;
+        _state[s_stateSizingGrip] = true;
         ResumeLayout(true);
     }
 
@@ -138,9 +138,9 @@ public partial class StatusStrip : ToolStrip
     {
         get
         {
-            rtlLayoutGrip ??= new RightToLeftLayoutGrip();
+            _rtlLayoutGrip ??= new RightToLeftLayoutGrip();
 
-            return rtlLayoutGrip;
+            return _rtlLayoutGrip;
         }
     }
 
@@ -183,13 +183,13 @@ public partial class StatusStrip : ToolStrip
     {
         get
         {
-            return state[stateSizingGrip];
+            return _state[s_stateSizingGrip];
         }
         set
         {
-            if (value != state[stateSizingGrip])
+            if (value != _state[s_stateSizingGrip])
             {
-                state[stateSizingGrip] = value;
+                _state[s_stateSizingGrip] = value;
                 EnsureRightToLeftGrip();
                 Invalidate(true);
             }
@@ -210,11 +210,11 @@ public partial class StatusStrip : ToolStrip
 
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    return new Rectangle(0, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
+                    return new Rectangle(0, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
                 }
                 else
                 {
-                    return new Rectangle(statusStripSize.Width - gripWidth, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
+                    return new Rectangle(statusStripSize.Width - GripWidth, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
                 }
             }
 
@@ -250,10 +250,10 @@ public partial class StatusStrip : ToolStrip
     {
         if (disposing)
         {
-            if (rtlLayoutGrip is not null)
+            if (_rtlLayoutGrip is not null)
             {
-                rtlLayoutGrip.Dispose();
-                rtlLayoutGrip = null;
+                _rtlLayoutGrip.Dispose();
+                _rtlLayoutGrip = null;
             }
         }
 
@@ -274,17 +274,17 @@ public partial class StatusStrip : ToolStrip
                 }
             }
         }
-        else if (rtlLayoutGrip is not null)
+        else if (_rtlLayoutGrip is not null)
         {
-            if (Controls.Contains(rtlLayoutGrip))
+            if (Controls.Contains(_rtlLayoutGrip))
             {
                 if (Controls is ReadOnlyControlCollection controlCollection)
                 {
-                    controlCollection.RemoveInternal(rtlLayoutGrip);
+                    controlCollection.RemoveInternal(_rtlLayoutGrip);
                 }
 
-                rtlLayoutGrip.Dispose();
-                rtlLayoutGrip = null;
+                _rtlLayoutGrip.Dispose();
+                _rtlLayoutGrip = null;
             }
         }
     }
@@ -328,7 +328,7 @@ public partial class StatusStrip : ToolStrip
 
     protected override void OnLayout(LayoutEventArgs levent)
     {
-        state[stateCalledSpringTableLayout] = false;
+        _state[s_stateCalledSpringTableLayout] = false;
         bool inDisplayedItemCollection = false;
         ToolStripItem? item = levent.AffectedComponent as ToolStripItem;
         int itemCount = DisplayedItems.Count;
@@ -364,7 +364,7 @@ public partial class StatusStrip : ToolStrip
 
     protected override void SetDisplayedItems()
     {
-        if (state[stateCalledSpringTableLayout])
+        if (_state[s_stateCalledSpringTableLayout])
         {
             // shove all items that don't fit one pixel outside the displayed region
             Rectangle displayRect = DisplayRectangle;
@@ -436,7 +436,7 @@ public partial class StatusStrip : ToolStrip
     internal override bool ShouldSerializeRenderMode()
     {
         // We should NEVER serialize custom.
-        return (RenderMode != ToolStripRenderMode.System && RenderMode != ToolStripRenderMode.Custom);
+        return (RenderMode is not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
     }
 
     /// <summary>
@@ -448,11 +448,11 @@ public partial class StatusStrip : ToolStrip
     {
         if (LayoutStyle == ToolStripLayoutStyle.Table)
         {
-            state[stateCalledSpringTableLayout] = true;
+            _state[s_stateCalledSpringTableLayout] = true;
 
             SuspendLayout();
 
-            if (lastOrientation != Orientation)
+            if (_lastOrientation != Orientation)
             {
                 TableLayoutSettings settings = TableLayoutSettings;
                 settings.RowCount = 0;
@@ -461,7 +461,7 @@ public partial class StatusStrip : ToolStrip
                 settings.RowStyles.Clear();
             }
 
-            lastOrientation = Orientation;
+            _lastOrientation = Orientation;
 
             if (Orientation == Orientation.Horizontal)
             {
@@ -491,7 +491,7 @@ public partial class StatusStrip : ToolStrip
                     colStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                 }
 
-                if (TableLayoutSettings.RowStyles.Count > 1 || TableLayoutSettings.RowStyles.Count == 0)
+                if (TableLayoutSettings.RowStyles.Count is > 1 or 0)
                 {
                     TableLayoutSettings.RowStyles.Clear();
                     TableLayoutSettings.RowStyles.Add(new RowStyle());
@@ -540,7 +540,7 @@ public partial class StatusStrip : ToolStrip
 
                 TableLayoutSettings.ColumnCount = 1;
 
-                if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
+                if (TableLayoutSettings.ColumnStyles.Count is > 1 or 0)
                 {
                     TableLayoutSettings.ColumnStyles.Clear();
                     TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());

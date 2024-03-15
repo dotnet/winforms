@@ -12,8 +12,8 @@ public partial class MenuStrip : ToolStrip
 {
     private ToolStripMenuItem? _mdiWindowListItem;
 
-    private static readonly object EventMenuActivate = new();
-    private static readonly object EventMenuDeactivate = new();
+    private static readonly object s_menuActivateEvent = new();
+    private static readonly object s_menuDeactivateEvent = new();
 
     public MenuStrip()
     {
@@ -95,16 +95,16 @@ public partial class MenuStrip : ToolStrip
     [SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
     public event EventHandler? MenuActivate
     {
-        add => Events.AddHandler(EventMenuActivate, value);
-        remove => Events.RemoveHandler(EventMenuActivate, value);
+        add => Events.AddHandler(s_menuActivateEvent, value);
+        remove => Events.RemoveHandler(s_menuActivateEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
     public event EventHandler? MenuDeactivate
     {
-        add => Events.AddHandler(EventMenuDeactivate, value);
-        remove => Events.RemoveHandler(EventMenuDeactivate, value);
+        add => Events.AddHandler(s_menuDeactivateEvent, value);
+        remove => Events.RemoveHandler(s_menuDeactivateEvent, value);
     }
 
     [DefaultValue(false)]
@@ -175,7 +175,7 @@ public partial class MenuStrip : ToolStrip
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, (int)OBJECT_IDENTIFIER.OBJID_MENU, -1);
         }
 
-        ((EventHandler?)Events[EventMenuActivate])?.Invoke(this, e);
+        ((EventHandler?)Events[s_menuActivateEvent])?.Invoke(this, e);
     }
 
     protected virtual void OnMenuDeactivate(EventArgs e)
@@ -191,7 +191,7 @@ public partial class MenuStrip : ToolStrip
             }
         }
 
-        ((EventHandler?)Events[EventMenuDeactivate])?.Invoke(this, e);
+        ((EventHandler?)Events[s_menuDeactivateEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -201,8 +201,8 @@ public partial class MenuStrip : ToolStrip
     {
         if (!(Focused || ContainsFocus))
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] set focus to menustrip");
-            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/true);
+            s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] set focus to menustrip");
+            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, menuKeyPressed: true);
 
             if (DisplayedItems.Count > 0)
             {

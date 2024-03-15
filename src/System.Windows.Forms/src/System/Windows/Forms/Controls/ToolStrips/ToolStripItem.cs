@@ -602,7 +602,7 @@ public abstract partial class ToolStripItem :
     public virtual bool CanSelect => Enabled;
 
     /// <remarks>
-    ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
+    ///  <para>Usually the same as can select, but things like the control box in an MDI window are exceptions</para>
     /// </remarks>
     internal virtual bool CanKeyboardSelect => CanSelect;
 
@@ -682,7 +682,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            if (Owner is not null && Owner is StatusStrip)
+            if (Owner is not null and StatusStrip)
             {
                 return _defaultStatusStripMargin;
             }
@@ -1230,7 +1230,7 @@ public abstract partial class ToolStripItem :
                 return true;
             }
 
-            Control? parent = ParentInternal;
+            ToolStrip? parent = ParentInternal;
             if (parent is not null)
             {
                 return parent.ShouldSerializeForeColor();
@@ -1433,7 +1433,7 @@ public abstract partial class ToolStripItem :
     [DefaultValue(null)]
     public string? Name
     {
-        get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(ToolStripItem.s_nameProperty));
+        get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(s_nameProperty));
         set
         {
             if (DesignMode)
@@ -1441,7 +1441,7 @@ public abstract partial class ToolStripItem :
                 return;
             }
 
-            Properties.SetObject(ToolStripItem.s_nameProperty, value);
+            Properties.SetObject(s_nameProperty, value);
         }
     }
 
@@ -1820,8 +1820,11 @@ public abstract partial class ToolStripItem :
     ///  Occurs when value of the <see cref="Selected" /> property changes.
     /// </summary>
     /// <remarks>
-    ///  This event is raised when item is selected by mouse, keyboard or programmatically.
-    ///  .NET Core 3.1 had removed MainMenu and MenuItem controls. ToolStripMenuItem.SelectedChanged event is recommended as a replacement for MenuItem.Select event.
+    ///  <para>
+    ///   This event is raised when item is selected by mouse, keyboard or programmatically.
+    ///   .NET Core 3.1 had removed MainMenu and MenuItem controls. ToolStripMenuItem.SelectedChanged event
+    ///   is recommended as a replacement for MenuItem.Select event.
+    ///  </para>
     /// </remarks>
     [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
     public event EventHandler? SelectedChanged
@@ -1888,8 +1891,8 @@ public abstract partial class ToolStripItem :
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.TryGetObject(ToolStripItem.s_tagProperty, out object? tag) ? tag : null;
-        set => Properties.SetObject(ToolStripItem.s_tagProperty, value);
+        get => Properties.TryGetObject(s_tagProperty, out object? tag) ? tag : null;
+        set => Properties.SetObject(s_tagProperty, value);
     }
 
     /// <summary>
@@ -1901,14 +1904,14 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemTextDescr))]
     public virtual string? Text
     {
-        get => Properties.TryGetObject(ToolStripItem.s_textProperty, out string? text)
+        get => Properties.TryGetObject(s_textProperty, out string? text)
             ? text
             : string.Empty;
         set
         {
             if (value != Text)
             {
-                Properties.SetObject(ToolStripItem.s_textProperty, value);
+                Properties.SetObject(s_textProperty, value);
                 OnTextChanged(EventArgs.Empty);
             }
         }
@@ -1951,7 +1954,7 @@ public abstract partial class ToolStripItem :
         get
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+            if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
             {
                 textDirection = direction;
             }
@@ -1975,7 +1978,7 @@ public abstract partial class ToolStripItem :
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            Properties.SetObject(ToolStripItem.s_textDirectionProperty, value);
+            Properties.SetObject(s_textDirectionProperty, value);
             InvalidateItemLayout("TextDirection");
         }
     }
@@ -3036,7 +3039,7 @@ public abstract partial class ToolStripItem :
     internal void OnOwnerTextDirectionChanged()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }
@@ -3356,9 +3359,11 @@ public abstract partial class ToolStripItem :
     internal void SetPlacement(ToolStripItemPlacement placement) => _placement = placement;
 
     /// <remarks>
-    ///  Some implementations of DefaultMargin check which container they
-    ///  are on. They need to be re-evaluated when the containership changes.
-    ///  DefaultMargin will stop being honored the moment someone sets the Margin property.
+    ///  <para>
+    ///   Some implementations of DefaultMargin check which container they
+    ///   are on. They need to be re-evaluated when the containership changes.
+    ///   DefaultMargin will stop being honored the moment someone sets the Margin property.
+    ///  </para>
     /// </remarks>
     internal void SetAmbientMargin()
     {
@@ -3457,7 +3462,7 @@ public abstract partial class ToolStripItem :
     private bool ShouldSerializeTextDirection()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }
@@ -3657,7 +3662,7 @@ public abstract partial class ToolStripItem :
             bool found = false;
             while (!found && i < count)
             {
-                found = object.ReferenceEquals(items[i], this);
+                found = ReferenceEquals(items[i], this);
                 if (found)
                 {
                     int previousIndex = i - 1;
@@ -3728,7 +3733,7 @@ public abstract partial class ToolStripItem :
     /// </summary>
     internal bool IsParentAccessibilityObjectCreated => ParentInternal is not null && ParentInternal.IsAccessibilityObjectCreated;
 
-    internal virtual bool IsBeingTabbedTo() => ToolStrip.AreCommonNavigationalKeysDown();
+    internal virtual bool IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
     /// <summary>
     /// Query font from property bag.

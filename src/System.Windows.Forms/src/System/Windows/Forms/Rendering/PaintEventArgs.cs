@@ -20,13 +20,17 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     private readonly DrawingEventArgs _event;
 
     /// <remarks>
-    ///  This is only needed for <see cref="ResetGraphics"/> callers and applies in the following places:
-    ///
-    ///    1. In <see cref="Control.WmPaint(ref Message)"/> when we are painting the background.
-    ///    2. In <see cref="Control.WmPrintClient(ref Message)"/>.
-    ///
-    ///  We can potentially optimize further by skipping the save when we only use <see cref="GraphicsInternal"/>
-    ///  as we shouldn't have messed with the clipping there.
+    ///  <para>
+    ///   This is only needed for <see cref="ResetGraphics"/> callers and applies in the following places:
+    ///  </para>
+    ///  <list type="number">
+    ///   <item><description>In <see cref="Control.WmPaint(ref Message)"/> when we are painting the background.</description></item>
+    ///   <item><description>In <see cref="Control.WmPrintClient(ref Message)"/>.</description></item>
+    ///  </list>
+    ///  <para>
+    ///   We can potentially optimize further by skipping the save when we only use <see cref="GraphicsInternal"/>
+    ///   as we shouldn't have messed with the clipping there.
+    ///  </para>
     /// </remarks>
     private GraphicsState? _savedGraphicsState;
 

@@ -14,7 +14,7 @@ internal class RelatedCurrencyManager : CurrencyManager
 {
     private BindingManagerBase _parentManager;
     private PropertyDescriptor _fieldInfo;
-    private static readonly List<BindingManagerBase> IgnoreItemChangedTable = [];
+    private static List<BindingManagerBase> IgnoreItemChangedTable { get; } = [];
 
     internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField)
         : base(dataSource: null)
@@ -132,7 +132,7 @@ internal class RelatedCurrencyManager : CurrencyManager
     private void ParentManager_MetaDataChanged(object? sender, EventArgs e)
     {
         // Propagate MetaDataChanged events from the parent manager
-        base.OnMetaDataChanged(e);
+        OnMetaDataChanged(e);
     }
 
     private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)

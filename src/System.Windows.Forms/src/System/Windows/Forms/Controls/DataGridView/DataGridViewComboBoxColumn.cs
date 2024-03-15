@@ -507,7 +507,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
             dataGridViewColumn = (DataGridViewComboBoxColumn)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewColumn);
+        CloneInternal(dataGridViewColumn);
         dataGridViewColumn.ComboBoxCellTemplate!.TemplateComboBoxColumn = dataGridViewColumn;
 
         return dataGridViewColumn;

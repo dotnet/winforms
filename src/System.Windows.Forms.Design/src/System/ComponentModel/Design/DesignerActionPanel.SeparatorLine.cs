@@ -25,10 +25,8 @@ internal sealed partial class DesignerActionPanel
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {
-            using (Pen p = new(ActionPanel.SeparatorColor))
-            {
-                g.DrawLine(p, SeparatorHorizontalPadding, 0, lineWidth - (SeparatorHorizontalPadding + 1), 0);
-            }
+            using Pen p = new(ActionPanel.SeparatorColor);
+            g.DrawLine(p, SeparatorHorizontalPadding, 0, lineWidth - (SeparatorHorizontalPadding + 1), 0);
         }
 
         internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)

@@ -152,9 +152,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 else
                 {
                     object value = DesignerUtils.GetOptionValue(ServiceProvider, "ShowGrid");
-                    if (value is bool)
+                    if (value is bool boolValue)
                     {
-                        _drawGrid = (bool)value;
+                        _drawGrid = boolValue;
                     }
                 }
             }
@@ -453,7 +453,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // Otherwise, proceed with the parenting and locating.
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         if (host is not null && newChild is not null && !Control.Contains(newChild)
-            && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
+            && host.GetDesigner(newChild) as ControlDesigner is not null && !(newChild is Form form && form.TopLevel))
         {
             Rectangle bounds = default;
 
@@ -678,7 +678,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             // the associated Component. Doing so can cause a crash in hosted designers.
             // It doesn't make sense to do so anyway, since the designer (and thus
             // the component) is being disposed.
-            OnMouseDragEnd((_mouseDragBase == InvalidPoint) ? true : false);
+            OnMouseDragEnd(_mouseDragBase == InvalidPoint);
 
             EnableDragDrop(false);
 
@@ -1041,16 +1041,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
             Rectangle translatedBounds = new(loc, ((Control)Component).Size);
 
-            int glyphOffset = (int)(DesignerUtils.CONTAINERGRABHANDLESIZE * .5);
+            int glyphOffset = (int)(DesignerUtils.s_containerGrabHandleSize * .5);
 
             // if the control is too small for our ideal position...
-            if (translatedBounds.Width < 2 * DesignerUtils.CONTAINERGRABHANDLESIZE)
+            if (translatedBounds.Width < 2 * DesignerUtils.s_containerGrabHandleSize)
             {
                 glyphOffset = -1 * glyphOffset;
             }
 
             ContainerSelectorBehavior behavior = new((Control)Component, Component.Site, true);
-            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
+            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.s_containerGrabHandleSize, glyphOffset, behavior);
 
             glyphs.Insert(0, containerSelectorGlyph);
         }
@@ -1196,9 +1196,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         base.Initialize(component);
 
-        if (Control is ScrollableControl)
+        if (Control is ScrollableControl control)
         {
-            ((ScrollableControl)Control).Scroll += new ScrollEventHandler(OnScroll);
+            control.Scroll += OnScroll;
         }
 
         EnableDragDrop(true);
@@ -1238,22 +1238,19 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             Rectangle bounds = new((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
 
             // ask the parent to give us the comps within this rect
-            IComponent parent = defaultValues["Parent"] as IComponent;
-            if (parent is null)
+            if (defaultValues["Parent"] is not IComponent parent)
             {
                 Debug.Fail("Couldn't get the parent instance from 'defaultValues'");
                 return;
             }
 
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host is null)
+            if (GetService(typeof(IDesignerHost)) is not IDesignerHost host)
             {
                 Debug.Fail("Failed to IDesignerHost");
                 return;
             }
 
-            ParentControlDesigner parentDesigner = host.GetDesigner(parent) as ParentControlDesigner;
-            if (parentDesigner is null)
+            if (host.GetDesigner(parent) is not ParentControlDesigner parentDesigner)
             {
                 Debug.Fail($"Could not get ParentControlDesigner for {parent}");
                 return;
@@ -1515,8 +1512,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             for (int i = 0; i < dragComps.Length; i++)
             {
-                IComponent comp = dragComps[i] as IComponent;
-                if (host is null || comp is null)
+                if (host is null || dragComps[i] is not IComponent comp)
                 {
                     continue;
                 }
@@ -2403,9 +2399,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             // set it's handler to this
             Control parent = GetParentForComponent(component);
-            Form form = c as Form;
 
-            if (form is null || !form.TopLevel)
+            if (c is not Form form || !form.TopLevel)
             {
                 if (c.Parent != parent)
                 {

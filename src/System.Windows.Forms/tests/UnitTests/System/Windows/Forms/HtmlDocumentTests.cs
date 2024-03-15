@@ -1864,9 +1864,9 @@ public class HtmlDocumentTests
         Assert.Equal("NoParameter1", document.InvokeScript("divide"));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", null));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", Array.Empty<object>()));
-        Assert.Equal("NoParameter2", document.InvokeScript("divide", new object[] { 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
+        Assert.Equal("NoParameter2", document.InvokeScript("divide", [2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
     }
 
     [WinFormsFact]
@@ -1884,7 +1884,7 @@ public class HtmlDocumentTests
         Assert.Null(document.InvokeScript("NoSuchScript"));
         Assert.Null(document.InvokeScript("NoSuchScript", null));
         Assert.Null(document.InvokeScript("NoSuchScript", Array.Empty<object>()));
-        Assert.Null(document.InvokeScript("NoSuchScript", new object[] { 1 }));
+        Assert.Null(document.InvokeScript("NoSuchScript", [1]));
     }
 
     public static IEnumerable<object[]> Write_TestData()

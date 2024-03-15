@@ -285,27 +285,25 @@ public class ComponentEditorPageTests
     [WinFormsFact]
     public void ComponentEditorPage_Icon_Set_GetReturnsExpected()
     {
-        using (var value = Icon.FromHandle(new Bitmap(10, 10).GetHicon()))
+        using var value = Icon.FromHandle(new Bitmap(10, 10).GetHicon());
+        using SubComponentEditorPage control = new()
         {
-            using SubComponentEditorPage control = new()
-            {
-                Icon = value
-            };
-            Assert.Same(value, control.Icon);
-            Assert.False(control.IsHandleCreated);
+            Icon = value
+        };
+        Assert.Same(value, control.Icon);
+        Assert.False(control.IsHandleCreated);
 
-            // Set same.
-            control.Icon = value;
-            Assert.Same(value, control.Icon);
-            Assert.False(control.IsHandleCreated);
+        // Set same.
+        control.Icon = value;
+        Assert.Same(value, control.Icon);
+        Assert.False(control.IsHandleCreated);
 
-            // Set null.
-            control.Icon = null;
-            Assert.NotSame(value, control.Icon);
-            Assert.NotNull(control.Icon);
-            Assert.Same(control.Icon, control.Icon);
-            Assert.False(control.IsHandleCreated);
-        }
+        // Set null.
+        control.Icon = null;
+        Assert.NotSame(value, control.Icon);
+        Assert.NotNull(control.Icon);
+        Assert.Same(control.Icon, control.Icon);
+        Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]

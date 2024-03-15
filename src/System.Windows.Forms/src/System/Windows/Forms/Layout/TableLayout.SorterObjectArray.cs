@@ -6,28 +6,28 @@ namespace System.Windows.Forms.Layout;
 internal partial class TableLayout
 {
     // Private value type used by the Sort methods.
-    private struct SorterObjectArray
+    private readonly struct SorterObjectArray
     {
-        private readonly LayoutInfo[] keys;
-        private readonly IComparer<LayoutInfo> comparer;
+        private readonly LayoutInfo[] _keys;
+        private readonly IComparer<LayoutInfo> _comparer;
 
         internal SorterObjectArray(LayoutInfo[] keys, IComparer<LayoutInfo> comparer)
         {
             comparer ??= Comparer<LayoutInfo>.Default;
 
-            this.keys = keys;
-            this.comparer = comparer;
+            _keys = keys;
+            _comparer = comparer;
         }
 
-        internal void SwapIfGreaterWithItems(int a, int b)
+        internal readonly void SwapIfGreaterWithItems(int a, int b)
         {
             if (a != b)
             {
                 try
                 {
-                    if (comparer.Compare(keys[a], keys[b]) > 0)
+                    if (_comparer.Compare(_keys[a], _keys[b]) > 0)
                     {
-                        (keys[a], keys[b]) = (keys[b], keys[a]);
+                        (_keys[a], _keys[b]) = (_keys[b], _keys[a]);
                     }
                 }
                 catch (IndexOutOfRangeException)
@@ -57,19 +57,19 @@ internal partial class TableLayout
                 SwapIfGreaterWithItems(i, j);      // swap the low with the high
                 SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
-                LayoutInfo x = keys[middle];
+                LayoutInfo x = _keys[middle];
                 do
                 {
                     // Add a try block here to detect IComparers (or their
                     // underlying IComparables, etc) that are bogus.
                     try
                     {
-                        while (comparer.Compare(keys[i], x) < 0)
+                        while (_comparer.Compare(_keys[i], x) < 0)
                         {
                             i++;
                         }
 
-                        while (comparer.Compare(x, keys[j]) < 0)
+                        while (_comparer.Compare(x, _keys[j]) < 0)
                         {
                             j--;
                         }
@@ -90,7 +90,7 @@ internal partial class TableLayout
 
                     if (i < j)
                     {
-                        (keys[i], keys[j]) = (keys[j], keys[i]);
+                        (_keys[i], _keys[j]) = (_keys[j], _keys[i]);
                     }
 
                     i++;

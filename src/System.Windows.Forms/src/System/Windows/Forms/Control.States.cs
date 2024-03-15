@@ -3,6 +3,8 @@
 
 namespace System.Windows.Forms;
 
+#pragma warning disable format
+
 public partial class Control
 {
     [Flags]
@@ -41,3 +43,5 @@ public partial class Control
         Mirrored                = 0x40000000,
     }
 }
+
+#pragma warning restore format

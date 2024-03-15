@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 public enum AccessibleEvents
 {
     /// <summary>
-    /// <c>EVENT_SYSTEM_SOUND</c>
+    ///  <c>EVENT_SYSTEM_SOUND</c>
     ///  Sent when a sound is played. Currently nothing is generating this, we
     ///  are going to be cleaning up the SOUNDSENTRY feature in the control panel
     ///  and will use this at that time. Applications implementing WinEvents
@@ -19,85 +19,94 @@ public enum AccessibleEvents
     SystemSound = 0x0001,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_ALERT</c>
+    ///  <c>EVENT_SYSTEM_ALERT</c>
     ///  Sent when an alert needs to be given to the user. MessageBoxes generate
     ///  alerts for example.
     /// </summary>
     SystemAlert = 0x0002,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_FOREGROUND</c>
+    ///  <c>EVENT_SYSTEM_FOREGROUND</c>
     ///  Sent when the foreground (active) window changes, even if it is changing
     ///  to another window in the same thread as the previous one.
     /// </summary>
     SystemForeground = 0x0003,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MENUSTART</c>
+    ///  <c>EVENT_SYSTEM_MENUSTART</c>
     ///  Sent when entering into menu mode (system, app bar, and track popups).
     /// </summary>
     /// <seealso cref="SystemMenuEnd"/>.
     SystemMenuStart = 0x0004,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MENUEND</c>
+    ///  <c>EVENT_SYSTEM_MENUEND</c>
     ///  Sent when leaving from menu mode (system, app bar, and track popups).
     /// </summary>
     /// <seealso cref="SystemMenuStart"/>.
     SystemMenuEnd = 0x0005,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MENUPOPUPSTART</c>
+    ///  <c>EVENT_SYSTEM_MENUPOPUPSTART</c>
     ///  Sent when a menu popup comes up.
     /// </summary>
     /// <remarks>
-    ///  For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
-    ///  followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
+    ///  <para>
+    ///   <seealso cref="SystemMenuPopupEnd"/> is the matching end event.
+    ///  </para>
+    ///  <para>
+    ///   For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
+    ///   followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
+    ///  </para>
     /// </remarks>
     /// <seealso cref="SystemMenuPopupEnd"/>.
     SystemMenuPopupStart = 0x0006,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MENUPOPUPEND</c>
+    ///  <c>EVENT_SYSTEM_MENUPOPUPEND</c>
     ///  Sent when a menu popup just before it is taken down.
     /// </summary>
     /// <remarks>
-    ///  For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
-    ///  followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
+    ///  <para>
+    ///   <seealso cref="SystemMenuPopupStart"/> is the matching start event.
+    ///  </para>
+    ///  <para>
+    ///   For a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
+    ///   followed almost immediately by <c>EVENT_SYSTEM_MENUPOPUPSTART</c> for the popup being shown.
+    ///  </para>
     /// </remarks>
-    /// <seealso cref="SystemMenuPopupStart"/>.
     SystemMenuPopupEnd = 0x0007,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_CAPTURESTART</c>
+    ///  <c>EVENT_SYSTEM_CAPTURESTART</c>
     ///  Sent when a window takes the capture.
     /// </summary>
     /// <seealso cref="SystemCaptureEnd"/>.
     SystemCaptureStart = 0x0008,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_CAPTUREEND</c>
+    ///  <c>EVENT_SYSTEM_CAPTUREEND</c>
     ///  Sent when a window releases the capture.
     /// </summary>
     /// <seealso cref="SystemCaptureStart"/>.
     SystemCaptureEnd = 0x0009,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MOVESIZESTART</c>
+    ///  <c>EVENT_SYSTEM_MOVESIZESTART</c>
     ///  Sent when a window enters move-size dragging mode.
     /// </summary>
     /// <seealso cref="SystemMoveSizeEnd"/>.
     SystemMoveSizeStart = 0x000A,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_MOVESIZEEND</c>
+    ///  <c>EVENT_SYSTEM_MOVESIZEEND</c>
     ///  Sent when a window leaves move-size dragging mode.
     /// </summary>
     /// <seealso cref="SystemMoveSizeStart"/>.
     SystemMoveSizeEnd = 0x000B,
 
     /// <summary>
-    /// <c>EVENT_SYSTEM_CONTEXTHELPSTART</c>
+    ///  <c>EVENT_SYSTEM_CONTEXTHELPSTART</c>
     ///  Sent when a window enters context sensitive help mode.
     /// </summary>
     /// <seealso cref="SystemContextHelpEnd"/>.
@@ -114,18 +123,31 @@ public enum AccessibleEvents
     ///  <c>EVENT_SYSTEM_DRAGDROPSTART</c>
     ///  Sent when a window enters drag drop mode.
     /// </summary>
-    /// <seealso cref="SystemDragDropEnd"/>.
-    // It is up to apps and OLE to generate this, since the system doesn't know.
-    //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
+    /// <remarks>
+    ///  <para>
+    ///   <seealso cref="SystemDragDropEnd"/> is the matching end event.
+    ///  </para>
+    ///  <para>
+    ///   It is up to apps and OLE to generate this, since the system doesn't know.
+    ///   Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
+    ///  </para>
+    /// </remarks>
     SystemDragDropStart = 0x000E,
 
     /// <summary>
     ///  <c>EVENT_SYSTEM_DRAGDROPEND</c>
     ///  Sent when a window leaves drag drop mode.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <seealso cref="SystemDragDropStart"/> is the matching start event.
+    ///  </para>
+    ///  <para>
+    ///   It is up to apps and OLE to generate this, since the system doesn't know.
+    ///   Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
+    ///  </para>
+    /// </remarks>
     /// <seealso cref="SystemDragDropStart"/>.
-    // It is up to apps and OLE to generate this, since the system doesn't know.
-    //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
     SystemDragDropEnd = 0x000F,
 
     /// <summary>

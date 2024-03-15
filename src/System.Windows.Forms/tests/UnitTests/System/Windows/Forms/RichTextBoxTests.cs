@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests;
 
 public class RichTextBoxTests
 {
-    private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
+    private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
     [WinFormsFact]
     public void RichTextBox_Ctor_Default()
@@ -6334,7 +6334,7 @@ public class RichTextBoxTests
     {
         using RichTextBox control = new()
         {
-            SelectionTabs = new int[] { 2, 3, 4 }
+            SelectionTabs = [2, 3, 4]
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -6370,7 +6370,7 @@ public class RichTextBoxTests
         using RichTextBox control = new();
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        control.SelectionTabs = new int[] { 1, 2, 3 };
+        control.SelectionTabs = [1, 2, 3];
         PARAFORMAT format = new()
         {
             cbSize = (uint)sizeof(PARAFORMAT)
@@ -6857,61 +6857,59 @@ public class RichTextBoxTests
         "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
     public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
     {
-        using (RichTextBox control = new())
+        using RichTextBox control = new();
+        control.CreateControl();
+
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        control.HandleCreated += (sender, e) => createdCallCount++;
+
+        // verify against RichEdit20W
+        using (var riched20 = new RichEdit20W())
         {
-            control.CreateControl();
+            riched20.CreateControl();
 
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            // verify against RichEdit20W
-            using (var riched20 = new RichEdit20W())
+            foreach (object[] testCaseData in RichTextBox_Text_GetWithHandle_TestData())
             {
-                riched20.CreateControl();
+                string text = (string)testCaseData[0];
+                string expectedText = (string)testCaseData[1];
+                string oldWayExpectedText = testCaseData.Length > 2 ? (string)testCaseData[2] : SAME;
+                string oldControlExpectedText = testCaseData.Length > 3 ? (string)testCaseData[3] : SAME;
 
-                foreach (object[] testCaseData in RichTextBox_Text_GetWithHandle_TestData())
+                // NOTE: in certain scenarios the old way (using StreamOut() method) returned a different
+                // text value to the new way (via GetTextEx() method).
+                // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
+                if (oldWayExpectedText is SAME)
                 {
-                    string text = (string)testCaseData[0];
-                    string expectedText = (string)testCaseData[1];
-                    string oldWayExpectedText = testCaseData.Length > 2 ? (string)testCaseData[2] : SAME;
-                    string oldControlExpectedText = testCaseData.Length > 3 ? (string)testCaseData[3] : SAME;
-
-                    // NOTE: in certain scenarios the old way (using StreamOut() method) returned a different
-                    // text value to the new way (via GetTextEx() method).
-                    // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
-                    if (oldWayExpectedText is SAME)
-                    {
-                        oldWayExpectedText = expectedText;
-                    }
-
-                    // NOTE: in certain scenarios the old control returns a different text value to the new control.
-                    // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
-                    if (oldControlExpectedText is SAME)
-                    {
-                        oldControlExpectedText = expectedText;
-                    }
-
-                    control.Text = text;
-                    Assert.Equal(expectedText, control.Text);
-
-                    // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
-                    string textOldWay = control.TestAccessor().Dynamic.StreamOut(PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
-                    Assert.Equal(oldWayExpectedText, textOldWay);
-
-                    // verify against RichEdit20W
-                    riched20.Text = text;
-                    Assert.Equal(oldControlExpectedText, riched20.Text);
+                    oldWayExpectedText = expectedText;
                 }
-            }
 
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+                // NOTE: in certain scenarios the old control returns a different text value to the new control.
+                // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
+                if (oldControlExpectedText is SAME)
+                {
+                    oldControlExpectedText = expectedText;
+                }
+
+                control.Text = text;
+                Assert.Equal(expectedText, control.Text);
+
+                // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
+                string textOldWay = control.TestAccessor().Dynamic.StreamOut(PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
+                Assert.Equal(oldWayExpectedText, textOldWay);
+
+                // verify against RichEdit20W
+                riched20.Text = text;
+                Assert.Equal(oldControlExpectedText, riched20.Text);
+            }
         }
+
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
     }
 
     [WinFormsTheory]
@@ -6952,16 +6950,14 @@ public class RichTextBoxTests
         }
 
         // verify against RichEdit20W
-        using (var riched20 = new RichEdit20W())
-        {
-            Assert.Empty(riched20.Text);
-            Assert.False(riched20.IsHandleCreated);
+        using var riched20 = new RichEdit20W();
+        Assert.Empty(riched20.Text);
+        Assert.False(riched20.IsHandleCreated);
 
-            riched20.Text = text;
+        riched20.Text = text;
 
-            Assert.Equal(expected, riched20.Text);
-            Assert.False(riched20.IsHandleCreated);
-        }
+        Assert.Equal(expected, riched20.Text);
+        Assert.False(riched20.IsHandleCreated);
     }
 
     [WinFormsTheory]
@@ -8514,8 +8510,8 @@ public class RichTextBoxTests
         using RichTextBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, RichTextBoxFinds.NoHighlight));
         Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, 0, RichTextBoxFinds.NoHighlight));
-        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start));
-        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start, 0));
+        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(['s'], start));
+        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(['s'], start, 0));
     }
 
     [WinFormsTheory]
@@ -8529,8 +8525,8 @@ public class RichTextBoxTests
         };
         Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, RichTextBoxFinds.NoHighlight));
         Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, 0, RichTextBoxFinds.NoHighlight));
-        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start));
-        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start, 0));
+        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(['s'], start));
+        Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(['s'], start, 0));
     }
 
     [WinFormsFact]
@@ -8538,7 +8534,7 @@ public class RichTextBoxTests
     {
         using RichTextBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find("s", 0, -2, RichTextBoxFinds.NoHighlight));
-        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 0, -2));
+        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(['s'], 0, -2));
     }
 
     [WinFormsFact]
@@ -8549,7 +8545,7 @@ public class RichTextBoxTests
             Text = "t"
         };
         Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find("s", 0, -2, RichTextBoxFinds.NoHighlight));
-        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 0, -2));
+        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(['s'], 0, -2));
     }
 
     [WinFormsFact]
@@ -8561,8 +8557,8 @@ public class RichTextBoxTests
         };
         Assert.Throws<ArgumentException>(() => control.Find("s", 1, 0, RichTextBoxFinds.None));
         Assert.Throws<ArgumentException>(() => control.Find("s", 1, 0, RichTextBoxFinds.Reverse));
-        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
-        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(['s'], 1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(['s'], 1, 0));
     }
 
     [WinFormsFact]
@@ -9774,7 +9770,7 @@ public class RichTextBoxTests
         int currentCodePage = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).CodePage;
 
         // The non-lossy conversion of nbsp only works single byte Windows code pages (e.g. not Japanese).
-        if (currentCodePage >= 1250 && currentCodePage <= 1258)
+        if (currentCodePage is >= 1250 and <= 1258)
         {
             Assert.Equal(input, control.Text[0]);
         }
@@ -10584,30 +10580,28 @@ public class RichTextBoxTests
             Assert.Contains(".RichEdit.", GetClassName(riched32.HWND), StringComparison.Ordinal);
         }
 
-        using (var riched20 = new RichEdit20W())
-        {
-            riched20.CreateControl();
-            Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.Ordinal);
+        using var riched20 = new RichEdit20W();
+        riched20.CreateControl();
+        Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.Ordinal);
 
-            string rtfString = @"{\rtf1\ansi{" +
-                @"The next line\par " +
-                @"is {\v ###NOT### }hidden\par in plain text!}}";
+        string rtfString = @"{\rtf1\ansi{" +
+            @"The next line\par " +
+            @"is {\v ###NOT### }hidden\par in plain text!}}";
 
-            riched20.Rtf = rtfString;
+        riched20.Rtf = rtfString;
 
-            using RichTextBox richTextBox = new();
-            richTextBox.CreateControl();
-            richTextBox.Rtf = rtfString;
+        using RichTextBox richTextBox = new();
+        richTextBox.CreateControl();
+        richTextBox.Rtf = rtfString;
 
-            Assert.Equal(riched20.TextLength, richTextBox.TextLength);
-            Assert.Equal(riched20.Text, richTextBox.Text);
-            Assert.Equal(richTextBox.Text.Length, richTextBox.TextLength);
+        Assert.Equal(riched20.TextLength, richTextBox.TextLength);
+        Assert.Equal(riched20.Text, richTextBox.Text);
+        Assert.Equal(richTextBox.Text.Length, richTextBox.TextLength);
 
-            int startOfIs = riched20.Text.IndexOf("is", StringComparison.Ordinal);
-            int endOfHidden = riched20.Text.IndexOf("hidden", StringComparison.Ordinal) + "hidden".Length;
-            richTextBox.Select(startOfIs, endOfHidden - startOfIs);
-            Assert.Equal("is ###NOT### hidden", richTextBox.SelectedText);
-        }
+        int startOfIs = riched20.Text.IndexOf("is", StringComparison.Ordinal);
+        int endOfHidden = riched20.Text.IndexOf("hidden", StringComparison.Ordinal) + "hidden".Length;
+        richTextBox.Select(startOfIs, endOfHidden - startOfIs);
+        Assert.Equal("is ###NOT### hidden", richTextBox.SelectedText);
     }
 
     [WinFormsTheory]

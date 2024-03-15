@@ -8,19 +8,19 @@ namespace System;
 
 internal class InvariantComparer : IComparer
 {
-    private readonly CompareInfo m_compareInfo;
-    internal static readonly InvariantComparer Default = new();
+    private readonly CompareInfo _compareInfo;
+    internal static InvariantComparer Default { get; } = new();
 
     internal InvariantComparer()
     {
-        m_compareInfo = CultureInfo.InvariantCulture.CompareInfo;
+        _compareInfo = CultureInfo.InvariantCulture.CompareInfo;
     }
 
     public int Compare(object? a, object? b)
     {
         if (a is string sa && b is string sb)
         {
-            return m_compareInfo.Compare(sa, sb);
+            return _compareInfo.Compare(sa, sb);
         }
         else
         {

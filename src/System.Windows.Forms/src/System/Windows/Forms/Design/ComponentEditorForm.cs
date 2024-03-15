@@ -166,7 +166,7 @@ public partial class ComponentEditorForm : Form
     [MemberNotNull(nameof(_selector))]
     private void OnConfigureUI()
     {
-        Font? uiFont = Control.DefaultFont;
+        Font? uiFont = DefaultFont;
         if (_component.Site is not null)
         {
             IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));
@@ -306,10 +306,11 @@ public partial class ComponentEditorForm : Form
             _helpButton
         ]);
 
-        // continuing with the old autoscale base size stuff, it works,
-        // and is currently set to a non-standard height
+        // Continuing with the old autoscale base size stuff, it works, and is currently set to a non-standard height.
         AutoScaleBaseSize = new Size(5, 14);
+#pragma warning disable CS0618 // Type or member is obsolete
         ApplyAutoScaling();
+#pragma warning restore CS0618
     }
 
     protected override void OnActivated(EventArgs e)

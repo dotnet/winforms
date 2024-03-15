@@ -86,8 +86,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     private bool ShouldSerializeAutoScaleBaseSize()
     {
         // Never serialize this unless AutoScale is turned on
-        return _initializing ? false
-            : ((Form)Component).AutoScale && ShadowProperties.Contains(nameof(AutoScaleBaseSize));
+        return !_initializing && ((Form)Component).AutoScale && ShadowProperties.Contains(nameof(AutoScaleBaseSize));
     }
 
     /// <summary>
@@ -162,10 +161,16 @@ internal class FormDocumentDesigner : DocumentDesigner
         get => (double)ShadowProperties[nameof(Opacity)];
         set
         {
-            if (value < 0.0f || value > 1.0f)
+            if (value is < (double)0.0f or > (double)1.0f)
             {
-                throw new ArgumentException(string.Format(SR.InvalidBoundArgument, "value", value.ToString(CultureInfo.CurrentCulture),
-                                                                (0.0f).ToString(CultureInfo.CurrentCulture), (1.0f).ToString(CultureInfo.CurrentCulture)), nameof(value));
+                throw new ArgumentException(
+                    string.Format(
+                        SR.InvalidBoundArgument,
+                        "value",
+                        value.ToString(CultureInfo.CurrentCulture),
+                        (0.0f).ToString(CultureInfo.CurrentCulture),
+                        (1.0f).ToString(CultureInfo.CurrentCulture)),
+                    nameof(value));
             }
 
             ShadowProperties[nameof(Opacity)] = value;
@@ -196,17 +201,17 @@ internal class FormDocumentDesigner : DocumentDesigner
                 for (int i = 0; i < snapLines.Count; i++)
                 {
                     // remove previous padding snaplines
-                    if (snapLines[i] is SnapLine snapLine && snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
+                    if (snapLines[i] is SnapLine snapLine && snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding, StringComparison.Ordinal))
                     {
                         if (snapLine.Filter.Equals(SnapLine.PaddingLeft) || snapLine.Filter.Equals(SnapLine.PaddingTop))
                         {
-                            snapLine.AdjustOffset(DesignerUtils.DEFAULTFORMPADDING);
+                            snapLine.AdjustOffset(DesignerUtils.s_defaultFormPadding);
                             paddingsFound++;
                         }
 
                         if (snapLine.Filter.Equals(SnapLine.PaddingRight) || snapLine.Filter.Equals(SnapLine.PaddingBottom))
                         {
-                            snapLine.AdjustOffset(-DesignerUtils.DEFAULTFORMPADDING);
+                            snapLine.AdjustOffset(-DesignerUtils.s_defaultFormPadding);
                             paddingsFound++;
                         }
 

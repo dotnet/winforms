@@ -65,7 +65,7 @@ public class OpacityConverter : TypeConverter
             }
 
             // Now check to see if it is within our bounds.
-            if (percent < 0.0 || percent > 1.0)
+            if (percent is < 0.0 or > 1.0)
             {
                 throw new FormatException(
                     string.Format(SR.InvalidBoundArgument,
