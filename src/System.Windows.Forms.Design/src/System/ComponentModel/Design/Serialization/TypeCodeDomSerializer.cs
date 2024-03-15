@@ -104,11 +104,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                     }
                 }
 
-                CodeMemberMethod[] methods = GetInitializeMethods(manager, declaration);
-                if (methods is null)
-                {
-                    throw new InvalidOperationException();
-                }
+                CodeMemberMethod[] methods = GetInitializeMethods(manager, declaration)
+                    ?? throw new InvalidOperationException();
 
                 Trace(TraceLevel.Verbose, $"Members to deserialize: {_nameTable.Keys.Count}");
                 Trace(TraceLevel.Verbose, $"Methods to deserialize: {methods.Length}");
@@ -500,11 +497,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                     CodeStatementCollection? statements = statementCtx.StatementCollection[member];
                     if (statements is not null)
                     {
-                        CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member);
-                        if (method is null)
-                        {
-                            throw new InvalidOperationException();
-                        }
+                        CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member)
+                            ?? throw new InvalidOperationException();
 
                         if (!methodMap.TryGetValue(method.Name, out CodeMethodMap? map))
                         {
@@ -525,11 +519,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         CodeStatementCollection? rootStatements = statementCtx.StatementCollection[root];
         if (rootStatements is not null)
         {
-            CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root);
-            if (rootMethod is null)
-            {
-                throw new InvalidOperationException();
-            }
+            CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root)
+                ?? throw new InvalidOperationException();
 
             if (!methodMap.TryGetValue(rootMethod.Name, out CodeMethodMap? rootMap))
             {

@@ -17,8 +17,10 @@ internal class MaskedTextBoxTextEditor : UITypeEditor
 
         if (context.Instance is not MaskedTextBox maskedTextBox)
         {
-            maskedTextBox = new();
-            maskedTextBox.Text = value as string;
+            maskedTextBox = new()
+            {
+                Text = value as string
+            };
         }
 
         MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);

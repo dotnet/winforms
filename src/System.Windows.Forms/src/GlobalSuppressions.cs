@@ -210,3 +210,5 @@
 // Matches native naming
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Matches native naming", Scope = "member", Target = "~F:System.Windows.Forms.Control.WM_GETCONTROLNAME")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Matches native naming", Scope = "member", Target = "~F:System.Windows.Forms.Control.WM_GETCONTROLTYPE")]
+
+[assembly: SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "CreatesAmbiguity", Scope = "member", Target = "~M:System.Windows.Forms.ListViewGroupConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext)~System.ComponentModel.TypeConverter.StandardValuesCollection")]

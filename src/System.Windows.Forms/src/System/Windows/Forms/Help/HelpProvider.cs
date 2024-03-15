@@ -98,7 +98,7 @@ public class HelpProvider : Component, IExtenderProvider
     public virtual bool GetShowHelp(Control ctl)
     {
         ArgumentNullException.ThrowIfNull(ctl);
-        return _showHelp.TryGetValue(ctl, out bool value) ? value : false;
+        return _showHelp.TryGetValue(ctl, out bool value) && value;
     }
 
     /// <summary>

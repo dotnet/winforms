@@ -246,7 +246,7 @@ public partial class CollectionEditor
 
                 if (_createdItems is not null)
                 {
-                    if (_createdItems is [IComponent {Site: not null}, ..])
+                    if (_createdItems is [IComponent { Site: not null }, ..])
                     {
                         // here we bail now because we don't want to do the "undo" manually,
                         // we're part of a transaction, we've added item, the rollback will be
@@ -256,7 +256,7 @@ public partial class CollectionEditor
                         return;
                     }
 
-                    object[] items = _createdItems.ToArray();
+                    object[] items = [.. _createdItems];
                     for (int i = 0; i < items.Length; i++)
                     {
                         DestroyInstance(items[i]);
@@ -272,7 +272,7 @@ public partial class CollectionEditor
                 // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
                 if (_originalItems is not null && _originalItems.Count > 0)
                 {
-                    Items = _originalItems.ToArray();
+                    Items = [.. _originalItems];
                     _originalItems.Clear();
                 }
                 else
@@ -324,9 +324,7 @@ public partial class CollectionEditor
                 }
 
                 int ti = _listBox.TopIndex;
-                object itemMove = _listBox.Items[index];
-                _listBox.Items[index] = _listBox.Items[index + 1];
-                _listBox.Items[index + 1] = itemMove;
+                (_listBox.Items[index + 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index + 1]);
 
                 if (ti < _listBox.Items.Count - 1)
                 {
@@ -522,32 +520,30 @@ public partial class CollectionEditor
                 return;
             }
 
-            using (Graphics g = _listBox.CreateGraphics())
+            using Graphics g = _listBox.CreateGraphics();
+            int old = _listBox.HorizontalExtent;
+
+            if (item is not null)
             {
-                int old = _listBox.HorizontalExtent;
-
-                if (item is not null)
+                int w = CalcItemWidth(g, item);
+                if (w > old)
                 {
-                    int w = CalcItemWidth(g, item);
-                    if (w > old)
+                    _listBox.HorizontalExtent = w;
+                }
+            }
+            else
+            {
+                int max = 0;
+                foreach (ListItem i in _listBox.Items)
+                {
+                    int w = CalcItemWidth(g, i);
+                    if (w > max)
                     {
-                        _listBox.HorizontalExtent = w;
+                        max = w;
                     }
                 }
-                else
-                {
-                    int max = 0;
-                    foreach (ListItem i in _listBox.Items)
-                    {
-                        int w = CalcItemWidth(g, i);
-                        if (w > max)
-                        {
-                            max = w;
-                        }
-                    }
 
-                    _listBox.HorizontalExtent = max;
-                }
+                _listBox.HorizontalExtent = max;
             }
         }
 
@@ -689,7 +685,7 @@ public partial class CollectionEditor
 
                 if (_removedItems is not null && _dirty)
                 {
-                    object[] deadItems = _removedItems.ToArray();
+                    object[] deadItems = [.. _removedItems];
 
                     for (int i = 0; i < deadItems.Length; i++)
                     {
@@ -997,9 +993,7 @@ public partial class CollectionEditor
             {
                 SuspendEnabledUpdates();
                 int ti = _listBox.TopIndex;
-                object itemMove = _listBox.Items[index];
-                _listBox.Items[index] = _listBox.Items[index - 1];
-                _listBox.Items[index - 1] = itemMove;
+                (_listBox.Items[index - 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index - 1]);
 
                 if (ti > 0)
                 {

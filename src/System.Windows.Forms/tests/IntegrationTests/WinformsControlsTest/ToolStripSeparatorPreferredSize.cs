@@ -39,12 +39,12 @@ internal class ToolStripSeparatorPreferredSize : Form
         // 
         // toolStrip1
         // 
-        _toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-        {
+        _toolStrip1.Items.AddRange((ToolStripItem[])
+        [
             _toolStripLabel1,
             _toolStripSeparator1,
             _toolStripLabel2
-        });
+        ]);
         _toolStrip1.Location = new System.Drawing.Point(0, 0);
         _toolStrip1.Name = "toolStrip1";
         _toolStrip1.Size = new System.Drawing.Size(481, 22);

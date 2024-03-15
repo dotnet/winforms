@@ -8,7 +8,9 @@ internal partial class Com2PropertyDescriptor
     private readonly ref struct ValidityScope
     {
 #pragma warning disable IDE0036 // Order modifiers (currently broken, required must come first)
+#pragma warning disable SA1206 // Declaration keywords should follow order
         required public Com2Properties? Properties { get; init; }
+#pragma warning restore SA1206
 #pragma warning restore IDE0036
 
         [SetsRequiredMembers]

@@ -89,7 +89,7 @@ internal sealed class ToolStripDesignerUtils
         ToolStrip parent;
         if (component is ToolStripItem stripItem)
         {
-            if (!(stripItem is ToolStripDropDownItem))
+            if (stripItem is not ToolStripDropDownItem)
             {
                 parent = stripItem.Owner;
             }
@@ -177,9 +177,9 @@ internal sealed class ToolStripDesignerUtils
 
         currentName ??= itemType.Name;
 
-        if (currentName.StartsWith("ToolStrip"))
+        if (currentName.StartsWith("ToolStrip", StringComparison.Ordinal))
         {
-            return currentName.Substring(TOOLSTRIPCHARCOUNT);
+            return currentName[TOOLSTRIPCHARCOUNT..];
         }
 
         return currentName;
@@ -391,9 +391,9 @@ internal sealed class ToolStripDesignerUtils
         {
             contextMenu.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
             contextMenu.Font = (Font)uis.Styles["DialogFont"];
-            if (uis.Styles["VsColorPanelText"] is Color)
+            if (uis.Styles["VsColorPanelText"] is Color color)
             {
-                contextMenu.ForeColor = (Color)uis.Styles["VsColorPanelText"];
+                contextMenu.ForeColor = color;
             }
         }
 

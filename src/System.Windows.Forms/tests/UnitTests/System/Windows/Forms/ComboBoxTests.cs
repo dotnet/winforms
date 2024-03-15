@@ -460,7 +460,7 @@ public class ComboBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -473,7 +473,7 @@ public class ComboBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -2250,12 +2250,12 @@ public class ComboBoxTests
     {
         using OwnerDrawComboBox ownerDrawComboBox = new();
         ownerDrawComboBox.CreateControl();
-        ownerDrawComboBox.Items.AddRange(new object[]
-        {
+        ownerDrawComboBox.Items.AddRange(
+        [
             "One",
             "Two",
             "Three"
-        });
+        ]);
         ownerDrawComboBox.Location = new Point(0, 50);
         Assert.Equal(3, ownerDrawComboBox.MeasureItemEventArgs.Count);
 
@@ -2306,7 +2306,7 @@ public class ComboBoxTests
             FormattingEnabled = true;
         }
 
-        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = new();
+        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = [];
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {

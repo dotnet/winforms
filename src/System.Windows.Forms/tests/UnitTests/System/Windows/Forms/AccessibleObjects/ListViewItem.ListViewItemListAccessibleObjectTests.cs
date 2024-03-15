@@ -49,7 +49,7 @@ public class ListViewItem_ListViewItemListAccessibleObjectTests
     {
         using ListView control = new();
         control.View = View.List;
-        control.Items.AddRange(new ListViewItem[] { new(), new(), new() });
+        control.Items.AddRange((ListViewItem[])[new(), new(), new()]);
         control.CreateControl();
 
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;
@@ -68,7 +68,7 @@ public class ListViewItem_ListViewItemListAccessibleObjectTests
     {
         using ListView control = new();
         control.View = View.List;
-        control.Items.AddRange(new ListViewItem[] { new(), new(), new() });
+        control.Items.AddRange((ListViewItem[])[new(), new(), new()]);
         control.CreateControl();
 
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;

@@ -301,8 +301,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             for (int i = 0; i < dragComps.Length; i++)
             {
-                IComponent comp = dragComps[i] as IComponent;
-                if (host is null || dragComps[i] is null || comp is null)
+                if (host is null || dragComps[i] is null || dragComps[i] is not IComponent comp)
                 {
                     continue;
                 }
@@ -942,22 +941,18 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
             // This is the mirror to logic in ParentControlDesigner.  The component should be
             // added somewhere, and this logic decides where.
-            //
 
             // LETS SEE IF WE ARE TOOLSTRIP in which case we want to get added
             // to the componentTray even though this is a control..
             // We should think of implementing an interface so that we can have many more
             // controls behaving like this.
-            //
-            ToolStripDesigner td = host.GetDesigner(component) as ToolStripDesigner;
 
-            if (td is null)
+            if (host.GetDesigner(component) is not ToolStripDesigner td)
             {
                 ControlDesigner cd = host.GetDesigner(component) as ControlDesigner;
                 if (cd is not null)
                 {
-                    Form form = cd.Control as Form;
-                    if (form is null || !form.TopLevel)
+                    if (cd.Control is not Form form || !form.TopLevel)
                     {
                         addControl = false;
                     }
@@ -1011,7 +1006,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private void OnComponentRemoved(object source, ComponentEventArgs ce)
     {
         // ToolStrip is designableAsControl but has a ComponentTray Entry ... so special case it out.
-        bool designableAsControl = (ce.Component is Control && !(ce.Component is ToolStrip)) && !(ce.Component is Form && ((Form)ce.Component).TopLevel);
+        bool designableAsControl = ce.Component is Control
+            && ce.Component is not ToolStrip
+            && !(ce.Component is Form form && form.TopLevel);
+
         if (!designableAsControl && _componentTray is not null)
         {
             _componentTray.RemoveComponent(ce.Component);
@@ -1116,9 +1114,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     {
         Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking to see if: {format} is supported.");
 
-        IDataObject dataObject = serializedData as IDataObject;
-
-        if (dataObject is null)
+        if (serializedData is not IDataObject dataObject)
         {
             Debug.Fail("Toolbox service didn't pass us a data object; that should never happen");
             return null;

@@ -22,7 +22,7 @@ internal class ScreenRecordService : IDisposable
     /// <remarks>
     ///  <para>Lock on this object before accessing to prevent concurrent accesses.</para>
     /// </remarks>
-    private static readonly List<(TimeSpan elapsed, Bitmap image)> s_frames = new();
+    private static readonly List<(TimeSpan elapsed, Bitmap image)> s_frames = [];
     private static readonly ArrayPool<byte> s_pool = ArrayPool<byte>.Shared;
 
     private static ScreenRecordService? s_currentInstance;
@@ -138,7 +138,7 @@ internal class ScreenRecordService : IDisposable
                         return;
                     }
 
-                    frames = s_frames.ToArray();
+                    frames = [.. s_frames];
                 }
 
                 // Make sure the frames are processed in order of their timestamps
@@ -147,45 +147,44 @@ internal class ScreenRecordService : IDisposable
 
                 try
                 {
-                    using (var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+                    using var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                    var crc = new Crc32();
+                    byte[] buffer = s_pool.Rent(4096);
+
+                    try
                     {
-                        var crc = new Crc32();
-                        byte[] buffer = s_pool.Rent(4096);
-                        try
+                        (TimeSpan elapsed, Bitmap image, Size offset) firstFrame = croppedFrames[0];
+                        (ReadOnlyMemory<byte> signature, ReadOnlyMemory<byte> ihdr, ImmutableArray<ReadOnlyMemory<byte>> idat, ReadOnlyMemory<byte> iend) firstEncoded = EncodeFrame(firstFrame.image);
+
+                        // PNG Signature (8 bytes)
+                        WritePngSignature(fileStream, buffer);
+
+                        // IHDR
+                        Write(fileStream, buffer, crc: null, firstEncoded.ihdr.Span);
+
+                        // acTL
+                        WriteActl(fileStream, buffer, crc, croppedFrames.Length, playCount: 1);
+
+                        // Write the first frame data as IDAT
+                        WriteFctl(fileStream, buffer, crc, sequenceNumber: 0, size: new Size(firstFrame.image.Width, firstFrame.image.Height), offset: firstFrame.offset, delay: TimeSpan.Zero, ApngDisposeOp.None, ApngBlendOp.Source);
+                        foreach (ReadOnlyMemory<byte> idat in firstEncoded.idat)
                         {
-                            (TimeSpan elapsed, Bitmap image, Size offset) firstFrame = croppedFrames[0];
-                            (ReadOnlyMemory<byte> signature, ReadOnlyMemory<byte> ihdr, ImmutableArray<ReadOnlyMemory<byte>> idat, ReadOnlyMemory<byte> iend) firstEncoded = EncodeFrame(firstFrame.image);
-
-                            // PNG Signature (8 bytes)
-                            WritePngSignature(fileStream, buffer);
-
-                            // IHDR
-                            Write(fileStream, buffer, crc: null, firstEncoded.ihdr.Span);
-
-                            // acTL
-                            WriteActl(fileStream, buffer, crc, croppedFrames.Length, playCount: 1);
-
-                            // Write the first frame data as IDAT
-                            WriteFctl(fileStream, buffer, crc, sequenceNumber: 0, size: new Size(firstFrame.image.Width, firstFrame.image.Height), offset: firstFrame.offset, delay: TimeSpan.Zero, ApngDisposeOp.None, ApngBlendOp.Source);
-                            foreach (ReadOnlyMemory<byte> idat in firstEncoded.idat)
-                            {
-                                Write(fileStream, buffer, crc: null, idat.Span);
-                            }
-
-                            // Write the remaining frames as fDAT
-                            int sequenceNumber = 1;
-                            for (int i = 1; i < croppedFrames.Length; i++)
-                            {
-                                TimeSpan elapsed = croppedFrames[i].elapsed - croppedFrames[i - 1].elapsed;
-                                WriteFrame(fileStream, buffer, crc, ref sequenceNumber, croppedFrames[i].image, croppedFrames[i].offset, elapsed);
-                            }
-
-                            WriteIend(fileStream, buffer, crc);
+                            Write(fileStream, buffer, crc: null, idat.Span);
                         }
-                        finally
+
+                        // Write the remaining frames as fDAT
+                        int sequenceNumber = 1;
+                        for (int i = 1; i < croppedFrames.Length; i++)
                         {
-                            s_pool.Return(buffer);
+                            TimeSpan elapsed = croppedFrames[i].elapsed - croppedFrames[i - 1].elapsed;
+                            WriteFrame(fileStream, buffer, crc, ref sequenceNumber, croppedFrames[i].image, croppedFrames[i].offset, elapsed);
                         }
+
+                        WriteIend(fileStream, buffer, crc);
+                    }
+                    finally
+                    {
+                        s_pool.Return(buffer);
                     }
                 }
                 finally
@@ -245,7 +244,7 @@ internal class ScreenRecordService : IDisposable
             // Even frame indexes go into the first slot of the image buffer. Odd frame indexes go into the second slot.
             lockedBitmaps[0] = (frames[0].image, frames[0].image.LockBits(bounds, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb));
             int stride = lockedBitmaps[0].data.Stride;
-            Assert.True(stride % BytesPerPixel == 0);
+            Assert.Equal(0, stride % BytesPerPixel);
             int stridePixels = stride / 4;
             int totalLockedPixels = stridePixels * lockedBitmaps[0].data.Height;
 
@@ -331,7 +330,7 @@ internal class ScreenRecordService : IDisposable
                 image?.UnlockBits(data);
         }
 
-        return resultFrames.ToArray();
+        return [.. resultFrames];
     }
 
     private static void WritePngSignature(Stream stream, byte[] buffer)
@@ -449,7 +448,7 @@ internal class ScreenRecordService : IDisposable
         }
 
         Assert.False(ihdr.IsEmpty);
-        Assert.False(idat.Count == 0);
+        Assert.NotEqual(0, idat.Count);
         Assert.False(iend.IsEmpty);
 
         return (signature, ihdr, idat.ToImmutableArray(), iend);
@@ -512,7 +511,7 @@ internal class ScreenRecordService : IDisposable
 
     private static void WritePngByte(Stream stream, Crc32? crc, byte value)
     {
-        Span<byte> buffer = stackalloc byte[] { value };
+        Span<byte> buffer = [value];
         crc?.Append(buffer);
         stream.WriteByte(value);
     }

@@ -5,12 +5,12 @@ Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO.Pipes
 Imports System.Reflection
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -87,7 +87,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
         Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
-
         Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
 
         Private ReadOnly _splashLock As New Object
@@ -104,7 +103,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Whether we have made it through the processing of OnInitialize.
         Private _finishedOnInitialize As Boolean
-
         Private _networkAvailabilityEventHandlers As List(Of Devices.NetworkAvailableEventHandler)
         Private _networkObject As Devices.Network
 
@@ -126,13 +124,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' For splash screens with a minimum display time, this let's us know when that time
         ' has expired and it is OK to close the splash screen.
         Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
-
         Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
-
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -351,7 +347,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -383,7 +379,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
@@ -400,7 +396,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
 
                 _splashScreen = value
@@ -499,13 +495,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
-
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
+            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
-                HighDpiMode) With {
-                    .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
-                }
+                HighDpiMode) With
+            {
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            }
+
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
@@ -929,6 +926,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
+
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions

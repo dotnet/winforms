@@ -298,7 +298,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
 
         _selected = false;
 
-        if (!(_host.RootComponent is Control))
+        if (_host.RootComponent is not Control)
         {
             return;
         }
@@ -449,12 +449,12 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 }
             }
         }
-        else if (comp is ToolStripItem) // case (c)
+        else if (comp is ToolStripItem item) // case (c)
         {
-            if (!(((ToolStripItem)comp).GetCurrentParent() is ToolStripDropDown parent))
+            if (item.GetCurrentParent() is not ToolStripDropDown parent)
             {
-                // Try if the item has not laid out...
-                parent = ((ToolStripItem)comp).Owner as ToolStripDropDown;
+                // Try if the item has not laid out.
+                parent = item.Owner as ToolStripDropDown;
             }
 
             if (parent is not null && parent.Visible)

@@ -201,32 +201,21 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     {
         try
         {
-            // - step.1
-            // - get the IDesignerHost
-            // - if we are not able to get it
-            // - then rollback (return without do nothing)
+            // Create a new component and initialize it via its designer
+
             host = GetIDesignerHost();
-            if (host is null)
+            if (host is null
+                || host.RootComponent is null
+                || host.CreateComponent(typeof(TComponent)) is not IComponent newComp
+                || host.GetDesigner(newComp) is not IDesigner designer)
+            {
                 return default;
-            // - check if the root component has already been set
-            // - if not so then rollback (return without do nothing)
-            if (host.RootComponent is null)
-                return default;
-            // -
-            // -
-            // - step.2
-            // - create a new component and initialize it via its designer
-            // - if the component has not a designer
-            // - then rollback (return without do nothing)
-            // - else do the initialization
-            IComponent newComp = host.CreateComponent(typeof(TComponent));
-            if (newComp is null)
-                return default;
-            IDesigner designer = host.GetDesigner(newComp);
-            if (designer is null)
-                return default;
-            if (designer is IComponentInitializer)
-                ((IComponentInitializer)designer).InitializeNewComponent(null);
+            }
+
+            if (designer is IComponentInitializer initializer)
+            {
+                initializer.InitializeNewComponent(null);
+            }
 
             return (TComponent)newComp;
         }
@@ -236,10 +225,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
     }
 
-    public IDesignerHost GetIDesignerHost()
-    {
-        return (IDesignerHost)(GetService(typeof(IDesignerHost)));
-    }
+    public IDesignerHost GetIDesignerHost() => (IDesignerHost)GetService(typeof(IDesignerHost));
 
     public Control GetView()
     {
@@ -341,9 +327,12 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
 
         // - 4. UndoEngine
-        _undoEngine = new UndoEngineExt(ServiceContainer);
-        // - disable the UndoEngine
-        _undoEngine.Enabled = false;
+        _undoEngine = new UndoEngineExt(ServiceContainer)
+        {
+            // Disable the UndoEngine
+            Enabled = false
+        };
+
         if (_undoEngine is not null)
         {
             // - the UndoEngine is ready to be replaced

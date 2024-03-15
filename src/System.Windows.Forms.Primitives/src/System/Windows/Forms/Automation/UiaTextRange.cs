@@ -672,7 +672,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             || (char.IsPunctuation(ch1) && char.IsWhiteSpace(ch2));
     }
 
-    private static bool IsApostrophe(char ch) => ch == '\'' || ch == (char)0x2019; // Unicode Right Single Quote Mark
+    private static bool IsApostrophe(char ch) => ch is '\'' or ((char)0x2019); // Unicode Right Single Quote Mark
 
     /// <devdoc>
     ///  Attribute values and their types are defined here - https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
@@ -692,7 +692,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             UIA_TEXTATTRIBUTE_ID.UIA_IsReadOnlyAttributeId => GetReadOnly(),
             UIA_TEXTATTRIBUTE_ID.UIA_StrikethroughStyleAttributeId => GetStrikethroughStyle(_provider.Logfont),
             UIA_TEXTATTRIBUTE_ID.UIA_UnderlineStyleAttributeId => GetUnderlineStyle(_provider.Logfont),
-            _  => null
+            _ => null
         };
 
 #if DEBUG

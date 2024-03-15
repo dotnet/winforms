@@ -74,10 +74,7 @@ public class TestAccessor<T> : ITestAccessor
             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
             binder: null,
             types,
-            modifiers: null);
-
-        if (methodInfo is null)
-            throw new ArgumentException($"Could not find non public method {methodName}.");
+            modifiers: null) ?? throw new ArgumentException($"Could not find non public method {methodName}.");
 
         return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
     }

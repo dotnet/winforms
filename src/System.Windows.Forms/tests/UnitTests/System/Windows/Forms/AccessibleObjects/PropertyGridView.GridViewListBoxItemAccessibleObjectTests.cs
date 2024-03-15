@@ -15,7 +15,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
     {
         Type type = typeof(PropertyGridView)
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        Assert.Throws<TargetInvocationException>(() => (AccessibleObject)Activator.CreateInstance(type, new object[] { null, new ItemArray.Entry("A") }));
+        Assert.Throws<TargetInvocationException>(() => (AccessibleObject)Activator.CreateInstance(type, [null, new ItemArray.Entry("A")]));
     }
 
     [WinFormsFact]
@@ -24,7 +24,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
         using GridViewListBox control = new(new PropertyGridView(null, null));
         Type type = typeof(PropertyGridView)
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        Assert.Throws<TargetInvocationException>(() => (AccessibleObject)Activator.CreateInstance(type, new object[] { control, null }));
+        Assert.Throws<TargetInvocationException>(() => (AccessibleObject)Activator.CreateInstance(type, [control, null]));
     }
 
     [WinFormsFact]
@@ -33,7 +33,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
         using GridViewListBox control = new(new PropertyGridView(null, null));
         Type type = typeof(PropertyGridView)
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { control, new ItemArray.Entry("A") });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [control, new ItemArray.Entry("A")]);
 
         Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentRoot);
         Assert.False(control.IsHandleCreated);
@@ -49,7 +49,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
         Type type = typeof(PropertyGridView)
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var itemEntry = new ItemArray.Entry(testName);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { control, itemEntry });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [control, itemEntry]);
 
         Assert.Equal(itemEntry.ToString(), accessibleObject.Name);
         Assert.False(control.IsHandleCreated);
@@ -62,7 +62,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
         using GridViewListBox control = new(new PropertyGridView(null, null));
         Type type = typeof(PropertyGridView)
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { control, new ItemArray.Entry("A") });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [control, new ItemArray.Entry("A")]);
 
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(control.IsHandleCreated);

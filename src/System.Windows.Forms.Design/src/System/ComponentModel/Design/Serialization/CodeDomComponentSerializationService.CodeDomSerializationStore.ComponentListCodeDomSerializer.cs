@@ -201,7 +201,7 @@ public sealed partial class CodeDomComponentSerializationService
                 // We need to resolve the first chunk using the manager. other chunks will be resolved within the nested containers.
                 int curIndex = name.IndexOf('.');
                 Debug.Assert(curIndex > 0, "ResolvedNestedName accepts only nested names!");
-                outerComponent = name.Substring(0, curIndex);
+                outerComponent = name[..curIndex];
                 IComponent? curComp = manager.GetInstance(outerComponent) as IComponent;
 
                 do
@@ -212,7 +212,7 @@ public sealed partial class CodeDomComponentSerializationService
                     moreChunks = curIndex != -1;
                     string compName = moreChunks
                         ? name.Substring(prevIndex + 1, curIndex)
-                        : name.Substring(prevIndex + 1);
+                        : name[(prevIndex + 1)..];
 
                     if (string.IsNullOrEmpty(compName))
                     {

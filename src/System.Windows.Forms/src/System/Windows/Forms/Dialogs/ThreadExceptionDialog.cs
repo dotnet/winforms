@@ -392,6 +392,6 @@ public class ThreadExceptionDialog : Form
             i--;
         }
 
-        return s.Substring(0, i);
+        return s[..i];
     }
 }

@@ -44,7 +44,7 @@ public class ArrayEditor : CollectionEditor
     /// </summary>
     protected override object SetItems(object editValue, object[] value)
     {
-        if (editValue is not null && !(editValue is Array))
+        if (editValue is not null and not Array)
         {
             return editValue;
         }

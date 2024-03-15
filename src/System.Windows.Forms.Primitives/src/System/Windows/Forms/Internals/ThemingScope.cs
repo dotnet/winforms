@@ -35,7 +35,7 @@ internal unsafe ref struct ThemingScope
         }
     }
 
-    public void Dispose()
+    public readonly void Dispose()
     {
         if (_cookie != 0)
         {

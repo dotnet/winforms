@@ -279,7 +279,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// </summary>
     private void EndDragDrop(bool allowSetChildIndexOnDrop)
     {
-        if (!(_data.Target is Control dragTarget))
+        if (_data.Target is not Control dragTarget)
         {
             return; // can't deal with a non-control drop target yet
         }
@@ -885,7 +885,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// </summary>
     private void InitiateDrag(Point initialMouseLocation, ICollection<IComponent> dragComps)
     {
-        _dragObjects = dragComps.ToList();
+        _dragObjects = [.. dragComps];
         DisableAdorners(_serviceProviderSource, _behaviorServiceSource, false);
         Control primaryControl = _dragObjects[0] as Control;
         Control primaryParent = primaryControl?.Parent;
@@ -980,20 +980,18 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         // Draw each control into the dragimage
         using (Graphics g = Graphics.FromImage(_dragImage))
         {
-            using (SolidBrush brush = new(primaryControl.BackColor))
+            using SolidBrush brush = new(primaryControl.BackColor);
+            for (int i = 0; i < _dragComponents.Length; i++)
             {
-                for (int i = 0; i < _dragComponents.Length; i++)
-                {
-                    Rectangle controlRect = new(_dragComponents[i].draggedLocation.X - _dragImageRect.X,
-                                              _dragComponents[i].draggedLocation.Y - _dragImageRect.Y,
-                                              _dragComponents[i].dragImage.Width, _dragComponents[i].dragImage.Height);
-                    // The background
-                    g.FillRectangle(brush, controlRect);
-                    // The foreground
-                    g.DrawImage(_dragComponents[i].dragImage, controlRect,
-                                new Rectangle(0, 0, _dragComponents[i].dragImage.Width, _dragComponents[i].dragImage.Height),
-                                GraphicsUnit.Pixel);
-                }
+                Rectangle controlRect = new(_dragComponents[i].draggedLocation.X - _dragImageRect.X,
+                                          _dragComponents[i].draggedLocation.Y - _dragImageRect.Y,
+                                          _dragComponents[i].dragImage.Width, _dragComponents[i].dragImage.Height);
+                // The background
+                g.FillRectangle(brush, controlRect);
+                // The foreground
+                g.DrawImage(_dragComponents[i].dragImage, controlRect,
+                            new Rectangle(0, 0, _dragComponents[i].dragImage.Width, _dragComponents[i].dragImage.Height),
+                            GraphicsUnit.Pixel);
             }
         }
 

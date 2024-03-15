@@ -101,7 +101,7 @@ public static class CommonTestHelperEx
         TheoryData<Cursor> data = new()
         {
             null,
-            new((IntPtr)1)
+            new(1)
         };
         return data;
     }

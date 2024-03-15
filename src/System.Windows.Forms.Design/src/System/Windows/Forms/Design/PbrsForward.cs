@@ -71,8 +71,9 @@ internal partial class PbrsForward : IWindowTarget
         // Here lets query for the ISupportInSituService.
         // If we find the service then ask if it has a designer which is interested
         // in getting the keychars by querying the IgnoreMessages.
-        if ((m.Msg >= (int)PInvoke.WM_KEYFIRST && m.Msg <= (int)PInvoke.WM_KEYLAST)
-           || (m.Msg >= (int)PInvoke.WM_IME_STARTCOMPOSITION && m.Msg <= (int)PInvoke.WM_IME_COMPOSITION))
+        if (m.Msg is >= ((int)PInvoke.WM_KEYFIRST)
+            and <= ((int)PInvoke.WM_KEYLAST) or >= ((int)PInvoke.WM_IME_STARTCOMPOSITION)
+            and <= ((int)PInvoke.WM_IME_COMPOSITION))
         {
             if (InSituSupportService is not null)
             {

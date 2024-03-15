@@ -440,7 +440,7 @@ internal sealed class SelectionManager : IDisposable
             }
 
             _previousPrimarySelection = primarySelection;
-            _previousSelectionBounds = _currentSelectionBounds.Length > 0 ? _currentSelectionBounds.AsSpan().ToArray() : null;
+            _previousSelectionBounds = _currentSelectionBounds.Length > 0 ? [.. _currentSelectionBounds] : null;
 
             _selectionChanging = false;
         }

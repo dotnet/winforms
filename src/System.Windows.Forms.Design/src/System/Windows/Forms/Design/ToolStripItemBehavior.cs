@@ -626,9 +626,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     {
         ToolStripItem currentDropItem = ToolStripDesigner.s_dragItem;
         // Ensure that the list item index is contained in the data.
-        if (e.Data is ToolStripItemDataObject && currentDropItem is not null)
+        if (e.Data is ToolStripItemDataObject data && currentDropItem is not null)
         {
-            ToolStripItemDataObject data = (ToolStripItemDataObject)e.Data;
             // Get the PrimarySelection before the Drag operation...
             ToolStripItem selectedItem = data.PrimarySelection;
             IDesignerHost designerHost = (IDesignerHost)currentDropItem.Site.GetService(typeof(IDesignerHost));
@@ -711,9 +710,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         if (selSvc is not null)
                         {
                             // Insert the item.
-                            if (parentToolStrip is ToolStripOverflow)
+                            if (parentToolStrip is ToolStripOverflow overflow)
                             {
-                                parentToolStrip = (((ToolStripOverflow)parentToolStrip).OwnerItem).Owner;
+                                parentToolStrip = overflow.OwnerItem.Owner;
                             }
 
                             int indexOfItemUnderMouseToDrop = parentToolStrip.Items.IndexOf(ToolStripDesigner.s_dragItem);

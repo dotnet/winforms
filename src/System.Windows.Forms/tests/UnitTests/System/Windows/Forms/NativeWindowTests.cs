@@ -539,7 +539,7 @@ public class NativeWindowTests
     {
         public Predicate<int> MessageTypePredicate { get; set; }
 
-        public List<Message> Messages { get; } = new();
+        public List<Message> Messages { get; } = [];
 
         protected override void WndProc(ref Message m)
         {

@@ -173,7 +173,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (ContextMenuStrip is not {Visible: true})
+            if (ContextMenuStrip is not { Visible: true })
             {
                 SetButtonDrawState();
                 if (Parent is not null && Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))

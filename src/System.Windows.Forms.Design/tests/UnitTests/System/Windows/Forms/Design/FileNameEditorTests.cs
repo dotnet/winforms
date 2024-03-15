@@ -44,12 +44,10 @@ public class FileNameEditorTests
     public void FileNameEditor_InitializeDialog_Invoke_Success()
     {
         SubFileNameEditor editor = new();
-        using (OpenFileDialog openFileDialog = new())
-        {
-            editor.InitializeDialog(openFileDialog);
-            Assert.Equal("All Files(*.*)|*.*", openFileDialog.Filter);
-            Assert.Equal("Open File", openFileDialog.Title);
-        }
+        using OpenFileDialog openFileDialog = new();
+        editor.InitializeDialog(openFileDialog);
+        Assert.Equal("All Files(*.*)|*.*", openFileDialog.Filter);
+        Assert.Equal("Open File", openFileDialog.Title);
     }
 
     [Fact]

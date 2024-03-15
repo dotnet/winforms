@@ -153,7 +153,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
                 If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
-                    Throw New InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
+                    Throw New ComponentModel.InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
                 End If
             End Sub
 
@@ -161,7 +161,5 @@ Namespace Microsoft.VisualBasic
             Private _sound As Media.SoundPlayer
 
         End Class 'Audio
-
     End Namespace
-
 End Namespace

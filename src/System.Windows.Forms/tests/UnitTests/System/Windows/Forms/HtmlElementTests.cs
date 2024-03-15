@@ -2371,7 +2371,7 @@ public class HtmlElementTests
         Assert.Null(element.InvokeMember("NoSuchMember"));
         Assert.Null(element.InvokeMember("NoSuchMember", null));
         Assert.Null(element.InvokeMember("NoSuchMember", Array.Empty<object>()));
-        Assert.Null(element.InvokeMember("NoSuchMember", new object[] { 1 }));
+        Assert.Null(element.InvokeMember("NoSuchMember", [1]));
     }
 
     [WinFormsFact]

@@ -21,7 +21,7 @@ internal struct ATOM
 
     public static ATOM Null { get; } = new(0);
 
-    public bool IsValid => Value != 0;
+    public readonly bool IsValid => Value != 0;
 
     public static implicit operator uint(ATOM atom) => atom.Value;
     public static implicit operator ATOM(IntPtr atom) => new((ushort)atom);

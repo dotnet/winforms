@@ -14,7 +14,7 @@ internal struct EMRCREATEBRUSHINDIRECT
     public uint ihBrush;
     public LOGBRUSH32 lb;
 
-    public override string ToString()
+    public override readonly string ToString()
         => $@"[{nameof(EMRCREATEBRUSHINDIRECT)}] Index: {ihBrush} Style: {lb.lbStyle} Color: {lb.lbColor.ToSystemColorString()}";
 
     // This structure is used exclusively in EMRCREATEBRUSHINDIRECT

@@ -534,7 +534,7 @@ internal class ControlCommandSet : CommandSet
                         if (dockProp is not null)
                         {
                             DockStyle docked = (DockStyle)dockProp.GetValue(comp);
-                            flipOffset = (docked == DockStyle.Bottom) || (docked == DockStyle.Right);
+                            flipOffset = docked is DockStyle.Bottom or DockStyle.Right;
                         }
 
                         SelectionRules rules = SelectionRules.Visible;
@@ -679,10 +679,8 @@ internal class ControlCommandSet : CommandSet
                                 {
                                     bool snapOn = false;
                                     Size snapSize = Size.Empty;
-                                    IComponent snapComponent = null;
-                                    PropertyDescriptor snapProperty = null;
 
-                                    GetSnapInformation(host, comp, out snapSize, out snapComponent, out snapProperty);
+                                    GetSnapInformation(host, comp, out snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
 
                                     if (snapProperty is not null)
                                     {
@@ -771,7 +769,7 @@ internal class ControlCommandSet : CommandSet
                                             if (propIntegralHeight is not null)
                                             {
                                                 object value = propIntegralHeight.GetValue(component);
-                                                if (value is bool && (bool)value)
+                                                if (value is bool boolValue && boolValue)
                                                 {
                                                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
                                                     if (propItemHeight is not null)
@@ -1256,19 +1254,15 @@ internal class ControlCommandSet : CommandSet
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-            if (host is not null)
+            if (host?.RootComponent is Control baseComponent)
             {
-                IComponent baseComponent = host.RootComponent;
-                if (baseComponent is not null && baseComponent is Control)
+                PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
+                if (prop is not null)
                 {
-                    PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
-                    if (prop is not null)
-                    {
-                        bool drawGrid = (bool)prop.GetValue(baseComponent);
-                        MenuCommand cmd = (MenuCommand)sender;
-                        cmd.Enabled = true;
-                        cmd.Checked = drawGrid;
-                    }
+                    bool drawGrid = (bool)prop.GetValue(baseComponent);
+                    MenuCommand cmd = (MenuCommand)sender;
+                    cmd.Enabled = true;
+                    cmd.Checked = drawGrid;
                 }
             }
         }
@@ -1285,19 +1279,15 @@ internal class ControlCommandSet : CommandSet
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-            if (host is not null)
+            if (host?.RootComponent is Control baseComponent)
             {
-                IComponent baseComponent = host.RootComponent;
-                if (baseComponent is not null && baseComponent is Control)
+                PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
+                if (prop is not null)
                 {
-                    PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
-                    if (prop is not null)
-                    {
-                        bool snapToGrid = (bool)prop.GetValue(baseComponent);
-                        MenuCommand cmd = (MenuCommand)sender;
-                        cmd.Enabled = controlsOnlySelection;
-                        cmd.Checked = snapToGrid;
-                    }
+                    bool snapToGrid = (bool)prop.GetValue(baseComponent);
+                    MenuCommand cmd = (MenuCommand)sender;
+                    cmd.Enabled = controlsOnlySelection;
+                    cmd.Checked = snapToGrid;
                 }
             }
         }

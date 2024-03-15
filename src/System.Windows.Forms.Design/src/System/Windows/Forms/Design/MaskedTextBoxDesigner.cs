@@ -56,8 +56,10 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 
             if (maskedTextProvider is null)
             {
-                designMaskedTextBox = new MaskedTextBox();
-                designMaskedTextBox.Text = maskedTextBox.Text;
+                designMaskedTextBox = new MaskedTextBox
+                {
+                    Text = maskedTextBox.Text
+                };
             }
             else
             {

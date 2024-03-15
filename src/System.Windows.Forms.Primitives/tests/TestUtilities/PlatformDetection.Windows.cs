@@ -54,20 +54,7 @@ public static partial class PlatformDetection
     public static bool IsNotOneCoreUAP =>
         File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
 
-    public static bool IsWindowsIoTCore
-    {
-        get
-        {
-            int productType = GetWindowsProductType();
-            if ((productType == PRODUCT_IOTUAPCOMMERCIAL) ||
-                (productType == PRODUCT_IOTUAP))
-            {
-                return true;
-            }
-
-            return false;
-        }
-    }
+    public static bool IsWindowsIoTCore => GetWindowsProductType() is PRODUCT_IOTUAPCOMMERCIAL or PRODUCT_IOTUAP;
 
     public static bool IsWindowsHomeEdition
     {
@@ -122,7 +109,7 @@ public static partial class PlatformDetection
                 return false;
             }
 
-            byte[] buffer = Array.Empty<byte>();
+            byte[] buffer = [];
             uint bufferSize = 0;
             try
             {
@@ -207,7 +194,7 @@ public static partial class PlatformDetection
         {
             value = (string)Registry.GetValue(key, "InstallationType", defaultValue: "");
         }
-        catch (Exception e) when (e is SecurityException || e is InvalidCastException || e is PlatformNotSupportedException /* UAP */)
+        catch (Exception e) when (e is SecurityException or InvalidCastException or PlatformNotSupportedException /* UAP */)
         {
         }
 
