@@ -73,13 +73,10 @@ dotnet_sort_system_directives_first = true
 dotnet_style_object_initializer = true:warning
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_coalesce_expression = true:warning
 dotnet_style_null_propagation = true:warning
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_prefer_auto_properties = true:silent
 dotnet_style_prefer_simplified_boolean_expressions = true:warning
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
@@ -206,6 +203,11 @@ dotnet_diagnostic.IDE1006.severity = error
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
+
+# Expression-level preferences
+dotnet_style_coalesce_expression = true:warning
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
 
 # New line preferences
 csharp_new_line_before_open_brace = all
