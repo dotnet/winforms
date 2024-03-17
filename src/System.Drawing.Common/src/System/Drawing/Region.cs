@@ -7,10 +7,6 @@ namespace System.Drawing;
 
 public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<GpRegion>
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     internal GpRegion* NativeRegion { get; private set; }
 
     GpRegion* IPointer<GpRegion>.Pointer => NativeRegion;
@@ -94,42 +90,17 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
 
     public void Dispose()
     {
-        Dispose(true);
+        if (NativeRegion is not null)
+        {
+            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeleteRegion(NativeRegion);
+            NativeRegion = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
+        }
+
         GC.SuppressFinalize(this);
     }
 
-    private void Dispose(bool disposing)
-    {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && NativeRegion is not null, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-        if (NativeRegion is not null)
-        {
-            try
-            {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDeleteRegion(NativeRegion);
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                NativeRegion = null;
-            }
-        }
-    }
-
-    ~Region() => Dispose(false);
+    ~Region() => Dispose();
 
     public void MakeInfinite() => CheckStatus(PInvoke.GdipSetInfinite(NativeRegion));
 
