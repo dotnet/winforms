@@ -216,7 +216,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
             MyBase.Dispose(disposing)
         End Sub
-
         Friend WithEvents LabelInfo As Label
         Friend WithEvents ProgressBarWork As ProgressBar
         Friend WithEvents ButtonCloseDialog As Button

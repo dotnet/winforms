@@ -108,6 +108,5 @@ Namespace Microsoft.VisualBasic.Devices
                 Return CType((UnsafeNativeMethods.GetKeyState(Keys.Scroll) And 1), Boolean)
             End Get
         End Property
-
     End Class
 End Namespace

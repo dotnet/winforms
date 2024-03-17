@@ -318,5 +318,4 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private _percentage As Integer
 
     End Class
-
 End Namespace

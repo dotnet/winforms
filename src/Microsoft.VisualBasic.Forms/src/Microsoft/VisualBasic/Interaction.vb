@@ -199,31 +199,32 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
-            Dim ParentWindow As IWin32Window = Nothing
+        Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
+            '  if no window with name (full or truncated) or task id, return an error
+            '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
+            Dim hwndOwned As IntPtr
+            If (Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp)) Then
+                '  scan to the next window until failure
+                hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
+                Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
+                    If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
+                        If (Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned)) Then
+                            hwndApp = hwndOwned
+                            hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
+                        Else
+                            Exit Do
+                        End If
+                    End If
+                    hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
+                Loop
 
-            Dim vbHost As IVbHost = HostServices.VBHost
-            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
-                ParentWindow = vbHost.GetParentWindow()
-            End If
-
-            If String.IsNullOrEmpty(Title) Then
-                If vbHost Is Nothing Then
-                    Title = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
-                Else
-                    Title = vbHost.GetWindowTitle()
+                '  if scan failed, return an error
+                If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
+                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, ProcessId))
                 End If
-            End If
 
-            'Threading state can only be set once, and will most often be already set
-            'but set to STA and check if it isn't STA, then we need to start another thread
-            'to display the InputBox
-            If Thread.CurrentThread.GetApartmentState() <> ApartmentState.STA Then
-                Dim InputHandler As New InputBoxHandler(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
-                Dim thread As New Thread(New ThreadStart(AddressOf InputHandler.StartHere))
-                thread.Start()
-                thread.Join()
-
+                '  set active window to the owned one
+                hwndApp = hwndOwned
                 If InputHandler.Exception IsNot Nothing Then
                     Throw InputHandler.Exception
                 End If
@@ -232,16 +233,16 @@ Namespace Microsoft.VisualBasic
             Else
                 Return InternalInputBox(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
             End If
-        End Function
+            End Function
 
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim ParentWindow As IWin32Window = Nothing
+            Dim parentWindow As IWin32Window = Nothing
 
-            Dim vbHost As IVbHost = HostServices.VBHost
+            vbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
-                ParentWindow = vbHost.GetParentWindow()
+                parentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -288,7 +289,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(MessageBox.Show(ParentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),

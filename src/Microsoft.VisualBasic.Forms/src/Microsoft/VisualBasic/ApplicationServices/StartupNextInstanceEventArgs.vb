@@ -39,6 +39,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  always return the same values
         ''' </remarks>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
-
     End Class
 End Namespace
