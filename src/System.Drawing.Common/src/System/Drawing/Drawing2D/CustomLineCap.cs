@@ -5,10 +5,6 @@ namespace System.Drawing.Drawing2D;
 
 public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     internal GpCustomLineCap* _nativeCap;
 
     private bool _disposed;
@@ -77,14 +73,6 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         {
             return;
         }
-
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativeCap is not null, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
 
         if (_nativeCap is not null && Gdip.Initialized)
         {

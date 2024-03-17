@@ -38,10 +38,6 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 {
     private const int ColorMapStackSpace = 32;
 
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     internal GpImageAttributes* _nativeImageAttributes;
 
     internal void SetNativeImageAttributes(GpImageAttributes* handle)
@@ -71,46 +67,21 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     /// </summary>
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && nativeImageAttributes is not null, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-        if (_nativeImageAttributes is not null)
+        if (_nativeImageAttributes is null)
         {
-            try
-            {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDisposeImageAttributes(_nativeImageAttributes);
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-                Debug.Fail($"Exception thrown during Dispose: {ex}");
-            }
-            finally
-            {
-                _nativeImageAttributes = null;
-            }
+            return;
         }
+
+        Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDisposeImageAttributes(_nativeImageAttributes);
+        _nativeImageAttributes = null;
+        Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
     ///  Cleans up Windows resources for this <see cref='ImageAttributes'/>.
     /// </summary>
-    ~ImageAttributes() => Dispose(disposing: false);
+    ~ImageAttributes() => Dispose();
 
     /// <summary>
     ///  Creates an exact copy of this <see cref='ImageAttributes'/>.
