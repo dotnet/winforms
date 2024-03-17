@@ -201,7 +201,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
         End Sub
 #End If
-
     End Class
-
 End Namespace

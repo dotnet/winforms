@@ -1,6 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Threading
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
@@ -28,7 +30,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
             If VariableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName("name", SR.EnvVarNotFound_Name, name)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
             End If
 
             Return VariableValue
@@ -67,7 +69,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Public ReadOnly Property Culture() As Globalization.CultureInfo
             Get
-                Return Threading.Thread.CurrentThread.CurrentCulture
+                Return Thread.CurrentThread.CurrentCulture
             End Get
         End Property
 
@@ -81,7 +83,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </returns>
         Public ReadOnly Property UICulture() As Globalization.CultureInfo
             Get
-                Return Threading.Thread.CurrentThread.CurrentUICulture
+                Return Thread.CurrentThread.CurrentUICulture
             End Get
         End Property
 
@@ -93,7 +95,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeCulture(cultureName As String)
-            Threading.Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(cultureName)
+            Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
         ''' <summary>
@@ -105,11 +107,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeUICulture(cultureName As String)
-            Threading.Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
+            Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
-
 End Namespace

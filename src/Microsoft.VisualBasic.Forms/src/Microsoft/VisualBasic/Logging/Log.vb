@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.Logging
         Public Sub WriteException(ex As Exception, severity As TraceEventType, additionalInfo As String, id As Integer)
 
             If ex Is Nothing Then
-                Throw GetArgumentNullException("ex")
+                Throw GetArgumentNullException(NameOf(ex))
             End If
 
             Dim builder As New StringBuilder()
@@ -230,9 +230,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
-
         Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appConfig
 
     End Class
-
 End Namespace

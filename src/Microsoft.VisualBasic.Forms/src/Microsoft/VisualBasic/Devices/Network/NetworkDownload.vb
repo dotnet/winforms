@@ -3,7 +3,6 @@
 
 Imports System.Net
 Imports System.Net.Http
-
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
@@ -13,7 +12,7 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' An object that allows easy access to some simple network properties and functionality.
+    '''  An object that allows easy access to some simple network properties and functionality.
     ''' </summary>
     Partial Public Class Network
 
@@ -27,7 +26,7 @@ Namespace Microsoft.VisualBasic.Devices
         Private Const DEFAULT_USERNAME As String = ""
 
         ''' <summary>
-        ''' Creates class and hooks up events
+        '''  Creates class and hooks up events
         ''' </summary>
         Public Sub New()
         End Sub
@@ -70,10 +69,10 @@ Namespace Microsoft.VisualBasic.Devices
                                     overwrite As Boolean,
                                     onUserCancel As UICancelOption) As Task
 
-            Dim clientHandler = If(networkCredentials Is Nothing,
-                                   New HttpClientHandler,
-                                   New HttpClientHandler With {.Credentials = networkCredentials}
-                                  )
+            Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
+                                                        New HttpClientHandler,
+                                                        New HttpClientHandler With {.Credentials = networkCredentials}
+                                                       )
             Return DownloadFileAsync(addressUri,
                     destinationFileName,
                     clientHandler,
@@ -265,10 +264,10 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw ExUtils.GetArgumentNullException(NameOf(addressUri))
             End If
 
-            Dim client = If(clientHandler IsNot Nothing,
-                            New HttpClient(clientHandler),
-                            New HttpClient()
-                           )
+            Dim client As HttpClient = If(clientHandler IsNot Nothing,
+                                          New HttpClient(clientHandler),
+                                          New HttpClient()
+                                         )
 
             ' Set credentials if we have any
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)

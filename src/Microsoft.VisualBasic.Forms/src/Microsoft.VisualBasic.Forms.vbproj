@@ -49,6 +49,7 @@
 
   <PropertyGroup>
     <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
 
 </Project>

@@ -94,5 +94,4 @@ Namespace Microsoft.VisualBasic.Devices
         Private Shared s_keyboardInstance As Keyboard 'Lazy initialized cache for the Keyboard class.  SHARED because Keyboard behaves as a ReadOnly singleton class
 
     End Class 'Computer
-
 End Namespace

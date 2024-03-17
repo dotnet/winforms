@@ -127,5 +127,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Close()
         End Sub
     End Class
-
 End Namespace

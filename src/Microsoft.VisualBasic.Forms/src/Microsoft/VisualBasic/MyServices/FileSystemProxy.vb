@@ -275,5 +275,4 @@ Namespace Microsoft.VisualBasic.MyServices
 
         Private _specialDirectoriesProxy As SpecialDirectoriesProxy
     End Class
-
 End Namespace

@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Devices
                     ReDim _pingBuffer(BUFFER_SIZE - 1)
                     For i As Integer = 0 To BUFFER_SIZE - 1
                         'This is the same logic Ping.exe uses to fill it's buffer
-                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
+                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + (i Mod 23), Globalization.CultureInfo.InvariantCulture)
                     Next
                 End If
 
@@ -73,7 +73,10 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim PingMaker As New NetInfoAlias.Ping
             Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
-            Return Reply.Status = NetInfoAlias.IPStatus.Success
+            If Reply.Status = NetInfoAlias.IPStatus.Success Then
+                Return True
+            End If
+            Return False
         End Function
 
         ''' <summary>

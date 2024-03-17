@@ -63,14 +63,14 @@ Namespace Microsoft.VisualBasic
 
                             If ok = 0 Then 'succeeded
                                 'Process ran to completion
-                                Shell = 0
+                                Return 0
                             Else
                                 'Wait timed out
-                                Shell = ProcessInfo.dwProcessId
+                                Return ProcessInfo.dwProcessId
                             End If
                         Else
                             NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
-                            Shell = ProcessInfo.dwProcessId
+                            Return ProcessInfo.dwProcessId
                         End If
                     Else
                         'Check for a win32 error access denied. If it is, make and throw the exception.
@@ -275,13 +275,13 @@ Namespace Microsoft.VisualBasic
                     Return _exception
                 End Get
             End Property
-
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
+            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            Dim vbHost As IVbHost = HostServices.VBHost
+            vbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbHost.GetParentWindow()
             End If
@@ -352,9 +352,10 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
+            Dim vbHost As IVbHost
             Dim parentWindow As IWin32Window = Nothing
 
-            Dim vbHost As IVbHost = HostServices.VBHost
+            vbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
                 parentWindow = vbHost.GetParentWindow()
             End If
@@ -412,5 +413,4 @@ Namespace Microsoft.VisualBasic
         End Function
 
     End Module
-
 End Namespace

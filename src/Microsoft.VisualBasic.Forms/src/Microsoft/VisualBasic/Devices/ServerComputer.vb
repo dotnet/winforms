@@ -101,5 +101,4 @@ Namespace Microsoft.VisualBasic.Devices
         Private Shared s_clock As Clock 'Lazy initialized cache for the Clock class.  SHARED because Clock behaves as a readonly singleton class
 
     End Class 'MyServerComputer
-
 End Namespace

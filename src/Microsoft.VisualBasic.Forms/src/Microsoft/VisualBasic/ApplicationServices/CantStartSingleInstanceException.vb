@@ -37,5 +37,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
     End Class
-
 End Namespace

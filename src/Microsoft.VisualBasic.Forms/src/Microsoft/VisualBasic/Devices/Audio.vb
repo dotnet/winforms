@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
-
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
@@ -11,10 +10,8 @@ Namespace Microsoft.VisualBasic
     '''  Enum for three ways to play a .wav file
     ''' </summary>
     Public Enum AudioPlayMode
-
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
         WaitToComplete = 0 'Synchronous
-
         Background = 1     'Asynchronous
         BackgroundLoop = 2 'Asynchronous and looping
     End Enum
@@ -62,7 +59,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw GetArgumentNullException("data")
+                    Throw GetArgumentNullException(NameOf(data))
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -79,7 +76,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw GetArgumentNullException("stream")
+                    Throw GetArgumentNullException(NameOf(stream))
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -92,7 +89,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw GetArgumentNullException("systemSound")
+                    Throw GetArgumentNullException(NameOf(systemSound))
                 End If
 
                 systemSound.Play()
@@ -142,7 +139,7 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw GetArgumentNullException("location")
+                    Throw GetArgumentNullException(NameOf(location))
                 End If
 
                 Return location
@@ -162,7 +159,5 @@ Namespace Microsoft.VisualBasic
             Private _sound As Media.SoundPlayer
 
         End Class 'Audio
-
     End Namespace
-
 End Namespace

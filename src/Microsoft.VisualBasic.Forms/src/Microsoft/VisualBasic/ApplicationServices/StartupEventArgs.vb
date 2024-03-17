@@ -29,7 +29,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Returns the command line sent to this application
         ''' </summary>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
-
     End Class
-
 End Namespace

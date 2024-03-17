@@ -45,5 +45,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property HighDpiMode As HighDpiMode
 
     End Class
-
 End Namespace

@@ -3,6 +3,7 @@
 
 Imports System.ComponentModel
 Imports System.Security.Principal
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -68,13 +69,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Protected Overridable Property InternalPrincipal() As IPrincipal
             Get
-                Return Threading.Thread.CurrentPrincipal
+                Return Thread.CurrentPrincipal
             End Get
             Set(value As IPrincipal)
-                Threading.Thread.CurrentPrincipal = value
+                Thread.CurrentPrincipal = value
             End Set
         End Property
 
     End Class 'User
-
 End Namespace
