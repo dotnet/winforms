@@ -21,5 +21,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetCultureInfo() As CultureInfo
             Return Thread.CurrentThread.CurrentCulture
         End Function
+
     End Class
 End Namespace

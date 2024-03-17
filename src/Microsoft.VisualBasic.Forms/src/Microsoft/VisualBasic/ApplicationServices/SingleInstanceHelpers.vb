@@ -86,5 +86,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Using
             Await pipeClient.WriteAsync(content.AsMemory(0, content.Length), cancellationToken).ConfigureAwait(False)
         End Function
+
     End Module
 End Namespace

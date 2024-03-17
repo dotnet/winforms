@@ -18,7 +18,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </remarks>
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public Class ContextValue(Of T)
-
         Public Sub New()
             _contextKey = Guid.NewGuid.ToString
         End Sub
@@ -47,5 +46,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a GUID which this string maintains
 
         Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
+
     End Class 'ContextValue
 End Namespace

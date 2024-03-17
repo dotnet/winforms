@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Creates a new exception
         ''' </summary>
         Public Sub New()
-            MyBase.New(Utils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+            MyBase.New(GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
         Public Sub New(ByVal message As String)
@@ -35,5 +35,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
+
     End Class
 End Namespace

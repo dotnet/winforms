@@ -7,9 +7,8 @@ Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
-
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
 
@@ -78,10 +77,10 @@ Namespace Microsoft.VisualBasic
                         'If not, throw FileNotFound
                         Const ERROR_ACCESS_DENIED As Integer = 5
                         If ErrorCode = ERROR_ACCESS_DENIED Then
-                            Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
+                            Throw VbMakeException(vbErrors.PermissionDenied)
                         End If
 
-                        Throw ExUtils.VbMakeException(vbErrors.FileNotFound)
+                        Throw VbMakeException(vbErrors.FileNotFound)
                     End If
                 Finally
                     safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
@@ -276,13 +275,13 @@ Namespace Microsoft.VisualBasic
                     Return _exception
                 End Get
             End Property
-
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
+            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            Dim vbHost As IVbHost = HostServices.VBHost
+            vbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbHost.GetParentWindow()
             End If
@@ -353,9 +352,10 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
+            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            Dim vbHost As IVbHost = HostServices.VBHost
+            vbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
                 ParentWindow = vbHost.GetParentWindow()
             End If
@@ -383,7 +383,7 @@ Namespace Microsoft.VisualBasic
             Catch
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
-            Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+
             Try
                 If Title Is Nothing Then
                     If vbHost Is Nothing Then

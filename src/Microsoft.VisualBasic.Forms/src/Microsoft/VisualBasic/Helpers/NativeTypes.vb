@@ -167,6 +167,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Const GW_MAX As Integer = 5
 
         Friend Const STARTF_USESHOWWINDOW As Integer = 1
+
         Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
+
     End Class
 End Namespace

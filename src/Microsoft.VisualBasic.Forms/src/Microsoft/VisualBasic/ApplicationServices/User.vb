@@ -77,5 +77,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
     End Class 'User
-
 End Namespace

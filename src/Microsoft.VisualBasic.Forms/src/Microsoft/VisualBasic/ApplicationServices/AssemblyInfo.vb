@@ -3,8 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.Reflection
-
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -23,7 +22,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="CurrentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(currentAssembly))
+                Throw GetArgumentNullException(NameOf(currentAssembly))
             End If
             _assembly = currentAssembly
         End Sub
@@ -237,12 +236,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Since these properties will not change during runtime, they're cached.
         ' "" is not Nothing so use Nothing to mark an un-accessed property.
         Private _description As String ' Cache the assembly's description.
-
         Private _title As String ' Cache the assembly's title.
         Private _productName As String ' Cache the assembly's product name.
         Private _companyName As String ' Cache the assembly's company name.
         Private _trademark As String ' Cache the assembly's trademark.
         Private _copyright As String ' Cache the assembly's copyright.
     End Class
-
 End Namespace

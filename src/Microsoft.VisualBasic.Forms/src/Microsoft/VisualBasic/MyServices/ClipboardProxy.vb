@@ -207,5 +207,6 @@ Namespace Microsoft.VisualBasic.MyServices
         Public Sub SetDataObject(data As DataObject)
             Clipboard.SetDataObject(data)
         End Sub
+
     End Class
 End Namespace

@@ -7,9 +7,8 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
-
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -17,10 +16,8 @@ Namespace Microsoft.VisualBasic.Logging
     ''' Options for the location of a log's directory
     ''' </summary>
     Public Enum LogFileLocation As Integer
-
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
-
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
@@ -203,7 +200,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As String)
                 If String.IsNullOrEmpty(value) Then
-                    Throw ExUtils.GetArgumentNullException(NameOf(value), SR.ApplicationLogBaseNameNull)
+                    Throw GetArgumentNullException(NameOf(value), SR.ApplicationLogBaseNameNull)
                 End If
 
                 ' Test the file name. This will throw if the name is invalid.
@@ -278,7 +275,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < MIN_FILE_SIZE Then
-                    Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
+                    Throw GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
                 End If
                 _maxFileSize = value
                 _propertiesSet(MAXFILESIZE_INDEX) = True
@@ -301,7 +298,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < 0 Then
-                    Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
+                    Throw GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
                 End If
                 _reserveDiskSpace = value
                 _propertiesSet(RESERVEDISKSPACE_INDEX) = True
@@ -346,7 +343,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As Encoding)
                 If value Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException(NameOf(value))
+                    Throw GetArgumentNullException(NameOf(value))
                 End If
                 _encoding = value
                 _propertiesSet(ENCODING_INDEX) = True
@@ -749,7 +746,7 @@ Namespace Microsoft.VisualBasic.Logging
             End While
             'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
             'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
-            Throw ExUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, BaseStreamName)
+            Throw GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, BaseStreamName)
         End Function
 
         ''' <summary>
@@ -865,7 +862,7 @@ Namespace Microsoft.VisualBasic.Logging
                 End If
             End If
 
-            Throw ExUtils.GetWin32Exception(SR.ApplicationLog_FreeSpaceError)
+            Throw GetWin32Exception(SR.ApplicationLog_FreeSpaceError)
         End Function
 
         ''' <summary>
@@ -1047,7 +1044,6 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Identifies properties in the BitArray
         Private Const PROPERTY_COUNT As Integer = 12
-
         Private Const APPEND_INDEX As Integer = 0
         Private Const AUTOFLUSH_INDEX As Integer = 1
         Private Const BASEFILENAME_INDEX As Integer = 2
@@ -1073,7 +1069,6 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
-
         Private Const KEY_APPEND_PASCAL As String = "Append"
 
         Private Const KEY_AUTOFLUSH As String = "autoflush"
@@ -1258,7 +1253,5 @@ Namespace Microsoft.VisualBasic.Logging
             Private _disposed As Boolean
 
         End Class 'ReferencedStream
-
     End Class 'FileLogTraceListener
-
 End Namespace

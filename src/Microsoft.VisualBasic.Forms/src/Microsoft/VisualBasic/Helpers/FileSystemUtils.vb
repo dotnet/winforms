@@ -145,5 +145,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             ' Otherwise, remove all separators at the end.
             Return Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
         End Function
+
     End Class
 End Namespace

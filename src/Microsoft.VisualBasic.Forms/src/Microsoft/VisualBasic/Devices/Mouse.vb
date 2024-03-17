@@ -2,8 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms
-
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -29,7 +28,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -44,7 +43,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -59,9 +58,10 @@ Namespace Microsoft.VisualBasic.Devices
                 If WheelExists Then
                     Return SystemInformation.MouseWheelScrollLines
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                    Throw GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
                 End If
             End Get
         End Property
+
     End Class 'Mouse
 End Namespace

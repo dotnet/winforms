@@ -25,7 +25,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Lib "user32" () As IntPtr
 
 #Disable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
-
         <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
         Friend Shared Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
 #Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
@@ -91,7 +90,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
-
         ''' <summary>
         ''' Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
@@ -123,9 +121,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend Sub Init()
                 dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
-
         End Structure
-
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
@@ -142,5 +138,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         Private Sub New()
         End Sub
+
     End Class
 End Namespace

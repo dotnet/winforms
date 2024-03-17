@@ -42,5 +42,6 @@ Namespace Microsoft.VisualBasic.Devices
                 Return Environment.TickCount
             End Get
         End Property
+
     End Class 'Clock
 End Namespace
