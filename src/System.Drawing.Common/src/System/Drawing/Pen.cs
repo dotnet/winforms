@@ -12,10 +12,6 @@ namespace System.Drawing;
 /// </summary>
 public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemColorTracker
 {
-#if FINALIZATION_WATCH
-    private string _allocationSite = Graphics.GetAllocationStack();
-#endif
-
     // Handle to native GDI+ pen object.
     private GpPen* _nativePen;
 
@@ -108,14 +104,6 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
     private void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativePen is not null, $"""
-            **********************
-            Disposed through finalization:
-            {_allocationSite}
-            """);
-#endif
-
         if (!disposing)
         {
             // If we are finalizing, then we will be unreachable soon. Finalize calls dispose to
@@ -130,23 +118,9 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
         if (_nativePen is not null)
         {
-            try
-            {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDeletePen(NativePen);
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                _nativePen = null;
-            }
+            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeletePen(NativePen);
+            _nativePen = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 
