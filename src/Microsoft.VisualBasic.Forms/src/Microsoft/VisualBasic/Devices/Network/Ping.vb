@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Devices
                     ReDim _pingBuffer(BUFFER_SIZE - 1)
                     For i As Integer = 0 To BUFFER_SIZE - 1
                         'This is the same logic Ping.exe uses to fill it's buffer
-                        _pingBuffer(i) = CByte(Asc("a"c) + i Mod 23)
+                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
                     Next
                 End If
 
