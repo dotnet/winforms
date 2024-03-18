@@ -151,7 +151,6 @@ public sealed partial class CodeDomComponentSerializationService
                     PropertyDescriptor? prop = props[propName];
                     if (prop is not null && prop.CanResetValue(comp))
                     {
-                        Trace(TraceLevel.Verbose, $"Resetting default for {name}.{propName}");
                         // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
                         if (manager.TryGetService(out MemberRelationshipService? relationships) && relationships[comp, prop] != MemberRelationship.Empty)
                         {
@@ -276,7 +275,6 @@ public sealed partial class CodeDomComponentSerializationService
                         Type? type = manager.GetType(typeName);
                         if (type is null)
                         {
-                            Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                         }
                         else if (statements.Count > 0)
@@ -285,19 +283,11 @@ public sealed partial class CodeDomComponentSerializationService
                             if (serializer is null)
                             {
                                 // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
-                                Trace(TraceLevel.Error,
-                                    $"Type referenced in init method has no serializer: {type.Name}");
                                 manager.ReportError(new CodeDomSerializerException(
                                     string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                             }
                             else
                             {
-                                Trace(TraceLevel.Verbose,
-                                    $"""
-                                     --------------------------------------------------------------------
-                                             Beginning deserialization of {name}
-                                     --------------------------------------------------------------------
-                                     """);
                                 try
                                 {
                                     object? instance = serializer.Deserialize(manager, statements);
@@ -569,8 +559,6 @@ public sealed partial class CodeDomComponentSerializationService
                                     if (!prop.IsReadOnly || prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
                                     {
                                         defaultPropList ??= new(data.Members.Count);
-
-                                        Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                         defaultPropList.Add(prop.Name);
                                     }
                                 }
@@ -611,8 +599,6 @@ public sealed partial class CodeDomComponentSerializationService
                                     else
                                     {
                                         defaultPropList ??= new(data.Members.Count);
-
-                                        Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                         defaultPropList.Add(prop.Name);
                                     }
                                 }

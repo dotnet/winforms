@@ -21,8 +21,6 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal partial class DesignerActionUI : IDisposable
 {
-    private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new("DesignerActionPanelTrace", "DesignerActionPanel tracing");
-
     private Adorner _designerActionAdorner; // used to add designeraction-related glyphs
     private IServiceProvider _serviceProvider; // standard service provider
     private ISelectionService _selectionService; // used to determine if comps have selection or not
@@ -46,13 +44,10 @@ internal partial class DesignerActionUI : IDisposable
     private bool _cancelClose;
 
     private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
-#if DEBUG
-    internal static TraceSwitch DropDownVisibilityDebug { get; } = new("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
-#else
-    internal static TraceSwitch? DropDownVisibilityDebug { get; }
-#endif
+
     /// <summary>
-    ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelectionService, as well as spin-up the DesignerActionService.
+    ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService
+    ///  and SelectionService, as well as spin-up the DesignerActionService.
     /// </summary>
     public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
     {
@@ -307,18 +302,21 @@ internal partial class DesignerActionUI : IDisposable
         if (glyph is not null)
         {
             VerifyGlyphIsInAdorner(glyph);
-            // this could happen when a verb change state or suddenly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...
-            RecreatePanel(glyph); // recreate the DAP itself
-            UpdateDAPLocation(comp, glyph); // reposition the thing
+
+            // This could happen when a verb change state or suddenly a control gets a new action in the panel and we
+            // are the primary selection in that case there would not be a glyph active in the adorner to be shown
+            // because we update that on selection change. We have to do that here too.
+
+            RecreatePanel(glyph);
+            UpdateDAPLocation(comp, glyph);
         }
     }
 
     private void RecreatePanel(Glyph glyphWithPanelToRegen)
     {
-        // we don't want to do anything if the panel is not visible
+        // We don't want to do anything if the panel is not visible.
         if (!IsDesignerActionPanelVisible)
         {
-            DropDownVisibilityDebug.TraceVerbose("[DesignerActionUI.RecreatePanel] panel is not visible, bail");
             return;
         }
 
@@ -562,33 +560,34 @@ internal partial class DesignerActionUI : IDisposable
         if (_cancelClose || e.Cancel)
         {
             e.Cancel = true;
-            DropDownVisibilityDebug.TraceVerbose("[DesignerActionUI.toolStripDropDown_Closing] cancelClose true, bail");
             return;
         }
 
         if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
         {
             e.Cancel = true;
-            DropDownVisibilityDebug.TraceVerbose($"[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: {e.Cancel}");
         }
 
         if (e.CloseReason == ToolStripDropDownCloseReason.Keyboard)
         {
             e.Cancel = false;
-            DropDownVisibilityDebug.TraceVerbose($"[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: {e.Cancel}");
         }
 
         if (e.Cancel == false)
-        { // we WILL disappear
-            DropDownVisibilityDebug.TraceVerbose("[DesignerActionUI.toolStripDropDown_Closing] Closing...");
+        {
+            // We WILL disappear
             Debug.Assert(_lastPanelComponent is not null, "last panel component should not be null here... " +
                 "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
+
             if (_lastPanelComponent is null)
             {
                 return;
             }
 
-            // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
+            // If we're actually closing get the coordinate of the last message, the one causing us to close, is it within
+            // the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH,
+            // that means that he actually wants to close it. The activation change is going to do that for us but we should
+            // NOT reopen right away because he clicked on the glyph. This code is here to prevent this.
             Point point = DesignerUtils.LastCursorPoint;
             if (_componentToGlyph.TryGetValue(_lastPanelComponent, out DesignerActionGlyph? currentGlyph))
             {
@@ -695,10 +694,8 @@ internal partial class DesignerActionUI : IDisposable
         if (_behaviorService is not null &&
             _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
         {
-            if (_mainParentWindow is not null && _mainParentWindow.Handle != IntPtr.Zero)
+            if (_mainParentWindow is not null && _mainParentWindow.Handle != 0)
             {
-                Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
-                DropDownVisibilityDebug.TraceVerbose("Assigning owner to mainParentWindow");
                 PInvoke.SetWindowLong(
                     _designerActionHost,
                     WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT,

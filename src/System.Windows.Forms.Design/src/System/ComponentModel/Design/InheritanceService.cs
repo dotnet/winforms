@@ -13,9 +13,12 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class InheritanceService : IInheritanceService, IDisposable
 {
-    private static readonly TraceSwitch s_inheritanceServiceSwitch = new("InheritanceService", "InheritanceService : Debug inheritance scan.");
     private Dictionary<IComponent, InheritanceAttribute> _inheritedComponents;
-    // While we're adding an inherited component, we must be wary of components that the inherited component adds as a result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events and push in the component
+
+    // While we're adding an inherited component, we must be wary of components that the inherited component adds as a
+    // result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component
+    // we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events
+    // and push in the component.
     private IComponent? _addingComponent;
     private InheritanceAttribute? _addingAttribute;
 
@@ -63,8 +66,6 @@ public class InheritanceService : IInheritanceService, IDisposable
             return;
         }
 
-        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Searching for inherited components on '{type.FullName}'.");
-        Debug.Indent();
         ISite? site = component.Site;
         IComponentChangeService? cs = null;
         INameCreationService? ncs = null;
@@ -85,7 +86,6 @@ public class InheritanceService : IInheritanceService, IDisposable
             {
                 Type reflect = TypeDescriptor.GetReflectionType(type);
                 FieldInfo[] fields = reflect.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
-                Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...found {fields.Length} fields.");
                 foreach (FieldInfo field in fields)
                 {
                     string name = field.Name;
@@ -94,22 +94,23 @@ public class InheritanceService : IInheritanceService, IDisposable
                     Type reflectionType = GetReflectionTypeFromTypeHelper(field.FieldType);
                     if (!GetReflectionTypeFromTypeHelper(typeof(IComponent)).IsAssignableFrom(reflectionType))
                     {
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...skipping {name}: Not IComponent");
                         continue;
                     }
 
                     // Now check the attributes of the field and get out if it isn't something that can be inherited.
                     Debug.Assert(!field.IsStatic, "Instance binding shouldn't have found this field");
 
-                    // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base class was created then we can't really use it.
+                    // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base
+                    // class was created then we can't really use it.
                     object? value = field.GetValue(component);
                     if (value is null)
                     {
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...skipping {name}: Contains NULL");
                         continue;
                     }
 
-                    // We've been fine up to this point looking at the field.  Now, however, we must check to see if this field has an AccessedThroughPropertyAttribute on it.  If it does, then we must look for the property and use its name and visibility for the remainder of the scan.  Should any of this bail we just use the field.
+                    // We've been fine up to this point looking at the field.  Now, however, we must check to see if this
+                    // field has an AccessedThroughPropertyAttribute on it.  If it does, then we must look for the property
+                    // and use its name and visibility for the remainder of the scan. Should any of this bail we just use the field.
                     MemberInfo member = field;
 
                     object[] fieldAttrs = field.GetCustomAttributes(typeof(AccessedThroughPropertyAttribute), false);
@@ -141,10 +142,11 @@ public class InheritanceService : IInheritanceService, IDisposable
                     // Add a user hook to add or remove members.  The default hook here ignores all inherited private members.
                     bool ignoreMember = IgnoreInheritedMember(member, component);
 
-                    // We now have an inherited member.  Gather some information about it and then add it to our list.  We must always add to our list, but we may not want to  add it to the container.  That is up to the IgnoreInheritedMember method. We add here because there are components in the world that, when sited, add their children to the container too. That's fine, but we want to make sure we account for them in the inheritance service too.
-                    Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...found inherited member '{name}'");
-                    Debug.Indent();
-                    Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Type: {field.FieldType.FullName}");
+                    // We now have an inherited member.  Gather some information about it and then add it to our list.
+                    // We must always add to our list, but we may not want to  add it to the container. That is up to
+                    // the IgnoreInheritedMember method. We add here because there are components in the world that,
+                    // when sited, add their children to the container too. That's fine, but we want to make sure we
+                    // account for them in the inheritance service too.
 
                     InheritanceAttribute attr;
 
@@ -154,7 +156,8 @@ public class InheritanceService : IInheritanceService, IDisposable
 
                     if (ignoreMember)
                     {
-                        // If we are ignoring this member, then always mark it as private. The designer doesn't want it; we only do this in case some other component adds this guy to the container.
+                        // If we are ignoring this member, then always mark it as private. The designer doesn't want it;
+                        // we only do this in case some other component adds this guy to the container.
                         privateInherited = true;
                     }
                     else
@@ -172,11 +175,9 @@ public class InheritanceService : IInheritanceService, IDisposable
                     if (privateInherited)
                     {
                         attr = InheritanceAttribute.InheritedReadOnly;
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Inheritance: Private");
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Inheritance: Public");
                         attr = InheritanceAttribute.Inherited;
                     }
 
@@ -189,7 +190,6 @@ public class InheritanceService : IInheritanceService, IDisposable
 
                         if (!ignoreMember && notPresent)
                         {
-                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding {name} to container.");
                             try
                             {
                                 _addingComponent = compValue;
@@ -203,7 +203,9 @@ public class InheritanceService : IInheritanceService, IDisposable
                                         container.Add(compValue, name);
                                     }
                                     catch
-                                    { // We do not always control the base components, and there could be a lot of rogue base components. If there are exceptions when adding them, lets just ignore and continue.
+                                    {
+                                        // We do not always control the base components, and there could be a lot of rogue
+                                        // base components. If there are exceptions when adding them, lets just ignore and continue.
                                     }
                                 }
                             }
@@ -214,8 +216,6 @@ public class InheritanceService : IInheritanceService, IDisposable
                             }
                         }
                     }
-
-                    Debug.Unindent();
                 }
 
                 type = type.BaseType!;
@@ -225,10 +225,8 @@ public class InheritanceService : IInheritanceService, IDisposable
         {
             if (cs is not null)
             {
-                cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
+                cs.ComponentAdding -= OnComponentAdding;
             }
-
-            Debug.Unindent();
         }
     }
 
@@ -263,8 +261,8 @@ public class InheritanceService : IInheritanceService, IDisposable
     {
         if (_addingComponent is not null && _addingComponent != ce.Component)
         {
-            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding component... {ce.Component}");
             _inheritedComponents[ce.Component!] = InheritanceAttribute.InheritedReadOnly;
+
             // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
             if (sender is INestedContainer nested && nested.Owner == _addingComponent)
             {
