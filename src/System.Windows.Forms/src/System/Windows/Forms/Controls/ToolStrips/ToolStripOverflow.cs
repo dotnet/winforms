@@ -8,19 +8,12 @@ namespace System.Windows.Forms;
 
 public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
 {
-#if DEBUG
-    internal static TraceSwitch PopupLayoutDebug { get; } = new("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
-#else
-    internal static TraceSwitch? PopupLayoutDebug { get; }
-#endif
-
     private readonly ToolStripOverflowButton? _ownerItem;
 
     public ToolStripOverflow(ToolStripItem parentItem)
         : base(parentItem)
     {
         ArgumentNullException.ThrowIfNull(parentItem);
-
         _ownerItem = parentItem as ToolStripOverflowButton;
     }
 

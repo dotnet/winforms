@@ -201,7 +201,6 @@ public partial class MenuStrip : ToolStrip
     {
         if (!(Focused || ContainsFocus))
         {
-            s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] set focus to menustrip");
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, menuKeyPressed: true);
 
             if (DisplayedItems.Count > 0)
@@ -230,13 +229,11 @@ public partial class MenuStrip : ToolStrip
             // ALT, then space should dismiss the menu and activate the system menu.
             if (keyData == Keys.Space)
             {
-                // if we're focused it's ok to activate system menu
-                // if we're not focused - we should not activate if we contain focus - this means a text box or something
-                // has focus.
+                // If we're focused it's ok to activate system menu. If we're not focused - we should not activate if
+                // we contain focus - this means a text box or something has focus.
                 if (Focused || !ContainsFocus)
                 {
                     NotifySelectionChange(item: null);
-                    s_snapFocusDebug.TraceVerbose("[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                     ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
                     // Send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.

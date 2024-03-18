@@ -26,12 +26,6 @@ public abstract partial class ToolStripItem :
     IArrangedElement,
     IKeyboardToolTip
 {
-#if DEBUG
-    internal static readonly TraceSwitch s_mouseDebugging = new("MouseDebugging", "Debug ToolStripItem mouse debugging code");
-#else
-    internal static readonly TraceSwitch? s_mouseDebugging;
-#endif
-
     private Rectangle _bounds = Rectangle.Empty;
     private PropertyStore? _propertyStore;
     private ToolStripItemAlignment _alignment = ToolStripItemAlignment.Left;
@@ -2461,8 +2455,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleClick(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] HandleClick");
-
         try
         {
             if (!DesignMode)
@@ -2470,13 +2462,12 @@ public abstract partial class ToolStripItem :
                 _state[s_statePressed] = true;
             }
 
-            // force painting w/o using message loop here because it may be quite a long
+            // Force painting w/o using message loop here because it may be quite a long
             // time before it gets pumped again.
             InvokePaint();
 
             if (SupportsItemClick && Owner is not null)
             {
-                s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClick");
                 Owner.HandleItemClick(this);
             }
 
@@ -2484,7 +2475,6 @@ public abstract partial class ToolStripItem :
 
             if (SupportsItemClick && Owner is not null)
             {
-                s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClicked");
                 Owner.HandleItemClicked(this);
             }
         }
@@ -2546,15 +2536,12 @@ public abstract partial class ToolStripItem :
         if (Enabled)
         {
             OnMouseEnter(e);
-            s_mouseDebugging.TraceVerbose($"[{Text}] MouseEnter");
             RaiseEvent(s_mouseEnterEvent, e);
         }
     }
 
     private void HandleMouseMove(MouseEventArgs mea)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseMove");
-
         if (Enabled && CanSelect && !Selected)
         {
             if (ParentInternal is not null
@@ -2575,7 +2562,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseHover(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseHover");
         OnMouseHover(e);
         RaiseEvent(s_mouseHoverEvent, e);
     }
@@ -2594,7 +2580,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseLeave(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseLeave");
         HandleLeave();
         if (Enabled)
         {
@@ -2605,8 +2590,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseDown(MouseEventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseDown");
-
         _state[s_stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
         if (_state[s_stateMouseDownAndNoDrag])
         {
@@ -2622,8 +2605,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseUp(MouseEventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseUp");
-
         bool fireMouseUp = (ParentInternal?.LastMouseDownedItem == this);
 
         if (!fireMouseUp && !MouseDownAndUpMustBeInSameItem)
@@ -3204,13 +3185,6 @@ public abstract partial class ToolStripItem :
 
     internal void Select(bool forceRaiseAccessibilityFocusChanged)
     {
-        // let's not snap the stack trace unless we're debugging selection.
-        ToolStrip.s_selectionDebug.TraceVerbose($"""
-            [Selection DBG] WBI.Select: {ToString()}
-            {new StackTrace().ToString().AsSpan(0, 200)}
-
-            """);
-
         if (!CanSelect)
         {
             return;
@@ -3218,30 +3192,25 @@ public abstract partial class ToolStripItem :
 
         if (Owner is not null && Owner.IsCurrentlyDragging)
         {
-            // make sure we don't select during a drag operation.
+            // Make sure we don't select during a drag operation.
             return;
         }
 
         if (ParentInternal is not null && ParentInternal.IsSelectionSuspended)
         {
-            ToolStrip.s_selectionDebug.TraceVerbose("[Selection DBG] BAILING, selection is currently suspended");
             return;
         }
 
         if (!Selected)
         {
             _state[s_stateSelected] = true;
-            if (ParentInternal is not null)
-            {
-                ParentInternal.NotifySelectionChange(this);
-                Debug.Assert(_state[s_stateSelected], "calling notify selection change changed the selection state of this item");
-            }
+            ParentInternal?.NotifySelectionChange(this);
 
             if (IsOnDropDown)
             {
                 if (OwnerItem is not null && OwnerItem.IsOnDropDown)
                 {
-                    // ensure the selection is moved back to our owner item.
+                    // Ensure the selection is moved back to our owner item.
                     OwnerItem.Select();
                 }
             }
@@ -3633,7 +3602,6 @@ public abstract partial class ToolStripItem :
     /// </summary>
     internal void Unselect()
     {
-        ToolStrip.s_selectionDebug.TraceVerbose($"[Selection DBG] WBI.Unselect: {ToString()}");
         if (_state[s_stateSelected])
         {
             _state[s_stateSelected] = false;

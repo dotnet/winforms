@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 
@@ -274,8 +273,6 @@ internal partial class PropertyGridView
 
         protected override void SetVisibleCore(bool value)
         {
-            CompModSwitches.DebugGridView.TraceVerbose($"DropDownHolder:Visible({value})");
-
             // Make sure we don't have the mouse captured if we're going invisible.
             if (value == false && HookMouseDown)
             {

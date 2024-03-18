@@ -6,9 +6,6 @@ namespace System.Windows.Forms;
 internal class MenuTimer
 {
     private readonly Timer _autoMenuExpandTimer = new();
-
-    // consider - weak reference?
-    private ToolStripMenuItem? _currentItem;
     private ToolStripMenuItem? _fromItem;
     private bool _inTransition;
 
@@ -26,19 +23,8 @@ internal class MenuTimer
         _slowShow = Math.Max(_quickShow, SystemInformation.MenuShowDelay);
     }
 
-    // the current item to autoexpand.
-    private ToolStripMenuItem? CurrentItem
-    {
-        get
-        {
-            return _currentItem;
-        }
-        set
-        {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && _currentItem != value, $"[MenuTimer.CurrentItem] changed: {(value is null ? "null" : value.ToString())}");
-            _currentItem = value;
-        }
-    }
+    // The current item to autoexpand.
+    private ToolStripMenuItem? CurrentItem { get; set; }
 
     public bool InTransition
     {
@@ -74,14 +60,11 @@ internal class MenuTimer
 
     public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem? toItem)
     {
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose($"[MenuTimer.Transition] transitioning items {fromItem} {toItem?.ToString()}");
-
         if (toItem is null && InTransition)
         {
             Cancel();
 
-            // in this case we're likely to have hit an item that's not a menu item
-            // or nothing is selected.
+            // In this case we're likely to have hit an item that's not a menu item or nothing is selected.
             EndTransition(forceClose: true);
             return;
         }
@@ -93,7 +76,7 @@ internal class MenuTimer
             StartCore(toItem);
         }
 
-        // set up the current item to be the toItem so it will be auto expanded when complete.
+        // Set up the current item to be the toItem so it will be auto expanded when complete.
         CurrentItem = toItem;
         InTransition = true;
     }
@@ -184,7 +167,6 @@ internal class MenuTimer
         EndTransition(forceClose: false);
         if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
         {
-            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[MenuTimer.OnTick] calling OnMenuAutoExpand");
             CurrentItem.OnMenuAutoExpand();
         }
     }

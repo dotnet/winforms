@@ -5797,27 +5797,19 @@ public partial class Form : ContainerControl
                 MdiControlStrip = null;
             }
 
-            if (ActiveMdiChildInternal is not null && maximized)
+            if (ActiveMdiChildInternal is not null && maximized && ActiveMdiChildInternal.ControlBox)
             {
-                if (ActiveMdiChildInternal.ControlBox)
+                // Determine if we need to add control gadgets into the MenuStrip.
+                // Double check GetMenu incase someone is using interop.
+                HMENU hMenu = PInvoke.GetMenu(this);
+                if (hMenu == HMENU.Null)
                 {
-                    ToolStrip.s_mdiMergeDebug.TraceVerbose("UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
-
-                    // determine if we need to add control gadgets into the MenuStrip
-                    // double check GetMenu incase someone is using interop
-                    HMENU hMenu = PInvoke.GetMenu(this);
-                    if (hMenu == HMENU.Null)
+                    MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+                    if (sourceMenuStrip is not null)
                     {
-                        MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-                        if (sourceMenuStrip is not null)
-                        {
-                            MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: built up an MDI control strip for {ActiveMdiChildInternal.Text} with {MdiControlStrip.Items.Count} items.");
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: {sourceMenuStrip.Items.Count}");
-                            ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: {sourceMenuStrip.Items.Count}");
-                            MdiControlStrip.MergedMenu = sourceMenuStrip;
-                        }
+                        MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
+                        ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
+                        MdiControlStrip.MergedMenu = sourceMenuStrip;
                     }
                 }
             }

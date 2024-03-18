@@ -23,18 +23,6 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionRichTextBox))]
 public partial class RichTextBox : TextBoxBase
 {
-    private static TraceSwitch? s_richTextDbg;
-
-    private static TraceSwitch RichTextDbg
-    {
-        get
-        {
-            s_richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
-
-            return s_richTextDbg;
-        }
-    }
-
     /// <summary>
     ///  Paste special flags.
     /// </summary>
@@ -3097,7 +3085,6 @@ public partial class RichTextBox : TextBoxBase
 
     private void UpdateOleCallback()
     {
-        RichTextDbg.TraceVerbose($"update ole callback ({AllowDrop})");
         if (!IsHandleCreated)
         {
             return;
@@ -3105,8 +3092,6 @@ public partial class RichTextBox : TextBoxBase
 
         if (_oleCallback is null)
         {
-            RichTextDbg.TraceVerbose("binding ole callback");
-
             AllowOleObjects = true;
 
             _oleCallback = CreateRichEditOleCallback();

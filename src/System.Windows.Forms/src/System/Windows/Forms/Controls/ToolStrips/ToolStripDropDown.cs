@@ -36,14 +36,6 @@ public partial class ToolStripDropDown : ToolStrip
     private static readonly Padding s_defaultPadding = new(1, 2, 1, 2);
     private Padding _scaledDefaultPadding = s_defaultPadding;
 
-#if DEBUG
-    internal static TraceSwitch DropDownActivateDebug { get; } = new("DropDownActivateDebug", "Debug activation code for dropDown controls");
-    internal static TraceSwitch DropDownDebugBounds { get; } = new("DropDownDebugBounds", "Debug GetDropDownBounds");
-#else
-    internal static TraceSwitch? DropDownActivateDebug { get; }
-    internal static TraceSwitch? DropDownDebugBounds { get; }
-#endif
-
     private static readonly int s_stateLayered = BitVector32.CreateMask();
     private static readonly int s_stateAllowTransparency = BitVector32.CreateMask(s_stateLayered);
     private static readonly int s_stateNotWorkingAreaConstrained = BitVector32.CreateMask(s_stateAllowTransparency);
@@ -1124,8 +1116,6 @@ public partial class ToolStripDropDown : ToolStrip
             dropDownBounds = new Rectangle(parentClientPoint, suggestedBounds.Size);
         }
 
-        DropDownDebugBounds.TraceVerbose($"DropDownBounds for {suggestedBounds} is {dropDownBounds}");
-
         return dropDownBounds;
     }
 
@@ -1216,7 +1206,6 @@ public partial class ToolStripDropDown : ToolStrip
 
         // Marking this as a modal form prevents it from being activated
         // by the IMsoComponentManager, which will break keyboard routing in VS.
-        //
         SetState(States.Modal, true);
 
         SetStyle(ControlStyles.ResizeRedraw, true);
@@ -1334,7 +1323,6 @@ public partial class ToolStripDropDown : ToolStrip
     protected override void OnMouseUp(MouseEventArgs mea)
     {
         base.OnMouseUp(mea);
-        s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
 
         // Menus should dismiss when you drag off
         if (!ClientRectangle.Contains(mea.Location))
@@ -1405,7 +1393,6 @@ public partial class ToolStripDropDown : ToolStrip
         }
         else
         {
-            s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SelectPreviousToolStrip] No previous toolstrip to select - exiting menu mode.");
             ToolStripManager.ModalMenuFilter.ExitMenuMode();
         }
     }
@@ -1417,8 +1404,6 @@ public partial class ToolStripDropDown : ToolStrip
     ///  </summary>
     internal override bool ProcessArrowKey(Keys keyCode)
     {
-        s_menuAutoExpandDebug.TraceVerbose("[ToolStripDropDown.ProcessArrowKey] MenuTimer.Cancel called");
-
         ToolStripMenuItem.MenuTimer.Cancel();
 
         if (keyCode is Keys.Left or Keys.Right)
@@ -1495,7 +1480,6 @@ public partial class ToolStripDropDown : ToolStrip
             ToolStrip? toplevel = GetToplevelOwnerToolStrip();
             if (toplevel is not null)
             {
-                s_snapFocusDebug.TraceVerbose("[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
                 toplevel.RestoreFocusInternal();
                 ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
             }
@@ -1854,9 +1838,6 @@ public partial class ToolStripDropDown : ToolStrip
                                 rootOwnerItem?.Unselect();
 
                                 ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
-
-                                s_snapFocusDebug.TraceVerbose("[ToolStripDropDown.SetVisibleCore] Exiting menu mode because item clicked");
-
                                 ToolStripManager.ModalMenuFilter.ExitMenuMode();
                             }
                             else
@@ -2062,8 +2043,6 @@ public partial class ToolStripDropDown : ToolStrip
                 // This is the Chrome Panel collection editor scenario
                 // we had focus, then the Chrome panel was activated and we never went away
                 // when we get focus again, we should reactivate our message filter.
-                s_snapFocusDebug.TraceVerbose(
-                    $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((nint)m.WParamInternal == PInvoke.WA_ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
                 if ((nint)m.WParamInternal == PInvoke.WA_ACTIVE)
                 {
@@ -2079,10 +2058,6 @@ public partial class ToolStripDropDown : ToolStrip
                     {
                         Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                     }
-                }
-                else
-                {
-                    s_snapFocusDebug.TraceVerbose($"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                 }
 
                 base.WndProc(ref m);
@@ -2105,7 +2080,6 @@ public partial class ToolStripDropDown : ToolStrip
 
     private void DismissActiveDropDowns()
     {
-        Debug.WriteLineIf((DropDownActivateDebug!.TraceVerbose && ActiveDropDowns.Count > 0), $"Dismiss children called - COUNT {ActiveDropDowns.Count}{Environment.NewLine}{new StackTrace().ToString()}");
         int count = ActiveDropDowns.Count;
         if (count == 1)
         {
@@ -2147,8 +2121,6 @@ public partial class ToolStripDropDown : ToolStrip
                 _sendingActivateMessage = true;
                 try
                 {
-                    DropDownActivateDebug.TraceVerbose($"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
-
                     // We're activating - notify the previous guy that we're activating.
                     HandleRef<HWND> activeWindow = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
@@ -2176,13 +2148,7 @@ public partial class ToolStripDropDown : ToolStrip
     /// <summary>
     ///  Determines if this is the first dropDown in the dropDown chain
     /// </summary>
-    internal bool IsFirstDropDown
-    {
-        get
-        {
-            return ((OwnerToolStrip as ToolStripDropDown) is null);
-        }
-    }
+    internal bool IsFirstDropDown => OwnerToolStrip as ToolStripDropDown is null;
 
     /// <summary>
     ///  returns the root dropdown in the chain.

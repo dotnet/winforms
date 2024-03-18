@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -97,8 +96,8 @@ internal partial class PropertyGridView
                     (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
                     (HINSTANCE)0,
                     PInvoke.GetCurrentThreadId());
+
                 Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");
-                CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:HookMouse()");
             }
         }
 
@@ -146,7 +145,6 @@ internal partial class PropertyGridView
                 {
                     PInvoke.UnhookWindowsHookEx(_mouseHookHandle);
                     _mouseHookHandle = default;
-                    CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:UnhookMouse()");
                 }
             }
         }

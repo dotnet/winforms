@@ -26,7 +26,6 @@ public abstract partial class UndoEngine
                 NextUndoAdds = !add;
                 OpenComponent = component;
 
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating {(add ? "Add" : "Remove")} undo event for '{_componentName}'");
                 using (_serializedData = engine._serializationService.CreateStore())
                 {
                     engine._serializationService.Serialize(_serializedData, component);
@@ -58,7 +57,6 @@ public abstract partial class UndoEngine
             {
                 if (!Committed)
                 {
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Committing remove of '{_componentName}'");
                     Committed = true;
                 }
             }
@@ -70,7 +68,6 @@ public abstract partial class UndoEngine
             {
                 if (NextUndoAdds)
                 {
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Adding '{_componentName}'");
                     // We need to add this component.  To add it, we deserialize it and then we add it to the designer host's container.
                     IDesignerHost host = engine.GetRequiredService<IDesignerHost>();
 
@@ -78,7 +75,6 @@ public abstract partial class UndoEngine
                 }
                 else
                 {
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Removing '{_componentName}'");
                     // We need to remove this component.  Take the name and match it to an object, and then ask that object to delete itself.
                     IDesignerHost host = engine.GetRequiredService<IDesignerHost>();
 
