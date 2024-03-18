@@ -28,6 +28,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     {
         get => _bindingContext ??= [];
 
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set
         {
             if (!Equals(_bindingContext, value))
