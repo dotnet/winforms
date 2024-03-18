@@ -17,10 +17,6 @@ internal class ToolStripDropTargetManager : IDropTarget
     private IDropTarget? _lastDropTarget;
     private readonly ToolStrip _owner;
 
-#if DEBUG
-    private bool _dropTargetIsEntered;
-#endif
-
     public ToolStrip Owner => _owner;
 
     public ToolStripDropTargetManager(ToolStrip owner)
@@ -98,13 +94,7 @@ internal class ToolStripDropTargetManager : IDropTarget
             }
         }
 
-        if (_lastDropTarget is not null)
-        {
-#if DEBUG
-            _dropTargetIsEntered = true;
-#endif
-            _lastDropTarget.OnDragEnter(e);
-        }
+        _lastDropTarget?.OnDragEnter(e);
     }
 
     public void OnDragOver(DragEventArgs e)
@@ -148,19 +138,7 @@ internal class ToolStripDropTargetManager : IDropTarget
 
     public void OnDragLeave(EventArgs e)
     {
-        if (_lastDropTarget is not null)
-        {
-#if DEBUG
-            _dropTargetIsEntered = false;
-#endif
-            _lastDropTarget.OnDragLeave(e);
-        }
-#if DEBUG
-        else
-        {
-            Debug.Assert(!_dropTargetIsEntered, "Why do we have an entered droptarget and NO lastDropTarget?");
-        }
-#endif
+        _lastDropTarget?.OnDragLeave(e);
         _lastDropTarget = null;
     }
 
