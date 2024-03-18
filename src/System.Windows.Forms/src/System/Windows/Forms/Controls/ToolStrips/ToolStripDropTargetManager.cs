@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -173,11 +172,8 @@ internal class ToolStripDropTargetManager : IDropTarget
                 throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
 
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
-
             // Register
             HRESULT hr = PInvoke.RegisterDragDrop(_owner, new DropTarget(this));
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
             if (hr.Failed && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
             {
                 throw Marshal.GetExceptionForHR((int)hr)!;

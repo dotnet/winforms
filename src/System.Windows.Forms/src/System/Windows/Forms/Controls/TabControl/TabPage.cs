@@ -546,7 +546,7 @@ public partial class TabPage : Panel
     ///  TabPage should fire enter when the focus is on the TabPage and not when the control
     ///  within the TabPage gets Focused.
     /// </summary>
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         if (ParentInternal is TabControl)
         {
@@ -569,7 +569,7 @@ public partial class TabPage : Panel
     ///  the TabPage gets Focused.
     ///  Similary the Leave should fire when the TabControl (and hence the TabPage) loses focus.
     /// </summary>
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         if (ParentInternal is TabControl)
         {

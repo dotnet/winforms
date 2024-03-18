@@ -15390,7 +15390,7 @@ public partial class DataGridView
         }
     }
 
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         if (EditingControl is not null && EditingControl.ContainsFocus)
         {
@@ -16201,7 +16201,7 @@ public partial class DataGridView
         }
     }
 
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         if (_ptCurrentCell.X > -1 && !_dataGridViewState1[State1_LeavingWithTabKey])
         {

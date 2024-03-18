@@ -22,7 +22,6 @@ internal static class CompModSwitches
     private static TraceSwitch? s_dgRelationShpRowLayout;
     private static TraceSwitch? s_dgRelationShpRowPaint;
     private static TraceSwitch? s_dgRowPaint;
-    private static TraceSwitch? s_dragDrop;
     private static TraceSwitch? s_imeMode;
     private static TraceSwitch? s_msaa;
     private static TraceSwitch? s_layoutPerformance;
@@ -193,16 +192,6 @@ internal static class CompModSwitches
             s_dgRowPaint ??= new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
 
             return s_dgRowPaint;
-        }
-    }
-
-    public static TraceSwitch DragDrop
-    {
-        get
-        {
-            s_dragDrop ??= new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
-
-            return s_dragDrop;
         }
     }
 

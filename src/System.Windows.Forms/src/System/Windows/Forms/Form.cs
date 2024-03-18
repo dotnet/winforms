@@ -235,7 +235,6 @@ public partial class Form : ContainerControl
         }
         set
         {
-            s_focusTracing.TraceVerbose($"Form::set_Active - {Name}");
             if ((_formState[s_formStateIsActive] != 0) != value)
             {
                 if (value)
@@ -2215,8 +2214,6 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void SetVisibleCore(bool value)
     {
-        s_focusTracing.TraceVerbose($"Form::SetVisibleCore({value}) - {Name}");
-
         // If DialogResult.OK and the value == Visible then this code has been called either through
         // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
         // This will avoid flashing during closing the dialog;
@@ -3636,11 +3633,11 @@ public partial class Form : ContainerControl
     /// </summary>
     internal override bool CanProcessMnemonic()
     {
-#if DEBUG
-        TraceCanProcessMnemonic();
-#endif
         // If this is a Mdi child form, child controls should process mnemonics only if this is the active mdi child.
-        if (IsMdiChild && (_formStateEx[s_formStateExMnemonicProcessed] == 1 || this != MdiParentInternal.ActiveMdiChildInternal || WindowState == FormWindowState.Minimized))
+        if (IsMdiChild &&
+            (_formStateEx[s_formStateExMnemonicProcessed] == 1
+                || this != MdiParentInternal.ActiveMdiChildInternal
+                || WindowState == FormWindowState.Minimized))
         {
             return false;
         }
@@ -3917,7 +3914,7 @@ public partial class Form : ContainerControl
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         base.OnEnter(e);
 
@@ -4533,11 +4530,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override bool ProcessDialogChar(char charCode)
     {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"Form.ProcessDialogChar [{charCode}]");
-#endif
-        // If we're the top-level form or control, we need to do the mnemonic handling
-        //
+        // If we're the top-level form or control, we need to do the mnemonic handling.
         if (IsMdiChild && charCode != ' ')
         {
             if (ProcessMnemonic(charCode))
