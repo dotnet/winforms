@@ -60,11 +60,26 @@ public partial class ProgressBar : Control
             {
                 // We want to turn on mirroring for Form explicitly.
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
+
                 // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
             return cp;
+        }
+    }
+
+    protected override void OnCreateControl()
+    {
+        base.OnCreateControl();
+
+        // If DarkMode is enabled, we need to disable the Visual Styles
+        // so Windows allows setting Fore- and Background color.
+        // There are more ideal ways imaginable, but this does the trick for now.
+        if (IsDarkModeEnabled)
+        {
+            // Disables Visual Styles for the ProgressBar.
+            PInvoke.SetWindowTheme(HWND, " ", " ");
         }
     }
 

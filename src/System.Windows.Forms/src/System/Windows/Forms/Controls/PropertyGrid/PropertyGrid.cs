@@ -1621,9 +1621,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     [Conditional("DEBUG")]
-#pragma warning disable CA1822 // Mark members as static
     internal void CheckInCreate()
-#pragma warning restore CA1822 // Mark members as static
     {
 #if DEBUG
         if (_inGridViewCreate)
@@ -2544,7 +2542,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         // Making sure, the _toolBar BackColor gets updated when the
         // default BackColor is not the typical light-theme one.
+#pragma warning disable CA2245 // Do not assign a property to itself
         BackColor = BackColor;
+#pragma warning restore CA2245 // Do not assign a property to itself
 
         OnLayoutInternal(dividerOnly: false);
         TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
