@@ -2457,7 +2457,7 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormWindowStateDescr))]
     public FormWindowState WindowState
     {
-        get => (FormWindowState)_formState[FormStateWindowState];
+        get => (FormWindowState)_formState[s_formStateWindowState];
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
