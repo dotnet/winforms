@@ -1,5 +1,6 @@
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
+override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
