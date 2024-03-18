@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-
 namespace System.Windows.Forms.Tests;
 
 public class TrackBarTests
@@ -3209,6 +3208,61 @@ public class TrackBarTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsFact]
+    public void TrackBar_AutoSizeChangedEvent_AddRemove_Success()
+    {
+        using TrackBar control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.AutoSizeChanged += handler;
+        control.AutoSize = !control.AutoSize;
+        callCount.Should().Be(1);
+
+        control.AutoSizeChanged -= handler;
+        control.AutoSize = !control.AutoSize;
+        callCount.Should().Be(1);
+    }
+
+    public static IEnumerable<object[]> PaintEvent_TestData()
+    {
+        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(100, 100)), new Rectangle(0, 0, 100, 100)) };
+        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(200, 200)), new Rectangle(10, 10, 50, 50)) };
+        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(300, 300)), new Rectangle(20, 20, 100, 100)) };
+        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(400, 400)), new Rectangle(30, 30, 150, 150)) };
+        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(500, 500)), new Rectangle(40, 40, 200, 200)) };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(PaintEvent_TestData))]
+    public void TrackBar_PaintEvent_AddRemove_Success(PaintEventArgs paintEventArgs)
+    {
+        using SubTrackBar trackBar = new();
+        int callCount = 0;
+        PaintEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(trackBar);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        // Add and remove the event handler and test the Paint event.
+        trackBar.Paint += handler;
+        trackBar.OnPaint(paintEventArgs);
+        callCount.Should().BeGreaterThan(0);
+
+        callCount = 0;
+        trackBar.Paint -= handler;
+        trackBar.OnPaint(paintEventArgs);
+        trackBar.Invalidate();
+        callCount.Should().Be(0);
     }
 
     public class SubTrackBar : TrackBar
