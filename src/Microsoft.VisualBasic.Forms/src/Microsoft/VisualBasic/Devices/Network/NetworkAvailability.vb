@@ -59,7 +59,9 @@ Namespace Microsoft.VisualBasic.Devices
                     Return
                 End Try
                 SyncLock _syncObject 'we don't want our event firing before we've finished setting up the infrastructure.  Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
-                    If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New List(Of NetworkAvailableEventHandler)
+                    If _networkAvailabilityEventHandlers Is Nothing Then
+                        _networkAvailabilityEventHandlers = New List(Of NetworkAvailableEventHandler)
+                    End If
                     _networkAvailabilityEventHandlers.Add(handler)
 
                     'Only setup the event Marshalling infrastructure once
