@@ -10744,7 +10744,6 @@ public class RichTextBoxTests
         { "Hello World" },
         { new string('a', 10000) },
         { "Special characters: !@#$%^&*()" },
-        { "" },
     };
 
     [WinFormsTheory]
@@ -10760,6 +10759,18 @@ public class RichTextBoxTests
 
             richTextBox1.Text.Should().Be(value);
         }
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_Paste_EmptyString_Data()
+    {
+        using RichTextBox richTextBox1 = new();
+
+        Clipboard.SetText("non-empty");
+        Clipboard.Clear();
+        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
+
+        richTextBox1.Text.Should().Be("");
     }
 
     public static TheoryData<string> RtfData => new()
@@ -10795,7 +10806,13 @@ public class RichTextBoxTests
             callCount++;
         };
 
-        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
 
         richTextBox1.DragDrop += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
@@ -10817,7 +10834,13 @@ public class RichTextBoxTests
             callCount++;
         };
 
-        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
 
         richTextBox1.DragEnter += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
@@ -10860,7 +10883,13 @@ public class RichTextBoxTests
             callCount++;
         };
 
-        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
 
         richTextBox1.DragOver += handler;
         richTextBox1.OnDragOver(dragEventArgs);
@@ -10882,7 +10911,7 @@ public class RichTextBoxTests
             callCount++;
         };
 
-        GiveFeedbackEventArgs giveFeedbackEventArgs = new(DragDropEffects.None, true);
+        GiveFeedbackEventArgs giveFeedbackEventArgs = new(DragDropEffects.None, useDefaultCursors: true);
 
         richTextBox1.GiveFeedback += handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
@@ -10904,7 +10933,7 @@ public class RichTextBoxTests
             callCount++;
         };
           
-        QueryContinueDragEventArgs queryContinueDragEventArgs = new(0, true, DragAction.Continue);
+        QueryContinueDragEventArgs queryContinueDragEventArgs = new(keyState: 0, escapePressed: true, action: DragAction.Continue);
 
         richTextBox1.QueryContinueDrag += handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
