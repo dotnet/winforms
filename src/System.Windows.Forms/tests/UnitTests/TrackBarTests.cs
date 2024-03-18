@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+
 namespace System.Windows.Forms.Tests;
 
 public class TrackBarTests
