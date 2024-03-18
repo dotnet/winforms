@@ -6965,6 +6965,6 @@ Stack trace where the illegal operation occurred was:
     <value>Controls whether multiple folders can be selected in the dialog.</value>
   </data>
   <data name="BindingNotSupported" xml:space="preserve">
-    <value>Binding is not supported in trimming</value>
+    <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
 </root>

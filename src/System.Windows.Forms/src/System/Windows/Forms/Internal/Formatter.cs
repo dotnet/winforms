@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 internal static class Formatter
 {
-    internal const string ComponentModelTrimIncompatibilityMessage = "ComponentModel APIs are trim incompatible.";
+    internal const string ComponentModelTrimIncompatibilityMessage = "ComponentModel APIs are not trimming compatible.";
 
     private static readonly Type s_stringType = typeof(string);
     private static readonly Type s_booleanType = typeof(bool);
