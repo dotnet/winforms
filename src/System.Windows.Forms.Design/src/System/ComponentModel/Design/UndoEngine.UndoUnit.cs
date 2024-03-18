@@ -25,8 +25,6 @@ public abstract partial class UndoEngine
         {
             Name = name ?? string.Empty;
 
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Creating undo unit '{Name}'");
-
             UndoEngine = engine.OrThrowIfNull();
             _reverse = true;
             if (UndoEngine.TryGetService(out ISelectionService? ss))
@@ -224,7 +222,6 @@ public abstract partial class UndoEngine
                     if (name is not null)
                     {
                         string memberName = e.Member?.Name ?? "(none)";
-                        Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, $"Adding second ChangeEvent for {name} Member: {memberName}");
                     }
                     else
                     {
@@ -357,7 +354,6 @@ public abstract partial class UndoEngine
         /// </summary>
         public void Undo()
         {
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Performing undo '{Name}'");
             UndoUnit? savedUnit = UndoEngine._executingUnit;
             UndoEngine._executingUnit = this;
             DesignerTransaction? transaction = null;

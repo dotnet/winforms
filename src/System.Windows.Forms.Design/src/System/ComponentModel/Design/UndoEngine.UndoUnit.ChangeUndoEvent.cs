@@ -28,10 +28,8 @@ public abstract partial class UndoEngine
                 OpenComponent = e.Component;
                 _member = e.Member;
 
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating change undo event for '{_componentName}'");
                 if (serializeBeforeState)
                 {
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving before snapshot for change to '{_componentName}'");
                     _before = Serialize(engine, OpenComponent!, _member);
                 }
             }
@@ -93,7 +91,6 @@ public abstract partial class UndoEngine
             {
                 if (!Committed)
                 {
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Committing change to '{_componentName}'");
                     OpenComponent = null;
                 }
             }
@@ -101,7 +98,6 @@ public abstract partial class UndoEngine
             private void SaveAfterState(UndoEngine engine)
             {
                 Debug.Assert(_after is null, "Change undo saving state twice.");
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving after snapshot for change to '{_componentName}'");
                 object? component = null;
 
                 if (engine.TryGetService(out IReferenceService? rs))
@@ -143,7 +139,6 @@ public abstract partial class UndoEngine
             /// </summary>
             public override void Undo(UndoEngine engine)
             {
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Applying changes to '{_componentName}'");
                 Debug.Assert(_savedAfterState, "After state not saved.  BeforeUndo was not called?");
 
                 if (_before is not null)

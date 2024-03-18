@@ -16,8 +16,6 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public abstract partial class UndoEngine : IDisposable
 {
-    private static readonly TraceSwitch s_traceUndo = new("UndoEngine", "Trace UndoRedo");
-
     private IServiceProvider _provider;
     private readonly Stack<UndoUnit> _unitStack; // the stack of active (non-committed) units.
     private UndoUnit? _executingUnit; // the unit currently executing an undo.
@@ -122,7 +120,6 @@ public abstract partial class UndoEngine : IDisposable
         if (reason != PopUnitReason.Normal || !_host.InTransaction)
         {
             UndoUnit unit = _unitStack.Pop();
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Popping unit {unit}.  Reason: {reason}");
 
             if (!unit.IsEmpty)
             {
@@ -187,8 +184,6 @@ public abstract partial class UndoEngine : IDisposable
     {
         if (disposing)
         {
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, "UndoEngine: Disposing undo engine");
-
             _host.TransactionOpening -= new EventHandler(OnTransactionOpening);
             _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
 
@@ -422,7 +417,7 @@ public abstract partial class UndoEngine : IDisposable
                             continue;
                         }
 
-                        if (obj is not null && object.ReferenceEquals(obj, e.Component))
+                        if (obj is not null && ReferenceEquals(obj, e.Component))
                         {
                             if (propsToUpdate is null)
                             {

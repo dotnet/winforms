@@ -573,35 +573,31 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         {
             if (isTopLevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space)))
             {
-                ToolStrip.s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] open submenu from toplevel item");
-
                 if (Enabled || DesignMode)
                 {
                     // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu.
                     ShowDropDown();
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                     DropDown.SelectNextToolStripItem(start: null, forward: true);
-                }// else eat the key
+                }
 
                 return true;
             }
             else if (!isTopLevel)
             {
-                // if we're on a DropDown - then cascade out.
+                // If we're on a DropDown - then cascade out.
                 bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
                 bool forward = ((keyCode == Keys.Enter) || (SupportsSpaceKey && keyCode == Keys.Space));
                 forward = (forward || (menusCascadeRight && keyCode == Keys.Left) || (!menusCascadeRight && keyCode == Keys.Right));
 
                 if (forward)
                 {
-                    ToolStrip.s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] open submenu from NON-toplevel item");
-
                     if (Enabled || DesignMode)
                     {
                         ShowDropDown();
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         DropDown.SelectNextToolStripItem(start: null, forward: true);
-                    } // else eat the key
+                    }
 
                     return true;
                 }
@@ -623,27 +619,20 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
             if (backward)
             {
-                ToolStrip.s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
-
-                // we're on a drop down but we're heading back up the chain.
-                // remember to select the item that displayed this dropdown.
+                // We're on a drop down but we're heading back up the chain.
+                // Remember to select the item that displayed this dropdown.
                 ToolStripDropDown? parent = GetCurrentParentDropDown();
                 if (parent is not null && !parent.IsFirstDropDown)
                 {
-                    // we're walking back up the dropdown chain.
+                    // We're walking back up the dropdown chain.
                     parent.SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                     parent.SelectPreviousToolStrip();
                     return true;
                 }
-
-                // else if (parent.IsFirstDropDown)
-                //    the base handling (ToolStripDropDown.ProcessArrowKey) will perform auto-expansion of
-                //    the previous item in the menu.
             }
         }
 
-        ToolStrip.s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] ddi calling base");
         return base.ProcessDialogKey(keyData);
     }
 
