@@ -7804,7 +7804,7 @@ public unsafe partial class Control :
                     or PictureBox        // Inherits from Control
                     or ProgressBar       // Inherits from Control
                     or ScrollableControl // Inherits from Control
-                    or TextBoxBase       // Excluded - probably too invasive.
+                    // or TextBoxBase    // Excluded - probably too invasive.
                     or TrackBar          // Inherits from Control
                     or TreeView          // Inherits from Control
                     or UpDownBase)       // Inherits from Control

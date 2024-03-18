@@ -39,7 +39,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     private bool _showAlways;
     private ToolTipNativeWindow _window;
     private Control? _topLevelControl;
-    private bool active = true;
+    private bool _active = true;
     private Color _backColor = Application.SystemColors.Info;
     private Color _foreColor = Application.SystemColors.InfoText;
     private bool _isBalloon;

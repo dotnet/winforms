@@ -5,9 +5,9 @@ namespace System.Drawing;
 
 public static class SystemColorsRouter
 {
-    internal static Func<Color> ActiveBorderRouter = () => SystemColors.ActiveBorder;
+    internal static Func<Color> s_activeBorderRouter = () => SystemColors.ActiveBorder;
 
-    public static Color ActiveBorder => ActiveBorderRouter();
+    public static Color ActiveBorder => s_activeBorderRouter();
     public static Color ActiveCaption => SystemColors.ActiveCaption;
     public static Color ActiveCaptionText => SystemColors.ActiveCaptionText;
     public static Color AppWorkspace => SystemColors.AppWorkspace;
