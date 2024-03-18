@@ -91,12 +91,12 @@ public class GraphicsTest : IDisposable
 
     private void AssertEquals(string msg, object expected, object actual)
     {
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected, msg);
     }
 
     private void AssertEquals(string msg, double expected, double actual, int precision)
     {
-        Assert.Equal(expected, actual, precision);
+        actual.Should().BeApproximately(expected, precision, msg);
     }
 
     [Fact]
@@ -1836,7 +1836,7 @@ public class GraphicsTest : IDisposable
         expected = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         for (int i = 1; i < 10; i++)
         {
-            s = s + " ";
+            s += " ";
             size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
             Assert.Equal((double)expected.Height, size.Height, 1);
             Assert.Equal((double)expected.Width, size.Width, 1);

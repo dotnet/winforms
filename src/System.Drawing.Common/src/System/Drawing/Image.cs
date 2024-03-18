@@ -21,10 +21,6 @@ namespace System.Drawing;
 [TypeConverter(typeof(ImageConverter))]
 public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, ICloneable, ISerializable
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     // The signature of this delegate is incorrect. The signature of the corresponding
     // native callback function is:
     // extern "C" {
@@ -160,7 +156,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     private static GpImage* LoadGdipImageFromStream(Stream stream, bool useEmbeddedColorManagement)
     {
         using var iStream = stream.ToIStream(makeSeekable: true);
-        return LoadGdipImageFromStream(iStream, useEmbeddedColorManagement: false);
+        return LoadGdipImageFromStream(iStream, useEmbeddedColorManagement);
     }
 
     private static unsafe GpImage* LoadGdipImageFromStream(IStream* stream, bool useEmbeddedColorManagement)
@@ -209,39 +205,14 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
     protected virtual void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && nativeImage is not null, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
         if (_nativeImage is null)
+        {
             return;
+        }
 
-        try
-        {
-#if DEBUG
-            Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-            PInvoke.GdipDisposeImage(_nativeImage);
-#if DEBUG
-            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-        }
-        catch (Exception ex)
-        {
-            if (ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-                throw;
-            }
-
-            Debug.Fail($"Exception thrown during Dispose: {ex}");
-        }
-        finally
-        {
-            _nativeImage = null;
-        }
+        Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDisposeImage(_nativeImage);
+        _nativeImage = null;
+        Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
     }
 
     /// <summary>

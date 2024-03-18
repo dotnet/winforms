@@ -25,14 +25,8 @@ internal class UserControlDocumentDesigner : DocumentDesigner
     /// </summary>
     private Size Size
     {
-        get
-        {
-            return Control.ClientSize;
-        }
-        set
-        {
-            Control.ClientSize = value;
-        }
+        get => Control.ClientSize;
+        set => Control.ClientSize = value;
     }
 
     /// <summary>

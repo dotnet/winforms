@@ -60,10 +60,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
 
     private string Text
     {
-        get
-        {
-            return Control.Text;
-        }
+        get => Control.Text;
         set
         {
             Control.Text = value;

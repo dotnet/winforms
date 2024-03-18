@@ -47,22 +47,18 @@ public sealed unsafe class EncoderParameter : IDisposable
 
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.KeepAlive(this);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
         if (_parameterValue != 0)
         {
             Marshal.FreeHGlobal(_parameterValue);
         }
 
         _parameterValue = 0;
+
+        GC.KeepAlive(this);
+        GC.SuppressFinalize(this);
     }
 
-    ~EncoderParameter() => Dispose(disposing: false);
+    ~EncoderParameter() => Dispose();
 
     public EncoderParameter(Encoder encoder, byte value)
     {

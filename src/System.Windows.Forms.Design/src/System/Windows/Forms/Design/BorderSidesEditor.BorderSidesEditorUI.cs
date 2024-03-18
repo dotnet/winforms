@@ -17,11 +17,9 @@ public partial class BorderSidesEditor
 
         private bool _allChecked;
         private CheckBox _bottomCheckBox;
-        private readonly BorderSidesEditor _editor;
         private CheckBox _leftCheckBox;
         private CheckBox _noneCheckBox;
         private bool _noneChecked;
-        private object? _originalValue;
         private CheckBox _rightCheckBox;
         private Label _splitterLabel;
 
@@ -30,9 +28,8 @@ public partial class BorderSidesEditor
 
         private bool _updateCurrentValue;
 
-        public BorderSidesEditorUI(BorderSidesEditor editor)
+        public BorderSidesEditorUI()
         {
-            _editor = editor;
             End();
             InitializeComponent();
             Size = PreferredSize;
@@ -55,7 +52,6 @@ public partial class BorderSidesEditor
         public void End()
         {
             EditorService = null;
-            _originalValue = null;
             Value = null;
             _updateCurrentValue = false;
         }
@@ -337,12 +333,12 @@ public partial class BorderSidesEditor
         }
 
         /// <summary>
-        ///  Allows to select proper values..
+        ///  Allows to select proper values.
         /// </summary>
         private void SetCheckBoxCheckState(ToolStripStatusLabelBorderSides sides)
         {
             ResetCheckBoxState();
-            if ((sides & ToolStripStatusLabelBorderSides.All) == ToolStripStatusLabelBorderSides.All)
+            if (sides.HasFlag(ToolStripStatusLabelBorderSides.All))
             {
                 _allCheckBox.Checked = true;
                 _topCheckBox.Checked = true;
@@ -353,16 +349,11 @@ public partial class BorderSidesEditor
             }
             else
             {
-                _noneCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.None) ==
-                                       ToolStripStatusLabelBorderSides.None;
-                _topCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Top) ==
-                                      ToolStripStatusLabelBorderSides.Top;
-                _bottomCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Bottom) ==
-                                         ToolStripStatusLabelBorderSides.Bottom;
-                _leftCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Left) ==
-                                       ToolStripStatusLabelBorderSides.Left;
-                _rightCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Right) ==
-                                        ToolStripStatusLabelBorderSides.Right;
+                _noneCheckBox.Checked = sides.HasFlag(ToolStripStatusLabelBorderSides.None);
+                _topCheckBox.Checked = sides.HasFlag(ToolStripStatusLabelBorderSides.Top);
+                _bottomCheckBox.Checked = sides.HasFlag(ToolStripStatusLabelBorderSides.Bottom);
+                _leftCheckBox.Checked = sides.HasFlag(ToolStripStatusLabelBorderSides.Left);
+                _rightCheckBox.Checked = sides.HasFlag(ToolStripStatusLabelBorderSides.Right);
             }
         }
 
@@ -374,7 +365,7 @@ public partial class BorderSidesEditor
             Debug.Assert(edSvc is not null);
 
             EditorService = edSvc;
-            _originalValue = Value = value;
+            Value = value;
 
             if (value is ToolStripStatusLabelBorderSides currentSides)
             {

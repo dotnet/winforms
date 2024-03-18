@@ -708,10 +708,10 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  Adds the new TemplateNode to the ToolStrip or MenuStrip.
     /// </summary>
-    internal void AddNewTemplateNode(ToolStrip wb)
+    internal void AddNewTemplateNode()
     {
-        // setup the MINIToolStrip host...
-        _tn = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText, null);
+        // Setup the MINIToolStrip host.
+        _tn = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText);
         _miniToolStrip = _tn.EditorToolStrip;
         int width = _tn.EditorToolStrip.Width;
         _editorNode = new DesignerToolStripControlHost(_tn.EditorToolStrip);
@@ -1569,9 +1569,9 @@ internal class ToolStripDesigner : ControlDesigner
             return;
         }
 
-        ToolStrip toolStrip = (ToolStrip)Component;
-        AddNewTemplateNode(toolStrip);
-        // set up the right visibility state for the ToolStrip.
+        AddNewTemplateNode();
+
+        // Set up the right visibility state for the ToolStrip.
         SelSvc_SelectionChanged(null, EventArgs.Empty);
     }
 

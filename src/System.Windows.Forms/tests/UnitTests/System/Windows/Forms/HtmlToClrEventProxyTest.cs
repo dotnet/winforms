@@ -12,7 +12,7 @@ public unsafe class HtmlToClrEventProxyTest
     [WinFormsFact]
     public void HtmlToClrEventProxy_EnumerateDispId_NamesExpected()
     {
-        HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
+        HtmlToClrEventProxy proxy = new("testEvent", (object sender, EventArgs e) => { });
         using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         // Requests that the object enumerates all of the elements on IDispatchEx
@@ -39,7 +39,7 @@ public unsafe class HtmlToClrEventProxyTest
     [WinFormsFact]
     public void HtmlToClrEventProxy_PropFlags_Expected()
     {
-        HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
+        HtmlToClrEventProxy proxy = new("testEvent", (object sender, EventArgs e) => { });
         using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         FDEX_PROP_FLAGS methodFlags = FDEX_PROP_FLAGS.fdexPropCannotGet
@@ -68,7 +68,7 @@ public unsafe class HtmlToClrEventProxyTest
     {
         string eventName = "testEvent";
         int count = 0;
-        HtmlToClrEventProxy proxy = new(null, eventName, (object sender, EventArgs e) => count++);
+        HtmlToClrEventProxy proxy = new(eventName, (object sender, EventArgs e) => count++);
         using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
 
         VARIANT result = default;

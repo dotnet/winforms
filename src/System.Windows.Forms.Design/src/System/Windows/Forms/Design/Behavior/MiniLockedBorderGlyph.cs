@@ -23,7 +23,7 @@ internal class MiniLockedBorderGlyph : SelectionGlyphBase
     ///  This constructor extends from the standard SelectionGlyphBase constructor.
     ///  Note that a primarySelection flag is passed in - this will be used when determining the colors of the borders.
     /// </summary>
-    internal MiniLockedBorderGlyph(Rectangle controlBounds, SelectionBorderGlyphType type, Behavior behavior, bool primarySelection)
+    internal MiniLockedBorderGlyph(Rectangle controlBounds, SelectionBorderGlyphType type, Behavior behavior)
         : base(behavior)
     {
         InitializeGlyph(controlBounds, type);

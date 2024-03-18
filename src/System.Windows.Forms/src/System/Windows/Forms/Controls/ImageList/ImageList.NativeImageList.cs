@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public sealed partial class ImageList
 {
-    internal class NativeImageList : IDisposable, IHandle<HIMAGELIST>
+    internal sealed class NativeImageList : IDisposable, IHandle<HIMAGELIST>
     {
 #if DEBUG
         private readonly string _callStack = new StackTrace().ToString();
@@ -65,12 +65,6 @@ public sealed partial class ImageList
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
             lock (s_syncLock)
             {
                 if (HIMAGELIST.IsNull)
@@ -81,6 +75,8 @@ public sealed partial class ImageList
                 PInvoke.ImageList.Destroy(this);
                 HIMAGELIST = HIMAGELIST.Null;
             }
+
+            GC.SuppressFinalize(this);
         }
 
         ~NativeImageList()
@@ -93,7 +89,7 @@ public sealed partial class ImageList
             //      resources.ApplyResources(this.listView1, "listView1");
             //
             // In those cases the loose instances will be collected by the GC.
-            Dispose(disposing: false);
+            Dispose();
         }
 
         internal NativeImageList Duplicate()

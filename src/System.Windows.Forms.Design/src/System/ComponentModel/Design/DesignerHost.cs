@@ -591,7 +591,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             Site? site = component.Site as Site;
             RemoveWithoutUnsiting(component);
-            RemoveFromContainerPostProcess(component, this);
+            RemoveFromContainerPostProcess(component);
             if (site is not null)
             {
                 site.Disposed = true;
@@ -652,9 +652,14 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         return true;
     }
 
-    internal void RemoveFromContainerPostProcess(IComponent component, IContainer container)
+    internal void RemoveFromContainerPostProcess(IComponent component)
     {
-        // At one point during Whidbey, the component used to be unsited earlier in this process and it would be temporarily resited here before raising OnComponentRemoved. The problem with resiting it is that some 3rd party controls take action when a component is sited (such as displaying  a dialog a control is dropped on the form) and resiting here caused them to think they were being initialized for the first time.  To preserve compat, we shouldn't resite the component  during Remove.
+        // At one point during Whidbey, the component used to be unsited earlier in this process and
+        // it would be temporarily resited here before raising OnComponentRemoved. The problem with
+        // resiting it is that some 3rd party controls take action when a component is sited (such as
+        // displaying  a dialog a control is dropped on the form) and resiting here caused them to think
+        // they were being initialized for the first time. To preserve compat, we shouldn't resite the
+        // component during Remove.
         try
         {
             ComponentEventHandler? eh = _events[s_eventComponentRemoved] as ComponentEventHandler;

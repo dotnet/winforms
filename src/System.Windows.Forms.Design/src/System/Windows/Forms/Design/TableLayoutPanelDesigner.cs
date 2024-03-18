@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace System.Windows.Forms.Design;
 
-internal class TableLayoutPanelDesigner : FlowPanelDesigner
+internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
 {
     private TableLayoutPanelBehavior _tlpBehavior;      // every resize col/row glyph is associated with this instance of behavior
     private Point _droppedCellPosition = InvalidPoint;  // used to insert new children
@@ -50,15 +50,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private int _ensureSuspendCount;
 
-    private TableLayoutPanelBehavior Behavior
-    {
-        get
-        {
-            _tlpBehavior ??= new TableLayoutPanelBehavior(Table, this, Component.Site);
-
-            return _tlpBehavior;
-        }
-    }
+    private TableLayoutPanelBehavior Behavior => _tlpBehavior ??= new TableLayoutPanelBehavior(Table, this, Component.Site);
 
     private TableLayoutColumnStyleCollection ColumnStyles => Table.ColumnStyles;
 
@@ -66,10 +58,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     public int RowCount
     {
-        get
-        {
-            return Table.RowCount;
-        }
+        get => Table.RowCount;
         set
         {
             if (value <= 0 && !Undoing)
@@ -85,10 +74,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     public int ColumnCount
     {
-        get
-        {
-            return Table.ColumnCount;
-        }
+        get => Table.ColumnCount;
         set
         {
             if (value <= 0 && !Undoing)
@@ -128,14 +114,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    private DesignerTableLayoutControlCollection Controls
-    {
-        get
-        {
-            _controls ??= new DesignerTableLayoutControlCollection((TableLayoutPanel)Control);
-            return _controls;
-        }
-    }
+    private DesignerTableLayoutControlCollection Controls =>
+        _controls ??= new DesignerTableLayoutControlCollection((TableLayoutPanel)Control);
 
     private ContextMenuStrip DesignerContextMenuStrip
     {
@@ -1206,19 +1186,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    protected override InheritanceAttribute InheritanceAttribute
-    {
-        get
-        {
-            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited)
-                || (base.InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
-            {
-                return InheritanceAttribute.InheritedReadOnly;
-            }
-
-            return base.InheritanceAttribute;
-        }
-    }
+    protected override InheritanceAttribute InheritanceAttribute =>
+        (base.InheritanceAttribute == InheritanceAttribute.Inherited)
+            || (base.InheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
+                ? InheritanceAttribute.InheritedReadOnly
+                : base.InheritanceAttribute;
 
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
@@ -2094,7 +2066,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private static string ReplaceText(string text) => text is null ? null : Regex.Replace(text, @"\(\&.\)", "");
+    private static string ReplaceText(string text) => text is null ? null : ParenthesisRegex().Replace(text, "");
 
     private void OnVerbRemove(object sender, EventArgs e)
     {
@@ -2275,4 +2247,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             return base.SerializeCollection(manager, targetExpression, targetType, originalCollection, subset);
         }
     }
+
+    [GeneratedRegex(@"\(\&.\)")]
+    private static partial Regex ParenthesisRegex();
 }

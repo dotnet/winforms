@@ -210,22 +210,6 @@ public class MetafileFulltrustTest
         }
     }
 
-    private void Metafile_IntPtrEmfType(EmfType type)
-    {
-        using Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb);
-        using Graphics g = Graphics.FromImage(bmp);
-        IntPtr hdc = g.GetHdc();
-        try
-        {
-            Metafile mf = new(hdc, type);
-            CheckEmptyHeader(mf, type);
-        }
-        finally
-        {
-            g.ReleaseHdc(hdc);
-        }
-    }
-
     [Fact]
     public void Metafile_IntPtrRectangle_Empty()
     {
@@ -294,44 +278,6 @@ public class MetafileFulltrustTest
     {
         using MemoryStream ms = new();
         Assert.Throws<ArgumentException>(() => Metafile_StreamEmfType(ms, (EmfType)int.MinValue));
-    }
-
-    private void CreateFilename(EmfType type, bool single)
-    {
-        string name = $"{type}-{(single ? "Single" : "Multiple")}.emf";
-        string filename = Path.Combine(Path.GetTempPath(), name);
-        Metafile mf;
-        using Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb);
-        using (Graphics g = Graphics.FromImage(bmp))
-        {
-            IntPtr hdc = g.GetHdc();
-            try
-            {
-                mf = new Metafile(filename, hdc, type);
-                Assert.Equal(0, new FileInfo(filename).Length);
-            }
-            finally
-            {
-                g.ReleaseHdc(hdc);
-            }
-        }
-
-        long size = 0;
-        using (Graphics g = Graphics.FromImage(mf))
-        {
-            g.FillRectangle(Brushes.BlueViolet, 10, 10, 80, 80);
-            size = new FileInfo(filename).Length;
-            Assert.Equal(0, size);
-        }
-
-        if (!single)
-        {
-            using Graphics g = Graphics.FromImage(mf);
-            g.DrawRectangle(Pens.Azure, 10, 10, 80, 80);
-        }
-
-        mf.Dispose();
-        Assert.Equal(size, new FileInfo(filename).Length);
     }
 
     [Fact]

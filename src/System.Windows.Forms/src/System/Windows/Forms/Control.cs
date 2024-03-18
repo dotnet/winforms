@@ -10066,7 +10066,7 @@ public unsafe partial class Control :
         // zooming feature, as opposed to AutoScale.
         using (new LayoutTransaction(this, this, PropertyNames.Bounds, resumeLayout: false))
         {
-            ScaleControl(factor, factor, this);
+            ScaleControl(factor, factor);
             if (ScaleChildren)
             {
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
@@ -10107,7 +10107,7 @@ public unsafe partial class Control :
         // positions of all controls.  Therefore, we should resume(false).
         using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
         {
-            ScaleControl(includedFactor, excludedFactor, requestingControl);
+            ScaleControl(includedFactor, excludedFactor);
 
             // Certain controls like 'PropertyGrid' does special scaling. Differing scaling to their own methods.
             if (!_doNotScaleChildren)
@@ -10188,7 +10188,7 @@ public unsafe partial class Control :
     ///  The requestingControl property indicates which control has requested
     ///  the scaling function.
     /// </summary>
-    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
+    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor)
     {
         try
         {

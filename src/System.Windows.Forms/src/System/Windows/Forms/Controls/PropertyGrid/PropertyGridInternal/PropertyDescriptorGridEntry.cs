@@ -339,7 +339,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     protected void Initialize(PropertyDescriptor propertyDescriptor)
     {
-        _isSerializeContentsProperty = PropertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
+        _isSerializeContentsProperty = propertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
 
         if (!_hide && IsPropertyReadOnly)
         {
