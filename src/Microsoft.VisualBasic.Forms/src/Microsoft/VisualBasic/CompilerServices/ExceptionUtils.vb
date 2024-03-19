@@ -1,7 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports Microsoft.VisualBasic.CompilerServices.Utils1
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -18,11 +18,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private Sub New()
         End Sub
 
+        Private Shared Function GetResourceStringResourceId(ResourceId As vbErrors) As String
+            Dim id As String = "ID" & CStr(ResourceId)
+            Return SR.GetResourceString(id, id)
+        End Function
+
         Friend Shared Function VbMakeException(hr As Integer) As Exception
             Dim description As String = ""
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
-                description = GetResourceString(CType(hr, vbErrors))
+                description = GetResourceStringResourceId(CType(hr, vbErrors))
             End If
 
             Select Case hr
