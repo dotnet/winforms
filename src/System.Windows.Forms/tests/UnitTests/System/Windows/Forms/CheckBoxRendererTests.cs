@@ -14,7 +14,7 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
     [InlineData(CheckBoxState.MixedNormal)]
     public void CheckBoxRenderer_DrawCheckBox(CheckBoxState cBState)
     {
-        using Form form = new Form();
+        using Form form = new();
         using CheckBox control = (CheckBox)CreateButton();
         form.Controls.Add(control);
 
@@ -29,15 +29,12 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
 
         CheckBoxRenderer.DrawCheckBox(graphics, point, bounds, control.Text, SystemFonts.DefaultFont, false, cBState);
 
-        if (Application.RenderWithVisualStyles)
-        {
-            emf.Validate(
-                state,
-                Application.RenderWithVisualStyles
-                    ? Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_ALPHABLEND)
-                    : Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS), 1)
-            );
-        }
+        emf.Validate(
+            state,
+            Application.RenderWithVisualStyles
+                ? Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_ALPHABLEND)
+                : Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS), 1)
+        );
     }
 
     [WinFormsTheory]
@@ -45,7 +42,7 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
     [InlineData(CheckBoxState.MixedNormal)]
     public void CheckBoxRenderer_DrawCheckBox_OverloadWithSizeAndText(CheckBoxState cBState)
     {
-        using Form form = new Form();
+        using Form form = new();
         using CheckBox control = (CheckBox)CreateButton();
         form.Controls.Add(control);
 
@@ -82,7 +79,7 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
     [InlineData(TextFormatFlags.TextBoxControl, CheckBoxState.UncheckedNormal)]
     public void CheckBoxRenderer_DrawCheckBox_VisualStyleOn_OverloadWithTextFormat(TextFormatFlags textFormat, CheckBoxState cBState)
     {
-        using Form form = new Form();
+        using Form form = new();
         using CheckBox control = (CheckBox)CreateButton();
         form.Controls.Add(control);
 
@@ -118,7 +115,7 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
     [InlineData(CheckBoxState.MixedNormal, false)]
     public void CheckBoxRenderer_DrawCheckBox_OverloadWithHandle(CheckBoxState cBState, bool focus)
     {
-        using Form form = new Form();
+        using Form form = new();
         using CheckBox control = (CheckBox)CreateButton();
         form.Controls.Add(control);
         form.Handle.Should().NotBe(IntPtr.Zero);

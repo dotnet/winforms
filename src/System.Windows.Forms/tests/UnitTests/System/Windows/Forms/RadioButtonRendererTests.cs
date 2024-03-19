@@ -115,7 +115,17 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         Rectangle bounds = control.Bounds;
         control.Text = "Text";
 
-        RadioButtonRenderer.DrawRadioButton(graphics, point, bounds, control.Text, SystemFonts.DefaultFont, TextFormatFlags.Default, focus, RadioButtonState.CheckedNormal, HWND.Null);
+        RadioButtonRenderer.DrawRadioButton(
+            graphics,
+            point,
+            bounds,
+            control.Text,
+            SystemFonts.DefaultFont,
+            TextFormatFlags.Default,
+            focus,
+            RadioButtonState.CheckedNormal,
+            HWND.Null
+);
 
         emf.Validate(
             state,

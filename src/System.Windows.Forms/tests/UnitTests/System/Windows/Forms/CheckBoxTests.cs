@@ -555,26 +555,24 @@ public class CheckBoxTests : AbstractButtonBaseTests
         eventFired.Should().BeTrue();
     }
 
+    public static IEnumerable<object[]> Appearance_FlatStyle()
+    {
+        yield return new object[] { Appearance.Button, FlatStyle.Standard };
+        yield return new object[] { Appearance.Button, FlatStyle.Flat };
+        yield return new object[] { Appearance.Button, FlatStyle.Popup };
+        yield return new object[] { Appearance.Button, FlatStyle.System };
+        yield return new object[] { Appearance.Normal, FlatStyle.Standard };
+        yield return new object[] { Appearance.Normal, FlatStyle.Flat };
+        yield return new object[] { Appearance.Normal, FlatStyle.Popup };
+        yield return new object[] { Appearance.Normal, FlatStyle.System };
+    }
+
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard)]
-    [InlineData(Appearance.Button, FlatStyle.Flat)]
-    [InlineData(Appearance.Button, FlatStyle.Popup)]
-    [InlineData(Appearance.Button, FlatStyle.System)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat)]
-    [InlineData(Appearance.Normal, FlatStyle.Popup)]
-    [InlineData(Appearance.Normal, FlatStyle.System)]
+    [MemberData(nameof(Appearance_FlatStyle))]
     public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard)]
-    [InlineData(Appearance.Button, FlatStyle.Flat)]
-    [InlineData(Appearance.Button, FlatStyle.Popup)]
-    [InlineData(Appearance.Button, FlatStyle.System)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat)]
-    [InlineData(Appearance.Normal, FlatStyle.Popup)]
-    [InlineData(Appearance.Normal, FlatStyle.System)]
+    [MemberData(nameof(Appearance_FlatStyle))]
     public void CheckBox_DownChangeRectangle_ReturnsExpectedRectangle(Appearance appearance, FlatStyle flatStyle)
     {
         CheckBox checkBox = (CheckBox)CreateButton();
@@ -642,11 +640,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         // Assert
         // Requirements for SUT to process mnemonic
-        bool requirements = (
+        bool requirements =
             useMnemonic
-            && charCode != '&'
-            && buttonText.Contains($"&{charCode}", StringComparison.OrdinalIgnoreCase)
-        );
+                && charCode != '&'
+                && buttonText.Contains($"&{charCode}", StringComparison.OrdinalIgnoreCase);
 
         if (!requirements)
         {

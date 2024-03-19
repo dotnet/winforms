@@ -10,17 +10,14 @@ namespace System.Windows.Forms.misc.Tests;
 public class EmfValidateHelper
 {
     /// <summary>
-    /// Helps immensely with debugging metafile tests.
+    ///  Helps immensely with debugging metafile tests.
     /// </summary>
     /// <param name="emf">The EmfScope instance to extract log information from.</param>
     /// <param name="methodName">The name of the calling method. Use <see cref="MethodBase.GetCurrentMethod()"/> and property <see cref="MemberInfo.Name"/>.</param>
     /// <param name="parameters">Optional parameters to include in the log information.</param>
     internal void LogEmfValidateToFile(EmfScope emf, string methodName, params object[] parameters)
     {
-        if (emf is null)
-        {
-            throw new ArgumentNullException(nameof(emf));
-        }
+        ArgumentNullException.ThrowIfNull(emf, nameof(emf));
 
         string timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
 
@@ -30,7 +27,7 @@ public class EmfValidateHelper
         sb.AppendLine("\r\n\r\n```c");
         sb.AppendLine($"{emf.RecordsToString()}```\r\n");
 
-        File.AppendAllText($"c:\\temp\\{methodName}.md", sb.ToString());
+        File.AppendAllText(@$"c:\temp\{methodName}.md", sb.ToString());
     }
 }
 
