@@ -146,7 +146,7 @@ public class BitmapTests
         Assert.Throws<InvalidOperationException>(() => bmp.SetPixel(0, 0, c));
     }
 
-    private void FormatTest(PixelFormat format)
+    private static void FormatTest(PixelFormat format)
     {
         bool alpha = Image.IsAlphaPixelFormat(format);
         int size = Image.GetPixelFormatSize(format) / 8 * 2;
@@ -368,7 +368,7 @@ public class BitmapTests
         return sOutput.ToString();
     }
 
-    public string RotateBmp(Bitmap src, RotateFlipType rotate)
+    public static string RotateBmp(Bitmap src, RotateFlipType rotate)
     {
         int width = 150, height = 150, index = 0;
         byte[] pixels = new byte[width * height * 3];
@@ -393,14 +393,14 @@ public class BitmapTests
         return ByteArrayToString(hash);
     }
 
-    public string RotateIndexedBmp(Bitmap src, RotateFlipType type)
+    public static string RotateIndexedBmp(Bitmap src, RotateFlipType type)
     {
         int pixels_per_byte = src.PixelFormat switch
         {
             PixelFormat.Format1bppIndexed => 8,
             PixelFormat.Format4bppIndexed => 2,
             PixelFormat.Format8bppIndexed => 1,
-            _ => throw new Exception($"Cannot pass a bitmap of format {src.PixelFormat} to RotateIndexedBmp"),
+            _ => throw new InvalidOperationException($"Cannot pass a bitmap of format {src.PixelFormat} to RotateIndexedBmp"),
         };
 
         using Bitmap test = src.Clone() as Bitmap;
@@ -457,7 +457,7 @@ public class BitmapTests
         Assert.Equal("297D4E905D773277CEA86276B15AC70EB02BE4B7FE06120330DABBE92D1DF4E2", RotateBmp(bmp, RotateFlipType.Rotate270FlipX));
     }
 
-    private Bitmap CreateBitmap(int width, int height, PixelFormat fmt)
+    private static Bitmap CreateBitmap(int width, int height, PixelFormat fmt)
     {
         Bitmap bmp = new(width, height, fmt);
         using (Graphics gr = Graphics.FromImage(bmp))
@@ -483,7 +483,7 @@ public class BitmapTests
         return bmp;
     }
 
-    private byte[] HashPixels(Bitmap bmp)
+    private static byte[] HashPixels(Bitmap bmp)
     {
         int len = bmp.Width * bmp.Height * 4;
         int index = 0;
@@ -503,7 +503,7 @@ public class BitmapTests
         return SHA256.Create().ComputeHash(pixels);
     }
 
-    private byte[] HashLock(Bitmap bmp, int width, int height, PixelFormat fmt, ImageLockMode mode)
+    private static byte[] HashLock(Bitmap bmp, int width, int height, PixelFormat fmt, ImageLockMode mode)
     {
         int len = bmp.Width * bmp.Height * 4;
         byte[] pixels = new byte[len];
@@ -1144,7 +1144,7 @@ public class BitmapTests
     [Fact]
     public void XmlSerialization() => new XmlSerializer(typeof(Bitmap));
 
-    private void SetResolution(float x, float y)
+    private static void SetResolution(float x, float y)
     {
         using Bitmap bmp = new(1, 1);
         bmp.SetResolution(x, y);
@@ -1177,7 +1177,7 @@ public class BitmapTests
     // BitmapFromHicon## is *almost* the same as IconTest.Icon##ToBitmap except
     // for the Flags property
 
-    private void HiconTest(string msg, Bitmap b, int size)
+    private static void HiconTest(string msg, Bitmap b, int size)
     {
         b.PixelFormat.Should().Be(PixelFormat.Format32bppArgb, msg);
 

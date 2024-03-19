@@ -8,7 +8,7 @@ public class UnhandledExceptionEventArgsTests
     public static IEnumerable<object[]> Ctor_Bool_Exception_TestData()
     {
         yield return new object[] { true, null };
-        yield return new object[] { false, new Exception() };
+        yield return new object[] { false, new InvalidOperationException() };
     }
 
     [Theory]

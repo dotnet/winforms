@@ -552,10 +552,10 @@ public class ToolboxItemTests
         Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
         mockComponentInitializer
             .Setup(i => i.InitializeNewComponent(null))
-            .Throws(new Exception());
+            .Throws(new InvalidOperationException());
         mockComponentInitializer
             .Setup(i => i.InitializeNewComponent(new Hashtable()))
-            .Throws(new Exception());
+            .Throws(new InvalidOperationException());
 
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
@@ -588,15 +588,15 @@ public class ToolboxItemTests
         item.ComponentsCreated += createdHandler;
 
         // With handler.
-        Assert.Throws<Exception>(() => item.CreateComponents(mockDesignerHost.Object));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponents(mockDesignerHost.Object));
         Assert.Equal(1, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
-        Assert.Throws<Exception>(() => item.CreateComponents(mockDesignerHost.Object, null));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponents(mockDesignerHost.Object, null));
         Assert.Equal(2, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
-        Assert.Throws<Exception>(() => item.CreateComponents(mockDesignerHost.Object, new Hashtable()));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponents(mockDesignerHost.Object, new Hashtable()));
         Assert.Equal(3, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
@@ -604,7 +604,7 @@ public class ToolboxItemTests
         item.ComponentsCreating -= creatingHandler;
         item.ComponentsCreated -= createdHandler;
 
-        Assert.Throws<Exception>(() => item.CreateComponents(mockDesignerHost.Object));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponents(mockDesignerHost.Object));
         Assert.Equal(3, creatingCallCount);
         Assert.Equal(0, createdCallCount);
     }
@@ -871,10 +871,10 @@ public class ToolboxItemTests
         Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
         mockComponentInitializer
             .Setup(i => i.InitializeNewComponent(null))
-            .Throws(new Exception());
+            .Throws(new InvalidOperationException());
         mockComponentInitializer
             .Setup(i => i.InitializeNewComponent(new Hashtable()))
-            .Throws(new Exception());
+            .Throws(new InvalidOperationException());
 
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
@@ -911,11 +911,11 @@ public class ToolboxItemTests
         Assert.Equal(0, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
-        Assert.Throws<Exception>(() => item.CreateComponentsCore(mockDesignerHost.Object, null));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponentsCore(mockDesignerHost.Object, null));
         Assert.Equal(0, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
-        Assert.Throws<Exception>(() => item.CreateComponentsCore(mockDesignerHost.Object, new Hashtable()));
+        Assert.Throws<InvalidOperationException>(() => item.CreateComponentsCore(mockDesignerHost.Object, new Hashtable()));
         Assert.Equal(0, creatingCallCount);
         Assert.Equal(0, createdCallCount);
 
@@ -1167,7 +1167,7 @@ public class ToolboxItemTests
             Assert.Equal(expected, actual);
         }
 
-        Assert.Equal(same, object.ReferenceEquals(value, actual));
+        Assert.Equal(same, ReferenceEquals(value, actual));
     }
 
     public static IEnumerable<object[]> GetHashCode_TestData()

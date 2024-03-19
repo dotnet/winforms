@@ -20,7 +20,7 @@ internal static class Program
         {
             if (args.Length != 1)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(message: null, nameof(args));
             }
 
             switch (args[0])
@@ -53,7 +53,7 @@ internal static class Program
                     VBInputBox_ShowDialog();
                     break;
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException(message: null, nameof(args));
             }
         }
         catch (Exception)

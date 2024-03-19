@@ -1994,7 +1994,7 @@ public partial class RichTextBox : TextBoxBase
         // Characters we have slurped into memory in order to search
         UnicodeCharBuffer charBuffer = new(CHAR_BUFFER_LEN + 1);
         txrg.lpstrText = charBuffer.AllocCoTaskMem();
-        if (txrg.lpstrText == IntPtr.Zero)
+        if (txrg.lpstrText == 0)
         {
             throw new OutOfMemoryException();
         }
@@ -2449,7 +2449,9 @@ public partial class RichTextBox : TextBoxBase
 
         // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
         // and our text will all be Color.WindowText.
-        AutoWordSelection = AutoWordSelection;
+        bool autoWordSelection = AutoWordSelection;
+        AutoWordSelection = autoWordSelection;
+
         PInvoke.SendMessage(this, PInvoke.EM_SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
         InternalSetForeColor(ForeColor);
 
@@ -3184,8 +3186,8 @@ public partial class RichTextBox : TextBoxBase
 
         int characters = (c.cpMax - c.cpMin) + 1; // +1 for null termination
         UnicodeCharBuffer charBuffer = new(characters);
-        IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
-        if (unmanagedBuffer == IntPtr.Zero)
+        nint unmanagedBuffer = charBuffer.AllocCoTaskMem();
+        if (unmanagedBuffer == 0)
         {
             throw new OutOfMemoryException(SR.OutOfMemory);
         }
@@ -3194,7 +3196,7 @@ public partial class RichTextBox : TextBoxBase
         int len = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTRANGE, 0, ref txrg);
         Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
         charBuffer.PutCoTaskMem(unmanagedBuffer);
-        if (txrg.lpstrText != IntPtr.Zero)
+        if (txrg.lpstrText != 0)
         {
             Marshal.FreeCoTaskMem(unmanagedBuffer);
         }

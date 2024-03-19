@@ -240,10 +240,11 @@ internal sealed partial class DesignerHost
                         // allow renames that are just case changes of the current name.
                         if (namedComponent is not null && validateName)
                         {
-                            Exception ex = new(string.Format(SR.DesignerHostDuplicateName, value))
+                            InvalidOperationException ex = new(string.Format(SR.DesignerHostDuplicateName, value))
                             {
                                 HelpLink = SR.DesignerHostDuplicateName
                             };
+
                             throw ex;
                         }
                     }

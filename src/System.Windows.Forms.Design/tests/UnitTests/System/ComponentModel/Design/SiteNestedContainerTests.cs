@@ -582,8 +582,8 @@ public class SiteNestedContainerTests
         using RootDesignerComponent component = new();
         container.Add(component, component.GetType().FullName);
         Assert.Equal(component.GetType().FullName, host.RootComponentClassName);
-        Assert.Throws<Exception>(() => container.Add(component));
-        Assert.Throws<Exception>(() => container.Add(new RootDesignerComponent(), host.RootComponentClassName));
+        Assert.Throws<InvalidOperationException>(() => container.Add(component));
+        Assert.Throws<InvalidOperationException>(() => container.Add(new RootDesignerComponent(), host.RootComponentClassName));
     }
 
     [WinFormsFact]

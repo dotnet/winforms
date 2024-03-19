@@ -139,7 +139,7 @@ public class TestAccessor<T> : ITestAccessor
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -151,7 +151,7 @@ public class TestAccessor<T> : ITestAccessor
         {
             result = null;
 
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -159,7 +159,7 @@ public class TestAccessor<T> : ITestAccessor
             return true;
         }
 
-        private MemberInfo? GetFieldOrPropertyInfo(string memberName)
+        private static MemberInfo? GetFieldOrPropertyInfo(string memberName)
         {
             Type? type = s_type;
             MemberInfo? info;

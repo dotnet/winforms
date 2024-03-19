@@ -277,7 +277,7 @@ internal partial class OleDragDropHandler
         /// </summary>
         public void SetData(string format, object? data)
         {
-            throw new Exception(SR.DragDropSetDataError);
+            throw new InvalidOperationException(SR.DragDropSetDataError);
         }
 
         /// <summary>

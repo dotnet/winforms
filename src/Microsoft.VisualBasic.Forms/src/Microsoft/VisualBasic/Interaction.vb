@@ -25,7 +25,7 @@ Namespace Microsoft.VisualBasic
             Dim ErrorCode As Integer = 0
 
             If (PathName Is Nothing) Then
-                Throw New NullReferenceException(GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+                Throw New ArgumentNullException(GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
             End If
 
             If (Style < 0 OrElse Style > 9) Then

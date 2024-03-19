@@ -189,7 +189,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
                 break;
             default:
-                throw new Exception(SR.ToolStripPanelGlyphUnsupportedDock);
+                throw new InvalidOperationException(SR.ToolStripPanelGlyphUnsupportedDock);
         }
     }
 

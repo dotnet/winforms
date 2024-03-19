@@ -739,7 +739,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
             float[] pattern;
 
-            // don't call GdipGetPenDashArray with a 0 count
+            // Don't call GdipGetPenDashArray with a 0 count
             if (count > 0)
             {
                 pattern = new float[count];
@@ -752,7 +752,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             {
                 // Most likely we're replicating an existing System.Drawing bug here, it doesn't make much sense to
                 // ask for a dash pattern when using a solid dash.
-                throw new OutOfMemoryException();
+                throw new InvalidOperationException();
             }
             else if (DashStyle == DashStyle.Solid)
             {
@@ -760,7 +760,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             }
             else
             {
-                // special case (not handled inside GDI+)
+                // Special case (not handled inside GDI+)
                 pattern = [1.0f];
             }
 
