@@ -201,7 +201,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         ArgumentNullException.ThrowIfNull(graphics);
         if (graphics.NativeGraphics is null)
         {
-            throw new ArgumentException(nameof(graphics));
+            throw new ArgumentException(message: null, nameof(graphics));
         }
 
         float height;

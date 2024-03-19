@@ -194,7 +194,7 @@ public static class TestHelpers
         catch
         {
             // no version was found, so we're done
-            throw new Exception("global.json does not contain a tools:dotnet version");
+            throw new InvalidOperationException("global.json does not contain a tools:dotnet version");
         }
 
         // Check to see if the matching version is installed

@@ -677,7 +677,8 @@ public partial class Form : ContainerControl
             _formState[s_formStateBorderStyle] = (int)value;
             if (_formState[s_formStateSetClientSize] == 1 && !IsHandleCreated)
             {
-                ClientSize = ClientSize;
+                Size size = ClientSize;
+                ClientSize = size;
             }
 
             // Since setting the border style induces a call to SetBoundsCore, which,

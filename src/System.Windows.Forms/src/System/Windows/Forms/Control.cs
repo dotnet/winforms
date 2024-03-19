@@ -5138,7 +5138,7 @@ public unsafe partial class Control :
         if (targetBounds.Width <= 0 || targetBounds.Height <= 0
             || targetBounds.X < 0 || targetBounds.Y < 0)
         {
-            throw new ArgumentException(nameof(targetBounds));
+            throw new ArgumentException(message: null, nameof(targetBounds));
         }
 
         if (!IsHandleCreated)

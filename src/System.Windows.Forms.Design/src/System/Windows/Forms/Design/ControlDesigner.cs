@@ -2493,7 +2493,7 @@ public partial class ControlDesigner : ComponentDesigner
         string typeName = owner.GetType().FullName;
         string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
-        Exception wrapper = new(
+        InvalidOperationException wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
             exception);
         DisplayError(wrapper);

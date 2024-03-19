@@ -106,7 +106,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             // - else do the initialization
             BeginLoad(typeof(TControl));
             if (LoadErrors.Count > 0)
-                throw new Exception($"the BeginLoad() failed! Some error during {typeof(TControl).FullName} loding");
+                throw new InvalidOperationException($"the BeginLoad() failed! Some error during {typeof(TControl).FullName} loding");
             // -
             // -
             // - step.3
@@ -143,14 +143,14 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             }
             else
             {
-                throw new Exception($"Undefined Host Type: {hostType}");
+                throw new InvalidOperationException($"Undefined Host Type: {hostType}");
             }
 
             return (TControl)ihost.RootComponent;
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -186,7 +186,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::CreateControl() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::CreateControl() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -221,7 +221,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -379,7 +379,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
         }
     }
 }
