@@ -18,16 +18,6 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     private BitVector32 _state;
     private readonly ToolStripContainer? _owner;
 
-#if DEBUG
-    internal static TraceSwitch s_toolStripPanelDebug = new("ToolStripPanelDebug", "Debug code for rafting mouse movement");
-    internal static TraceSwitch s_toolStripPanelFeedbackDebug = new("ToolStripPanelFeedbackDebug", "Debug code for rafting feedback");
-    internal static TraceSwitch s_toolStripPanelMissingRowDebug = new("ToolStripPanelMissingRowDebug", "Debug code for rafting feedback");
-#else
-    internal static TraceSwitch? s_toolStripPanelDebug;
-    internal static TraceSwitch? s_toolStripPanelFeedbackDebug;
-    internal static TraceSwitch? s_toolStripPanelMissingRowDebug;
-#endif
-
     private static readonly int s_propToolStripPanelRowCollection = PropertyStore.CreateKey();
 
     private static readonly int s_stateLocked = BitVector32.CreateMask();
@@ -636,7 +626,9 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             {
                 int numRows = RowsInternal.Count;
 
-                if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow is not null && !draggedControl.IsCurrentlyDragging)
+                if (controlArray[i] is ISupportToolStripPanel draggedControl
+                    && draggedControl.ToolStripPanelRow is not null
+                    && !draggedControl.IsCurrentlyDragging)
                 {
                     ToolStripPanelRow row = draggedControl.ToolStripPanelRow;
                     if (row.Bounds.Contains(controlArray[i].Location))
@@ -679,8 +671,6 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         _state[s_stateRightToLeftChanged] = false;
     }
 
-    #region Feedback
-
     [ThreadStatic]
     private static FeedbackRectangle? t_feedbackRect;
 
@@ -692,17 +682,12 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             screenLocation.Offset(-toolStripToDrag.Width, 0);
         }
 
-        if (CurrentFeedbackRect is null)
-        {
-            s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: creating NEW feedback at {screenLocation}");
-
-            CurrentFeedbackRect = new FeedbackRectangle(toolStripToDrag.ClientRectangle);
-        }
+        CurrentFeedbackRect ??= new FeedbackRectangle(toolStripToDrag.ClientRectangle);
 
         if (!CurrentFeedbackRect.Visible)
         {
-            s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: Showing NEW feedback at {screenLocation}");
             toolStripToDrag.SuspendCaptureMode();
+
             try
             {
                 CurrentFeedbackRect.Show(screenLocation);
@@ -715,19 +700,12 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         }
         else
         {
-            s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: Moving feedback to {screenLocation}");
             CurrentFeedbackRect.Move(screenLocation);
         }
     }
 
     internal static void ClearDragFeedback()
     {
-#if DEBUG
-        if (s_toolStripPanelFeedbackDebug.TraceVerbose)
-        {
-            Debug.WriteLine("FEEDBACK:  clearing old feedback at "/*+ new StackTrace().ToString()*/);
-        }
-#endif
         FeedbackRectangle? oldFeedback = t_feedbackRect;
         t_feedbackRect = null;
         oldFeedback?.Dispose();
@@ -735,19 +713,9 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     private static FeedbackRectangle? CurrentFeedbackRect
     {
-        get
-        {
-            return t_feedbackRect;
-        }
-        set
-        {
-            t_feedbackRect = value;
-        }
+        get => t_feedbackRect;
+        set => t_feedbackRect = value;
     }
-
-    #endregion Feedback
-
-    #region JoinAndMove
 
     public void Join(ToolStrip toolStripToDrag)
     {
@@ -821,7 +789,6 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         Point clientLocation = PointToClient(screenLocation);
         if (!DragBounds.Contains(clientLocation))
         {
-            s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point {clientLocation} is not in current rafting container drag bounds {DragBounds}, calling MoveOutsideContainer");
             MoveOutsideContainer(toolStripToDrag, screenLocation);
             return;
         }
@@ -834,14 +801,14 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     private void MoveInsideContainer(ToolStrip toolStripToDrag, Point clientLocation)
     {
         ISupportToolStripPanel draggedControl = toolStripToDrag;
-        // if the point is not in this rafting container forward on to the appropriate container.
 
+        // If the point is not in this rafting container forward on to the appropriate container.
         if (draggedControl.IsCurrentlyDragging && !DragBounds.Contains(clientLocation))
         {
             return;
         }
 
-        // we know we're moving inside the container.
+        // We know we're moving inside the container.
 
         bool changedRow = false;
 
@@ -888,26 +855,20 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         if (pointInCurrentRow)
         {
             // Point INSIDE same rafting row
-            s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow?.DragBounds}");
             draggedControl.ToolStripPanelRow?.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
         }
         else
         {
             // Point OUTSIDE current rafting row.
-
-            s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point {clientLocation} is outside the current rafting row.");
-
             ToolStripPanelRow? row = PointToRow(clientLocation);
             if (row is null)
             {
-                s_toolStripPanelDebug.TraceVerbose("\tThere is no row corresponding to this point, creating a new one.");
-
-                // there's no row at this point so lets create one
+                // There's no row at this point so lets create one.
                 int index = RowsInternal.Count;
 
                 if (Orientation == Orientation.Horizontal)
                 {
-                    // if it's above the first row, insert at the front.
+                    // If it's above the first row, insert at the front.
                     index = (clientLocation.Y <= Padding.Left) ? 0 : index;
                 }
                 else
@@ -930,16 +891,14 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
                     }
                 }
 
-                if (previousRow is not null /* there was a previous row */
-                    && previousRow.ControlsInternal.Count == 1 /*toolStripToDrag*/
+                if (previousRow is not null
+                    && previousRow.ControlsInternal.Count == 1
                     && previousRow.ControlsInternal.Contains(toolStripToDrag))
                 {
-                    // if the previous row already contains this control
-                    // it's futile to create a new row, we're just going to wind
-                    // up disposing this one and causing great amounts of flicker.
+                    // If the previous row already contains this control it's futile to create a new row, we're just
+                    // going to wind up disposing this one and causing great amounts of flicker.
                     row = previousRow;
 
-                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("Reusing previous row");
                     // Move the ToolStrip to the new Location in the existing row.
                     if (toolStripToDrag.IsInDesignMode)
                     {
@@ -950,24 +909,21 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
                 else
                 {
                     // Create a new row and insert it.
-                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose($"Inserting a new row at {index}");
                     row = new ToolStripPanelRow(this);
                     RowsInternal.Insert(index, row);
                 }
             }
             else if (!row.CanMove(toolStripToDrag))
             {
-                ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("\tThere was a row, but we can't add the control to it, creating/inserting new row.");
-
-                // we have a row at that point, but it's too full or doesn't want
-                // anyone to join it.
+                // There was a row, but we can't add the control to it, creating/inserting new row.
                 int index = RowsInternal.IndexOf(row);
 
                 if (currentToolStripPanelRow is not null && currentToolStripPanelRow.ControlsInternal.Count == 1)
                 {
                     if (index > 0 && index - 1 == RowsInternal.IndexOf(currentToolStripPanelRow))
                     {
-                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row.");
+                        // Attempts to leave the current row failed as there's no space in the next row.
+                        // Since there's only one control, just keep the row.
                         return;
                     }
                 }
@@ -991,15 +947,13 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
             if (changedRow)
             {
-                s_toolStripPanelDebug.TraceVerbose("\tCalling JoinRow.");
                 currentToolStripPanelRow?.LeaveRow(toolStripToDrag);
-
                 row.JoinRow(toolStripToDrag, clientLocation);
             }
 
             if (changedRow && draggedControl.IsCurrentlyDragging)
             {
-                // force the layout of the new row.
+                // Force the layout of the new row.
                 for (int i = 0; i < RowsInternal.Count; i++)
                 {
                     LayoutTransaction.DoLayout(RowsInternal[i], this, PropertyNames.Rows);
@@ -1028,7 +982,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
 #if DEBUG
         Debug_VerifyOneToOneCellRowControlMatchup();
-        // Debug_VerifyCountRows();
+
         if (draggedControl.IsCurrentlyDragging && changedRow && !debugModeOnly_ChangedContainers)
         {
             // if we have changed containers, we're in a SuspendLayout.
@@ -1096,8 +1050,6 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
         return null;
     }
-
-    #endregion JoinAndMove
 
 #if DEBUG
     [Conditional("DEBUG")]
@@ -1169,11 +1121,5 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     }
 #endif
 
-    ArrangedElementCollection IArrangedElement.Children
-    {
-        get
-        {
-            return RowsInternal;
-        }
-    }
+    ArrangedElementCollection IArrangedElement.Children => RowsInternal;
 }

@@ -28,10 +28,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </summary>
 internal static unsafe partial class Com2TypeInfoProcessor
 {
-    private static TraceSwitch DbgTypeInfoProcessorSwitch { get; } = new(
-        "DbgTypeInfoProcessor",
-        "Com2TypeInfoProcessor: debug Com2 type info processing");
-
     private static ModuleBuilder? s_moduleBuilder;
 
     private static ModuleBuilder ModuleBuilder
@@ -192,13 +188,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
     public static Com2Properties? GetProperties(object comObject)
     {
-        DbgTypeInfoProcessorSwitch.TraceVerbose("Com2TypeInfoProcessor.GetProperties");
-
         if (!ComHelpers.SupportsInterface<IDispatch>(comObject))
         {
-            DbgTypeInfoProcessorSwitch.TraceVerbose(
-                "Com2TypeInfoProcessor.GetProperties returning null: Object is not a supported COM object");
-
             return null;
         }
 
@@ -206,7 +197,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
         if (typeInfos.Length == 0)
         {
-            DbgTypeInfoProcessorSwitch.TraceVerbose("Com2TypeInfoProcessor.GetProperties :: Didn't get typeinfo");
             return null;
         }
 
@@ -282,8 +272,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 propList.AddRange(properties);
             }
         }
-
-        DbgTypeInfoProcessorSwitch.TraceVerbose($"Com2TypeInfoProcessor.GetProperties : returning {propList.Count} properties");
 
         // Done!
         Com2PropertyDescriptor[] temp2 = new Com2PropertyDescriptor[propList.Count];
@@ -464,8 +452,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
                 if (!hr.Succeeded)
                 {
-                    DbgTypeInfoProcessorSwitch.TraceVerbose(
-                        $"Adding Browsable(false) to property '{info.Name}' because Invoke(dispid=0x{info.DispId:X}, DISPATCH_PROPERTYGET) returned hr=0x{hr:X}. Properties that do not return S_OK are hidden by default.");
+                    // Hide the property.
                     info.Attributes.Add(new BrowsableAttribute(false));
                     info.NonBrowsable = true;
                 }
@@ -550,10 +537,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
             {
                 info.ValueType = GetValueTypeFromTypeDesc(ref typeDescription, typeInfo, ref typeGuid);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                DbgTypeInfoProcessorSwitch.TraceVerbose(
-                    $"Hiding property {info.Name} because value Type could not be resolved: {ex}");
             }
 
             // If we can't resolve the type, mark the property as nonbrowsable.
@@ -635,8 +620,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 hr = typeInfo->GetFuncDesc(i, &functionDescription);
                 if (!hr.Succeeded || functionDescription is null)
                 {
-                    DbgTypeInfoProcessorSwitch.TraceVerbose(
-                        $"ProcessTypeInfoEnum: ignoring function item 0x{i:X} because Oleaut32.ITypeInfo::GetFuncDesc returned hr=0x{hr:X} or NULL");
                     continue;
                 }
 
@@ -709,11 +692,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
     /// </summary>
     private static unsafe Type? ProcessTypeInfoEnum(ITypeInfo* enumTypeInfo)
     {
-        DbgTypeInfoProcessorSwitch.TraceVerbose("ProcessTypeInfoEnum entered");
-
         if (enumTypeInfo is null)
         {
-            DbgTypeInfoProcessorSwitch.TraceVerbose("ProcessTypeInfoEnum got a NULL enumTypeInfo");
             return null;
         }
 
@@ -729,8 +709,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
             try
             {
                 uint nItems = pTypeAttr->cVars;
-
-                DbgTypeInfoProcessorSwitch.TraceVerbose($"ProcessTypeInfoEnum: processing {nItems} variables");
 
                 List<string> strings = [];
                 List<object?> vars = [];
@@ -749,8 +727,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                     hr = enumTypeInfo->GetVarDesc(i, &pVarDesc);
                     if (!hr.Succeeded || pVarDesc is null)
                     {
-                        DbgTypeInfoProcessorSwitch.TraceVerbose(
-                            $"ProcessTypeInfoEnum: ignoring item 0x{i:X} because Oleaut32.ITypeInfo::GetVarDesc returned hr=0x{hr:X} or NULL");
                         continue;
                     }
 
@@ -769,29 +745,21 @@ internal static unsafe partial class Com2TypeInfoProcessor
                         hr = enumTypeInfo->GetDocumentation(pVarDesc->memid, &nameBstr, &helpBstr, null, null);
                         if (!hr.Succeeded)
                         {
-                            DbgTypeInfoProcessorSwitch.TraceVerbose(
-                                $"ProcessTypeInfoEnum: ignoring item 0x{i:X} because Oleaut32.ITypeInfo::GetDocumentation returned hr=0x{(int)hr:X} or NULL");
                             continue;
                         }
 
                         var name = nameBstr.AsSpan();
                         var helpString = helpBstr.AsSpan();
-                        DbgTypeInfoProcessorSwitch.TraceVerbose(
-                            $"ProcessTypeInfoEnum got name={name}, helpstring={helpString}");
 
                         // Get the value.
                         try
                         {
                             varValue = (*pVarDesc->Anonymous.lpvarValue).ToObject();
                         }
-                        catch (Exception ex)
+                        catch (Exception ex) when (!ex.IsCriticalException())
                         {
-                            DbgTypeInfoProcessorSwitch.TraceVerbose(
-                                $"ProcessTypeInfoEnum: PtrtoStructFailed {ex.GetType().Name},{ex.Message}");
                         }
 
-                        DbgTypeInfoProcessorSwitch.TraceVerbose(
-                            $"ProcessTypeInfoEnum: adding variable value={Convert.ToString(varValue, CultureInfo.InvariantCulture)}");
                         vars.Add(varValue);
 
                         // If we have a helpstring, use it, otherwise use name.
@@ -806,7 +774,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                             nameString = name.ToString();
                         }
 
-                        DbgTypeInfoProcessorSwitch.TraceVerbose($"ProcessTypeInfoEnum: adding name value={nameString}");
                         strings.Add(nameString);
                     }
                     finally
@@ -814,8 +781,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                         enumTypeInfo->ReleaseVarDesc(pVarDesc);
                     }
                 }
-
-                DbgTypeInfoProcessorSwitch.TraceVerbose($"ProcessTypeInfoEnum: returning enum with {strings.Count} items");
 
                 // Just build our enumerator.
                 if (strings.Count > 0)
@@ -878,8 +843,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 hr = typeInfo->GetVarDesc(i, &pVarDesc);
                 if (!hr.Succeeded || pVarDesc is null)
                 {
-                    DbgTypeInfoProcessorSwitch.TraceVerbose(
-                        $"ProcessTypeInfoEnum: ignoring variable item 0x{i:X} because Oleaut32.ITypeInfo::GetFuncDesc returned hr=0x{hr:X} or NULL");
                     continue;
                 }
 

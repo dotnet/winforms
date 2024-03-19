@@ -6,7 +6,6 @@
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -26,7 +25,6 @@ internal class TableLayoutPanelBehavior : Behavior
     private StyleHelper _leftStyle;
     private List<TableLayoutStyle> _styles;
     private bool _currentColumnStyles; // is Styles for Columns or Rows
-    private static TraceSwitch ResizeSwitch { get; } = new("TLPRESIZE", "Behavior service drag & drop messages");
 
     internal TableLayoutPanelBehavior(TableLayoutPanel panel, TableLayoutPanelDesigner designer, IServiceProvider serviceProvider)
     {
@@ -257,12 +255,8 @@ internal class TableLayoutPanelBehavior : Behavior
 
                 if (delta == 0)
                 {
-                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "0 mouse delta");
                     return false;
                 }
-
-                Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "BEGIN RESIZE");
-                Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "mouse delta: " + delta);
 
                 int[] oldWidths = isColumn ? _table.GetColumnWidths() : _table.GetRowHeights();
 
@@ -274,8 +268,6 @@ internal class TableLayoutPanelBehavior : Behavior
                 if (newWidths[rightIndex] < DesignerUtils.s_minimumSizeDrag ||
                     newWidths[leftIndex] < DesignerUtils.s_minimumSizeDrag)
                 {
-                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Bottomed out.");
-                    Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "END RESIZE\n");
                     return false;
                 }
 
@@ -327,25 +319,13 @@ internal class TableLayoutPanelBehavior : Behavior
                     {
                         int i = j == 0 ? rightIndex : leftIndex;
                         float newSize = (float)newWidths[i] * 100 / totalPercent;
-                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"NewSize {newSize}");
 
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[i])[isColumn ? "Width" : "Height"];
-                        if (prop is not null)
-                        {
-                            prop.SetValue(_styles[i], newSize);
-                            Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Resizing column (per) {i.ToString(CultureInfo.InvariantCulture)} to {newSize.ToString(CultureInfo.InvariantCulture)}");
-                        }
+                        prop?.SetValue(_styles[i], newSize);
                     }
                 }
                 else
                 {
-#if DEBUG
-                    for (int i = 0; i < oldWidths.Length; i++)
-                    {
-                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, $"Col {i}: Old: {oldWidths[i]} New: {newWidths[i]}");
-                    }
-#endif
-
                     // mixed - just update absolute
                     int absIndex = _styles[rightIndex].SizeType == SizeType.Absolute ? rightIndex : leftIndex;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[absIndex])[isColumn ? "Width" : "Height"];
@@ -366,7 +346,6 @@ internal class TableLayoutPanelBehavior : Behavior
                         }
 
                         prop.SetValue(_styles[absIndex], newAbsSize);
-                        Debug.WriteLineIf(ResizeSwitch.TraceVerbose, "Resizing column (abs) " + absIndex.ToString(CultureInfo.InvariantCulture) + " to " + newWidths[absIndex]);
                     }
                     else
                     {
@@ -402,7 +381,6 @@ internal class TableLayoutPanelBehavior : Behavior
             }
         }
 
-        Debug.WriteLineIf(ResizeSwitch.TraceVerbose && _pushedBehavior, "END RESIZE\n");
         return false;
     }
 

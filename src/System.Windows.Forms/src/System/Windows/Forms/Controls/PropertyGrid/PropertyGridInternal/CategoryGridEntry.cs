@@ -110,7 +110,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
 
     public override Type PropertyType => typeof(void);
 
-    internal override object GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
+    internal override object? GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
 
     protected override bool CreateChildren(bool diffOldChildren) => true;
 

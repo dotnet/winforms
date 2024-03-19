@@ -801,8 +801,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  Raises the <see cref="CheckedChanged"/>
-    ///  event.
+    ///  Raises the <see cref="CheckedChanged"/> event.
     /// </summary>
     protected virtual void OnCheckedChanged(EventArgs e)
     {
@@ -820,16 +819,13 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     protected override void OnDropDownHide(EventArgs e)
     {
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
         MenuTimer.Cancel(this);
         base.OnDropDownHide(e);
     }
 
     protected override void OnDropDownShow(EventArgs e)
     {
-        // if someone has beaten us to the punch by arrowing around
-        // cancel the current menu timer.
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
+        // If someone has beaten us to the punch by arrowing around, cancel the current menu timer.
         MenuTimer.Cancel(this);
         if (ParentInternal is not null)
         {
@@ -852,17 +848,13 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     protected override void OnMouseDown(MouseEventArgs e)
     {
-        // Opening should happen on mouse down
-        // we use a mouse down ID to ensure that the reshow
-
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
         MenuTimer.Cancel(this);
-        OnMouseButtonStateChange(e, /*isMouseDown=*/true);
+        OnMouseButtonStateChange(e, isMouseDown: true);
     }
 
     protected override void OnMouseUp(MouseEventArgs e)
     {
-        OnMouseButtonStateChange(e, /*isMouseDown=*/false);
+        OnMouseButtonStateChange(e, isMouseDown: false);
         base.OnMouseUp(e);
     }
 
@@ -917,10 +909,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         // If we are in a submenu pop down the submenu.
         if (ParentInternal is not null && ParentInternal.MenuAutoExpand && Selected)
         {
-            s_mouseDebugging.TraceVerbose("received mouse enter - calling drop down");
-
-            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
-
             MenuTimer.Cancel(this);
             MenuTimer.Start(this);
         }
@@ -930,7 +918,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     protected override void OnMouseLeave(EventArgs e)
     {
-        ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
         MenuTimer.Cancel(this);
         base.OnMouseLeave(e);
     }
@@ -1052,9 +1039,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
     }
 
-    /// <summary>
-    ///  handle shortcut keys here.
-    /// </summary>
     protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
         if (Enabled && ShortcutKeys == keyData && !HasDropDownItems)

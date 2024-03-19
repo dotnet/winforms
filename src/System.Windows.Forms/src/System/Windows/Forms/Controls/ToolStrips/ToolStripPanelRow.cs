@@ -31,12 +31,6 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private static readonly int s_propControlsCollection = PropertyStore.CreateKey();
 
 #if DEBUG
-    internal static TraceSwitch s_toolStripPanelRowCreationDebug = new("ToolStripPanelRowCreationDebug", "Debug code for rafting row creation");
-#else
-    internal static TraceSwitch? s_toolStripPanelRowCreationDebug;
-#endif
-
-#if DEBUG
     private static int s_rowCreationCount;
     private readonly int _thisRowID;
 #endif
@@ -58,8 +52,6 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         ToolStripPanel = parent;
         _state[s_stateVisible] = visible;
         _state[s_stateDisposing | s_stateLocked | s_stateInitialized] = false;
-
-        s_toolStripPanelRowCreationDebug.TraceVerbose("Created new ToolStripPanelRow");
 
         using LayoutTransaction lt = new(parent, this, null);
         Margin = DefaultMargin;
@@ -301,7 +293,6 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         {
             if (disposing)
             {
-                s_toolStripPanelRowCreationDebug.TraceVerbose("Disposed ToolStripPanelRow");
                 _state[s_stateDisposing] = true;
                 ControlsInternal.Clear();
             }
@@ -315,7 +306,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 
     protected internal virtual void OnControlAdded(Control control, int index)
     {
-        // if previously added - remove.
+        // If previously added - remove.
 
         if (control is ISupportToolStripPanel controlToBeDragged)
         {

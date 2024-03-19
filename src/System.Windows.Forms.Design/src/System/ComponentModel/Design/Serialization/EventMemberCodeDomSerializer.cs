@@ -44,9 +44,7 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
 
                 if (methodName is not null)
                 {
-                    Trace(TraceLevel.Verbose, $"Event {eventToSerialize.Name} bound to {methodName}");
                     CodeExpression? eventTarget = SerializeToExpression(manager, value);
-                    TraceIf(TraceLevel.Warning, eventTarget is null, $"Object has no name and no property ref in context so we cannot serialize events: {value}");
                     if (eventTarget is not null)
                     {
                         CodeTypeReference delegateTypeRef = new(eventToSerialize.EventType);
@@ -62,10 +60,7 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
         }
         catch (Exception e)
         {
-            // Since we usually go through reflection, don't
-            // show what our engine does, show what caused
-            // the problem.
-            //
+            // Since we usually go through reflection, don't show what our engine does, show what caused the problem.
             if (e is TargetInvocationException)
             {
                 e = e.InnerException!;

@@ -30,13 +30,11 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
 
             if (obj is not null)
             {
-                Trace(TraceLevel.Verbose, "Returning IContainer service as container");
                 manager.SetName(obj, name!);
                 return obj;
             }
         }
 
-        Trace(TraceLevel.Verbose, "No IContainer service, creating default container.");
         return base.DeserializeInstance(manager, type, parameters, name, addToContainer);
     }
 

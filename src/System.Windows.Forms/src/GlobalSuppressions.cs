@@ -141,6 +141,13 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataFormats.Serializable")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.OSFeature.LayeredWindows")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.OSFeature.Themes")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.BinSerializedObjectMimeType")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ResMimeType")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.Version")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ResourceSchema")]
 [assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
 
 // Thread locals (there is no way to configure this style yet)
