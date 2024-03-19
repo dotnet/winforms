@@ -3232,14 +3232,14 @@ public class TrackBarTests
         callCount.Should().Be(1);
     }
 
-    public static IEnumerable<object[]> PaintEvent_TestData()
+    public static TheoryData<PaintEventArgs> PaintEvent_TestData = new()
     {
-        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(100, 100)), new Rectangle(0, 0, 100, 100)) };
-        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(200, 200)), new Rectangle(10, 10, 50, 50)) };
-        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(300, 300)), new Rectangle(20, 20, 100, 100)) };
-        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(400, 400)), new Rectangle(30, 30, 150, 150)) };
-        yield return new object[] { new PaintEventArgs(Graphics.FromImage(new Bitmap(500, 500)), new Rectangle(40, 40, 200, 200)) };
-    }
+        new(Graphics.FromImage(new Bitmap(100, 200)), new Rectangle(0, 0, 50, 100)),
+        new(Graphics.FromImage(new Bitmap(200, 300)), new Rectangle(10, 20, 70, 140)),
+        new(Graphics.FromImage(new Bitmap(300, 400)), new Rectangle(-10, -20, 70, 140)),
+        new(Graphics.FromImage(new Bitmap(400, 500)), new Rectangle(0, 0, 1, 1)),
+        new(Graphics.FromImage(new Bitmap(500, 600)), new Rectangle(0, 0, 500, 600))
+    };
 
     [WinFormsTheory]
     [MemberData(nameof(PaintEvent_TestData))]
@@ -3254,10 +3254,9 @@ public class TrackBarTests
             callCount++;
         };
 
-        // Add and remove the event handler and test the Paint event.
         trackBar.Paint += handler;
         trackBar.OnPaint(paintEventArgs);
-        callCount.Should().BeGreaterThan(0);
+        callCount.Should().Be(1);
 
         callCount = 0;
         trackBar.Paint -= handler;
