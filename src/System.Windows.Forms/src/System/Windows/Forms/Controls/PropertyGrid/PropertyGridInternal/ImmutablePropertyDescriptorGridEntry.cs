@@ -36,10 +36,15 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
         set
         {
             // Create a new instance of the value and set it into the parent grid entry.
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             object? newObject = null;
             GridEntry parentEntry = InstanceParentGridEntry;
             TypeConverter parentConverter = parentEntry.TypeConverter;
+
+            if (owner is null)
+            {
+                return;
+            }
 
             PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
             if (properties is not null)

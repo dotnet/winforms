@@ -122,7 +122,6 @@ public class HelpProvider : Component, IExtenderProvider
 
         if (Control.MouseButtons != MouseButtons.None && !string.IsNullOrEmpty(helpString))
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: Mouse down w/ helpstring");
             Help.ShowPopup(ctl, helpString, hevent.MousePos);
             hevent.Handled = true;
             return;
@@ -131,7 +130,6 @@ public class HelpProvider : Component, IExtenderProvider
         // If we have a help file, and help keyword we try F1 help next
         if (HelpNamespace is not null)
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: F1 help");
             if (!string.IsNullOrEmpty(keyword))
             {
                 Help.ShowHelp(ctl, HelpNamespace, navigator, keyword);
@@ -148,7 +146,6 @@ public class HelpProvider : Component, IExtenderProvider
         // So at this point we don't have a help keyword, so try to display the whats this help
         if (!string.IsNullOrEmpty(helpString))
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: back to helpstring");
             Help.ShowPopup(ctl, helpString, hevent.MousePos);
             hevent.Handled = true;
         }

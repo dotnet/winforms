@@ -383,10 +383,6 @@ internal partial class ResourceCodeDomSerializer
                     // resourceSet may be null here. We add it to the cache anyway as a sentinel so we don't repeatedly ask for the same resource.
                     ResourceTable[culture] = resourceSet;
                 }
-                else
-                {
-                    Trace(TraceLevel.Error, "IResourceService is not available.  We will not be able to load resources.");
-                }
             }
 
             return resourceSet;

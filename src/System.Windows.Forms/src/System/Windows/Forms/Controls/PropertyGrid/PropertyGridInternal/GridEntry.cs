@@ -346,7 +346,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             _flags |= Flags.Checked;
 
             TypeConverter converter = TypeConverter;
-            UITypeEditor editor = UITypeEditor;
+            UITypeEditor? editor = UITypeEditor;
             object value = Instance;
             bool forceReadOnly = ForceReadOnly;
 
@@ -724,11 +724,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Returns the Type of the value of this <see cref="GridEntry"/>, or null if the value is null.
     /// </summary>
     public virtual Type PropertyType => PropertyValue?.GetType();
-
+#nullable enable
     /// <summary>
     ///  Gets or sets the value for the property that is represented by this <see cref="GridEntry"/>.
     /// </summary>
-    public virtual object PropertyValue
+    public virtual object? PropertyValue
     {
         get => _cacheItems?.LastValue;
         set { }
@@ -750,13 +750,13 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the type editor for this entry. This may return null if there is no type editor.
     /// </summary>
-    internal virtual UITypeEditor UITypeEditor
+    internal virtual UITypeEditor? UITypeEditor
     {
         get
         {
             if (Editor is null && PropertyType is not null)
             {
-                Editor = (UITypeEditor)TypeDescriptor.GetEditor(PropertyType, typeof(UITypeEditor));
+                Editor = (UITypeEditor?)TypeDescriptor.GetEditor(PropertyType, typeof(UITypeEditor));
             }
 
             return Editor;
@@ -764,8 +764,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     // Note: we don't do set because of the value class semantics, etc.
-#nullable enable
-    public sealed override object Value => PropertyValue;
+
+    public sealed override object? Value => PropertyValue;
 
     internal Point ValueToolTipLocation
     {
@@ -1046,7 +1046,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         try
         {
-            object originalValue = PropertyValue;
+            object? originalValue = PropertyValue;
             object? value = UITypeEditor.EditValue(this, this, originalValue);
 
             // Since edit value can push a modal loop there is a chance that this gridentry will be zombied
@@ -1129,11 +1129,14 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     private object? FindPropertyValue(string propertyName, Type propertyType)
     {
-        object owner = GetValueOwner();
-        PropertyDescriptor? property = TypeDescriptor.GetProperties(owner)[propertyName];
-        if (property is not null && property.PropertyType == propertyType)
+        object? owner = GetValueOwner();
+        if (owner is not null)
         {
-            return property.GetValue(owner);
+            PropertyDescriptor? property = TypeDescriptor.GetProperties(owner)[propertyName];
+            if (property is not null && property.PropertyType == propertyType)
+            {
+                return property.GetValue(owner);
+            }
         }
 
         return _parent?.FindPropertyValue(propertyName, propertyType);
@@ -1208,7 +1211,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Gets the owner of the current value. This is usually the value of the root entry,
     ///  which is the object being browsed.
     /// </summary>
-    public object GetValueOwner() => _parent is null ? PropertyValue : _parent.GetValueOwnerInternal();
+    public object? GetValueOwner() => _parent is null ? PropertyValue : _parent.GetValueOwnerInternal();
 
     /// <summary>
     ///  Gets the owner of the current value. This is usually the value of the root entry,
@@ -1218,7 +1221,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  This internal override allows <see cref="CategoryGridEntry"/> to skip to its parent <see cref="PropertyValue"/>
     ///  and <see cref="MultiPropertyDescriptorGridEntry"/> to return it's set of owners.
     /// </devdoc>
-    internal virtual object GetValueOwnerInternal() => PropertyValue;
+    internal virtual object? GetValueOwnerInternal() => PropertyValue;
 
     /// <summary>
     ///  Returns a string with info about the currently selected <see cref="GridEntry"/>.
@@ -1233,7 +1236,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     private GridEntry[]? GetChildEntries()
     {
-        object value = PropertyValue;
+        object? value = PropertyValue;
         Type objectType = PropertyType;
 
         // We don't want to create child entries for null objects.
@@ -1905,8 +1908,14 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         try
         {
-            ComponentChangeService?.OnComponentChanging(GetValueOwner(), PropertyDescriptor);
-            return true;
+            object? owner = GetValueOwner();
+            if (owner is not null)
+            {
+                ComponentChangeService?.OnComponentChanging(owner, PropertyDescriptor);
+                return true;
+            }
+
+            return false;
         }
         catch (CheckoutException e) when (e == CheckoutException.Canceled)
         {
@@ -1915,7 +1924,13 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     public virtual void OnComponentChanged()
-        => ComponentChangeService?.OnComponentChanged(GetValueOwner(), PropertyDescriptor);
+    {
+        object? owner = GetValueOwner();
+        if (owner is not null)
+        {
+            ComponentChangeService?.OnComponentChanged(owner, PropertyDescriptor);
+        }
+    }
 
     /// <summary>
     ///  Called when the GridEntry is clicked.
@@ -2074,7 +2089,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <returns>
     ///  The result of the notification.
     /// </returns>
-    protected virtual bool SendNotification(object owner, Notify notification) => false;
+    protected virtual bool SendNotification(object? owner, Notify notification) => false;
 
     /// <summary>
     ///  Sends a notification to the owner of the given <paramref name="entry"/>.

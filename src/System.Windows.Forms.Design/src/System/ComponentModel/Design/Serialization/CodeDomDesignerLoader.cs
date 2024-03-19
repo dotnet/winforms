@@ -28,7 +28,6 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, INameCreationService, IDesignerSerializationService
 {
-    private static readonly TraceSwitch s_traceCDLoader = new("CodeDomDesignerLoader", "Trace CodeDomDesignerLoader");
     private static readonly int s_stateCodeDomDirty = BitVector32.CreateMask();                                 // True if the code dom tree is dirty, meaning it must be integrated back with the code file.
     private static readonly int s_stateCodeParserChecked = BitVector32.CreateMask(s_stateCodeDomDirty);         // True if we have searched for a parser.
     private static readonly int s_stateOwnTypeResolution = BitVector32.CreateMask(s_stateCodeParserChecked);    // True if we have added our own type resolution service
@@ -125,7 +124,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     internal static void DumpTypeDeclaration(CodeTypeDeclaration? typeDeclaration)
     {
-        if (typeDeclaration is null || !s_traceCDLoader.TraceVerbose)
+        if (typeDeclaration is null)
         {
             return;
         }
@@ -807,37 +806,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         {
             typeDeclaration = _typeSerializer.Serialize(manager, LoaderHost.RootComponent, LoaderHost.Container.Components);
         }
-#if DEBUG
-        if (s_traceCDLoader.TraceVerbose)
-        {
-            Debug.WriteLine("****************** Pre-integrated tree **********************");
-            DumpTypeDeclaration(typeDeclaration);
-            EnsureDocument(manager);
-            Debug.WriteLine("****************** Live tree **********************");
-            DumpTypeDeclaration(_documentType);
-        }
-#endif
 
         // Now we must integrate the code DOM tree from the serializer with
         // our own tree.  If changes were made to the tree this will
         // return true.
         if (typeDeclaration is not null && IntegrateSerializedTree(manager, typeDeclaration))
         {
-#if DEBUG
-            if (s_traceCDLoader.TraceVerbose)
-            {
-                Debug.WriteLine("****************** Integrated tree **********************");
-                DumpTypeDeclaration(_documentType);
-            }
-#endif
-            // EndTimingMark("Serialize tree");
-            // StartTimingMark();
             Write(_documentCompileUnit);
-            // EndTimingMark("Generate unit total");
-        }
-        else
-        {
-            Debug.WriteLineIf(s_traceCDLoader.TraceVerbose, "No need to integrate tree; no changes detected");
         }
     }
 

@@ -9,12 +9,13 @@ namespace System.Windows.Forms;
 
 internal static class Formatter
 {
+    internal const string ComponentModelTrimIncompatibilityMessage = "ComponentModel APIs are not trimming compatible.";
+
     private static readonly Type s_stringType = typeof(string);
     private static readonly Type s_booleanType = typeof(bool);
     private static readonly Type s_checkStateType = typeof(CheckState);
     private static readonly object s_parseMethodNotFound = new();
     private static readonly object s_defaultDataSourceNullValue = DBNull.Value;
-
     /// <summary>
     ///  Converts a binary value into a format suitable for display to the end user.
     ///  Used when pushing a value from a back-end data source into a data-bound property on a control.
@@ -25,6 +26,7 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     public static object? FormatObject(
         object? value,
         Type targetType,
@@ -82,6 +84,7 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException is no suitable conversion can be found
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     private static object? FormatObjectInternal(
         object? value,
         Type targetType,
@@ -431,7 +434,7 @@ internal static class Formatter
     /// <summary>
     ///  Converts a value to the specified type using best Parse() method on that type
     /// </summary>
-    public static object? InvokeStringParseMethod(object? value, Type targetType, IFormatProvider? formatInfo)
+    public static object? InvokeStringParseMethod(object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type targetType, IFormatProvider? formatInfo)
     {
         try
         {

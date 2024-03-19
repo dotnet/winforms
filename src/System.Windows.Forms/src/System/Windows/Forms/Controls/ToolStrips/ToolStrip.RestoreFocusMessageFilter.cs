@@ -54,12 +54,7 @@ public partial class ToolStrip
 
         private void RestoreFocusInternal()
         {
-            s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
-
             _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), [ToolStripManager.ModalMenuFilter.InMenuMode]);
-
-            // PERF
-
             Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
         }
     }

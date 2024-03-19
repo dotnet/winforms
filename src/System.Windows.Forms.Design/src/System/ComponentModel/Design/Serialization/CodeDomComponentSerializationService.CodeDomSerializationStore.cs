@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.CodeDom;
 using System.Collections;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -21,13 +19,6 @@ public sealed partial class CodeDomComponentSerializationService
     /// </summary>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
-#if DEBUG
-        private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
-#else
-#pragma warning disable CS0649  // Field is never assigned to, and will always have its default value null
-        private static readonly TraceSwitch? s_trace;
-#pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
-#endif
         private const string StateKey = "State";
         private const string NameKey = "Names";
         private const string AssembliesKey = "Assemblies";
@@ -109,8 +100,6 @@ public sealed partial class CodeDomComponentSerializationService
         internal void AddMember(object value, MemberDescriptor member, bool absolute)
         {
             ObjectData data = GetOrCreateObjectData(value);
-
-            s_trace.TraceVerbose($"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
             data.Members.Add(new MemberData(member, absolute));
         }
 
@@ -120,8 +109,6 @@ public sealed partial class CodeDomComponentSerializationService
         internal void AddObject(object value, bool absolute)
         {
             ObjectData data = GetOrCreateObjectData(value);
-
-            s_trace.TraceVerbose($"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
             data.EntireObject = true;
             data.Absolute = absolute;
         }
@@ -147,7 +134,6 @@ public sealed partial class CodeDomComponentSerializationService
                 }
             }
 
-            s_trace.TraceVerbose($"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
             using (manager.CreateSession())
             {
                 // Walk through our objects and name them so the serialization manager knows what names we gave them.
@@ -188,8 +174,6 @@ public sealed partial class CodeDomComponentSerializationService
             AssemblyNames = new AssemblyName[assemblies.Count];
             assemblies.Values.CopyTo(AssemblyNames, 0);
 
-            TraceCode(state);
-
             _objectState = state;
             _objects.Clear();
         }
@@ -226,7 +210,8 @@ public sealed partial class CodeDomComponentSerializationService
             delegator.Manager.RecycleInstances = recycleInstances;
             delegator.Manager.PreserveNames = recycleInstances;
             delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
-            // recreate resources
+
+            // Recreate resources
             if (_resourceStream is not null)
             {
                 _resourceStream.Seek(0, SeekOrigin.Begin);
@@ -236,10 +221,9 @@ public sealed partial class CodeDomComponentSerializationService
                 _resources = new LocalResourceManager(resources);
             }
 
-            s_trace.TraceVerbose($"ComponentSerialization: Deserializing {_objectState!.Count} objects, recycling instances: {recycleInstances}");
             using (delegator.Manager.CreateSession())
             {
-                // before we deserialize, setup any references to components we faked during serialization
+                // Before we deserialize, setup any references to components we faked during serialization
                 if (_shimObjectNames.Count > 0)
                 {
                     if (delegator is IDesignerSerializationManager dsm && container is not null)
@@ -322,68 +306,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// <summary>
         ///  The Save method is not supported.
         /// </summary>
-        public override void Save(Stream stream)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        [Conditional("DEBUG")]
-        internal static void TraceCode(Dictionary<string, CodeDomComponentSerializationState> state)
-        {
-            if (!s_trace!.TraceVerbose)
-            {
-                return;
-            }
-
-            foreach (KeyValuePair<string, CodeDomComponentSerializationState> stateEntry in state)
-            {
-                object? code = stateEntry.Value.Code;
-
-                if (code is null)
-                {
-                    continue;
-                }
-
-                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-                using StringWriter stringWriter = new(CultureInfo.InvariantCulture);
-                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
-                Debug.Indent();
-
-                if (code is CodeTypeDeclaration codeTypeDeclaration)
-                {
-                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, stringWriter, o: null);
-                }
-                else if (code is CodeStatementCollection statements)
-                {
-                    foreach (CodeStatement statement in statements)
-                    {
-                        codeGenerator.GenerateCodeFromStatement(statement, stringWriter, o: null);
-                    }
-                }
-                else if (code is CodeStatement codeStatement)
-                {
-                    codeGenerator.GenerateCodeFromStatement(codeStatement, stringWriter, o: null);
-                }
-                else if (code is CodeExpression codeExpression)
-                {
-                    codeGenerator.GenerateCodeFromExpression(codeExpression, stringWriter, o: null);
-                }
-                else
-                {
-                    stringWriter.Write("Unknown code type: ");
-                    stringWriter.WriteLine(code.GetType().Name);
-                }
-
-                // spit this line by line so it respects the indent.
-                StringReader stringReader = new(stringWriter.ToString());
-                for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
-                {
-                    Debug.WriteLine(ln);
-                }
-
-                Debug.Unindent();
-            }
-        }
+        public override void Save(Stream stream) => throw new PlatformNotSupportedException();
 
         /// <summary>
         ///  Implements the save part of ISerializable. Used in unit tests only.

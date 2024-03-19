@@ -15,8 +15,6 @@ namespace System.Drawing.Design;
 /// </summary>
 public class ToolboxItem : ISerializable
 {
-    private static readonly TraceSwitch s_toolboxItemPersist = new("ToolboxPersisting", "ToolboxItem: write data");
-
     private static bool s_isScalingInitialized;
     private const int ICON_DIMENSION = 16;
     private static int s_iconWidth = ICON_DIMENSION;
@@ -698,15 +696,10 @@ public class ToolboxItem : ISerializable
     }
 
     /// <summary>
-    ///Saves the state of this ToolboxItem to the specified serialization info
+    ///  Saves the state of this ToolboxItem to the specified serialization info
     /// </summary>
     protected virtual void Serialize(SerializationInfo info, StreamingContext context)
     {
-        Debug.WriteLineIf(s_toolboxItemPersist.TraceVerbose, $"""
-                Persisting: {GetType().Name}
-                    Display Name: {DisplayName}
-                """);
-
         info.AddValue(nameof(Locked), Locked);
         List<string> propertyNames = new(Properties.Count);
         foreach (DictionaryEntry de in Properties)
