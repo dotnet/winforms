@@ -22,96 +22,66 @@ public class ProgressBarRendererTest
     [WinFormsFact]
     public void DrawHorizontalBar_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap1 = new(100, 100);
-        using Bitmap bitmap2 = new(100, 100);
-        using Graphics graphics1 = Graphics.FromImage(bitmap1);
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawHorizontalBar(graphics1, rectangle1);
-
-        act.Should().NotThrow();
-        bitmap1.Should().BeEquivalentTo(bitmap2);
+        TestProgressBarRenderer(ProgressBarRenderer.DrawHorizontalBar);
     }
 
     [WinFormsFact]
     public void DrawVerticalBar_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap1 = new(100, 100);
-        using Bitmap bitmap2 = new(100, 100);
-        using Graphics graphics1 = Graphics.FromImage(bitmap1);
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawVerticalBar(graphics1, rectangle1);
-
-        act.Should().NotThrow();
-        bitmap1.Should().BeEquivalentTo(bitmap2);
+        TestProgressBarRenderer(ProgressBarRenderer.DrawVerticalBar);
     }
 
     [WinFormsFact]
     public void DrawHorizontalChunks_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap1 = new(100, 100);
-        using Bitmap bitmap2 = new(100, 100);
-        using Graphics graphics1 = Graphics.FromImage(bitmap1);
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawHorizontalChunks(graphics1, rectangle1);
-
-        act.Should().NotThrow();
-        bitmap1.Should().BeEquivalentTo(bitmap2);
+        TestProgressBarRenderer(ProgressBarRenderer.DrawHorizontalChunks);
     }
 
     [WinFormsFact]
     public void DrawVerticalChunks_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap1 = new(100, 100);
-        using Bitmap bitmap2 = new(100, 100);
-        using Graphics graphics1 = Graphics.FromImage(bitmap1);
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawVerticalChunks(graphics1, rectangle1);
-
-        act.Should().NotThrow();
-        bitmap1.Should().BeEquivalentTo(bitmap2);
+        TestProgressBarRenderer(ProgressBarRenderer.DrawVerticalChunks);
     }
 
     [WinFormsFact]
     public void ChunkThickness_ShouldReturnExpectedValue()
     {
         // Test with VisualStyleElement.ProgressBar.Chunk.Normal
-        bool isElementDefined1 = VisualStyleRenderer.IsElementDefined(VisualStyleElement.ProgressBar.Chunk.Normal);
-        int actualValue1 = ProgressBarRenderer.ChunkThickness;
-        int expectedValue1= 6;
-
-        isElementDefined1.Should().BeTrue();     
-        actualValue1.Should().Be(expectedValue1);
+        TestChunkProperty(() => ProgressBarRenderer.ChunkThickness, VisualStyleElement.ProgressBar.Chunk.Normal, 6);
 
         // Test with VisualStyleElement.ProgressBar.ChunkVertical.Normal
-        bool isElementDefined2 = VisualStyleRenderer.IsElementDefined(VisualStyleElement.ProgressBar.Chunk.Normal);
-        int actualValue2 = ProgressBarRenderer.ChunkThickness;
-        int expectedValue2 = 6;
-
-        isElementDefined2.Should().BeTrue();
-        actualValue2.Should().Be(expectedValue2);
+        TestChunkProperty(() => ProgressBarRenderer.ChunkThickness, VisualStyleElement.ProgressBar.ChunkVertical.Normal, 6);
     }
 
     [WinFormsFact]
     public void ChunkSpaceThickness_ShouldReturnExpectedValue_BasedOnVisualStyleElement()
     {
         // Test with VisualStyleElement.ProgressBar.Chunk.Normal
-        bool isElementDefined1 = VisualStyleRenderer.IsElementDefined(VisualStyleElement.ProgressBar.Chunk.Normal);
-        int actualValue1 = ProgressBarRenderer.ChunkSpaceThickness;
-        int expectedValue1 = 0;
-
-        isElementDefined1.Should().BeTrue();       
-        actualValue1.Should().Be(expectedValue1);
+        TestChunkProperty(() => ProgressBarRenderer.ChunkSpaceThickness, VisualStyleElement.ProgressBar.Chunk.Normal, 0);
 
         // Test with VisualStyleElement.ProgressBar.ChunkVertical.Normal
-        bool isElementDefined2 = VisualStyleRenderer.IsElementDefined(VisualStyleElement.ProgressBar.ChunkVertical.Normal);
-        int actualValue2 = ProgressBarRenderer.ChunkSpaceThickness;
-        int expectedValue2 = 0;
+        TestChunkProperty(() => ProgressBarRenderer.ChunkSpaceThickness, VisualStyleElement.ProgressBar.ChunkVertical.Normal, 0);
+    }
 
-        isElementDefined2.Should().BeTrue();       
-        actualValue2.Should().Be(expectedValue2);
+    private void TestProgressBarRenderer(Action<Graphics, Rectangle> drawAction)
+    {
+        using Bitmap bitmap1 = new(100, 100);
+        using Bitmap bitmap2 = new(100, 100);
+        using Graphics graphics1 = Graphics.FromImage(bitmap1);
+        Rectangle rectangle1 = new(0, 0, 50, 50);
+
+        Action act = () => drawAction(graphics1, rectangle1);
+
+        act.Should().NotThrow();
+        bitmap1.Should().BeEquivalentTo(bitmap2);
+    }
+
+    private void TestChunkProperty(Func<int> propertyGetter, VisualStyleElement styleElement, int expectedValue)
+    {
+        bool isElementDefined = VisualStyleRenderer.IsElementDefined(styleElement);
+        int actualValue = propertyGetter();
+
+        isElementDefined.Should().BeTrue();
+        actualValue.Should().Be(expectedValue);
     }
 }
