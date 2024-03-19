@@ -335,7 +335,7 @@ internal partial class PropertyGridView
             Debug.Assert(editor is not null, "How do we have a link without the InstanceCreationEditor?");
             if (editor is not null && _gridView?.SelectedGridEntry is not null)
             {
-                Type createType = _gridView.SelectedGridEntry.PropertyType;
+                Type? createType = _gridView.SelectedGridEntry.PropertyType;
                 if (createType is not null)
                 {
                     _gridView.CloseDropDown();

@@ -20,7 +20,7 @@ internal class ArrayElementGridEntry : GridEntry
 
     public override string PropertyLabel => $"[{_index}]";
 
-    public override Type? PropertyType => ParentGridEntry.PropertyType.GetElementType();
+    public override Type? PropertyType => ParentGridEntry.PropertyType?.GetElementType();
 
     public override object? PropertyValue
     {
