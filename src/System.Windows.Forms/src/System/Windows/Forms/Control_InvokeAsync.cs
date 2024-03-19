@@ -15,10 +15,7 @@ public partial class Control
     /// <returns>The result of the asynchronous operation.</returns>
     public T? AsyncInvoke<T>(Func<Task<T>> asyncFunc)
     {
-        if (asyncFunc is null)
-        {
-            throw new ArgumentNullException(nameof(asyncFunc));
-        }
+        ArgumentNullException.ThrowIfNull(asyncFunc);
 
         if (!IsHandleCreated)
         {

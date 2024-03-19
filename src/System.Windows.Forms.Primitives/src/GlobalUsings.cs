@@ -12,4 +12,3 @@ global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;
 global using Windows.Win32.UI.Shell.Common;
 global using Windows.Win32.UI.WindowsAndMessaging;
-global using HRESULT = Interop.HRESULT;

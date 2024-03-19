@@ -1147,12 +1147,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     public Task<Graphics> GetGraphicsForItemAsync(ToolStripItem toolStripItem)
     {
-        TaskCompletionSource<Graphics> tcs = new();
+        ArgumentNullException.ThrowIfNull(toolStripItem);
 
-        if (toolStripItem is null)
-        {
-            throw new ArgumentNullException(nameof(toolStripItem));
-        }
+        TaskCompletionSource<Graphics> tcs = new();
 
         var asyncResult = BeginInvoke(() =>
         {
