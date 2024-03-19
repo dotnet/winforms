@@ -13,18 +13,11 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class Help
 {
-#if DEBUG
-    internal static readonly TraceSwitch s_windowsFormsHelpTrace = new("WindowsFormsHelpTrace", "Debug help system");
-#else
-    internal static readonly TraceSwitch? s_windowsFormsHelpTrace;
-#endif
-
     private const int HTML10HELP = 2;
     private const int HTMLFILE = 3;
 
     /// <summary>
-    ///  Displays
-    ///  the contents of the Help file at located at a specified Url.
+    ///  Displays the contents of the Help file at located at a specified Url.
     /// </summary>
     public static void ShowHelp(Control? parent, string? url)
     {
@@ -32,9 +25,7 @@ public static class Help
     }
 
     /// <summary>
-    ///  Displays the contents of
-    ///  the Help
-    ///  file for a specific topic found at the specified Url.
+    ///  Displays the contents of the Help file for a specific topic found at the specified Url.
     /// </summary>
     public static void ShowHelp(Control? parent, string? url, HelpNavigator navigator)
     {
@@ -42,9 +33,7 @@ public static class Help
     }
 
     /// <summary>
-    ///  Displays the contents of
-    ///  the Help
-    ///  file for a specific topic found at the specified Url.
+    ///  Displays the contents of the Help file for a specific topic found at the specified Url.
     /// </summary>
     public static void ShowHelp(Control? parent, string? url, string? keyword)
     {
@@ -59,15 +48,10 @@ public static class Help
     }
 
     /// <summary>
-    ///  Displays the contents of the Help file located at
-    ///  the Url
-    ///  supplied by the
-    ///  user.
+    ///  Displays the contents of the Help file located at the Url supplied by the user.
     /// </summary>
     public static void ShowHelp(Control? parent, string? url, HelpNavigator command, object? parameter)
     {
-        s_windowsFormsHelpTrace.TraceVerbose("Help:: ShowHelp");
-
         switch (GetHelpFileType(url))
         {
             case HTML10HELP:
@@ -84,8 +68,6 @@ public static class Help
     /// </summary>
     public static void ShowHelpIndex(Control? parent, string? url)
     {
-        s_windowsFormsHelpTrace.TraceVerbose("Help:: ShowHelpIndex");
-
         ShowHelp(parent, url, HelpNavigator.Index, null);
     }
 
@@ -94,8 +76,6 @@ public static class Help
     /// </summary>
     public static unsafe void ShowPopup(Control? parent, string caption, Point location)
     {
-        s_windowsFormsHelpTrace.TraceVerbose("Help:: ShowPopup");
-
         HH_POPUP pop = new()
         {
             cbStruct = sizeof(HH_POPUP),
@@ -117,12 +97,10 @@ public static class Help
     }
 
     /// <summary>
-    ///  Displays HTML 1.0 Help with the specified parameters
+    ///  Displays HTML 1.0 Help with the specified parameters.
     /// </summary>
     private static unsafe void ShowHTML10Help(Control? parent, string? url, HelpNavigator command, object? param)
     {
-        s_windowsFormsHelpTrace.TraceVerbose($"Help:: ShowHTML10Help:: {url}, {command:G}, {param}");
-
         // See if we can get a full path and file name and if that will
         // resolve the out of memory condition with file names that include spaces.
         // If we can't, though, we can't assume that the path's no good: it might be in
@@ -215,8 +193,6 @@ public static class Help
     /// </summary>
     private static void ShowHTMLFile(Control? parent, string? url, HelpNavigator command, object? param)
     {
-        s_windowsFormsHelpTrace.TraceVerbose($"Help:: ShowHTMLHelp:: {url}, {command:G}, {param}");
-
         Uri? file = Resolve(url) ?? throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), nameof(url));
 
         switch (command)
@@ -224,8 +200,7 @@ public static class Help
             case HelpNavigator.TableOfContents:
             case HelpNavigator.Find:
             case HelpNavigator.Index:
-                // nothing needed...
-                //
+                // Nothing needed.
                 break;
             case HelpNavigator.Topic:
                 if (param is string stringParam)
@@ -237,7 +212,6 @@ public static class Help
         }
 
         HandleRef<HWND> handle = parent is not null ? new(parent) : Control.GetHandleRef(PInvoke.GetActiveWindow());
-        s_windowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
         string fileName = file.ToString();
         string? executable = file.IsFile ? FindExecutableInternal(file.LocalPath.ToString()) : null;
         PInvoke.ShellExecute(handle.Handle, lpOperation: null, executable ?? fileName, executable is not null ? fileName : null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
@@ -261,9 +235,6 @@ public static class Help
 
     private static Uri? Resolve(string? partialUri)
     {
-        s_windowsFormsHelpTrace.TraceVerbose($"Help:: Resolve {partialUri}");
-        Debug.Indent();
-
         Uri? file = null;
 
         if (!string.IsNullOrEmpty(partialUri))
@@ -281,21 +252,19 @@ public static class Help
         if (file is not null && file.Scheme == "file")
         {
             string localPath = file.LocalPath + file.Fragment;
-            s_windowsFormsHelpTrace.TraceVerbose("file, check for existence");
 
             if (!File.Exists(localPath))
             {
-                // clear, and try relative to AppBase...
+                // Clear, and try relative to AppBase.
                 file = null;
             }
         }
 
         if (file is null)
         {
-            s_windowsFormsHelpTrace.TraceVerbose("try AppBase relative");
             try
             {
-                // try relative to AppBase...
+                // Try relative to AppBase.
                 file = new Uri(new Uri(AppContext.BaseDirectory),
                                partialUri);
             }
@@ -307,26 +276,21 @@ public static class Help
             if (file is not null && file.Scheme == "file")
             {
                 string localPath = file.LocalPath + file.Fragment;
-                s_windowsFormsHelpTrace.TraceVerbose("file, check for existence");
                 if (!File.Exists(localPath))
                 {
-                    // clear - file isn't there...
+                    // Clear - file isn't there.
                     file = null;
                 }
             }
         }
 
-        Debug.Unindent();
         return file;
     }
 
     private static int GetHelpFileType(string? url)
     {
-        s_windowsFormsHelpTrace.TraceVerbose("Help:: GetHelpFileType {url}");
-
         if (url is null)
         {
-            s_windowsFormsHelpTrace.TraceVerbose("\tnull, must be Html File");
             return HTMLFILE;
         }
 
@@ -334,17 +298,13 @@ public static class Help
 
         if (file is null || file.Scheme == "file")
         {
-            s_windowsFormsHelpTrace.TraceVerbose("\tfile");
-
             string ext = Path.GetExtension(file is null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
             if (ext is ".chm" or ".col")
             {
-                s_windowsFormsHelpTrace.TraceVerbose("\tchm or col, HtmlHelp 1.0 file");
                 return HTML10HELP;
             }
         }
 
-        s_windowsFormsHelpTrace.TraceVerbose("\tnot file, or odd extension, but be HTML");
         return HTMLFILE;
     }
 

@@ -19,7 +19,6 @@ public abstract partial class UndoEngine
             {
                 _before = before;
                 _after = after;
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating rename undo event for '{_before}'->'{_after}'");
             }
 
             /// <summary>
@@ -27,7 +26,6 @@ public abstract partial class UndoEngine
             /// </summary>
             public override void Undo(UndoEngine engine)
             {
-                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Renaming '{_after}'->'{_before}'");
                 IComponent? comp = engine._host.Container.Components[_after];
                 if (comp is not null)
                 {

@@ -412,6 +412,11 @@
         <target state="translated">바인딩 탐색기</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="new">Binding operations are not supported when application trimming is enabled.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">사용자가 BindingSource에서 AddNew를 호출하면 이벤트가 발생합니다.</target>

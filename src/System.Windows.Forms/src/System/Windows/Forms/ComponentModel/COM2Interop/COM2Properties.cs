@@ -11,11 +11,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </summary>
 internal sealed class Com2Properties
 {
-#if DEBUG
-    private static readonly TraceSwitch s_dbgCom2PropertiesSwitch
-        = new("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
-#endif
-
     // This is the interval that we'll hold properties for. If someone doesn't touch an object for this amount of time,
     // we'll dump the properties from our cache. 5 minutes -- ticks are 1/10,000,000th of a second
     private const long AgeThreshold = 10000000L * 60L * 5L;
@@ -43,13 +38,6 @@ internal sealed class Com2Properties
     {
         ArgumentNullException.ThrowIfNull(comObject);
         ArgumentNullException.ThrowIfNull(properties);
-
-#if DEBUG
-        if (s_dbgCom2PropertiesSwitch.TraceVerbose)
-        {
-            Debug.WriteLine($"Creating Com2Properties for object {comObject.GetType().FullName ?? "(null)"}.");
-        }
-#endif
 
         // Set up our variables.
         _properties = properties;
@@ -117,12 +105,6 @@ internal sealed class Com2Properties
         {
             if (CheckAndGetTarget(checkVersions: false, callDispose: true) is not { } target || _touchedTime == 0)
             {
-#if DEBUG
-                if (s_dbgCom2PropertiesSwitch.TraceVerbose)
-                {
-                    Debug.WriteLine("CheckValid called on dead object!");
-                }
-#endif
                 return null;
             }
 
@@ -153,12 +135,6 @@ internal sealed class Com2Properties
                 _properties[i].SetNeedsRefresh(Com2PropertyDescriptorRefresh.All, true);
             }
 
-#if DEBUG
-            if (s_dbgCom2PropertiesSwitch.TraceVerbose)
-            {
-                Debug.WriteLine("Returning property array for object.");
-            }
-#endif
             return _properties;
         }
     }
@@ -198,13 +174,6 @@ internal sealed class Com2Properties
 
     public void Dispose()
     {
-#if DEBUG
-        if (s_dbgCom2PropertiesSwitch.TraceVerbose)
-        {
-            Debug.WriteLine("Disposing property manager.");
-        }
-#endif
-
         if (_properties is not null)
         {
             Disposed?.Invoke(this, EventArgs.Empty);
@@ -290,13 +259,6 @@ internal sealed class Com2Properties
         if (!valid && callDispose)
         {
             // Weak reference has died, so remove this from the hash table
-#if DEBUG
-            if (s_dbgCom2PropertiesSwitch.TraceVerbose)
-            {
-                Debug.WriteLine($"Disposing reference to object (weakRef {(_weakObjectReference is null ? "null" : "dead")})");
-            }
-#endif
-
             Dispose();
         }
 

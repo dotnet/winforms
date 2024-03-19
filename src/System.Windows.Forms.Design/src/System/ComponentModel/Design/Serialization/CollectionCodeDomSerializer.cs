@@ -110,7 +110,6 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             DesignerSerializationVisibilityAttribute visibility = (DesignerSerializationVisibilityAttribute)attributes[0];
             if (visibility is { Visibility: DesignerSerializationVisibility.Hidden })
             {
-                Trace(TraceLevel.Verbose, $"Member {method.Name} does not support serialization.");
                 return false;
             }
         }
@@ -127,89 +126,87 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         ArgumentNullException.ThrowIfNull(value);
 
         object? result = null;
-        using (TraceScope($"CollectionCodeDomSerializer::{nameof(Serialize)}"))
+
+        // We serialize collections as follows:
+        //      If the collection is an array, we write out the array.
+        //      If the collection has a method called AddRange, we will call that, providing an array.
+        //      If the collection has an Add method, we will call it repeatedly.
+        //      If the collection is an IList, we will cast to IList and add to it.
+        //      If the collection has no add method, but is marked with PersistContents, we will enumerate the collection and serialize each element.
+        // Check to see if there is a CodePropertyReferenceExpression on the stack.  If there is, we can use it as a guide for serialization.
+        CodeExpression? target;
+        if (manager.TryGetContext(out ExpressionContext? context) && context.PresetValue == value &&
+            manager.TryGetContext(out PropertyDescriptor? property) && property.PropertyType == context.ExpressionType)
         {
-            // We serialize collections as follows:
-            //      If the collection is an array, we write out the array.
-            //      If the collection has a method called AddRange, we will call that, providing an array.
-            //      If the collection has an Add method, we will call it repeatedly.
-            //      If the collection is an IList, we will cast to IList and add to it.
-            //      If the collection has no add method, but is marked with PersistContents, we will enumerate the collection and serialize each element.
-            // Check to see if there is a CodePropertyReferenceExpression on the stack.  If there is, we can use it as a guide for serialization.
-            CodeExpression? target;
-            if (manager.TryGetContext(out ExpressionContext? context) && context.PresetValue == value &&
-                manager.TryGetContext(out PropertyDescriptor? property) && property.PropertyType == context.ExpressionType)
-            {
-                // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array.  If it is an array, we will  just return the array create expression.
-                target = context.Expression;
-                Trace(TraceLevel.Verbose, "Valid context and property descriptor found on context stack.");
-            }
-            else
-            {
-                // This context is either the wrong context or doesn't match the property descriptor we found.
-                target = null;
-                context = null;
-                property = null;
-                Trace(TraceLevel.Verbose, "No valid context.  We can only serialize if this is an array.");
-            }
+            // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array.  If it is an array, we will  just return the array create expression.
+            target = context.Expression;
+        }
+        else
+        {
+            // This context is either the wrong context or doesn't match the property descriptor we found.
+            target = null;
+            context = null;
+            property = null;
+        }
 
-            // If we have a target expression see if we can create a delta for the collection. We want to do this only if the property the collection is associated with is inherited, and if the collection is not an array.
-            if (value is ICollection collection)
+        // If we have a target expression see if we can create a delta for the collection. We want to do this only if the
+        // property the collection is associated with is inherited, and if the collection is not an array.
+        if (value is ICollection collection)
+        {
+            ICollection subset = collection;
+            Type collectionType = context?.ExpressionType ?? collection.GetType();
+            bool isArray = typeof(Array).IsAssignableFrom(collectionType);
+
+            // If we don't have a target expression and this isn't an array, let's try to create one.
+            if (target is null && !isArray)
             {
-                ICollection subset = collection;
-                Type collectionType = context?.ExpressionType ?? collection.GetType();
-                bool isArray = typeof(Array).IsAssignableFrom(collectionType);
-                // If we don't have a target expression and this isn't an array, let's try to create one.
-                if (target is null && !isArray)
+                target = SerializeCreationExpression(manager, collection, out bool isComplete);
+                if (isComplete)
                 {
-                    target = SerializeCreationExpression(manager, collection, out bool isComplete);
-                    if (isComplete)
-                    {
-                        return target;
-                    }
-                }
-
-                if (target is not null || isArray)
-                {
-                    if (property is InheritedPropertyDescriptor inheritedDesc && !isArray)
-                    {
-                        subset = GetCollectionDelta(inheritedDesc.OriginalValue as ICollection, collection);
-                    }
-
-                    result = SerializeCollection(manager, target, collectionType, collection, subset);
-
-                    // See if we should emit a clear for this collection.
-                    if (target is not null && ShouldClearCollection(manager, collection))
-                    {
-                        CodeStatementCollection? resultCollection = result as CodeStatementCollection;
-                        // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
-                        if (collection.Count > 0 && (result is null || (resultCollection is not null && resultCollection.Count == 0)))
-                        {
-                            return null;
-                        }
-
-                        if (resultCollection is null)
-                        {
-                            resultCollection = [];
-                            if (result is CodeStatement resultStatement)
-                            {
-                                resultCollection.Add(resultStatement);
-                            }
-
-                            result = resultCollection;
-                        }
-
-                        CodeMethodInvokeExpression clearMethod = new(target, "Clear");
-                        CodeExpressionStatement clearStatement = new(clearMethod);
-                        resultCollection.Insert(0, clearStatement);
-                    }
+                    return target;
                 }
             }
-            else
+
+            if (target is not null || isArray)
             {
-                Debug.Fail($"Collection serializer invoked for non-collection: {(value is null ? "(null)" : value.GetType().Name)}");
-                Trace(TraceLevel.Error, $"Collection serializer invoked for non collection: {(value is null ? "(null)" : value.GetType().Name)}");
+                if (property is InheritedPropertyDescriptor inheritedDesc && !isArray)
+                {
+                    subset = GetCollectionDelta(inheritedDesc.OriginalValue as ICollection, collection);
+                }
+
+                result = SerializeCollection(manager, target, collectionType, collection, subset);
+
+                // See if we should emit a clear for this collection.
+                if (target is not null && ShouldClearCollection(manager, collection))
+                {
+                    CodeStatementCollection? resultCollection = result as CodeStatementCollection;
+
+                    // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
+                    if (collection.Count > 0 && (result is null || (resultCollection is not null && resultCollection.Count == 0)))
+                    {
+                        return null;
+                    }
+
+                    if (resultCollection is null)
+                    {
+                        resultCollection = [];
+                        if (result is CodeStatement resultStatement)
+                        {
+                            resultCollection.Add(resultStatement);
+                        }
+
+                        result = resultCollection;
+                    }
+
+                    CodeMethodInvokeExpression clearMethod = new(target, "Clear");
+                    CodeExpressionStatement clearStatement = new(clearMethod);
+                    resultCollection.Insert(0, clearStatement);
+                }
             }
+        }
+        else
+        {
+            Debug.Fail($"Collection serializer invoked for non-collection: {(value is null ? "(null)" : value.GetType().Name)}");
         }
 
         return result;
@@ -220,7 +217,9 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     /// </summary>
     private static MethodInfo? ChooseMethodByType(TypeDescriptionProvider provider, List<MethodInfo> methods, ICollection values)
     {
-        // Note that this method uses reflection types which may not be compatible with runtime types. objType must be obtained from the same provider as the methods were to ensure that the reflection types all belong to the same type universe.
+        // Note that this method uses reflection types which may not be compatible with runtime types. objType must be
+        // obtained from the same provider as the methods were to ensure that the reflection types all belong to the
+        // same type universe.
         MethodInfo? final = null;
         Type? finalType = null;
         foreach (object obj in values)
@@ -294,7 +293,6 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         bool serialized = false;
         if (typeof(Array).IsAssignableFrom(targetType))
         {
-            Trace(TraceLevel.Verbose, "Collection is array");
             CodeArrayCreateExpression? arrayCreate = SerializeArray(manager, targetType, (Array)originalCollection, valuesToSerialize);
             if (arrayCreate is not null)
             {
@@ -310,8 +308,9 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         }
         else if (valuesToSerialize.Count > 0)
         {
-            Trace(TraceLevel.Verbose, "Searching for AddRange or Add");
-            // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the service is not available.  Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes, they can only be used with other reflection types from the same provider.
+            // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the
+            // service is not available. Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes,
+            // they can only be used with other reflection types from the same provider.
             TypeDescriptionProvider? provider = GetTargetFrameworkProvider(manager, originalCollection);
             provider ??= TypeDescriptor.GetProvider(originalCollection);
 
@@ -366,10 +365,6 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             }
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
         }
-        else
-        {
-            Trace(TraceLevel.Verbose, "Collection has no values to serialize.");
-        }
 
         return result;
     }
@@ -380,77 +375,74 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     private CodeArrayCreateExpression? SerializeArray(IDesignerSerializationManager manager, Type targetType, Array array, ICollection valuesToSerialize)
     {
         CodeArrayCreateExpression? result = null;
-        using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeArray)}"))
+
+        if (array.Rank != 1)
         {
-            if (array.Rank != 1)
+            manager.ReportError(string.Format(SR.SerializerInvalidArrayRank, array.Rank.ToString(CultureInfo.InvariantCulture)));
+        }
+        else
+        {
+            // For an array, we need an array create expression.  First, get the array type
+            Type elementType = targetType.GetElementType()!;
+            CodeTypeReference elementTypeRef = new(elementType);
+
+            // Now create an ArrayCreateExpression, and fill its initializers.
+            CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
             {
-                Trace(TraceLevel.Error, "Cannot serialize arrays with rank > 1.");
-                manager.ReportError(string.Format(SR.SerializerInvalidArrayRank, array.Rank.ToString(CultureInfo.InvariantCulture)));
+                CreateType = elementTypeRef
+            };
+
+            bool arrayOk = true;
+            foreach (object o in valuesToSerialize)
+            {
+                // If this object is being privately inherited, it cannot be inside this collection.  Since we're writing an entire array here, we cannot write any of it.
+                if (o is IComponent && TypeDescriptor.GetAttributes(o).Contains(InheritanceAttribute.InheritedReadOnly))
+                {
+                    arrayOk = false;
+                    break;
+                }
+
+                CodeExpression? expression = null;
+                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
+                ExpressionContext? newContext = null;
+                if (manager.TryGetContext(out ExpressionContext? context))
+                {
+                    newContext = new ExpressionContext(context.Expression, elementType, context.Owner);
+                    manager.Context.Push(newContext);
+                }
+
+                try
+                {
+                    expression = SerializeToExpression(manager, o);
+                }
+                finally
+                {
+                    if (newContext is not null)
+                    {
+                        Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
+                        manager.Context.Pop();
+                    }
+                }
+
+                if (expression is not null)
+                {
+                    if (o is not null && o.GetType() != elementType)
+                    {
+                        expression = new CodeCastExpression(elementType, expression);
+                    }
+
+                    arrayCreate.Initializers.Add(expression);
+                }
+                else
+                {
+                    arrayOk = false;
+                    break;
+                }
             }
-            else
+
+            if (arrayOk)
             {
-                // For an array, we need an array create expression.  First, get the array type
-                Type elementType = targetType.GetElementType()!;
-                CodeTypeReference elementTypeRef = new(elementType);
-                Trace(TraceLevel.Verbose, $"Array type: {elementType.Name}");
-                Trace(TraceLevel.Verbose, $"Count: {valuesToSerialize.Count}");
-                // Now create an ArrayCreateExpression, and fill its initializers.
-                CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
-                {
-                    CreateType = elementTypeRef
-                };
-                bool arrayOk = true;
-                foreach (object o in valuesToSerialize)
-                {
-                    // If this object is being privately inherited, it cannot be inside this collection.  Since we're writing an entire array here, we cannot write any of it.
-                    if (o is IComponent && TypeDescriptor.GetAttributes(o).Contains(InheritanceAttribute.InheritedReadOnly))
-                    {
-                        arrayOk = false;
-                        break;
-                    }
-
-                    CodeExpression? expression = null;
-                    // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
-                    ExpressionContext? newContext = null;
-                    if (manager.TryGetContext(out ExpressionContext? context))
-                    {
-                        newContext = new ExpressionContext(context.Expression, elementType, context.Owner);
-                        manager.Context.Push(newContext);
-                    }
-
-                    try
-                    {
-                        expression = SerializeToExpression(manager, o);
-                    }
-                    finally
-                    {
-                        if (newContext is not null)
-                        {
-                            Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
-                            manager.Context.Pop();
-                        }
-                    }
-
-                    if (expression is not null)
-                    {
-                        if (o is not null && o.GetType() != elementType)
-                        {
-                            expression = new CodeCastExpression(elementType, expression);
-                        }
-
-                        arrayCreate.Initializers.Add(expression);
-                    }
-                    else
-                    {
-                        arrayOk = false;
-                        break;
-                    }
-                }
-
-                if (arrayOk)
-                {
-                    result = arrayCreate;
-                }
+                result = arrayCreate;
             }
         }
 
@@ -467,80 +459,79 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         ICollection valuesToSerialize)
     {
         CodeStatementCollection statements = [];
-        using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
+
+        // Here we need to invoke Add once for each and every item in the collection. We can re-use the property
+        // reference and method reference, but we will need to recreate the invoke statement each time.
+        CodeMethodReferenceExpression methodRef = new(targetExpression!, "Add");
+
+        if (valuesToSerialize.Count == 0)
         {
-            Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
-            // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
-            CodeMethodReferenceExpression methodRef = new(targetExpression!, "Add");
-
-            if (valuesToSerialize.Count == 0)
-            {
-                return statements;
-            }
-
-            foreach (object o in valuesToSerialize)
-            {
-                // If this object is being privately inherited, it cannot be inside this collection.
-                bool genCode = o is not IComponent;
-                if (!genCode)
-                {
-                    if (TypeDescriptorHelper.TryGetAttribute(o, out InheritanceAttribute? ia))
-                    {
-                        genCode = ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly;
-                    }
-                    else
-                    {
-                        genCode = true;
-                    }
-                }
-
-                Debug.Assert(genCode, "Why didn't GetCollectionDelta calculate the same thing?");
-                if (genCode)
-                {
-                    CodeMethodInvokeExpression statement = new CodeMethodInvokeExpression
-                    {
-                        Method = methodRef
-                    };
-                    CodeExpression? serializedObject = null;
-
-                    // If there is an expression context on the stack at this point,
-                    // we need to fix up the ExpressionType on it to be the element type.
-                    ExpressionContext? newCtx = null;
-
-                    if (manager.TryGetContext(out ExpressionContext? ctx))
-                    {
-                        newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
-                        manager.Context.Push(newCtx);
-                    }
-
-                    try
-                    {
-                        serializedObject = SerializeToExpression(manager, o);
-                    }
-                    finally
-                    {
-                        if (newCtx is not null)
-                        {
-                            Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
-                            manager.Context.Pop();
-                        }
-                    }
-
-                    if (o is not null && !elementType.IsAssignableFrom(o.GetType()) && o.GetType().IsPrimitive)
-                    {
-                        serializedObject = new CodeCastExpression(elementType, serializedObject!);
-                    }
-
-                    if (serializedObject is not null)
-                    {
-                        statement.Parameters.Add(serializedObject);
-                        statements.Add(statement);
-                    }
-                }
-            }
-
             return statements;
         }
+
+        foreach (object o in valuesToSerialize)
+        {
+            // If this object is being privately inherited, it cannot be inside this collection.
+            bool genCode = o is not IComponent;
+            if (!genCode)
+            {
+                if (TypeDescriptorHelper.TryGetAttribute(o, out InheritanceAttribute? ia))
+                {
+                    genCode = ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly;
+                }
+                else
+                {
+                    genCode = true;
+                }
+            }
+
+            Debug.Assert(genCode, "Why didn't GetCollectionDelta calculate the same thing?");
+            if (genCode)
+            {
+                CodeMethodInvokeExpression statement = new CodeMethodInvokeExpression
+                {
+                    Method = methodRef
+                };
+
+                CodeExpression? serializedObject = null;
+
+                // If there is an expression context on the stack at this point,
+                // we need to fix up the ExpressionType on it to be the element type.
+                ExpressionContext? newCtx = null;
+
+                if (manager.TryGetContext(out ExpressionContext? ctx))
+                {
+                    newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                    manager.Context.Push(newCtx);
+                }
+
+                try
+                {
+                    serializedObject = SerializeToExpression(manager, o);
+                }
+                finally
+                {
+                    if (newCtx is not null)
+                    {
+                        Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
+                        manager.Context.Pop();
+                    }
+                }
+
+                if (o is not null && !elementType.IsAssignableFrom(o.GetType()) && o.GetType().IsPrimitive)
+                {
+                    serializedObject = new CodeCastExpression(elementType, serializedObject!);
+                }
+
+                if (serializedObject is not null)
+                {
+                    statement.Parameters.Add(serializedObject);
+                    statements.Add(statement);
+                }
+            }
+        }
+
+        return statements;
     }
 
     /// <summary>
@@ -553,96 +544,95 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         ICollection valuesToSerialize)
     {
         CodeStatementCollection statements = [];
-        using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
+
+        if (valuesToSerialize.Count == 0)
         {
-            Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
-
-            if (valuesToSerialize.Count == 0)
-            {
-                return statements;
-            }
-
-            List<CodeExpression> arrayList = new(valuesToSerialize.Count);
-            foreach (object o in valuesToSerialize)
-            {
-                // If this object is being privately inherited, it cannot be inside this collection.
-                bool genCode = o is not IComponent;
-                if (!genCode)
-                {
-                    if (TypeDescriptorHelper.TryGetAttribute(o, out InheritanceAttribute? ia))
-                    {
-                        genCode = ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly;
-                    }
-                    else
-                    {
-                        genCode = true;
-                    }
-                }
-
-                Debug.Assert(genCode, "Why didn't GetCollectionDelta calculate the same thing?");
-                if (genCode)
-                {
-                    CodeExpression? expression = null;
-                    // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
-                    ExpressionContext? newContext = null;
-
-                    if (manager.TryGetContext(out ExpressionContext? ctx))
-                    {
-                        newContext = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
-                        manager.Context.Push(newContext);
-                    }
-
-                    try
-                    {
-                        expression = SerializeToExpression(manager, o);
-                    }
-                    finally
-                    {
-                        if (newContext is not null)
-                        {
-                            Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
-                            manager.Context.Pop();
-                        }
-                    }
-
-                    if (expression is not null)
-                    {
-                        // Check to see if we need a cast
-                        if (o is not null && !elementType.IsAssignableFrom(o.GetType()))
-                        {
-                            expression = new CodeCastExpression(elementType, expression);
-                        }
-
-                        arrayList.Add(expression);
-                    }
-                }
-            }
-
-            if (arrayList.Count > 0)
-            {
-                // Now convert the array list into an array create expression.
-                CodeTypeReference elementTypeRef = new(elementType);
-                // Now create an ArrayCreateExpression, and fill its initializers.
-                CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
-                {
-                    CreateType = elementTypeRef
-                };
-                foreach (CodeExpression expression in arrayList)
-                {
-                    arrayCreate.Initializers.Add(expression);
-                }
-
-                CodeMethodReferenceExpression methodRef = new(targetExpression!, "AddRange");
-                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
-                {
-                    Method = methodRef
-                };
-                methodInvoke.Parameters.Add(arrayCreate);
-                statements.Add(new CodeExpressionStatement(methodInvoke));
-            }
-
             return statements;
         }
+
+        List<CodeExpression> arrayList = new(valuesToSerialize.Count);
+        foreach (object o in valuesToSerialize)
+        {
+            // If this object is being privately inherited, it cannot be inside this collection.
+            bool genCode = o is not IComponent;
+            if (!genCode)
+            {
+                if (TypeDescriptorHelper.TryGetAttribute(o, out InheritanceAttribute? ia))
+                {
+                    genCode = ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly;
+                }
+                else
+                {
+                    genCode = true;
+                }
+            }
+
+            Debug.Assert(genCode, "Why didn't GetCollectionDelta calculate the same thing?");
+            if (genCode)
+            {
+                CodeExpression? expression = null;
+                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
+                ExpressionContext? newContext = null;
+
+                if (manager.TryGetContext(out ExpressionContext? ctx))
+                {
+                    newContext = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                    manager.Context.Push(newContext);
+                }
+
+                try
+                {
+                    expression = SerializeToExpression(manager, o);
+                }
+                finally
+                {
+                    if (newContext is not null)
+                    {
+                        Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
+                        manager.Context.Pop();
+                    }
+                }
+
+                if (expression is not null)
+                {
+                    // Check to see if we need a cast
+                    if (o is not null && !elementType.IsAssignableFrom(o.GetType()))
+                    {
+                        expression = new CodeCastExpression(elementType, expression);
+                    }
+
+                    arrayList.Add(expression);
+                }
+            }
+        }
+
+        if (arrayList.Count > 0)
+        {
+            // Now convert the array list into an array create expression.
+            CodeTypeReference elementTypeRef = new(elementType);
+
+            // Now create an ArrayCreateExpression, and fill its initializers.
+            CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
+            {
+                CreateType = elementTypeRef
+            };
+
+            foreach (CodeExpression expression in arrayList)
+            {
+                arrayCreate.Initializers.Add(expression);
+            }
+
+            CodeMethodReferenceExpression methodRef = new(targetExpression!, "AddRange");
+            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+            {
+                Method = methodRef
+            };
+
+            methodInvoke.Parameters.Add(arrayCreate);
+            statements.Add(new CodeExpressionStatement(methodInvoke));
+        }
+
+        return statements;
     }
 
     /// <summary>

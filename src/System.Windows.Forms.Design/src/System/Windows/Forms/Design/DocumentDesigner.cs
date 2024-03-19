@@ -53,7 +53,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private static readonly Guid s_htmlDesignTime = new("73CEF3DD-AE85-11CF-A406-00AA00C00940");
 
     private Dictionary<string, AxToolboxItem> _axTools;
-    private static TraceSwitch AxToolSwitch { get; } = new("AxTool", "ActiveX Toolbox Tracing");
     private const string AxClipFormat = "CLSID";
     private ToolboxItemCreatorCallback _toolboxCreator;
 
@@ -295,7 +294,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         string clsid = Text.Encoding.Default.GetString(bytes);
         int index = clsid.IndexOf('}');
         clsid = clsid[..(index + 1)];
-        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"\tCLSID of the Toolbox item: {clsid}");
 
         // Look to see if we can find the Control key for this CLSID. If present, create a
         // new AxToolboxItem and add it to the cache.
@@ -307,7 +305,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         // Look to see if we have already cached the ToolboxItem.
         if (_axTools is not null && _axTools.TryGetValue(clsid, out AxToolboxItem tool))
         {
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Found AxToolboxItem in tool cache");
             return tool;
         }
 
@@ -315,7 +312,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         tool = new AxToolboxItem(clsid);
         _axTools ??= [];
         _axTools[clsid] = tool;
-        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
         return tool;
     }
 
@@ -329,9 +325,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         serializationData = dataObject.GetData(OleDragDropHandler.DataFormat, false);
         if (serializationData is not null)
-        {    // backcompat
+        {
             return new OleDragDropHandler.CfCodeToolboxItem(serializationData);
-            ;
         }
 
         return null;
@@ -396,13 +391,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                     Debug.Assert(toolbox is not null, "No toolbox service available");
                     if (toolbox is not null)
                     {
-                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CLSID ToolboxItemCreator");
                         toolbox.RemoveCreator(AxClipFormat, host);
-
-                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CF_CODE ToolboxItemCreator");
                         toolbox.RemoveCreator(OleDragDropHandler.DataFormat, host);
-
-                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CF_TOOLBOXITEM ToolboxItemCreator");
                         toolbox.RemoveCreator(OleDragDropHandler.NestedToolboxItemFormat, host);
                     }
 
@@ -767,11 +757,9 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             }
 
             // Add the DocumentDesigner as a creator of CLSID toolbox items.
-            //
             IToolboxService toolbox = (IToolboxService)host.GetService(typeof(IToolboxService));
             if (toolbox is not null)
             {
-                Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Adding DocumentDesigner as CLSID ToolboxItemCreator");
                 _toolboxCreator = new ToolboxItemCreatorCallback(OnCreateToolboxItem);
                 toolbox.AddCreator(_toolboxCreator, AxClipFormat, host);
                 toolbox.AddCreator(_toolboxCreator, OleDragDropHandler.DataFormat, host);
@@ -781,25 +769,21 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // Listen for the completed load.  When finished, we need to select the form.  We don'
             // want to do it before we're done, however, or else the dimensions of the selection rectangle
             // could be off because during load, change events are not fired.
-            //
             host.LoadComplete += new EventHandler(OnLoadComplete);
         }
 
         // Setup our menu command structure.
-        //
         Debug.Assert(component.Site is not null, "Designer host should have given us a site by now.");
         _commandSet = new ControlCommandSet(component.Site);
 
         // Finally hook the designer view into the frame.  We do this last because the frame may
         // cause the control to be created, and if this happens before the inheritance scan we
         // will subclass the inherited controls before we get a chance to attach designers.
-        //
         _frame.Initialize(Control);
         _pbrsFwd = new PbrsForward(_frame, component.Site);
 
         // And force some shadow properties that we change in the course of
         // initializing the form.
-        //
         Location = new Point(0, 0);
     }
 
@@ -1074,8 +1058,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// </summary>
     private ToolboxItem OnCreateToolboxItem(object serializedData, string format)
     {
-        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking to see if: {format} is supported.");
-
         if (serializedData is not IDataObject dataObject)
         {
             Debug.Fail("Toolbox service didn't pass us a data object; that should never happen");
@@ -1083,14 +1065,12 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         }
 
         // CLSID format.
-        //
         if (format.Equals(AxClipFormat))
         {
             return CreateAxToolboxItem(dataObject);
         }
 
         // CF_CODE format
-        //
         if (format.Equals(OleDragDropHandler.DataFormat) ||
             format.Equals(OleDragDropHandler.NestedToolboxItemFormat))
         {
@@ -1137,16 +1117,13 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private void OnLoadComplete(object sender, EventArgs e)
     {
         // Remove the handler; we're done looking at this.
-        //
         ((IDesignerHost)sender).LoadComplete -= new EventHandler(OnLoadComplete);
 
         // Restore the tray layout.
-        //
         if (_trayLayoutSuspended && _componentTray is not null)
             _componentTray.ResumeLayout();
 
         // Select this component.
-        //
         ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
         if (ss is not null)
         {

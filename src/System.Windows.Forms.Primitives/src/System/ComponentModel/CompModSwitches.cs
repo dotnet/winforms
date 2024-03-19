@@ -17,7 +17,6 @@ internal static class CompModSwitches
     private static TraceSwitch? s_dataGridSelection;
     private static TraceSwitch? s_dataObject;
     private static TraceSwitch? s_dataView;
-    private static TraceSwitch? s_debugGridView;
     private static TraceSwitch? s_dgCaptionPaint;
     private static TraceSwitch? s_dgEditColumnEditing;
     private static TraceSwitch? s_dgRelationShpRowLayout;
@@ -144,16 +143,6 @@ internal static class CompModSwitches
             s_dataView ??= new TraceSwitch("DataView", "DataView");
 
             return s_dataView;
-        }
-    }
-
-    public static TraceSwitch DebugGridView
-    {
-        get
-        {
-            s_debugGridView ??= new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
-
-            return s_debugGridView;
         }
     }
 

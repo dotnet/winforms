@@ -116,30 +116,32 @@ internal class MdiWindowListStrip : MenuStrip
                                 MergeAction = MergeAction.Append,
                                 MergeIndex = accel
                             };
-                            windowListItem.Click += new EventHandler(OnWindowListItemClick);
+
+                            windowListItem.Click += OnWindowListItemClick;
+
                             if (forms[i].Equals(activeMdiChild))
-                            {  // if this the active one, check it off.
+                            {
+                                // If this the active one, check it off.
                                 windowListItem.Checked = true;
                                 activeFormAdded = true;
                             }
 
                             accel++;
                             formsAddedToMenu++;
-                            s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {windowListItem.Text}");
                             mergeItem.DropDownItems.Add(windowListItem);
                         }
                     }
                 }
 
-                // show the More Windows... item if necessary.
+                // Show the "More Windows..." item if necessary.
                 if (visibleChildren > maxMenuForms)
                 {
                     ToolStripMenuItem moreWindowsMenuItem = new ToolStripMenuItem
                     {
                         Text = SR.MDIMenuMoreWindows
                     };
-                    s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {moreWindowsMenuItem.Text}");
-                    moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
+
+                    moreWindowsMenuItem.Click += OnMoreWindowsMenuItemClick;
                     moreWindowsMenuItem.MergeAction = MergeAction.Append;
                     mergeItem.DropDownItems.Add(moreWindowsMenuItem);
                 }
@@ -147,7 +149,7 @@ internal class MdiWindowListStrip : MenuStrip
         }
         finally
         {
-            // this is an invisible toolstrip don't even bother doing layout.
+            // This is an invisible toolstrip don't even bother doing layout.
             ResumeLayout(false);
             MergeItem.DropDown.ResumeLayout(false);
         }

@@ -59,7 +59,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 return _helpKeyword;
             }
 
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             if (owner is null)
             {
                 return null;
@@ -82,7 +82,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
                     // For value classes, the equality will never work, so just try the type equality.
                     if (entry.PropertyValue == owner
-                        || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue.GetType()))
+                        || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue?.GetType()))
                     {
                         _helpKeyword = $"{entry.PropertyName}.{_helpKeyword}";
                         break;
@@ -280,7 +280,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    internal override UITypeEditor UITypeEditor
+    internal override UITypeEditor? UITypeEditor
     {
         get
         {
@@ -359,14 +359,14 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
-            object owner = entry.GetValueOwner();
+            object? owner = entry.GetValueOwner();
 
             // When owner is an instance of a value type we can't use == in the following while condition.
-            bool isValueType = owner.GetType().IsValueType;
+            bool isValueType = owner?.GetType().IsValueType ?? false;
 
             // Find the next property descriptor with a different parent.
             while (entry is not PropertyDescriptorGridEntry
-                || isValueType ? owner.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
+                || isValueType ? owner!.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
             {
                 entry = entry.ParentGridEntry;
                 if (entry is null)
@@ -380,8 +380,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 owner = entry.GetValueOwner();
 
-                ComponentChangeService?.OnComponentChanging(owner, entry.PropertyDescriptor);
-                ComponentChangeService?.OnComponentChanged(owner, entry.PropertyDescriptor);
+                if (owner is not null)
+                {
+                    ComponentChangeService?.OnComponentChanging(owner, entry.PropertyDescriptor);
+                    ComponentChangeService?.OnComponentChanged(owner, entry.PropertyDescriptor);
+                }
 
                 // Clear the value so it paints correctly next time.
                 entry.ClearCachedValues(clearChildren: false);
