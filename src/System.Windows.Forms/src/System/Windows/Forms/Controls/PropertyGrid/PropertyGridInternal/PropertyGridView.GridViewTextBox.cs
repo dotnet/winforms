@@ -225,7 +225,7 @@ internal partial class PropertyGridView
                             && !PropertyGridView.SelectedGridEntry.IsTextEditable
                             && PropertyGridView.SelectedGridEntry.CanResetPropertyValue())
                         {
-                            object oldValue = PropertyGridView.SelectedGridEntry.PropertyValue;
+                            object? oldValue = PropertyGridView.SelectedGridEntry.PropertyValue;
                             PropertyGridView.SelectedGridEntry.ResetPropertyValue();
                             PropertyGridView.UnfocusSelection();
                             PropertyGridView.OwnerGrid.OnPropertyValueSet(PropertyGridView.SelectedGridEntry, oldValue);

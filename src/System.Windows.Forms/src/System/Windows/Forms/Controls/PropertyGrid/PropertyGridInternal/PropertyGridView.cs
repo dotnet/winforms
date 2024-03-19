@@ -1691,7 +1691,7 @@ internal sealed partial class PropertyGridView :
         try
         {
             object[] values = gridEntry.GetPropertyValueList();
-            object value = gridEntry.PropertyValue;
+            object? value = gridEntry.PropertyValue;
             string? textValue = gridEntry.TypeConverter.ConvertToString(gridEntry, value);
 
             if (values.Length == 0)
@@ -2418,7 +2418,7 @@ internal sealed partial class PropertyGridView :
 
     private bool ProcessEnumUpAndDown(GridEntry entry, Keys keyCode, bool closeDropDown = true)
     {
-        object value = entry.PropertyValue;
+        object? value = entry.PropertyValue;
         object[] values = entry.GetPropertyValueList();
 
         for (int i = 0; i < values.Length; i++)
@@ -3746,7 +3746,7 @@ internal sealed partial class PropertyGridView :
 
             try
             {
-                SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
+                SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor?.IsDropDownResizable ?? false);
                 gridEntry.EditPropertyValue(this);
             }
             finally
