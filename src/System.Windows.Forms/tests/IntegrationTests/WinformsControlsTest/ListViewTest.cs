@@ -97,7 +97,7 @@ public partial class ListViewTest : Form
                 0 => item1,
                 1 => item2,
                 2 => item3,
-                _ => throw new IndexOutOfRangeException(),
+                _ => throw new ArgumentOutOfRangeException(),
             };
         };
 

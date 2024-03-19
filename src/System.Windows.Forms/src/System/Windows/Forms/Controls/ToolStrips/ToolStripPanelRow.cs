@@ -700,8 +700,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     // Sets the bounds for an element.
     void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
     {
-        // in this case the parent is telling us to refresh our bounds - don't
-        // call PerformLayout
+        // In this case the parent is telling us to refresh our bounds - don't call PerformLayout.
         SetBounds(bounds);
     }
 
@@ -713,28 +712,12 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         }
     }
 
-    #region MouseStuff
-
-#if DEBUG
-    internal static TraceSwitch ToolStripPanelMouseDebug { get; } = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
-#else
-    internal static TraceSwitch? ToolStripPanelMouseDebug { get; }
-#endif
-
-    internal Rectangle DragBounds
-    {
-        get
-        {
-            return RowManager.DragBounds;
-        }
-    }
+    internal Rectangle DragBounds => RowManager.DragBounds;
 
     internal void MoveControl(ToolStrip movingControl, Point startClientLocation, Point endClientLocation)
     {
         RowManager.MoveControl(movingControl, startClientLocation, endClientLocation);
     }
-
-    //
 
     internal void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
     {
@@ -750,6 +733,4 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
             Dispose();
         }
     }
-
-    #endregion
 }

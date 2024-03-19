@@ -56,13 +56,6 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     /// </summary>
     public void AddFontFile(string filename)
     {
-        if (_nativeFontCollection is null)
-        {
-            // This is the default behavior on Desktop. The ArgumentException originates from GdipPrivateAddFontFile which would
-            // refuse the null pointer.
-            throw new ArgumentException();
-        }
-
         ArgumentNullException.ThrowIfNull(filename);
 
         if (!File.Exists(filename))

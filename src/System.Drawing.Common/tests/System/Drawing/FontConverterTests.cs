@@ -39,7 +39,7 @@ public class FontNameConverterTest
 
 public class FontConverterTest
 {
-    public static char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
+    public static char Separator { get; } = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
 
     [Theory]
     [MemberData(nameof(TestConvertFormData))]
@@ -152,34 +152,34 @@ public class FontConverterTest
             new TheoryData<string, string, float, GraphicsUnit, FontStyle>()
             {
                 { $"Courier New", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Courier New{s_separator} 11", "Courier New", 11f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator} 11px", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} 11 px", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular | FontStyle.Italic },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
-                { $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
+                { $"Courier New{Separator} 11", "Courier New", 11f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator} 11px", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} 11 px", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} 11 px{Separator} style=Regular", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold },
+                { $"Courier New{Separator} 11 px{Separator} style=Bold{Separator} Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic },
+                { $"Courier New{Separator} 11 px{Separator} style=Regular, Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular | FontStyle.Italic },
+                { $"Courier New{Separator} 11 px{Separator} style=Bold{Separator} Italic{Separator} Strikeout", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
+                { $"Arial{Separator} 11 px{Separator} style=Bold, Italic, Strikeout", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
                 { $"11px", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
                 { $"Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"arIAL{s_separator} 10{s_separator} style=bold", "Arial", 10f, GraphicsUnit.Point, FontStyle.Bold },
-                { $"Arial{s_separator} 10{s_separator}", "Arial", 10f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator}", "Arial", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, GraphicsUnit.Point, FontStyle.Underline | FontStyle.Strikeout },
-                { $"Courier New{s_separator} Style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold }, // FullFramework style keyword is case sensitive.
-                { $"11px{s_separator} Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Bold}
+                { $"arIAL{Separator} 10{Separator} style=bold", "Arial", 10f, GraphicsUnit.Point, FontStyle.Bold },
+                { $"Arial{Separator} 10{Separator}", "Arial", 10f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator}", "Arial", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator} 10{Separator} style=12", "Arial", 10f, GraphicsUnit.Point, FontStyle.Underline | FontStyle.Strikeout },
+                { $"Courier New{Separator} Style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold }, // FullFramework style keyword is case sensitive.
+                { $"11px{Separator} Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Bold}
             };
 
         // FullFramework disregards all arguments if the font name is an empty string.
         // Empty string is not an installed font on Windows 7, windows 8 and some versions of windows 10.
         if (EmptyFontPresent)
         {
-            data.Add($"{s_separator} 10{s_separator} style=bold", "", 10f, GraphicsUnit.Point, FontStyle.Bold);
+            data.Add($"{Separator} 10{Separator} style=bold", "", 10f, GraphicsUnit.Point, FontStyle.Bold);
         }
         else
         {
-            data.Add($"{s_separator} 10{s_separator} style=bold", "Microsoft Sans Serif", 10f, GraphicsUnit.Point, FontStyle.Bold);
+            data.Add($"{Separator} 10{Separator} style=bold", "Microsoft Sans Serif", 10f, GraphicsUnit.Point, FontStyle.Bold);
         }
 
         return data;
@@ -196,22 +196,22 @@ public class FontConverterTest
 
     public static TheoryData<string, string, string> ArgumentExceptionFontConverterData() => new()
     {
-        { $"Courier New{s_separator} 11 px{s_separator} type=Bold{s_separator} Italic", "units", null },
-        { $"Courier New{s_separator} {s_separator} Style=Bold", "value", null },
-        { $"Courier New{s_separator} 11{s_separator} Style=", "value", null },
-        { $"Courier New{s_separator} 11{s_separator} Style=RandomEnum", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=bold{s_separator}", "value", null },
-        { $"Arial{s_separator} 10{s_separator} style=null", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=abc#", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=##", null, null },
-        { $"Arial{s_separator} 10display{s_separator} style=bold", null, null },
-        { $"Arial{s_separator} 10style{s_separator} style=bold", "units", null },
+        { $"Courier New{Separator} 11 px{Separator} type=Bold{Separator} Italic", "units", null },
+        { $"Courier New{Separator} {Separator} Style=Bold", "value", null },
+        { $"Courier New{Separator} 11{Separator} Style=", "value", null },
+        { $"Courier New{Separator} 11{Separator} Style=RandomEnum", null, null },
+        { $"Arial{Separator} 10{Separator} style=bold{Separator}", "value", null },
+        { $"Arial{Separator} 10{Separator} style=null", null, null },
+        { $"Arial{Separator} 10{Separator} style=abc#", null, null },
+        { $"Arial{Separator} 10{Separator} style=##", null, null },
+        { $"Arial{Separator} 10display{Separator} style=bold", null, null },
+        { $"Arial{Separator} 10style{Separator} style=bold", "units", null },
     };
 
     public static TheoryData<string, string> InvalidEnumArgumentExceptionFontConverterData() => new()
     {
-        { $"Arial{s_separator} 10{s_separator} style=56", "style" },
-        { $"Arial{s_separator} 10{s_separator} style=-1", "style" },
+        { $"Arial{Separator} 10{Separator} style=56", "style" },
+        { $"Arial{Separator} 10{Separator} style=-1", "style" },
     };
 }
 

@@ -13,7 +13,7 @@ public class ExceptionCollectionTests
     {
         yield return new object[] { null };
         yield return new object[] { new ArrayList() };
-        yield return new object[] { new ArrayList { new Exception(), new Exception(), new Exception()} };
+        yield return new object[] { new ArrayList { new InvalidOperationException(), new InvalidOperationException(), new InvalidOperationException()} };
     }
 
     [Theory]

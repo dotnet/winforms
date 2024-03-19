@@ -165,7 +165,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // We should never add anything while we're unloading.
         if (_state[s_stateUnloading])
         {
-            Exception ex = new(SR.DesignerHostUnloading)
+            InvalidOperationException ex = new(SR.DesignerHostUnloading)
             {
                 HelpLink = SR.DesignerHostUnloading
             };
@@ -177,7 +177,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
             {
-                Exception ex = new(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
+                InvalidOperationException ex = new(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
                 {
                     HelpLink = SR.DesignerHostCyclicAdd
                 };
@@ -226,7 +226,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
             if (designer is null)
             {
-                Exception ex = new(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
+                InvalidOperationException ex = new(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                 {
                     HelpLink = SR.DesignerHostNoTopLevelDesigner
                 };
@@ -323,10 +323,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             }
 
             string message = e.Message;
+
             // We must handle the case of an exception with no message.
             if (string.IsNullOrEmpty(message))
             {
-                e = new Exception(string.Format(SR.DesignSurfaceFatalError, e), e);
+                e = new InvalidOperationException(string.Format(SR.DesignSurfaceFatalError, e), e);
             }
 
             // Loader blew up.  Add this exception to our error list.

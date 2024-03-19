@@ -16,7 +16,7 @@ public class TabOrderHooker
         // - the TabOrder must be called AFTER the DesignSurface has been loaded
         // - therefore we do a little check
         if (host.RootComponent is null)
-            throw new Exception($"{Name}::HookTabOrder() - Exception: the TabOrder must be invoked after the DesignSurface has been loaded! ");
+            throw new InvalidOperationException($"{Name}::HookTabOrder() - Exception: the TabOrder must be invoked after the DesignSurface has been loaded! ");
 
         try
         {
@@ -34,7 +34,7 @@ public class TabOrderHooker
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::HookTabOrder() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::HookTabOrder() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -55,7 +55,7 @@ public class TabOrderHooker
         }
         catch (Exception ex)
         {
-            throw new Exception($"{Name}::DisposeTabOrder() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::DisposeTabOrder() - Exception: (see Inner Exception)", ex);
         }
     }
 }

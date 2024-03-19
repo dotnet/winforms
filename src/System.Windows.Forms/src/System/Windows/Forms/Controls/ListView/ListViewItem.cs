@@ -261,7 +261,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                     View.List => new ListViewItemListAccessibleObject(this),
                     View.SmallIcon => new ListViewItemSmallIconAccessibleObject(this),
                     View.Tile => new ListViewItemTileAccessibleObject(this),
-                    _ => throw new Exception()
+                    _ => throw new InvalidOperationException()
                 };
             }
 

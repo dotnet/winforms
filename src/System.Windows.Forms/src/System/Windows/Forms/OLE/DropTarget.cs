@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.SystemServices;
@@ -20,7 +19,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     public DropTarget(IDropTarget owner)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
         _owner = owner.OrThrowIfNull();
 
         if (_owner is Control control && control.IsHandleCreated)
@@ -34,13 +32,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
             _hwndTarget = toolStrip.HWND;
         }
     }
-
-#if DEBUG
-    ~DropTarget()
-    {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");
-    }
-#endif
 
     private void ClearDropDescription()
     {
@@ -103,8 +94,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
         Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
 
         if (pdwEffect is null)
@@ -134,9 +123,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
-
         if (pdwEffect is null)
         {
             return HRESULT.E_INVALIDARG;
@@ -164,7 +150,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragLeave()
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
         _owner.OnDragLeave(EventArgs.Empty);
 
         if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
@@ -178,9 +163,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
-
         if (pdwEffect is null)
         {
             return HRESULT.E_INVALIDARG;

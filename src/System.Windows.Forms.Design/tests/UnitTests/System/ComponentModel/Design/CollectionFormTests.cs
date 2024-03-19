@@ -358,10 +358,12 @@ public class CollectionFormTests : CollectionEditor
         mockContext
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
+#pragma warning disable CA2201 // Do not raise reserved exception types
         mockContext
             .Setup(c => c.OnComponentChanging())
             .Returns(() => throw new StackOverflowException())
             .Verifiable();
+#pragma warning restore CA2201 // Do not raise reserved exception types
         mockContext
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
@@ -721,7 +723,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        Exception exception = new();
+        InvalidOperationException exception = new();
         Mock<IUIService> mockService = new(MockBehavior.Strict);
         mockService
             .Setup(s => s.ShowError(exception))
