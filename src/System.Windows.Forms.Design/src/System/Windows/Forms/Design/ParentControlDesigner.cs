@@ -1659,10 +1659,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
         }
 
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
-
-        // If tab order UI is being shown, then don't allow anything to be
-        // dropped here.
+        // If tab order UI is being shown, then don't allow anything to be dropped here.
         IMenuCommandService ms = (IMenuCommandService)GetService(typeof(IMenuCommandService));
         if (ms is not null)
         {
@@ -1691,8 +1688,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             de.Effect = DragDropEffects.Copy;
             return;
         }
-
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
     }
 
     /// <summary>

@@ -10,10 +10,6 @@ namespace System.Windows.Forms;
 /// </summary>
 public struct Message : IEquatable<Message>, IHandle<HWND>
 {
-#if DEBUG
-    private static readonly TraceSwitch s_allWinMessages = new("AllWinMessages", "Output every received message");
-#endif
-
     // Keep HWND, WM, WPARAM, and LPARAM in this order so that they match the MSG struct.
     // This struct shouldn't be used as a direct mapping against MSG, but if someone does already do this
     // it will allow their code to continue to work.
@@ -112,12 +108,6 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
             ResultInternal = (LRESULT)0
         };
 
-#if DEBUG
-        if (s_allWinMessages.TraceVerbose)
-        {
-            Debug.WriteLine(m.ToString());
-        }
-#endif
         return m;
     }
 

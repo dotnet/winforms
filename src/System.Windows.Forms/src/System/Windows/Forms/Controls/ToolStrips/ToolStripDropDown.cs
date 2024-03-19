@@ -1503,8 +1503,6 @@ public partial class ToolStripDropDown : ToolStrip
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override bool ProcessDialogChar(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"ToolStripDropDown.ProcessDialogChar [{charCode}]");
-
         // Since we're toplevel and aren't a container control, we've got to do our own mnemonic handling.
         if ((OwnerItem is null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
         {

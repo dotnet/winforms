@@ -254,7 +254,6 @@ public unsafe partial class WebBrowserBase : Control
             HRESULT hr = _axOleInPlaceActiveObject!.TranslateAccelerator(&win32Message);
             if (hr == HRESULT.S_OK)
             {
-                s_controlKeyboardRouting.TraceVerbose($"\t Message translated to {win32Message}");
                 return true;
             }
             else
@@ -285,14 +284,10 @@ public unsafe partial class WebBrowserBase : Control
                 }
                 else if (GetAXHostState(WebBrowserHelper.s_siteProcessedInputKey))
                 {
-                    s_controlKeyboardRouting.TraceVerbose(
-                        $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
                     return base.PreProcessMessage(ref msg);
                 }
                 else
                 {
-                    s_controlKeyboardRouting.TraceVerbose(
-                        $"\t Message not processed by site. Returning false. {msg}");
                     return false;
                 }
             }

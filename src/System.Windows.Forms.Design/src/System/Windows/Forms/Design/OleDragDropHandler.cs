@@ -945,7 +945,6 @@ internal partial class OleDragDropHandler
 
     public void DoOleDragOver(DragEventArgs de)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tOleDragDropHandler.OnDragOver: {de}");
         if (!Dragging && !_dragOk)
         {
             de.Effect = DragDropEffects.None;
@@ -976,8 +975,7 @@ internal partial class OleDragDropHandler
                 newOffset = new Point(de.X - _dragBase.X, de.Y - _dragBase.Y);
             }
 
-            // 96845 -- only allow drops on the client area
-            //
+            // Only allow drops on the client area.
             if (!Destination.GetDesignerControl().ClientRectangle.Contains(convertedPoint))
             {
                 copy = false;
@@ -987,7 +985,6 @@ internal partial class OleDragDropHandler
 
             if (newOffset != _localDragOffset)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
                 DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect, newOffset, _forceDrawFrames);
                 _localDragOffset = newOffset;
                 _localDragEffect = de.Effect;
