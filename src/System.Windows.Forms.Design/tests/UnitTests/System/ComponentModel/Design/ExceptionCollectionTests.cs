@@ -23,22 +23,23 @@ public class ExceptionCollectionTests
         ExceptionCollection collection = new(exceptions);
         if (exceptions is null)
         {
-            Assert.Null(collection.Exceptions);
+            collection.Exceptions.Should().BeNull();
         }
         else
         {
-            Assert.Equal(exceptions, collection.Exceptions);
-            Assert.NotSame(exceptions, collection.Exceptions);
-            Assert.Equal(collection.Exceptions, collection.Exceptions);
-            Assert.NotSame(collection.Exceptions, collection.Exceptions);
+            collection.Exceptions.Should().BeEquivalentTo(exceptions);
+            collection.Exceptions.Should().NotBeSameAs(exceptions);
+            collection.Exceptions.Should().BeEquivalentTo(collection.Exceptions);
+            collection.Exceptions.Should().NotBeSameAs(collection.Exceptions);
         }
     }
 
     [Fact]
     public void ExceptionCollection_Ctor_ArguementException()
     {
-        ArrayList exceptions = [1, 2, 3];
-        Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
+        ArrayList exceptions = new() { 1, 2, 3 };
+        Action act = () => new ExceptionCollection(exceptions);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -48,7 +49,8 @@ public class ExceptionCollectionTests
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
         ExceptionCollection collection = new(new ArrayList());
-        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
+        Action act = () => formatter.Serialize(stream, collection);
+        act.Should().Throw<NotSupportedException>();
     }
 
     [Theory]
@@ -65,18 +67,18 @@ public class ExceptionCollectionTests
         ExceptionCollection deserialized = Assert.IsType<ExceptionCollection>(formatter.Deserialize(stream));
         if (exceptions is null)
         {
-            Assert.Null(deserialized.Exceptions);
+            deserialized.Exceptions.Should().BeNull();
         }
         else
         {
             for(int i = 0; i < exceptions.Count; i++)
             {
-                Assert.Equal(((Exception)exceptions[i]).Message, ((Exception)deserialized.Exceptions[i]).Message);
+                ((Exception)deserialized.Exceptions[i]).Message.Should().Be(((Exception)exceptions[i]).Message);
             }
 
-            Assert.NotSame(exceptions, deserialized.Exceptions);
-            Assert.Equal(deserialized.Exceptions, deserialized.Exceptions);
-            Assert.NotSame(deserialized.Exceptions, deserialized.Exceptions);
+            deserialized.Exceptions.Should().NotBeSameAs(exceptions);
+            deserialized.Exceptions.Should().BeEquivalentTo(deserialized.Exceptions);
+            deserialized.Exceptions.Should().NotBeSameAs(deserialized.Exceptions);
         }
     }
 
@@ -84,6 +86,7 @@ public class ExceptionCollectionTests
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         ExceptionCollection collection = new(new ArrayList());
-        Assert.Throws<ArgumentNullException>(() => collection.GetObjectData(null, new StreamingContext()));
+        Action act = () => collection.GetObjectData(null, new StreamingContext());
+        act.Should().Throw<ArgumentNullException>();
     }
 }
