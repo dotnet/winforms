@@ -16,30 +16,29 @@ internal sealed partial class DragAssistanceManager
     private readonly BehaviorService _behaviorService;
     private readonly IServiceProvider _serviceProvider;
     private readonly Graphics _graphics; // graphics to the adornerwindow
-    private readonly IntPtr _rootComponentHandle; // used for mapping window points of nested controls
     private Point _dragOffset; // the offset from the new drag pos compared to the last
     private Rectangle _cachedDragRect; // used to store drag rect between erasing & waiting to render
     private readonly Pen _edgePen = SystemPens.Highlight;
     private readonly bool _disposeEdgePen;
     private readonly Pen _baselinePen = new(Color.Fuchsia);
     // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in these lists have been properly adjusted for the AdornerWindow coords.
-    private readonly List<SnapLine> _verticalSnapLines = new();
-    private readonly List<SnapLine> _horizontalSnapLines = new();
+    private readonly List<SnapLine> _verticalSnapLines = [];
+    private readonly List<SnapLine> _horizontalSnapLines = [];
     // These are SnapLines that represent our target control.
-    private readonly List<SnapLine> _targetVerticalSnapLines = new();
-    private readonly List<SnapLine> _targetHorizontalSnapLines = new();
+    private readonly List<SnapLine> _targetVerticalSnapLines = [];
+    private readonly List<SnapLine> _targetHorizontalSnapLines = [];
     // This is a list of all the different type of SnapLines our target control has.  When compiling our global SnapLine lists, if we see a SnapLineType that doesn't exist on our target - we can safely ignore it
-    private readonly List<SnapLineType> _targetSnapLineTypes = new();
+    private readonly List<SnapLineType> _targetSnapLineTypes = [];
     // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control.  Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
     private int[] _verticalDistances;
     private int[] _horizontalDistances;
     // These are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
-    private readonly List<Line> _tempVertLines = new();
-    private readonly List<Line> _tempHorzLines = new();
-    private Line[] _vertLines = Array.Empty<Line>();
-    private Line[] _horzLines = Array.Empty<Line>();
+    private readonly List<Line> _tempVertLines = [];
+    private readonly List<Line> _tempHorzLines = [];
+    private Line[] _vertLines = [];
+    private Line[] _horzLines = [];
     // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to.  To do this, we'll keep a dictionary... format: snapLineToBounds[SnapLine]=ControlBounds.
-    private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = new();
+    private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = [];
     // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.  From there, if we receive a test hook message requesting these - we got 'em
     private Line[]? _recentLines;
     private readonly Image? _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
@@ -156,7 +155,6 @@ internal sealed partial class DragAssistanceManager
         }
 
         _backgroundImage = backgroundImage;
-        _rootComponentHandle = host.RootComponent is Control ? ((Control)host.RootComponent).Handle : IntPtr.Zero;
         _resizing = resizing;
         _ctrlDrag = ctrlDrag;
         Initialize(dragComponents, host);
@@ -190,7 +188,7 @@ internal sealed partial class DragAssistanceManager
             if (isTarget)
             {
                 // we will remove padding snaplines from targets - it doesn't make sense to snap to the target's padding lines
-                if (snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
+                if (snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding, StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -208,7 +206,7 @@ internal sealed partial class DragAssistanceManager
                 }
 
                 // store off the bounds in our dictionary, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is.
-                if ((snapLine.Filter is not null) && snapLine.Filter.StartsWith(SnapLine.Padding))
+                if ((snapLine.Filter is not null) && snapLine.Filter.StartsWith(SnapLine.Padding, StringComparison.Ordinal))
                 {
                     _snapLineToBounds.Add(snapLine, controlRect);
                 }
@@ -354,7 +352,7 @@ internal sealed partial class DragAssistanceManager
         }
         else
         {
-            lines = Array.Empty<Line>();
+            lines = [];
         }
 
         return lines;
@@ -376,7 +374,7 @@ internal sealed partial class DragAssistanceManager
             return _recentLines;
         }
 
-        return Array.Empty<Line>();
+        return [];
     }
 
     private void IdentifyAndStoreValidLines(List<SnapLine> snapLines, int[] distances, Rectangle dragBounds, int smallestDistance)
@@ -581,7 +579,9 @@ internal sealed partial class DragAssistanceManager
     /// </summary>
     private static bool IsMarginOrPaddingSnapLine(SnapLine snapLine)
     {
-        return snapLine.Filter is not null && (snapLine.Filter.StartsWith(SnapLine.Margin) || snapLine.Filter.StartsWith(SnapLine.Padding));
+        return snapLine.Filter is not null
+            && (snapLine.Filter.StartsWith(SnapLine.Margin, StringComparison.Ordinal)
+                || snapLine.Filter.StartsWith(SnapLine.Padding, StringComparison.Ordinal));
     }
 
     /// <summary>
@@ -678,9 +678,8 @@ internal sealed partial class DragAssistanceManager
         // loop while we still have valid distance to check and try to find the smallest valid distance
         while (true)
         {
-            int distanceValue;
             // get the next smallest snapline index
-            int snapLineIndex = SmallestDistanceIndex(distances, direction, out distanceValue);
+            int snapLineIndex = SmallestDistanceIndex(distances, direction, out int distanceValue);
 
             if (snapLineIndex == INVALID_VALUE)
             {
@@ -746,7 +745,7 @@ internal sealed partial class DragAssistanceManager
         Pen currentPen;
         for (int i = 0; i < lines.Length; i++)
         {
-            if (lines[i].LineType == LineType.Margin || lines[i].LineType == LineType.Padding)
+            if (lines[i].LineType is LineType.Margin or LineType.Padding)
             {
                 currentPen = _edgePen;
                 if (lines[i].X1 == lines[i].X2)
@@ -855,7 +854,7 @@ internal sealed partial class DragAssistanceManager
         if (IsMarginOrPaddingSnapLine(snapLine))
         {
             // We already check if snapLine.Filter is not null inside IsMarginOrPaddingSnapLine.
-            type = snapLine.Filter!.StartsWith(SnapLine.Margin) ? LineType.Margin : LineType.Padding;
+            type = snapLine.Filter!.StartsWith(SnapLine.Margin, StringComparison.Ordinal) ? LineType.Margin : LineType.Padding;
         }
 
         // propagate the baseline through to the linetype

@@ -14,8 +14,8 @@ public class Control_ControlAccessibleObjectTests
     // These controls return an empty "AccessKey" property because they have a ControlStyles.UseTextForAccessibility flag
     // with "false" value, which prohibits the use of text to create the AccessKey.
     // This behavior is consistent with .NET Framework 4.7.2
-    private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
-    {
+    private static readonly Type[] s_controlsNotUseTextForAccessibility =
+    [
         typeof(CheckedListBox),
         typeof(ComboBox),
         typeof(DataGridViewComboBoxEditingControl),
@@ -34,15 +34,15 @@ public class Control_ControlAccessibleObjectTests
         typeof(TreeView),
         typeof(VScrollBar),
         typeof(WebBrowser),
-    };
+    ];
 
     // These controls have special conditions for setting the Text property.
     // Please check if the control type isn't contained here in cases where text change is needed
     // otherwise an error can be thrown.
-    private static Type[] s_controlsIgnoringTextChangesForTests = new Type[]
-    {
+    private static readonly Type[] s_controlsIgnoringTextChangesForTests =
+    [
         typeof(DateTimePicker), typeof(WebBrowser)
-    };
+    ];
 
     [WinFormsFact]
     public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
@@ -718,9 +718,10 @@ public class Control_ControlAccessibleObjectTests
     public void ControlAccessibleObject_Name_Set_GetReturnsExpected(string value)
     {
         using Control ownerControl = new();
-        var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-
-        accessibleObject.Name = value;
+        var accessibleObject = new Control.ControlAccessibleObject(ownerControl)
+        {
+            Name = value
+        };
         Assert.Equal(value, accessibleObject.Name);
         Assert.Empty(ownerControl.Name);
         Assert.Equal(value, ownerControl.AccessibleName);
@@ -819,9 +820,10 @@ public class Control_ControlAccessibleObjectTests
     {
         using Control ownerControl = new();
         ownerControl.CreateControl();
-        var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-
-        accessibleObject.Value = value;
+        var accessibleObject = new Control.ControlAccessibleObject(ownerControl)
+        {
+            Value = value
+        };
         Assert.Null(accessibleObject.Value);
 
         // Set same.
@@ -835,9 +837,10 @@ public class Control_ControlAccessibleObjectTests
     public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsNotCreated(string value)
     {
         using Control ownerControl = new();
-        var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-
-        accessibleObject.Value = value;
+        var accessibleObject = new Control.ControlAccessibleObject(ownerControl)
+        {
+            Value = value
+        };
         Assert.Equal(string.Empty, accessibleObject.Value);
 
         // Set same.
@@ -1383,7 +1386,7 @@ public class Control_ControlAccessibleObjectTests
 
         Assert.Equal(expected, actual);
         // Check if the method returns an exist UIA_ControlTypeId
-        Assert.True(actual >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId && actual <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
+        Assert.True(actual is >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId and <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
     }
 
     [WinFormsTheory]
@@ -1709,11 +1712,11 @@ public class Control_ControlAccessibleObjectTests
     // are Top level controls that can't be added to a ToolStrip.
     // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).
     private bool CanBeAddedToToolStrip(Control control)
-        => !(control is ContextMenuStrip
-            || control is Form
-            || control is ToolStripDropDown
-            || control is ToolStripDropDownMenu
-            || control is TabPage);
+        => control is not (ContextMenuStrip
+            or Form
+            or ToolStripDropDown
+            or ToolStripDropDownMenu
+            or TabPage);
 
     private class AutomationLiveRegionControl : Control, IAutomationLiveRegion
     {

@@ -18,15 +18,18 @@ internal sealed class ToolStripDesignerUtils
 {
     private static readonly Type s_toolStripItemType = typeof(ToolStripItem);
     [ThreadStatic]
-    private static Dictionary<Type, ToolboxItem> s_cachedToolboxItems;
+    private static Dictionary<Type, ToolboxItem> t_cachedToolboxItems;
     [ThreadStatic]
-    private static int s_customToolStripItemCount;
+    private static int t_customToolStripItemCount;
     private const int TOOLSTRIPCHARCOUNT = 9;
-    // used to cache in the selection. This is used when the selection is changing and we need to invalidate the original selection Especially, when the selection is changed through NON UI designer action like through propertyGrid or through Doc Outline.
-    public static ArrayList originalSelComps;
+
+    // Used to cache in the selection. This is used when the selection is changing and we need to invalidate
+    // the original selection Especially, when the selection is changed through NON UI designer action like
+    // through propertyGrid or through Doc Outline.
+    public static ArrayList s_originalSelComps;
 
     [ThreadStatic]
-    private static Dictionary<Type, Bitmap> s_cachedWinformsImages;
+    private static Dictionary<Type, Bitmap> t_cachedWinformsImages;
     private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
 
     private ToolStripDesignerUtils()
@@ -37,16 +40,16 @@ internal sealed class ToolStripDesignerUtils
     // This section controls the ordering of standard item types in all the various pieces of toolstrip designer UI.
     // ToolStrip - Default item is determined by being first in the list
     private static readonly Type[] s_newItemTypesForToolStrip =
-        new Type[] { typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar) };
+        [typeof(ToolStripButton), typeof(ToolStripLabel), typeof(ToolStripSplitButton), typeof(ToolStripDropDownButton), typeof(ToolStripSeparator), typeof(ToolStripComboBox), typeof(ToolStripTextBox), typeof(ToolStripProgressBar)];
     // StatusStrip - Default item is determined by being first in the list
     private static readonly Type[] s_newItemTypesForStatusStrip =
-        new Type[] { typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton) };
+        [typeof(ToolStripStatusLabel), typeof(ToolStripProgressBar), typeof(ToolStripDropDownButton), typeof(ToolStripSplitButton)];
     // MenuStrip - Default item is determined by being first in the list
     private static readonly Type[] s_newItemTypesForMenuStrip =
-        new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox) };
+        [typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripTextBox)];
     // ToolStripDropDown - roughly same as menu strip.
     private static readonly Type[] s_newItemTypesForToolStripDropDownMenu =
-        new Type[] { typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox) };
+        [typeof(ToolStripMenuItem), typeof(ToolStripComboBox), typeof(ToolStripSeparator), typeof(ToolStripTextBox)];
     #endregion
 
     // Get the Correct bounds for painting...
@@ -86,7 +89,7 @@ internal sealed class ToolStripDesignerUtils
         ToolStrip parent;
         if (component is ToolStripItem stripItem)
         {
-            if (!(stripItem is ToolStripDropDownItem))
+            if (stripItem is not ToolStripDropDownItem)
             {
                 parent = stripItem.Owner;
             }
@@ -105,8 +108,8 @@ internal sealed class ToolStripDesignerUtils
 
     private static ToolboxItem GetCachedToolboxItem(Type itemType)
     {
-        s_cachedToolboxItems ??= new Dictionary<Type, ToolboxItem>();
-        if (s_cachedToolboxItems.TryGetValue(itemType, out ToolboxItem tbxItem))
+        t_cachedToolboxItems ??= [];
+        if (t_cachedToolboxItems.TryGetValue(itemType, out ToolboxItem tbxItem))
         {
             return tbxItem;
         }
@@ -115,11 +118,11 @@ internal sealed class ToolStripDesignerUtils
         // create a toolbox item to match
         tbxItem = new ToolboxItem(itemType);
 
-        s_cachedToolboxItems[itemType] = tbxItem;
-        if (s_customToolStripItemCount > 0 && (s_customToolStripItemCount * 2 < s_cachedToolboxItems.Count))
+        t_cachedToolboxItems[itemType] = tbxItem;
+        if (t_customToolStripItemCount > 0 && (t_customToolStripItemCount * 2 < t_cachedToolboxItems.Count))
         {
             // time to clear the toolbox item cache - we've got twice the number of toolbox items than actual custom item types.
-            s_cachedToolboxItems.Clear();
+            t_cachedToolboxItems.Clear();
         }
 
         return tbxItem;
@@ -128,13 +131,13 @@ internal sealed class ToolStripDesignerUtils
     // only call this for well known items.
     private static Bitmap GetKnownToolboxBitmap(Type itemType)
     {
-        s_cachedWinformsImages ??= new Dictionary<Type, Bitmap>();
+        t_cachedWinformsImages ??= [];
 
-        if (!s_cachedWinformsImages.TryGetValue(itemType, out Bitmap value))
+        if (!t_cachedWinformsImages.TryGetValue(itemType, out Bitmap value))
         {
             Bitmap knownImage = ToolboxBitmapAttribute.GetImageFromResource(itemType, null, false) as Bitmap;
             value = knownImage;
-            s_cachedWinformsImages[itemType] = value;
+            t_cachedWinformsImages[itemType] = value;
             return knownImage;
         }
 
@@ -174,9 +177,9 @@ internal sealed class ToolStripDesignerUtils
 
         currentName ??= itemType.Name;
 
-        if (currentName.StartsWith("ToolStrip"))
+        if (currentName.StartsWith("ToolStrip", StringComparison.Ordinal))
         {
-            return currentName.Substring(TOOLSTRIPCHARCOUNT);
+            return currentName[TOOLSTRIPCHARCOUNT..];
         }
 
         return currentName;
@@ -273,7 +276,7 @@ internal sealed class ToolStripDesignerUtils
                     }
 
                     // Check if we have public constructor...
-                    ConstructorInfo ctor = t.GetConstructor(Array.Empty<Type>());
+                    ConstructorInfo ctor = t.GetConstructor([]);
                     if (ctor is null)
                     {
                         continue;
@@ -301,13 +304,13 @@ internal sealed class ToolStripDesignerUtils
                     }
                 }
 
-                s_customToolStripItemCount = creatableTypes.Count;
+                t_customToolStripItemCount = creatableTypes.Count;
                 return [.. creatableTypes];
             }
         }
 
-        s_customToolStripItemCount = 0;
-        return Array.Empty<Type>();
+        t_customToolStripItemCount = 0;
+        return [];
     }
 
     /// <summary>
@@ -388,9 +391,9 @@ internal sealed class ToolStripDesignerUtils
         {
             contextMenu.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
             contextMenu.Font = (Font)uis.Styles["DialogFont"];
-            if (uis.Styles["VsColorPanelText"] is Color)
+            if (uis.Styles["VsColorPanelText"] is Color color)
             {
-                contextMenu.ForeColor = (Color)uis.Styles["VsColorPanelText"];
+                contextMenu.ForeColor = color;
             }
         }
 

@@ -69,7 +69,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             // the snapline appear in the right place. Rather than adding a class for each control
             // we special case it here - for perf reasons.
 
-            if ((Control is CheckBox) || (Control is RadioButton))
+            if (Control is CheckBox or RadioButton)
             {
                 Appearance appearance = Appearance.Normal;
 
@@ -109,7 +109,7 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
         {
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.System))
+            if (flatStyle is FlatStyle.Standard or FlatStyle.System)
             {
                 return -1;
             }
@@ -128,7 +128,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             {
                 return 0;
             }
-            else if ((flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            else if (flatStyle is FlatStyle.Flat or FlatStyle.Popup)
             {
                 return 2;
             }
@@ -139,7 +139,8 @@ internal class ButtonBaseDesigner : ControlDesigner
             }
         }
         else
-        {// bottom alignment
+        {
+            // Bottom alignment
             if (flatStyle == FlatStyle.Standard)
             {
                 return -3;
@@ -148,7 +149,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             {
                 return 0;
             }
-            else if ((flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            else if (flatStyle is FlatStyle.Flat or FlatStyle.Popup)
             {
                 return -2;
             }
@@ -175,7 +176,7 @@ internal class ButtonBaseDesigner : ControlDesigner
         }
         else
         {// Top or bottom alignment
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            if (flatStyle is FlatStyle.Standard or FlatStyle.Flat or FlatStyle.Popup)
             {
                 return ((alignment & DesignerUtils.AnyTopAlignment) != 0) ? 2 : -2;
             }
@@ -198,8 +199,9 @@ internal class ButtonBaseDesigner : ControlDesigner
             return 0;
         }
         else
-        { // Top or bottom alignment
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.Popup))
+        {
+            // Top or bottom alignment
+            if (flatStyle is FlatStyle.Standard or FlatStyle.Popup)
             {
                 return ((alignment & DesignerUtils.AnyTopAlignment) != 0) ? 4 : -4;
             }

@@ -12,12 +12,14 @@ namespace System.Windows.Forms.UITests;
 
 internal static class DataCollectionService
 {
-    private static readonly ConditionalWeakTable<Exception, StrongBox<bool>> LoggedExceptions = new();
-    private static ImmutableList<CustomLoggerData> _customInProcessLoggers = ImmutableList<CustomLoggerData>.Empty;
-    private static bool _firstChanceExceptionHandlerInstalled;
+    private static readonly ConditionalWeakTable<Exception, StrongBox<bool>> s_loggedExceptions = [];
+    private static ImmutableList<CustomLoggerData> s_customInProcessLoggers = [];
+    private static bool s_firstChanceExceptionHandlerInstalled;
 
     [ThreadStatic]
-    private static bool _inHandler;
+#pragma warning disable IDE1006 // Naming Styles
+    private static bool t_inHandler;
+#pragma warning restore IDE1006
 
     internal static ITest? CurrentTest { get; set; }
 
@@ -75,7 +77,7 @@ internal static class DataCollectionService
     public static void RegisterCustomLogger(Action<string> callback, string logId, string extension)
     {
         ImmutableInterlocked.Update(
-            ref _customInProcessLoggers,
+            ref s_customInProcessLoggers,
             (loggers, newLogger) => loggers.Add(newLogger),
             new CustomLoggerData(callback, logId, extension));
     }
@@ -85,16 +87,16 @@ internal static class DataCollectionService
         var testMethod = testCase.TestMethod.Method;
         string testClass = testCase.TestMethod.TestClass.Class.Name;
         int lastDot = testClass.LastIndexOf('.');
-        testClass = testClass.Substring(lastDot + 1);
+        testClass = testClass[(lastDot + 1)..];
         return $"{testClass}.{testMethod.Name}";
     }
 
     internal static void InstallFirstChanceExceptionHandler()
     {
-        if (!_firstChanceExceptionHandlerInstalled)
+        if (!s_firstChanceExceptionHandlerInstalled)
         {
             AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
-            _firstChanceExceptionHandlerInstalled = true;
+            s_firstChanceExceptionHandlerInstalled = true;
         }
     }
 
@@ -133,7 +135,7 @@ internal static class DataCollectionService
             return false;
         }
 
-        var logged = LoggedExceptions.GetOrCreateValue(ex);
+        var logged = s_loggedExceptions.GetOrCreateValue(ex);
         if (logged.Value)
         {
             // Only log the first time an exception is thrown
@@ -147,7 +149,7 @@ internal static class DataCollectionService
 
     internal static void CaptureFailureState(string testName, Exception ex)
     {
-        if (_inHandler)
+        if (t_inHandler)
         {
             // Avoid stack overflow which could occur by recursively trying to capture failure states
             return;
@@ -155,7 +157,7 @@ internal static class DataCollectionService
 
         try
         {
-            _inHandler = true;
+            t_inHandler = true;
 
             string logDir = GetLogDirectory();
             var timestamp = DateTimeOffset.UtcNow;
@@ -170,14 +172,14 @@ internal static class DataCollectionService
             exceptionDetails.AppendLine("Stack Trace at Log Time:");
             exceptionDetails.AppendLine(new StackTrace(true).ToString());
             File.WriteAllText(CreateLogFileName(logDir, timestamp, testName, errorId, logId: string.Empty, "log"), exceptionDetails.ToString());
-            foreach (var (callback, logId, extension) in _customInProcessLoggers)
+            foreach (var (callback, logId, extension) in s_customInProcessLoggers)
             {
                 callback(CreateLogFileName(logDir, timestamp, testName, errorId, logId, extension));
             }
         }
         finally
         {
-            _inHandler = false;
+            t_inHandler = false;
         }
     }
 
@@ -209,7 +211,7 @@ internal static class DataCollectionService
         string path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
         if (path.Length > MaxPath)
         {
-            testName = testName.Substring(0, Math.Max(0, testName.Length - (path.Length - MaxPath)));
+            testName = testName[..Math.Max(0, testName.Length - (path.Length - MaxPath))];
             path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
         }
 

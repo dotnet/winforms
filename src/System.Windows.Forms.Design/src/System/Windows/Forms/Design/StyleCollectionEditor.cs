@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Design
 {
     internal partial class StyleCollectionEditor : CollectionEditor
     {
-        private bool _isRowCollection;
+        private readonly bool _isRowCollection;
         protected string? _helpTopic;
 
         /// <summary>

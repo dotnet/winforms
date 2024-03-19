@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Metafiles;
 /// <summary>
 ///  Record that just has a single <see cref="RECT"/> value.
 /// </summary>
-/// <remarks>
+/// <devdoc>
 ///   Not an actual Win32 define, encapsulates:
 ///
 ///    - EMRFILLPATH
@@ -20,12 +20,12 @@ namespace System.Windows.Forms.Metafiles;
 ///    - EMRINTERSECTCLIPRECT
 ///    - EMRELLIPSE
 ///    - EMRRECTANGLE
-/// </remarks>
+/// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRRECTRECORD
 {
     public EMR emr;
     public RECT rect;
 
-    public override string ToString() => $"[EMR{emr.iType}] RECT: {rect}";
+    public override readonly string ToString() => $"[EMR{emr.iType}] RECT: {rect}";
 }

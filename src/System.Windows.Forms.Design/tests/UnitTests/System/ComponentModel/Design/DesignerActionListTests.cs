@@ -157,6 +157,8 @@ public class DesignerActionListTests
         {
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable IDE0060 // Remove unused parameter
         private void PrivateMethod()
         {
         }
@@ -194,5 +196,8 @@ public class DesignerActionListTests
         private int PrivateProperty { get; set; }
 
         public static int StaticProperty { get; set; }
+
+#pragma warning restore IDE0051
+#pragma warning restore IDE0060
     }
 }

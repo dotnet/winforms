@@ -63,7 +63,7 @@ public partial class DataObject
                                 baseVar = found.Data;
                             }
 
-                            if (baseVar is not null && baseVar is not MemoryStream)
+                            if (baseVar is not null and not MemoryStream)
                             {
                                 original = null;
                                 break;
@@ -230,7 +230,7 @@ public partial class DataObject
                     }
                 }
 
-                baseVar = distinctFormats.ToArray();
+                baseVar = [.. distinctFormats];
             }
 
             CompModSwitches.DataObject.TraceVerbose($"DataStore: returning {baseVar.Length} formats from GetFormats");

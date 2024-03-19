@@ -20,6 +20,6 @@ internal struct EMRCREATEDIBPATTERNBRUSHPT
     public uint offBits;            // Offset to the bitmap bits
     public uint cbBits;             // Size of the bitmap bits
 
-    public override string ToString()
+    public override readonly string ToString()
         => $"[{nameof(EMRCREATEDIBPATTERNBRUSHPT)}] Index: {ihBrush}";
 }

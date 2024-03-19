@@ -88,7 +88,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     internal int _index;                  // our index into our parents child array
-    internal List<TreeNode> _childNodes = new();
+    internal List<TreeNode> _childNodes = [];
     internal TreeNode? _parent;
     internal TreeView? _treeView;
     private bool _expandOnRealization;
@@ -585,7 +585,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero
+    public bool IsExpanded => HTREEITEMInternal == 0
         ? _expandOnRealization
         : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
@@ -593,9 +593,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero
-        ? false
-        : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
+    public bool IsSelected => HTREEITEMInternal != 0
+        && (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.
@@ -644,7 +643,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return null;
             }
 
-            return _childNodes[_childNodes.Count - 1];
+            return _childNodes[^1];
         }
     }
 
@@ -697,7 +696,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 LRESULT next = PInvoke.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
-                    (WPARAM)(uint)PInvoke.TVGN_NEXTVISIBLE,
+                    (WPARAM)PInvoke.TVGN_NEXTVISIBLE,
                     (LPARAM)node.Handle);
 
                 if (next != 0)
@@ -855,7 +854,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 LRESULT prev = PInvoke.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
-                    (WPARAM)(uint)PInvoke.TVGN_PREVIOUSVISIBLE,
+                    (WPARAM)PInvoke.TVGN_PREVIOUSVISIBLE,
                     (LPARAM)node.Handle);
 
                 if (prev != 0)
@@ -2162,7 +2161,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         return;
 
         static bool IsSpecialImageIndex(int actualIndex)
-            => actualIndex == ImageList.Indexer.NoneIndex || actualIndex == ImageList.Indexer.DefaultIndex;
+            => actualIndex is ImageList.Indexer.NoneIndex or ImageList.Indexer.DefaultIndex;
     }
 
     internal unsafe void UpdateImage()

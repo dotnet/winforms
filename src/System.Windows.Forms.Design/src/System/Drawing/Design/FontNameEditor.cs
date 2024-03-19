@@ -13,12 +13,12 @@ public class FontNameEditor : UITypeEditor
     private const float ScaleFactor = 1.5f;
 
     private static readonly FontStyle[] s_fontStyles =
-    {
+    [
          FontStyle.Regular,
          FontStyle.Italic,
          FontStyle.Bold,
          FontStyle.Bold | FontStyle.Italic
-    };
+    ];
 
     /// <inheritdoc />
     /// <returns>

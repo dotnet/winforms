@@ -363,7 +363,7 @@ public partial class RadioButton : ButtonBase
         base.OnClick(e);
     }
 
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         // Just like the Win32 RadioButton, fire a click if the user arrows onto the control.
         if (MouseButtons == MouseButtons.None)

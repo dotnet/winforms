@@ -137,8 +137,10 @@ public sealed partial class Application
     ///  Gets the path for the application data that is shared among all users.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>
+    ///   Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///   the Windows logo required adornments to the directory (Company\Product\Version).
+    ///  </para>
     /// </remarks>
     public static string CommonAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
@@ -190,7 +192,7 @@ public sealed partial class Application
                                 int firstDot = ns.IndexOf('.');
                                 if (firstDot != -1)
                                 {
-                                    s_companyName = ns.Substring(0, firstDot);
+                                    s_companyName = ns[..firstDot];
                                 }
                                 else
                                 {
@@ -250,8 +252,8 @@ public sealed partial class Application
     ///  Gets the path for the application data specific to a local, non-roaming user.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///  the Windows logo required adornments to the directory (Company\Product\Version)</para>
     /// </remarks>
     public static string LocalUserAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
@@ -265,7 +267,7 @@ public sealed partial class Application
     /// <summary>
     ///  Gets the forms collection associated with this application.
     /// </summary>
-    public static FormCollection OpenForms => s_forms ??= new FormCollection();
+    public static FormCollection OpenForms => s_forms ??= [];
 
     /// <summary>
     ///  Gets
@@ -315,7 +317,7 @@ public sealed partial class Application
                                 int lastDot = ns.LastIndexOf('.');
                                 if (lastDot != -1 && lastDot < ns.Length - 1)
                                 {
-                                    s_productName = ns.Substring(lastDot + 1);
+                                    s_productName = ns[(lastDot + 1)..];
                                 }
                                 else
                                 {
@@ -458,8 +460,8 @@ public sealed partial class Application
     ///  Gets the path for the application data specific to the roaming user.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///  the Windows logo required adornments to the directory (Company\Product\Version)</para>
     /// </remarks>
     public static string UserAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
@@ -476,15 +478,19 @@ public sealed partial class Application
     /// </summary>
     /// <value><see langword="true" /> if visual styles are enabled; otherwise, <see langword="false" />.</value>
     /// <remarks>
-    ///  The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
-    ///  The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+    ///  <para>
+    ///   The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
+    ///   The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+    ///  </para>
     /// </remarks>
     public static bool UseVisualStyles { get; private set; }
 
     /// <remarks>
-    ///  Don't never ever change this name, since the window class and partner teams
-    ///  dependent on this. Changing this will introduce breaking changes.
-    ///  If there is some reason need to change this, notify any partner teams affected.
+    ///  <para>
+    ///   Don't never ever change this name, since the window class and partner teams
+    ///   dependent on this. Changing this will introduce breaking changes.
+    ///   If there is some reason need to change this, notify any partner teams affected.
+    ///  </para>
     /// </remarks>
     internal static string WindowsFormsVersion => "WindowsForms10";
 
@@ -1108,8 +1114,11 @@ public sealed partial class Application
             string[] arguments = Environment.GetCommandLineArgs();
             Debug.Assert(arguments is not null && arguments.Length > 0);
 
-            ProcessStartInfo currentStartInfo = new();
-            currentStartInfo.FileName = ExecutablePath;
+            ProcessStartInfo currentStartInfo = new()
+            {
+                FileName = ExecutablePath
+            };
+
             if (arguments.Length >= 2)
             {
                 StringBuilder sb = new((arguments.Length - 1) * 16);

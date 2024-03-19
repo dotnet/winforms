@@ -260,7 +260,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         {
             g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
-            if (!(e.ToolStrip is ToolStripOverflow))
+            if (e.ToolStrip is not ToolStripOverflow)
             {
                 // make the neck connected.
                 g.FillRectangle(SystemBrushes.Control, e.ConnectedArea);
@@ -460,7 +460,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
     private static void DrawHightContrastDashedBorder(Graphics graphics, ToolStripItem item)
     {
         Rectangle bounds = item.ClientBounds;
-        float[] dashValues = { 2, 2 };
+        float[] dashValues = [2, 2];
         int penWidth = 2;
 
         Pen focusPen1 = new(SystemColors.ControlText, penWidth)

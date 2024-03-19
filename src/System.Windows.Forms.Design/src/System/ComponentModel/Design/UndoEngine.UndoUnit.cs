@@ -25,14 +25,12 @@ public abstract partial class UndoEngine
         {
             Name = name ?? string.Empty;
 
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Creating undo unit '{Name}'");
-
             UndoEngine = engine.OrThrowIfNull();
             _reverse = true;
             if (UndoEngine.TryGetService(out ISelectionService? ss))
             {
                 ICollection selection = ss.GetSelectedComponents();
-                Dictionary<string, IContainer> selectedNames = new();
+                Dictionary<string, IContainer> selectedNames = [];
                 foreach (object sel in selection)
                 {
                     if (sel is IComponent { Site: ISite site })
@@ -59,7 +57,7 @@ public abstract partial class UndoEngine
         /// </summary>
         private void AddEvent(UndoEvent e)
         {
-            _events ??= new();
+            _events ??= [];
 
             _events.Add(e);
         }
@@ -73,7 +71,7 @@ public abstract partial class UndoEngine
             {
                 foreach (ChangeUndoEvent e in _changeEvents)
                 {
-                    e.Commit(UndoEngine);
+                    e.Commit();
                 }
             }
 
@@ -81,7 +79,7 @@ public abstract partial class UndoEngine
             {
                 foreach (AddRemoveUndoEvent e in _removeEvents)
                 {
-                    e.Commit(UndoEngine);
+                    e.Commit();
                 }
             }
 
@@ -108,7 +106,7 @@ public abstract partial class UndoEngine
 
             _ignoreAddingList?.Remove(e.Component);
 
-            _ignoreAddedList ??= new();
+            _ignoreAddedList ??= [];
 
             _ignoreAddedList.Add(e.Component);
         }
@@ -118,7 +116,7 @@ public abstract partial class UndoEngine
         /// </summary>
         public virtual void ComponentAdding(ComponentEventArgs e)
         {
-            _ignoreAddingList ??= new();
+            _ignoreAddingList ??= [];
 
             _ignoreAddingList.Add(e.Component!);
         }
@@ -197,7 +195,7 @@ public abstract partial class UndoEngine
                 return;
             }
 
-            _changeEvents ??= new();
+            _changeEvents ??= [];
 
             // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
             if (UndoEngine.GetName(e.Component, false) is not null)
@@ -224,7 +222,6 @@ public abstract partial class UndoEngine
                     if (name is not null)
                     {
                         string memberName = e.Member?.Name ?? "(none)";
-                        Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, $"Adding second ChangeEvent for {name} Member: {memberName}");
                     }
                     else
                     {
@@ -285,7 +282,7 @@ public abstract partial class UndoEngine
 
                     if (_events[idx] is AddRemoveUndoEvent evt && evt.OpenComponent == e.Component)
                     {
-                        evt.Commit(UndoEngine);
+                        evt.Commit();
                         // We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
                         // If there are other events (such as AddRemoving), the serialization  done in OnComponentRemoving might refer to components that aren't available.
                         if (idx != _events.Count - 1 && changeEvt is not null)
@@ -325,7 +322,7 @@ public abstract partial class UndoEngine
                 return;
             }
 
-            _removeEvents ??= new();
+            _removeEvents ??= [];
 
             try
             {
@@ -357,7 +354,6 @@ public abstract partial class UndoEngine
         /// </summary>
         public void Undo()
         {
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Performing undo '{Name}'");
             UndoUnit? savedUnit = UndoEngine._executingUnit;
             UndoEngine._executingUnit = this;
             DesignerTransaction? transaction = null;

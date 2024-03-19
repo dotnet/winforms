@@ -54,42 +54,20 @@ public static partial class PlatformDetection
     public static bool IsNotOneCoreUAP =>
         File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
 
-    public static bool IsWindowsIoTCore
-    {
-        get
-        {
-            int productType = GetWindowsProductType();
-            if ((productType == PRODUCT_IOTUAPCOMMERCIAL) ||
-                (productType == PRODUCT_IOTUAP))
-            {
-                return true;
-            }
+    public static bool IsWindowsIoTCore => GetWindowsProductType() is PRODUCT_IOTUAPCOMMERCIAL or PRODUCT_IOTUAP;
 
-            return false;
-        }
-    }
-
-    public static bool IsWindowsHomeEdition
+    public static bool IsWindowsHomeEdition => GetWindowsProductType() switch
     {
-        get
-        {
-            int productType = GetWindowsProductType();
-            switch (productType)
-            {
-                case PRODUCT_CORE:
-                case PRODUCT_CORE_COUNTRYSPECIFIC:
-                case PRODUCT_CORE_N:
-                case PRODUCT_CORE_SINGLELANGUAGE:
-                case PRODUCT_HOME_BASIC:
-                case PRODUCT_HOME_BASIC_N:
-                case PRODUCT_HOME_PREMIUM:
-                case PRODUCT_HOME_PREMIUM_N:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
+        PRODUCT_CORE
+            or PRODUCT_CORE_COUNTRYSPECIFIC
+            or PRODUCT_CORE_N
+            or PRODUCT_CORE_SINGLELANGUAGE
+            or PRODUCT_HOME_BASIC
+            or PRODUCT_HOME_BASIC_N
+            or PRODUCT_HOME_PREMIUM
+            or PRODUCT_HOME_PREMIUM_N => true,
+        _ => false,
+    };
 
     public static bool IsWindows => true;
     public static bool IsWindows7 => GetWindowsVersion() == 6 && GetWindowsMinorVersion() == 1;
@@ -122,27 +100,22 @@ public static partial class PlatformDetection
                 return false;
             }
 
-            byte[] buffer = Array.Empty<byte>();
+            byte[] buffer = [];
             uint bufferSize = 0;
             try
             {
                 int result = GetCurrentApplicationUserModelId(ref bufferSize, buffer);
-                switch (result)
+                s_isInAppContainer = result switch
                 {
-                    case 15703: // APPMODEL_ERROR_NO_APPLICATION
-                        s_isInAppContainer = 0;
-                        break;
-                    case 0:     // ERROR_SUCCESS
-                    case 122:   // ERROR_INSUFFICIENT_BUFFER
-                                // Success is actually insufficent buffer as we're really only looking for
-                                // not NO_APPLICATION and we're not actually giving a buffer here. The
-                                // API will always return NO_APPLICATION if we're not running under a
-                                // WinRT process, no matter what size the buffer is.
-                        s_isInAppContainer = 1;
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Failed to get AppId, result was {result}.");
-                }
+                    // APPMODEL_ERROR_NO_APPLICATION
+                    15703 => 0,
+                    // ERROR_SUCCESS
+                    0 or 122 => 1,// Success is actually insufficent buffer as we're really only looking for
+                                  // not NO_APPLICATION and we're not actually giving a buffer here. The
+                                  // API will always return NO_APPLICATION if we're not running under a
+                                  // WinRT process, no matter what size the buffer is.
+                    _ => throw new InvalidOperationException($"Failed to get AppId, result was {result}."),
+                };
             }
             catch (Exception e)
             {
@@ -207,7 +180,7 @@ public static partial class PlatformDetection
         {
             value = (string)Registry.GetValue(key, "InstallationType", defaultValue: "");
         }
-        catch (Exception e) when (e is SecurityException || e is InvalidCastException || e is PlatformNotSupportedException /* UAP */)
+        catch (Exception e) when (e is SecurityException or InvalidCastException or PlatformNotSupportedException /* UAP */)
         {
         }
 
@@ -278,12 +251,14 @@ public static partial class PlatformDetection
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private unsafe struct RTL_OSVERSIONINFOEX
     {
+#pragma warning disable IDE1006 // Naming Styles - matching OS
         internal uint dwOSVersionInfoSize;
         internal uint dwMajorVersion;
         internal uint dwMinorVersion;
         internal uint dwBuildNumber;
         internal uint dwPlatformId;
         internal fixed char szCSDVersion[128];
+#pragma warning restore IDE1006
     }
 
     private static unsafe int GetWindowsVersion()

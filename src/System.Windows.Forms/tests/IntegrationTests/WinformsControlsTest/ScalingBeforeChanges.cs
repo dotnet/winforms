@@ -96,7 +96,7 @@ public partial class ScalingBeforeChanges : Form
                     _deviceDpiY = y;
                     _deviceDpiX = x;
 
-                    Font = new Font(this.Font.FontFamily, this.Font.Size * factorY, this.Font.Style);
+                    Font = new Font(Font.FontFamily, Font.Size * factorY, Font.Style);
 
                     checkBox1.Scale(new SizeF(factorX, factorY));
                 }

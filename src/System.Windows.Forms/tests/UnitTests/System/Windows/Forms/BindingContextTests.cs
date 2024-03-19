@@ -14,7 +14,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Ctor_Default()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         Assert.False(context.IsReadOnly);
         Assert.Empty(context);
     }
@@ -32,7 +32,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Count_GetWithNullWeakReferenceTarget_ScrubsWeakRefs()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource1 = new() { Property = 1 };
         DataSource dataSource2 = new() { Property = 2 };
         PropertyManager manager1 = Assert.IsAssignableFrom<PropertyManager>(context[dataSource1, "Property"]);
@@ -57,7 +57,7 @@ public class BindingContextTests
     public void BindingContext_Add_NullDataSource_ThrowsArgumentNullException()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         Assert.Throws<ArgumentNullException>("dataSource", () => context.Add(null, source.CurrencyManager));
     }
 
@@ -65,8 +65,8 @@ public class BindingContextTests
     public void BindingContext_Add_Invoke_GetReturnsExpected()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source1 = [];
+        using BindingSource source2 = [];
         DataSource dataSource = new();
         context.Add(dataSource, source1.CurrencyManager);
         Assert.Single(context);
@@ -87,8 +87,8 @@ public class BindingContextTests
     public void BindingContext_Add_InvokeMultiple_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source1 = [];
+        using BindingSource source2 = [];
         DataSource dataSource1 = new();
         DataSource dataSource2 = new();
         context.Add(dataSource1, source1.CurrencyManager);
@@ -110,8 +110,8 @@ public class BindingContextTests
     public void BindingContext_AddCore_Invoke_GetReturnsExpected()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source1 = [];
+        using BindingSource source2 = [];
         DataSource dataSource = new();
         context.AddCore(dataSource, source1.CurrencyManager);
         Assert.Single(context);
@@ -132,8 +132,8 @@ public class BindingContextTests
     public void BindingContext_AddCore_InvokeMultiple_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source1 = [];
+        using BindingSource source2 = [];
         DataSource dataSource1 = new();
         DataSource dataSource2 = new();
         context.AddCore(dataSource1, source1.CurrencyManager);
@@ -148,7 +148,7 @@ public class BindingContextTests
     public void BindingContext_AddCore_NullDataSource_ThrowsArgumentNullException()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         Assert.Throws<ArgumentNullException>("dataSource", () => context.AddCore(null, source.CurrencyManager));
     }
 
@@ -163,11 +163,11 @@ public class BindingContextTests
     public void BindingContext_CopyTo_Invoke_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         DataSource dataSource = new();
         context.Add(dataSource, source.CurrencyManager);
 
-        object[] array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         ((ICollection)context).CopyTo(array, 1);
         Assert.Equal(1, array[0]);
         Assert.NotNull(Assert.IsType<DictionaryEntry>(array[1]).Key);
@@ -178,7 +178,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_CopyTo_WithNullWeakReferenceTarget_ScrubsWeakRefs()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource1 = new() { Property = 1 };
         DataSource dataSource2 = new() { Property = 2 };
         PropertyManager manager1 = Assert.IsAssignableFrom<PropertyManager>(context[dataSource1, "Property"]);
@@ -207,7 +207,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_GetEnumerator_WithNullWeakReferenceTarget_ScrubsWeakRefs()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource1 = new() { Property = 1 };
         DataSource dataSource2 = new() { Property = 2 };
         PropertyManager manager1 = Assert.IsAssignableFrom<PropertyManager>(context[dataSource1, "Property"]);
@@ -237,9 +237,9 @@ public class BindingContextTests
     public void BindingContext_Remove_Invoke_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
+        using BindingSource source1 = [];
         DataSource dataSource1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source2 = [];
         DataSource dataSource2 = new();
         context.Add(dataSource1, source1.CurrencyManager);
         context.Add(dataSource2, source2.CurrencyManager);
@@ -270,9 +270,9 @@ public class BindingContextTests
     public void BindingContext_RemoveCore_Invoke_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source1 = new();
+        using BindingSource source1 = [];
         DataSource dataSource1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source2 = [];
         DataSource dataSource2 = new();
         context.Add(dataSource1, source1.CurrencyManager);
         context.Add(dataSource2, source2.CurrencyManager);
@@ -315,7 +315,7 @@ public class BindingContextTests
     public void BindingContext_Clear_NotEmpty_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         context.Add(new DataSource(), source.CurrencyManager);
 
         // Clear again.
@@ -342,7 +342,7 @@ public class BindingContextTests
     public void BindingContext_ClearCore_NotEmpty_Success()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         context.Add(new DataSource(), source.CurrencyManager);
 
         // Clear again.
@@ -357,7 +357,7 @@ public class BindingContextTests
     public void BindingContext_Contains_DataSource_ReturnsExpected()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         DataSource dataSource = new();
         context.Add(dataSource, source.CurrencyManager);
         Assert.True(context.Contains(dataSource));
@@ -372,7 +372,7 @@ public class BindingContextTests
     public void BindingContext_Contains_DataSourceDataMember_ReturnsExpected()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         DataSource dataSource1 = new();
         DataSource dataSource2 = new();
         context.Add(dataSource1, source.CurrencyManager);
@@ -392,7 +392,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Contains_NullDataSource_ThrowsArgumentNullException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         Assert.Throws<ArgumentNullException>("dataSource", () => context.Contains(null));
         Assert.Throws<ArgumentNullException>("dataSource", () => context.Contains(null, null));
         Assert.Throws<ArgumentNullException>("dataSource", () => context.Contains(null, string.Empty));
@@ -401,7 +401,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetNoSuchDataSource_AddsToCollection()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[dataSource]);
         Assert.Same(dataSource, manager.Current);
@@ -414,8 +414,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListDataSource_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> dataSource = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> dataSource = [1, 2, 3];
         CurrencyManager manager = Assert.IsType<CurrencyManager>(context[dataSource]);
         Assert.Same(dataSource, manager.List);
         Assert.Equal(1, manager.Current);
@@ -428,7 +428,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetArrayDataSource_AddsToCollection()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         int[] dataSource = [1, 2, 3];
         CurrencyManager manager = Assert.IsType<CurrencyManager>(context[dataSource]);
         Assert.Same(dataSource, manager.List);
@@ -442,8 +442,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSource_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> dataSource = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> dataSource = [1, 2, 3];
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
             .Setup(s => s.GetList())
@@ -461,7 +461,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSourceReturningNull_ThrowsArgumentNullException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
             .Setup(s => s.GetList())
@@ -474,7 +474,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetWithICurrencyManagerProvider_DoesNotAddToCollection()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         CurrencyManager manager = new BindingSource().CurrencyManager;
         Mock<ICurrencyManagerProvider> mockCurrencyManagerProvider = new();
         mockCurrencyManagerProvider
@@ -488,7 +488,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetWithNullICurrencyManagerProvider_AddsToCollection()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         Mock<ICurrencyManagerProvider> mockCurrencyManagerProvider = new();
         mockCurrencyManagerProvider
             .Setup(p => p.GetRelatedCurrencyManager("dataMember"))
@@ -518,7 +518,7 @@ public class BindingContextTests
     [MemberData(nameof(Item_DataSourceWithDataMember_TestData))]
     public void BindingContext_Item_GetNoSuchDataSourceWithDataMember_AddsToCollection(object dataSource, string dataMember, object expectedCurrent, int expectedCount)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         PropertyManager manager = Assert.IsAssignableFrom<PropertyManager>(context[dataSource, dataMember]);
         Assert.Equal(expectedCurrent, manager.Current);
         Assert.Equal(1, manager.Count);
@@ -532,7 +532,7 @@ public class BindingContextTests
     public void BindingContext_Item_GetWithAddedDataSourceWithDataMember_ThrowsArgumentException()
     {
         SubBindingContext context = new();
-        using BindingSource source = new();
+        using BindingSource source = [];
         DataSource dataSource = new();
         context.Add(dataSource, source.CurrencyManager);
         Assert.Throws<ArgumentException>(() => context[dataSource, "Property"]);
@@ -569,8 +569,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListWithDataMemberReturningIList_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> list = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> list = [1, 2, 3];
         IListDataSource dataSource = new()
         {
             Property = list
@@ -588,8 +588,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListWithDataMemberReturningNonIList_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> list = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> list = [1, 2, 3];
         ObjectDataSource dataSource = new()
         {
             Property = list
@@ -606,8 +606,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetArrayWithDataMember_AddsToCollection()
     {
-        BindingContext context = new();
-        int[] list = new int[] { 1, 2, 3 };
+        BindingContext context = [];
+        int[] list = [1, 2, 3];
         IListDataSource dataSource = new()
         {
             Property = list
@@ -625,8 +625,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningIList_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> list = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> list = [1, 2, 3];
         IListDataSource dataSource = new();
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
@@ -647,8 +647,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningNonIList_AddsToCollection()
     {
-        BindingContext context = new();
-        List<int> list = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> list = [1, 2, 3];
         IListSourceDataSource dataSource = new();
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
@@ -667,7 +667,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningIListNull_ThrowsArgumentNullException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         IListDataSource dataSource = new();
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
@@ -686,7 +686,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningNonIListNull_AddsToCollection()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         IListSourceDataSource dataSource = new();
         Mock<IListSource> mockIListSource = new(MockBehavior.Strict);
         mockIListSource
@@ -705,7 +705,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_Item_GetWithNullWeakReferenceTarget_Success()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[dataSource]);
         WeakReference reference = Assert.IsType<WeakReference>(Assert.IsType<DictionaryEntry>(Assert.Single(context)).Value);
@@ -736,7 +736,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_CollectionChanged_Add_ThrowsNotImplementedException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         CollectionChangeEventHandler handler = (sender, e) => { };
         Assert.Throws<NotImplementedException>(() => context.CollectionChanged += handler);
     }
@@ -744,7 +744,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_CollectionChanged_Remove_Nop()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         CollectionChangeEventHandler handler = (sender, e) => { };
         context.CollectionChanged -= handler;
     }
@@ -764,8 +764,8 @@ public class BindingContextTests
         SubBindingContext context2 = new();
         SubBindingContext context3 = new();
         SubBindingContext context4 = new();
-        using BindingSource source1 = new();
-        using BindingSource source2 = new();
+        using BindingSource source1 = [];
+        using BindingSource source2 = [];
         DataSource dataSource1 = new();
         DataSource dataSource2 = new();
 
@@ -791,7 +791,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NewBindingWithoutDataMember_Success()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         Binding binding = new(null, dataSource, "dataMember");
 
@@ -809,8 +809,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NewListBindingWithoutDataMember_Success()
     {
-        BindingContext context = new();
-        List<int> dataSource = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> dataSource = [1, 2, 3];
         Binding binding = new(null, dataSource, "dataMember");
 
         BindingContext.UpdateBinding(context, binding);
@@ -828,7 +828,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NewBindingWithDataMember_Success()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new() { Property = 1 };
         Binding binding = new(null, dataSource, "Property.ignored");
 
@@ -846,8 +846,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NewListBindingWithDataMember_Success()
     {
-        BindingContext context = new();
-        List<int> list = new() { 1, 2, 3 };
+        BindingContext context = [];
+        List<int> list = [1, 2, 3];
         IListDataSource dataSource = new() { Property = list };
         Binding binding = new(null, dataSource, "Property.ignore");
 
@@ -866,8 +866,8 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_UpdateBindingWithoutDataMember_Success()
     {
-        BindingContext context1 = new();
-        BindingContext context2 = new();
+        BindingContext context1 = [];
+        BindingContext context2 = [];
         DataSource dataSource = new();
         Binding binding = new(null, dataSource, "dataMember");
 
@@ -897,9 +897,9 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_UpdateListBindingWithoutDataMember_Success()
     {
-        BindingContext context1 = new();
-        BindingContext context2 = new();
-        List<int> dataSource = new() { 1, 2, 3 };
+        BindingContext context1 = [];
+        BindingContext context2 = [];
+        List<int> dataSource = [1, 2, 3];
         Binding binding = new(null, dataSource, "dataMember");
 
         BindingContext.UpdateBinding(context1, binding);
@@ -930,7 +930,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NullBindingContext_Success()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         Binding binding = new(null, dataSource, "dataMember");
 
@@ -957,7 +957,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_InvokeCircularWithoutComponent_ThrowsArgumentException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         Binding binding = new(null, dataSource, "dataMember");
 
@@ -970,7 +970,7 @@ public class BindingContextTests
             {
                 Assert.Null(binding.BindingManagerBase);
                 MethodInfo m = oldManager.Bindings.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-                m.Invoke(oldManager.Bindings, new object[] { binding });
+                m.Invoke(oldManager.Bindings, [binding]);
                 Assert.NotNull(binding.BindingManagerBase);
                 callCount++;
             }
@@ -982,7 +982,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_InvokeCircularWithComponent_ThrowsArgumentException()
     {
-        BindingContext context = new();
+        BindingContext context = [];
         DataSource dataSource = new();
         Binding binding = new(null, dataSource, "dataMember");
         Control control = new();
@@ -998,7 +998,7 @@ public class BindingContextTests
             {
                 Assert.Null(binding.BindingManagerBase);
                 MethodInfo m = oldManager.Bindings.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-                m.Invoke(oldManager.Bindings, new object[] { binding });
+                m.Invoke(oldManager.Bindings, [binding]);
                 Assert.NotNull(binding.BindingManagerBase);
                 callCount++;
             }
@@ -1010,7 +1010,7 @@ public class BindingContextTests
     [Fact]
     public void BindingContext_UpdateBinding_NullBinding_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>("binding", () => BindingContext.UpdateBinding(new BindingContext(), null));
+        Assert.Throws<ArgumentNullException>("binding", () => BindingContext.UpdateBinding([], null));
     }
 
     private class ParentDataSource

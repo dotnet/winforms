@@ -237,9 +237,9 @@ public class TreeNodeCollection : IList
     {
         key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-        List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
+        List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, []);
 
-        return foundNodes.ToArray();
+        return [.. foundNodes];
     }
 
     private static List<TreeNode> FindInternal(
@@ -367,10 +367,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
-    bool IList.Contains(object? node) =>
-        node is TreeNode treeNode
-            ? Contains(treeNode)
-            : false;
+    bool IList.Contains(object? node) => node is TreeNode treeNode && Contains(treeNode);
 
     public int IndexOf(TreeNode node)
     {

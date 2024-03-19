@@ -25,17 +25,21 @@ public unsafe class ComScopeTests
     {
 #pragma warning disable CA1823 // Avoid unused private fields
 #pragma warning disable CS0169 // The field 'ComScopeTests.ITestObject._vtbl' is never used
+#pragma warning disable IDE0051 // Remove unused private members
         private readonly void** _vtbl;
+#pragma warning restore IDE0051
 #pragma warning restore CS0169
 #pragma warning restore CA1823
 
         internal struct Vtbl
         {
 #pragma warning disable CS0649 // Field never assigned to
+#pragma warning disable IDE1006 // Naming Styles - matching CsWin32 patterns
             internal delegate* unmanaged[Stdcall]<ITestObject*, Guid*, void**, HRESULT> QueryInterface_1;
             internal delegate* unmanaged[Stdcall]<ITestObject*, uint> AddRef_2;
             internal delegate* unmanaged[Stdcall]<ITestObject*, uint> Release_3;
-#pragma warning restore CS0649 // Field never assigned to
+#pragma warning restore CS0649
+#pragma warning restore IDE1006
         }
 
         [ComImport]

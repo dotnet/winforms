@@ -62,7 +62,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             dataGridViewCell = (DataGridViewRowHeaderCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
         dataGridViewCell.Value = Value;
         return dataGridViewCell;
     }
@@ -535,7 +535,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         if (DataGridView.ApplyVisualStylesToHeaderCells)
         {
             // Add the theming margins to the borders.
-            Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(graphics);
+            Rectangle rectThemeMargins = GetThemeMargins(graphics);
             borderAndPaddingWidths += rectThemeMargins.Y;
             borderAndPaddingWidths += rectThemeMargins.Height;
             borderAndPaddingHeights += rectThemeMargins.X;
@@ -637,7 +637,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         // Else resultBounds will be Rectangle.Empty;
         Rectangle resultBounds = Rectangle.Empty;
 
-        if (paint && DataGridViewCell.PaintBorder(paintParts))
+        if (paint && PaintBorder(paintParts))
         {
             PaintBorder(graphics, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
         }
@@ -672,12 +672,11 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
             if (backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
             {
-                if (paint && DataGridViewCell.PaintBackground(paintParts))
+                if (paint && PaintBackground(paintParts))
                 {
                     // Theming
                     int state = (int)HeaderItemState.Normal;
-                    if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
-                        DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
+                    if (DataGridView.SelectionMode is DataGridViewSelectionMode.FullRowSelect or DataGridViewSelectionMode.RowHeaderSelect)
                     {
                         if (ButtonState != ButtonState.Normal)
                         {
@@ -696,20 +695,16 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     }
 
                     // Flip the column header background
-                    using (Bitmap bmFlipXPThemes = new(backgroundBounds.Height, backgroundBounds.Width))
-                    {
-                        using (Graphics gFlip = Graphics.FromImage(bmFlipXPThemes))
-                        {
-                            DataGridViewRowHeaderCellRenderer.DrawHeader(gFlip, new Rectangle(0, 0, backgroundBounds.Height, backgroundBounds.Width), state);
-                            bmFlipXPThemes.RotateFlip(DataGridView.RightToLeftInternal ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipY);
+                    using Bitmap bmFlipXPThemes = new(backgroundBounds.Height, backgroundBounds.Width);
+                    using Graphics gFlip = Graphics.FromImage(bmFlipXPThemes);
+                    DataGridViewRowHeaderCellRenderer.DrawHeader(gFlip, new Rectangle(0, 0, backgroundBounds.Height, backgroundBounds.Width), state);
+                    bmFlipXPThemes.RotateFlip(DataGridView.RightToLeftInternal ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipY);
 
-                            graphics.DrawImage(
-                                bmFlipXPThemes,
-                                backgroundBounds,
-                                new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height),
-                                GraphicsUnit.Pixel);
-                        }
-                    }
+                    graphics.DrawImage(
+                        bmFlipXPThemes,
+                        backgroundBounds,
+                        new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height),
+                        GraphicsUnit.Pixel);
                 }
 
                 // update the val bounds
@@ -769,12 +764,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             if (!string.IsNullOrEmpty(formattedString))
             {
                 // There is text to display
-                if (valBounds.Width >= s_iconsWidth +
-                                       2 * RowHeaderIconMarginWidth &&
-                    valBounds.Height >= s_iconsHeight +
-                                        2 * RowHeaderIconMarginHeight)
+                if (valBounds.Width >= s_iconsWidth + 2 * RowHeaderIconMarginWidth
+                    && valBounds.Height >= s_iconsHeight + 2 * RowHeaderIconMarginHeight)
                 {
-                    if (paint && DataGridViewCell.PaintContentBackground(paintParts))
+                    if (paint && PaintContentBackground(paintParts))
                     {
                         // There is enough room for the potential glyph which is the first priority
                         if (DataGridView.CurrentCellAddress.Y == rowIndex)
@@ -856,7 +849,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     {
                         // Check if the text fits if we remove the room required for the row error icon
                         Size maxBounds = new(valBounds.Width - s_iconsWidth - 2 * RowHeaderIconMarginWidth, valBounds.Height);
-                        if (DataGridViewCell.TextFitsInBounds(
+                        if (TextFitsInBounds(
                             graphics,
                             formattedString,
                             cellStyle.Font,
@@ -873,7 +866,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         }
                     }
 
-                    if (DataGridViewCell.PaintContentForeground(paintParts))
+                    if (PaintContentForeground(paintParts))
                     {
                         if (paint)
                         {
@@ -908,11 +901,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                 }
 
                 // Third priority is the row error icon, which may be painted on top of text
-                if (errorBounds.Width >= 3 * RowHeaderIconMarginWidth +
-                                         2 * s_iconsWidth)
+                if (errorBounds.Width >= 3 * RowHeaderIconMarginWidth + 2 * s_iconsWidth)
                 {
                     // There is enough horizontal room for the error icon and the glyph
-                    if (paint && DataGridView.ShowRowErrors && DataGridViewCell.PaintErrorIcon(paintParts))
+                    if (paint && DataGridView.ShowRowErrors && PaintErrorIcon(paintParts))
                     {
                         PaintErrorIcon(graphics, clipBounds, errorBounds, errorText);
                     }
@@ -931,7 +923,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                 if (valBounds.Width >= s_iconsWidth + 2 * RowHeaderIconMarginWidth &&
                     valBounds.Height >= s_iconsHeight + 2 * RowHeaderIconMarginHeight)
                 {
-                    if (paint && DataGridViewCell.PaintContentBackground(paintParts))
+                    if (paint && PaintContentBackground(paintParts))
                     {
                         // There is enough room for the potential icon
                         if (DataGridView.CurrentCellAddress.Y == rowIndex)
@@ -996,7 +988,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                                          2 * s_iconsWidth)
                 {
                     // There is enough horizontal room for the error icon
-                    if (paint && DataGridView.ShowRowErrors && DataGridViewCell.PaintErrorIcon(paintParts))
+                    if (paint && DataGridView.ShowRowErrors && PaintErrorIcon(paintParts))
                     {
                         PaintErrorIcon(
                             graphics,

@@ -460,7 +460,7 @@ public class ComboBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -473,7 +473,7 @@ public class ComboBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -1860,7 +1860,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1882,7 +1882,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1902,7 +1902,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1924,7 +1924,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsTheory]
@@ -1965,7 +1965,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1987,7 +1987,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationEvent" method is called from "OnTextChanged" and "OnSelectedIndexChanged" methods
-        Assert.Equal(2, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(2, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2005,7 +2005,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2027,7 +2027,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationEvent" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2041,7 +2041,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2056,7 +2056,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2074,7 +2074,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" method
-        Assert.Equal(1, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(1, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2093,7 +2093,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" and "OnDropDownClosed" method
-        Assert.Equal(2, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(2, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2250,12 +2250,12 @@ public class ComboBoxTests
     {
         using OwnerDrawComboBox ownerDrawComboBox = new();
         ownerDrawComboBox.CreateControl();
-        ownerDrawComboBox.Items.AddRange(new object[]
-        {
+        ownerDrawComboBox.Items.AddRange(
+        [
             "One",
             "Two",
             "Three"
-        });
+        ]);
         ownerDrawComboBox.Location = new Point(0, 50);
         Assert.Equal(3, ownerDrawComboBox.MeasureItemEventArgs.Count);
 
@@ -2306,7 +2306,7 @@ public class ComboBoxTests
             FormattingEnabled = true;
         }
 
-        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = new();
+        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = [];
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
@@ -2329,11 +2329,11 @@ public class ComboBoxTests
         public AutomationEventCountingComboBoxAccessibleObject(ComboBox owner) : base(owner)
         { }
 
-        internal int RaiseAutomationCallCount;
+        internal int _raiseAutomationCallCount;
 
         internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
-            RaiseAutomationCallCount++;
+            _raiseAutomationCallCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }
@@ -2342,14 +2342,14 @@ public class ComboBoxTests
     {
         public AutomationEventCountingComboBoxChildEditUiaProvider(ComboBox owner, HWND childEditControlhandle) : base(owner, childEditControlhandle)
         {
-            RaiseAutomationCallCount = 0;
+            _raiseAutomationCallCount = 0;
         }
 
-        internal int RaiseAutomationCallCount;
+        internal int _raiseAutomationCallCount;
 
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
-            RaiseAutomationCallCount++;
+            _raiseAutomationCallCount++;
             return base.RaiseAutomationEvent(eventId);
         }
     }
@@ -2431,7 +2431,7 @@ public class ComboBoxTests
         public void ConfigureForCtrlBackspace(int cursorRelativeToEnd = 0)
         {
             Focus();
-            SelectionStart = this.Text.Length + cursorRelativeToEnd;
+            SelectionStart = Text.Length + cursorRelativeToEnd;
             SelectionLength = 0;
         }
 

@@ -21,9 +21,9 @@ internal class LockedHandleGlyph : SelectionGlyphBase
         _isPrimary = primarySelection;
         hitTestCursor = Cursors.Default;
         rules = SelectionRules.None;
-        bounds = new Rectangle((controlBounds.X + DesignerUtils.LOCKHANDLEOVERLAP) - DesignerUtils.LOCKHANDLEWIDTH,
-                                (controlBounds.Y + DesignerUtils.LOCKHANDLEOVERLAP) - DesignerUtils.LOCKHANDLEHEIGHT,
-                                DesignerUtils.LOCKHANDLEWIDTH, DesignerUtils.LOCKHANDLEHEIGHT);
+        bounds = new Rectangle((controlBounds.X + DesignerUtils.s_lockHandleOverlap) - DesignerUtils.s_lockHandleWidth,
+                                (controlBounds.Y + DesignerUtils.s_lockHandleOverlap) - DesignerUtils.s_lockHandleHeight,
+                                DesignerUtils.s_lockHandleWidth, DesignerUtils.s_lockHandleHeight);
         hitBounds = bounds;
     }
 
@@ -32,6 +32,6 @@ internal class LockedHandleGlyph : SelectionGlyphBase
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        DesignerUtils.DrawLockedHandle(pe.Graphics, bounds, _isPrimary, this);
+        DesignerUtils.DrawLockedHandle(pe.Graphics, bounds, _isPrimary);
     }
 }

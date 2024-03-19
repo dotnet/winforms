@@ -8,7 +8,7 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal partial class PropertyGridView
 {
-    private class GridViewListBoxItemAccessibleObject : ListBox.ListBoxItemAccessibleObject
+    private class GridViewListBoxItemAccessibleObject : ListBoxItemAccessibleObject
     {
         private readonly GridViewListBox _owningGridViewListBox;
         private readonly ItemArray.Entry _owningItem;

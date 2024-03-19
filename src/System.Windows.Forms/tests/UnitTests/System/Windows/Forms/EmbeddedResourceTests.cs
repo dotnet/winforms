@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Tests;
 public class EmbeddedResourceTests
 {
     // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
-    private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));
+    private readonly Assembly _assembly = Assembly.GetAssembly(typeof(AccessibleObject));
 
-    private static string s_expectedIconNames = """
+    private const string ExpectedIconNamesString = """
             System.Windows.Forms.ActiveDocumentHost
             System.Windows.Forms.alignment
             System.Windows.Forms.alignToGrid
@@ -196,20 +196,20 @@ public class EmbeddedResourceTests
             """;
 
     public static TheoryData ExpectedIconNames()
-        => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+        => ExpectedIconNamesString.Split(Environment.NewLine).ToTheoryData();
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]
     public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
     {
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        using Stream stream = _assembly.GetManifestResourceStream(resourceName);
         Assert.NotNull(stream);
 
         using Icon icon = new(stream);
         Assert.NotNull(icon);
     }
 
-    private static string s_expectedCursorNames = """
+    private const string ExpectedCursorNamesString = """
             System.Windows.Forms.east.cur
             System.Windows.Forms.hsplit.cur
             System.Windows.Forms.ne.cur
@@ -226,20 +226,20 @@ public class EmbeddedResourceTests
             """;
 
     public static TheoryData ExpectedCursorNames()
-         => (TheoryData)s_expectedCursorNames.Split(Environment.NewLine).ToTheoryData();
+         => ExpectedCursorNamesString.Split(Environment.NewLine).ToTheoryData();
 
     [Theory]
     [MemberData(nameof(ExpectedCursorNames))]
     public void EmbeddedResource_ResourcesExist_Cursor(string resourceName)
     {
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        using Stream stream = _assembly.GetManifestResourceStream(resourceName);
         Assert.NotNull(stream);
 
         using Cursor cursor = new(stream);
         Assert.NotNull(cursor);
     }
 
-    private const string expectedResourceNames = """
+    private const string ExpectedResourceNames = """
             ILLink.Substitutions.xml
             System.SR.resources
             System.Windows.Forms.MdiWindowDialog.resources
@@ -250,10 +250,10 @@ public class EmbeddedResourceTests
     [Fact]
     public void EmbeddedResource_VerifyList()
     {
-        string[] actual = assembly.GetManifestResourceNames();
+        string[] actual = _assembly.GetManifestResourceNames();
         Array.Sort(actual, StringComparer.Ordinal);
 
-        string allNames = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedCursorNames}{Environment.NewLine}{expectedResourceNames}";
+        string allNames = $"{ExpectedIconNamesString}{Environment.NewLine}{ExpectedCursorNamesString}{Environment.NewLine}{ExpectedResourceNames}";
         string[] expected = allNames.Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 

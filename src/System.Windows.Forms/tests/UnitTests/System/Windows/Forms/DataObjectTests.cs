@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests;
 public partial class DataObjectTests
 {
     private static readonly string[] s_clipboardFormats =
-    {
+    [
         DataFormats.CommaSeparatedValue,
         DataFormats.Dib,
         DataFormats.Dif,
@@ -41,14 +41,14 @@ public partial class DataObjectTests
         DataFormats.UnicodeText,
         DataFormats.Serializable,
         "something custom",
-    };
+    ];
 
     private static readonly string[] s_mappedFormats =
-    {
+    [
         typeof(Bitmap).FullName,
         "FileName",
         "FileNameW"
-    };
+    ];
 
     [Fact]
     public void DataObject_ContainsAudio_InvokeDefault_ReturnsFalse()
@@ -942,7 +942,7 @@ public partial class DataObjectTests
     public static IEnumerable<object[]> SetAudio_Stream_TestData()
     {
         yield return new object[] { new MemoryStream(Array.Empty<byte>()) };
-        yield return new object[] { new MemoryStream(new byte[] { 1, 2, 3 }) };
+        yield return new object[] { new MemoryStream([1, 2, 3]) };
     }
 
     [Theory]
@@ -2261,7 +2261,7 @@ public partial class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_FileNames_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+        dataObject.SetFileDropList(["Path1", "Path2"]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2302,7 +2302,7 @@ public partial class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_EmptyFileNames_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection());
+        dataObject.SetFileDropList([]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2341,7 +2341,7 @@ public partial class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_FileNamesNoData_ThrowsArgumentException()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+        dataObject.SetFileDropList(["Path1", "Path2"]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2360,7 +2360,7 @@ public partial class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_EmptyFileNamesNoData_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection());
+        dataObject.SetFileDropList([]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()

@@ -5,7 +5,7 @@ namespace System.Windows.Forms.Layout;
 
 internal struct NullLayoutTransaction : IDisposable
 {
-    public void Dispose()
+    public readonly void Dispose()
     {
     }
 }

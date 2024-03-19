@@ -13,7 +13,7 @@ public class ExceptionCollectionTests
     {
         yield return new object[] { null };
         yield return new object[] { new ArrayList() };
-        yield return new object[] { new ArrayList { new Exception(), new Exception(), new Exception()} };
+        yield return new object[] { new ArrayList { new InvalidOperationException(), new InvalidOperationException(), new InvalidOperationException()} };
     }
 
     [Theory]
@@ -37,7 +37,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_Ctor_ArguementException()
     {
-        ArrayList exceptions = new() { 1, 2, 3 };
+        ArrayList exceptions = [1, 2, 3];
         Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
     }
 

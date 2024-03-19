@@ -262,7 +262,7 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))]
     public bool LinkVisited
     {
-        get => _links.Count == 0 ? false : _links[0].Visited;
+        get => _links.Count != 0 && _links[0].Visited;
         set
         {
             if (value == LinkVisited)
@@ -621,7 +621,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         if (string.IsNullOrEmpty(text))
         {
-            return Array.Empty<CharacterRange>();
+            return [];
         }
 
         StringInfo stringInfo = new(text);
@@ -641,7 +641,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         ranges.Add(new CharacterRange(0, text.Length));
 
-        return ranges.ToArray();
+        return [.. ranges];
     }
 
     /// <summary>
@@ -1376,10 +1376,8 @@ public partial class LinkLabel : Label, IButtonControl
 
     private void PaintLinkBackground(Graphics g)
     {
-        using (PaintEventArgs e = new(g, ClientRectangle))
-        {
-            InvokePaintBackground(this, e);
-        }
+        using PaintEventArgs e = new(g, ClientRectangle);
+        InvokePaintBackground(this, e);
     }
 
     void IButtonControl.PerformClick()
@@ -1628,7 +1626,7 @@ public partial class LinkLabel : Label, IButtonControl
     private bool ShouldSerializeUseCompatibleTextRendering()
     {
         // Serialize code if LinkLabel cannot support the feature or the property's value is  not the default.
-        return !CanUseTextRenderer || UseCompatibleTextRendering != Control.UseCompatibleTextRenderingDefault;
+        return !CanUseTextRenderer || UseCompatibleTextRendering != UseCompatibleTextRenderingDefault;
     }
 
     /// <summary>

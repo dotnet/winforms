@@ -18,25 +18,16 @@ public partial class ToolStripPanelRow
 
         public virtual bool CanMove(ToolStrip toolStripToDrag)
         {
-            if (toolStripToDrag is ISupportToolStripPanel toolStripToDragAsRaftingControl)
+            if (toolStripToDrag is ISupportToolStripPanel toolStripToDragAsRaftingControl && toolStripToDragAsRaftingControl.Stretch)
             {
-                if (toolStripToDragAsRaftingControl.Stretch)
-                {
-                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the item moving is stretched.");
-                    return false;
-                }
+                return false;
             }
 
             foreach (Control control in Row.ControlsInternal)
             {
-                var controlAsRaftingControl = control as ISupportToolStripPanel;
-                if (controlAsRaftingControl is not null)
+                if (control is ISupportToolStripPanel controlAsRaftingControl && controlAsRaftingControl.Stretch)
                 {
-                    if (controlAsRaftingControl.Stretch)
-                    {
-                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the row already contains a stretched item.");
-                        return false;
-                    }
+                    return false;
                 }
             }
 

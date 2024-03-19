@@ -8,14 +8,14 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Ctor_Default()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         Assert.Empty(collection);
     }
 
     [Fact]
     public void DesignerActionItemCollection_Add_DesignerActionItem_Success()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
 
         SubDesignerActionItem value1 = new("displayName", "category", "description");
         collection.Add(value1);
@@ -34,14 +34,14 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Add_NullValue_ThrowsArgumentNullException()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         Assert.Throws<ArgumentNullException>("value", () => collection.Add(null));
     }
 
     [Fact]
     public void DesignerActionItemCollection_Insert_DesignerActionItem_Success()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
 
         SubDesignerActionItem value1 = new("displayName", "category", "description");
         collection.Insert(0, value1);
@@ -60,14 +60,14 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Insert_NullValue_ThrowsArgumentNullException()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         Assert.Throws<ArgumentNullException>("value", () => collection.Insert(0, null));
     }
 
     [Fact]
     public void DesignerActionItemCollection_Remove_Invoke_Success()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
         Assert.Same(value, Assert.Single(collection));
@@ -81,14 +81,14 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Remove_NullValue_ThrowsArgumentNullException()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         Assert.Throws<ArgumentNullException>("value", () => collection.Remove(null));
     }
 
     [Fact]
     public void DesignerActionItemCollection_Item_Set_GetReturnsExpected()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value1 = new("displayName", "category", "description");
         SubDesignerActionItem value2 = new("displayName", "category", "description");
         collection.Add(value1);
@@ -106,7 +106,7 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Item_SetNull_ThrowsArgumentNullException()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
         Assert.Throws<ArgumentNullException>("value", () => collection[0] = null);
@@ -115,19 +115,19 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_CopyTo_Invoke_Success()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
 
         var array = new DesignerActionItem[3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new DesignerActionItem[] { null, value, null }, array);
+        Assert.Equal([null, value, null], array);
     }
 
     [Fact]
     public void DesignerActionItemCollection_Contains_NoSuchValue_ReturnsFalse()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
 
@@ -138,7 +138,7 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
 
@@ -149,7 +149,7 @@ public class DesignerActionItemCollectionTests
     [Fact]
     public void DesignerActionItemCollection_Clear_Success()
     {
-        DesignerActionItemCollection collection = new();
+        DesignerActionItemCollection collection = [];
         SubDesignerActionItem value = new("displayName", "category", "description");
         collection.Add(value);
 

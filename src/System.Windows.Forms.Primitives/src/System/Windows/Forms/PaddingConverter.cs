@@ -12,10 +12,10 @@ namespace System.Windows.Forms;
 public class PaddingConverter : TypeConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
-        sourceType == typeof(string) ? true : base.CanConvertFrom(context, sourceType);
+        sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
     public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType) =>
-        destinationType == typeof(InstanceDescriptor) ? true : base.CanConvertTo(context, destinationType);
+        destinationType == typeof(InstanceDescriptor) || base.CanConvertTo(context, destinationType);
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {

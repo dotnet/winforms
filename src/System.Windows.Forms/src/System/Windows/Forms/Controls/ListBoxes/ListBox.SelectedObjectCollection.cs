@@ -12,7 +12,7 @@ public partial class ListBox
     public class SelectedObjectCollection : IList
     {
         // This is the bitmask used within ItemArray to identify selected objects.
-        internal static int SelectedObjectMask = ItemArray.CreateMask();
+        internal static int SelectedObjectMask { get; } = ItemArray.CreateMask();
 
         private readonly ListBox _owner;
         private bool _stateDirty;

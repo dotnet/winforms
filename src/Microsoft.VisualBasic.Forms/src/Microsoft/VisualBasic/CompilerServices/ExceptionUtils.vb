@@ -164,7 +164,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetWin32Exception(
             ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 
-            Return New ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
+            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
         End Function
 
     End Class

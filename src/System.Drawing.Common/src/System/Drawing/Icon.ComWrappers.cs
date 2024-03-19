@@ -17,8 +17,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
         else
         {
-            if (outputStream is null)
-                throw new ArgumentNullException(nameof(outputStream));
+            ArgumentNullException.ThrowIfNull(outputStream);
 
             // Ideally, we would pick apart the icon using
             // GetIconInfo, and then pull the individual bitmaps out,

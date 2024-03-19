@@ -84,8 +84,8 @@ public partial class ResXFileRef
 
             string[] parts = remainingString.Split(';');
             result = parts.Length > 1
-                ? (new string[] { fileName, parts[0], parts[1] })
-                : parts.Length > 0 ? (new string[] { fileName, parts[0] }) : (new string[] { fileName });
+                ? ([fileName, parts[0], parts[1]])
+                : parts.Length > 0 ? ([fileName, parts[0]]) : ([fileName]);
 
             return result;
         }
@@ -108,14 +108,9 @@ public partial class ResXFileRef
             if (toCreate == typeof(string))
             {
                 // We have a string, now we need to check the encoding.
-                Encoding textFileEncoding =
-                    parts.Length > 2
-                        ? Encoding.GetEncoding(parts[2])
-                        : Encoding.Default;
-                using (StreamReader sr = new(fileName, textFileEncoding))
-                {
-                    return sr.ReadToEnd();
-                }
+                Encoding textFileEncoding = parts.Length > 2 ? Encoding.GetEncoding(parts[2]) : Encoding.Default;
+                using StreamReader sr = new(fileName, textFileEncoding);
+                return sr.ReadToEnd();
             }
 
             // This is a regular file, we call its constructor with a stream as a parameter
@@ -154,7 +149,7 @@ public partial class ResXFileRef
                     toCreate,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
                     null,
-                    new object[] { memoryStream },
+                    [memoryStream],
                     null);
         }
     }

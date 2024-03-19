@@ -104,7 +104,11 @@ internal unsafe ref struct RegionScope
     /// <summary>
     ///  Returns true if this represents a null HRGN.
     /// </summary>
+#if DEBUG
     public bool IsNull => Region.IsNull;
+#else
+    public readonly bool IsNull => Region.IsNull;
+#endif
 
     public static implicit operator HRGN(RegionScope regionScope) => regionScope.Region;
 
@@ -113,7 +117,11 @@ internal unsafe ref struct RegionScope
     /// </summary>
     public void RelinquishOwnership() => Region = default;
 
+#if DEBUG
     public void Dispose()
+#else
+    public readonly void Dispose()
+#endif
     {
         if (!IsNull)
         {

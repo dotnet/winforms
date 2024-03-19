@@ -13,20 +13,10 @@ namespace System.Windows.Forms;
 [Designer($"System.Windows.Forms.Design.ScrollableControlDesigner, {AssemblyRef.SystemDesign}")]
 public partial class ScrollableControl : Control, IArrangedElement
 {
-#if DEBUG
-    internal static readonly TraceSwitch s_autoScrolling = new("AutoScrolling", "Debug autoscrolling logic");
-#else
-    internal static readonly TraceSwitch? s_autoScrolling;
-#endif
-
     protected const int ScrollStateAutoScrolling = 0x0001;
-
     protected const int ScrollStateHScrollVisible = 0x0002;
-
     protected const int ScrollStateVScrollVisible = 0x0004;
-
     protected const int ScrollStateUserHasScrolled = 0x0008;
-
     protected const int ScrollStateFullDrag = 0x0010;
 
     private Size _userAutoScrollMinSize = Size.Empty;
@@ -45,11 +35,6 @@ public partial class ScrollableControl : Control, IArrangedElement
     ///  User requested margins for autoscrolling.
     /// </summary>
     private Size _requestedScrollMargin = Size.Empty;
-
-    /// <summary>
-    ///  User requested autoscroll position - used for form creation only.
-    /// </summary>
-    private Point _scrollPosition = Point.Empty;
 
     private DockPaddingEdges? _dockPadding;
 
@@ -141,8 +126,6 @@ public partial class ScrollableControl : Control, IArrangedElement
                 SetDisplayRectLocation(-value.X, -value.Y);
                 SyncScrollbars(true);
             }
-
-            _scrollPosition = value;
         }
     }
 
@@ -204,7 +187,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     {
         get
         {
-            Rectangle rect = base.ClientRectangle;
+            Rectangle rect = ClientRectangle;
             if (!_displayRect.IsEmpty)
             {
                 rect.X = _displayRect.X;
@@ -375,7 +358,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 // "local" visibility, not the hierarchy.
                 if (current is not null && current.DesiredVisibility)
                 {
-                    switch (((Control)current).Dock)
+                    switch (current.Dock)
                     {
                         case DockStyle.Bottom:
                             _scrollMargin.Height += current.Size.Height;
@@ -646,9 +629,9 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             SetDisplayRectLocation(_displayRect.X, -pos);
             SyncScrollbars(AutoScroll);
-            if (e is HandledMouseEventArgs)
+            if (e is HandledMouseEventArgs args)
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                args.Handled = true;
             }
         }
         else if (HScroll)
@@ -662,9 +645,9 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             SetDisplayRectLocation(-pos, _displayRect.Y);
             SyncScrollbars(AutoScroll);
-            if (e is HandledMouseEventArgs)
+            if (e is HandledMouseEventArgs args)
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                args.Handled = true;
             }
         }
 
@@ -851,9 +834,6 @@ public partial class ScrollableControl : Control, IArrangedElement
             return;
         }
 
-        s_autoScrolling.TraceVerbose($"ScrollControlIntoView({activeControl.GetType().FullName})");
-        Debug.Indent();
-
         Rectangle client = ClientRectangle;
 
         if (IsDescendant(activeControl)
@@ -861,18 +841,15 @@ public partial class ScrollableControl : Control, IArrangedElement
             && (HScroll || VScroll)
             && (client.Width > 0 && client.Height > 0))
         {
-            s_autoScrolling.TraceVerbose("Calculating...");
-
             Point scrollLocation = ScrollToControl(activeControl);
             SetScrollState(ScrollStateUserHasScrolled, false);
             SetDisplayRectLocation(scrollLocation.X, scrollLocation.Y);
             SyncScrollbars(true);
         }
-
-        Debug.Unindent();
     }
 
-    /// <summary> Allow containers to tweak autoscrolling. when you tab between controls contained in the scrollable control
+    /// <summary>
+    ///  Allow containers to tweak autoscrolling. when you tab between controls contained in the scrollable control
     ///  this allows you to set the scroll location. This would allow you to scroll to the middle of a control, where as the default is
     ///  the top of the control.
     ///  Additionally there is a new AutoScrollOffset property on the child controls themselves. This lets them control where they want to
@@ -890,8 +867,6 @@ public partial class ScrollableControl : Control, IArrangedElement
         Rectangle bounds = activeControl.Bounds;
         if (activeControl.ParentInternal != this)
         {
-            s_autoScrolling.TraceVerbose($"not direct child, original bounds: {bounds}");
-
             if (activeControl.ParentInternal is null)
             {
                 throw new InvalidOperationException(SR.ScrollableControlActiveControlParentNull);
@@ -899,8 +874,6 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
         }
-
-        s_autoScrolling.TraceVerbose($"adjusted bounds: {bounds}");
 
         if (bounds.X < xMargin)
         {
@@ -959,7 +932,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Raises the <see cref="System.Windows.Forms.ScrollBar.OnScroll"/> event.
+    ///  Raises the <see cref="ScrollBar.OnScroll"/> event.
     /// </summary>
     protected virtual void OnScroll(ScrollEventArgs se)
     {
@@ -1142,7 +1115,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollPosition"/> property should
+    ///  Indicates whether the <see cref="AutoScrollPosition"/> property should
     ///  be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollPosition()
@@ -1160,12 +1133,12 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMargin"/> property should be persisted.
+    ///  Indicates whether the <see cref="AutoScrollMargin"/> property should be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollMargin() => !AutoScrollMargin.Equals(Size.Empty);
 
     /// <summary>
-    ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMinSize"/>
+    ///  Indicates whether the <see cref="AutoScrollMinSize"/>
     ///  property should be persisted.
     /// </summary>
     private bool ShouldSerializeAutoScrollMinSize() => !AutoScrollMinSize.Equals(Size.Empty);
@@ -1176,7 +1149,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     /// </summary>
     private void SyncScrollbars(bool autoScroll)
     {
-        Rectangle displayRect = this._displayRect;
+        Rectangle displayRect = _displayRect;
 
         if (autoScroll)
         {

@@ -21,7 +21,7 @@ public partial class SendKeys
         private static bool s_gotNextEvent;
 
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
 #pragma warning restore CS3016
         public static unsafe LRESULT Callback(int nCode, WPARAM wparam, LPARAM lparam)
         {

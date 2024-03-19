@@ -118,7 +118,7 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            List<int> emptyList = new() { };
+            List<int> emptyList = [];
             yield return new object[] { emptyList, dataMember, true, false, emptyList };
 
             int[] emptyArray = Array.Empty<int>();
@@ -182,7 +182,7 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            List<int> nonEmptyList = new() { 1, 2, 3 };
+            List<int> nonEmptyList = [1, 2, 3];
             yield return new object[] { nonEmptyList, dataMember, true, false, true, false, false, false, nonEmptyList };
 
             FixedSizeList<int> fixedSizeList = new() { 1, 2, 3 };
@@ -194,7 +194,7 @@ public class BindingSourceTests
             SynchronizedList<int> synchronizedList = new() { 1, 2, 3 };
             yield return new object[] { synchronizedList, dataMember, true, false, true, false, false, true, synchronizedList };
 
-            int[] nonEmptyArray = new int[] { 1, 2, 3 };
+            int[] nonEmptyArray = [1, 2, 3];
             yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
 
             Mock<IListSource> mockNonEmptyListSource = new(MockBehavior.Strict);
@@ -204,7 +204,7 @@ public class BindingSourceTests
             yield return new object[] { mockNonEmptyListSource.Object, dataMember, true, false, true, false, false, false, nonEmptyList };
         }
 
-        List<int> list = new() { 1, 2, 3 };
+        List<int> list = [1, 2, 3];
         DataClass listDataClass = new() { List = list };
         yield return new object[] { listDataClass, nameof(DataClass.List), true, false, true, false, false, false, list };
         yield return new object[] { listDataClass, nameof(DataClass.List).ToLower(), true, false, true, false, false, false, list };
@@ -268,9 +268,9 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            List<int> emptyList = new() { };
+            List<int> emptyList = [];
 
-            List<int> nonEmptyList = new() { 1, 2, 3 };
+            List<int> nonEmptyList = [1, 2, 3];
             EnumerableWrapper<int> emptyEnumerable = new(emptyList);
             yield return new object[] { emptyEnumerable, dataMember, true, false, true, false, false, false, new List<int>[] { emptyList }, typeof(BindingList<EnumerableWrapper<int>>) };
 
@@ -527,7 +527,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void ISupportInitializeNotification_GetProperties_ReturnsExpected()
     {
-        using BindingSource bindingSource = new();
+        using BindingSource bindingSource = [];
         ISupportInitializeNotification source = bindingSource;
         Assert.True(source.IsInitialized);
     }
@@ -535,7 +535,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_Invoke_Success()
     {
-        using BindingSource bindingSource = new();
+        using BindingSource bindingSource = [];
         ISupportInitializeNotification source = bindingSource;
         source.BeginInit();
         Assert.False(source.IsInitialized);
@@ -547,7 +547,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_WithInitializedEvent_CallsEvent()
     {
-        using BindingSource bindingSource = new();
+        using BindingSource bindingSource = [];
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -725,7 +725,7 @@ public class BindingSourceTests
 
     private class VirtualList<T> : IList
     {
-        private readonly List<T> _innerList = new();
+        private readonly List<T> _innerList = [];
 
         public VirtualList()
         {
@@ -856,7 +856,9 @@ public class BindingSourceTests
 
     private class NoDefaultConstructor : List<int>, ITypedList
     {
+#pragma warning disable IDE0060 // Remove unused parameter
         public NoDefaultConstructor(int i) { }
+#pragma warning restore IDE0060 // Remove unused parameter
 
         public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {

@@ -168,7 +168,7 @@ public partial class BindingSource : Component,
     private BindingSource GetRelatedBindingSource(string dataMember)
     {
         // Auto-create the binding source cache on first use
-        _relatedBindingSources ??= new Dictionary<string, BindingSource>();
+        _relatedBindingSources ??= [];
 
         // Look for an existing binding source that uses this data member, and return that
         foreach (string key in _relatedBindingSources.Keys)
@@ -290,8 +290,7 @@ public partial class BindingSource : Component,
             }
             else if (List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
             {
-                ListSortDescription[] sortsArray = new ListSortDescription[1];
-                sortsArray[0] = new ListSortDescription(ibl.SortProperty, ibl.SortDirection);
+                ListSortDescription[] sortsArray = [new ListSortDescription(ibl.SortProperty, ibl.SortDirection)];
                 sortsColln = new ListSortDescriptionCollection(sortsArray);
             }
 
@@ -518,7 +517,7 @@ public partial class BindingSource : Component,
     private static IList CreateBindingList(Type type)
     {
         Type genericType = typeof(BindingList<>);
-        Type bindingType = genericType.MakeGenericType(new Type[] { type });
+        Type bindingType = genericType.MakeGenericType([type]);
 
         return (IList)Activator.CreateInstance(bindingType)!;
     }
@@ -648,11 +647,8 @@ public partial class BindingSource : Component,
     /// </summary>
     public int Find(string propertyName, object key)
     {
-        PropertyDescriptor? pd = _itemShape?.Find(propertyName, true);
-        if (pd is null)
-        {
-            throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
-        }
+        PropertyDescriptor? pd = (_itemShape?.Find(propertyName, true))
+            ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
 
         return ((IBindingList)this).Find(pd, key);
     }
@@ -779,8 +775,10 @@ public partial class BindingSource : Component,
     public void MovePrevious() => Position--;
 
     /// <remarks>
-    ///  This method is used to fire ListChanged events when the inner list
-    ///  is not an IBindingList (and therefore cannot fire them itself).
+    ///  <para>
+    ///   This method is used to fire ListChanged events when the inner list is not an <see cref="IBindingList"/>
+    ///   (and therefore cannot fire them itself).
+    ///  </para>
     /// </remarks>
     private void OnSimpleListChanged(ListChangedType listChangedType, int newIndex)
     {
@@ -985,28 +983,25 @@ public partial class BindingSource : Component,
             bool ascending = true;
             if (current.EndsWith(" ASC", StringComparison.InvariantCulture))
             {
-                current = current.Substring(0, length - 4).Trim();
+                current = current[..(length - 4)].Trim();
             }
             else if (current.EndsWith(" DESC", StringComparison.InvariantCulture))
             {
                 ascending = false;
-                current = current.Substring(0, length - 5).Trim();
+                current = current[..(length - 5)].Trim();
             }
 
             // Handle brackets
-            if (current.StartsWith("["))
+            if (current.StartsWith('['))
             {
-                current = current.EndsWith("]")
-                    ? current.Substring(1, current.Length - 2)
+                current = current.EndsWith(']')
+                    ? current[1..^1]
                     : throw new ArgumentException(SR.BindingSourceBadSortString);
             }
 
             // Find the property
-            PropertyDescriptor? prop = props.Find(current, true);
-            if (prop is null)
-            {
-                throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
-            }
+            PropertyDescriptor? prop = props.Find(current, true)
+                ?? throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
 
             // Add the sort description
             sorts[i] = new ListSortDescription(prop, ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
@@ -1159,7 +1154,7 @@ public partial class BindingSource : Component,
         UnhookItemChangedEventsForOldCurrent();
 
         // Bind to the new list
-        if (!(ListBindingHelper.GetList(list) is IList listInternal))
+        if (ListBindingHelper.GetList(list) is not IList listInternal)
         {
             listInternal = list;
         }
@@ -1190,7 +1185,7 @@ public partial class BindingSource : Component,
             _itemConstructor = _itemType.GetConstructor(
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance,
                 binder: null,
-                Array.Empty<Type>(),
+                [],
                 modifiers: null);
         }
 

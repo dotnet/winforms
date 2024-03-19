@@ -230,17 +230,13 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     /// </summary>
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
         if (!_handle.IsNull && _freeHandle)
         {
             PInvoke.DestroyCursor(_handle);
             _handle = HCURSOR.Null;
         }
+
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -364,10 +360,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         DrawImageCore(g, Rectangle.Empty, targetRect, stretch: true);
     }
 
-    ~Cursor()
-    {
-        Dispose(disposing: false);
-    }
+    ~Cursor() => Dispose();
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {

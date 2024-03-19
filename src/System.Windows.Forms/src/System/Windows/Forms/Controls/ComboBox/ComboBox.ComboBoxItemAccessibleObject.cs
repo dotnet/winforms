@@ -128,16 +128,14 @@ public partial class ComboBox
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            switch (patternId)
+            return patternId switch
             {
-                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
-                case UIA_PATTERN_ID.UIA_InvokePatternId:
-                case UIA_PATTERN_ID.UIA_ScrollItemPatternId:
-                case UIA_PATTERN_ID.UIA_SelectionItemPatternId:
-                    return true;
-                default:
-                    return base.IsPatternSupported(patternId);
-            }
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId
+                    or UIA_PATTERN_ID.UIA_InvokePatternId
+                    or UIA_PATTERN_ID.UIA_ScrollItemPatternId
+                    or UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
+                _ => base.IsPatternSupported(patternId),
+            };
         }
 
         public override string? Name => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);

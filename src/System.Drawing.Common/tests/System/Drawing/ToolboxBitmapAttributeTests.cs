@@ -13,10 +13,11 @@ namespace System.Drawing.Tests
 
     public class ToolboxBitmapAttributeTests
     {
-        private static Size DefaultSize = new(16, 16);
+        private static Size s_defaultSize = new(16, 16);
+
         private void AssertDefaultSize(Image image)
         {
-            Assert.Equal(DefaultSize, image.Size);
+            Assert.Equal(s_defaultSize, image.Size);
         }
 
         public static IEnumerable<object[]> Ctor_FileName_TestData()

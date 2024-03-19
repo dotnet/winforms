@@ -188,8 +188,10 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnStringEmpty_IfOwningRowNotExist()
     {
-        SubDataGridViewCell cell = new();
-        cell.OwningColumn = new DataGridViewTextBoxColumn();
+        SubDataGridViewCell cell = new()
+        {
+            OwningColumn = new DataGridViewTextBoxColumn()
+        };
         AccessibleObject accessibleObject = new DataGridViewCellAccessibleObject(cell);
 
         Assert.Equal(string.Empty, accessibleObject.Name);
@@ -198,8 +200,10 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnStringEmpty_IfOwningColumnNotExist()
     {
-        SubDataGridViewCell cell = new();
-        cell.OwningRow = new DataGridViewRow();
+        SubDataGridViewCell cell = new()
+        {
+            OwningRow = new DataGridViewRow()
+        };
         AccessibleObject accessibleObject = new DataGridViewCellAccessibleObject(cell);
         Assert.Equal(string.Empty, accessibleObject.Name);
     }
@@ -207,9 +211,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected_IfDataGridViewNotExist()
     {
-        SubDataGridViewCell cell = new();
-        cell.OwningRow = new DataGridViewRow();
-        cell.OwningColumn = new DataGridViewTextBoxColumn() { HeaderText = "Test", SortMode = DataGridViewColumnSortMode.NotSortable };
+        SubDataGridViewCell cell = new()
+        {
+            OwningRow = new DataGridViewRow(),
+            OwningColumn = new DataGridViewTextBoxColumn() { HeaderText = "Test", SortMode = DataGridViewColumnSortMode.NotSortable }
+        };
         AccessibleObject accessibleObject = new DataGridViewCellAccessibleObject(cell);
         string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, cell.OwningColumn.HeaderText, -1);
 
@@ -720,7 +726,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -735,8 +741,10 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Row_ReturnExpected_IfDataGridViewNotExist()
     {
-        SubDataGridViewCell cell = new();
-        cell.OwningRow = new DataGridViewRow();
+        SubDataGridViewCell cell = new()
+        {
+            OwningRow = new DataGridViewRow()
+        };
 
         Assert.Equal(-1, cell.AccessibilityObject.Row);
     }
@@ -831,8 +839,10 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Column_ReturnExpected_IfDataGridViewNotExist()
     {
-        SubDataGridViewCell cell = new();
-        cell.OwningColumn = new DataGridViewTextBoxColumn();
+        SubDataGridViewCell cell = new()
+        {
+            OwningColumn = new DataGridViewTextBoxColumn()
+        };
 
         Assert.Equal(-1, cell.AccessibilityObject.Column);
     }

@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(CollectionChanged))]
 public class BindingsCollection : BaseCollection
 {
-    private List<Binding> _list = new();
+    private readonly List<Binding> _list = [];
     private CollectionChangeEventHandler? _onCollectionChanging;
     private CollectionChangeEventHandler? _onCollectionChanged;
 

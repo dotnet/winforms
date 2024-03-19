@@ -52,7 +52,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     // Properties used using drawing a moving splitter
     private int _lastDrawSplit = 1;
     private int _initialSplitterDistance;
-    private Rectangle _initialSplitterRectangle;
     private Point _anchor = Point.Empty;
     private bool _splitBegin;
     private bool _splitMove;
@@ -220,6 +219,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         {
             return BindingContextInternal;
         }
+
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set
         {
             BindingContextInternal = value;
@@ -1146,7 +1147,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 IContainerControl? c = ParentInternal?.GetContainerControl();
                 if (c is not null)
                 {
-                    if (!(c is ContainerControl cc))
+                    if (c is not ContainerControl cc)
                     {
                         c.ActiveControl = this;
                     }
@@ -1765,14 +1766,14 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 scale = factor.Height;
             }
 
-            SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
-            _splitterDistance = (int)Math.Round((float)_splitterDistance * scale);
+            SplitterWidth = (int)Math.Round(SplitterWidth * scale);
+            _splitterDistance = (int)Math.Round(_splitterDistance * scale);
             _splitDistance = _splitterDistance;
 
             // If FixedPanel property is set.
             if (_panelSize != 0)
             {
-                _panelSize = (int)Math.Round((float)_panelSize * scale);
+                _panelSize = (int)Math.Round(_panelSize * scale);
             }
         }
         finally
@@ -2023,31 +2024,30 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void SetInnerMostBorder(SplitContainer sc)
     {
-        foreach (Control ctl in sc.Controls)
+        foreach (Control control in sc.Controls)
         {
             bool foundChildSplitContainer = false;
-            if (ctl is SplitterPanel)
+            if (control is SplitterPanel panel)
             {
-                foreach (Control c in ctl.Controls)
+                foreach (Control child in control.Controls)
                 {
-                    if (c is SplitContainer c1 && c1.Dock == DockStyle.Fill)
+                    if (child is SplitContainer splitContainer && splitContainer.Dock == DockStyle.Fill)
                     {
-                        // We need to Overlay borders
-                        // if the Children have matching BorderStyles ...
-                        if (c1.BorderStyle != BorderStyle)
+                        // We need to overlay borders if the children have matching BorderStyles.
+                        if (splitContainer.BorderStyle != BorderStyle)
                         {
                             break;
                         }
 
-                       ((SplitterPanel)ctl).BorderStyle = BorderStyle.None;
-                        SetInnerMostBorder(c1);
+                        panel.BorderStyle = BorderStyle.None;
+                        SetInnerMostBorder(splitContainer);
                         foundChildSplitContainer = true;
                     }
                 }
 
                 if (!foundChildSplitContainer)
                 {
-                    ((SplitterPanel)ctl).BorderStyle = BorderStyle;
+                    panel.BorderStyle = BorderStyle;
                 }
             }
         }
@@ -2092,7 +2092,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         _anchor = new Point(x, y);
         _splitterDistance = GetSplitterDistance(x, y);
         _initialSplitterDistance = _splitterDistance;
-        _initialSplitterRectangle = SplitterRectangle;
 
         _splitContainerMessageFilter ??= new SplitContainerMessageFilter(this);
 
@@ -2194,7 +2193,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 SetSplitterRect(true /*Vertical*/);
                 if (!_resizeCalled)
                 {
-                    _ratioWidth = ((double)(Width) / (double)(Panel1.Width) > 0) ? (double)(Width) / (double)(Panel1.Width) : _ratioWidth;
+                    _ratioWidth = (Width / (double)(Panel1.Width) > 0) ? Width / (double)(Panel1.Width) : _ratioWidth;
                 }
             }
             else
@@ -2213,7 +2212,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 // Update Ratio when the splitContainer is in CollapsedMode.
                 if (!_resizeCalled)
                 {
-                    _ratioWidth = ((double)(Width) / (double)(_splitterDistance) > 0) ? (double)(Width) / (double)(_splitterDistance) : _ratioWidth;
+                    _ratioWidth = (Width / (double)(_splitterDistance) > 0) ? Width / (double)(_splitterDistance) : _ratioWidth;
                 }
             }
         }
@@ -2235,7 +2234,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
                 if (!_resizeCalled)
                 {
-                    _ratioHeight = ((double)(Height) / (double)(Panel1.Height) > 0) ? (double)(Height) / (double)(Panel1.Height) : _ratioHeight;
+                    _ratioHeight = (Height / (double)(Panel1.Height) > 0) ? Height / (double)(Panel1.Height) : _ratioHeight;
                 }
             }
             else
@@ -2254,7 +2253,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 // Update Ratio when the splitContainer is in CollapsedMode.
                 if (!_resizeCalled)
                 {
-                    _ratioHeight = ((double)(Height) / (double)(_splitterDistance) > 0) ? (double)(Height) / (double)(_splitterDistance) : _ratioHeight;
+                    _ratioHeight = (Height / (double)(_splitterDistance) > 0) ? Height / (double)(_splitterDistance) : _ratioHeight;
                 }
             }
         }
@@ -2296,23 +2295,11 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
     }
 
-    /// <summary>
-    ///  Processes a dialog key. Overrides Control.processDialogKey(). This
-    ///  method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
-    ///  keys in dialogs.
-    ///  The method performs no processing on keys that include the ALT or
-    ///  CONTROL modifiers. For the TAB key, the method selects the next control
-    ///  on the form. For the arrow keys,
-    ///  !!!
-    /// </summary>
     protected override bool ProcessDialogKey(Keys keyData)
     {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessDialogKey [{keyData}]");
-#endif
         if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
         {
-            Keys keyCode = (Keys)keyData & Keys.KeyCode;
+            Keys keyCode = keyData & Keys.KeyCode;
             switch (keyCode)
             {
                 case Keys.Tab:
@@ -2328,8 +2315,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 case Keys.Down:
                     if (!_splitterFocused)
                     {
-                        if (ProcessArrowKey(keyCode == Keys.Right ||
-                                        keyCode == Keys.Down))
+                        if (ProcessArrowKey(keyCode is Keys.Right or
+                                        Keys.Down))
                         {
                             return true;
                         }

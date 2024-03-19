@@ -1035,7 +1035,7 @@ public class FormTests
     public static void ShowIcon_renders_icon_correctly(bool showIcon, bool expectedIconNull)
     {
         using Form form = new();
-        Assert.True(form.Handle != 0);
+        Assert.NotEqual(0, form.Handle);
 
         form.ShowIcon = showIcon;
 
@@ -1251,7 +1251,7 @@ public class FormTests
         Assert.True(hSmallIcon.IsNull);
         hLargeIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.True(hLargeIcon.IsNull);
-        Assert.True(!menuStrip.Items[0].Visible);
+        Assert.False(menuStrip.Items[0].Visible);
 
         control.ShowIcon = true;
         hSmallIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
@@ -1999,8 +1999,8 @@ public class FormTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         control.Visible = true;
-        Assert.Equal(dialogResult == DialogResult.OK || dialogResult == DialogResult.None, control.Visible);
-        Assert.Equal(dialogResult == DialogResult.OK || dialogResult == DialogResult.None, control.IsHandleCreated);
+        Assert.Equal(dialogResult is DialogResult.OK or DialogResult.None, control.Visible);
+        Assert.Equal(dialogResult is DialogResult.OK or DialogResult.None, control.IsHandleCreated);
 
         // Set same.
         control.Visible = true;
@@ -2677,15 +2677,15 @@ public class FormTests
 
     public class SubForm : Form
     {
-        public new const int ScrollStateAutoScrolling = Form.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = Form.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = Form.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = Form.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = Form.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 

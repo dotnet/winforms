@@ -266,7 +266,7 @@ internal partial class MultiSelectRootGridEntry
             PropertyDescriptor[] baseEntries,
             List<PropertyDescriptor[]> sortedMergedEntries)
         {
-            List<PropertyDescriptor[]> mergedEntries = new();
+            List<PropertyDescriptor[]> mergedEntries = [];
 
             foreach (PropertyDescriptor basePropertyDescriptor in baseEntries)
             {

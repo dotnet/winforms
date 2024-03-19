@@ -26,7 +26,7 @@ internal class HtmlToClrEventProxy : UnknownDispatch, IManagedWrapper<IDispatch,
     private readonly EventHandler _eventHandler;
     private readonly string _eventName;
 
-    public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler)
+    public HtmlToClrEventProxy(string eventName, EventHandler eventHandler)
     {
         _eventHandler = eventHandler;
         _eventName = eventName;

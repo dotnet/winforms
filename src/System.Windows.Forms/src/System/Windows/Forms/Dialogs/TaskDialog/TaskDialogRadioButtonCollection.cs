@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 {
     // HashSet to detect duplicate items.
-    private readonly HashSet<TaskDialogRadioButton> _itemSet = new();
+    private readonly HashSet<TaskDialogRadioButton> _itemSet = [];
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.

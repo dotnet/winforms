@@ -28,9 +28,11 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
     public void Write()
     {
         TraceEventCache cache = new();
-        FileLogTraceListener listener = new();
-        listener.Location = LogFileLocation.Custom;
-        listener.CustomLocation = GetTestFilePath();
+        FileLogTraceListener listener = new()
+        {
+            Location = LogFileLocation.Custom,
+            CustomLocation = GetTestFilePath()
+        };
 
         listener.Write("Write");
         listener.WriteLine("WriteLine");

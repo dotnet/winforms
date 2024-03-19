@@ -582,8 +582,8 @@ public class SiteNestedContainerTests
         using RootDesignerComponent component = new();
         container.Add(component, component.GetType().FullName);
         Assert.Equal(component.GetType().FullName, host.RootComponentClassName);
-        Assert.Throws<Exception>(() => container.Add(component));
-        Assert.Throws<Exception>(() => container.Add(new RootDesignerComponent(), host.RootComponentClassName));
+        Assert.Throws<InvalidOperationException>(() => container.Add(component));
+        Assert.Throws<InvalidOperationException>(() => container.Add(new RootDesignerComponent(), host.RootComponentClassName));
     }
 
     [WinFormsFact]
@@ -652,7 +652,7 @@ public class SiteNestedContainerTests
         DisposingDesignerComponent component = new();
         container.Add(component);
         int callCount = 0;
-        DisposingDesigner.Disposed += (sender, e) =>
+        DisposingDesigner.s_disposed += (sender, e) =>
         {
             callCount++;
         };
@@ -1118,11 +1118,11 @@ public class SiteNestedContainerTests
 
     private class DisposingDesigner : Designer
     {
-        public static EventHandler Disposed;
+        public static EventHandler s_disposed;
 
         protected override void Dispose(bool disposing)
         {
-            Disposed?.Invoke(this, EventArgs.Empty);
+            s_disposed?.Invoke(this, EventArgs.Empty);
         }
     }
 

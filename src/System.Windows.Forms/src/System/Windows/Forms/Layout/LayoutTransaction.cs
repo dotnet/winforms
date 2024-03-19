@@ -59,16 +59,10 @@ internal sealed class LayoutTransaction : IDisposable
 
     public void Dispose()
     {
-#pragma warning disable IDE0031
-        if (_controlToLayout is not null)
-        {
-            _controlToLayout.ResumeLayout(_resumeLayout);
-
+        _controlToLayout?.ResumeLayout(_resumeLayout);
 #if DEBUG
-            Debug.Assert(_controlToLayout.LayoutSuspendCount == _layoutSuspendCount, "Suspend/Resume layout mismatch!");
+        Debug.Assert(_controlToLayout is null || _controlToLayout.LayoutSuspendCount == _layoutSuspendCount, "Suspend/Resume layout mismatch!");
 #endif
-        }
-#pragma warning restore IDE0031
     }
 
     // This overload should be used when a property has changed that affects preferred size,

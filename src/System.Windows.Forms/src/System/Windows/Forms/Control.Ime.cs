@@ -21,12 +21,12 @@ public partial class Control
     /// <summary>
     ///  The ImeMode value for controls with ImeMode = ImeMode.NoControl.  See PropagatingImeMode property.
     /// </summary>
-    private static ImeMode propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
+    private static ImeMode s_propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
 
     /// <summary>
     ///  This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
     /// </summary>
-    private static bool ignoreWmImeNotify;
+    private static bool s_ignoreWmImeNotify;
 
     /// <summary>
     ///  The ImeMode in the property store.
@@ -170,7 +170,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_IgnoreWmImeNotify()");
             Debug.Indent();
 
-            bool val = Control.ignoreWmImeNotify;
+            bool val = s_ignoreWmImeNotify;
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value: {val}");
             Debug.Unindent();
@@ -180,7 +180,7 @@ public partial class Control
         set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside set_IgnoreWmImeNotify(): {value}");
-            Control.ignoreWmImeNotify = value;
+            s_ignoreWmImeNotify = value;
         }
     }
 
@@ -377,7 +377,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_PropagatingImeMode()");
             Debug.Indent();
 
-            if (Control.propagatingImeMode == ImeMode.Inherit)
+            if (s_propagatingImeMode == ImeMode.Inherit)
             {
                 // Initialize the propagating IME mode to the value the IME associated to the focused window currently has,
                 // this enables propagating the IME mode from/to unmanaged applications hosting winforms controls.
@@ -407,17 +407,17 @@ public partial class Control
                 PropagatingImeMode = imeMode;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {propagatingImeMode}");
+            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {s_propagatingImeMode}");
             Debug.Unindent();
 
-            return Control.propagatingImeMode;
+            return s_propagatingImeMode;
         }
         private set
         {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside set_PropagatingImeMode()");
             Debug.Indent();
 
-            if (Control.propagatingImeMode != value)
+            if (s_propagatingImeMode != value)
             {
                 switch (value)
                 {
@@ -432,8 +432,8 @@ public partial class Control
                     default:
                         Debug.WriteLineIf(
                             CompModSwitches.ImeMode.Level >= TraceLevel.Warning,
-                            $"Setting PropagatingImeMode: Current value = {propagatingImeMode}, New value = {value}");
-                        Control.propagatingImeMode = value;
+                            $"Setting PropagatingImeMode: Current value = {s_propagatingImeMode}, New value = {value}");
+                        s_propagatingImeMode = value;
                         break;
                 }
             }
@@ -774,7 +774,7 @@ public partial class Control
             // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
             // lead to another WM_IME_NOTIFY loop.
 
-            if (wparam == (int)PInvoke.IMN_SETCONVERSIONMODE || wparam == (int)PInvoke.IMN_SETOPENSTATUS)
+            if (wparam is ((int)PInvoke.IMN_SETCONVERSIONMODE) or ((int)PInvoke.IMN_SETOPENSTATUS))
             {
                 Debug.WriteLineIf(
                     CompModSwitches.ImeMode.Level >= TraceLevel.Info,
@@ -847,7 +847,7 @@ public partial class Control
             // See the PropagatingImeMode property
 
             // Note: We need to check the static field here directly to avoid initialization of the property.
-            if (Control.propagatingImeMode != ImeMode.Inherit)
+            if (s_propagatingImeMode != ImeMode.Inherit)
             {
                 // Setting the ime context of the top window will generate a WM_IME_NOTIFY on the focused control which will
                 // update its ImeMode, we need to prevent this temporarily.
@@ -881,7 +881,7 @@ public static class ImeContext
     /// <summary>
     ///  The IME context handle obtained when first associating an IME.
     /// </summary>
-    private static HIMC originalImeContext;
+    private static HIMC s_originalImeContext;
 
     /// <summary>
     ///  Disable the IME
@@ -895,9 +895,9 @@ public static class ImeContext
         {
             // Close the IME if necessary
             //
-            if (ImeContext.IsOpen(handle))
+            if (IsOpen(handle))
             {
-                ImeContext.SetOpenStatus(false, handle);
+                SetOpenStatus(false, handle);
             }
 
             // Disable the IME by disassociating the context from the window.
@@ -906,11 +906,11 @@ public static class ImeContext
             HIMC oldContext = PInvoke.ImmAssociateContext((HWND)handle, (HIMC)IntPtr.Zero);
             if (oldContext != IntPtr.Zero)
             {
-                originalImeContext = oldContext;
+                s_originalImeContext = oldContext;
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -931,7 +931,7 @@ public static class ImeContext
             // Enable IME by associating the IME context to the window.
             if (inputContext == IntPtr.Zero)
             {
-                if (originalImeContext == IntPtr.Zero)
+                if (s_originalImeContext == IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmCreateContext()");
                     inputContext = PInvoke.ImmCreateContext();
@@ -944,7 +944,7 @@ public static class ImeContext
                 else
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext()");
-                    PInvoke.ImmAssociateContext((HWND)handle, originalImeContext);
+                    PInvoke.ImmAssociateContext((HWND)handle, s_originalImeContext);
                 }
             }
             else
@@ -954,13 +954,13 @@ public static class ImeContext
             }
 
             // Make sure the IME is opened.
-            if (!ImeContext.IsOpen(handle))
+            if (!IsOpen(handle))
             {
-                ImeContext.SetOpenStatus(true, handle);
+                SetOpenStatus(true, handle);
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -996,7 +996,7 @@ public static class ImeContext
             goto cleanup;
         }
 
-        if (!ImeContext.IsOpen(handle))
+        if (!IsOpen(handle))
         {
             // There's an IME associated with the window but is closed - the input is taken from the keyboard as is (English).
             retval = countryTable[ImeModeConversion.ImeClosed];
@@ -1045,7 +1045,7 @@ public static class ImeContext
             PInvoke.ImmReleaseContext((HWND)handle, inputContext);
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
 
         Debug.Unindent();
         return retval;
@@ -1193,12 +1193,12 @@ public static class ImeContext
 
         if (imeMode == ImeMode.Disable)
         {
-            ImeContext.Disable(handle);
+            Disable(handle);
         }
         else
         {
             // This will make sure the IME is opened.
-            ImeContext.Enable(handle);
+            Enable(handle);
         }
 
         switch (imeMode)
@@ -1234,7 +1234,7 @@ public static class ImeContext
                     goto default;
                 }
 
-                ImeContext.SetOpenStatus(false, handle);
+                SetOpenStatus(false, handle);
                 break;
 
             default:
@@ -1267,7 +1267,7 @@ public static class ImeContext
         }
 
     cleanup:
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
 
@@ -1300,12 +1300,11 @@ public static class ImeContext
             }
         }
 
-        ImeContext.TraceImeStatus(handle);
+        TraceImeStatus(handle);
         Debug.Unindent();
     }
-}// end ImeContext class
+}
 
-/////////////////////////////////////////////////////////  ImeModeConversion structure /////////////////////////////////////////////////////////
 /// <summary>
 ///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
 ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
@@ -1337,8 +1336,8 @@ public readonly struct ImeModeConversion
     ///              meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
     ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
     /// </summary>
-    private static readonly ImeMode[] japaneseTable =
-    {
+    private static readonly ImeMode[] s_japaneseTable =
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Off,
@@ -1349,10 +1348,10 @@ public readonly struct ImeModeConversion
         ImeMode.KatakanaHalf,
         ImeMode.AlphaFull,
         ImeMode.Alpha
-    };
+    ];
 
-    private static readonly ImeMode[] koreanTable =
-    {
+    private static readonly ImeMode[] s_koreanTable =
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Alpha,
@@ -1363,10 +1362,10 @@ public readonly struct ImeModeConversion
         ImeMode.Hangul,
         ImeMode.AlphaFull,
         ImeMode.Alpha
-    };
+    ];
 
-    private static readonly ImeMode[] chineseTable =
-    {
+    private static readonly ImeMode[] s_chineseTable =
+    [
         ImeMode.Inherit,
         ImeMode.Disable,
         ImeMode.Off,
@@ -1377,41 +1376,17 @@ public readonly struct ImeModeConversion
         ImeMode.OnHalf,
         ImeMode.Off,
         ImeMode.Off
-    };
+    ];
 
-    private static readonly ImeMode[] unsupportedTable = Array.Empty<ImeMode>();
+    private static readonly ImeMode[] s_unsupportedTable = [];
 
-    internal static ImeMode[] ChineseTable
-    {
-        get
-        {
-            return chineseTable;
-        }
-    }
+    internal static ImeMode[] ChineseTable => s_chineseTable;
 
-    internal static ImeMode[] JapaneseTable
-    {
-        get
-        {
-            return japaneseTable;
-        }
-    }
+    internal static ImeMode[] JapaneseTable => s_japaneseTable;
 
-    internal static ImeMode[] KoreanTable
-    {
-        get
-        {
-            return koreanTable;
-        }
-    }
+    internal static ImeMode[] KoreanTable => s_koreanTable;
 
-    internal static ImeMode[] UnsupportedTable
-    {
-        get
-        {
-            return unsupportedTable;
-        }
-    }
+    internal static ImeMode[] UnsupportedTable => s_unsupportedTable;
 
     /// <summary>
     ///  Gets the ImeMode table of the current input language.
@@ -1427,27 +1402,17 @@ public readonly struct ImeModeConversion
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_InputLanguageTable(), Input Language = {InputLanguage.CurrentInputLanguage.Culture.DisplayName}, Thread = {Environment.CurrentManagedThreadId}");
             InputLanguage inputLanguage = InputLanguage.CurrentInputLanguage;
 
-            int lcid = (int)((long)inputLanguage.Handle & (long)0xFFFF);
+            int lcid = (int)(inputLanguage.Handle & (long)0xFFFF);
 
-            switch (lcid)
+            return lcid switch
             {
-                case 0x0404:
-                case 0x0804:
-                case 0x0c04:
-                case 0x1004:
-                case 0x1404:
-                    return chineseTable;
-
-                case 0x0412:    // Korean
-                case 0x0812:    // Korean (Johab)
-                    return koreanTable;
-
-                case 0x0411:    // Japanese
-                    return japaneseTable;
-
-                default:
-                    return unsupportedTable;
-            }
+                0x0404 or 0x0804 or 0x0c04 or 0x1004 or 0x1404 => s_chineseTable,
+                // Korean (Johab)
+                0x0412 or 0x0812 => s_koreanTable,
+                // Japanese
+                0x0411 => s_japaneseTable,
+                _ => s_unsupportedTable,
+            };
         }
     }
 
@@ -1540,11 +1505,5 @@ public readonly struct ImeModeConversion
         };
     }
 
-    public static bool IsCurrentConversionTableSupported
-    {
-        get
-        {
-            return InputLanguageTable != UnsupportedTable;
-        }
-    }
+    public static bool IsCurrentConversionTableSupported => InputLanguageTable != UnsupportedTable;
 }

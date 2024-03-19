@@ -49,56 +49,56 @@ public class TreeNodeConverter : TypeConverter
             {
                 if (node.Nodes.Count == 0)
                 {
-                    info = typeof(TreeNode).GetConstructor(new Type[] { typeof(string) });
-                    args = new object[] { node.Text };
+                    info = typeof(TreeNode).GetConstructor([typeof(string)]);
+                    args = [node.Text];
                 }
                 else
                 {
-                    info = typeof(TreeNode).GetConstructor(new Type[] { typeof(string), typeof(TreeNode[]) });
+                    info = typeof(TreeNode).GetConstructor([typeof(string), typeof(TreeNode[])]);
 
                     TreeNode[] nodesArray = new TreeNode[node.Nodes.Count];
                     node.Nodes.CopyTo(nodesArray, 0);
 
-                    args = new object[] { node.Text, nodesArray };
+                    args = [node.Text, nodesArray];
                 }
             }
             else
             {
                 if (node.Nodes.Count == 0)
                 {
-                    info = typeof(TreeNode).GetConstructor(new Type[]
-                    {
+                    info = typeof(TreeNode).GetConstructor(
+                    [
                         typeof(string),
                         typeof(int),
                         typeof(int)
-                    });
-                    args = new object[]
-                    {
+                    ]);
+                    args =
+                    [
                         node.Text,
                         node.ImageIndex,
                         node.SelectedImageIndex
-                    };
+                    ];
                 }
                 else
                 {
-                    info = typeof(TreeNode).GetConstructor(new Type[]
-                    {
+                    info = typeof(TreeNode).GetConstructor(
+                    [
                         typeof(string),
                         typeof(int),
                         typeof(int),
                         typeof(TreeNode[])
-                    });
+                    ]);
 
                     TreeNode[] nodesArray = new TreeNode[node.Nodes.Count];
                     node.Nodes.CopyTo(nodesArray, 0);
 
-                    args = new object[]
-                    {
+                    args =
+                    [
                         node.Text,
                         node.ImageIndex,
                         node.SelectedImageIndex,
                         nodesArray
-                    };
+                    ];
                 }
             }
 

@@ -46,12 +46,11 @@ public sealed partial class BehaviorService : IDisposable
     private bool _useSnapLines;                                     // indicates if this designer session is using snaplines or snapping to a grid
     private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
     private readonly HashSet<Glyph> _dragEnterReplies;              // we keep track of whether glyph has already responded to a DragEnter this D&D.
-    private static readonly TraceSwitch s_dragDropSwitch
-        = new("BSDRAGDROP", "Behavior service drag & drop messages");
 
     // test hooks for SnapLines
-    private static MessageId WM_GETALLSNAPLINES;
-    private static MessageId WM_GETRECENTSNAPLINES;
+    private static MessageId WM_GETALLSNAPLINES { get; } = PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
+    private static MessageId WM_GETRECENTSNAPLINES { get; } = PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
     internal BehaviorService(IServiceProvider serviceProvider, DesignerFrame windowFrame)
@@ -66,11 +65,11 @@ public sealed partial class BehaviorService : IDisposable
             AdornerWindowIndex = os.PushOverlay(_adornerWindow);
         }
 
-        _dragEnterReplies = new();
+        _dragEnterReplies = [];
 
         // Start with an empty adorner collection & no behavior on the stack
         Adorners = new BehaviorServiceAdornerCollection(this);
-        _behaviorStack = new();
+        _behaviorStack = [];
 
         _hitTestedGlyph = null;
         _validDragArgs = null;
@@ -91,10 +90,6 @@ public sealed partial class BehaviorService : IDisposable
         // Default layoutmode is SnapToGrid.
         _useSnapLines = false;
         _queriedSnapLines = false;
-
-        // Test hooks
-        WM_GETALLSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
-        WM_GETRECENTSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -631,8 +626,6 @@ public sealed partial class BehaviorService : IDisposable
 
     private void OnDragEnter(Glyph? g, DragEventArgs e)
     {
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragEnter");
-
         // If the AdornerWindow receives a drag message, this method will be called without
         // a glyph - assign the last hit tested one
         g ??= _hitTestedGlyph;
@@ -640,24 +633,19 @@ public sealed partial class BehaviorService : IDisposable
         Behavior? behavior = GetAppropriateBehavior(g);
         if (behavior is null)
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, returning");
             return;
         }
 
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
         behavior.OnDragEnter(g, e);
 
         if (g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
         {
             _dragEnterReplies.Add(g);
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tCalled DragEnter on this glyph. Caching");
         }
     }
 
     private void OnDragLeave(Glyph? g, EventArgs e)
     {
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragLeave");
-
         // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
         // So let's make sure it is really cleared when we start the drag.
         _dragEnterReplies.Clear();
@@ -669,11 +657,9 @@ public sealed partial class BehaviorService : IDisposable
         Behavior? behavior = GetAppropriateBehavior(g);
         if (behavior is null)
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\t No behavior returning ");
             return;
         }
 
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tBehavior found calling OnDragLeave");
         behavior.OnDragLeave(g, e);
     }
 
@@ -730,17 +716,14 @@ public sealed partial class BehaviorService : IDisposable
 
     private void OnDragDrop(DragEventArgs e)
     {
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragDrop");
         _validDragArgs = null;
 
         Behavior? behavior = GetAppropriateBehavior(_hitTestedGlyph);
         if (behavior is null)
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior. returning");
             return;
         }
 
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
         behavior.OnDragDrop(_hitTestedGlyph, e);
     }
 
@@ -786,12 +769,12 @@ public sealed partial class BehaviorService : IDisposable
         }
 
         // Copy the name into the given IntPtr
-        char[] nullChar = new char[] { (char)0 };
+        char[] nullChar = [(char)0];
         byte[] nullBytes;
         byte[] bytes;
 
-        bytes = Text.Encoding.Unicode.GetBytes(text);
-        nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
+        bytes = Encoding.Unicode.GetBytes(text);
+        nullBytes = Encoding.Unicode.GetBytes(nullChar);
 
         Marshal.Copy(bytes, 0, m.LParamInternal, bytes.Length);
         Marshal.Copy(nullBytes, 0, m.LParamInternal + (nint)bytes.Length, nullBytes.Length);
@@ -830,12 +813,10 @@ public sealed partial class BehaviorService : IDisposable
     {
         // cache off our validDragArgs so we can re-fabricate enter/leave drag events
         _validDragArgs = e;
-        Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragOver");
         Behavior? behavior = GetAppropriateBehavior(_hitTestedGlyph);
 
         if (behavior is null)
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, exiting with DragDropEffects.None");
             e.Effect = DragDropEffects.None;
             return;
         }
@@ -843,12 +824,10 @@ public sealed partial class BehaviorService : IDisposable
         if (_hitTestedGlyph is null ||
            (_hitTestedGlyph is not null && !_dragEnterReplies.Contains(_hitTestedGlyph)))
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
             behavior.OnDragOver(_hitTestedGlyph, e);
         }
         else
         {
-            Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFell through");
             e.Effect = DragDropEffects.None;
         }
     }

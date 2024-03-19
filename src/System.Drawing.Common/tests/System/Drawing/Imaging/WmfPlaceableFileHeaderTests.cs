@@ -26,16 +26,18 @@ public class WmfPlaceableFileHeaderTests
     [InlineData(short.MinValue)]
     public void ShortProperties_SetValues_ReturnsExpected(short value)
     {
-        WmfPlaceableFileHeader fileHeader = new();
-        fileHeader.BboxBottom = value;
-        fileHeader.BboxLeft = value;
-        fileHeader.BboxRight = value;
-        fileHeader.BboxTop = value;
-        fileHeader.Checksum = value;
-        fileHeader.Hmf = value;
-        fileHeader.Inch = value;
-        fileHeader.Key = value;
-        fileHeader.Reserved = value;
+        WmfPlaceableFileHeader fileHeader = new()
+        {
+            BboxBottom = value,
+            BboxLeft = value,
+            BboxRight = value,
+            BboxTop = value,
+            Checksum = value,
+            Hmf = value,
+            Inch = value,
+            Key = value,
+            Reserved = value
+        };
         Assert.Equal(value, fileHeader.BboxBottom);
         Assert.Equal(value, fileHeader.BboxLeft);
         Assert.Equal(value, fileHeader.BboxRight);
@@ -53,9 +55,11 @@ public class WmfPlaceableFileHeaderTests
     [InlineData(int.MinValue)]
     public void IntProperties_SetValues_ReturnsExpected(int value)
     {
-        WmfPlaceableFileHeader fileHeader = new();
-        fileHeader.Key = value;
-        fileHeader.Reserved = value;
+        WmfPlaceableFileHeader fileHeader = new()
+        {
+            Key = value,
+            Reserved = value
+        };
         Assert.Equal(value, fileHeader.Key);
         Assert.Equal(value, fileHeader.Reserved);
     }

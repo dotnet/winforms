@@ -66,8 +66,6 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
 
             var mergedProperties = PropertyMerger.GetMergedProperties(targets, this, _propertySort, OwnerTab);
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null, "PropertyGridView: MergedProps returned null!");
-
             if (mergedProperties is not null)
             {
                 ChildCollection.AddRange(mergedProperties);

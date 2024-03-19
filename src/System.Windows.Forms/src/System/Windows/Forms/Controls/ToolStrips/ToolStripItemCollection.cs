@@ -236,9 +236,9 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     {
         key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-        List<ToolStripItem> foundItems = new();
+        List<ToolStripItem> foundItems = [];
         FindInternal(key, searchAllChildren, this, foundItems);
-        return foundItems.ToArray();
+        return [.. foundItems];
     }
 
     /// <summary>

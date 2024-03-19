@@ -248,7 +248,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             if (value.Positions is null)
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
             if (value.Colors.Length != value.Positions.Length)
-                throw new ArgumentException(nameof(value));
+                throw new ArgumentException(message: null, nameof(value));
 
             float[] positions = value.Positions;
             using ArgbBuffer argbValues = new(value.Colors);

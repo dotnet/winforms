@@ -165,7 +165,7 @@ public partial class MonthCalendar : Control
     [SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))]
     public DateTime[] AnnuallyBoldedDates
     {
-        get => _annualBoldDates.ToArray();
+        get => [.. _annualBoldDates];
         set
         {
             _annualBoldDates.Clear();
@@ -242,7 +242,7 @@ public partial class MonthCalendar : Control
     [Localizable(true)]
     public DateTime[] BoldedDates
     {
-        get => _boldDates.ToArray();
+        get => [.. _boldDates];
 
         set
         {
@@ -372,7 +372,7 @@ public partial class MonthCalendar : Control
 
         set
         {
-            if (value < Day.Monday || value > Day.Default)
+            if (value is < Day.Monday or > Day.Default)
             {
                 throw new InvalidEnumArgumentException(nameof(FirstDayOfWeek), (int)value, typeof(Day));
             }
@@ -521,7 +521,7 @@ public partial class MonthCalendar : Control
     [SRDescription(nameof(SR.MonthCalendarMonthlyBoldedDatesDescr))]
     public DateTime[] MonthlyBoldedDates
     {
-        get => _monthlyBoldDates.ToArray();
+        get => [.. _monthlyBoldDates];
 
         set
         {
@@ -1147,38 +1147,22 @@ public partial class MonthCalendar : Control
     /// <summary>
     ///  Retrieves the enumeration value corresponding to the hit area.
     /// </summary>
-    private static HitArea GetHitArea(MCHITTESTINFO_HIT_FLAGS hit)
+    private static HitArea GetHitArea(MCHITTESTINFO_HIT_FLAGS hit) => hit switch
     {
-        switch (hit)
-        {
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBK:
-                return HitArea.TitleBackground;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEMONTH:
-                return HitArea.TitleMonth;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEYEAR:
-                return HitArea.TitleYear;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNNEXT:
-                return HitArea.NextMonthButton;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNPREV:
-                return HitArea.PrevMonthButton;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARBK:
-                return HitArea.CalendarBackground;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATE:
-                return HitArea.Date;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATENEXT:
-                return HitArea.NextMonthDate;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEPREV:
-                return HitArea.PrevMonthDate;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY:
-                return HitArea.DayOfWeek;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM:
-                return HitArea.WeekNumbers;
-            case MCHITTESTINFO_HIT_FLAGS.MCHT_TODAYLINK:
-                return HitArea.TodayLink;
-            default:
-                return HitArea.Nowhere;
-        }
-    }
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBK => HitArea.TitleBackground,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEMONTH => HitArea.TitleMonth,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEYEAR => HitArea.TitleYear,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNNEXT => HitArea.NextMonthButton,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNPREV => HitArea.PrevMonthButton,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARBK => HitArea.CalendarBackground,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATE => HitArea.Date,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATENEXT => HitArea.NextMonthDate,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEPREV => HitArea.PrevMonthDate,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY => HitArea.DayOfWeek,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM => HitArea.WeekNumbers,
+        MCHITTESTINFO_HIT_FLAGS.MCHT_TODAYLINK => HitArea.TodayLink,
+        _ => HitArea.Nowhere,
+    };
 
     private static int GetIndexInMonths(DateTime startDate, DateTime currentDate)
         => (currentDate.Year - startDate.Year) * MonthsInYear + currentDate.Month - startDate.Month;
@@ -1349,16 +1333,11 @@ public partial class MonthCalendar : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     protected override void OnHandleCreated(EventArgs e)
@@ -1753,7 +1732,7 @@ public partial class MonthCalendar : Control
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)minDate, (SYSTEMTIME)maxDate];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
-            if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
+            if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)flags, ref times[0]) == 0)
             {
                 throw new InvalidOperationException(
                     string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
@@ -2030,7 +2009,7 @@ public partial class MonthCalendar : Control
         try
         {
             // Use BeginInvoke instead of Invoke in case the destination thread is not processing messages.
-            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
+            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), [sender, pref]);
         }
         catch (InvalidOperationException)
         {

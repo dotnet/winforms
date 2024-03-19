@@ -17,7 +17,7 @@ internal unsafe class DeviceContextState
     // Not all state is handled yet. Backfilling in as we write specific tests. Of special note is that we don't
     // have tracking for Save/RestoreDC yet.
 
-    private readonly List<State> _savedStates = new();
+    private readonly List<State> _savedStates = [];
     private State _currentState;
 
     /// <summary>
@@ -89,7 +89,7 @@ internal unsafe class DeviceContextState
     /// <summary>
     ///  When using to parse a metafile, this is the list of known created objects.
     /// </summary>
-    public List<EmfRecord> GdiObjects { get; } = new();
+    public List<EmfRecord> GdiObjects { get; } = [];
 
     /// <summary>
     ///  Adds the given object to <see cref="GdiObjects"/>.

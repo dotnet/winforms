@@ -23,7 +23,7 @@ internal sealed class SystemDesignMetadataReader
         using PEReader peReader = new(fs);
 
         MetadataReader metadataReader = peReader.GetMetadataReader();
-        List<string> typeNames = new();
+        List<string> typeNames = [];
 
         foreach (ExportedTypeHandle typeHandle in metadataReader.ExportedTypes)
         {

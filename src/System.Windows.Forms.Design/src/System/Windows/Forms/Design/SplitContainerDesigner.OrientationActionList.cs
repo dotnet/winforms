@@ -57,9 +57,9 @@ internal partial class SplitContainerDesigner
             actionUIService.Refresh(_ownerComponent);
         }
 
-        public override DesignerActionItemCollection GetSortedActionItems() => new()
-        {
+        public override DesignerActionItemCollection GetSortedActionItems() =>
+        [
             new DesignerActionVerbItem(new DesignerVerb(_actionName!, OnOrientationActionClick))
-        };
+        ];
     }
 }

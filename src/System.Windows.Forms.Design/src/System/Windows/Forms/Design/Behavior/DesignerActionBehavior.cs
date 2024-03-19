@@ -55,7 +55,7 @@ internal sealed class DesignerActionBehavior : Behavior
         DesignerActionListCollection lists = new();
         lists.AddRange(ActionLists);
         DesignerActionPanel dap = new(_serviceProvider);
-        dap.UpdateTasks(lists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name), null);
+        dap.UpdateTasks(lists, [], string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name), null);
         return dap;
     }
 

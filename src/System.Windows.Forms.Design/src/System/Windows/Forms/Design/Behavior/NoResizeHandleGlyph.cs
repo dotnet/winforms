@@ -32,10 +32,10 @@ internal class NoResizeHandleGlyph : SelectionGlyphBase
 
         // The handle is always upperleft
         bounds = new Rectangle(
-            controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE,
-            controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE,
-            DesignerUtils.NORESIZEHANDLESIZE,
-            DesignerUtils.NORESIZEHANDLESIZE);
+            controlBounds.X - DesignerUtils.s_noResizeHandleSize,
+            controlBounds.Y - DesignerUtils.s_noResizeHandleSize,
+            DesignerUtils.s_noResizeHandleSize,
+            DesignerUtils.s_noResizeHandleSize);
         hitBounds = bounds;
     }
 
@@ -44,6 +44,6 @@ internal class NoResizeHandleGlyph : SelectionGlyphBase
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary, this);
+        DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary);
     }
 }

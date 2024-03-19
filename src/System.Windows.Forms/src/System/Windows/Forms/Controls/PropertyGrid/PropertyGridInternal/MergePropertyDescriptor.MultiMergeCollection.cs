@@ -60,7 +60,7 @@ internal partial class MergePropertyDescriptor
 
             if (_items is null || _items.Length != collection.Count)
             {
-                _items = Array.Empty<object>();
+                _items = [];
                 return false;
             }
 
@@ -71,7 +71,7 @@ internal partial class MergePropertyDescriptor
                 if (((newItems[i] is null) != (_items[i] is null)) ||
                     (_items[i] is object item && !item.Equals(newItems[i])))
                 {
-                    _items = Array.Empty<object>();
+                    _items = [];
                     return false;
                 }
             }

@@ -76,7 +76,7 @@ public class Form_FormAccessibleObjectTests
 
         foreach (AccessibleRole role in roles)
         {
-            if (role == AccessibleRole.Default || role == AccessibleRole.Client)
+            if (role is AccessibleRole.Default or AccessibleRole.Client)
             {
                 continue; // The test checks custom roles. "Client" is the default role and it has special handling.
             }

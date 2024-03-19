@@ -35,9 +35,9 @@ public partial class ListBox : ListControl
     /// </summary>
     public const int DefaultItemHeight = 13;
 
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
-    private static readonly object EVENT_DRAWITEM = new();
-    private static readonly object EVENT_MEASUREITEM = new();
+    private static readonly object s_selectedIndexChangedEvent = new();
+    private static readonly object s_drawItemEvent = new();
+    private static readonly object s_measureItemEvent = new();
 
     private SelectedObjectCollection? _selectedItems;
     private SelectedIndexCollection? _selectedIndices;
@@ -572,8 +572,7 @@ public partial class ListBox : ListControl
     {
         get
         {
-            if (_drawMode == DrawMode.OwnerDrawFixed ||
-                _drawMode == DrawMode.OwnerDrawVariable)
+            if (_drawMode is DrawMode.OwnerDrawFixed or DrawMode.OwnerDrawVariable)
             {
                 return _itemHeight;
             }
@@ -1228,24 +1227,24 @@ public partial class ListBox : ListControl
     [SRDescription(nameof(SR.drawItemEventDescr))]
     public event DrawItemEventHandler? DrawItem
     {
-        add => Events.AddHandler(EVENT_DRAWITEM, value);
-        remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
+        add => Events.AddHandler(s_drawItemEvent, value);
+        remove => Events.RemoveHandler(s_drawItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.measureItemEventDescr))]
     public event MeasureItemEventHandler? MeasureItem
     {
-        add => Events.AddHandler(EVENT_MEASUREITEM, value);
-        remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
+        add => Events.AddHandler(s_measureItemEvent, value);
+        remove => Events.RemoveHandler(s_measureItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
     public event EventHandler? SelectedIndexChanged
     {
-        add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
+        add => Events.AddHandler(s_selectedIndexChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedIndexChangedEvent, value);
     }
 
     /// <summary>
@@ -1728,7 +1727,7 @@ public partial class ListBox : ListControl
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+        ((DrawItemEventHandler?)Events[s_drawItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -1815,7 +1814,7 @@ public partial class ListBox : ListControl
 
     protected virtual void OnMeasureItem(MeasureItemEventArgs e)
     {
-        ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+        ((MeasureItemEventHandler?)Events[s_measureItemEvent])?.Invoke(this, e);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -1901,7 +1900,7 @@ public partial class ListBox : ListControl
 
         // Call the handler after updating the DataManager's position so that
         // the DataManager's selected index will be correct in an event handler.
-        ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedIndexChangedEvent])?.Invoke(this, e);
     }
 
     protected override void OnSelectedValueChanged(EventArgs e)

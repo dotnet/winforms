@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class FlowLayout : LayoutEngine
 {
-    internal static readonly FlowLayout Instance = new();
+    internal static FlowLayout Instance { get; } = new();
 
     private static readonly int s_wrapContentsProperty = PropertyStore.CreateKey();
     private static readonly int s_flowDirectionProperty = PropertyStore.CreateKey();
@@ -18,10 +18,11 @@ internal partial class FlowLayout : LayoutEngine
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
     {
 #if DEBUG
-        Debug.WriteLineIf(CompModSwitches.FlowLayout.TraceInfo,
+        Debug.WriteLineIf(
+            CompModSwitches.FlowLayout.TraceInfo,
             $"FlowLayout::Layout(container={container}, displayRect={container.DisplayRectangle}, args={args})");
-        Debug.Indent();
 #endif
+        Debug.Indent();
 
         // ScrollableControl will first try to get the layoutbounds from the derived control when
         // trying to figure out if ScrollBars should be added.

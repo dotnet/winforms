@@ -8,20 +8,20 @@ namespace System.Windows.Forms;
 public static partial class ToolStripManager
 {
     ///  <remarks>
-    ///  - this installs a message filter when a dropdown becomes active.
-    ///  - the message filter
-    ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
-    ///  doesnt get highlight processing/tooltips
-    ///  b. detects mouse clicks. if the click is outside the dropdown, it
-    ///  dismisses it.
-    ///  c. detects when the active window has changed. If the active window
-    ///  is unexpected, it dismisses all dropdowns.
-    ///  d. detects keyboard messages, and redirects them to the active dropdown.
-    ///
-    ///  - There should be 1 Message Filter per thread and it should be uninstalled once
-    ///  the last dropdown has gone away
-    ///  This is not part of ToolStripManager because it's DropDown specific and
-    ///  we don't want to publicly expose this message filter.
+    ///   <para>
+    ///    This installs a message filter when a dropdown becomes active. The filter:
+    ///   </para>
+    ///   <list type="bullet">
+    ///    <item><description>Eats WM_MOUSEMOVEs so that the window underneath doesnt get highlight processing/tooltips.</description></item>
+    ///    <item><description>Dismisses the menu if clicked outside the dropdown.</description></item>
+    ///    <item><description>Dismisses all dropdowns if the active window changes.</description></item>
+    ///    <item><description>Redirects keyboard messages to the active dropdown.</description></item>
+    ///   </list>
+    ///   <para>
+    ///    There should be one Message Filter per thread and it should be uninstalled once the last dropdown has gone away.
+    ///    This is not part of <see cref="ToolStripManager"/> because it is DropDown specific and
+    ///    we don't want to publicly expose this message filter.
+    ///   </para>
     ///  </remarks>
     internal partial class ModalMenuFilter : IMessageModifyAndFilter
     {
@@ -42,10 +42,6 @@ public static partial class ToolStripManager
         private ToolStrip? _toplevelToolStrip;
 
         private readonly WeakReference<IKeyboardToolTip?> _lastFocusedTool = new(null);
-
-#if DEBUG
-        private bool _justEnteredMenuMode;
-#endif
 
         [ThreadStatic]
         private static ModalMenuFilter? t_instance;
@@ -70,7 +66,7 @@ public static partial class ToolStripManager
                 if (_showUnderlines != value)
                 {
                     _showUnderlines = value;
-                    ToolStripManager.NotifyMenuModeChange(invalidateText: true, activationChange: false);
+                    NotifyMenuModeChange(invalidateText: true, activationChange: false);
                 }
             }
         }
@@ -137,10 +133,6 @@ public static partial class ToolStripManager
 
             if (!InMenuMode)
             {
-                ToolStrip.s_snapFocusDebug.TraceVerbose("___________Entering MenuMode....");
-#if DEBUG
-                _justEnteredMenuMode = true;
-#endif
                 HWND hwndActive = PInvoke.GetActiveWindow();
                 if (!hwndActive.IsNull)
                 {
@@ -190,8 +182,6 @@ public static partial class ToolStripManager
 
             try
             {
-                ToolStrip.s_snapFocusDebug.TraceVerbose("___________Exiting MenuMode....");
-
                 if (_messageHook is not null)
                 {
                     // Message filter isn't going to help as we don't own the message pump
@@ -202,9 +192,6 @@ public static partial class ToolStripManager
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
                 Application.ThreadContext.FromCurrent().TrackInput(false);
 
-#if DEBUG
-                _justEnteredMenuMode = false;
-#endif
                 if (!ActiveHwnd.Handle.IsNull)
                 {
                     // Unsubscribe from handle creates
@@ -236,7 +223,7 @@ public static partial class ToolStripManager
                 // Skip the setter here so we only iterate through the toolstrips once.
                 bool textStyleChanged = _showUnderlines;
                 _showUnderlines = false;
-                ToolStripManager.NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
+                NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
             }
         }
 
@@ -246,7 +233,7 @@ public static partial class ToolStripManager
         {
             if (_inputFilterQueue is not null && _inputFilterQueue.Count > 0)
             {
-                return _inputFilterQueue[_inputFilterQueue.Count - 1];
+                return _inputFilterQueue[^1];
             }
 
             return null;
@@ -293,7 +280,7 @@ public static partial class ToolStripManager
                 }
                 else if (!MenuKeyToggle)
                 {
-                    ModalMenuFilter.Instance.ShowUnderlines = true;
+                    Instance.ShowUnderlines = true;
                 }
             }
         }
@@ -306,7 +293,6 @@ public static partial class ToolStripManager
             // There's no more dropdowns left in the chain
             if (GetActiveToolStrip() is null)
             {
-                ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.CloseActiveDropDown] Calling exit because there are no more dropdowns left to activate.");
                 ExitMenuMode();
 
                 // Make sure we roll selection off  the toplevel toolstrip.
@@ -335,8 +321,6 @@ public static partial class ToolStripManager
 
         private void ProcessMouseButtonPressed(HWND hwndMouseMessageIsFrom, Point location)
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
-
             int countDropDowns = _inputFilterQueue?.Count ?? 0;
             for (int i = 0; i < countDropDowns; i++)
             {
@@ -365,11 +349,7 @@ public static partial class ToolStripManager
                             // Make sure we clear the selection.
                             activeToolStrip.NotifySelectionChange(item: null);
 
-                            // We're a toplevel toolstrip and we've clicked somewhere else.
-                            // Exit menu mode
-                            ToolStrip.s_snapFocusDebug.TraceVerbose(
-                                "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
-
+                            // We're a toplevel toolstrip and we've clicked somewhere else. Exit menu mode.
                             ExitMenuModeCore();
                         }
                     }
@@ -381,7 +361,6 @@ public static partial class ToolStripManager
                 }
                 else
                 {
-                    ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.ProcessMouseButtonPressed] active toolstrip is null.");
                     break;
                 }
             }
@@ -446,7 +425,7 @@ public static partial class ToolStripManager
             if (_inputFilterQueue is null)
             {
                 // Use list because we want to be able to remove at any point.
-                _inputFilterQueue = new List<ToolStrip>();
+                _inputFilterQueue = [];
             }
             else
             {
@@ -462,10 +441,8 @@ public static partial class ToolStripManager
                     }
                     else if (toolStrip.IsDropDown
                         && (ToolStripDropDown.GetFirstDropDown(toolStrip)
-                        != ToolStripDropDown.GetFirstDropDown(currentActiveToolStrip)))
+                            != ToolStripDropDown.GetFirstDropDown(currentActiveToolStrip)))
                     {
-                        ToolStrip.s_snapFocusDebug.TraceVerbose(
-                            "[ModalMenuFilter.SetActiveToolStripCore] Detected a new dropdown not in this chain opened, Dismissing everything in the old chain. ");
                         _inputFilterQueue.Remove(currentActiveToolStrip);
 
                         ToolStripDropDown currentActiveToolStripDropDown = (ToolStripDropDown)currentActiveToolStrip;
@@ -484,8 +461,6 @@ public static partial class ToolStripManager
 
             if (!InMenuMode && _inputFilterQueue.Count > 0)
             {
-                ToolStrip.s_snapFocusDebug.TraceVerbose(
-                    $"[ModalMenuFilter.SetActiveToolStripCore] Setting {WindowsFormsUtils.GetControlInformation(toolStrip.HWND)} active.");
                 EnterMenuModeCore();
             }
 
@@ -499,14 +474,11 @@ public static partial class ToolStripManager
 
         internal static void SuspendMenuMode()
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter] SuspendMenuMode");
-
             Instance._suspendMenuMode = true;
         }
 
         internal static void ResumeMenuMode()
         {
-            ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter] ResumeMenuMode");
             Instance._suspendMenuMode = false;
         }
 
@@ -531,7 +503,7 @@ public static partial class ToolStripManager
             {
                 return true;
             }
-            else if (m.Msg >= (int)PInvoke.WM_NCLBUTTONDOWN && m.Msg <= (int)PInvoke.WM_NCMBUTTONDBLCLK)
+            else if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
             {
                 return true;
             }
@@ -545,13 +517,6 @@ public static partial class ToolStripManager
 
         public bool PreFilterMessage(ref Message m)
         {
-#if DEBUG
-            Debug.WriteLineIf(
-                ToolStrip.s_snapFocusDebug.TraceVerbose && _justEnteredMenuMode,
-                "[ModalMenuFilter.PreFilterMessage] MenuMode MessageFilter installed and working.");
-            _justEnteredMenuMode = false;
-#endif
-
             if (_suspendMenuMode)
             {
                 return false;
@@ -572,24 +537,19 @@ public static partial class ToolStripManager
             HandleRef<HWND> activeToolStripHandle = new(activeToolStrip);
             var activeWindowHandle = Control.GetHandleRef(PInvoke.GetActiveWindow());
 
-            // if the active window has changed...
             if (activeWindowHandle != _lastActiveWindow)
             {
-                // if another window has gotten activation - we should dismiss.
+                // If another window has gotten activation - we should dismiss.
                 if (activeWindowHandle.Handle.IsNull)
                 {
-                    // we don't know what it was cause it's on another thread or doesnt exist
-                    ToolStrip.s_snapFocusDebug.TraceVerbose(
-                        $"[ModalMenuFilter.PreFilterMessage] Dismissing because: {WindowsFormsUtils.GetControlInformation(activeWindowHandle.Handle)} has gotten activation. ");
+                    // We don't know what it was cause it's on another thread or doesnt exist.
                     ProcessActivationChange();
                 }
-                else if (Control.FromChildHandle(activeWindowHandle.Handle) is not ToolStripDropDown   // its NOT a dropdown
-                    && !IsChildOrSameWindow(activeWindowHandle, activeToolStripHandle)    // and NOT a child of the active toolstrip
+                else if (Control.FromChildHandle(activeWindowHandle.Handle) is not ToolStripDropDown
+                    && !IsChildOrSameWindow(activeWindowHandle, activeToolStripHandle)
                     && !IsChildOrSameWindow(activeWindowHandle, ActiveHwnd))
                 {
-                    // and NOT a child of the active hwnd
-                    ToolStrip.s_snapFocusDebug.TraceVerbose(
-                        $"[ModalMenuFilter.PreFilterMessage] Calling ProcessActivationChange because: {WindowsFormsUtils.GetControlInformation(activeWindowHandle.Handle)} has gotten activation.");
+                    // Not a dropdown, and not a child of the active toolstrip or the active window.
                     ProcessActivationChange();
                 }
             }
@@ -675,16 +635,8 @@ public static partial class ToolStripManager
 
                         if (!activeToolStrip.ContainsFocus)
                         {
-                            ToolStrip.s_snapFocusDebug.TraceVerbose(
-                                $"[ModalMenuFilter.PreFilterMessage] MODIFYING Keyboard message {m}");
-
                             // Route all keyboard messages to the active dropdown.
                             m.HWnd = activeToolStrip.Handle;
-                        }
-                        else
-                        {
-                            ToolStrip.s_snapFocusDebug.TraceVerbose(
-                                $"[ModalMenuFilter.PreFilterMessage] got Keyboard message {m}");
                         }
 
                         break;

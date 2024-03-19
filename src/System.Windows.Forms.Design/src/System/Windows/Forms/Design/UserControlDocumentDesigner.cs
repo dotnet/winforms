@@ -25,14 +25,8 @@ internal class UserControlDocumentDesigner : DocumentDesigner
     /// </summary>
     private Size Size
     {
-        get
-        {
-            return Control.ClientSize;
-        }
-        set
-        {
-            Control.ClientSize = value;
-        }
+        get => Control.ClientSize;
+        set => Control.ClientSize = value;
     }
 
     /// <summary>
@@ -49,13 +43,7 @@ internal class UserControlDocumentDesigner : DocumentDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        //
-        string[] shadowProps = new string[]
-        {
-            "Size"
-        };
-
-        Attribute[] empty = Array.Empty<Attribute>();
+        string[] shadowProps = ["Size"];
 
         PropertyDescriptor? prop;
         for (int i = 0; i < shadowProps.Length; i++)
@@ -63,7 +51,7 @@ internal class UserControlDocumentDesigner : DocumentDesigner
             prop = (PropertyDescriptor?)properties[shadowProps[i]];
             if (prop is not null)
             {
-                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(UserControlDocumentDesigner), prop, empty);
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(UserControlDocumentDesigner), prop, []);
             }
         }
     }

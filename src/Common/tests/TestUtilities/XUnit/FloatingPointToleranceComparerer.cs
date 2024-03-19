@@ -11,7 +11,7 @@ namespace System.XUnit;
 public class FloatingPointToleranceComparerer<T> : IEqualityComparer<T>
     where T : struct, IFloatingPoint<T>
 {
-    private T _tolerance;
+    private readonly T _tolerance;
 
     /// <param name="tolerance">The difference must be less than or equal to this number.</param>
     public FloatingPointToleranceComparerer(T tolerance) => _tolerance = T.Abs(tolerance);

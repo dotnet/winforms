@@ -8,23 +8,23 @@ namespace System.Windows.Forms.Tests;
 // NB: doesn't require thread affinity
 public class PrintPreviewControlTests
 {
-    private const int emptyColorArgb = 0;
-    private const int blueColorArgb = -16776961;
-    private const int greenColorArgb = -16744448;
-    private const int controlDarkColorArgb = -6250336;
-    private const int appWorkSpaceNoHcColorArgb = -5526613;
-    private const int appWorkSpaceHcColorArgb = -1;
+    private const int EmptyColorArgb = 0;
+    private const int BlueColorArgb = -16776961;
+    private const int GreenColorArgb = -16744448;
+    private const int ControlDarkColorArgb = -6250336;
+    private const int AppWorkSpaceNoHcColorArgb = -5526613;
+    private const int AppWorkSpaceHcColorArgb = -1;
 
     [Theory]
-    [InlineData(emptyColorArgb, false, appWorkSpaceNoHcColorArgb)]
-    [InlineData(emptyColorArgb, true, controlDarkColorArgb)]
-    [InlineData(blueColorArgb, false, blueColorArgb)]
-    [InlineData(greenColorArgb, true, greenColorArgb)]
+    [InlineData(EmptyColorArgb, false, AppWorkSpaceNoHcColorArgb)]
+    [InlineData(EmptyColorArgb, true, ControlDarkColorArgb)]
+    [InlineData(BlueColorArgb, false, BlueColorArgb)]
+    [InlineData(GreenColorArgb, true, GreenColorArgb)]
     public void ShowPrintPreviewControl_BackColorIsCorrect(int customBackColorArgb, bool isHighContrast, int expectedBackColorArgb)
     {
         PrintPreviewControl control = new();
 
-        if (customBackColorArgb != emptyColorArgb)
+        if (customBackColorArgb != EmptyColorArgb)
         {
             control.BackColor = Color.FromArgb(customBackColorArgb);
         }
@@ -35,7 +35,7 @@ public class PrintPreviewControlTests
         // Default AppWorkSpace color in HC theme does not allow to follow HC standards.
         if (isHighContrast)
         {
-            Assert.True(!appWorkSpaceHcColorArgb.Equals(actualBackColorArgb));
+            Assert.True(!AppWorkSpaceHcColorArgb.Equals(actualBackColorArgb));
         }
     }
 }

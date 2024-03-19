@@ -241,7 +241,7 @@ public class TabPage_TabPageAccessibilityObjectTests
     {
         using TabControl tabControl = new();
         TabPageCollection pages = tabControl.TabPages;
-        pages.AddRange(new TabPage[] { new(), new(), new() });
+        pages.AddRange([new(), new(), new()]);
         tabControl.CreateControl();
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
@@ -263,7 +263,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         using TabControl tabControl = new();
         tabControl.CreateControl();
         TabPageCollection pages = tabControl.TabPages;
-        pages.AddRange(new TabPage[] { new(), new(), new() });
+        pages.AddRange([new(), new(), new()]);
 
         TabPageAccessibleObject accessibleObject1 = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
         TabPageAccessibleObject accessibleObject2 = Assert.IsType<TabPageAccessibleObject>(pages[1].AccessibilityObject);
@@ -516,7 +516,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         using TabPage tabPage = new();
         TabPageAccessibleObject accessibleObject = (TabPageAccessibleObject)tabPage.AccessibilityObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(tabPage.IsHandleCreated);
     }
 

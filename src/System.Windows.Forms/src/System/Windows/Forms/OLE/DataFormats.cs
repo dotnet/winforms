@@ -154,10 +154,7 @@ public static partial class DataFormats
     /// </summary>
     public static Format GetFormat(string format)
     {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            throw new ArgumentException(nameof(format));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(format);
 
         lock (s_internalSyncObject)
         {
@@ -229,7 +226,7 @@ public static partial class DataFormats
                 int length = PInvoke.GetClipboardFormatName(id, pFormatName, 256);
                 if (length != 0)
                 {
-                    name = formatName.Slice(0, length).ToString();
+                    name = formatName[..length].ToString();
                 }
             }
 
@@ -272,8 +269,8 @@ public static partial class DataFormats
     {
         if (s_formatCount == 0)
         {
-            s_formatList = new Format[]
-            {
+            s_formatList =
+            [
                 // Text name                  Win32 format ID
                 new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
                 new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
@@ -291,13 +288,13 @@ public static partial class DataFormats
                 new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
                 new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
                 new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
-            };
+            ];
 
             s_formatCount = s_formatList.Length;
         }
         else
         {
-            s_formatList ??= Array.Empty<Format>();
+            s_formatList ??= [];
         }
     }
 }

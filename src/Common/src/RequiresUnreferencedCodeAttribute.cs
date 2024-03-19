@@ -1,15 +1,17 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Diagnostics.CodeAnalysis;
 
 /// <summary>
-/// Indicates that the specified method requires dynamic access to code that is not referenced
-/// statically, for example through <see cref="System.Reflection"/>.
+///  Indicates that the specified method requires dynamic access to code that is not referenced
+///  statically, for example through <see cref="Reflection"/>.
 /// </summary>
 /// <remarks>
-/// This allows tools to understand which methods are unsafe to call when removing unreferenced
-/// code from an application.
+///  <para>
+///  This allows tools to understand which methods are unsafe to call when removing unreferenced
+///  code from an application.
+///  </para>
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Class, Inherited = false)]
 #if SYSTEM_PRIVATE_CORELIB

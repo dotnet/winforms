@@ -120,7 +120,7 @@ public sealed partial class MdiClient : Control
     {
         get
         {
-            return _children.ToArray();
+            return [.. _children];
         }
     }
 
@@ -214,7 +214,7 @@ public sealed partial class MdiClient : Control
     protected override unsafe void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
         if (!IsHandleCreated
-            || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false
+            || ParentInternal is Form { MdiChildrenMinimizedAnchorBottom: false }
             || ParentInternal?.Site?.DesignMode == true)
         {
             base.SetBoundsCore(x, y, width, height, specified);
@@ -309,20 +309,11 @@ public sealed partial class MdiClient : Control
         }
     }
 
-    internal override bool ShouldSerializeBackColor()
-    {
-        return BackColor != SystemColors.AppWorkspace;
-    }
+    internal override bool ShouldSerializeBackColor() => BackColor != SystemColors.AppWorkspace;
 
-    private static bool ShouldSerializeLocation()
-    {
-        return false;
-    }
+    private static bool ShouldSerializeLocation() => false;
 
-    internal override bool ShouldSerializeSize()
-    {
-        return false;
-    }
+    internal override bool ShouldSerializeSize() => false;
 
     /// <summary>
     ///  Processes Windows messages.

@@ -17,7 +17,7 @@ public enum PictureBoxSizeMode
 
     /// <summary>
     ///  The image within the <see cref="PictureBox"/> is stretched or shrunk to fit the
-    ///  current size of the <see cref="System.Windows.Forms.PictureBox"/>.
+    ///  current size of the <see cref="PictureBox"/>.
     /// </summary>
     StretchImage = 1,
 

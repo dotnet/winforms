@@ -6,7 +6,6 @@
     <CLSCompliant>true</CLSCompliant>
     <Nullable>enable</Nullable>
 
-    <NoWarn>$(NoWarn);618</NoWarn>
     <!--
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649

@@ -56,8 +56,10 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 
             if (maskedTextProvider is null)
             {
-                designMaskedTextBox = new MaskedTextBox();
-                designMaskedTextBox.Text = maskedTextBox.Text;
+                designMaskedTextBox = new MaskedTextBox
+                {
+                    Text = maskedTextBox.Text
+                };
             }
             else
             {
@@ -160,13 +162,13 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     {
         base.PreFilterProperties(properties);
 
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "Text",
             "PasswordChar"
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         PropertyDescriptor? prop;
         for (int i = 0; i < shadowProps.Length; i++)

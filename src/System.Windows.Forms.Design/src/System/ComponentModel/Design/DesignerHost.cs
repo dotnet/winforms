@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -19,7 +19,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
     private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading); // A transaction is in the process of being Canceled or Commited.
 
-    private static readonly Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
+    private static readonly Type[] s_defaultServices = [typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2)];
 
     // IDesignerHost events
     private static readonly object s_eventActivated = new(); // Designer has been activated
@@ -61,7 +61,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     {
         _surface = surface;
         _state = default;
-        _designers = new();
+        _designers = [];
         _events = new EventHandlerList();
 
         // Add the relevant services.  We try to add these as "fixed" services.  A fixed service cannot be removed by the user.  The reason for this is that each of these services depends on each other, so you can't really remove and replace just one of them. If we can't get our own service container that supports fixed services, we add these as regular services.
@@ -165,7 +165,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // We should never add anything while we're unloading.
         if (_state[s_stateUnloading])
         {
-            Exception ex = new(SR.DesignerHostUnloading)
+            InvalidOperationException ex = new(SR.DesignerHostUnloading)
             {
                 HelpLink = SR.DesignerHostUnloading
             };
@@ -177,7 +177,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
             {
-                Exception ex = new(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
+                InvalidOperationException ex = new(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
                 {
                     HelpLink = SR.DesignerHostCyclicAdd
                 };
@@ -226,7 +226,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
             if (designer is null)
             {
-                Exception ex = new(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
+                InvalidOperationException ex = new(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                 {
                     HelpLink = SR.DesignerHostNoTopLevelDesigner
                 };
@@ -323,10 +323,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             }
 
             string message = e.Message;
+
             // We must handle the case of an exception with no message.
             if (string.IsNullOrEmpty(message))
             {
-                e = new Exception(string.Format(SR.DesignSurfaceFatalError, e), e);
+                e = new InvalidOperationException(string.Format(SR.DesignSurfaceFatalError, e), e);
             }
 
             // Loader blew up.  Add this exception to our error list.
@@ -527,7 +528,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         if (component == _rootComponent)
         {
             string className = _rootComponentClassName!;
-            if (oldName is not null && className.EndsWith(oldName) // If oldName occurs at the end of className
+            if (oldName is not null && className.EndsWith(oldName, StringComparison.Ordinal) // If oldName occurs at the end of className
                 && (className.Length > oldName.Length && className[className.Length - oldName.Length - 1] == '.')) // and is preceeded by a period
             {
                 // We assume the preceeding chars are the namespace and preserve it.
@@ -591,7 +592,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             Site? site = component.Site as Site;
             RemoveWithoutUnsiting(component);
-            RemoveFromContainerPostProcess(component, this);
+            RemoveFromContainerPostProcess(component);
             if (site is not null)
             {
                 site.Disposed = true;
@@ -652,9 +653,14 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         return true;
     }
 
-    internal void RemoveFromContainerPostProcess(IComponent component, IContainer container)
+    internal void RemoveFromContainerPostProcess(IComponent component)
     {
-        // At one point during Whidbey, the component used to be unsited earlier in this process and it would be temporarily resited here before raising OnComponentRemoved. The problem with resiting it is that some 3rd party controls take action when a component is sited (such as displaying  a dialog a control is dropped on the form) and resiting here caused them to think they were being initialized for the first time.  To preserve compat, we shouldn't resite the component  during Remove.
+        // At one point during Whidbey, the component used to be unsited earlier in this process and
+        // it would be temporarily resited here before raising OnComponentRemoved. The problem with
+        // resiting it is that some 3rd party controls take action when a component is sited (such as
+        // displaying  a dialog a control is dropped on the form) and resiting here caused them to think
+        // they were being initialized for the first time. To preserve compat, we shouldn't resite the
+        // component during Remove.
         try
         {
             ComponentEventHandler? eh = _events[s_eventComponentRemoved] as ComponentEventHandler;
@@ -687,7 +693,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // Now remove all the designers and their components.  We save the root for last.  Note that we eat any exceptions that components or their designers generate.  A bad component or designer should not prevent an unload from happening.  We do all of this in a transaction to help reduce the number of events we generate.
         _state[s_stateUnloading] = true;
         DesignerTransaction t = ((IDesignerHost)this).CreateTransaction();
-        List<Exception> exceptions = new();
+        List<Exception> exceptions = [];
         try
         {
             IComponent[] components = new IComponent[Components.Count];
@@ -1182,7 +1188,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
                     _state[s_stateLoading] = true;
                     Unload();
 
-                    List<object> errorList = errorCollection is null ? new() : errorCollection.Cast<object>().ToList();
+                    List<object> errorList = errorCollection is null ? [] : errorCollection.Cast<object>().ToList();
                     errorList.Insert(0, ex);
 
                     errorCollection = errorList;

@@ -39,7 +39,7 @@ internal static class CodeDomCompileHelper
 
         ResourceDescription[] description = resource is null
             ? null
-            : new ResourceDescription[] { new(resourceName, () => resource, isPublic: true) };
+            : [new(resourceName, () => resource, isPublic: true)];
 
         MemoryStream stream = new();
         var result = compilation.Emit(stream, manifestResources: description);

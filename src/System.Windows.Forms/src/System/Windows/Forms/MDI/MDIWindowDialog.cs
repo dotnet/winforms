@@ -93,14 +93,14 @@ internal sealed partial class MdiWindowDialog : Form
         // _okButton
         //
         resources.ApplyResources(_okButton, "okButton");
-        _okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+        _okButton.DialogResult = DialogResult.OK;
         _okButton.Margin = new Padding(0, 0, 3, 0);
         _okButton.Name = "okButton";
         //
         // _cancelButton
         //
         resources.ApplyResources(_cancelButton, "cancelButton");
-        _cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+        _cancelButton.DialogResult = DialogResult.Cancel;
         _cancelButton.Margin = new Padding(3, 0, 0, 0);
         _cancelButton.Name = "cancelButton";
         //
@@ -108,8 +108,8 @@ internal sealed partial class MdiWindowDialog : Form
         //
         resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
         _okCancelTableLayoutPanel.ColumnCount = 2;
-        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         _okCancelTableLayoutPanel.Controls.Add(_okButton, 0, 0);
         _okCancelTableLayoutPanel.Controls.Add(_cancelButton, 1, 0);
         _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
@@ -119,7 +119,7 @@ internal sealed partial class MdiWindowDialog : Form
         // MdiWindowDialog
         //
         resources.ApplyResources(this, "$this");
-        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(_okCancelTableLayoutPanel);
         Controls.Add(_itemList);
         MaximizeBox = false;

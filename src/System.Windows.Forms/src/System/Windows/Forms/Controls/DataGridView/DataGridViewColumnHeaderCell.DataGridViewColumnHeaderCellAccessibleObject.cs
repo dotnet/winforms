@@ -89,8 +89,8 @@ public partial class DataGridViewColumnHeaderCell
 
                 if (Owner.DataGridView is not null && Owner.OwningColumn is not null && Owner.OwningColumn.Selected)
                 {
-                    if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
-                    Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
+                    if (Owner.DataGridView.SelectionMode is DataGridViewSelectionMode.FullColumnSelect
+                        or DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
                         resultState |= AccessibleStates.Selected;
                     }
@@ -109,7 +109,7 @@ public partial class DataGridViewColumnHeaderCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewColumnHeaderCell dataGridViewCell))
+            if (Owner is not DataGridViewColumnHeaderCell dataGridViewCell)
             {
                 return;
             }
@@ -128,8 +128,8 @@ public partial class DataGridViewColumnHeaderCell
 
                 dataGridView.Sort(dataGridViewCell.OwningColumn, listSortDirection);
             }
-            else if (dataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
-                     dataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
+            else if (dataGridView.SelectionMode is DataGridViewSelectionMode.FullColumnSelect or
+                     DataGridViewSelectionMode.ColumnHeaderSelect)
             {
                 dataGridViewCell.OwningColumn.Selected = true;
             }
@@ -147,19 +147,14 @@ public partial class DataGridViewColumnHeaderCell
                 return null;
             }
 
-            switch (navigationDirection)
+            return navigationDirection switch
             {
-                case AccessibleNavigation.Right:
-                    return Owner.DataGridView.RightToLeft == RightToLeft.No ? NavigateForward() : NavigateBackward();
-                case AccessibleNavigation.Next:
-                    return NavigateForward();
-                case AccessibleNavigation.Left:
-                    return Owner.DataGridView.RightToLeft == RightToLeft.No ? NavigateBackward() : NavigateForward();
-                case AccessibleNavigation.Previous:
-                    return NavigateBackward();
-                default:
-                    return null;
-            }
+                AccessibleNavigation.Right => Owner.DataGridView.RightToLeft == RightToLeft.No ? NavigateForward() : NavigateBackward(),
+                AccessibleNavigation.Next => NavigateForward(),
+                AccessibleNavigation.Left => Owner.DataGridView.RightToLeft == RightToLeft.No ? NavigateBackward() : NavigateForward(),
+                AccessibleNavigation.Previous => NavigateBackward(),
+                _ => null,
+            };
         }
 
         private AccessibleObject? NavigateBackward()
@@ -209,7 +204,7 @@ public partial class DataGridViewColumnHeaderCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewColumnHeaderCell dataGridViewCell))
+            if (Owner is not DataGridViewColumnHeaderCell dataGridViewCell)
             {
                 return;
             }

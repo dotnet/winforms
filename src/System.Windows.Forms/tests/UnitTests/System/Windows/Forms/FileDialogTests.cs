@@ -821,7 +821,9 @@ public class FileDialogTests
 
     private unsafe class SubFileDialog : FileDialog
     {
+#pragma warning disable IDE1006 // Naming Styles
         public static new readonly object EventFileOk = FileDialog.EventFileOk;
+#pragma warning restore IDE1006
 
         public new bool CanRaiseEvents => base.CanRaiseEvents;
 

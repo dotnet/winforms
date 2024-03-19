@@ -9,21 +9,13 @@ internal static partial class PInvoke
     {
         public uint RawValue;
 
-        public LCID(uint id)
-        {
-            RawValue = id;
-        }
+        public LCID(uint id) => RawValue = id;
 
-        public override bool Equals(object? obj)
-        {
-            return obj is LCID other
-                ? other.RawValue == RawValue
-                : false;
-        }
+        public override readonly bool Equals(object? obj) => obj is LCID other && other.RawValue == RawValue;
 
-        public bool Equals(LCID other) => other.RawValue == RawValue;
+        public readonly bool Equals(LCID other) => other.RawValue == RawValue;
 
-        public override int GetHashCode() => RawValue.GetHashCode();
+        public override readonly int GetHashCode() => RawValue.GetHashCode();
 
         public static bool operator ==(LCID a, LCID b) => a.RawValue == b.RawValue;
 
@@ -31,6 +23,6 @@ internal static partial class PInvoke
 
         public static implicit operator LCID(uint value) => new(value);
 
-        public static readonly LCID USER_DEFAULT = new(0x0400);
+        public static LCID USER_DEFAULT { get; } = new(0x0400);
     }
 }

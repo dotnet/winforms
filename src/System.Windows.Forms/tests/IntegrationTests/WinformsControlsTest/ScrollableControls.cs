@@ -8,7 +8,7 @@ namespace WinformsControlsTest
         public ScrollableControls()
         {
             InitializeComponent();
-            this.treeView1.ExpandAll();
+            treeView1.ExpandAll();
         }
     }
 }

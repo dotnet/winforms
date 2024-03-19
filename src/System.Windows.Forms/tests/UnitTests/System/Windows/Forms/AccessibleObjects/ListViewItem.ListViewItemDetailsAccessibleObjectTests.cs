@@ -36,7 +36,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         using ListView control = new() { View = View.Details };
         ListViewItem item = new();
         control.Items.Add(item);
-        control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
         item.SubItems.AddRange(new ListViewSubItem[] { new(), new(), new(), new(), new() });
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
@@ -51,7 +51,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
     {
         using ListView control = new() { View = View.Details };
         ListViewItem item = new();
-        control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
         int outRangeIndex = control.Columns.Count + 1;
         control.Items.Add(item);
 
@@ -68,7 +68,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         using ListView control = new() { View = View.Details };
         ListViewItem item = new();
         control.Items.Add(item);
-        control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
         item.SubItems.AddRange(new ListViewSubItem[] { new(), new(), new(), new() });
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
@@ -99,7 +99,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         using ListView control = new() { View = View.Details };
         ListViewItem item = new();
         control.Items.Add(item);
-        control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
         control.CreateControl();
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
@@ -114,7 +114,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         using ListView control = new() { View = View.Details };
         ListViewItem item = new();
         control.Items.Add(item);
-        control.Columns.AddRange(new ColumnHeader[] { new(), new(), new() });
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
 
         // Enforce subitems' accessible objects creation.
         Assert.NotNull(item.AccessibilityObject.GetChild(0));
@@ -166,8 +166,8 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         ListViewItem listViewItem1 = new(new string[] { "Item1", "sub1", "sub2" }, 0);
         ListViewItem listViewItem2 = new(new string[] { "Item2", "sub1", "sub2" }, 0);
 
-        listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-        listView1.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+        listView1.Columns.AddRange((ColumnHeader[])[columnHeader1, columnHeader2, columnHeader3]);
+        listView1.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2]);
         listView1.View = View.Details;
 
         columnHeader1.Text = "Col1";

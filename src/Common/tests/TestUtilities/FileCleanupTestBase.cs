@@ -29,7 +29,7 @@ public abstract class FileCleanupTestBase : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
         try
         {
@@ -42,7 +42,7 @@ public abstract class FileCleanupTestBase : IDisposable
 
     public string GetTestFilePath() => Path.Combine(TestDirectory, GetTestFileName());
 
-    public string GetTestFileName() => GetUniqueName();
+    public static string GetTestFileName() => GetUniqueName();
 
     private static string GetUniqueName() => Guid.NewGuid().ToString("D");
 }

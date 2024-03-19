@@ -28,14 +28,14 @@ public partial class DragDrop : Form
         InitializeComponent();
 
         _nyanCatAscii = ReadAsciiText();
-        _pictureBoxList = new()
-        {
+        _pictureBoxList =
+        [
             pictureBox1,
             pictureBox2,
             pictureBox3,
             pictureBox4,
             pictureBox5
-        };
+        ];
 
         AllowDrop = true;
         DragEnter += DragDrop_DragEnter;
@@ -459,7 +459,7 @@ public partial class DragDrop : Form
         ContextMenuStrip = _catContextMenuStrip;
     }
 
-    void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
+    private void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
     {
         if (_catContextMenuStrip is null)
         {

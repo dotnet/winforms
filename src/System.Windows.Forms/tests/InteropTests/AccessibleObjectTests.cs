@@ -717,8 +717,8 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         Type type = typeof(Accessibility.IAccessible);
         var members = type.GetMembers();
 
-        List<string> memberNames = new();
-        List<string> getterNames = new();
+        List<string> memberNames = [];
+        List<string> getterNames = [];
 
         foreach (var member in members)
         {

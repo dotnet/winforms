@@ -73,8 +73,10 @@ internal class PanelDesigner : ScrollableControlDesigner
                           ControlPaint.Light(Control.BackColor) :
                           ControlPaint.Dark(Control.BackColor);
 
-            Pen pen = new(penColor);
-            pen.DashStyle = DashStyle.Dash;
+            Pen pen = new(penColor)
+            {
+                DashStyle = DashStyle.Dash
+            };
 
             return pen;
         }

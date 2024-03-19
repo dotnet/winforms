@@ -25,8 +25,8 @@ public partial class ColorEditor
         private static int s_marginX = MarginWidth;
         private static int s_marginY = MarginWidth;
 
-        private static readonly int[] s_staticCells = new int[]
-        {
+        private static readonly int[] s_staticCells =
+        [
             0x00ffffff, 0x00c0c0ff, 0x00c0e0ff, 0x00c0ffff,
             0x00c0ffc0, 0x00ffffc0, 0x00ffc0c0, 0x00ffc0ff,
 
@@ -44,7 +44,7 @@ public partial class ColorEditor
 
             0x00000000, 0x00000040, 0x00404080, 0x00004040,
             0x00004000, 0x00404000, 0x00400000, 0x00400040
-        };
+        ];
 
         private readonly Color[] _staticColors;
         private Color _selectedColor;

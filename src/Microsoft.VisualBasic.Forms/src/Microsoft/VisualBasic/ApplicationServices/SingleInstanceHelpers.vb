@@ -4,7 +4,6 @@
 Option Strict On
 Option Explicit On
 
-Imports System
 Imports System.IO
 Imports System.IO.Pipes
 Imports System.Runtime.InteropServices

@@ -643,15 +643,15 @@ public class MonthCalendarTests
         {
             CalendarDimensions = value
         };
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.False(calendar.IsHandleCreated);
 
         // Set same.
         var previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
         Assert.False(calendar.IsHandleCreated);
     }
@@ -701,8 +701,8 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -711,8 +711,8 @@ public class MonthCalendarTests
         // Set same.
         var previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -2985,27 +2985,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3032,7 +3032,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3040,7 +3040,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3048,7 +3048,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3056,7 +3056,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3064,7 +3064,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3092,27 +3092,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3139,7 +3139,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3147,7 +3147,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3155,7 +3155,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3163,7 +3163,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3171,7 +3171,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3199,27 +3199,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3246,7 +3246,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3254,7 +3254,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3262,7 +3262,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3270,7 +3270,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3278,7 +3278,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);

@@ -7,12 +7,12 @@ namespace Windows.Win32.System.Ole;
 
 internal partial struct CADWORD
 {
-    public unsafe uint[] ConvertAndFree()
+    public readonly unsafe uint[] ConvertAndFree()
     {
         try
         {
             return (cElems == 0 || pElems is null)
-                ? Array.Empty<uint>()
+                ? []
                 : new Span<uint>(pElems, (int)cElems).ToArray();
         }
         finally

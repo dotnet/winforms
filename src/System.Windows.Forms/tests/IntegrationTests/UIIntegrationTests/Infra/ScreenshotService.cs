@@ -8,7 +8,7 @@ namespace System.Windows.Forms.UITests;
 
 internal static class ScreenshotService
 {
-    private static readonly object Gate = new();
+    private static readonly object s_gate = new();
 
     /// <summary>
     /// Takes a picture of the screen and saves it to the location specified by
@@ -22,7 +22,7 @@ internal static class ScreenshotService
         // 1. Only one screenshot is held in memory at a time to prevent running out of memory for large displays
         // 2. Only one screenshot is written to disk at a time to avoid exceptions if concurrent calls are writing
         //    to the same file
-        lock (Gate)
+        lock (s_gate)
         {
             using var bitmap = TryCaptureFullScreen();
             if (bitmap is null)
@@ -61,23 +61,21 @@ internal static class ScreenshotService
 
         Bitmap bitmap = new(width, height, PixelFormat.Format32bppArgb);
 
-        using (var graphics = Graphics.FromImage(bitmap))
+        using var graphics = Graphics.FromImage(bitmap);
+        graphics.CopyFromScreen(
+            sourceX: primaryScreen.Bounds.X,
+            sourceY: primaryScreen.Bounds.Y,
+            destinationX: 0,
+            destinationY: 0,
+            blockRegionSize: bitmap.Size,
+            copyPixelOperation: CopyPixelOperation.SourceCopy);
+
+        if (Cursor.Current is { } cursor)
         {
-            graphics.CopyFromScreen(
-                sourceX: primaryScreen.Bounds.X,
-                sourceY: primaryScreen.Bounds.Y,
-                destinationX: 0,
-                destinationY: 0,
-                blockRegionSize: bitmap.Size,
-                copyPixelOperation: CopyPixelOperation.SourceCopy);
-
-            if (Cursor.Current is { } cursor)
-            {
-                Rectangle bounds = new(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
-                cursor.Draw(graphics, bounds);
-            }
-
-            return bitmap;
+            Rectangle bounds = new(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
+            cursor.Draw(graphics, bounds);
         }
+
+        return bitmap;
     }
 }

@@ -12,10 +12,6 @@ namespace System.Drawing;
 /// </summary>
 public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemColorTracker
 {
-#if FINALIZATION_WATCH
-    private string _allocationSite = Graphics.GetAllocationStack();
-#endif
-
     // Handle to native GDI+ pen object.
     private GpPen* _nativePen;
 
@@ -108,14 +104,6 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
     private void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativePen is not null, $"""
-            **********************
-            Disposed through finalization:
-            {_allocationSite}
-            """);
-#endif
-
         if (!disposing)
         {
             // If we are finalizing, then we will be unreachable soon. Finalize calls dispose to
@@ -130,23 +118,9 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
         if (_nativePen is not null)
         {
-            try
-            {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDeletePen(NativePen);
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                _nativePen = null;
-            }
+            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeletePen(NativePen);
+            _nativePen = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 
@@ -765,7 +739,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
             float[] pattern;
 
-            // don't call GdipGetPenDashArray with a 0 count
+            // Don't call GdipGetPenDashArray with a 0 count
             if (count > 0)
             {
                 pattern = new float[count];
@@ -778,7 +752,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             {
                 // Most likely we're replicating an existing System.Drawing bug here, it doesn't make much sense to
                 // ask for a dash pattern when using a solid dash.
-                throw new OutOfMemoryException();
+                throw new InvalidOperationException();
             }
             else if (DashStyle == DashStyle.Solid)
             {
@@ -786,7 +760,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             }
             else
             {
-                // special case (not handled inside GDI+)
+                // Special case (not handled inside GDI+)
                 pattern = [1.0f];
             }
 

@@ -106,14 +106,18 @@ public class ImageListTests : ControlTestBase
             UseCompatibleStateImageBehavior = false
         };
 
-        Form form = new();
-        form.AutoScaleMode = AutoScaleMode.Font;
+        Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
         form.Controls.Add(listView1);
         form.Name = "ListViewTest";
         form.Text = "ListView Test";
 
-        ImageList imageList1 = new();
-        imageList1.ImageStream = DeserializeStreamer(DevMsImageListStreamer);
+        ImageList imageList1 = new()
+        {
+            ImageStream = DeserializeStreamer(DevMsImageListStreamer)
+        };
         listView1.SmallImageList = imageList1;
 
         return form;

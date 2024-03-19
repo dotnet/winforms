@@ -7,7 +7,7 @@ namespace System.Drawing.Tests;
 
 public class ImageAnimatorManualTests
 {
-    public static string OutputFolder = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+    public static string OutputFolder { get; } = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
 
     [Fact(Skip = "Manual Test")]
     public void AnimateAndCaptureFrames()
@@ -36,9 +36,9 @@ public class ImageAnimatorManualTests
             "animated-timer-0-delay-all-frames.gif",
         ];
 
-        Dictionary<string, EventHandler> handlers = new();
-        Dictionary<string, int> frameIndexes = new();
-        Dictionary<string, Bitmap> bitmaps = new();
+        Dictionary<string, EventHandler> handlers = [];
+        Dictionary<string, int> frameIndexes = [];
+        Dictionary<string, Bitmap> bitmaps = [];
 
         Stopwatch stopwatch = new();
 
