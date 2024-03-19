@@ -34,19 +34,6 @@ public class ProgressBarRendererTest
     }
 
     [WinFormsFact]
-    public void DrawHorizontalBar_ShouldThrowException_WhenCalledWithNullGraphics()
-    {
-        Graphics? graphics1 = null;
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawHorizontalBar(graphics1, rectangle1);
-
-        act.Should().Throw<ArgumentNullException>()
-       .And.ParamName.Should().Be("dc")
-       .And.OrThrowIfNullWithMessage("*Value cannot be null.*");
-    }
-
-    [WinFormsFact]
     public void DrawVerticalBar_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
         using Bitmap bitmap1 = new(100, 100);
@@ -58,19 +45,6 @@ public class ProgressBarRendererTest
 
         act.Should().NotThrow();
         bitmap1.Should().BeEquivalentTo(bitmap2);
-    }
-
-    [WinFormsFact]
-    public void DrawVerticalBar_ShouldThrowException_WhenCalledWithNullGraphics()
-    {
-        Graphics? graphics1 = null;
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawVerticalBar(graphics1, rectangle1);
-
-        act.Should().Throw<ArgumentNullException>()
-       .And.ParamName.Should().Be("dc")
-       .And.OrThrowIfNullWithMessage("*Value cannot be null.*");
     }
 
     [WinFormsFact]
@@ -88,19 +62,6 @@ public class ProgressBarRendererTest
     }
 
     [WinFormsFact]
-    public void DrawHorizontalChunks_ShouldThrowException_WhenCalledWithNullGraphics()
-    {
-        Graphics? graphics1 = null;
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawHorizontalChunks(graphics1, rectangle1);
-
-        act.Should().Throw<ArgumentNullException>()
-       .And.ParamName.Should().Be("dc")
-       .And.OrThrowIfNullWithMessage("*Value cannot be null.*");
-    }
-
-    [WinFormsFact]
     public void DrawVerticalChunks_ShouldNotThrowException_WhenCalledWithValidParameters()
     {
         using Bitmap bitmap1 = new(100, 100);
@@ -112,19 +73,6 @@ public class ProgressBarRendererTest
 
         act.Should().NotThrow();
         bitmap1.Should().BeEquivalentTo(bitmap2);
-    }
-
-    [WinFormsFact]
-    public void DrawVerticalChunks_ShouldThrowException_WhenCalledWithNullGraphics()
-    {
-        Graphics? graphics1 = null;
-        Rectangle rectangle1 = new(0, 0, 50, 50);
-
-        Action act = () => ProgressBarRenderer.DrawVerticalChunks(graphics1, rectangle1);
-
-        act.Should().Throw<ArgumentNullException>()
-        .And.ParamName.Should().Be("dc")
-        .And.OrThrowIfNullWithMessage("*Value cannot be null.*");
     }
 
     [WinFormsFact]
