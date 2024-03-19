@@ -88,6 +88,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
         Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
+
         Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
 
         Private ReadOnly _splashLock As New Object
@@ -104,10 +105,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Whether we have made it through the processing of OnInitialize.
         Private _finishedOnInitialize As Boolean
+
         Private _networkAvailabilityEventHandlers As List(Of Devices.NetworkAvailableEventHandler)
         Private _networkObject As Devices.Network
-
-#Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
 
         ' Whether this app runs using Word like instancing behavior.
         Private _isSingleInstance As Boolean
@@ -125,11 +125,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' For splash screens with a minimum display time, this let's us know when that time
         ' has expired and it is OK to close the splash screen.
         Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
+
         Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
+
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -138,8 +140,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
         Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
-
-#Enable Warning IDE0032 ' Use auto property
 
         ''' <summary>
         ''' Occurs when the network availability changes.
@@ -927,7 +927,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
-
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions
@@ -1026,5 +1025,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Return Entry.ManifestModule.ModuleVersionId.ToString()
         End Function
+
     End Class
+
 End Namespace
