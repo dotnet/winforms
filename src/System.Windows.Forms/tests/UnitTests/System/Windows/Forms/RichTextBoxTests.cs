@@ -10667,6 +10667,278 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // still call base so that this has a chance to work if it can.
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Invoke_Success()
+    {
+        using Bitmap bitmap1 = new(10, 10);
+        using RichTextBox richTextBox1 = new();
+        richTextBox1.DrawToBitmap(bitmap1, new Rectangle(0, 0, 10, 10));
+
+        bitmap1.Width.Should().Be(10);
+        bitmap1.Height.Should().Be(10);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_SaveFilePath_Invoke_Success()
+    {
+        using RichTextBox richTextBox1 = new()
+        {
+            Rtf = @"{\rtf1\ansi{Sample for {\v HIDDEN }text}}"
+        };
+         using RichTextBox richTextBox2 = new();
+
+        string fileName = "SaveRichTextBox.rtf";
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");     
+        string filePath = $"{projectDirectory}/src/System.Windows.Forms/tests/UnitTests/TestResources/Files/{fileName}";
+
+        try
+        {
+            richTextBox1.SaveFile(filePath);
+            richTextBox2.LoadFile(filePath);
+            int startOfSample = richTextBox2.Text.IndexOf("Sample", StringComparison.Ordinal);
+            int endOfText = richTextBox2.Text.IndexOf("text", StringComparison.Ordinal) + "text".Length;
+            richTextBox2.Select(startOfSample, endOfText - startOfSample);
+
+            richTextBox2.Rtf.Should().NotBeNullOrEmpty();
+            richTextBox2.SelectedText.Should().Be("Sample for HIDDEN text");
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(RichTextBoxStreamType.RichText)]
+    [InlineData(RichTextBoxStreamType.PlainText)]
+    [InlineData(RichTextBoxStreamType.UnicodePlainText)]
+    [InlineData(RichTextBoxStreamType.RichNoOleObjs)]
+    [InlineData(RichTextBoxStreamType.TextTextOleObjs)]
+    public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
+    {       
+        using RichTextBox richTextBox1 = new();
+        
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
+        string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
+
+        try
+        {
+            richTextBox1.SaveFile(filePath, fileType);
+            File.Exists(filePath).Should().BeTrue();
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    public static TheoryData<string> PlainTextData => new()
+    {
+        { "Hello World"},
+        { new string('a', 10000) },
+        { "Special characters: !@#$%^&*()" },
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(PlainTextData))]
+    public void RichTextBox_Paste_PlainText_Data(string value)
+    {
+        using RichTextBox richTextBox1 = new();
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            Clipboard.SetText(value);
+            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
+
+            richTextBox1.Text.Should().Be(value);
+        }
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_Paste_EmptyString_Data()
+    {
+        using RichTextBox richTextBox1 = new();
+
+        Clipboard.SetText("non-empty");
+        Clipboard.Clear();
+        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
+
+        richTextBox1.Text.Should().Be("");
+    }
+
+    public static TheoryData<string> RtfData => new()
+    {
+        { "{\\rtf Hello World}" },
+        { "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}" },
+        { "{\\rtf1\\ansi{Invalid RTF data" },
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(RtfData))]
+    public void RichTextBox_Paste_Rtf_Data(string rtf)
+    {
+        using RichTextBox richTextBox1 = new();
+
+        if (!string.IsNullOrEmpty(rtf))
+        {
+            Clipboard.SetText(rtf);
+            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Rtf));
+
+            richTextBox1.Rtf.Should().StartWith("{\\rtf");
+        }
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragDropEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
+
+        richTextBox1.DragDrop += handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        callCount.Should().Be(1);
+
+        richTextBox1.DragDrop -= handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragEnterEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
+
+        richTextBox1.DragEnter += handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        callCount.Should().Be(0);
+
+        richTextBox1.DragEnter -= handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        callCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragLeaveEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        richTextBox1.DragLeave += handler;
+        richTextBox1.OnDragLeave(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        richTextBox1.DragLeave -= handler;
+        richTextBox1.OnDragLeave(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragOverEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new DragEventArgs(
+            data: null,
+            keyState: 0,
+            x: 0,
+            y: 0,
+            allowedEffect: DragDropEffects.None,
+            effect: DragDropEffects.None);
+
+        richTextBox1.DragOver += handler;
+        richTextBox1.OnDragOver(dragEventArgs);
+        callCount.Should().Be(1);
+
+        richTextBox1.DragOver -= handler;
+        richTextBox1.OnDragOver(dragEventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_GiveFeedbackEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        GiveFeedbackEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            callCount++;
+        };
+
+        GiveFeedbackEventArgs giveFeedbackEventArgs = new(DragDropEffects.None, useDefaultCursors: true);
+
+        richTextBox1.GiveFeedback += handler;
+        richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
+        callCount.Should().Be(1);
+        
+        richTextBox1.GiveFeedback -= handler;
+        richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_QueryContinueDragEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        QueryContinueDragEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(richTextBox1);
+            callCount++;
+        };
+          
+        QueryContinueDragEventArgs queryContinueDragEventArgs = new(keyState: 0, escapePressed: true, action: DragAction.Continue);
+
+        richTextBox1.QueryContinueDrag += handler;
+        richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
+        callCount.Should().Be(1);
+
+        richTextBox1.QueryContinueDrag -= handler;
+        richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
+        callCount.Should().Be(1);
+    }
+
     private class CustomGetParaFormatRichTextBox : RichTextBox
     {
         public bool MakeCustom { get; set; }
@@ -10798,6 +11070,16 @@ public class RichTextBoxTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+
+        public new void OnDragDrop(DragEventArgs e) => base.OnDragDrop(e);
+
+        public new void OnDragLeave(EventArgs e) => base.OnDragLeave(e);
+
+        public new void OnDragOver(DragEventArgs e) => base.OnDragOver(e);
+ 
+        public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
+
+        public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
     }
 
     private static unsafe string GetClassName(HWND hWnd)
