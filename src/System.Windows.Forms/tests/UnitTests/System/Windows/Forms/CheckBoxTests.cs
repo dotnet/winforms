@@ -555,7 +555,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
         eventFired.Should().BeTrue();
     }
 
-    public static IEnumerable<object[]> Appearance_FlatStyle()
+    public static IEnumerable<object[]> Appearance_FlatStyle_TestData()
     {
         yield return new object[] { Appearance.Button, FlatStyle.Standard };
         yield return new object[] { Appearance.Button, FlatStyle.Flat };
@@ -568,11 +568,11 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Appearance_FlatStyle))]
+    [MemberData(nameof(Appearance_FlatStyle_TestData))]
     public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
 
     [WinFormsTheory]
-    [MemberData(nameof(Appearance_FlatStyle))]
+    [MemberData(nameof(Appearance_FlatStyle_TestData))]
     public void CheckBox_DownChangeRectangle_ReturnsExpectedRectangle(Appearance appearance, FlatStyle flatStyle)
     {
         CheckBox checkBox = (CheckBox)CreateButton();

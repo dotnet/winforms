@@ -134,8 +134,8 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
                 : Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS), 1),
             Validate.TextOut(
                 control.Text,
-                    bounds: new Rectangle(3, 0, 20, 12),
-                    State.FontFace(SystemFonts.DefaultFont.Name)
+                bounds: new Rectangle(3, 0, 20, 12),
+                State.FontFace(SystemFonts.DefaultFont.Name)
             ),
             (focus
                 ? Validate.PolyPolygon16(new(new(bounds.X, bounds.Y), new Size(-1, -1)))
