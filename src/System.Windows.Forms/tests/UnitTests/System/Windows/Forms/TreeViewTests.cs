@@ -1715,7 +1715,7 @@ public class TreeViewTests
             }
             else if (m.Msg == (int)PInvoke.CCM_SETVERSION)
             {
-                Assert.Equal((IntPtr)5, m.WParam);
+                Assert.Equal(5, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 SetVersionCallCount++;
                 return;

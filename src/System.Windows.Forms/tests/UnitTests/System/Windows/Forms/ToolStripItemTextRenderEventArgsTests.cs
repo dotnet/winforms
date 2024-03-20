@@ -9,7 +9,7 @@ public class ToolStripItemTextRenderEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData()
     {
-        yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (TextFormatFlags)(TextFormatFlags.Top - 1) };
+        yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, TextFormatFlags.Top - 1 };
         yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top };
         yield return new object[] { new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Bottom };
     }
@@ -34,7 +34,7 @@ public class ToolStripItemTextRenderEventArgsTests
 
     public static IEnumerable<object[]> Ctor_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment_TestData()
     {
-        yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (ContentAlignment)(ContentAlignment.TopLeft - 1), TextFormatFlags.Default | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
+        yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, ContentAlignment.TopLeft - 1, TextFormatFlags.Default | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
         yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.MiddleCenter, TextFormatFlags.Default | TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
         yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.BottomRight, TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.HidePrefix };
         yield return new object[] { new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, (ContentAlignment)(-1), TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.RightToLeft | TextFormatFlags.HidePrefix };

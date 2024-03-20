@@ -49,7 +49,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         Assert.Equal(1, collection[0]);
         Assert.Equal(2, collection[1]);
@@ -86,7 +86,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Set first.
         collection[0] = 4;
@@ -112,7 +112,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Set first.
         collection[0] = 4;
@@ -138,7 +138,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -180,7 +180,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -466,7 +466,7 @@ public class ListBoxIntegerCollectionTests
         };
         var collection = new ListBox.IntegerCollection(owner);
 
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
@@ -494,7 +494,7 @@ public class ListBoxIntegerCollectionTests
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
 
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -529,7 +529,7 @@ public class ListBoxIntegerCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
@@ -570,7 +570,7 @@ public class ListBoxIntegerCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -606,7 +606,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange((int[])[2, 1, 1, 3]);
+        otherCollection.AddRange(2, 1, 1, 3);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -637,7 +637,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange((int[])[2, 1, 1, 3]);
+        otherCollection.AddRange(2, 1, 1, 3);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -675,7 +675,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange((int[])[2, 1, 1, 3]);
+        otherCollection.AddRange(2, 1, 1, 3);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -719,7 +719,7 @@ public class ListBoxIntegerCollectionTests
 
         using ListBox otherOwner = new();
         var otherCollection = new ListBox.IntegerCollection(otherOwner);
-        otherCollection.AddRange((int[])[2, 1, 1, 3]);
+        otherCollection.AddRange(2, 1, 1, 3);
         collection.AddRange(otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
@@ -1101,7 +1101,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Remove middle.
         collection.Remove(2);
@@ -1145,7 +1145,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Remove middle.
         collection.Remove(2);
@@ -1189,7 +1189,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1252,7 +1252,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1315,7 +1315,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Remove middle.
         collection.RemoveAt(1);
@@ -1352,7 +1352,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffsets
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
 
         // Remove middle.
         collection.RemoveAt(1);
@@ -1389,7 +1389,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         var collection = new ListBox.IntegerCollection(owner);
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1442,7 +1442,7 @@ public class ListBoxIntegerCollectionTests
             UseCustomTabOffsets = useCustomTabOffset
         };
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
-        collection.AddRange((int[])[2, 1, 1, 3]);
+        collection.AddRange(2, 1, 1, 3);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
         owner.Invalidated += (sender, e) => invalidatedCallCount++;

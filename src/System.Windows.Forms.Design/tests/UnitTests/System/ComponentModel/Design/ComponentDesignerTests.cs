@@ -76,7 +76,7 @@ public class ComponentDesignerTests
         using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PostFilterProperties(properties);
-        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        PropertyDescriptor result = properties["SettingsKey"];
         Assert.Same(descriptor, result);
 
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
@@ -88,7 +88,7 @@ public class ComponentDesignerTests
         designer.Initialize(component);
 
         designer.PostFilterProperties(properties);
-        result = (PropertyDescriptor)properties["SettingsKey"];
+        result = properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
     }
 
@@ -2311,7 +2311,7 @@ public class ComponentDesignerTests
         using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
-        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        PropertyDescriptor result = properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
         Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
         Assert.Equal(descriptor.Name, result.Name);
@@ -2331,7 +2331,7 @@ public class ComponentDesignerTests
         using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
-        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        PropertyDescriptor result = properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
         Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
         Assert.Equal(descriptor.Name, result.Name);
@@ -2741,7 +2741,7 @@ public class ComponentDesignerTests
         using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
-        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        PropertyDescriptor result = properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
         Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
         Assert.Equal(descriptor.Name, result.Name);
@@ -2762,7 +2762,7 @@ public class ComponentDesignerTests
         using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
-        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        PropertyDescriptor result = properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
         Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
         Assert.Equal(descriptor.Name, result.Name);

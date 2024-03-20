@@ -1149,8 +1149,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_InvokeWithChildrenWithCursor_CallsCursorChanged(EventArgs eventArgs)
     {
-        Cursor childCursor1 = new((IntPtr)1);
-        Cursor childCursor2 = new((IntPtr)1);
+        Cursor childCursor1 = new(1);
+        Cursor childCursor2 = new(1);
         using Control child1 = new()
         {
             Cursor = childCursor1
@@ -4380,7 +4380,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentCursorChanged_InvokeWithCursor_DoesNotCallCursorChanged(EventArgs eventArgs)
     {
-        Cursor cursor = new((IntPtr)1);
+        Cursor cursor = new(1);
         using SubControl control = new()
         {
             Cursor = cursor

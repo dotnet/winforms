@@ -9,8 +9,8 @@ public class DrawListViewSubItemEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData()
     {
-        yield return new object[] { Rectangle.Empty, null, new ListViewItem.ListViewSubItem(), -2, -2, null, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
-        yield return new object[] { Rectangle.Empty, new ListViewItem(), new ListViewItem.ListViewSubItem(), -2, -2, null, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
+        yield return new object[] { Rectangle.Empty, null, new ListViewItem.ListViewSubItem(), -2, -2, null, ListViewItemStates.Checked - 1 };
+        yield return new object[] { Rectangle.Empty, new ListViewItem(), new ListViewItem.ListViewSubItem(), -2, -2, null, ListViewItemStates.Checked - 1 };
         yield return new object[] { new Rectangle(1, 2, 3, 4), new ListViewItem(), null, -1, -1, new ColumnHeader(), ListViewItemStates.Checked };
         yield return new object[] { new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), -1, -1, new ColumnHeader(), ListViewItemStates.Checked };
         yield return new object[] { new Rectangle(-1, 2, -3, -4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 0, 0, new ColumnHeader(), ListViewItemStates.Focused };

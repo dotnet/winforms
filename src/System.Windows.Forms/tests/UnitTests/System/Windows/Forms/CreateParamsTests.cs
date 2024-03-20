@@ -142,7 +142,7 @@ public class CreateParamsTests
             Y = 13,
             Width = 14,
             Height = 15,
-            Parent = (IntPtr)16,
+            Parent = 16,
             Param = "param"
         };
         Assert.Equal("CreateParams {'className', 'caption', 0xa, 0xb, {12, 13, 14, 15}}", createParams.ToString());

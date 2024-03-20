@@ -8,7 +8,7 @@ public class TreeViewCancelEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_TreeNode_Bool_TreeViewAction_TestData()
     {
-        yield return new object[] { null, false, (TreeViewAction)(TreeViewAction.Unknown - 1) };
+        yield return new object[] { null, false, TreeViewAction.Unknown - 1 };
         yield return new object[] { new TreeNode(), true, TreeViewAction.ByKeyboard };
     }
 

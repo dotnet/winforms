@@ -50,7 +50,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
         using PropertyGrid propertyGrid = new();
         using ComboBox comboBox = new();
         propertyGrid.SelectedObject = comboBox;
-        GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetCurrentEntries()[0]).Children[2];
+        GridEntry entry = propertyGrid.GetCurrentEntries()[0].Children[2];
         entry.HasFocus = true;
         entry.Select();
         Assert.Equal(entry, propertyGrid.SelectedGridItem);
@@ -65,7 +65,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
         using PropertyGrid propertyGrid = new();
         using ComboBox comboBox = new();
         propertyGrid.SelectedObject = comboBox;
-        GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetCurrentEntries()[0]).Children[2];
+        GridEntry entry = propertyGrid.GetCurrentEntries()[0].Children[2];
         entry.HasFocus = true;
         entry.Select();
         Assert.Equal(entry, propertyGrid.SelectedGridItem);

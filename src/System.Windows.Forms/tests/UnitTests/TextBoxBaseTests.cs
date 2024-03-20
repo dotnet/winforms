@@ -4673,7 +4673,7 @@ public partial class TextBoxBaseTests
         using CustomCharFromPosTextBox control = new()
         {
             Text = text,
-            CharFromPosResult = (IntPtr)result
+            CharFromPosResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetCharIndexFromPosition(new Point(1, 2)));
@@ -4776,8 +4776,8 @@ public partial class TextBoxBaseTests
     {
         using CustomLineIndexTextBox control = new()
         {
-            ExpectedWParam = (IntPtr)1,
-            LineIndexResult = (IntPtr)result
+            ExpectedWParam = 1,
+            LineIndexResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetFirstCharIndexFromLine(1));
@@ -4866,8 +4866,8 @@ public partial class TextBoxBaseTests
     {
         using CustomLineIndexTextBox control = new()
         {
-            ExpectedWParam = (IntPtr)(-1),
-            LineIndexResult = (IntPtr)result
+            ExpectedWParam = -1,
+            LineIndexResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetFirstCharIndexOfCurrentLine());
@@ -4985,7 +4985,7 @@ public partial class TextBoxBaseTests
     {
         using CustomLineFromCharTextBox control = new()
         {
-            LineFromCharResult = (IntPtr)result
+            LineFromCharResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetLineFromCharIndex(1));
@@ -4999,7 +4999,7 @@ public partial class TextBoxBaseTests
         {
             if (m.Msg == (int)PInvoke.EM_LINEFROMCHAR)
             {
-                Assert.Equal((IntPtr)1, m.WParam);
+                Assert.Equal(1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 m.Result = LineFromCharResult;
                 return;
@@ -5142,7 +5142,7 @@ public partial class TextBoxBaseTests
         using CustomPosFromCharTextBox control = new()
         {
             Text = "text",
-            PosFromCharResult = (IntPtr)result
+            PosFromCharResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetPositionFromCharIndex(1));
@@ -5156,7 +5156,7 @@ public partial class TextBoxBaseTests
         {
             if (m.Msg == (int)PInvoke.EM_POSFROMCHAR)
             {
-                Assert.Equal((IntPtr)1, m.WParam);
+                Assert.Equal(1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 m.Result = PosFromCharResult;
                 return;
@@ -7153,7 +7153,7 @@ public partial class TextBoxBaseTests
     {
         foreach (bool shortcutsEnabled in new bool[] { true, false })
         {
-            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : (IntPtr)250;
+            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : 250;
             yield return new object[] { new Size(10, 20), shortcutsEnabled, (IntPtr)(-1), expectedResult };
             yield return new object[] { new Size(10, 20), shortcutsEnabled, PARAM.FromLowHigh(0, 0), expectedResult };
             yield return new object[] { new Size(10, 20), shortcutsEnabled, PARAM.FromLowHigh(1, 2), expectedResult };
@@ -7181,7 +7181,7 @@ public partial class TextBoxBaseTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -7196,7 +7196,7 @@ public partial class TextBoxBaseTests
 
         foreach (bool shortcutsEnabled in new bool[] { true, false })
         {
-            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : (IntPtr)250;
+            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : 250;
 
             yield return new object[] { new Size(10, 20), shortcutsEnabled, (IntPtr)(-1), (IntPtr)250, true, true };
             yield return new object[] { new Size(10, 20), shortcutsEnabled, PARAM.FromLowHigh(0, 0), expectedResult, false, true };
@@ -7229,7 +7229,7 @@ public partial class TextBoxBaseTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -7260,7 +7260,7 @@ public partial class TextBoxBaseTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -7277,7 +7277,7 @@ public partial class TextBoxBaseTests
 
         foreach (bool shortcutsEnabled in new bool[] { true, false })
         {
-            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : (IntPtr)250;
+            IntPtr expectedResult = shortcutsEnabled ? IntPtr.Zero : 250;
 
             yield return new object[] { new Size(10, 20), shortcutsEnabled, (IntPtr)(-1), (IntPtr)250, true };
             yield return new object[] { new Size(10, 20), shortcutsEnabled, PARAM.FromLowHigh(0, 0), expectedResult, false };
@@ -7316,7 +7316,7 @@ public partial class TextBoxBaseTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -7347,7 +7347,7 @@ public partial class TextBoxBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_GETDLGCODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -7374,7 +7374,7 @@ public partial class TextBoxBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_GETDLGCODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -7495,7 +7495,7 @@ public partial class TextBoxBaseTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -7531,7 +7531,7 @@ public partial class TextBoxBaseTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -7564,7 +7564,7 @@ public partial class TextBoxBaseTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7605,7 +7605,7 @@ public partial class TextBoxBaseTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -7649,7 +7649,7 @@ public partial class TextBoxBaseTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -7690,7 +7690,7 @@ public partial class TextBoxBaseTests
         Message m = new()
         {
             Msg = msg,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7725,7 +7725,7 @@ public partial class TextBoxBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7738,7 +7738,7 @@ public partial class TextBoxBaseTests
 
     public static IEnumerable<object[]> WndProc_ReflectCommand_TestData()
     {
-        foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+        foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, 1 })
         {
             yield return new object[] { IntPtr.Zero, lParam, 0 };
             yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_CHANGE), lParam, 1 };
@@ -7770,10 +7770,10 @@ public partial class TextBoxBaseTests
             Msg = (int)(MessageId.WM_REFLECT | PInvoke.WM_COMMAND),
             WParam = wParam,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
         Assert.Equal(0, modifiedCallCount);
         Assert.False(control.IsHandleCreated);
@@ -7806,10 +7806,10 @@ public partial class TextBoxBaseTests
             Msg = (int)(MessageId.WM_REFLECT | PInvoke.WM_COMMAND),
             WParam = wParam,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
         Assert.Equal(0, modifiedCallCount);
         Assert.True(control.IsHandleCreated);

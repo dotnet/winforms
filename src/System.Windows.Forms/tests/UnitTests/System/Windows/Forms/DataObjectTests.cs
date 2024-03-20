@@ -299,7 +299,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetData(format, true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format));
         mockDataObject.Verify(o => o.GetData(format, true), Times.Once());
     }
@@ -355,7 +355,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetData(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format, autoConvert));
         mockDataObject.Verify(o => o.GetData(format, autoConvert), Times.Once());
     }
@@ -467,7 +467,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetDataPresent(format, true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format));
         mockDataObject.Verify(o => o.GetDataPresent(format, true), Times.Once());
     }
@@ -523,7 +523,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetDataPresent(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format, autoConvert));
         mockDataObject.Verify(o => o.GetDataPresent(format, autoConvert), Times.Once());
     }
@@ -669,7 +669,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetFormats(true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats());
         mockDataObject.Verify(o => o.GetFormats(true), Times.Once());
     }
@@ -724,7 +724,7 @@ public partial class DataObjectTests
             .Setup(o => o.GetFormats(autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats(autoConvert));
         mockDataObject.Verify(o => o.GetFormats(autoConvert), Times.Once());
     }
@@ -927,7 +927,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetAudio(audioBytes);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()), Times.Once());
     }
@@ -982,7 +982,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, audioStream))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetAudio(audioStream);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, audioStream), Times.Once());
     }
@@ -1061,7 +1061,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(data);
         mockDataObject.Verify(o => o.SetData(data), Times.Once());
     }
@@ -1154,7 +1154,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1250,7 +1250,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, autoConvert, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, autoConvert, data);
         mockDataObject.Verify(o => o.SetData(format, autoConvert, data), Times.Once());
     }
@@ -1272,7 +1272,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1357,7 +1357,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetFileDropList(filePaths);
         mockDataObject.Verify(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()), Times.Once());
     }
@@ -1420,7 +1420,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.Bitmap, true, image))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetImage(image);
         mockDataObject.Verify(o => o.SetData(DataFormats.Bitmap, true, image), Times.Once());
     }
@@ -1496,7 +1496,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.UnicodeText, false, textData))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetText(textData);
         mockDataObject.Verify(o => o.SetData(DataFormats.UnicodeText, false, textData), Times.Once());
     }
@@ -1583,7 +1583,7 @@ public partial class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(expectedFormat, false, textData))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetText(textData, format);
         mockDataObject.Verify(o => o.SetData(expectedFormat, false, textData), Times.Once());
     }

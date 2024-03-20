@@ -10,7 +10,7 @@ public class DrawListViewItemEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData()
     {
-        yield return new object[] { Rectangle.Empty, -2, (ListViewItemStates)(ListViewItemStates.Checked - 1) };
+        yield return new object[] { Rectangle.Empty, -2, ListViewItemStates.Checked - 1 };
         yield return new object[] { new Rectangle(1, 2, 3, 4), -1, ListViewItemStates.Checked };
         yield return new object[] { new Rectangle(-1, 2, -3, -4), 0, ListViewItemStates.Focused };
         yield return new object[] { new Rectangle(1, 2, 3, 4), 1, ListViewItemStates.Checked };

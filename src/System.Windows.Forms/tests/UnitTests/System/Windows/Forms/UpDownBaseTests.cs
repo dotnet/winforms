@@ -2861,7 +2861,7 @@ public class UpDownBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -2887,7 +2887,7 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -2914,7 +2914,7 @@ public class UpDownBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_MOUSEHOVER,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -2945,7 +2945,7 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -2970,10 +2970,10 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.True(control.IsHandleCreated);
     }
@@ -3000,10 +3000,10 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);

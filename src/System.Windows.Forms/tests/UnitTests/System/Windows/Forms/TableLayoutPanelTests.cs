@@ -1124,13 +1124,13 @@ public class TableLayoutPanelTests
             GrowStyle = growStyle,
             ClientSize = new Size(50, 50)
         };
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 22));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 22));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
 
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 22));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 22));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
 
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 6));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 6));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
     }
 

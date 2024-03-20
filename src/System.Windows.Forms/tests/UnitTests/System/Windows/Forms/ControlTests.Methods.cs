@@ -2028,7 +2028,7 @@ public partial class ControlTests
     public void Control_FromChildHandle_InvokeNoSuchControl_ReturnsNull()
     {
         Assert.Null(Control.FromChildHandle(IntPtr.Zero));
-        Assert.Null(Control.FromChildHandle((IntPtr)1));
+        Assert.Null(Control.FromChildHandle(1));
     }
 
     [WinFormsFact]
@@ -2083,7 +2083,7 @@ public partial class ControlTests
     public void Control_FromHandle_InvokeNoSuchControl_ReturnsNull()
     {
         Assert.Null(Control.FromHandle(IntPtr.Zero));
-        Assert.Null(Control.FromHandle((IntPtr)1));
+        Assert.Null(Control.FromHandle(1));
     }
 
     // TODO: create a focus test that returns true when a handle has been created
@@ -5724,7 +5724,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
         Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
@@ -5771,7 +5771,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
         Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
@@ -5828,7 +5828,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyEventArgs(ref m));
         Assert.Equal(0, callCount);
@@ -6015,7 +6015,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyMessage(ref m));
         Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
@@ -6062,7 +6062,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyMessage(ref m));
         Assert.Equal(expectedKeyPressCallCount, keyPressCallCount);
@@ -6119,7 +6119,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            WParam = (IntPtr)2
+            WParam = 2
         };
         Assert.Equal(handled, control.ProcessKeyMessage(ref m));
         Assert.Equal(0, callCount);
@@ -6415,7 +6415,7 @@ public partial class ControlTests
     public void Control_ResetCursor_Invoke_Success()
     {
         using SubControl control = new();
-        using Cursor cursor = new((IntPtr)1);
+        using Cursor cursor = new(1);
 
         // Reset without value.
         control.ResetCursor();
@@ -12414,7 +12414,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -12445,7 +12445,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CAPTURECHANGED,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -12468,7 +12468,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -12494,7 +12494,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CANCELMODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -12532,7 +12532,7 @@ public partial class ControlTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -12574,12 +12574,12 @@ public partial class ControlTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
             Assert.False(menu.Visible);
-            Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+            Assert.Equal(expectedResult == 250, menu.SourceControl == control);
             Assert.Equal(expectedHandleCreated, control.IsHandleCreated);
         }
     }
@@ -12604,7 +12604,7 @@ public partial class ControlTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -12654,12 +12654,12 @@ public partial class ControlTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
         Assert.False(menu.Visible);
-        Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+        Assert.Equal(expectedResult == 250, menu.SourceControl == control);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -12857,7 +12857,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -12899,7 +12899,7 @@ public partial class ControlTests
                 {
                     Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedResult, m.Result);
@@ -12945,7 +12945,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -12994,7 +12994,7 @@ public partial class ControlTests
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13019,7 +13019,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_GETDLGCODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13042,7 +13042,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_GETDLGCODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -13063,7 +13063,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_IME_NOTIFY,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13089,7 +13089,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_IME_NOTIFY,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -13116,7 +13116,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13147,7 +13147,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -13180,7 +13180,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13203,10 +13203,10 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)250, m.Result);
+            Assert.Equal(250, m.Result);
             Assert.False(control.IsHandleCreated);
             Assert.Equal(0, paintCallCount);
         }
@@ -13241,7 +13241,7 @@ public partial class ControlTests
                 {
                     Msg = (int)PInvoke.WM_PRINTCLIENT,
                     WParam = hdc,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedResult, m.Result);
@@ -13282,7 +13282,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_PRINTCLIENT,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -13312,11 +13312,11 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_PRINTCLIENT,
-            Result = (IntPtr)250
+            Result = 250
         };
 
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -13358,7 +13358,7 @@ public partial class ControlTests
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13485,7 +13485,7 @@ public partial class ControlTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13521,7 +13521,7 @@ public partial class ControlTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13554,7 +13554,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13595,7 +13595,7 @@ public partial class ControlTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -13639,7 +13639,7 @@ public partial class ControlTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -13680,7 +13680,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -13709,7 +13709,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_MOUSEHOVER,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13740,7 +13740,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -13820,7 +13820,7 @@ public partial class ControlTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13856,7 +13856,7 @@ public partial class ControlTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -13885,7 +13885,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -13926,7 +13926,7 @@ public partial class ControlTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -13970,7 +13970,7 @@ public partial class ControlTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -14007,7 +14007,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = msg,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14036,7 +14036,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_SETFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -14067,7 +14067,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14105,7 +14105,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14161,7 +14161,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -14221,7 +14221,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14265,7 +14265,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14309,7 +14309,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14353,7 +14353,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -14374,7 +14374,7 @@ public partial class ControlTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_SETFONT,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -14397,7 +14397,7 @@ public partial class ControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFONT,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);

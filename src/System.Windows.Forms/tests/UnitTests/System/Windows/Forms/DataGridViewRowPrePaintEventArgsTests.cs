@@ -96,7 +96,7 @@ public class DataGridViewRowPrePaintEventArgsTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void PaintParts_SetInvalidValue_ThrowsArgumentException(DataGridViewPaintParts value)
     {
         using Bitmap image = new(10, 10);

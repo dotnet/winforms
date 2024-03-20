@@ -7,7 +7,7 @@ public class TabControlCancelEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_TabPage_Int_Bool_TabControlAction_TestData()
     {
-        yield return new object[] { null, -2, false, (TabControlAction)(TabControlAction.Selecting - 1) };
+        yield return new object[] { null, -2, false, TabControlAction.Selecting - 1 };
         yield return new object[] { new TabPage(), -1, true, TabControlAction.Selecting };
         yield return new object[] { new TabPage(), 0, false, TabControlAction.Selected };
         yield return new object[] { new TabPage(), 1, true, TabControlAction.Selected };

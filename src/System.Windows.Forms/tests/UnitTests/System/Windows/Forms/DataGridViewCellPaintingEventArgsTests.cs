@@ -63,7 +63,7 @@ public class DataGridViewCellPaintingEventArgsTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewCellPaintingEventArgs_Ctor_InvalidPaintParts_ThrowsArgumentException(DataGridViewPaintParts paintParts)
     {
         using Bitmap image = new(10, 10);

@@ -1358,7 +1358,7 @@ public partial class ToolStripTests
         control.CursorChanged += handler;
 
         // Set different.
-        using Cursor cursor1 = new((IntPtr)1);
+        using Cursor cursor1 = new(1);
         control.Cursor = cursor1;
         Assert.Same(cursor1, control.Cursor);
         Assert.Equal(1, callCount);
@@ -1369,7 +1369,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor2 = new(2);
         control.Cursor = cursor2;
         Assert.Same(cursor2, control.Cursor);
         Assert.Equal(2, callCount);
@@ -7141,7 +7141,7 @@ public partial class ToolStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7163,7 +7163,7 @@ public partial class ToolStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7195,7 +7195,7 @@ public partial class ToolStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);

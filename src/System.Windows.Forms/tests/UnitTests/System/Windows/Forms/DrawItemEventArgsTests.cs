@@ -10,7 +10,7 @@ public class DrawItemEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Graphics_Font_Rectangle_Int_DrawItemState_TestData()
     {
-        yield return new object[] { null, Rectangle.Empty, -2, (DrawItemState)(DrawItemState.None - 1), SystemColors.HighlightText, SystemColors.Highlight };
+        yield return new object[] { null, Rectangle.Empty, -2, DrawItemState.None - 1, SystemColors.HighlightText, SystemColors.Highlight };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None, SystemColors.WindowText, SystemColors.Window };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(-1, 2, -3, -4), 0, DrawItemState.Selected, SystemColors.HighlightText, SystemColors.Highlight };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus, SystemColors.WindowText, SystemColors.Window };
@@ -35,7 +35,7 @@ public class DrawItemEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color_TestData()
     {
-        yield return new object[] { null, Rectangle.Empty, -2, (DrawItemState)(DrawItemState.None - 1), Color.Empty, Color.Empty };
+        yield return new object[] { null, Rectangle.Empty, -2, DrawItemState.None - 1, Color.Empty, Color.Empty };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None, Color.Red, Color.Blue };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(-1, 2, -3, -4), 0, DrawItemState.Selected, Color.Red, Color.Blue };
         yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus, Color.Red, Color.Blue };

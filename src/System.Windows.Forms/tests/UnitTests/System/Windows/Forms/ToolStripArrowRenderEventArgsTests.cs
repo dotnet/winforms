@@ -18,7 +18,7 @@ public class ToolStripArrowRenderEventArgsTests
     {
         Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
-        yield return new object[] { graphics, null, Rectangle.Empty, Color.Empty, (ArrowDirection)(ArrowDirection.Down + 1) };
+        yield return new object[] { graphics, null, Rectangle.Empty, Color.Empty, ArrowDirection.Down + 1 };
         yield return new object[] { graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down };
         yield return new object[] { graphics, new ToolStripButton(), new Rectangle(-1, -2, -3, -4), Color.Blue, ArrowDirection.Down };
     }
@@ -77,7 +77,7 @@ public class ToolStripArrowRenderEventArgsTests
     }
 
     [WinFormsTheory]
-    [InlineData((ArrowDirection)(ArrowDirection.Down + 1))]
+    [InlineData((ArrowDirection.Down + 1))]
     [InlineData(ArrowDirection.Up)]
     public void Direction_Set_GetReturnsExpected(ArrowDirection value)
     {
