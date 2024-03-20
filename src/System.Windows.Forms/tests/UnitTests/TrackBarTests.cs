@@ -3232,35 +3232,35 @@ public class TrackBarTests
         callCount.Should().Be(1);
     }
 
-    public static TheoryData<PaintEventArgs> PaintEvent_TestData = new()
-    {
-        new(Graphics.FromImage(new Bitmap(100, 200)), new Rectangle(0, 0, 50, 100)),
-        new(Graphics.FromImage(new Bitmap(200, 300)), new Rectangle(10, 20, 70, 140)),
-        new(Graphics.FromImage(new Bitmap(300, 400)), new Rectangle(-10, -20, 70, 140)),
-        new(Graphics.FromImage(new Bitmap(400, 500)), new Rectangle(0, 0, 1, 1)),
-        new(Graphics.FromImage(new Bitmap(500, 600)), new Rectangle(0, 0, 500, 600))
-    };
-
     [WinFormsTheory]
-    [MemberData(nameof(PaintEvent_TestData))]
-    public void TrackBar_PaintEvent_AddRemove_Success(PaintEventArgs paintEventArgs)
+    [InlineData(100, 200, 0, 0, 50, 100)]
+    [InlineData(200, 300, 10, 20, 70, 140)]
+    [InlineData(300, 400, -10, -20, 70, 140)]
+    [InlineData(400, 500, 0, 0, 1, 1)]
+    [InlineData(500, 600, 0, 0, 500, 600)]
+    public void TrackBar_PaintEvent_AddRemove_Success(int bitmapWidth, int bitmapHeight, int rectX, int rectY, int rectWidth, int rectHeight)
     {
+        using Bitmap bitmap = new(bitmapWidth, bitmapHeight);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Rectangle rectangle = new(rectX, rectY, rectWidth, rectHeight);
+
         using SubTrackBar trackBar = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
             sender.Should().BeSameAs(trackBar);
-            e.Should().NotBeNull();
+            e.Graphics.Should().BeSameAs(graphics);
+            e.ClipRectangle.Should().Be(rectangle);
             callCount++;
         };
 
         trackBar.Paint += handler;
-        trackBar.OnPaint(paintEventArgs);
+        trackBar.OnPaint(new PaintEventArgs(graphics, rectangle));
         callCount.Should().Be(1);
 
         callCount = 0;
         trackBar.Paint -= handler;
-        trackBar.OnPaint(paintEventArgs);
+        trackBar.OnPaint(new PaintEventArgs(graphics, rectangle));
         trackBar.Invalidate();
         callCount.Should().Be(0);
     }
