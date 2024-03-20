@@ -120,7 +120,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         IDesignerHost? host = surface.GetService<IDesignerHost>();
         Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
 
-        _designerList ??= new();
+        _designerList ??= [];
         _designerList.Add(host);
 
         // Hookup an object disposed handler on the design surface so we know when it's gone.
@@ -307,7 +307,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     {
         get
         {
-            _designerList ??= new();
+            _designerList ??= [];
             _designerCollection ??= new DesignerCollection(_designerList);
             return _designerCollection;
         }

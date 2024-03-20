@@ -81,7 +81,7 @@ internal partial class OleDragDropHandler
 
             // Deserialize to components collection
             ICollection objects = ds.Deserialize(_serializationData);
-            List<IComponent> components = new();
+            List<IComponent> components = [];
             foreach (object item in objects)
             {
                 if (item is IComponent component)
@@ -130,7 +130,7 @@ internal partial class OleDragDropHandler
 
                     if (trayControl is not null)
                     {
-                        trayComponents ??= new();
+                        trayComponents ??= [];
                         trayComponents.Add(trayControl);
                     }
                 }
@@ -141,7 +141,7 @@ internal partial class OleDragDropHandler
                 }
             }
 
-            return components.ToArray();
+            return [.. components];
         }
 
         protected override IComponent[]? CreateComponentsCore(IDesignerHost? host) => CreateComponentsCore(host, null);

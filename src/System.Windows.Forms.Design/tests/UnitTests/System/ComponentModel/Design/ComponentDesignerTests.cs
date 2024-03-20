@@ -2975,16 +2975,18 @@ public class ComponentDesignerTests
 
     private class CustomInheritanceAttributeComponentDesigner : ComponentDesigner
     {
-        private InheritanceAttribute _inheritanceAttribute;
+        private readonly InheritanceAttribute _inheritanceAttribute;
 
         public CustomInheritanceAttributeComponentDesigner(InheritanceAttribute inheritanceAttribute) : base()
         {
             _inheritanceAttribute = inheritanceAttribute;
         }
 
-        protected override InheritanceAttribute InheritanceAttribute => _inheritanceAttribute;
+        protected override InheritanceAttribute InheritanceAttribute => InheritanceAttribute1;
 
         public new bool Inherited => base.Inherited;
+
+        public InheritanceAttribute InheritanceAttribute1 => _inheritanceAttribute;
 
         public new void PostFilterAttributes(IDictionary attributes) => base.PostFilterAttributes(attributes);
 
@@ -3018,19 +3020,19 @@ public class ComponentDesignerTests
         }
     }
 
-    [DefaultProperty(nameof(StringDefaultPropertyComponent.Value))]
+    [DefaultProperty(nameof(Value))]
     private class StringDefaultPropertyComponent : Component
     {
         public string Value { get; set; }
     }
 
-    [DefaultProperty(nameof(IntDefaultPropertyComponent.Value))]
+    [DefaultProperty(nameof(Value))]
     private class IntDefaultPropertyComponent : Component
     {
         public int Value { get; set; }
     }
 
-    [DefaultEvent(nameof(DefaultEventComponent.Event))]
+    [DefaultEvent(nameof(Event))]
     private class DefaultEventComponent : Component
     {
         private string _stringProperty;

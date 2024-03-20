@@ -25,24 +25,24 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionComboBox))]
 public partial class ComboBox : ListControl
 {
-    private static readonly object EVENT_DROPDOWN = new();
-    private static readonly object EVENT_DRAWITEM = new();
-    private static readonly object EVENT_MEASUREITEM = new();
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
-    private static readonly object EVENT_SELECTIONCHANGECOMMITTED = new();
-    private static readonly object EVENT_SELECTEDITEMCHANGED = new();
-    private static readonly object EVENT_DROPDOWNSTYLE = new();
-    private static readonly object EVENT_TEXTUPDATE = new();
-    private static readonly object EVENT_DROPDOWNCLOSED = new();
+    private static readonly object s_dropDownEvent = new();
+    private static readonly object s_drawItemEvent = new();
+    private static readonly object s_measureItemEvent = new();
+    private static readonly object s_selectedIndexChangedEvent = new();
+    private static readonly object s_selectionChangedComittedEvent = new();
+    private static readonly object s_selectedItemChangedEvent = new();
+    private static readonly object s_dropDownStyleEvent = new();
+    private static readonly object s_textUpdateEvent = new();
+    private static readonly object s_dropDownClosedEvent = new();
 
-    private static readonly int PropMaxLength = PropertyStore.CreateKey();
-    private static readonly int PropItemHeight = PropertyStore.CreateKey();
-    private static readonly int PropDropDownWidth = PropertyStore.CreateKey();
-    private static readonly int PropDropDownHeight = PropertyStore.CreateKey();
-    private static readonly int PropStyle = PropertyStore.CreateKey();
-    private static readonly int PropDrawMode = PropertyStore.CreateKey();
-    private static readonly int PropMatchingText = PropertyStore.CreateKey();
-    private static readonly int PropFlatComboAdapter = PropertyStore.CreateKey();
+    private static readonly int s_propMaxLength = PropertyStore.CreateKey();
+    private static readonly int s_propItemHeight = PropertyStore.CreateKey();
+    private static readonly int s_propDropDownWidth = PropertyStore.CreateKey();
+    private static readonly int s_propDropDownHeight = PropertyStore.CreateKey();
+    private static readonly int s_propStyle = PropertyStore.CreateKey();
+    private static readonly int s_propDrawMode = PropertyStore.CreateKey();
+    private static readonly int s_propMatchingText = PropertyStore.CreateKey();
+    private static readonly int s_propFlatComboAdapter = PropertyStore.CreateKey();
 
     private const int DefaultSimpleStyleHeight = 150;
     private const int DefaultDropDownHeight = 106;
@@ -193,7 +193,7 @@ public partial class ComboBox : ListControl
                 throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
             }
 
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
                 throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
@@ -220,7 +220,7 @@ public partial class ComboBox : ListControl
         {
             if (_autoCompleteCustomSource is null)
             {
-                _autoCompleteCustomSource = new AutoCompleteStringCollection();
+                _autoCompleteCustomSource = [];
                 _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
             }
 
@@ -419,7 +419,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            int drawMode = Properties.GetInteger(PropDrawMode, out bool found);
+            int drawMode = Properties.GetInteger(s_propDrawMode, out bool found);
             if (found)
             {
                 return (DrawMode)drawMode;
@@ -434,7 +434,7 @@ public partial class ComboBox : ListControl
                 // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
-                Properties.SetInteger(PropDrawMode, (int)value);
+                Properties.SetInteger(s_propDrawMode, (int)value);
                 RecreateHandle();
             }
         }
@@ -449,16 +449,16 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
+            int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
             return found ? dropDownWidth : Width;
         }
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(PropDropDownWidth) != value)
+            if (Properties.GetInteger(s_propDropDownWidth) != value)
             {
-                Properties.SetInteger(PropDropDownWidth, value);
+                Properties.SetInteger(s_propDropDownWidth, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
@@ -479,7 +479,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            int dropDownHeight = Properties.GetInteger(PropDropDownHeight, out bool found);
+            int dropDownHeight = Properties.GetInteger(s_propDropDownHeight, out bool found);
             if (found)
             {
                 return dropDownHeight;
@@ -493,9 +493,9 @@ public partial class ComboBox : ListControl
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(PropDropDownHeight) != value)
+            if (Properties.GetInteger(s_propDropDownHeight) != value)
             {
-                Properties.SetInteger(PropDropDownHeight, value);
+                Properties.SetInteger(s_propDropDownHeight, value);
 
                 // The dropDownHeight is not reflected unless the
                 // combobox integralHeight == false..
@@ -636,7 +636,7 @@ public partial class ComboBox : ListControl
                 drawMode == DrawMode.OwnerDrawVariable ||
                 !IsHandleCreated)
             {
-                int itemHeight = Properties.GetInteger(PropItemHeight, out bool found);
+                int itemHeight = Properties.GetInteger(s_propItemHeight, out bool found);
                 if (found)
                 {
                     return itemHeight;
@@ -664,9 +664,9 @@ public partial class ComboBox : ListControl
 
             ResetHeightCache();
 
-            if (Properties.GetInteger(PropItemHeight) != value)
+            if (Properties.GetInteger(s_propItemHeight) != value)
             {
-                Properties.SetInteger(PropItemHeight, value);
+                Properties.SetInteger(s_propItemHeight, value);
                 if (DrawMode != DrawMode.Normal)
                 {
                     UpdateItemHeight();
@@ -700,14 +700,14 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            string? matchingText = (string?)Properties.GetObject(PropMatchingText);
+            string? matchingText = (string?)Properties.GetObject(s_propMatchingText);
             return matchingText ?? string.Empty;
         }
         set
         {
-            if (value is not null || Properties.ContainsObject(PropMatchingText))
+            if (value is not null || Properties.ContainsObject(s_propMatchingText))
             {
-                Properties.SetObject(PropMatchingText, value);
+                Properties.SetObject(s_propMatchingText, value);
             }
         }
     }
@@ -759,7 +759,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            return Properties.GetInteger(PropMaxLength);
+            return Properties.GetInteger(s_propMaxLength);
         }
         set
         {
@@ -770,7 +770,7 @@ public partial class ComboBox : ListControl
 
             if (MaxLength != value)
             {
-                Properties.SetInteger(PropMaxLength, value);
+                Properties.SetInteger(s_propMaxLength, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)value);
@@ -1136,7 +1136,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            int style = Properties.GetInteger(PropStyle, out bool found);
+            int style = Properties.GetInteger(s_propStyle, out bool found);
             if (found)
             {
                 return (ComboBoxStyle)style;
@@ -1165,7 +1165,7 @@ public partial class ComboBox : ListControl
             // reset preferred height.
             ResetHeightCache();
 
-            Properties.SetInteger(PropStyle, (int)value);
+            Properties.SetInteger(s_propStyle, (int)value);
 
             if (IsHandleCreated)
             {
@@ -1323,16 +1323,16 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.drawItemEventDescr))]
     public event DrawItemEventHandler? DrawItem
     {
-        add => Events.AddHandler(EVENT_DRAWITEM, value);
-        remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
+        add => Events.AddHandler(s_drawItemEvent, value);
+        remove => Events.RemoveHandler(s_drawItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
     public event EventHandler? DropDown
     {
-        add => Events.AddHandler(EVENT_DROPDOWN, value);
-        remove => Events.RemoveHandler(EVENT_DROPDOWN, value);
+        add => Events.AddHandler(s_dropDownEvent, value);
+        remove => Events.RemoveHandler(s_dropDownEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
@@ -1341,12 +1341,12 @@ public partial class ComboBox : ListControl
     {
         add
         {
-            Events.AddHandler(EVENT_MEASUREITEM, value);
+            Events.AddHandler(s_measureItemEvent, value);
             UpdateItemHeight();
         }
         remove
         {
-            Events.RemoveHandler(EVENT_MEASUREITEM, value);
+            Events.RemoveHandler(s_measureItemEvent, value);
             UpdateItemHeight();
         }
     }
@@ -1355,24 +1355,24 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
     public event EventHandler? SelectedIndexChanged
     {
-        add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
+        add => Events.AddHandler(s_selectedIndexChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedIndexChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
     public event EventHandler? SelectionChangeCommitted
     {
-        add => Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
-        remove => Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
+        add => Events.AddHandler(s_selectionChangedComittedEvent, value);
+        remove => Events.RemoveHandler(s_selectionChangedComittedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
     public event EventHandler? DropDownStyleChanged
     {
-        add => Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
-        remove => Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
+        add => Events.AddHandler(s_dropDownStyleEvent, value);
+        remove => Events.RemoveHandler(s_dropDownStyleEvent, value);
     }
 
     /// <summary>
@@ -1395,8 +1395,8 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
     public event EventHandler? TextUpdate
     {
-        add => Events.AddHandler(EVENT_TEXTUPDATE, value);
-        remove => Events.RemoveHandler(EVENT_TEXTUPDATE, value);
+        add => Events.AddHandler(s_textUpdateEvent, value);
+        remove => Events.RemoveHandler(s_textUpdateEvent, value);
     }
 
     /// <summary>
@@ -1407,8 +1407,8 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
     public event EventHandler? DropDownClosed
     {
-        add => Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
-        remove => Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
+        add => Events.AddHandler(s_dropDownClosedEvent, value);
+        remove => Events.RemoveHandler(s_dropDownClosedEvent, value);
     }
 
     /// <summary>
@@ -2028,8 +2028,8 @@ public partial class ComboBox : ListControl
     // constraints on their size.
     internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
-        if (DropDownStyle == ComboBoxStyle.DropDown
-            || DropDownStyle == ComboBoxStyle.DropDownList)
+        if (DropDownStyle is ComboBoxStyle.DropDown
+            or ComboBoxStyle.DropDownList)
         {
             proposedHeight = PreferredHeight;
         }
@@ -2242,7 +2242,7 @@ public partial class ComboBox : ListControl
     protected override bool IsInputKey(Keys keyData)
     {
         Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
-        if (keyCode == Keys.Return || keyCode == Keys.Escape)
+        if (keyCode is Keys.Return or Keys.Escape)
         {
             if (DroppedDown || _autoCompleteDroppedDown)
             {
@@ -2416,13 +2416,13 @@ public partial class ComboBox : ListControl
             }
         }
 
-        int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
+        int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
         if (found)
         {
             PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
-        _ = Properties.GetInteger(PropItemHeight, out found);
+        _ = Properties.GetInteger(s_propItemHeight, out found);
         if (found)
         {
             // someone has set the item height - update it
@@ -2501,7 +2501,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+        ((DrawItemEventHandler?)Events[s_drawItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2511,7 +2511,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDown(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_DROPDOWN])?.Invoke(this, e);
+        ((EventHandler?)Events[s_dropDownEvent])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -2595,19 +2595,11 @@ public partial class ComboBox : ListControl
         }
     }
 
-    private static bool ContainsNavigationKeyCode(Keys keyCode)
+    private static bool ContainsNavigationKeyCode(Keys keyCode) => keyCode switch
     {
-        switch (keyCode)
-        {
-            case Keys.Home:
-            case Keys.End:
-            case Keys.Left:
-            case Keys.Right:
-                return true;
-            default:
-                return false;
-        }
-    }
+        Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+        _ => false,
+    };
 
     /// <summary>
     ///  This is the code that actually fires the OnMeasureItem event.  Don't
@@ -2616,7 +2608,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnMeasureItem(MeasureItemEventArgs e)
     {
-        ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+        ((MeasureItemEventHandler?)Events[s_measureItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2665,7 +2657,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnSelectionChangeCommitted(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_SELECTIONCHANGECOMMITTED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectionChangedComittedEvent])?.Invoke(this, e);
 
         // The user selects a list item or selects an item and then closes the list.
         // It indicates that the user's selection is to be processed but should not
@@ -2684,7 +2676,7 @@ public partial class ComboBox : ListControl
     protected override void OnSelectedIndexChanged(EventArgs e)
     {
         base.OnSelectedIndexChanged(e);
-        ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedIndexChangedEvent])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -2751,7 +2743,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnSelectedItemChanged(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_SELECTEDITEMCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedItemChangedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2759,7 +2751,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDownStyleChanged(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_DROPDOWNSTYLE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_dropDownStyleEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2976,7 +2968,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDownClosed(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_dropDownClosedEvent])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -3028,7 +3020,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnTextUpdate(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_TEXTUPDATE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_textUpdateEvent])?.Invoke(this, e);
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -3209,12 +3201,12 @@ public partial class ComboBox : ListControl
 
     private void ResetDropDownWidth()
     {
-        Properties.RemoveInteger(PropDropDownWidth);
+        Properties.RemoveInteger(s_propDropDownWidth);
     }
 
     private void ResetItemHeight()
     {
-        Properties.RemoveInteger(PropItemHeight);
+        Properties.RemoveInteger(s_propItemHeight);
     }
 
     public override void ResetText()
@@ -3441,7 +3433,7 @@ public partial class ComboBox : ListControl
 
     internal bool ShouldSerializeDropDownWidth()
     {
-        return (Properties.ContainsInteger(PropDropDownWidth));
+        return (Properties.ContainsInteger(s_propDropDownWidth));
     }
 
     /// <summary>
@@ -3449,7 +3441,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     internal bool ShouldSerializeItemHeight()
     {
-        return (Properties.ContainsInteger(PropItemHeight));
+        return (Properties.ContainsInteger(s_propItemHeight));
     }
 
     /// <summary>
@@ -3966,10 +3958,10 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            if (!(Properties.GetObject(PropFlatComboAdapter) is FlatComboAdapter comboAdapter) || !comboAdapter.IsValid(this))
+            if (!(Properties.GetObject(s_propFlatComboAdapter) is FlatComboAdapter comboAdapter) || !comboAdapter.IsValid(this))
             {
                 comboAdapter = CreateFlatComboAdapterInstance();
-                Properties.SetObject(PropFlatComboAdapter, comboAdapter);
+                Properties.SetObject(s_propFlatComboAdapter, comboAdapter);
             }
 
             return comboAdapter;

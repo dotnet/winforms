@@ -8,14 +8,9 @@ namespace System.Windows.Forms;
 
 internal class ToolStripSplitStackLayout : LayoutEngine
 {
-    private Point noMansLand;
-    private Rectangle displayRectangle = Rectangle.Empty;
+    private Point _noMansLand;
+    private Rectangle _displayRectangle = Rectangle.Empty;
 
-#if DEBUG
-    internal static readonly TraceSwitch DebugLayoutTraceSwitch = new("DebugLayout", "Debug ToolStrip Layout code");
-#else
-    internal static readonly TraceSwitch? DebugLayoutTraceSwitch;
-#endif
     internal ToolStripSplitStackLayout(ToolStrip owner)
     {
         ToolStrip = owner;
@@ -42,7 +37,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
 
             // since we haven't parented the item yet - the auto size won't have reset the size yet.
-            Size overflowButtonSize = toolStrip.OverflowButton.AutoSize ? toolStrip.OverflowButton.GetPreferredSize(displayRectangle.Size) : toolStrip.OverflowButton.Size;
+            Size overflowButtonSize = toolStrip.OverflowButton.AutoSize ? toolStrip.OverflowButton.GetPreferredSize(_displayRectangle.Size) : toolStrip.OverflowButton.Size;
             return overflowButtonSize + toolStrip.OverflowButton.Margin.Size;
         }
     }
@@ -82,24 +77,21 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 // if we have something set to overflow always we need to show an overflow button
                 if (item.Overflow == ToolStripItemOverflow.Always)
                 {
-                    DebugLayoutTraceSwitch.TraceVerbose($"OverflowRequired - item set to always overflow: {item} ");
                     OverflowRequired = true;
                 }
 
                 if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                 {
                     // since we haven't parented the item yet - the auto size won't have reset the size yet.
-                    Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
+                    Size itemSize = item.AutoSize ? item.GetPreferredSize(_displayRectangle.Size) : item.Size;
 
                     currentWidth += itemSize.Width + item.Margin.Horizontal;
 
                     int overflowWidth = (OverflowRequired) ? OverflowButtonSize.Width : 0;
 
-                    if (currentWidth > displayRectangle.Width - overflowWidth)
+                    if (currentWidth > _displayRectangle.Width - overflowWidth)
                     {
-                        DebugLayoutTraceSwitch.TraceVerbose($"SendNextItemToOverflow to free space for {item}");
-                        int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - displayRectangle.Width, true);
-
+                        int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - _displayRectangle.Width, true);
                         currentWidth -= spaceRecovered;
                     }
                 }
@@ -136,22 +128,19 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 if (item.Overflow == ToolStripItemOverflow.Always)
                 {
                     OverflowRequired = true;
-                    DebugLayoutTraceSwitch.TraceVerbose($"OverflowRequired - item set to always overflow: {item} ");
                 }
 
                 if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                 {
                     // since we haven't parented the item yet - the auto size won't have reset the size yet.
-                    Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
+                    Size itemSize = item.AutoSize ? item.GetPreferredSize(_displayRectangle.Size) : item.Size;
                     int overflowWidth = (OverflowRequired) ? OverflowButtonSize.Height : 0;
 
                     currentHeight += itemSize.Height + item.Margin.Vertical;
-                    DebugLayoutTraceSwitch.TraceVerbose($"Adding {item} Size {itemSize} to currentHeight = {currentHeight}");
-                    if (currentHeight > displayRectangle.Height - overflowWidth)
-                    {
-                        DebugLayoutTraceSwitch.TraceVerbose($"Got to {item} and realized that currentHeight = {currentHeight} is larger than displayRect {displayRectangle} minus overflow {overflowWidth}");
-                        int spaceRecovered = SendNextItemToOverflow(currentHeight - displayRectangle.Height, false);
 
+                    if (currentHeight > _displayRectangle.Height - overflowWidth)
+                    {
+                        int spaceRecovered = SendNextItemToOverflow(currentHeight - _displayRectangle.Height, false);
                         currentHeight -= spaceRecovered;
                     }
                 }
@@ -185,7 +174,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         BackwardsWalkingIndex = -1;
         OverflowSpace = 0;
         OverflowRequired = false;
-        displayRectangle = Rectangle.Empty;
+        _displayRectangle = Rectangle.Empty;
     }
 
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
@@ -196,13 +185,13 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         }
 
         InvalidateLayout();
-        displayRectangle = ToolStrip.DisplayRectangle;
+        _displayRectangle = ToolStrip.DisplayRectangle;
 
         // pick a location that's outside of the displayed region to send
         // items that will potentially clobber/overlay others.
-        noMansLand = displayRectangle.Location;
-        noMansLand.X += ToolStrip.ClientSize.Width + 1;
-        noMansLand.Y += ToolStrip.ClientSize.Height + 1;
+        _noMansLand = _displayRectangle.Location;
+        _noMansLand.X += ToolStrip.ClientSize.Width + 1;
+        _noMansLand.Y += ToolStrip.ClientSize.Height + 1;
 
         if (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow)
         {
@@ -221,13 +210,8 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         ToolStrip toolStrip = ToolStrip;
         Rectangle clientRectangle = toolStrip.ClientRectangle;
 
-        DebugLayoutTraceSwitch.TraceVerbose($"""
-                _________________________
-                Horizontal Layout:{toolStrip}{displayRectangle}
-                """);
-
-        int lastRight = displayRectangle.Right;
-        int lastLeft = displayRectangle.Left;
+        int lastRight = _displayRectangle.Right;
+        int lastLeft = _displayRectangle.Left;
         bool needsMoreSpace = false;
         Size itemSize = Size.Empty;
         Rectangle alignedLeftItems = Rectangle.Empty;
@@ -291,7 +275,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // main.
             if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
             {
-                DebugLayoutTraceSwitch.TraceVerbose($"Resetting {item} to Main - we don't need it to overflow");
                 item.SetPlacement(ToolStripItemPlacement.Main);
             }
 
@@ -301,8 +284,8 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             //      In RTL.No,  Head is to the Left,  Tail is to the Right
             if (item.Placement == ToolStripItemPlacement.Main)
             {
-                int x = displayRectangle.Left;
-                int y = displayRectangle.Top;
+                int x = _displayRectangle.Left;
+                int y = _displayRectangle.Top;
                 Padding itemMargin = item.Margin;
 
                 if (((item.Alignment == ToolStripItemAlignment.Right) && (toolStrip.RightToLeft == RightToLeft.No)) || ((item.Alignment == ToolStripItemAlignment.Left) && (toolStrip.RightToLeft == RightToLeft.Yes)))
@@ -341,19 +324,19 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 }
                 else if (alignedRightItems.Width > 0 && alignedLeftItems.Width > 0 && alignedRightItems.IntersectsWith(alignedLeftItems))
                 {
-                    itemLocation = noMansLand;
+                    itemLocation = _noMansLand;
                     item.SetPlacement(ToolStripItemPlacement.None);
                 }
 
                 if (item.AutoSize)
                 {
                     // autosized items stretch from edge-edge
-                    itemSize.Height = Math.Max(displayRectangle.Height - itemMargin.Vertical, 0);
+                    itemSize.Height = Math.Max(_displayRectangle.Height - itemMargin.Vertical, 0);
                 }
                 else
                 {
                     // non autosized items are vertically centered
-                    Rectangle bounds = LayoutUtils.VAlign(item.Size, displayRectangle, AnchorStyles.None);
+                    Rectangle bounds = LayoutUtils.VAlign(item.Size, _displayRectangle, AnchorStyles.None);
                     itemLocation.Y = bounds.Y;
                 }
 
@@ -363,8 +346,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             {
                 item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
-
-            DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
         }
 
         return needsMoreSpace;
@@ -372,21 +353,16 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
     private bool LayoutVertical()
     {
-        DebugLayoutTraceSwitch.TraceVerbose($"""
-            _________________________
-            Vertical Layout{displayRectangle}
-            """);
-
         ToolStrip toolStrip = ToolStrip;
         Rectangle clientRectangle = toolStrip.ClientRectangle;
-        int lastBottom = displayRectangle.Bottom;
-        int lastTop = displayRectangle.Top;
+        int lastBottom = _displayRectangle.Bottom;
+        int lastTop = _displayRectangle.Top;
         bool needsMoreSpace = false;
         Size itemSize = Size.Empty;
         Rectangle alignedLeftItems = Rectangle.Empty;
         Rectangle alignedRightItems = Rectangle.Empty;
 
-        Size toolStripPreferredSize = displayRectangle.Size;
+        Size toolStripPreferredSize = _displayRectangle.Size;
         DockStyle dock = toolStrip.Dock;
         bool IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
         if (toolStrip.AutoSize && (IsNotInToolStripPanelWithLeftDockstyle || dock == DockStyle.Right))
@@ -441,7 +417,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // main.
             if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
             {
-                DebugLayoutTraceSwitch.TraceVerbose($"Resetting {item} to Main - we don't need it to overflow");
                 item.SetPlacement(ToolStripItemPlacement.Main);
             }
 
@@ -452,8 +427,8 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             if (item.Placement == ToolStripItemPlacement.Main)
             {
                 Padding itemMargin = item.Margin;
-                int x = displayRectangle.Left + itemMargin.Left;
-                int y = displayRectangle.Top;
+                int x = _displayRectangle.Left + itemMargin.Left;
+                int y = _displayRectangle.Top;
 
                 switch (item.Alignment)
                 {
@@ -482,7 +457,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 }
                 else if (alignedRightItems.Width > 0 && alignedLeftItems.Width > 0 && alignedRightItems.IntersectsWith(alignedLeftItems))
                 {
-                    itemLocation = noMansLand;
+                    itemLocation = _noMansLand;
                     item.SetPlacement(ToolStripItemPlacement.None);
                 }
 
@@ -494,7 +469,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 else
                 {
                     // non autosized items are horizontally centered
-                    Rectangle bounds = LayoutUtils.HAlign(item.Size, displayRectangle, AnchorStyles.None);
+                    Rectangle bounds = LayoutUtils.HAlign(item.Size, _displayRectangle, AnchorStyles.None);
                     itemLocation.X = bounds.X;
                 }
 
@@ -504,8 +479,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             {
                 item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
-
-            DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
         }
 
         return needsMoreSpace;
@@ -518,27 +491,24 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         {
             // overflow buttons can be placed outside the display rect.
             bool horizontal = (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow);
-            Rectangle displayRect = displayRectangle;
+            Rectangle displayRect = _displayRectangle;
             Rectangle itemBounds = new(itemLocation, itemSize);
 
             // in horizontal if something bleeds over the top/bottom that's ok - its left/right we care about
             // same in vertical.
             if (horizontal)
             {
-                if ((itemBounds.Right > displayRectangle.Right) || (itemBounds.Left < displayRectangle.Left))
+                if ((itemBounds.Right > _displayRectangle.Right) || (itemBounds.Left < _displayRectangle.Left))
                 {
-                    DebugLayoutTraceSwitch.TraceVerbose($"[SplitStack.SetItemLocation] Sending Item {item} to NoMansLand as it doesn't fit horizontally within the DRect");
-                    itemLocation = noMansLand;
+                    itemLocation = _noMansLand;
                     item.SetPlacement(ToolStripItemPlacement.None);
                 }
             }
             else
             {
-                if ((itemBounds.Bottom > displayRectangle.Bottom) || (itemBounds.Top < displayRectangle.Top))
+                if ((itemBounds.Bottom > _displayRectangle.Bottom) || (itemBounds.Top < _displayRectangle.Top))
                 {
-                    DebugLayoutTraceSwitch.TraceVerbose($"[SplitStack.SetItemLocation] Sending Item {item} to NoMansLand as it doesn't fit vertically within the DRect");
-
-                    itemLocation = noMansLand;
+                    itemLocation = _noMansLand;
                     item.SetPlacement(ToolStripItemPlacement.None);
                 }
             }
@@ -591,9 +561,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
     /// </summary>²
     private int SendNextItemToOverflow(int spaceNeeded, bool horizontal)
     {
-        DebugLayoutTraceSwitch.TraceVerbose($"SendNextItemToOverflow attempting to free {spaceNeeded}");
-        Debug.Indent();
-
         int freedSpace = 0;
         int backIndex = BackwardsWalkingIndex;
 
@@ -613,10 +580,8 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // not looking at ones that Always overflow - as the forward walker already skips these.
             if (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement != ToolStripItemPlacement.Overflow)
             {
-                DebugLayoutTraceSwitch.TraceVerbose($"Found candidate for sending to overflow {item}");
-
                 // since we haven't parented the item yet - the auto size won't have reset the size yet.
-                Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
+                Size itemSize = item.AutoSize ? item.GetPreferredSize(_displayRectangle.Size) : item.Size;
 
                 if (BackwardsWalkingIndex <= ForwardsWalkingIndex)
                 {
@@ -624,7 +589,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                     // we need to let him know how much space we're freeing by sending this guy over
                     // to the overflow.
                     freedSpace += (horizontal) ? itemSize.Width + itemMargin.Horizontal : itemSize.Height + itemMargin.Vertical;
-                    DebugLayoutTraceSwitch.TraceVerbose($"Sweet! {itemSize} FreedSpace - which is now {freedSpace}");
                 }
 
                 // send the item to the overflow.
@@ -634,7 +598,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                     // this is the first item we're sending down.
                     // we now need to account for the width or height of the overflow button
                     spaceNeeded += (horizontal) ? OverflowButtonSize.Width : OverflowButtonSize.Height;
-                    DebugLayoutTraceSwitch.TraceVerbose($"Turns out we now need an overflow button, space needed now: {spaceNeeded}");
                     OverflowRequired = true;
                 }
 
@@ -647,7 +610,6 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
         }
 
-        Debug.Unindent();
         return freedSpace;
     }
 }

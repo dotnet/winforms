@@ -5,192 +5,151 @@
 trigger:
   branches:
     include:
-      - main
-      - release/*
-      - internal/release/*
-      - internal/experimental/*
+    - main
+    - release/*
+    - internal/release/*
+    - internal/experimental/*
   paths:
     include:
-      - '*'
+    - '*'
     exclude:
-      - .github/*
-      - docs/*
-      - CODE-OF-CONDUCT.md
-      - CONTRIBUTING.md
-      - LICENSE.TXT
-      - PATENTS.TXT
-      - README.md
-      - SECURITY.md
-      - THIRD-PARTY-NOTICES.TXT
-
-# trigger ci builds on pull requests into main and any release branches
-pr:
-  autoCancel: true
-  branches:
-    include:
-      - main
-      - vnext
-      - release/*
-      - internal/release/*
-      - internal/experimental/*
-      - feature/win32
-      - feature/9.0
-  paths:
-    include:
-      - '*'
-    exclude:
-      - .github/*
-      - docs/*
-      - CODE-OF-CONDUCT.md
-      - CONTRIBUTING.md
-      - LICENSE.TXT
-      - PATENTS.TXT
-      - README.md
-      - SECURITY.md
-      - THIRD-PARTY-NOTICES.TXT
+    - .github/*
+    - docs/*
+    - CODE-OF-CONDUCT.md
+    - CONTRIBUTING.md
+    - LICENSE.TXT
+    - PATENTS.TXT
+    - README.md
+    - SECURITY.md
+    - THIRD-PARTY-NOTICES.TXT
 
 variables:
-  - name: TeamName
-    value: DotNetCore
-  # clean the local repo on the build agents
-  - name: Build.Repository.Clean
+- name: TeamName
+  value: DotNetCore
+# clean the local repo on the build agents
+- name: Build.Repository.Clean
+  value: true
+- ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/internal/release/'), eq(variables['Build.Reason'], 'Manual')) }}:
+  - name: PostBuildSign
+    value: false
+- ${{ else }}:
+  - name: PostBuildSign
     value: true
-  - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/internal/release/'), eq(variables['Build.Reason'], 'Manual')) }}:
-    - name: PostBuildSign
-      value: false
-  - ${{ else }}:
-    - name: PostBuildSign
-      value: true
-  - name: EnableLoc
-    value: ${{ contains(variables['Build.SourceBranch'], 'main') }}
-  - name: NativeToolsOnMachine
-    value: true
-  - name: isPublic
-    value: ${{ eq(variables['System.TeamProject'], 'public') }}
-  - name: isPR
-    value: ${{ eq(variables['Build.Reason'], 'PullRequest')}}
+- name: EnableLoc
+  value: ${{ contains(variables['Build.SourceBranch'], 'main') }}
+- name: NativeToolsOnMachine
+  value: true
 
-  # used for post-build phases, internal builds only
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-    - group: DotNet-Winforms-SDLValidation-Params
-  - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
-    - name: _InternalRuntimeDownloadArgs
-      value: ''
-  - ${{ if eq(variables['System.TeamProject'], 'internal') }}:
-    - group: DotNetBuilds storage account read tokens
-    - group: AzureDevOps-Artifact-Feeds-Pats
-    - name: _InternalRuntimeDownloadArgs
-      value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
-             /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
+# used for post-build phases
+- group: DotNet-Winforms-SDLValidation-Params
+- group: DotNetBuilds storage account read tokens
+- group: AzureDevOps-Artifact-Feeds-Pats
+- name: _InternalRuntimeDownloadArgs
+  value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
+          /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
 
-  # Produce test-signed build for PR and Public builds
-  - ${{ if or(eq(variables['isPublic'], 'true'), eq(variables['isPR'], 'true')) }}:
-    # needed for darc (dependency flow) publishing
-    - name: _PublishArgs
-      value: ''
-    - name: _OfficialBuildIdArgs
-      value: ''
-    # needed for signing
-    - name: _SignType
-      value: test
-    - name: _SignArgs
-      value: ''
-    - name: _Sign
-      value: false
+# Set up non-PR build from internal project
+# needed for darc (dependency flow) publishing
+- name: _PublishArgs
+  value: >-
+    /p:DotNetPublishUsingPipelines=true
+- name: _OfficialBuildIdArgs
+  value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+# needed for signing
+- name: _SignType
+  value: real
+- name: _SignArgs
+  value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+- name: _Sign
+  value: true
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    featureFlags:
+      autoBaseline: true
+    pool:
+      name: NetCore1ESPool-Internal
+      image: 1es-windows-2022-pt
+      os: windows
+    customBuildTags:
+    - ES365AIMigrationTooling
+    stages:
 
-  # Set up non-PR build from internal project
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-    # needed for darc (dependency flow) publishing
-    - name: _PublishArgs
-      value: >-
-            /p:DotNetPublishUsingPipelines=true
-    - name: _OfficialBuildIdArgs
-      value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-    # needed for signing
-    - name: _SignType
-      value: real
-    - name: _SignArgs
-      value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
-    - name: _Sign
-      value: true
+    - stage: Build
+      jobs:
 
+      # Windows x64
+      - template: /eng/pipelines/build.yml@self
+        parameters:
+          name: Windows_x64
+          targetArchitecture: x64
+          skipTests: $(SkipTests)
 
-stages:
+      # Windows x86
+      - template: /eng/pipelines/build.yml@self
+        parameters:
+          name: Windows_x86
+          targetArchitecture: x86
+          skipTests: $(SkipTests)
 
-- stage: Build
-  jobs:
+      # Windows arm64
+      - template: /eng/pipelines/build.yml@self
+        parameters:
+          name: Windows_arm64
+          targetArchitecture: arm64
+          skipTests: $(SkipTests)
 
-  # Windows x64
-  - template: /eng/pipelines/build.yml
-    parameters:
-      name: Windows_x64
-      targetArchitecture: x64
-      skipTests: $(SkipTests)
+    - ${{ if eq(variables['EnableLoc'], 'true') }}:
+      - stage: OneLocBuild
+        displayName: Publish localizable content to OneLocBuild
+        jobs:
+        - template: /eng/common/templates-official/job/onelocbuild.yml@self
+          parameters:
+            MirrorRepo: winforms
+            UseCheckedInLocProjectJson: true
+            LclSource: lclFilesfromPackage
+            LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
 
-  # Windows x86
-  - template: /eng/pipelines/build.yml
-    parameters:
-      name: Windows_x86
-      targetArchitecture: x86
-      skipTests: $(SkipTests)
+    - stage: PublishAssetRegistry
+      displayName: Publish to Build Asset Registry
+      dependsOn: Build
+      variables:
+      - template: /eng/common/templates-official/variables/pool-providers.yml@self
+      jobs:
+      # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
+      - template: /eng/common/templates-official/job/publish-build-assets.yml@self
+        parameters:
+          publishUsingPipelines: true
+          pool:
+            name: $(DncEngInternalBuildPool)
+            demands: ImageOverride -equals windows.vs2022preview.amd64
 
-  # Windows arm64
-  - template: /eng/pipelines/build.yml
-    parameters:
-      name: Windows_arm64
-      targetArchitecture: arm64
-      skipTests: $(SkipTests)
-
-
-- ${{ if and(eq(variables['EnableLoc'], 'true'), ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - stage: OneLocBuild
-    displayName: Publish localizable content to OneLocBuild
-    jobs:
-    - template: /eng/common/templates/job/onelocbuild.yml
+    # Copied from the arcade repo and modified for winforms
+    - template: /eng/common/templates-official/post-build/post-build.yml@self
       parameters:
-        MirrorRepo: winforms
-        UseCheckedInLocProjectJson: true
-        LclSource: lclFilesfromPackage
-        LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
-
-
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - stage: PublishAssetRegistry
-    displayName: Publish to Build Asset Registry
-    dependsOn: Build
-    variables:
-    - template: /eng/common/templates/variables/pool-providers.yml
-    jobs:
-    # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
-    - template: /eng/common/templates/job/publish-build-assets.yml
-      parameters:
-        publishUsingPipelines: true
-        pool:
-          name: $(DncEngInternalBuildPool)
-          demands: ImageOverride -equals windows.vs2022preview.amd64
-
-
-# Copied from the arcade repo and modified for winforms
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-  - template: /eng/common/templates/post-build/post-build.yml
-    parameters:
-      validateDependsOn: PublishAssetRegistry
-      publishingInfraVersion: 3
-      enableSymbolValidation: false
-      enableSigningValidation: false
-      enableNugetValidation: false
-      enableSourceLinkValidation: false
-      # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
-      SDLValidationParameters:
-        enable: false
-        params: ' -SourceToolsList $(_TsaSourceToolsList)
-        -TsaInstanceURL $(_TsaInstanceURL)
-        -TsaProjectName $(_TsaProjectName)
-        -TsaNotificationEmail $(_TsaNotificationEmail)
-        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
-        -TsaBugAreaPath $(_TsaBugAreaPath)
-        -TsaIterationPath $(_TsaIterationPath)
-        -TsaRepositoryName $(_TsaRepositoryName)
-        -TsaCodebaseName $(_TsaCodebaseName)
-        -TsaOnboard $(_TsaOnboard)
-        -TsaPublish $(_TsaPublish)'
+        validateDependsOn: PublishAssetRegistry
+        publishingInfraVersion: 3
+        enableSymbolValidation: false
+        enableSigningValidation: false
+        enableNugetValidation: false
+        enableSourceLinkValidation: false
+        # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
+        SDLValidationParameters:
+          enable: false
+          params: ' -SourceToolsList $(_TsaSourceToolsList)
+          -TsaInstanceURL $(_TsaInstanceURL)
+          -TsaProjectName $(_TsaProjectName)
+          -TsaNotificationEmail $(_TsaNotificationEmail)
+          -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+          -TsaBugAreaPath $(_TsaBugAreaPath)
+          -TsaIterationPath $(_TsaIterationPath)
+          -TsaRepositoryName $(_TsaRepositoryName)
+          -TsaCodebaseName $(_TsaCodebaseName)
+          -TsaOnboard $(_TsaOnboard)
+          -TsaPublish $(_TsaPublish)'

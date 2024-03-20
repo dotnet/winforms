@@ -53,14 +53,14 @@ public class UITypeEditor
     public virtual bool IsDropDownResizable => false;
 
     /// <summary>
-    ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
+    ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
     /// <param name="provider">An <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
     /// <param name="value">The object to edit.</param>
     public object? EditValue(IServiceProvider provider, object? value) => EditValue(null, provider, value);
 
     /// <summary>
-    ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
+    ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
     /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
     /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>

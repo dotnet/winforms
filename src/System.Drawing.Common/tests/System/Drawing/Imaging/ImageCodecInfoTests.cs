@@ -71,7 +71,7 @@ public class ImageCodecInfoTests
 
     private void CheckDecoderAndEncoder(string clsid, ImageFormat format, string CodecName, string DllName,
         string FilenameExtension, ImageCodecFlags Flags, string FormatDescription,
-        string MimeType, int Version, int signatureLength, string mask, string pattern, string pattern2)
+        string MimeType, int signatureLength, string mask, string pattern, string pattern2)
     {
         ImageCodecInfo encoder = GetEncoder(clsid);
         ImageCodecInfo decoder = GetDecoder(clsid);
@@ -122,7 +122,7 @@ public class ImageCodecInfoTests
                 WMF_CSID, ImageFormat.Wmf,
                 "WMF", null, "*.WMF",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "WMF", "image/x-wmf", 1, 1, "FF-FF-FF-FF", "D7-CD-C6-9A", null
+                "WMF", "image/x-wmf", 1, "FF-FF-FF-FF", "D7-CD-C6-9A", null
             };
 
             yield return new object[]
@@ -130,7 +130,7 @@ public class ImageCodecInfoTests
                 EMF_CSID, ImageFormat.Emf,
                 "EMF", null, "*.EMF",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "EMF", "image/x-emf", 1, 1, "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-FF-FF-FF-FF",
+                "EMF", "image/x-emf", 1, "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-FF-FF-FF-FF",
                 "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-20-45-4D-46", null
             };
 
@@ -139,7 +139,7 @@ public class ImageCodecInfoTests
                 ICO_CSID, ImageFormat.Icon,
                 "ICO", null, "*.ICO",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "ICO", "image/x-icon", 1, 1, "FF-FF-FF-FF", "00-00-01-00", null
+                "ICO", "image/x-icon", 1, "FF-FF-FF-FF", "00-00-01-00", null
             };
 
             yield return new object[]
@@ -147,7 +147,7 @@ public class ImageCodecInfoTests
                 TIF_CSID, ImageFormat.Tiff,
                 "TIFF", null, "*.TIF;*.TIFF",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Encoder | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "TIFF", "image/tiff", 1, 2, "FF-FF", "49-49", "4D-4D"
+                "TIFF", "image/tiff", 2, "FF-FF", "49-49", "4D-4D"
             };
 
             yield return new object[]
@@ -155,7 +155,7 @@ public class ImageCodecInfoTests
                 PNG_CSID, ImageFormat.Png,
                 "PNG", null, "*.PNG",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Encoder | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "PNG", "image/png", 1, 1, "FF-FF-FF-FF-FF-FF-FF-FF", "89-50-4E-47-0D-0A-1A-0A", null
+                "PNG", "image/png", 1, "FF-FF-FF-FF-FF-FF-FF-FF", "89-50-4E-47-0D-0A-1A-0A", null
             };
 
             yield return new object[]
@@ -163,7 +163,7 @@ public class ImageCodecInfoTests
                 JPG_JPEG_JPE_JFIF_CSID, ImageFormat.Jpeg,
                 "JPEG", null, "*.JPG",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Encoder | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "JPEG", "image/jpeg", 1, 1, "FF-FF", "FF-D8", null
+                "JPEG", "image/jpeg", 1, "FF-FF", "FF-D8", null
             };
 
             yield return new object[]
@@ -171,7 +171,7 @@ public class ImageCodecInfoTests
                 GIF_CSID, ImageFormat.Gif,
                 "GIF", null, "*.GIF",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Encoder | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "GIF", "image/gif", 1, 2, "FF-FF-FF-FF-FF-FF", "47-49-46-38-39-61", "47-49-46-38-37-61"
+                "GIF", "image/gif", 2, "FF-FF-FF-FF-FF-FF", "47-49-46-38-39-61", "47-49-46-38-37-61"
             };
 
             yield return new object[]
@@ -179,7 +179,7 @@ public class ImageCodecInfoTests
                 BMP_DIB_RLE_CSID, ImageFormat.Bmp,
                 "BMP", null, "*.BMP",
                 ImageCodecFlags.Builtin | ImageCodecFlags.Encoder | ImageCodecFlags.Decoder | ImageCodecFlags.SupportBitmap,
-                "BMP", "image/bmp", 1, 1, "FF-FF", "42-4D", null
+                "BMP", "image/bmp", 1, "FF-FF", "42-4D", null
             };
         }
     }
@@ -225,9 +225,9 @@ public class ImageCodecInfoTests
     [MemberData(nameof(CodecInfoTestData))]
     public void CheckDecoderAndEncoder_ReturnsExpected(string clsid, ImageFormat format, string codecName, string dllName,
         string fileNameExtension, ImageCodecFlags flags, string formatDescription,
-        string mimeType, int version, int signatureLength, string mask, string pattern, string pattern2)
+        string mimeType, int signatureLength, string mask, string pattern, string pattern2)
     {
-        CheckDecoderAndEncoder(clsid, format, codecName, dllName, fileNameExtension, flags, formatDescription, mimeType, version, signatureLength, mask, pattern, pattern2);
+        CheckDecoderAndEncoder(clsid, format, codecName, dllName, fileNameExtension, flags, formatDescription, mimeType, signatureLength, mask, pattern, pattern2);
     }
 
     [Theory]

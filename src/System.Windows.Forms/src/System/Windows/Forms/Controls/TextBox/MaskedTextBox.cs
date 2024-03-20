@@ -33,24 +33,24 @@ public partial class MaskedTextBox : TextBoxBase
     // to implement our own.  For more info about how to do this, see:
     // https://docs.microsoft.com/en-us/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
 
-    private const bool forward = true;
-    private const bool backward = false;
-    private const string nullMask = "<>"; // any char/str is OK here.
+    private const bool Forward = true;
+    private const bool Backward = false;
+    private const string NullMask = "<>"; // any char/str is OK here.
 
-    private static readonly object EVENT_MASKINPUTREJECTED = new();
-    private static readonly object EVENT_VALIDATIONCOMPLETED = new();
-    private static readonly object EVENT_TEXTALIGNCHANGED = new();
-    private static readonly object EVENT_ISOVERWRITEMODECHANGED = new();
-    private static readonly object EVENT_MASKCHANGED = new();
+    private static readonly object s_maskInputRejectedEvent = new();
+    private static readonly object s_validationCompletedEvent = new();
+    private static readonly object s_textAlignChangedEvent = new();
+    private static readonly object s_isOverwriteModeChangedEvent = new();
+    private static readonly object s_maskChangedEvent = new();
 
     // The native edit control's default password char (per thread). See corresponding property for more info.
-    private static char systemPwdChar;
+    private static char s_systemPwdChar;
 
     // Values to track changes in IME composition string (if any).  Having const variables is a bit more efficient
     // than having an enum (which creates a class).
-    private const byte imeConversionNone = 0;  // no conversion has been performed in the composition string.
-    private const byte imeConversionUpdate = 1;  // the char being composed has been updated but not converted yet.
-    private const byte imeConversionCompleted = 2;  // the char being composed has been fully converted.
+    private const byte ImeConversionNone = 0;       // no conversion has been performed in the composition string.
+    private const byte ImeConversionUpdate = 1;     // the char being composed has been updated but not converted yet.
+    private const byte ImeConversionCompleted = 2;  // the char being composed has been fully converted.
 
     /////////  Instance fields
 
@@ -61,38 +61,38 @@ public partial class MaskedTextBox : TextBoxBase
     private int _caretTestPos;
 
     // Bit mask - Determines when the Korean IME composition string is completed so converted character can be processed.
-    private static readonly int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
+    private static readonly int s_imeEndingComposition = BitVector32.CreateMask();
 
     // Bit mask - Determines when the Korean IME is completing a composition, used when forcing conversion.
-    private static readonly int IME_COMPLETING = BitVector32.CreateMask(IME_ENDING_COMPOSITION);
+    private static readonly int s_imeCompleting = BitVector32.CreateMask(s_imeEndingComposition);
 
     // Used for handling characters that have a modifier (Ctrl-A, Shift-Del...).
-    private static readonly int HANDLE_KEY_PRESS = BitVector32.CreateMask(IME_COMPLETING);
+    private static readonly int s_handleKeyPress = BitVector32.CreateMask(s_imeCompleting);
 
     // Bit mask - Used to simulate a null mask.  Needed since a MaskedTextProvider object cannot be
     // initialized with a null mask but we need one even in this case as a backend for
     // default properties.  This is to support creating a MaskedTextBox with the default
     // constructor, specially at design time.
-    private static readonly int IS_NULL_MASK = BitVector32.CreateMask(HANDLE_KEY_PRESS);
+    private static readonly int s_isNullMask = BitVector32.CreateMask(s_handleKeyPress);
 
     // Bit mask - Used in conjuction with get_Text to return the text that is actually set in the native
     // control.  This is required to be able to measure text correctly (GetPreferredSize) and
     // to compare against during set_Text (to bail if the same and not to raise TextChanged event).
-    private static readonly int QUERY_BASE_TEXT = BitVector32.CreateMask(IS_NULL_MASK);
+    private static readonly int s_queryBaseText = BitVector32.CreateMask(s_isNullMask);
 
     // If true, the input text is rejected whenever a character does not comply with the mask; a MaskInputRejected
     // event is fired for the failing character.
     // If false, characters in the input string are processed one by one accepting the ones that comply
     // with the mask and raising the MaskInputRejected event for the rejected ones.
-    private static readonly int REJECT_INPUT_ON_FIRST_FAILURE = BitVector32.CreateMask(QUERY_BASE_TEXT);
+    private static readonly int s_rejectInputOnFirstFailure = BitVector32.CreateMask(s_queryBaseText);
 
     // Bit masks for boolean properties.
-    private static readonly int HIDE_PROMPT_ON_LEAVE = BitVector32.CreateMask(REJECT_INPUT_ON_FIRST_FAILURE);
-    private static readonly int BEEP_ON_ERROR = BitVector32.CreateMask(HIDE_PROMPT_ON_LEAVE);
-    private static readonly int USE_SYSTEM_PASSWORD_CHAR = BitVector32.CreateMask(BEEP_ON_ERROR);
-    private static readonly int INSERT_TOGGLED = BitVector32.CreateMask(USE_SYSTEM_PASSWORD_CHAR);
-    private static readonly int CUTCOPYINCLUDEPROMPT = BitVector32.CreateMask(INSERT_TOGGLED);
-    private static readonly int CUTCOPYINCLUDELITERALS = BitVector32.CreateMask(CUTCOPYINCLUDEPROMPT);
+    private static readonly int s_hidePromptOnLeave = BitVector32.CreateMask(s_rejectInputOnFirstFailure);
+    private static readonly int s_beepOnError = BitVector32.CreateMask(s_hidePromptOnLeave);
+    private static readonly int s_useSystemPasswordChar = BitVector32.CreateMask(s_beepOnError);
+    private static readonly int s_insertToggled = BitVector32.CreateMask(s_useSystemPasswordChar);
+    private static readonly int s_cutCopyIncludePrompt = BitVector32.CreateMask(s_insertToggled);
+    private static readonly int s_cutCopyIncludeLiterals = BitVector32.CreateMask(s_cutCopyIncludePrompt);
 
     /////////  Properties backend fields. See corresponding property comments for more info.
 
@@ -111,8 +111,8 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     public MaskedTextBox()
     {
-        MaskedTextProvider maskedTextProvider = new(nullMask, CultureInfo.CurrentCulture);
-        _flagState[IS_NULL_MASK] = true;
+        MaskedTextProvider maskedTextProvider = new(NullMask, CultureInfo.CurrentCulture);
+        _flagState[s_isNullMask] = true;
         Initialize(maskedTextProvider);
     }
 
@@ -124,7 +124,7 @@ public partial class MaskedTextBox : TextBoxBase
         ArgumentNullException.ThrowIfNull(mask);
 
         MaskedTextProvider maskedTextProvider = new(mask, CultureInfo.CurrentCulture);
-        _flagState[IS_NULL_MASK] = false;
+        _flagState[s_isNullMask] = false;
         Initialize(maskedTextProvider);
     }
 
@@ -135,7 +135,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         ArgumentNullException.ThrowIfNull(maskedTextProvider);
 
-        _flagState[IS_NULL_MASK] = false;
+        _flagState[s_isNullMask] = false;
         Initialize(maskedTextProvider);
     }
 
@@ -151,7 +151,7 @@ public partial class MaskedTextBox : TextBoxBase
         _maskedTextProvider = maskedTextProvider;
 
         // set the initial display text.
-        if (!_flagState[IS_NULL_MASK])
+        if (!_flagState[s_isNullMask])
         {
             SetWindowText();
         }
@@ -160,18 +160,18 @@ public partial class MaskedTextBox : TextBoxBase
         _passwordChar = _maskedTextProvider.PasswordChar;
         _insertMode = InsertKeyMode.Default;
 
-        _flagState[HIDE_PROMPT_ON_LEAVE] = false;
-        _flagState[BEEP_ON_ERROR] = false;
-        _flagState[USE_SYSTEM_PASSWORD_CHAR] = false;
-        _flagState[REJECT_INPUT_ON_FIRST_FAILURE] = false;
+        _flagState[s_hidePromptOnLeave] = false;
+        _flagState[s_beepOnError] = false;
+        _flagState[s_useSystemPasswordChar] = false;
+        _flagState[s_rejectInputOnFirstFailure] = false;
 
         // CutCopyMaskFormat - set same defaults as TextMaskFormat (IncludePromptAndLiterals).
         // It is a lot easier to handle this flags individually since that's the way the MaskedTextProvider does it.
-        _flagState[CUTCOPYINCLUDEPROMPT] = _maskedTextProvider.IncludePrompt;
-        _flagState[CUTCOPYINCLUDELITERALS] = _maskedTextProvider.IncludeLiterals;
+        _flagState[s_cutCopyIncludePrompt] = _maskedTextProvider.IncludePrompt;
+        _flagState[s_cutCopyIncludeLiterals] = _maskedTextProvider.IncludeLiterals;
 
         // fields for internal use.
-        _flagState[HANDLE_KEY_PRESS] = true;
+        _flagState[s_handleKeyPress] = true;
         _caretTestPos = 0;
     }
 
@@ -277,11 +277,11 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[BEEP_ON_ERROR];
+            return _flagState[s_beepOnError];
         }
         set
         {
-            _flagState[BEEP_ON_ERROR] = value;
+            _flagState[s_beepOnError] = value;
         }
     }
 
@@ -379,9 +379,9 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (_flagState[CUTCOPYINCLUDEPROMPT])
+            if (_flagState[s_cutCopyIncludePrompt])
             {
-                if (_flagState[CUTCOPYINCLUDELITERALS])
+                if (_flagState[s_cutCopyIncludeLiterals])
                 {
                     return MaskFormat.IncludePromptAndLiterals;
                 }
@@ -389,7 +389,7 @@ public partial class MaskedTextBox : TextBoxBase
                 return MaskFormat.IncludePrompt;
             }
 
-            if (_flagState[CUTCOPYINCLUDELITERALS])
+            if (_flagState[s_cutCopyIncludeLiterals])
             {
                 return MaskFormat.IncludeLiterals;
             }
@@ -404,19 +404,19 @@ public partial class MaskedTextBox : TextBoxBase
 
             if (value == MaskFormat.IncludePrompt)
             {
-                _flagState[CUTCOPYINCLUDEPROMPT] = true;
-                _flagState[CUTCOPYINCLUDELITERALS] = false;
+                _flagState[s_cutCopyIncludePrompt] = true;
+                _flagState[s_cutCopyIncludeLiterals] = false;
             }
             else if (value == MaskFormat.IncludeLiterals)
             {
-                _flagState[CUTCOPYINCLUDEPROMPT] = false;
-                _flagState[CUTCOPYINCLUDELITERALS] = true;
+                _flagState[s_cutCopyIncludePrompt] = false;
+                _flagState[s_cutCopyIncludeLiterals] = true;
             }
             else // value == MaskFormat.IncludePromptAndLiterals || value == MaskFormat.ExcludePromptAndLiterals
             {
                 bool include = value == MaskFormat.IncludePromptAndLiterals;
-                _flagState[CUTCOPYINCLUDEPROMPT] = include;
-                _flagState[CUTCOPYINCLUDELITERALS] = include;
+                _flagState[s_cutCopyIncludePrompt] = include;
+                _flagState[s_cutCopyIncludeLiterals] = include;
             }
         }
     }
@@ -450,17 +450,17 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[HIDE_PROMPT_ON_LEAVE];
+            return _flagState[s_hidePromptOnLeave];
         }
         set
         {
-            if (_flagState[HIDE_PROMPT_ON_LEAVE] != value)
+            if (_flagState[s_hidePromptOnLeave] != value)
             {
-                _flagState[HIDE_PROMPT_ON_LEAVE] = value;
+                _flagState[s_hidePromptOnLeave] = value;
 
                 // If the control is not focused and there are available edit positions (mask not full) we need to
                 // update the displayed text.
-                if (!_flagState[IS_NULL_MASK] && !Focused && !MaskFull && !DesignMode)
+                if (!_flagState[s_isNullMask] && !Focused && !MaskFull && !DesignMode)
                 {
                     SetWindowText();
                 }
@@ -552,7 +552,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (_flagState[IS_NULL_MASK])
+            if (_flagState[s_isNullMask])
             {
                 return false; // EditBox always inserts.
             }
@@ -571,7 +571,7 @@ public partial class MaskedTextBox : TextBoxBase
                     // behavior of apps like WinWord, WordPad and VS; so we have to keep track of it and not query its
                     // system value.
                     // return Control.IsKeyLocked(Keys.Insert);
-                    return _flagState[INSERT_TOGGLED];
+                    return _flagState[s_insertToggled];
 
                 default:
                     Debug.Fail("Invalid InsertKeyMode.  This code path should have never been executed.");
@@ -587,8 +587,8 @@ public partial class MaskedTextBox : TextBoxBase
     [SRDescription(nameof(SR.MaskedTextBoxIsOverwriteModeChangedDescr))]
     public event EventHandler? IsOverwriteModeChanged
     {
-        add => Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
+        add => Events.AddHandler(s_isOverwriteModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_isOverwriteModeChangedEvent, value);
     }
 
     /// <summary>
@@ -604,14 +604,14 @@ public partial class MaskedTextBox : TextBoxBase
         {
             string[] lines;
 
-            _flagState[QUERY_BASE_TEXT] = true;
+            _flagState[s_queryBaseText] = true;
             try
             {
                 lines = base.Lines;
             }
             finally
             {
-                _flagState[QUERY_BASE_TEXT] = false;
+                _flagState[s_queryBaseText] = false;
             }
 
             return lines;
@@ -635,7 +635,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[IS_NULL_MASK] ? string.Empty : _maskedTextProvider.Mask;
+            return _flagState[s_isNullMask] ? string.Empty : _maskedTextProvider.Mask;
         }
         set
         {
@@ -644,7 +644,7 @@ public partial class MaskedTextBox : TextBoxBase
             // 1.  IsNullOrEmpty( value )->[Reset control] && _flagState[IS_NULL_MASK]==>Already Reset.
             // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
             //
-            if (_flagState[IS_NULL_MASK] == string.IsNullOrEmpty(value) && (_flagState[IS_NULL_MASK] || value == _maskedTextProvider.Mask))
+            if (_flagState[s_isNullMask] == string.IsNullOrEmpty(value) && (_flagState[s_isNullMask] || value == _maskedTextProvider.Mask))
             {
                 return;
             }
@@ -662,7 +662,7 @@ public partial class MaskedTextBox : TextBoxBase
                 string formattedText = TextOutput;
                 string unformattedText = _maskedTextProvider.ToString(false, false);
 
-                _flagState[IS_NULL_MASK] = true;
+                _flagState[s_isNullMask] = true;
 
                 if (_maskedTextProvider.IsPassword)
                 {
@@ -682,7 +682,7 @@ public partial class MaskedTextBox : TextBoxBase
                     OnTextChanged(e);
                 }
 
-                newMask = nullMask;
+                newMask = NullMask;
             }
             else    // Setting control to a new value.
             {
@@ -695,7 +695,7 @@ public partial class MaskedTextBox : TextBoxBase
                     }
                 }
 
-                if (_flagState[IS_NULL_MASK])
+                if (_flagState[s_isNullMask])
                 {
                     // If this.IsNullMask, we are setting the mask to a new value; in this case we need to get the text because
                     // the underlying MTP does not have it (used as a property backend only) and pass it to SetMaskedTextProvider
@@ -727,8 +727,8 @@ public partial class MaskedTextBox : TextBoxBase
     [SRDescription(nameof(SR.MaskedTextBoxMaskChangedDescr))]
     public event EventHandler? MaskChanged
     {
-        add => Events.AddHandler(EVENT_MASKCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_MASKCHANGED, value);
+        add => Events.AddHandler(s_maskChangedEvent, value);
+        remove => Events.RemoveHandler(s_maskChangedEvent, value);
     }
 
     /// <summary>
@@ -767,7 +767,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[IS_NULL_MASK] ? null : (MaskedTextProvider)_maskedTextProvider.Clone();
+            return _flagState[s_isNullMask] ? null : (MaskedTextProvider)_maskedTextProvider.Clone();
         }
     }
 
@@ -778,8 +778,8 @@ public partial class MaskedTextBox : TextBoxBase
     [SRDescription(nameof(SR.MaskedTextBoxMaskInputRejectedDescr))]
     public event MaskInputRejectedEventHandler? MaskInputRejected
     {
-        add => Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
-        remove => Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
+        add => Events.AddHandler(s_maskInputRejectedEvent, value);
+        remove => Events.RemoveHandler(s_maskInputRejectedEvent, value);
     }
 
     /// <summary>
@@ -860,7 +860,7 @@ public partial class MaskedTextBox : TextBoxBase
                 {
                     _maskedTextProvider.PasswordChar = value;
 
-                    if (_flagState[IS_NULL_MASK])
+                    if (_flagState[s_isNullMask])
                     {
                         SetEditControlPasswordChar(value);
                     }
@@ -940,7 +940,7 @@ public partial class MaskedTextBox : TextBoxBase
                 // if true, this disables IME in the base class.
                 base.ReadOnly = value;
 
-                if (!_flagState[IS_NULL_MASK])
+                if (!_flagState[s_isNullMask])
                 {
                     // Prompt will be hidden.
                     SetWindowText();
@@ -960,11 +960,11 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[REJECT_INPUT_ON_FIRST_FAILURE];
+            return _flagState[s_rejectInputOnFirstFailure];
         }
         set
         {
-            _flagState[REJECT_INPUT_ON_FIRST_FAILURE] = value;
+            _flagState[s_rejectInputOnFirstFailure] = value;
         }
     }
 
@@ -1033,7 +1033,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (_flagState[IS_NULL_MASK])
+            if (_flagState[s_isNullMask])
             {
                 return base.SelectedText;
             }
@@ -1048,7 +1048,7 @@ public partial class MaskedTextBox : TextBoxBase
 
     internal override void SetSelectedTextInternal(string? value, bool clearUndo)
     {
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             base.SetSelectedTextInternal(value, true); // Operates as a regular text box base.
             return;
@@ -1062,7 +1062,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void ImeComplete()
     {
-        _flagState[IME_COMPLETING] = true;
+        _flagState[s_imeCompleting] = true;
         ImeNotify(NOTIFY_IME_INDEX.CPS_COMPLETE);
     }
 
@@ -1111,7 +1111,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (MaskedTextBox.systemPwdChar == '\0')
+            if (s_systemPwdChar == '\0')
             {
                 // We need to temporarily create an edit control to get the default password character.
                 // We cannot use this control because we would have to reset the native control's password char to use
@@ -1121,10 +1121,10 @@ public partial class MaskedTextBox : TextBoxBase
                 using TextBox txtBox = new();
                 txtBox.UseSystemPasswordChar = true; // this forces the creation of the control handle.
 
-                MaskedTextBox.systemPwdChar = txtBox.PasswordChar;
+                s_systemPwdChar = txtBox.PasswordChar;
             }
 
-            return MaskedTextBox.systemPwdChar;
+            return s_systemPwdChar;
         }
     }
 
@@ -1145,7 +1145,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (_flagState[IS_NULL_MASK] || _flagState[QUERY_BASE_TEXT])
+            if (_flagState[s_isNullMask] || _flagState[s_queryBaseText])
             {
                 return base.Text;
             }
@@ -1154,7 +1154,7 @@ public partial class MaskedTextBox : TextBoxBase
         }
         set
         {
-            if (_flagState[IS_NULL_MASK])
+            if (_flagState[s_isNullMask])
             {
                 base.Text = value;
                 return;
@@ -1200,7 +1200,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            if (_flagState[IS_NULL_MASK])
+            if (_flagState[s_isNullMask])
             {
                 return base.TextLength;
             }
@@ -1223,7 +1223,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+            Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
             return _maskedTextProvider.ToString();
         }
     }
@@ -1264,9 +1264,9 @@ public partial class MaskedTextBox : TextBoxBase
     [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
     public event EventHandler? TextAlignChanged
     {
-        add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
+        add => Events.AddHandler(s_textAlignChangedEvent, value);
 
-        remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
+        remove => Events.RemoveHandler(s_textAlignChangedEvent, value);
     }
 
     /// <summary>
@@ -1312,7 +1312,7 @@ public partial class MaskedTextBox : TextBoxBase
 
             // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
             // verify it against the new value and raise OnTextChange if needed.
-            string? oldText = _flagState[IS_NULL_MASK] ? null : TextOutput;
+            string? oldText = _flagState[s_isNullMask] ? null : TextOutput;
 
             if (value == MaskFormat.IncludePrompt)
             {
@@ -1344,7 +1344,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     public override string ToString()
     {
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             return base.ToString();
         }
@@ -1374,8 +1374,8 @@ public partial class MaskedTextBox : TextBoxBase
     [SRDescription(nameof(SR.MaskedTextBoxTypeValidationCompletedDescr))]
     public event TypeValidationEventHandler? TypeValidationCompleted
     {
-        add => Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
-        remove => Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
+        add => Events.AddHandler(s_validationCompletedEvent, value);
+        remove => Events.RemoveHandler(s_validationCompletedEvent, value);
     }
 
     /// <summary>
@@ -1390,11 +1390,11 @@ public partial class MaskedTextBox : TextBoxBase
     {
         get
         {
-            return _flagState[USE_SYSTEM_PASSWORD_CHAR];
+            return _flagState[s_useSystemPasswordChar];
         }
         set
         {
-            if (value != _flagState[USE_SYSTEM_PASSWORD_CHAR])
+            if (value != _flagState[s_useSystemPasswordChar])
             {
                 if (value)
                 {
@@ -1412,9 +1412,9 @@ public partial class MaskedTextBox : TextBoxBase
                     _maskedTextProvider.PasswordChar = _passwordChar;
                 }
 
-                _flagState[USE_SYSTEM_PASSWORD_CHAR] = value;
+                _flagState[s_useSystemPasswordChar] = value;
 
-                if (_flagState[IS_NULL_MASK])
+                if (_flagState[s_isNullMask])
                 {
                     SetEditControlPasswordChar(_maskedTextProvider.PasswordChar);
                 }
@@ -1486,7 +1486,7 @@ public partial class MaskedTextBox : TextBoxBase
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void CreateHandle()
     {
-        if (!_flagState[IS_NULL_MASK] && RecreatingHandle)
+        if (!_flagState[s_isNullMask] && RecreatingHandle)
         {
             // update cached text value in Control. Don't preserve caret, cannot query for selection start at this time.
             SetWindowText(GetFormattedDisplayString(), false, false);
@@ -1501,7 +1501,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void Delete(Keys keyCode, int startPosition, int selectionLen)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
         Debug.Assert(keyCode is Keys.Delete or Keys.Back, $"Delete called with keyCode == {keyCode}");
         Debug.Assert(startPosition >= 0 && ((startPosition + selectionLen) <= _maskedTextProvider.Length), "Invalid position range.");
 
@@ -1560,21 +1560,21 @@ public partial class MaskedTextBox : TextBoxBase
                     {
                         if (keyCode == Keys.Delete)
                         {
-                            _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, forward);
+                            _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, Forward);
                         }
                         else
                         {
-                            if (_maskedTextProvider.FindAssignedEditPositionFrom(startPosition, forward) == MaskedTextProvider.InvalidIndex)
+                            if (_maskedTextProvider.FindAssignedEditPositionFrom(startPosition, Forward) == MaskedTextProvider.InvalidIndex)
                             {
                                 // No assigned position at the right, nothing to shift then move to the next assigned position at the
                                 // left (if any).
-                                _caretTestPos = _maskedTextProvider.FindAssignedEditPositionFrom(startPosition, backward);
+                                _caretTestPos = _maskedTextProvider.FindAssignedEditPositionFrom(startPosition, Backward);
                             }
                             else
                             {
                                 // there are assigned positions at the right so move to an edit position at the left to get ready for
                                 // removing the character on it or just shifting the characters at the right
-                                _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, backward);
+                                _caretTestPos = _maskedTextProvider.FindEditPositionFrom(startPosition, Backward);
                             }
 
                             if (_caretTestPos != MaskedTextProvider.InvalidIndex)
@@ -1618,14 +1618,14 @@ public partial class MaskedTextBox : TextBoxBase
     {
         char ch;
 
-        _flagState[QUERY_BASE_TEXT] = true;
+        _flagState[s_queryBaseText] = true;
         try
         {
             ch = base.GetCharFromPosition(pt);
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = false;
+            _flagState[s_queryBaseText] = false;
         }
 
         return ch;
@@ -1638,14 +1638,14 @@ public partial class MaskedTextBox : TextBoxBase
     {
         int index;
 
-        _flagState[QUERY_BASE_TEXT] = true;
+        _flagState[s_queryBaseText] = true;
         try
         {
             index = base.GetCharIndexFromPosition(pt);
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = false;
+            _flagState[s_queryBaseText] = false;
         }
 
         return index;
@@ -1657,12 +1657,12 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     internal override int GetEndPosition()
     {
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             return base.GetEndPosition();
         }
 
-        int pos = _maskedTextProvider.FindEditPositionFrom(_maskedTextProvider.LastAssignedPosition + 1, forward);
+        int pos = _maskedTextProvider.FindEditPositionFrom(_maskedTextProvider.LastAssignedPosition + 1, Forward);
 
         if (pos == MaskedTextProvider.InvalidIndex)
         {
@@ -1696,7 +1696,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private string GetFormattedDisplayString()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         bool includePrompt;
 
@@ -1733,14 +1733,14 @@ public partial class MaskedTextBox : TextBoxBase
     {
         Point pos;
 
-        _flagState[QUERY_BASE_TEXT] = true;
+        _flagState[s_queryBaseText] = true;
         try
         {
             pos = base.GetPositionFromCharIndex(index);
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = false;
+            _flagState[s_queryBaseText] = false;
         }
 
         return pos;
@@ -1754,14 +1754,14 @@ public partial class MaskedTextBox : TextBoxBase
     {
         Size size;
 
-        _flagState[QUERY_BASE_TEXT] = true;
+        _flagState[s_queryBaseText] = true;
         try
         {
             size = base.GetPreferredSizeCore(proposedConstraints);
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = false;
+            _flagState[s_queryBaseText] = false;
         }
 
         return size;
@@ -1774,9 +1774,9 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private string GetSelectedText()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out int selStart, out int selLength);
+        GetSelectionStartAndLength(out int selStart, out int selLength);
 
         if (selLength == 0)
         {
@@ -1817,9 +1817,9 @@ public partial class MaskedTextBox : TextBoxBase
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        base.SetSelectionOnHandle();
+        SetSelectionOnHandle();
 
-        if (_flagState[IS_NULL_MASK] && _maskedTextProvider.IsPassword)
+        if (_flagState[s_isNullMask] && _maskedTextProvider.IsPassword)
         {
             SetEditControlPasswordChar(_maskedTextProvider.PasswordChar);
         }
@@ -1831,7 +1831,7 @@ public partial class MaskedTextBox : TextBoxBase
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnIsOverwriteModeChanged(EventArgs e)
     {
-        if (Events[EVENT_ISOVERWRITEMODECHANGED] is EventHandler eh)
+        if (Events[s_isOverwriteModeChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -1844,7 +1844,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         base.OnKeyDown(e);
 
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             // Operates as a regular text box base.
             return;
@@ -1853,16 +1853,16 @@ public partial class MaskedTextBox : TextBoxBase
         Keys keyCode = e.KeyCode;
 
         // Special-case Return & Esc since they generate invalid characters we should not process OnKeyPress.
-        if (keyCode == Keys.Return || keyCode == Keys.Escape)
+        if (keyCode is Keys.Return or Keys.Escape)
         {
-            _flagState[HANDLE_KEY_PRESS] = false;
+            _flagState[s_handleKeyPress] = false;
         }
 
         // Insert is toggled when not modified with some other key (ctrl, shift...).  Note that shift-Insert is
         // same as paste.
         if (keyCode == Keys.Insert && e.Modifiers == Keys.None && _insertMode == InsertKeyMode.Default)
         {
-            _flagState[INSERT_TOGGLED] = !_flagState[INSERT_TOGGLED];
+            _flagState[s_insertToggled] = !_flagState[s_insertToggled];
             OnIsOverwriteModeChanged(EventArgs.Empty);
             return;
         }
@@ -1890,16 +1890,16 @@ public partial class MaskedTextBox : TextBoxBase
                     // Next OnKeyPress should not be handled to allow Ctrl-<x/c/v/a> to be processed in the
                     // base class so corresponding messages can be generated (WM_CUT/WM_COPY/WM_PASTE).
                     // Combined characters don't generate OnKeyDown by themselves but they generate OnKeyPress.
-                    _flagState[HANDLE_KEY_PRESS] = false;
+                    _flagState[s_handleKeyPress] = false;
                     return;
             }
         }
 
-        if (keyCode == Keys.Delete || keyCode == Keys.Back) // Deletion keys.
+        if (keyCode is Keys.Delete or Keys.Back) // Deletion keys.
         {
             if (!ReadOnly)
             {
-                base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
+                GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
                 switch (e.Modifiers)
                 {
@@ -1928,9 +1928,9 @@ public partial class MaskedTextBox : TextBoxBase
                         goto default;
 
                     default:
-                        if (!_flagState[HANDLE_KEY_PRESS])
+                        if (!_flagState[s_handleKeyPress])
                         {
-                            _flagState[HANDLE_KEY_PRESS] = true;
+                            _flagState[s_handleKeyPress] = true;
                         }
 
                         break;
@@ -1956,16 +1956,16 @@ public partial class MaskedTextBox : TextBoxBase
     {
         base.OnKeyPress(e);
 
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             // Operates as a regular text box base.
             return;
         }
 
         // This key may be a combined key involving a letter, like Ctrl-A; let the native control handle it.
-        if (!_flagState[HANDLE_KEY_PRESS])
+        if (!_flagState[s_handleKeyPress])
         {
-            _flagState[HANDLE_KEY_PRESS] = true;
+            _flagState[s_handleKeyPress] = true;
 
             // When the combined key involves a letter, the final character is not a letter. There are some
             // Ctrl combined keys that generate a letter and can be confusing; we do not mean to pass those
@@ -1980,7 +1980,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             // At this point the character needs to be processed ...
 
-            base.GetSelectionStartAndLength(out int selectionStart, out int selectionLen);
+            GetSelectionStartAndLength(out int selectionStart, out int selectionLen);
 
             string oldText = TextOutput;
             if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out MaskedTextResultHint hint))
@@ -1997,7 +1997,7 @@ public partial class MaskedTextBox : TextBoxBase
                     // Korean IMEs complete composition when a character has been fully converted, so the composition string
                     // is only one-character long; once composed we block the IME if there isn't more room in the test string.
 
-                    int editPos = _maskedTextProvider.FindUnassignedEditPositionFrom(_caretTestPos, forward);
+                    int editPos = _maskedTextProvider.FindUnassignedEditPositionFrom(_caretTestPos, Forward);
                     if (editPos == MaskedTextProvider.InvalidIndex)
                     {
                         ImeComplete();  // Force completion of composition.
@@ -2027,14 +2027,14 @@ public partial class MaskedTextBox : TextBoxBase
 
         // KeyUp is the last message to be processed so it is the best place to reset these flags.
 
-        if (_flagState[IME_COMPLETING])
+        if (_flagState[s_imeCompleting])
         {
-            _flagState[IME_COMPLETING] = false;
+            _flagState[s_imeCompleting] = false;
         }
 
-        if (_flagState[IME_ENDING_COMPOSITION])
+        if (_flagState[s_imeEndingComposition])
         {
-            _flagState[IME_ENDING_COMPOSITION] = false;
+            _flagState[s_imeEndingComposition] = false;
         }
 
         if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
@@ -2049,7 +2049,7 @@ public partial class MaskedTextBox : TextBoxBase
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMaskChanged(EventArgs e)
     {
-        if (Events[EVENT_MASKCHANGED] is EventHandler eh)
+        if (Events[s_maskChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -2060,7 +2060,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void OnMaskInputRejected(MaskInputRejectedEventArgs e)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         if (BeepOnError)
         {
@@ -2068,7 +2068,7 @@ public partial class MaskedTextBox : TextBoxBase
             sp.Play();
         }
 
-        if (Events[EVENT_MASKINPUTREJECTED] is MaskInputRejectedEventHandler eh)
+        if (Events[s_maskInputRejectedEvent] is MaskInputRejectedEventHandler eh)
         {
             eh(this, e);
         }
@@ -2102,7 +2102,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnTextAlignChanged(EventArgs e)
     {
-        if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
+        if (Events[s_textAlignChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -2113,7 +2113,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void OnTypeValidationCompleted(TypeValidationEventArgs e)
     {
-        if (Events[EVENT_VALIDATIONCOMPLETED] is TypeValidationEventHandler eh)
+        if (Events[s_validationCompletedEvent] is TypeValidationEventHandler eh)
         {
             eh(this, e);
         }
@@ -2142,15 +2142,15 @@ public partial class MaskedTextBox : TextBoxBase
     {
         // A text changed event handler will most likely query for the Text value, we need to return the
         // formatted one.
-        bool queryBaseText = _flagState[QUERY_BASE_TEXT];
-        _flagState[QUERY_BASE_TEXT] = false;
+        bool queryBaseText = _flagState[s_queryBaseText];
+        _flagState[s_queryBaseText] = false;
         try
         {
             base.OnTextChanged(e);
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = queryBaseText;
+            _flagState[s_queryBaseText] = queryBaseText;
         }
     }
 
@@ -2160,7 +2160,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void Replace(string text, int startPosition, int selectionLen)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
         Debug.Assert(text is not null, "text is null.");
 
         // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
@@ -2204,7 +2204,7 @@ public partial class MaskedTextBox : TextBoxBase
                 {
                     // Observe that we look for a position w/o respecting the selection length, because the input text could be larger than
                     // the number of edit positions in the selection.
-                    testPos = clonedProvider.FindEditPositionFrom(startPosition, forward);
+                    testPos = clonedProvider.FindEditPositionFrom(startPosition, Forward);
 
                     if (testPos == MaskedTextProvider.InvalidIndex)
                     {
@@ -2290,9 +2290,9 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void PasteInt(string? text)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out int selStart, out int selLength);
+        GetSelectionStartAndLength(out int selStart, out int selLength);
 
         if (string.IsNullOrEmpty(text))
         {
@@ -2321,7 +2321,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             string? message = null;
 
-            if (!_flagState[IS_NULL_MASK] && _maskedTextProvider.MaskCompleted == false)
+            if (!_flagState[s_isNullMask] && _maskedTextProvider.MaskCompleted == false)
             {
                 message = SR.MaskedTextBoxIncompleteMsg;
             }
@@ -2329,7 +2329,7 @@ public partial class MaskedTextBox : TextBoxBase
             {
                 string textValue;
 
-                if (!_flagState[IS_NULL_MASK]) // replace prompt with space.
+                if (!_flagState[s_isNullMask]) // replace prompt with space.
                 {
                     textValue = _maskedTextProvider.ToString(/*includePrompt*/ false, IncludeLiterals);
                 }
@@ -2397,7 +2397,7 @@ public partial class MaskedTextBox : TextBoxBase
     private bool PlaceChar(MaskedTextProvider provider, char ch, int startPosition, int length, bool overwrite,
         out MaskedTextResultHint hint)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         _caretTestPos = startPosition;
 
@@ -2441,7 +2441,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             if ((int)keyData == (int)Shortcut.CtrlA)
             {
-                base.SelectAll();
+                SelectAll();
                 msgProcessed = true; // This prevents generating a WM_CHAR for 'A'.
             }
         }
@@ -2461,14 +2461,14 @@ public partial class MaskedTextBox : TextBoxBase
 
         bool msgProcessed = base.ProcessKeyMessage(ref m);
 
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             return msgProcessed; // Operates as a regular text box base.
         }
 
         // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
         // the corresponding WM_IME_CHAR message.
-        if (m.Msg == PInvoke.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+        if (m.Msg == PInvoke.WM_CHAR && ImeWmCharsToIgnore > 0)
         {
             return true;    // meaning, we handled the message so it is not passed to the default WndProc.
         }
@@ -2519,7 +2519,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         // If mask not initialized and not initializing it, the new provider is just a property backend.
         // Change won't have any effect in text.
-        if (_flagState[IS_NULL_MASK] && textOnInitializingMask is null)
+        if (_flagState[s_isNullMask] && textOnInitializingMask is null)
         {
             _maskedTextProvider = newProvider;
             return;
@@ -2556,7 +2556,7 @@ public partial class MaskedTextBox : TextBoxBase
 
             while (assignedCount > 0)
             {
-                srcPos = oldProvider.FindAssignedEditPositionFrom(srcPos, forward);
+                srcPos = oldProvider.FindAssignedEditPositionFrom(srcPos, Forward);
                 Debug.Assert(srcPos != MaskedTextProvider.InvalidIndex, "InvalidIndex unexpected at this time.");
 
                 if (preserveCharPos)
@@ -2565,7 +2565,7 @@ public partial class MaskedTextBox : TextBoxBase
                 }
                 else
                 {
-                    dstPos = newProvider.FindEditPositionFrom(dstPos, forward);
+                    dstPos = newProvider.FindEditPositionFrom(dstPos, Forward);
 
                     if (dstPos == MaskedTextProvider.InvalidIndex)
                     {
@@ -2595,9 +2595,9 @@ public partial class MaskedTextBox : TextBoxBase
         // Set provider.
         _maskedTextProvider = newProvider;
 
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
-            _flagState[IS_NULL_MASK] = false;
+            _flagState[s_isNullMask] = false;
         }
 
         // Raising events need to be done only after the new provider has been set so the MTB is in a state where properties
@@ -2654,7 +2654,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void SetWindowText(string text, bool raiseTextChangedEvent, bool preserveCaret)
     {
-        _flagState[QUERY_BASE_TEXT] = true;
+        _flagState[s_queryBaseText] = true;
 
         try
         {
@@ -2677,7 +2677,7 @@ public partial class MaskedTextBox : TextBoxBase
         }
         finally
         {
-            _flagState[QUERY_BASE_TEXT] = false;
+            _flagState[s_queryBaseText] = false;
         }
     }
 
@@ -2712,11 +2712,11 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private bool WmClear()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         if (!ReadOnly)
         {
-            base.GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int selStart, out int selLength);
             Delete(Keys.Delete, selStart, selLength);
             return true;
         }
@@ -2731,7 +2731,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private bool WmCopy()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         if (_maskedTextProvider.IsPassword) // cannot copy password to clipboard.
         {
@@ -2769,7 +2769,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private bool WmImeComposition(ref Message m)
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
 #if DEBUG
         if (ReadOnly || _maskedTextProvider.IsPassword)
@@ -2784,27 +2784,27 @@ public partial class MaskedTextBox : TextBoxBase
 
         if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
         {
-            byte imeConversionType = imeConversionNone;
+            byte imeConversionType = ImeConversionNone;
 
             // Check if there's an update to the composition string:
             if ((m.LParamInternal & (int)IME_COMPOSITION_STRING.GCS_COMPSTR) != 0)
             {
                 // The character in the composition has been updated but not yet converted.
-                imeConversionType = imeConversionUpdate;
+                imeConversionType = ImeConversionUpdate;
             }
             else if ((m.LParamInternal & (int)IME_COMPOSITION_STRING.GCS_RESULTSTR) != 0)
             {
                 // The character(s) in the composition has been fully converted.
-                imeConversionType = imeConversionCompleted;
+                imeConversionType = ImeConversionCompleted;
             }
 
             // Process any update in the composition string.
-            if (imeConversionType != imeConversionNone)
+            if (imeConversionType != ImeConversionNone)
             {
-                if (_flagState[IME_ENDING_COMPOSITION])
+                if (_flagState[s_imeEndingComposition])
                 {
                     // If IME is completing the conversion, we don't want to process further characters.
-                    return _flagState[IME_COMPLETING];
+                    return _flagState[s_imeCompleting];
                 }
             }
         }
@@ -2818,13 +2818,13 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private bool WmImeStartComposition()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         // Position the composition window in a valid place.
 
-        base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
+        GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
-        int startEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition, forward);
+        int startEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition, Forward);
 
         if (startEditPos != MaskedTextProvider.InvalidIndex)
         {
@@ -2834,7 +2834,7 @@ public partial class MaskedTextBox : TextBoxBase
                 // character only, otherwise it would overwrite the selection with the caret (composition string),
                 // deleting a portion of the mask.
 
-                int endEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition + selectionLen - 1, backward);
+                int endEditPos = _maskedTextProvider.FindEditPositionFrom(startPosition + selectionLen - 1, Backward);
 
                 if (endEditPos >= startEditPos)
                 {
@@ -2875,7 +2875,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void WmPaste()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         if (ReadOnly)
         {
@@ -2942,7 +2942,7 @@ public partial class MaskedTextBox : TextBoxBase
                 break;  // continue.
         }
 
-        if (_flagState[IS_NULL_MASK])
+        if (_flagState[s_isNullMask])
         {
             base.WndProc(ref m); // Operates as a regular text box base.
             return;
@@ -2959,7 +2959,7 @@ public partial class MaskedTextBox : TextBoxBase
                 goto default;
 
             case PInvoke.WM_IME_ENDCOMPOSITION:
-                _flagState[IME_ENDING_COMPOSITION] = true;
+                _flagState[s_imeEndingComposition] = true;
                 goto default;
 
             case PInvoke.WM_IME_COMPOSITION:
@@ -3011,9 +3011,9 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void WmKillFocus()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
-        base.GetSelectionStartAndLength(out _caretTestPos, out _lastSelLength);
+        GetSelectionStartAndLength(out _caretTestPos, out _lastSelLength);
 
         if (HidePromptOnLeave && !MaskFull)
         {
@@ -3030,7 +3030,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     private void WmSetFocus()
     {
-        Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
+        Debug.Assert(!_flagState[s_isNullMask], "This method must be called when a Mask is provided.");
 
         if (HidePromptOnLeave && !MaskFull) // Prompt will show up.
         {

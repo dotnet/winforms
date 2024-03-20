@@ -16,13 +16,12 @@ internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescr
         : base(
               PInvokeCore.DISPID_ABOUTBOX,
               "About",
-              new Attribute[]
-              {
+              [
                   new DispIdAttribute(PInvokeCore.DISPID_ABOUTBOX),
                   DesignerSerializationVisibilityAttribute.Hidden,
                   new DescriptionAttribute(SR.AboutBoxDesc),
                   new ParenthesizePropertyNameAttribute(true)
-              },
+              ],
               readOnly: true,
               typeof(string),
               typeData: null,

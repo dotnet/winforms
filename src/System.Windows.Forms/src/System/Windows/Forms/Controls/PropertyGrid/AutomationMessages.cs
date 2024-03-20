@@ -89,7 +89,7 @@ internal static class AutomationMessages
     {
         string? fullFileName = null;
 
-        string? filePath = System.Environment.GetEnvironmentVariable("TEMP");
+        string? filePath = Environment.GetEnvironmentVariable("TEMP");
         Debug.Assert(filePath is not null, "Could not get value of the TEMP environment variable");
 
         if (filePath is not null)

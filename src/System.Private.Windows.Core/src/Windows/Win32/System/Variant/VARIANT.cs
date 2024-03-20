@@ -245,7 +245,7 @@ internal unsafe partial struct VARIANT : IDisposable
         return t;
     }
 
-    private static object? ToArray(SAFEARRAY* psa, VARENUM vt)
+    private static Array? ToArray(SAFEARRAY* psa, VARENUM vt)
     {
         if (psa is null)
         {

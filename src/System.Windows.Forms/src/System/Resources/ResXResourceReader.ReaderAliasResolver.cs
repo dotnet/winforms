@@ -13,7 +13,7 @@ public partial class ResXResourceReader
 
         internal ReaderAliasResolver()
         {
-            _cachedAliases = new Dictionary<string, AssemblyName>();
+            _cachedAliases = [];
         }
 
         public AssemblyName? ResolveAlias(string alias)

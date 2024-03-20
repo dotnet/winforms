@@ -16,7 +16,7 @@ public class ListTests
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
-        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
         systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
 
         format[2].Should().BeOfType<ArraySingleObject>();
@@ -34,7 +34,7 @@ public class ListTests
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
-        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
         systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
@@ -53,7 +53,7 @@ public class ListTests
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
-        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
         systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
@@ -128,8 +128,8 @@ public class ListTests
         classInfo.Name.Should().Be(
             "System.Collections.Generic.List`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]");
 
-        classInfo.ClassInfo.MemberNames.Should().BeEquivalentTo(new string[]
-        {
+        classInfo.ClassInfo.MemberNames.Should().BeEquivalentTo(
+        [
             "_items",
             // This is something that wouldn't be needed if List<T> implemented ISerializable. If we format
             // we can save any extra unused array spots.
@@ -137,7 +137,8 @@ public class ListTests
             // It is a bit silly that _version gets serialized, it's only use is as a check to see if
             // the collection is modified while it is being enumerated.
             "_version"
-        });
+        ]);
+
         classInfo.MemberTypeInfo[0].Should().Be((BinaryType.PrimitiveArray, PrimitiveType.Int32));
         classInfo.MemberTypeInfo[1].Should().Be((BinaryType.Primitive, PrimitiveType.Int32));
         classInfo.MemberTypeInfo[2].Should().Be((BinaryType.Primitive, PrimitiveType.Int32));

@@ -37,8 +37,10 @@ public class ParkingWindowTests
     private Form InitFormWithControlToGarbageCollect()
     {
         Form form = new();
-        ComboBox comboBox = new();
-        comboBox.DropDownStyle = ComboBoxStyle.DropDown;
+        ComboBox comboBox = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDown
+        };
 
         form.Controls.Add(comboBox);
         form.Show();

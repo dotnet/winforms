@@ -22,7 +22,7 @@ public partial class DocumentDesigner
 
         public AxToolboxItem(string clsid) : base(typeof(AxHost))
         {
-            this._clsid = clsid;
+            _clsid = clsid;
             Company = null; // we don't get any company info for ax controls.
             LoadVersionInfo();
         }
@@ -70,13 +70,14 @@ public partial class DocumentDesigner
                 {
                     TLIBATTR tlibAttr = GetTypeLibAttr();
 
-                    object[] args = new object[5];
-                    args[0] = $"{{{tlibAttr.guid}}}";
-                    args[1] = (int)tlibAttr.wMajorVerNum;
-                    args[2] = (int)tlibAttr.wMinorVerNum;
-                    args[3] = tlibAttr.lcid;
-
-                    args[4] = "";
+                    object[] args =
+                    [
+                        $"{{{tlibAttr.guid}}}",
+                        (int)tlibAttr.wMajorVerNum,
+                        (int)tlibAttr.wMinorVerNum,
+                        tlibAttr.lcid,
+                        "",
+                    ];
                     object? tlbRef = references.GetType().InvokeMember(
                         "AddActiveX",
                         BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
@@ -100,13 +101,7 @@ public partial class DocumentDesigner
                 }
                 catch (TargetInvocationException tie)
                 {
-                    Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Generating Ax References failed: {tie.InnerException}");
                     throw tie.InnerException!;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Generating Ax References failed: {e}");
-                    throw;
                 }
             }
 
@@ -129,7 +124,7 @@ public partial class DocumentDesigner
                     uiSvc.ShowError(SR.AxImportFailed);
                 }
 
-                return Array.Empty<IComponent>();
+                return [];
             }
 
             var comps = new IComponent[1];
@@ -176,7 +171,6 @@ public partial class DocumentDesigner
 
             FileInfo file = new(path);
             string fullPath = file.FullName;
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking: {fullPath}");
 
             ITypeResolutionService? trs = host.GetService<ITypeResolutionService>();
             Debug.Assert(trs is not null, "No type resolution service found.");
@@ -256,13 +250,8 @@ public partial class DocumentDesigner
         private unsafe TLIBATTR GetTypeLibAttr()
         {
             string controlKey = $"CLSID\\{_clsid}";
-            using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
-            if (key is null)
-            {
-                if (AxToolSwitch.TraceVerbose)
-                    Debug.WriteLine($"No registry key found for: {controlKey}");
-                throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey));
-            }
+            using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey)
+                ?? throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey));
 
             // Load the typelib into memory.
             ITypeLib* pTLB = null;
@@ -353,12 +342,10 @@ public partial class DocumentDesigner
         }
 
         /// <summary>
-        /// <para>Saves the state of this 'AxToolboxItem' to
-        ///  the specified serialization info.</para>
+        ///  Saves the state of this <see cref="AxToolboxItem"/> to the specified serialization info.
         /// </summary>
         protected override void Serialize(SerializationInfo info, StreamingContext context)
         {
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Serializing AxToolboxItem:{_clsid}");
             base.Serialize(info, context);
             info.AddValue("Clsid", _clsid);
         }

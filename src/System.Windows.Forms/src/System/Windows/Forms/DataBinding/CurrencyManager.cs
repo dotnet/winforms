@@ -151,10 +151,10 @@ public partial class CurrencyManager : BindingManagerBase
         finalType = null;
 
         object? tempList = dataSource;
-        if (tempList is Array)
+        if (tempList is Array array)
         {
             finalType = tempList.GetType();
-            tempList = (Array)tempList;
+            tempList = array;
         }
 
         if (tempList is IListSource listSource)
@@ -552,7 +552,7 @@ public partial class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Find the position of a desired list item.
     /// </summary>
-    internal int Find(PropertyDescriptor? property, object key, bool keepIndex)
+    internal int Find(PropertyDescriptor? property, object key)
     {
         ArgumentNullException.ThrowIfNull(key);
 
@@ -664,9 +664,9 @@ public partial class CurrencyManager : BindingManagerBase
             }
 
             // we should still fire meta data change notification even when the list is empty
-            if (e.ListChangedType == ListChangedType.PropertyDescriptorAdded ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorDeleted ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorChanged)
+            if (e.ListChangedType is ListChangedType.PropertyDescriptorAdded or
+                ListChangedType.PropertyDescriptorDeleted or
+                ListChangedType.PropertyDescriptorChanged)
             {
                 OnMetaDataChanged(EventArgs.Empty);
             }

@@ -26,13 +26,13 @@ internal class ArrayElementGridEntry : GridEntry
     {
         get
         {
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             Debug.Assert(owner is Array, "Owner is not array type!");
             return ((Array)owner).GetValue(_index);
         }
         set
         {
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             Debug.Assert(owner is Array, "Owner is not array type!");
             ((Array)owner).SetValue(value, _index);
         }

@@ -19,7 +19,7 @@ public partial class ErrorProvider
     internal partial class ErrorWindow : NativeWindow
     {
         private AccessibleObject? _accessibleObject;
-        private readonly List<ControlItem> _items = new();
+        private readonly List<ControlItem> _items = [];
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
         private Rectangle _windowBounds;
@@ -66,10 +66,7 @@ public partial class ErrorProvider
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ErrorWindowAccessibleObject(this);
-        }
+        private ErrorWindowAccessibleObject CreateAccessibilityInstance() => new(this);
 
         /// <summary>
         ///  Called to get rid of any resources the Object may have.

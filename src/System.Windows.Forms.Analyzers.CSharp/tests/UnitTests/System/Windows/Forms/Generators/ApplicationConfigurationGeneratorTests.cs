@@ -41,8 +41,8 @@ namespace MyProject
     {
         foreach (OutputKind projectType in Enum.GetValues(typeof(OutputKind)))
         {
-            if (projectType != OutputKind.ConsoleApplication &&
-                projectType != OutputKind.WindowsApplication)
+            if (projectType is not OutputKind.ConsoleApplication
+                and not OutputKind.WindowsApplication)
             {
                 yield return new object[] { projectType };
             }

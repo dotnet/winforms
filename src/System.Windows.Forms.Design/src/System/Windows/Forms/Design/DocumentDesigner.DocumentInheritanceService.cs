@@ -18,15 +18,12 @@ public partial class DocumentDesigner
     /// </summary>
     private class DocumentInheritanceService : InheritanceService
     {
-        private readonly DocumentDesigner designer;
+        private readonly DocumentDesigner _designer;
 
         /// <summary>
         ///  Creates a new document inheritance service.
         /// </summary>
-        public DocumentInheritanceService(DocumentDesigner designer)
-        {
-            this.designer = designer;
-        }
+        public DocumentInheritanceService(DocumentDesigner designer) => _designer = designer;
 
         /// <summary>
         ///  <para>Indicates the inherited members to ignore.</para>
@@ -72,7 +69,7 @@ public partial class DocumentDesigner
                         child = (Control)method.Invoke(component, null);
                     }
 
-                    Control parent = designer.Control;
+                    Control parent = _designer.Control;
 
                     while (child is not null && child != parent)
                     {

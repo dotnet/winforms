@@ -175,7 +175,7 @@ public class ToolStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(30, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -191,7 +191,7 @@ public class ToolStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(30, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -244,7 +244,7 @@ public class ToolStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(30, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (bool canOverflow in canOverflowValues)
         {
@@ -485,7 +485,7 @@ public class ToolStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(30, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (ToolStripGripStyle grip in Enum.GetValues<ToolStripGripStyle>())
             foreach (bool canOverflow in canOverflowValues)
@@ -502,7 +502,7 @@ public class ToolStripAccessibleObjectTests
         Size horizontalSize = new(300, 30);
         Size verticalSize = new(30, 300);
 
-        bool[] canOverflowValues = new[] { true, false };
+        bool[] canOverflowValues = [true, false];
 
         foreach (ToolStripGripStyle grip in Enum.GetValues<ToolStripGripStyle>())
             foreach (bool canOverflow in canOverflowValues)
@@ -895,21 +895,21 @@ public class ToolStripAccessibleObjectTests
 
     internal static ToolStripLayoutStyle[] GetStackToolStripLayoutStyles()
     {
-        return new ToolStripLayoutStyle[]
-        {
+        return
+        [
             ToolStripLayoutStyle.HorizontalStackWithOverflow,
             ToolStripLayoutStyle.VerticalStackWithOverflow,
             ToolStripLayoutStyle.StackWithOverflow
-        };
+        ];
     }
 
     internal static ToolStripLayoutStyle[] GetNonStackToolStripLayoutStyles()
     {
-        return new ToolStripLayoutStyle[]
-        {
+        return
+        [
             ToolStripLayoutStyle.Table,
             ToolStripLayoutStyle.Flow
-        };
+        ];
     }
 
     internal static IEnumerable<(ToolStripLayoutStyle, ToolStripGripStyle)> GetLayoutsWithGripVisible()

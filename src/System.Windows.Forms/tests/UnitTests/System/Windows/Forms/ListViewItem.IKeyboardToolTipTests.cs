@@ -774,7 +774,7 @@ public class ListViewItem_IKeyboardToolTipTests
 
     private void AssignListItemsToListView(ListView listView, int count)
     {
-        List<ListViewItem> listViewItems = new();
+        List<ListViewItem> listViewItems = [];
 
         for (int i = 0; i < count; i++)
         {
@@ -795,7 +795,7 @@ public class ListViewItem_IKeyboardToolTipTests
         }
         else
         {
-            listView.Items.AddRange(listViewItems.ToArray());
+            listView.Items.AddRange((ListViewItem[])[.. listViewItems]);
         }
     }
 

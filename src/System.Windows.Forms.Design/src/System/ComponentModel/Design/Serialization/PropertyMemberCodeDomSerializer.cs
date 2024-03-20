@@ -65,7 +65,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             if (!type.IsDefined(typeof(ProjectTargetFrameworkAttribute), false))
             {
                 // TargetFrameworkProvider is not attached
-                TypeDescriptionProvider? typeProvider = CodeDomSerializerBase.GetTargetFrameworkProvider(manager, propertyValue);
+                TypeDescriptionProvider? typeProvider = GetTargetFrameworkProvider(manager, propertyValue);
                 if (typeProvider is not null)
                 {
                     TypeDescriptor.AddProvider(typeProvider, propertyValue);
@@ -97,7 +97,6 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             bool isExtender = exAttr?.Provider is not null;
             bool serializeContents = propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content);
 
-            CodeDomSerializer.Trace(TraceLevel.Verbose, $"Serializing property {propertyToSerialize.Name}");
             if (serializeContents)
             {
                 SerializeContentProperty(manager, value, propertyToSerialize, isExtender, statements);
@@ -130,17 +129,11 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     /// </summary>
     private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements)
     {
-        CodeDomSerializer.Trace(TraceLevel.Verbose, "Property is marked as Visibility.Content.  Recursing.");
-
         object? propertyValue = GetPropertyValue(manager, property, value, out _);
 
-        // For persist contents objects, we don't just serialize the properties on the object; we
-        // serialize everything.
-        //
+        // For persist contents objects, we don't just serialize the properties on the object; we serialize everything.
         if (propertyValue is null)
         {
-            CodeDomSerializer.Trace(TraceLevel.Error, $"Property {property.Name} is marked as Visibility.Content but it is returning null.");
-
             string? name = manager.GetName(value);
 
             name ??= value.GetType().FullName;
@@ -154,26 +147,18 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             // serializing.
             CodeExpression? target = SerializeToExpression(manager, value);
 
-            if (target is null)
-            {
-                CodeDomSerializer.Trace(TraceLevel.Warning, "Unable to convert value to expression object");
-            }
-            else
+            if (target is not null)
             {
                 CodeExpression? propertyRef = null;
 
                 if (isExtender)
                 {
-                    CodeDomSerializer.Trace(TraceLevel.Verbose, "Content property is an extender.");
                     ExtenderProvidedPropertyAttribute exAttr = property.GetAttribute<ExtenderProvidedPropertyAttribute>()!;
 
                     // Extender properties are method invokes on a target "extender" object.
-                    //
                     CodeExpression? extender = SerializeToExpression(manager, exAttr.Provider);
                     CodeExpression? extended = SerializeToExpression(manager, value);
 
-                    CodeDomSerializer.TraceIf(TraceLevel.Warning, extender is null, $"Extender object {manager.GetName(exAttr.Provider!)} could not be serialized.");
-                    CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
                     if (extender is not null && extended is not null)
                     {
                         CodeMethodReferenceExpression methodRef = new(extender, $"Get{property.Name}");
@@ -229,8 +214,6 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
         }
         else
         {
-            CodeDomSerializer.Trace(TraceLevel.Error, $"Property {property.Name} is marked as Visibility.Content but there is no serializer for it.");
-
             manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, property.PropertyType.FullName), manager));
         }
     }
@@ -240,25 +223,101 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     /// </summary>
     private void SerializeExtenderProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
     {
-        using (CodeDomSerializer.TraceScope($"PropertyMemberCodeDomSerializer::{nameof(SerializeExtenderProperty)}"))
+        ExtenderProvidedPropertyAttribute exAttr = property.GetAttribute<ExtenderProvidedPropertyAttribute>()!;
+
+        // Extender properties are method invokes on a target "extender" object.
+        CodeExpression? extender = SerializeToExpression(manager, exAttr.Provider);
+        CodeExpression? extended = SerializeToExpression(manager, value);
+
+        if (extender is not null && extended is not null)
         {
-            ExtenderProvidedPropertyAttribute exAttr = property.GetAttribute<ExtenderProvidedPropertyAttribute>()!;
+            CodeMethodReferenceExpression methodRef = new(extender, $"Set{property.Name}");
+            object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
+            CodeExpression? serializedPropertyValue = null;
 
-            // Extender properties are method invokes on a target "extender" object.
-            //
-            CodeExpression? extender = SerializeToExpression(manager, exAttr.Provider);
-            CodeExpression? extended = SerializeToExpression(manager, value);
-
-            CodeDomSerializer.TraceIf(TraceLevel.Warning, extender is null, $"Extender object {manager.GetName(exAttr.Provider!)} could not be serialized.");
-            CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
-            if (extender is not null && extended is not null)
+            // Serialize the value of this property into a code expression.  If we can't get one,
+            // then we won't serialize the property.
+            if (validValue)
             {
-                CodeMethodReferenceExpression methodRef = new(extender, $"Set{property.Name}");
-                object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
-                CodeExpression? serializedPropertyValue = null;
+                ExpressionContext? tree = null;
 
+                if (propValue != value)
+                {
+                    // make sure the value isn't the object or we'll end up printing
+                    // this property instead of the value.
+                    tree = new ExpressionContext(methodRef, property.PropertyType, value);
+                    manager.Context.Push(tree);
+                }
+
+                try
+                {
+                    serializedPropertyValue = SerializeToExpression(manager, propValue);
+                }
+                finally
+                {
+                    if (tree is not null)
+                    {
+                        Debug.Assert(manager.Context.Current == tree, "Context stack corrupted.");
+                        manager.Context.Pop();
+                    }
+                }
+            }
+
+            if (serializedPropertyValue is not null)
+            {
+                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+                {
+                    Method = methodRef
+                };
+                methodInvoke.Parameters.Add(extended);
+                methodInvoke.Parameters.Add(serializedPropertyValue);
+                statements.Add(methodInvoke);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  This serializes the given property on this object.
+    /// </summary>
+    private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
+    {
+        CodeExpression? target = SerializeToExpression(manager, value);
+
+        if (target is not null)
+        {
+            CodeExpression propertyRef = new CodePropertyReferenceExpression(target, property.Name);
+
+            CodeExpression? serializedPropertyValue = null;
+
+            // First check for a member relationship service to see if this property
+            // is related to another member.  If it is, then we will use that
+            // relationship to construct the property assign statement.  if
+            // it isn't, then we're serialize ourselves.
+
+            MemberRelationshipService? relationships = manager.GetService<MemberRelationshipService>();
+
+            if (relationships is not null)
+            {
+                MemberRelationship relationship = relationships[value, property];
+
+                if (relationship != MemberRelationship.Empty)
+                {
+                    CodeExpression? rhsTarget = SerializeToExpression(manager, relationship.Owner);
+
+                    if (rhsTarget is not null)
+                    {
+                        serializedPropertyValue = new CodePropertyReferenceExpression(rhsTarget, relationship.Member.Name);
+                    }
+                }
+            }
+
+            if (serializedPropertyValue is null)
+            {
                 // Serialize the value of this property into a code expression.  If we can't get one,
                 // then we won't serialize the property.
+                //
+                object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
+
                 if (validValue)
                 {
                     ExpressionContext? tree = null;
@@ -267,7 +326,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
                     {
                         // make sure the value isn't the object or we'll end up printing
                         // this property instead of the value.
-                        tree = new ExpressionContext(methodRef, property.PropertyType, value);
+                        tree = new ExpressionContext(propertyRef, property.PropertyType, value);
                         manager.Context.Push(tree);
                     }
 
@@ -284,98 +343,12 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
                         }
                     }
                 }
-
-                if (serializedPropertyValue is not null)
-                {
-                    CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
-                    {
-                        Method = methodRef
-                    };
-                    methodInvoke.Parameters.Add(extended);
-                    methodInvoke.Parameters.Add(serializedPropertyValue);
-                    statements.Add(methodInvoke);
-                }
             }
-        }
-    }
 
-    /// <summary>
-    ///  This serializes the given property on this object.
-    /// </summary>
-    private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
-    {
-        using (CodeDomSerializer.TraceScope($"CodeDomSerializer::{nameof(SerializeProperty)}"))
-        {
-            CodeExpression? target = SerializeToExpression(manager, value);
-
-            CodeDomSerializer.TraceIf(TraceLevel.Warning, target is null, $"Unable to serialize target for property {property.Name}");
-            if (target is not null)
+            if (serializedPropertyValue is not null)
             {
-                CodeExpression propertyRef = new CodePropertyReferenceExpression(target, property.Name);
-
-                CodeExpression? serializedPropertyValue = null;
-
-                // First check for a member relationship service to see if this property
-                // is related to another member.  If it is, then we will use that
-                // relationship to construct the property assign statement.  if
-                // it isn't, then we're serialize ourselves.
-
-                MemberRelationshipService? relationships = manager.GetService<MemberRelationshipService>();
-
-                if (relationships is not null)
-                {
-                    MemberRelationship relationship = relationships[value, property];
-
-                    if (relationship != MemberRelationship.Empty)
-                    {
-                        CodeExpression? rhsTarget = SerializeToExpression(manager, relationship.Owner);
-
-                        if (rhsTarget is not null)
-                        {
-                            serializedPropertyValue = new CodePropertyReferenceExpression(rhsTarget, relationship.Member.Name);
-                        }
-                    }
-                }
-
-                if (serializedPropertyValue is null)
-                {
-                    // Serialize the value of this property into a code expression.  If we can't get one,
-                    // then we won't serialize the property.
-                    //
-                    object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
-
-                    if (validValue)
-                    {
-                        ExpressionContext? tree = null;
-
-                        if (propValue != value)
-                        {
-                            // make sure the value isn't the object or we'll end up printing
-                            // this property instead of the value.
-                            tree = new ExpressionContext(propertyRef, property.PropertyType, value);
-                            manager.Context.Push(tree);
-                        }
-
-                        try
-                        {
-                            serializedPropertyValue = SerializeToExpression(manager, propValue);
-                        }
-                        finally
-                        {
-                            if (tree is not null)
-                            {
-                                Debug.Assert(manager.Context.Current == tree, "Context stack corrupted.");
-                                manager.Context.Pop();
-                            }
-                        }
-                    }
-                }
-
-                if (serializedPropertyValue is not null)
-                {
-                    CodeAssignStatement assign = new(propertyRef, serializedPropertyValue);
-                    statements.Add(assign);
-                }
+                CodeAssignStatement assign = new(propertyRef, serializedPropertyValue);
+                statements.Add(assign);
             }
         }
     }

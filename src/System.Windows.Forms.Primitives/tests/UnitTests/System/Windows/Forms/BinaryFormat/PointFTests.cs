@@ -19,7 +19,7 @@ public class PointFTests
         ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format[2];
         classInfo.ObjectId.Should().Be(1);
         classInfo.Name.Should().Be("System.Drawing.PointF");
-        classInfo.MemberNames.Should().BeEquivalentTo(new string[] { "x", "y" });
+        classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
         classInfo.MemberValues.Should().BeEquivalentTo(new object[] { 0.0f, 0.0f });
         classInfo.MemberTypeInfo.Should().BeEquivalentTo(new[]
         {

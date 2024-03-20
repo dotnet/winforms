@@ -176,7 +176,7 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Gets the data types this collection editor can create.
     /// </summary>
-    protected virtual Type[] CreateNewItemTypes() => new Type[] { CollectionItemType };
+    protected virtual Type[] CreateNewItemTypes() => [CollectionItemType];
 
     /// <summary>
     ///  Destroys the specified instance of the object.
@@ -324,7 +324,7 @@ public partial class CollectionEditor : UITypeEditor
             return values;
         }
 
-        return Array.Empty<object>();
+        return [];
     }
 
     /// <summary>

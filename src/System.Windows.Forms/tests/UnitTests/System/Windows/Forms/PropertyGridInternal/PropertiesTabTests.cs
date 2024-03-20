@@ -98,7 +98,7 @@ public class PropertiesTabTests
     public void PropertiesTab_GetProperties_InvokeObjectCustomAttributes_ReturnsExpected()
     {
         PropertiesTab tab = new();
-        PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty(), new Attribute[] { new BrowsableAttribute(false) });
+        PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty(), [new BrowsableAttribute(false)]);
         Assert.Equal(1, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.NotBrowsableProperty)]);
     }
@@ -182,7 +182,7 @@ public class PropertiesTabTests
     public void PropertiesTab_GetProperties_InvokeObjectCustomAttributesNullContext_ReturnsExpected()
     {
         PropertiesTab tab = new();
-        PropertyDescriptorCollection properties = tab.GetProperties(null, new ClassWithDefaultProperty(), new Attribute[] { new BrowsableAttribute(false) });
+        PropertyDescriptorCollection properties = tab.GetProperties(null, new ClassWithDefaultProperty(), [new BrowsableAttribute(false)]);
         Assert.Equal(1, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.NotBrowsableProperty)]);
     }

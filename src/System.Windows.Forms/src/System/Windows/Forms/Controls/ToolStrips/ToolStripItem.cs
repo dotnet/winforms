@@ -26,12 +26,6 @@ public abstract partial class ToolStripItem :
     IArrangedElement,
     IKeyboardToolTip
 {
-#if DEBUG
-    internal static readonly TraceSwitch s_mouseDebugging = new("MouseDebugging", "Debug ToolStripItem mouse debugging code");
-#else
-    internal static readonly TraceSwitch? s_mouseDebugging;
-#endif
-
     private Rectangle _bounds = Rectangle.Empty;
     private PropertyStore? _propertyStore;
     private ToolStripItemAlignment _alignment = ToolStripItemAlignment.Left;
@@ -416,7 +410,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
+    ///  Gets or sets the <see cref="Input.ICommand"/> whose <see cref="Input.ICommand.Execute(object?)"/>
     ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked.
     /// </summary>
     [Bindable(true)]
@@ -431,8 +425,8 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the
-    ///  <see cref="System.Windows.Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
+    ///  Occurs when the <see cref="Input.ICommand.CanExecute(object?)"/> status of the
+    ///  <see cref="Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -444,7 +438,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> of the <see cref="Command"/> property has changed.
+    ///  Occurs when the assigned <see cref="Input.ICommand"/> of the <see cref="Command"/> property has changed.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -456,7 +450,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Gets or sets the parameter that is passed to the <see cref="System.Windows.Input.ICommand"/>
+    ///  Gets or sets the parameter that is passed to the <see cref="Input.ICommand"/>
     ///  which is assigned to the <see cref="Command"/> property.
     /// </summary>
     [Bindable(true)]
@@ -602,7 +596,7 @@ public abstract partial class ToolStripItem :
     public virtual bool CanSelect => Enabled;
 
     /// <remarks>
-    ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
+    ///  <para>Usually the same as can select, but things like the control box in an MDI window are exceptions</para>
     /// </remarks>
     internal virtual bool CanKeyboardSelect => CanSelect;
 
@@ -682,7 +676,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            if (Owner is not null && Owner is StatusStrip)
+            if (Owner is not null and StatusStrip)
             {
                 return _defaultStatusStripMargin;
             }
@@ -1230,7 +1224,7 @@ public abstract partial class ToolStripItem :
                 return true;
             }
 
-            Control? parent = ParentInternal;
+            ToolStrip? parent = ParentInternal;
             if (parent is not null)
             {
                 return parent.ShouldSerializeForeColor();
@@ -1433,7 +1427,7 @@ public abstract partial class ToolStripItem :
     [DefaultValue(null)]
     public string? Name
     {
-        get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(ToolStripItem.s_nameProperty));
+        get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(s_nameProperty));
         set
         {
             if (DesignMode)
@@ -1441,7 +1435,7 @@ public abstract partial class ToolStripItem :
                 return;
             }
 
-            Properties.SetObject(ToolStripItem.s_nameProperty, value);
+            Properties.SetObject(s_nameProperty, value);
         }
     }
 
@@ -1817,11 +1811,14 @@ public abstract partial class ToolStripItem :
              ParentInternal.LastMouseDownedItem == this));
 
     /// <summary>
-    ///  Occurs when value of the <see cref="ToolStripItem.Selected" /> property changes.
+    ///  Occurs when value of the <see cref="Selected" /> property changes.
     /// </summary>
     /// <remarks>
-    ///  This event is raised when item is selected by mouse, keyboard or programmatically.
-    ///  .NET Core 3.1 had removed MainMenu and MenuItem controls. ToolStripMenuItem.SelectedChanged event is recommended as a replacement for MenuItem.Select event.
+    ///  <para>
+    ///   This event is raised when item is selected by mouse, keyboard or programmatically.
+    ///   .NET Core 3.1 had removed MainMenu and MenuItem controls. ToolStripMenuItem.SelectedChanged event
+    ///   is recommended as a replacement for MenuItem.Select event.
+    ///  </para>
     /// </remarks>
     [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
     public event EventHandler? SelectedChanged
@@ -1831,7 +1828,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
+    ///  Raises the <see cref="SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
     ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
     /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
@@ -1888,8 +1885,8 @@ public abstract partial class ToolStripItem :
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.TryGetObject(ToolStripItem.s_tagProperty, out object? tag) ? tag : null;
-        set => Properties.SetObject(ToolStripItem.s_tagProperty, value);
+        get => Properties.TryGetObject(s_tagProperty, out object? tag) ? tag : null;
+        set => Properties.SetObject(s_tagProperty, value);
     }
 
     /// <summary>
@@ -1901,14 +1898,14 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemTextDescr))]
     public virtual string? Text
     {
-        get => Properties.TryGetObject(ToolStripItem.s_textProperty, out string? text)
+        get => Properties.TryGetObject(s_textProperty, out string? text)
             ? text
             : string.Empty;
         set
         {
             if (value != Text)
             {
-                Properties.SetObject(ToolStripItem.s_textProperty, value);
+                Properties.SetObject(s_textProperty, value);
                 OnTextChanged(EventArgs.Empty);
             }
         }
@@ -1951,7 +1948,7 @@ public abstract partial class ToolStripItem :
         get
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+            if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
             {
                 textDirection = direction;
             }
@@ -1975,7 +1972,7 @@ public abstract partial class ToolStripItem :
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            Properties.SetObject(ToolStripItem.s_textDirectionProperty, value);
+            Properties.SetObject(s_textDirectionProperty, value);
             InvalidateItemLayout("TextDirection");
         }
     }
@@ -2190,7 +2187,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
     ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
-    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>) or some <see cref="object"/> that implements
     ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
     ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
     ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
@@ -2458,8 +2455,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleClick(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] HandleClick");
-
         try
         {
             if (!DesignMode)
@@ -2467,13 +2462,12 @@ public abstract partial class ToolStripItem :
                 _state[s_statePressed] = true;
             }
 
-            // force painting w/o using message loop here because it may be quite a long
+            // Force painting w/o using message loop here because it may be quite a long
             // time before it gets pumped again.
             InvokePaint();
 
             if (SupportsItemClick && Owner is not null)
             {
-                s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClick");
                 Owner.HandleItemClick(this);
             }
 
@@ -2481,7 +2475,6 @@ public abstract partial class ToolStripItem :
 
             if (SupportsItemClick && Owner is not null)
             {
-                s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClicked");
                 Owner.HandleItemClicked(this);
             }
         }
@@ -2543,15 +2536,12 @@ public abstract partial class ToolStripItem :
         if (Enabled)
         {
             OnMouseEnter(e);
-            s_mouseDebugging.TraceVerbose($"[{Text}] MouseEnter");
             RaiseEvent(s_mouseEnterEvent, e);
         }
     }
 
     private void HandleMouseMove(MouseEventArgs mea)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseMove");
-
         if (Enabled && CanSelect && !Selected)
         {
             if (ParentInternal is not null
@@ -2572,7 +2562,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseHover(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseHover");
         OnMouseHover(e);
         RaiseEvent(s_mouseHoverEvent, e);
     }
@@ -2591,7 +2580,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseLeave(EventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseLeave");
         HandleLeave();
         if (Enabled)
         {
@@ -2602,8 +2590,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseDown(MouseEventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseDown");
-
         _state[s_stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
         if (_state[s_stateMouseDownAndNoDrag])
         {
@@ -2619,8 +2605,6 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseUp(MouseEventArgs e)
     {
-        s_mouseDebugging.TraceVerbose($"[{Text}] MouseUp");
-
         bool fireMouseUp = (ParentInternal?.LastMouseDownedItem == this);
 
         if (!fireMouseUp && !MouseDownAndUpMustBeInSameItem)
@@ -2736,7 +2720,7 @@ public abstract partial class ToolStripItem :
 
             if (parent.IsHandleCreated && parent.InvokeRequired)
             {
-                parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), new object?[] { o, e });
+                parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), [o, e]);
                 return;
             }
 
@@ -2747,7 +2731,7 @@ public abstract partial class ToolStripItem :
     protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
+    ///  Raises the <see cref="CommandChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2755,7 +2739,7 @@ public abstract partial class ToolStripItem :
         => RaiseEvent(s_commandChangedEvent, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
+    ///  Raises the <see cref="CommandCanExecuteChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2763,7 +2747,7 @@ public abstract partial class ToolStripItem :
         => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
+    ///  Raises the <see cref="CommandParameterChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2771,7 +2755,7 @@ public abstract partial class ToolStripItem :
 
     /// <summary>
     ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke
-    ///  <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
+    ///  <see cref="Input.ICommand.Execute(object?)"/> if the context allows.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected virtual void OnRequestCommandExecute(EventArgs e)
@@ -2786,7 +2770,7 @@ public abstract partial class ToolStripItem :
         => OnCommandCanExecuteChanged(e);
 
     /// <summary>
-    ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
+    ///  Raises the <see cref="DragEnter"/> event.
     ///  Inheriting classes should override this method to handle this event.
     ///  Call base.OnEnter to send this event to any registered event listeners.
     /// </summary>
@@ -3036,7 +3020,7 @@ public abstract partial class ToolStripItem :
     internal void OnOwnerTextDirectionChanged()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }
@@ -3201,13 +3185,6 @@ public abstract partial class ToolStripItem :
 
     internal void Select(bool forceRaiseAccessibilityFocusChanged)
     {
-        // let's not snap the stack trace unless we're debugging selection.
-        ToolStrip.s_selectionDebug.TraceVerbose($"""
-            [Selection DBG] WBI.Select: {ToString()}
-            {new StackTrace().ToString().AsSpan(0, 200)}
-
-            """);
-
         if (!CanSelect)
         {
             return;
@@ -3215,30 +3192,25 @@ public abstract partial class ToolStripItem :
 
         if (Owner is not null && Owner.IsCurrentlyDragging)
         {
-            // make sure we don't select during a drag operation.
+            // Make sure we don't select during a drag operation.
             return;
         }
 
         if (ParentInternal is not null && ParentInternal.IsSelectionSuspended)
         {
-            ToolStrip.s_selectionDebug.TraceVerbose("[Selection DBG] BAILING, selection is currently suspended");
             return;
         }
 
         if (!Selected)
         {
             _state[s_stateSelected] = true;
-            if (ParentInternal is not null)
-            {
-                ParentInternal.NotifySelectionChange(this);
-                Debug.Assert(_state[s_stateSelected], "calling notify selection change changed the selection state of this item");
-            }
+            ParentInternal?.NotifySelectionChange(this);
 
             if (IsOnDropDown)
             {
                 if (OwnerItem is not null && OwnerItem.IsOnDropDown)
                 {
-                    // ensure the selection is moved back to our owner item.
+                    // Ensure the selection is moved back to our owner item.
                     OwnerItem.Select();
                 }
             }
@@ -3356,9 +3328,11 @@ public abstract partial class ToolStripItem :
     internal void SetPlacement(ToolStripItemPlacement placement) => _placement = placement;
 
     /// <remarks>
-    ///  Some implementations of DefaultMargin check which container they
-    ///  are on. They need to be re-evaluated when the containership changes.
-    ///  DefaultMargin will stop being honored the moment someone sets the Margin property.
+    ///  <para>
+    ///   Some implementations of DefaultMargin check which container they
+    ///   are on. They need to be re-evaluated when the containership changes.
+    ///   DefaultMargin will stop being honored the moment someone sets the Margin property.
+    ///  </para>
     /// </remarks>
     internal void SetAmbientMargin()
     {
@@ -3457,7 +3431,7 @@ public abstract partial class ToolStripItem :
     private bool ShouldSerializeTextDirection()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }
@@ -3628,7 +3602,6 @@ public abstract partial class ToolStripItem :
     /// </summary>
     internal void Unselect()
     {
-        ToolStrip.s_selectionDebug.TraceVerbose($"[Selection DBG] WBI.Unselect: {ToString()}");
         if (_state[s_stateSelected])
         {
             _state[s_stateSelected] = false;
@@ -3657,7 +3630,7 @@ public abstract partial class ToolStripItem :
             bool found = false;
             while (!found && i < count)
             {
-                found = object.ReferenceEquals(items[i], this);
+                found = ReferenceEquals(items[i], this);
                 if (found)
                 {
                     int previousIndex = i - 1;
@@ -3728,7 +3701,7 @@ public abstract partial class ToolStripItem :
     /// </summary>
     internal bool IsParentAccessibilityObjectCreated => ParentInternal is not null && ParentInternal.IsAccessibilityObjectCreated;
 
-    internal virtual bool IsBeingTabbedTo() => ToolStrip.AreCommonNavigationalKeysDown();
+    internal virtual bool IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
     /// <summary>
     /// Query font from property bag.

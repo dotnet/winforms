@@ -104,11 +104,11 @@ public class ThreadExceptionDialog : Form
             messageText = w.Message;
             if (w.HelpUrl is null)
             {
-                buttons = new Button[] { _continueButton };
+                buttons = [_continueButton];
             }
             else
             {
-                buttons = new Button[] { _continueButton, _helpButton };
+                buttons = [_continueButton, _helpButton];
             }
         }
         else
@@ -128,7 +128,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton, _quitButton };
+                buttons = [_detailsButton, _continueButton, _quitButton];
             }
             else
             {
@@ -141,7 +141,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgContinueErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton };
+                buttons = [_detailsButton, _continueButton];
             }
         }
 
@@ -225,7 +225,7 @@ public class ThreadExceptionDialog : Form
         int width = textSize.Width + _scaledPaddingWidth;
         int buttonTop = Math.Max(textSize.Height, _scaledMaxTextHeight) + _scaledPaddingHeight;
 
-        Form? activeForm = Form.ActiveForm;
+        Form? activeForm = ActiveForm;
         if (activeForm is null || activeForm.Text.Length == 0)
         {
             Text = SR.ExDlgCaption;
@@ -392,6 +392,6 @@ public class ThreadExceptionDialog : Form
             i--;
         }
 
-        return s.Substring(0, i);
+        return s[..i];
     }
 }

@@ -19,24 +19,18 @@ public unsafe partial class Control
             _control = control;
             _performLayout = performLayout;
 
-            if (_control is not null)
-            {
 #if DEBUG
-                _layoutSuspendCount = _control.LayoutSuspendCount;
+            _layoutSuspendCount = _control?.LayoutSuspendCount ?? 0;
 #endif
-                _control.SuspendLayout();
-            }
+            _control?.SuspendLayout();
         }
 
         public readonly void Dispose()
         {
-            if (_control is not null)
-            {
-                _control.ResumeLayout(_performLayout);
+            _control?.ResumeLayout(_performLayout);
 #if DEBUG
-                Debug.Assert(_layoutSuspendCount == _control.LayoutSuspendCount, "Suspend/Resume layout mismatch!");
+            Debug.Assert(_control is null || _layoutSuspendCount == _control.LayoutSuspendCount, "Suspend/Resume layout mismatch!");
 #endif
-            }
         }
     }
 }

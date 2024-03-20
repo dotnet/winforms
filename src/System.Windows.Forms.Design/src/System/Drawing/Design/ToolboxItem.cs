@@ -15,8 +15,6 @@ namespace System.Drawing.Design;
 /// </summary>
 public class ToolboxItem : ISerializable
 {
-    private static readonly TraceSwitch s_toolboxItemPersist = new("ToolboxPersisting", "ToolboxItem: write data");
-
     private static bool s_isScalingInitialized;
     private const int ICON_DIMENSION = 16;
     private static int s_iconWidth = ICON_DIMENSION;
@@ -256,7 +254,7 @@ public class ToolboxItem : ISerializable
     /// </summary>
     protected virtual IComponent[]? CreateComponentsCore(IDesignerHost? host)
     {
-        List<IComponent> comps = new();
+        List<IComponent> comps = [];
         Type? createType = GetType(host, AssemblyName, TypeName, true);
         if (createType is not null)
         {
@@ -270,7 +268,7 @@ public class ToolboxItem : ISerializable
             }
         }
 
-        return comps.ToArray();
+        return [.. comps];
     }
 
     /// <summary>
@@ -331,15 +329,15 @@ public class ToolboxItem : ISerializable
 
         // For backwards compat, here are the default property
         // names we use
-        propertyNames ??= new string[]
-        {
+        propertyNames ??=
+        [
                 "AssemblyName",
                 "Bitmap",
                 "DisplayName",
                 "Filter",
                 "IsTransient",
                 "TypeName"
-        };
+        ];
 
         foreach (SerializationEntry entry in info)
         {
@@ -549,7 +547,7 @@ public class ToolboxItem : ISerializable
             TypeName = type.FullName;
             AssemblyName assemblyName = type.Assembly.GetName(true);
 
-            Dictionary<string, AssemblyName> parents = new();
+            Dictionary<string, AssemblyName> parents = [];
             Type? parentType = type;
 
             do
@@ -609,7 +607,7 @@ public class ToolboxItem : ISerializable
                 }
 
                 bool filterContainsType = false;
-                List<ToolboxItemFilterAttribute> filterItems = new();
+                List<ToolboxItemFilterAttribute> filterItems = [];
                 foreach (Attribute a in TypeDescriptor.GetAttributes(type))
                 {
                     if (a is ToolboxItemFilterAttribute ta)
@@ -698,15 +696,10 @@ public class ToolboxItem : ISerializable
     }
 
     /// <summary>
-    ///Saves the state of this ToolboxItem to the specified serialization info
+    ///  Saves the state of this ToolboxItem to the specified serialization info
     /// </summary>
     protected virtual void Serialize(SerializationInfo info, StreamingContext context)
     {
-        Debug.WriteLineIf(s_toolboxItemPersist.TraceVerbose, $"""
-                Persisting: {GetType().Name}
-                    Display Name: {DisplayName}
-                """);
-
         info.AddValue(nameof(Locked), Locked);
         List<string> propertyNames = new(Properties.Count);
         foreach (DictionaryEntry de in Properties)
@@ -785,7 +778,7 @@ public class ToolboxItem : ISerializable
                 ValidatePropertyType(propertyName, value, typeof(ICollection), true);
 
                 ICollection? col = (ICollection?)value;
-                return col?.OfType<ToolboxItemFilterAttribute>().ToArray() ?? Array.Empty<ToolboxItemFilterAttribute>();
+                return col?.OfType<ToolboxItemFilterAttribute>().ToArray() ?? [];
 
             case "DependentAssemblies":
                 ValidatePropertyType(propertyName, value, typeof(AssemblyName[]), true);

@@ -211,33 +211,34 @@ public class ColorMatrixTests
     [Fact]
     public void MatrixElement_SetValues_ReturnsExpected()
     {
-        ColorMatrix cm = new();
-
-        cm.Matrix00 = 1;
-        cm.Matrix01 = 2;
-        cm.Matrix02 = 3;
-        cm.Matrix03 = 4;
-        cm.Matrix04 = 5;
-        cm.Matrix10 = 6;
-        cm.Matrix11 = 7;
-        cm.Matrix12 = 8;
-        cm.Matrix13 = 9;
-        cm.Matrix14 = 10;
-        cm.Matrix20 = 11;
-        cm.Matrix21 = 12;
-        cm.Matrix22 = 13;
-        cm.Matrix23 = 14;
-        cm.Matrix24 = 15;
-        cm.Matrix30 = 16;
-        cm.Matrix31 = 17;
-        cm.Matrix32 = 18;
-        cm.Matrix33 = 19;
-        cm.Matrix34 = 20;
-        cm.Matrix40 = 21;
-        cm.Matrix41 = 22;
-        cm.Matrix42 = 23;
-        cm.Matrix43 = 24;
-        cm.Matrix44 = 25;
+        ColorMatrix cm = new()
+        {
+            Matrix00 = 1,
+            Matrix01 = 2,
+            Matrix02 = 3,
+            Matrix03 = 4,
+            Matrix04 = 5,
+            Matrix10 = 6,
+            Matrix11 = 7,
+            Matrix12 = 8,
+            Matrix13 = 9,
+            Matrix14 = 10,
+            Matrix20 = 11,
+            Matrix21 = 12,
+            Matrix22 = 13,
+            Matrix23 = 14,
+            Matrix24 = 15,
+            Matrix30 = 16,
+            Matrix31 = 17,
+            Matrix32 = 18,
+            Matrix33 = 19,
+            Matrix34 = 20,
+            Matrix40 = 21,
+            Matrix41 = 22,
+            Matrix42 = 23,
+            Matrix43 = 24,
+            Matrix44 = 25
+        };
 
         Assert.Equal(1, cm.Matrix00);
         Assert.Equal(2, cm.Matrix01);

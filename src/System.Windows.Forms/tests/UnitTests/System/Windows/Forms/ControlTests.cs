@@ -932,24 +932,24 @@ public partial class ControlTests
         using ToolStripTextBox toolStrip1_TextBox1 = new();
         using ToolStripComboBox toolStrip1_ComboBox1 = new();
         using ToolStripSplitButton toolStrip1_SplitButton1 = new();
-        toolStrip1.Items.AddRange(new ToolStripItem[]
-        {
+        toolStrip1.Items.AddRange((ToolStripItem[])
+        [
             toolStrip1_Button1, toolStrip1_TextBox1, toolStrip1_ComboBox1, toolStrip1_SplitButton1
-        });
+        ]);
 
         using ToolStripComboBox toolStrip2_ComboBox1 = new();
         using ToolStripSplitButton toolStrip2_SplitButton1 = new();
         using ToolStripLabel toolStrip2_Label1 = new();
         using ToolStripSplitButton toolStrip2_DropDownButton1 = new();
         using ToolStripComboBox toolStrip2_ComboBox2 = new();
-        toolStrip2.Items.AddRange(new ToolStripItem[]
-        {
+        toolStrip2.Items.AddRange((ToolStripItem[])
+        [
             toolStrip2_ComboBox1,
             toolStrip2_SplitButton1,
             toolStrip2_Label1,
             toolStrip2_DropDownButton1,
             toolStrip2_ComboBox2
-        });
+        ]);
 
         form.Controls.AddRange(new ToolStrip[] { toolStrip1, toolStrip2 });
         toolStrip1.ParentInternal.Visible = true;
@@ -989,24 +989,24 @@ public partial class ControlTests
         using ToolStripLabel toolStrip1_Label1 = new();
         using ToolStripTextBox toolStrip1_TextBox1 = new();
         using ToolStripSplitButton toolStrip1_SplitButton1 = new();
-        toolStrip1.Items.AddRange(new ToolStripItem[]
-        {
+        toolStrip1.Items.AddRange((ToolStripItem[])
+        [
             toolStrip1_Button1, toolStrip1_Label1, toolStrip1_TextBox1, toolStrip1_SplitButton1
-        });
+        ]);
 
         using ToolStripComboBox toolStrip2_ComboBox1 = new();
         using ToolStripSplitButton toolStrip2_SplitButton1 = new();
         using ToolStripLabel toolStrip2_Label1 = new();
         using ToolStripSplitButton toolStrip2_DropDownButton1 = new();
         using ToolStripComboBox toolStrip2_ComboBox2 = new();
-        toolStrip2.Items.AddRange(new ToolStripItem[]
-        {
+        toolStrip2.Items.AddRange((ToolStripItem[])
+        [
             toolStrip2_ComboBox1,
             toolStrip2_SplitButton1,
             toolStrip2_Label1,
             toolStrip2_DropDownButton1,
             toolStrip2_ComboBox2
-        });
+        ]);
 
         form.Controls.AddRange(new ToolStrip[] { toolStrip1, toolStrip2 });
         toolStrip1.ParentInternal.Visible = true;
@@ -1040,18 +1040,18 @@ public partial class ControlTests
         SubListBox listBox1 = new();
         SubListView listView1 = new();
 
-        checkedListBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+        checkedListBox1.Items.AddRange((object[])["Foo", "Foo", "Foo"]);
         checkedListBox1.Location = new Point(10, 10);
         checkedListBox1.Size = new Size(103, 64);
 
         button1.Location = new Point(12, 166);
         button1.Size = new Size(213, 20);
 
-        listBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+        listBox1.Items.AddRange((object[])["Foo", "Foo", "Foo"]);
         listBox1.Location = new Point(12, 80);
         listBox1.Size = new Size(101, 69);
 
-        listView1.Items.AddRange(new ListViewItem[] { new("Foo"), new("Foo"), new("Foo") });
+        listView1.Items.AddRange((ListViewItem[])[new("Foo"), new("Foo"), new("Foo")]);
         listView1.Location = new Point(130, 10);
         listView1.Size = new Size(121, 64);
         listView1.View = View.List;

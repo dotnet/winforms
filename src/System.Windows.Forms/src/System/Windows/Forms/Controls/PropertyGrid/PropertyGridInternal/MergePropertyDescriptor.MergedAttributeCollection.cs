@@ -60,7 +60,7 @@ internal partial class MergePropertyDescriptor
                 }
             }
 
-            _foundAttributes ??= new();
+            _foundAttributes ??= [];
             if (value is not null)
             {
                 _foundAttributes[attributeType] = value;

@@ -41,7 +41,7 @@ public partial class ToolStripPanel
             ArgumentNullException.ThrowIfNull(value);
 
             int retVal = ((IList)InnerList).Add(value);
-            OnAdd(value, retVal);
+            OnAdd(value);
             return retVal;
         }
 
@@ -134,10 +134,10 @@ public partial class ToolStripPanel
             ArgumentNullException.ThrowIfNull(value);
 
             InnerList.Insert(index, value);
-            OnAdd(value, index);
+            OnAdd(value);
         }
 
-        private void OnAdd(ToolStripPanelRow value, int index)
+        private void OnAdd(ToolStripPanelRow value)
         {
             if (_owner is not null)
             {
@@ -145,29 +145,9 @@ public partial class ToolStripPanel
             }
         }
 
-        /// <summary>
-        ///  Do proper cleanup of ownership, etc.
-        /// </summary>
-        private static void OnAfterRemove(ToolStripPanelRow? row)
-        {
-#if DEBUG
-            if (s_toolStripPanelMissingRowDebug.TraceVerbose)
-            {
-                if (row is not null)
-                {
-                    Debug.Write("Removing row: ");
-                    row.Debug_PrintRowID();
-                    Debug.WriteLine(new StackTrace().ToString());
-                }
-            }
-#endif
-
-        }
-
         public void Remove(ToolStripPanelRow value)
         {
             InnerList.Remove(value);
-            OnAfterRemove(value);
         }
 
         public void RemoveAt(int index)
@@ -179,7 +159,6 @@ public partial class ToolStripPanel
             }
 
             InnerList.RemoveAt(index);
-            OnAfterRemove(item);
         }
 
         public void CopyTo(ToolStripPanelRow[] array, int index)

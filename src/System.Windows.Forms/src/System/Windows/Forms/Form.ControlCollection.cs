@@ -24,12 +24,11 @@ public partial class Form
         }
 
         /// <summary>
-        ///  Adds a control
-        ///  to the form.
+        ///  Adds a control to the form.
         /// </summary>
         public override void Add(Control? value)
         {
-            if (value is MdiClient && _owner._ctlClient is null)
+            if (value is MdiClient client && _owner._ctlClient is null)
             {
                 if (!_owner.TopLevel && !_owner.DesignMode)
                 {
@@ -42,11 +41,11 @@ public partial class Form
                     throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                 }
 
-                _owner._ctlClient = (MdiClient)value;
+                _owner._ctlClient = client;
             }
 
             // make sure we don't add a form that has a valid mdi parent
-            if (value is Form && ((Form)value).MdiParentInternal is not null)
+            if (value is Form form && form.MdiParentInternal is not null)
             {
                 throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
             }

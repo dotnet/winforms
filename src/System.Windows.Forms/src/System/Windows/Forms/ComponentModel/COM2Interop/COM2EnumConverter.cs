@@ -14,10 +14,10 @@ internal class Com2EnumConverter : TypeConverter
     public Com2EnumConverter(Com2Enum enumObj) => _com2Enum = enumObj;
 
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        => sourceType == typeof(string) ? true : base.CanConvertFrom(context, sourceType);
+        => sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
     public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destType)
-        => base.CanConvertTo(context, destType) ? true : destType is not null && destType.IsEnum;
+        => base.CanConvertTo(context, destType) || (destType is not null && destType.IsEnum);
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         => value is string valueAsString ? _com2Enum.FromString(valueAsString) : base.ConvertFrom(context, culture, value);

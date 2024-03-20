@@ -8,7 +8,7 @@ public class BindingManagerDataErrorEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Exception_TestData()
     {
-        yield return new object[] { new Exception() };
+        yield return new object[] { new InvalidOperationException() };
         yield return new object[] { null };
     }
 

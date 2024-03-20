@@ -23,7 +23,6 @@ public sealed partial class CodeDomLocalizationProvider
         private bool _localizable;
         private CultureInfo _language;
         private CultureInfo? _loadLanguage;
-        private CultureInfo? _defaultLanguage;
 
         public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo?[]? supportedCultures)
         {
@@ -42,11 +41,6 @@ public sealed partial class CodeDomLocalizationProvider
         ///  type converter should use the default set of supported cultures.
         /// </summary>
         internal TypeConverter.StandardValuesCollection? SupportedCultures { get; }
-
-        /// <summary>
-        ///  Returns the current default language for the thread.
-        /// </summary>
-        private CultureInfo ThreadDefaultLanguage => _defaultLanguage ??= Application.CurrentCulture;
 
         /// <summary>
         ///  Broadcasts a global change, indicating that all objects on the designer have changed.
@@ -95,7 +89,6 @@ public sealed partial class CodeDomLocalizationProvider
         public CultureInfo GetLanguage(IComponent o)
         {
             CheckRoot();
-
             return _language;
         }
 
@@ -116,8 +109,7 @@ public sealed partial class CodeDomLocalizationProvider
         }
 
         /// <summary>
-        ///  Gets a value indicating whether the specified object supports design-time localization
-        ///  support.
+        ///  Gets a value indicating whether the specified object supports design-time localization support.
         /// </summary>
         [DesignOnly(true)]
         [Category("Design")]
@@ -125,13 +117,11 @@ public sealed partial class CodeDomLocalizationProvider
         public bool GetLocalizable(IComponent? o)
         {
             CheckRoot();
-
             return _localizable;
         }
 
         /// <summary>
-        ///  Sets the language to use.  When the language is set the designer will be
-        ///  reloaded.
+        ///  Sets the language to use.  When the language is set the designer will be reloaded.
         /// </summary>
         public void SetLanguage(IComponent o, CultureInfo? language)
         {

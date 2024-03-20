@@ -34,7 +34,7 @@ public sealed partial class Application
         private AgileComPointer<IMsoComponent>? _trackingComponent;
         private msocstate _currentState;
 
-        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
+        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= [];
 
         unsafe HRESULT IMsoComponentManager.Interface.QueryService(
             Guid* guidService,

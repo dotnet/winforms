@@ -74,8 +74,10 @@ public partial class Main : Form
 
     private void button11_Click(object sender, EventArgs e)
     {
-        CustomAccessiblePropertiesForm cusAcccName = new();
-        cusAcccName.StartPosition = FormStartPosition.CenterParent;
+        CustomAccessiblePropertiesForm cusAcccName = new()
+        {
+            StartPosition = FormStartPosition.CenterParent
+        };
         cusAcccName.Show();
     }
 

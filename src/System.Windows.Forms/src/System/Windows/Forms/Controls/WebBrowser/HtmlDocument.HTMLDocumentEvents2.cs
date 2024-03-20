@@ -51,7 +51,7 @@ public sealed partial class HtmlDocument
         public bool onclick(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventClick, e);
+            FireEvent(s_eventClick, e);
 
             return e.ReturnValue;
         }
@@ -59,7 +59,7 @@ public sealed partial class HtmlDocument
         public bool oncontextmenu(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventContextMenuShowing, e);
+            FireEvent(s_eventContextMenuShowing, e);
             return e.ReturnValue;
         }
 
@@ -98,13 +98,13 @@ public sealed partial class HtmlDocument
         public void onfocusin(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventFocusing, e);
+            FireEvent(s_eventFocusing, e);
         }
 
         public void onfocusout(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventLosingFocus, e);
+            FireEvent(s_eventLosingFocus, e);
         }
 
         public bool onhelp(IHTMLEventObj evtObj)
@@ -126,31 +126,31 @@ public sealed partial class HtmlDocument
         public void onmousedown(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventMouseDown, e);
+            FireEvent(s_eventMouseDown, e);
         }
 
         public void onmousemove(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventMouseMove, e);
+            FireEvent(s_eventMouseMove, e);
         }
 
         public void onmouseout(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventMouseLeave, e);
+            FireEvent(s_eventMouseLeave, e);
         }
 
         public void onmouseover(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventMouseOver, e);
+            FireEvent(s_eventMouseOver, e);
         }
 
         public void onmouseup(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventMouseUp, e);
+            FireEvent(s_eventMouseUp, e);
         }
 
         public bool onmousewheel(IHTMLEventObj evtObj)
@@ -186,7 +186,7 @@ public sealed partial class HtmlDocument
         public bool onstop(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlDocument.s_eventStop, e);
+            FireEvent(s_eventStop, e);
             return e.ReturnValue;
         }
 

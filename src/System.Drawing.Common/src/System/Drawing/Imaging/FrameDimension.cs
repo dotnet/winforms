@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging;
@@ -47,22 +47,13 @@ public sealed class FrameDimension
     /// <summary>
     /// The page dimension.
     /// </summary>
-    public static FrameDimension Page
-    {
-        get { return s_page; }
-    }
+    public static FrameDimension Page => s_page;
 
     /// <summary>
     /// Returns a value indicating whether the specified object is an <see cref='FrameDimension'/> equivalent to
     /// this <see cref='FrameDimension'/>.
     /// </summary>
-    public override bool Equals([NotNullWhen(true)] object? o)
-    {
-        FrameDimension? format = o as FrameDimension;
-        if (format is null)
-            return false;
-        return _guid == format._guid;
-    }
+    public override bool Equals([NotNullWhen(true)] object? o) => o is FrameDimension format && _guid == format._guid;
 
     public override int GetHashCode()
     {
@@ -70,13 +61,25 @@ public sealed class FrameDimension
     }
 
     /// <summary>
-    /// Converts this <see cref='FrameDimension'/> to a human-readable string.
+    ///  Converts this <see cref='FrameDimension'/> to a human-readable string.
     /// </summary>
     public override string ToString()
     {
-        if (this == s_time) return "Time";
-        if (this == s_resolution) return "Resolution";
-        if (this == s_page) return "Page";
+        if (this == s_time)
+        {
+            return "Time";
+        }
+
+        if (this == s_resolution)
+        {
+            return "Resolution";
+        }
+
+        if (this == s_page)
+        {
+            return "Page";
+        }
+
         return $"[FrameDimension: {_guid}]";
     }
 }

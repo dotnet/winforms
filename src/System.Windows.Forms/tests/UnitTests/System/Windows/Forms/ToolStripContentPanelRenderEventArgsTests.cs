@@ -41,15 +41,13 @@ public class ToolStripContentPanelRenderEventArgsTests
     [InlineData(false)]
     public void Handled_Set_GetReturnsExpected(bool value)
     {
-        using (Bitmap image = new(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using ToolStripContentPanel panel = new();
+        ToolStripContentPanelRenderEventArgs e = new(graphics, panel)
         {
-            using ToolStripContentPanel panel = new();
-            ToolStripContentPanelRenderEventArgs e = new(graphics, panel)
-            {
-                Handled = value
-            };
-            Assert.Equal(value, e.Handled);
-        }
+            Handled = value
+        };
+        Assert.Equal(value, e.Handled);
     }
 }

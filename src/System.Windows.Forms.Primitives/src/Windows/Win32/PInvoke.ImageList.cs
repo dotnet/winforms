@@ -18,7 +18,7 @@ internal partial class PInvoke
         }
 
         /// <inheritdoc cref="ImageList_Destroy(HIMAGELIST)"/>
-        public static bool Destroy<T>(T himl) where T: IHandle<HIMAGELIST>
+        public static bool Destroy<T>(T himl) where T : IHandle<HIMAGELIST>
         {
             bool result = ImageList_Destroy(himl.Handle);
             GC.KeepAlive(himl.Wrapper);

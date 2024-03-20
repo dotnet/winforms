@@ -227,25 +227,25 @@ public class ListViewItemConverterTests
         // Custom style - text.
         yield return new object[]
         {
-            new ListViewItem(new string[] { "text" }, "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont),
+            new ListViewItem(["text"], "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont),
             new Type[] { typeof(string[]), typeof(string), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text" }, "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont }
         };
         yield return new object[]
         {
-            new ListViewItem(new string[] { "text" }, 1, Color.Red, Color.Blue, SystemFonts.MenuFont),
+            new ListViewItem(["text"], 1, Color.Red, Color.Blue, SystemFonts.MenuFont),
             new Type[] { typeof(string[]), typeof(int), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text" }, 1, Color.Red, Color.Blue, SystemFonts.MenuFont }
         };
         yield return new object[]
         {
-            new ListViewItem(new string[] { "text" }, "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont, group),
+            new ListViewItem(["text"], "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont, group),
             new Type[] { typeof(string[]), typeof(string), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text" }, "imageKey", Color.Red, Color.Blue, SystemFonts.MenuFont }
         };
         yield return new object[]
         {
-            new ListViewItem(new string[] { "text" }, 1, Color.Red, Color.Blue, SystemFonts.MenuFont, group),
+            new ListViewItem(["text"], 1, Color.Red, Color.Blue, SystemFonts.MenuFont, group),
             new Type[] { typeof(string[]), typeof(int), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text" }, 1, Color.Red, Color.Blue, SystemFonts.MenuFont }
         };

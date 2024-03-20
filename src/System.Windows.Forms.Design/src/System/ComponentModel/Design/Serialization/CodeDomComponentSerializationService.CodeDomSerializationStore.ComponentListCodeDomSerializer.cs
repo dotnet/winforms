@@ -16,11 +16,11 @@ public sealed partial class CodeDomComponentSerializationService
         private class ComponentListCodeDomSerializer : CodeDomSerializer
         {
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
-            private readonly Dictionary<string, OrderedCodeStatementCollection?> _statementsTable = new();
-            private readonly Dictionary<string, List<CodeExpression>> _expressions = new();
+            private readonly Dictionary<string, OrderedCodeStatementCollection?> _statementsTable = [];
+            private readonly Dictionary<string, List<CodeExpression>> _expressions = [];
             private Dictionary<string, CodeDomComponentSerializationState>? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
-            private readonly HashSet<string> _nameResolveGuard = new();
+            private readonly HashSet<string> _nameResolveGuard = [];
 
             public override object Deserialize(IDesignerSerializationManager manager, object state)
             {
@@ -47,7 +47,7 @@ public sealed partial class CodeDomComponentSerializationService
                     // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
                     if (!expressions.TryGetValue(name, out List<CodeExpression>? exps))
                     {
-                        exps = new();
+                        exps = [];
                         expressions[name] = exps;
                     }
 
@@ -64,7 +64,7 @@ public sealed partial class CodeDomComponentSerializationService
             /// </summary>
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
-                CodeStatementCollection completeStatements = new();
+                CodeStatementCollection completeStatements = [];
                 _expressions.Clear();
                 _applyDefaults = applyDefaults;
                 foreach (string name in objectNames)
@@ -76,7 +76,7 @@ public sealed partial class CodeDomComponentSerializationService
                     }
                 }
 
-                CodeStatementCollection mappedStatements = new();
+                CodeStatementCollection mappedStatements = [];
                 CodeMethodMap methodMap = new(mappedStatements);
 
                 methodMap.Add(completeStatements);
@@ -151,7 +151,6 @@ public sealed partial class CodeDomComponentSerializationService
                     PropertyDescriptor? prop = props[propName];
                     if (prop is not null && prop.CanResetValue(comp))
                     {
-                        Trace(TraceLevel.Verbose, $"Resetting default for {name}.{propName}");
                         // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
                         if (manager.TryGetService(out MemberRelationshipService? relationships) && relationships[comp, prop] != MemberRelationship.Empty)
                         {
@@ -201,7 +200,7 @@ public sealed partial class CodeDomComponentSerializationService
                 // We need to resolve the first chunk using the manager. other chunks will be resolved within the nested containers.
                 int curIndex = name.IndexOf('.');
                 Debug.Assert(curIndex > 0, "ResolvedNestedName accepts only nested names!");
-                outerComponent = name.Substring(0, curIndex);
+                outerComponent = name[..curIndex];
                 IComponent? curComp = manager.GetInstance(outerComponent) as IComponent;
 
                 do
@@ -212,7 +211,7 @@ public sealed partial class CodeDomComponentSerializationService
                     moreChunks = curIndex != -1;
                     string compName = moreChunks
                         ? name.Substring(prevIndex + 1, curIndex)
-                        : name.Substring(prevIndex + 1);
+                        : name[(prevIndex + 1)..];
 
                     if (string.IsNullOrEmpty(compName))
                     {
@@ -276,7 +275,6 @@ public sealed partial class CodeDomComponentSerializationService
                         Type? type = manager.GetType(typeName);
                         if (type is null)
                         {
-                            Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                         }
                         else if (statements.Count > 0)
@@ -285,19 +283,11 @@ public sealed partial class CodeDomComponentSerializationService
                             if (serializer is null)
                             {
                                 // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
-                                Trace(TraceLevel.Error,
-                                    $"Type referenced in init method has no serializer: {type.Name}");
                                 manager.ReportError(new CodeDomSerializerException(
                                     string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                             }
                             else
                             {
-                                Trace(TraceLevel.Verbose,
-                                    $"""
-                                     --------------------------------------------------------------------
-                                             Beginning deserialization of {name}
-                                     --------------------------------------------------------------------
-                                     """);
                                 try
                                 {
                                     object? instance = serializer.Deserialize(manager, statements);
@@ -488,7 +478,7 @@ public sealed partial class CodeDomComponentSerializationService
                         object? code = null;
                         CodeStatementCollection? ctxStatements = null;
                         Dictionary<string, object?>? resources = null;
-                        CodeStatementCollection extraStatements = new();
+                        CodeStatementCollection extraStatements = [];
                         manager.Context.Push(extraStatements);
                         if (manager.TryGetSerializer(data._value.GetType(), out CodeDomSerializer? serializer))
                         {
@@ -518,7 +508,7 @@ public sealed partial class CodeDomComponentSerializationService
                             }
                             else
                             {
-                                CodeStatementCollection codeStatements = new();
+                                CodeStatementCollection codeStatements = [];
                                 foreach (MemberData md in data.Members)
                                 {
                                     if (md._member.Attributes.Contains(DesignOnlyAttribute.Yes))
@@ -527,7 +517,7 @@ public sealed partial class CodeDomComponentSerializationService
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
                                         if (md._member is PropertyDescriptor prop && prop.PropertyType.IsSerializable)
                                         {
-                                            resources ??= new Dictionary<string, object?>();
+                                            resources ??= [];
 
                                             resources[prop.Name] = prop.GetValue(data._value);
                                         }
@@ -569,8 +559,6 @@ public sealed partial class CodeDomComponentSerializationService
                                     if (!prop.IsReadOnly || prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
                                     {
                                         defaultPropList ??= new(data.Members.Count);
-
-                                        Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                         defaultPropList.Add(prop.Name);
                                     }
                                 }
@@ -588,7 +576,7 @@ public sealed partial class CodeDomComponentSerializationService
 
                                     if (eventProp.GetValue(data._value) is null)
                                     {
-                                        defaultEventList ??= new List<string>();
+                                        defaultEventList ??= [];
 
                                         defaultEventList.Add(eventProp.Name);
                                     }
@@ -604,15 +592,13 @@ public sealed partial class CodeDomComponentSerializationService
                                     if (ebs?.GetEvent(prop) is not null)
                                     {
                                         Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
-                                        defaultEventList ??= new List<string>();
+                                        defaultEventList ??= [];
 
                                         defaultEventList.Add(prop.Name);
                                     }
                                     else
                                     {
                                         defaultPropList ??= new(data.Members.Count);
-
-                                        Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                         defaultPropList.Add(prop.Name);
                                     }
                                 }

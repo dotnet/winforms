@@ -312,6 +312,6 @@ internal class MaskDescriptorTemplate : MaskDescriptor
         /// <summary>
         /// Returns a reference to the internal List object.
         /// </summary>
-        public List<MaskDescriptor> List { get; } = new();
+        public List<MaskDescriptor> List { get; } = [];
     }
 }

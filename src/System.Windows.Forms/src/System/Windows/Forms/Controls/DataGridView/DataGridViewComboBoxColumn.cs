@@ -507,7 +507,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
             dataGridViewColumn = (DataGridViewComboBoxColumn)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewColumn);
+        CloneInternal(dataGridViewColumn);
         dataGridViewColumn.ComboBoxCellTemplate!.TemplateComboBoxColumn = dataGridViewColumn;
 
         return dataGridViewColumn;
@@ -524,7 +524,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 
         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
         int rowCount = dataGridViewRows.Count;
-        object[] items = ComboBoxCellTemplate!.Items.InnerArray.ToArray();
+        object[] items = [.. ComboBoxCellTemplate!.Items.InnerArray];
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
             DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);

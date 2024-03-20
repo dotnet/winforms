@@ -16,7 +16,7 @@ public partial class DataGridViewCheckBoxCell
         {
             get
             {
-                s_visualStyleRenderer ??= new VisualStyleRenderer(CheckBoxElement);
+                s_visualStyleRenderer ??= new VisualStyleRenderer(s_checkBoxElement);
 
                 return s_visualStyleRenderer;
             }
@@ -24,7 +24,7 @@ public partial class DataGridViewCheckBoxCell
 
         public static void DrawCheckBox(Graphics g, Rectangle bounds, int state)
         {
-            CheckBoxRenderer.SetParameters(CheckBoxElement.ClassName, CheckBoxElement.Part, (int)state);
+            CheckBoxRenderer.SetParameters(s_checkBoxElement.ClassName, s_checkBoxElement.Part, state);
             CheckBoxRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
         }
     }

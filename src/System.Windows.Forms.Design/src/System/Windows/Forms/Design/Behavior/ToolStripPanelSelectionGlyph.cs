@@ -19,8 +19,8 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     private const int ImageWidthOriginal = 50;
     private const int ImageHeightOriginal = 6;
 
-    private int _imageWidth = ImageWidthOriginal;
-    private int _imageHeight = ImageHeightOriginal;
+    private readonly int _imageWidth = ImageWidthOriginal;
+    private readonly int _imageHeight = ImageHeightOriginal;
 
     internal ToolStripPanelSelectionGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, IServiceProvider? _provider, ToolStripPanelSelectionBehavior behavior) : base(bounds, cursor, relatedComponent, behavior)
     {
@@ -189,7 +189,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
                 break;
             default:
-                throw new Exception(SR.ToolStripPanelGlyphUnsupportedDock);
+                throw new InvalidOperationException(SR.ToolStripPanelGlyphUnsupportedDock);
         }
     }
 

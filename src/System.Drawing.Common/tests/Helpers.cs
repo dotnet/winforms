@@ -15,7 +15,7 @@ public unsafe static class Helpers
     // This MUST come before s_anyInstalledPrinters. Caching for performance in tests.
     public static PrinterSettings.StringCollection InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;
 
-    private static bool s_anyInstalledPrinters = InstalledPrinters.Count > 0;
+    private static readonly bool s_anyInstalledPrinters = InstalledPrinters.Count > 0;
 
     public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(AreAnyPrintersInstalled)}";
 
@@ -44,7 +44,7 @@ public unsafe static class Helpers
         }
     }
 
-    private static Exception GetBitmapEqualFailureException(Bitmap bitmap, Color[][] colors, int firstFailureX, int firstFailureY)
+    private static EqualException GetBitmapEqualFailureException(Bitmap bitmap, Color[][] colors, int firstFailureX, int firstFailureY)
     {
         // Print out the whole bitmap to provide a view of the whole image, rather than just the difference between
         // a single pixel.

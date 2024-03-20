@@ -471,7 +471,7 @@ public class CheckedListBoxTests
             checkedListBox.CreateControl();
         }
 
-        checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+        checkedListBox.Items.AddRange((object[])["1", "2", "3"]);
         checkedListBox.SelectedItem = checkedListBox.Items[0];
 
         Assert.Equal(3, checkedListBox.Items.Count);
@@ -510,7 +510,7 @@ public class CheckedListBoxTests
             checkedListBox.CreateControl();
         }
 
-        checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+        checkedListBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
         {
@@ -544,7 +544,7 @@ public class CheckedListBoxTests
             checkedListBox.CreateControl();
         }
 
-        checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+        checkedListBox.Items.AddRange((object[])["1", "2", "3"]);
 
         checkedListBox.SetItemChecked(0, true);
 
@@ -575,7 +575,7 @@ public class CheckedListBoxTests
             checkedListBox.CreateControl();
         }
 
-        checkedListBox.Items.AddRange(new object[] { "1", "2", "3" });
+        checkedListBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
         {

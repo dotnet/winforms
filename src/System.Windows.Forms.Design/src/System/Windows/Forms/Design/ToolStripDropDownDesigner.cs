@@ -18,15 +18,14 @@ namespace System.Windows.Forms.Design;
 internal class ToolStripDropDownDesigner : ComponentDesigner
 {
     private ISelectionService _selectionService;
-    private MenuStrip designMenu;
-    private ToolStripMenuItem menuItem;
-    private IDesignerHost host;
-    private ToolStripDropDown dropDown;
-    private bool selected;
-    private ControlBodyGlyph dummyToolStripGlyph;
+    private MenuStrip _designMenu;
+    private ToolStripMenuItem _menuItem;
+    private IDesignerHost _host;
+    private ToolStripDropDown _dropDown;
+    private bool _selected;
+    private ControlBodyGlyph _dummyToolStripGlyph;
     private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
-    private FormDocumentDesigner parentFormDesigner;
-    internal ToolStripMenuItem currentParent;
+    internal ToolStripMenuItem _currentParent;
     private INestedContainer _nestedContainer; // NestedContainer for our DesignTime MenuItem.
     private UndoEngine _undoEngine;
 
@@ -84,7 +83,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     // Dummy menuItem that is used for the contextMenuStrip design
     public ToolStripMenuItem DesignerMenuItem
     {
-        get => menuItem;
+        get => _menuItem;
     }
 
     /// <summary>
@@ -126,18 +125,18 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     /// </summary>
     private RightToLeft RightToLeft
     {
-        get => dropDown.RightToLeft;
+        get => _dropDown.RightToLeft;
         set
         {
-            if (menuItem is not null && designMenu is not null && value != RightToLeft)
+            if (_menuItem is not null && _designMenu is not null && value != RightToLeft)
             {
                 Rectangle bounds = Rectangle.Empty;
                 try
                 {
-                    bounds = dropDown.Bounds;
-                    menuItem.HideDropDown();
-                    designMenu.RightToLeft = value;
-                    dropDown.RightToLeft = value;
+                    bounds = _dropDown.Bounds;
+                    _menuItem.HideDropDown();
+                    _designMenu.RightToLeft = value;
+                    _dropDown.RightToLeft = value;
                 }
                 finally
                 {
@@ -146,7 +145,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                         GetService<BehaviorService>()?.Invalidate(bounds);
                     }
 
-                    ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(menuItem);
+                    ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(_menuItem);
                     itemDesigner?.InitializeDropDown();
                 }
             }
@@ -162,11 +161,11 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         {
             if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
             {
-                if (Component is IPersistComponentSettings persistableComponent && host is not null)
+                if (Component is IPersistComponentSettings persistableComponent && _host is not null)
                 {
                     if (persistableComponent.SettingsKey is null)
                     {
-                        IComponent rootComponent = host.RootComponent;
+                        IComponent rootComponent = _host.RootComponent;
                         if (rootComponent is not null && rootComponent != persistableComponent)
                         {
                             ShadowProperties[SettingsKeyName] = $"{rootComponent.Site.Name}.{Component.Site.Name}";
@@ -199,12 +198,12 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     {
         // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
         ICollection selComponents = selectionService.GetSelectedComponents();
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
         foreach (object selComp in selComponents)
         {
             if (selComp is ToolStripItem item)
             {
-                ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)host.GetDesigner(item);
+                ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
                 itemDesigner?.GetGlyphs(ref glyphs, new ResizeBehavior(item.Site));
             }
         }
@@ -241,15 +240,15 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             }
 
             DisposeMenu();
-            if (designMenu is not null)
+            if (_designMenu is not null)
             {
-                designMenu.Dispose();
-                designMenu = null;
+                _designMenu.Dispose();
+                _designMenu = null;
             }
 
-            if (dummyToolStripGlyph is not null)
+            if (_dummyToolStripGlyph is not null)
             {
-                dummyToolStripGlyph = null;
+                _dummyToolStripGlyph = null;
             }
 
             if (_undoEngine is not null)
@@ -267,14 +266,14 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     private void DisposeMenu()
     {
         HideMenu();
-        if (host.RootComponent is Control form)
+        if (_host.RootComponent is Control form)
         {
-            if (designMenu is not null)
+            if (_designMenu is not null)
             {
-                form.Controls.Remove(designMenu);
+                form.Controls.Remove(_designMenu);
             }
 
-            if (menuItem is not null)
+            if (_menuItem is not null)
             {
                 if (_nestedContainer is not null)
                 {
@@ -282,8 +281,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                     _nestedContainer = null;
                 }
 
-                menuItem.Dispose();
-                menuItem = null;
+                _menuItem.Dispose();
+                _menuItem = null;
             }
         }
     }
@@ -291,24 +290,24 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     // private helper function to Hide the ContextMenu structure.
     private void HideMenu()
     {
-        if (menuItem is null)
+        if (_menuItem is null)
         {
             return;
         }
 
-        selected = false;
+        _selected = false;
 
-        if (!(host.RootComponent is Control))
+        if (_host.RootComponent is not Control)
         {
             return;
         }
 
-        menuItem.DropDown.AutoClose = true;
-        menuItem.HideDropDown();
-        menuItem.Visible = false;
+        _menuItem.DropDown.AutoClose = true;
+        _menuItem.HideDropDown();
+        _menuItem.Visible = false;
 
         // Hide the MenuItem DropDown.
-        designMenu.Visible = false;
+        _designMenu.Visible = false;
 
         // Invalidate the Bounds..
         // toolStripAdornerWindowService.Invalidate(boundsToInvalidate);
@@ -317,26 +316,26 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         // Query for the Behavior Service and Remove Glyph....
         if (TryGetService(out BehaviorService _))
         {
-            if (dummyToolStripGlyph is not null && TryGetService(out SelectionManager selectionManager))
+            if (_dummyToolStripGlyph is not null && TryGetService(out SelectionManager selectionManager))
             {
-                if (selectionManager.BodyGlyphAdorner.Glyphs.Contains(dummyToolStripGlyph))
+                if (selectionManager.BodyGlyphAdorner.Glyphs.Contains(_dummyToolStripGlyph))
                 {
-                    selectionManager.BodyGlyphAdorner.Glyphs.Remove(dummyToolStripGlyph);
+                    selectionManager.BodyGlyphAdorner.Glyphs.Remove(_dummyToolStripGlyph);
                 }
 
                 selectionManager.Refresh();
             }
 
-            dummyToolStripGlyph = null;
+            _dummyToolStripGlyph = null;
         }
 
         // Unhook all the events for DesignMenuItem
-        if (menuItem is not null)
+        if (_menuItem is not null)
         {
-            if (host.GetDesigner(menuItem) is ToolStripMenuItemDesigner itemDesigner)
+            if (_host.GetDesigner(_menuItem) is ToolStripMenuItemDesigner itemDesigner)
             {
                 itemDesigner.UnHookEvents();
-                itemDesigner.RemoveTypeHereNode(menuItem);
+                itemDesigner.RemoveTypeHereNode(_menuItem);
             }
         }
     }
@@ -347,7 +346,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     public override void Initialize(IComponent component)
     {
         base.Initialize(component);
-        host = (IDesignerHost)GetService(typeof(IDesignerHost));
+        _host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
         // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
         ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
@@ -357,50 +356,50 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         ISupportInSituService inSituService = (ISupportInSituService)GetService(typeof(ISupportInSituService));
         inSituService ??= new ToolStripInSituService(Component.Site);
 
-        dropDown = (ToolStripDropDown)Component;
-        dropDown.Visible = false;
+        _dropDown = (ToolStripDropDown)Component;
+        _dropDown.Visible = false;
 
         // Shadow properties as we would change these for DropDowns at DesignTime.
-        AutoClose = dropDown.AutoClose;
-        AllowDrop = dropDown.AllowDrop;
+        AutoClose = _dropDown.AutoClose;
+        AllowDrop = _dropDown.AllowDrop;
 
         if (TryGetService(out _selectionService))
         {
             // first select the rootComponent and then hook on the events... but not if we are loading - VSWhidbey #484576
-            if (host is not null && !host.Loading)
+            if (_host is not null && !_host.Loading)
             {
-                _selectionService.SetSelectedComponents(new IComponent[] { host.RootComponent }, SelectionTypes.Replace);
+                _selectionService.SetSelectedComponents(new IComponent[] { _host.RootComponent }, SelectionTypes.Replace);
             }
 
             _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
             _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
         }
 
-        designMenu = new MenuStrip
+        _designMenu = new MenuStrip
         {
             Visible = false,
             AutoSize = false,
             Dock = DockStyle.Top
         };
 
-        designMenu.Height = ScaleHelper.ScaleToInitialSystemDpi(designMenu.Height);
+        _designMenu.Height = ScaleHelper.ScaleToInitialSystemDpi(_designMenu.Height);
 
         // Add MenuItem
-        if (host.RootComponent is Control form)
+        if (_host.RootComponent is Control form)
         {
-            menuItem = new ToolStripMenuItem
+            _menuItem = new ToolStripMenuItem
             {
                 BackColor = SystemColors.Window,
                 Name = Component.Site.Name
             };
-            menuItem.Text = (dropDown is not null) ? dropDown.GetType().Name : menuItem.Name;
-            designMenu.Items.Add(menuItem);
-            form.Controls.Add(designMenu);
-            designMenu.SendToBack();
+            _menuItem.Text = (_dropDown is not null) ? _dropDown.GetType().Name : _menuItem.Name;
+            _designMenu.Items.Add(_menuItem);
+            form.Controls.Add(_designMenu);
+            _designMenu.SendToBack();
 
             if (TryGetService(out _nestedContainer))
             {
-                _nestedContainer.Add(menuItem, "ContextMenuStrip");
+                _nestedContainer.Add(_menuItem, "ContextMenuStrip");
             }
         }
 
@@ -418,14 +417,14 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     private bool IsContextMenuStripItemSelected(ISelectionService selectionService)
     {
         bool showDesignMenu = false;
-        if (menuItem is null)
+        if (_menuItem is null)
         {
             return showDesignMenu;
         }
 
         ToolStripDropDown topmost = null;
         IComponent comp = (IComponent)selectionService.PrimarySelection;
-        if (comp is null && dropDown.Visible)
+        if (comp is null && _dropDown.Visible)
         {
             if (TryGetService(out ToolStripKeyboardHandlingService keyboardHandlingService))
             {
@@ -436,37 +435,37 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         // This case covers (a) and (b) above....
         if (comp is ToolStripDropDownItem currentItem)
         {
-            if (currentItem == menuItem)
+            if (currentItem == _menuItem)
             {
-                topmost = menuItem.DropDown;
+                topmost = _menuItem.DropDown;
             }
             else
             {
-                ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(comp);
+                ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(comp);
                 if (itemDesigner is not null)
                 {
                     topmost = ToolStripItemDesigner.GetFirstDropDown(currentItem);
                 }
             }
         }
-        else if (comp is ToolStripItem) // case (c)
+        else if (comp is ToolStripItem item) // case (c)
         {
-            if (!(((ToolStripItem)comp).GetCurrentParent() is ToolStripDropDown parent))
+            if (item.GetCurrentParent() is not ToolStripDropDown parent)
             {
-                // Try if the item has not laid out...
-                parent = ((ToolStripItem)comp).Owner as ToolStripDropDown;
+                // Try if the item has not laid out.
+                parent = item.Owner as ToolStripDropDown;
             }
 
             if (parent is not null && parent.Visible)
             {
                 ToolStripItem ownerItem = parent.OwnerItem;
-                if (ownerItem is not null && ownerItem == menuItem)
+                if (ownerItem is not null && ownerItem == _menuItem)
                 {
-                    topmost = menuItem.DropDown;
+                    topmost = _menuItem.DropDown;
                 }
                 else
                 {
-                    ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(ownerItem);
+                    ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(ownerItem);
                     if (itemDesigner is not null)
                     {
                         topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)ownerItem);
@@ -478,7 +477,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         if (topmost is not null)
         {
             ToolStripItem topMostItem = topmost.OwnerItem;
-            if (topMostItem == menuItem)
+            if (topMostItem == _menuItem)
             {
                 showDesignMenu = true;
             }
@@ -495,7 +494,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         ISelectionService selectionService = (ISelectionService)sender;
         // If we are no longer selected ... Hide the DropDown
         bool showDesignMenu = IsContextMenuStripItemSelected(selectionService) || Component.Equals(selectionService.PrimarySelection);
-        if (selected && !showDesignMenu)
+        if (_selected && !showDesignMenu)
         {
             HideMenu();
         }
@@ -506,20 +505,20 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
     {
-        if (Component is null || menuItem is null)
+        if (Component is null || _menuItem is null)
         {
             return;
         }
 
         ISelectionService selectionService = (ISelectionService)sender;
         // Select the container if TopLevel Dummy MenuItem is selected.
-        if (selectionService.GetComponentSelected(menuItem))
+        if (selectionService.GetComponentSelected(_menuItem))
         {
             selectionService.SetSelectedComponents(new IComponent[] { Component }, SelectionTypes.Replace);
         }
 
         // return if DropDown is already is selected.
-        if (Component.Equals(selectionService.PrimarySelection) && selected)
+        if (Component.Equals(selectionService.PrimarySelection) && _selected)
         {
             return;
         }
@@ -528,7 +527,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
 
         if (showDesignMenu)
         {
-            if (!dropDown.Visible)
+            if (!_dropDown.Visible)
             {
                 ShowMenu();
             }
@@ -536,9 +535,9 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             // Selection change would remove our Glyph from the BodyGlyph Collection.
             if (TryGetService(out SelectionManager selectionManager))
             {
-                if (dummyToolStripGlyph is not null)
+                if (_dummyToolStripGlyph is not null)
                 {
-                    selectionManager.BodyGlyphAdorner.Glyphs.Insert(0, dummyToolStripGlyph);
+                    selectionManager.BodyGlyphAdorner.Glyphs.Insert(0, _dummyToolStripGlyph);
                 }
 
                 // Add our SelectionGlyphs and Invalidate.
@@ -555,7 +554,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         base.PreFilterProperties(properties);
         PropertyDescriptor prop;
         string[] shadowProps = ["AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop"];
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];
@@ -576,7 +575,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripDropDown AutoClose to be the default padding
+    ///  Resets the ToolStripDropDown AutoClose to be the default padding
     /// </summary>
     private void ResetAutoClose()
     {
@@ -584,15 +583,15 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
+    ///  Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
     /// </summary>
     private void RestoreAutoClose()
     {
-        dropDown.AutoClose = (bool)ShadowProperties[nameof(AutoClose)];
+        _dropDown.AutoClose = (bool)ShadowProperties[nameof(AutoClose)];
     }
 
     /// <summary>
-    /// Resets the ToolStripDropDown AllowDrop to be the default padding
+    ///  Resets the ToolStripDropDown AllowDrop to be the default padding
     /// </summary>
     private void ResetAllowDrop()
     {
@@ -604,7 +603,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     /// </summary>
     private void RestoreAllowDrop()
     {
-        dropDown.AutoClose = (bool)ShadowProperties[nameof(AllowDrop)];
+        _dropDown.AutoClose = (bool)ShadowProperties[nameof(AllowDrop)];
     }
 
     /// <summary>
@@ -620,10 +619,10 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     /// </summary>
     public void ShowMenu()
     {
-        int count = dropDown.Items.Count - 1;
+        int count = _dropDown.Items.Count - 1;
         if (count >= 0)
         {
-            ShowMenu(dropDown.Items[count]);
+            ShowMenu(_dropDown.Items[count]);
         }
         else
         {
@@ -632,72 +631,69 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown
+    ///  item through the PG or Document outline. The input toolstrip item will be selected.
     /// </summary>
     public void ShowMenu(ToolStripItem selectedItem)
     {
-        if (menuItem is null)
+        if (_menuItem is null)
         {
             return;
         }
 
-        Control parent = designMenu.Parent;
-        if (parent is Form parentForm)
-        {
-            parentFormDesigner = host.GetDesigner(parentForm) as FormDocumentDesigner;
-        }
+        Control parent = _designMenu.Parent;
 
-        selected = true;
-        designMenu.Visible = true;
-        designMenu.BringToFront();
-        menuItem.Visible = true;
+        _selected = true;
+        _designMenu.Visible = true;
+        _designMenu.BringToFront();
+        _menuItem.Visible = true;
 
         // Check if this is a design-time DropDown
-        if (currentParent is not null && currentParent != menuItem)
+        if (_currentParent is not null && _currentParent != _menuItem)
         {
-            if (host.GetDesigner(currentParent) is ToolStripMenuItemDesigner ownerItemDesigner)
+            if (_host.GetDesigner(_currentParent) is ToolStripMenuItemDesigner ownerItemDesigner)
             {
-                ownerItemDesigner.RemoveTypeHereNode(currentParent);
+                ownerItemDesigner.RemoveTypeHereNode(_currentParent);
             }
         }
 
         // Every time you hide/show .. set the DropDown of the designer MenuItem to the component dropDown being designed.
-        menuItem.DropDown = dropDown;
-        menuItem.DropDown.OwnerItem = menuItem;
-        if (dropDown.Items.Count > 0)
+        _menuItem.DropDown = _dropDown;
+        _menuItem.DropDown.OwnerItem = _menuItem;
+        if (_dropDown.Items.Count > 0)
         {
-            ToolStripItem[] items = new ToolStripItem[dropDown.Items.Count];
-            dropDown.Items.CopyTo(items, 0);
+            ToolStripItem[] items = new ToolStripItem[_dropDown.Items.Count];
+            _dropDown.Items.CopyTo(items, 0);
             foreach (ToolStripItem toolItem in items)
             {
                 if (toolItem is DesignerToolStripControlHost)
                 {
-                    dropDown.Items.Remove(toolItem);
+                    _dropDown.Items.Remove(toolItem);
                 }
             }
         }
 
-        ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(menuItem);
+        ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(_menuItem);
         if (TryGetService(out BehaviorService behaviorService))
         {
             // Show the contextMenu only if the dummy menuStrip is contained in the Form. Refer to VsWhidbey 484317 for more details.
             if (itemDesigner is not null && parent is not null)
             {
                 Rectangle parentBounds = behaviorService.ControlRectInAdornerWindow(parent);
-                Rectangle menuBounds = behaviorService.ControlRectInAdornerWindow(designMenu);
+                Rectangle menuBounds = behaviorService.ControlRectInAdornerWindow(_designMenu);
                 if (ToolStripDesigner.IsGlyphTotallyVisible(menuBounds, parentBounds))
                 {
                     itemDesigner.InitializeDropDown();
                 }
             }
 
-            if (dummyToolStripGlyph is null)
+            if (_dummyToolStripGlyph is null)
             {
-                Point loc = behaviorService.ControlToAdornerWindow(designMenu);
-                Rectangle r = designMenu.Bounds;
+                Point loc = behaviorService.ControlToAdornerWindow(_designMenu);
+                Rectangle r = _designMenu.Bounds;
                 r.Offset(loc);
-                dummyToolStripGlyph = new ControlBodyGlyph(r, Cursor.Current, menuItem, new ContextMenuStripBehavior(menuItem));
-                GetService<SelectionManager>()?.BodyGlyphAdorner.Glyphs.Insert(0, dummyToolStripGlyph);
+                _dummyToolStripGlyph = new ControlBodyGlyph(r, Cursor.Current, _menuItem, new ContextMenuStripBehavior());
+                GetService<SelectionManager>()?.BodyGlyphAdorner.Glyphs.Insert(0, _dummyToolStripGlyph);
             }
 
             if (selectedItem is not null)
@@ -708,7 +704,9 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     // Should the designer serialize the settings?
-    private bool ShouldSerializeSettingsKey() => (Component is IPersistComponentSettings persistableComponent && persistableComponent.SaveSettings && SettingsKey is not null);
+    private bool ShouldSerializeSettingsKey() => Component is IPersistComponentSettings persistableComponent
+        && persistableComponent.SaveSettings
+        && SettingsKey is not null;
 
     /// <summary>
     /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
@@ -738,24 +736,15 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
+    ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph.
+    ///  This will just eat the MouseUps.
     /// </summary>
     internal class ContextMenuStripBehavior : Behavior.Behavior
     {
-        private readonly ToolStripMenuItem _item;
-        internal ContextMenuStripBehavior(ToolStripMenuItem menuItem)
+        internal ContextMenuStripBehavior()
         {
-            _item = menuItem;
         }
 
-        public override bool OnMouseUp(Glyph g, MouseButtons button)
-        {
-            if (button == MouseButtons.Left)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public override bool OnMouseUp(Glyph g, MouseButtons button) => button == MouseButtons.Left;
     }
 }

@@ -48,7 +48,8 @@ public class ControlBodyGlyph : ComponentGlyph
     /// </summary>
     public override Cursor? GetHitTest(Point p)
     {
-        bool isVisible = (_component is Control control) ? control.Visible : true; /*non-controls are always visible here*/
+        // non-controls are always visible here
+        bool isVisible = _component is not Control control || control.Visible;
 
         if (isVisible && _bounds.Contains(p))
         {

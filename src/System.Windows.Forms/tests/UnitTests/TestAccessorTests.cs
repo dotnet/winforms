@@ -203,7 +203,7 @@ public class TestAccessorTests
     {
         private int _integer;
         private readonly int _readOnlyInteger;
-        private List<string> _list = new() { "42" };
+        private List<string> _list = ["42"];
 
         private long Long { get; set; }
 

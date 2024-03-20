@@ -305,8 +305,8 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
     internal override bool IsCreatable => base.IsCreatable && _state != TaskDialogProgressBarState.None;
 
     private static bool ProgressBarStateIsMarquee(TaskDialogProgressBarState state) =>
-        state == TaskDialogProgressBarState.Marquee ||
-        state == TaskDialogProgressBarState.MarqueePaused;
+        state is TaskDialogProgressBarState.Marquee or
+        TaskDialogProgressBarState.MarqueePaused;
 
     private static uint GetNativeProgressBarState(TaskDialogProgressBarState state) => state switch
     {

@@ -136,7 +136,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         var host = _serviceProvider.GetRequiredService<IDesignerHost>();
         using DesignerTransaction transaction = host.CreateTransaction(GetTransactionDescription());
 
-        List<IComponent>? temp = copy ? new List<IComponent>() : null;
+        List<IComponent>? temp = copy ? [] : null;
         ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
         IComponentChangeService changeService = _serviceProvider.GetRequiredService<IComponentChangeService>();
 

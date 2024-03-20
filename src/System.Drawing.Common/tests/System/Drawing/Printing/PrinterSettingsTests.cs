@@ -560,7 +560,7 @@ public class PrinterSettingsTests
 
     private static string GetNameOfTestPrinterSuitableForDevModeTesting()
     {
-        foreach (string candidate in s_TestPrinterNames)
+        foreach (string candidate in s_testPrinterNames)
         {
             PrinterSettings printerSettings = new() { PrinterName = candidate };
             if (printerSettings.IsValid)
@@ -570,7 +570,7 @@ public class PrinterSettingsTests
         return null;
     }
 
-    private static readonly string[] s_TestPrinterNames =
+    private static readonly string[] s_testPrinterNames =
     [
         // Our method of testing some apis requires a printer that supports multi-copy printing, collating, color and duplex settings. Not all printers
         // support these so rather than trust the machine running the test to have configured such a printer as the default, use the name of

@@ -24,14 +24,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         get
         {
             DataGridViewColumn col = (DataGridViewColumn)Component;
-            if (col.Site is not null)
-            {
-                return col.Site.Name;
-            }
-            else
-            {
-                return col.Name;
-            }
+            return col.Site is not null ? col.Site.Name : col.Name;
         }
 
         set
@@ -121,14 +114,8 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     /// </devdoc>
     private bool UserAddedColumn
     {
-        get
-        {
-            return _userAddedColumn;
-        }
-        set
-        {
-            _userAddedColumn = value;
-        }
+        get => _userAddedColumn;
+        set => _userAddedColumn = value;
     }
 
     private int Width
@@ -248,7 +235,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         PropertyDescriptor? prop = properties["Width"] as PropertyDescriptor;
         if (prop is not null)
         {
-            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, Array.Empty<Attribute>());
+            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, []);
         }
 
         prop = properties["Name"] as PropertyDescriptor;
@@ -311,32 +298,40 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             MenuCommand command;
             if ((commandId.ID == StandardCommands.Copy.ID) && (commandId.Guid == StandardCommands.Copy.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Copy);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Copy)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Paste.ID) && (commandId.Guid == StandardCommands.Paste.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Paste);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Paste)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Delete.ID) && (commandId.Guid == StandardCommands.Delete.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Delete);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Delete)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }
 
             if ((commandId.ID == StandardCommands.Cut.ID) && (commandId.Guid == StandardCommands.Cut.Guid))
             {
-                command = new MenuCommand(handler, StandardCommands.Cut);
-                command.Enabled = false;
+                command = new MenuCommand(handler, StandardCommands.Cut)
+                {
+                    Enabled = false
+                };
 
                 return command;
             }

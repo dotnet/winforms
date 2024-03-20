@@ -699,8 +699,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_InvokeWithChildrenWithBindingContext_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext childContext1 = new();
-        BindingContext childContext2 = new();
+        BindingContext childContext1 = [];
+        BindingContext childContext2 = [];
         using Control child1 = new()
         {
             BindingContext = childContext1
@@ -4327,7 +4327,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBindingContextChanged_InvokeWithBindingContext_DoesNotCallBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubControl control = new()
         {
             BindingContext = context

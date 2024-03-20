@@ -61,7 +61,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         NumberFormatInfo? formatInfo = (NumberFormatInfo?)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
         _decimalSep = formatInfo is not null ? formatInfo.NumberDecimalSeparator : ".";
 
-        _tabProperties = new();
+        _tabProperties = [];
 
         // Set up a NULL brush so we never try to invalidate the control.  This is
         // more efficient for what we're doing
@@ -76,8 +76,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
         hs?.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
 
-        _commands = new MenuCommand[]
-        {
+        _commands =
+        [
             new(new EventHandler(OnKeyCancel),
                 MenuCommands.KeyCancel),
 
@@ -101,13 +101,13 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
             new(new EventHandler(OnKeyPrevious),
                 MenuCommands.KeySelectPrevious),
-        };
+        ];
 
-        _newCommands = new MenuCommand[]
-        {
+        _newCommands =
+        [
             new(new EventHandler(OnKeyDefault),
                 MenuCommands.KeyTabOrderSelect),
-        };
+        ];
 
         IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
         if (mcs is not null)
@@ -654,13 +654,13 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
         if (_tabControls is null)
         {
-            _tabControls = new();
+            _tabControls = [];
             GetTabbing((Control)_host.RootComponent, _tabControls);
             _tabGlyphs = new Rectangle[_tabControls.Count];
         }
 
-        _tabComplete ??= new();
-        _tabNext ??= new();
+        _tabComplete ??= [];
+        _tabNext ??= [];
 
         if (_region is null)
         {

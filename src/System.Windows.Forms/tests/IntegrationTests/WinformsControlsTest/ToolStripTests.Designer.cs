@@ -56,6 +56,10 @@ partial class ToolStripTests
         this.toolStrip3 = new System.Windows.Forms.ToolStrip();
         this.toolStrip3_MenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip3_MenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStrip4 = new System.Windows.Forms.ToolStrip();
+        this.toolStrip4_Label1 = new System.Windows.Forms.ToolStripLabel();
+        this.toolStrip4_MenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStrip4_SubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.uncheckedCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.checkCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.checkedCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,6 +115,39 @@ partial class ToolStripTests
         this.toolStrip3.TabIndex = 1;
         this.toolStrip3.Text = "toolStrip3";
         this.toolStrip3.TabStop = true;
+        // 
+        // toolStrip4
+        // 
+        this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this.toolStrip4_Label1,
+        this.toolStrip4_MenuItem1});
+        this.toolStrip4.Location = new System.Drawing.Point(0, 68);
+        this.toolStrip4.Name = "toolStrip4";
+        this.toolStrip4.Size = new System.Drawing.Size(481, 22);
+        this.toolStrip4.TabIndex = 1;
+        this.toolStrip4.Text = "toolStrip4";
+        this.toolStrip4.TabStop = true;
+        this.toolStrip4.Font=new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold);
+        // 
+        // toolStrip4_Label1
+        // 
+        this.toolStrip4_Label1.Name = "toolStrip4_Label1";
+        this.toolStrip4_Label1.Size = new System.Drawing.Size(86, 22);
+        this.toolStrip4_Label1.Text = "toolStrip4_Label1";
+        // 
+        // toolStrip4_MenuItem1
+        //
+        this.toolStrip4_MenuItem1.DropDownItems.AddRange(new ToolStripItem[] { toolStrip4_SubMenuItem });
+        this.toolStrip4_MenuItem1.Name = "toolStrip4_MenuItem1";
+        this.toolStrip4_MenuItem1.Size = new System.Drawing.Size(180, 40);
+        this.toolStrip4_MenuItem1.Text = "toolStrip4_MenuItem1";
+        this.toolStrip4_MenuItem1.ToolTipText = "toolStrip4_MenuItem1";
+        // 
+        // toolStrip4_SubMenuItem
+        // 
+        this.toolStrip4_SubMenuItem.Name = "toolStrip4_SubMenuItem";
+        this.toolStrip4_SubMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.toolStrip4_SubMenuItem.Text = "toolStrip4_SubMenuItem";
         // 
         // toolStrip2_Button1
         //
@@ -267,7 +304,7 @@ partial class ToolStripTests
         this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
         this.toolStripProgressBar2,
         this.toolStripStatusLabel1});
-        this.statusStrip1.Location = new System.Drawing.Point(0, 101);
+        this.statusStrip1.Location = new System.Drawing.Point(0, 142);
         this.statusStrip1.Name = "statusStrip1";
         this.statusStrip1.Size = new System.Drawing.Size(481, 22);
         this.statusStrip1.TabIndex = 1;
@@ -277,7 +314,7 @@ partial class ToolStripTests
         // label1
         // 
         this.label1.AutoSize = true;
-        this.label1.Location = new System.Drawing.Point(12, 78);
+        this.label1.Location = new System.Drawing.Point(12, 127);
         this.label1.Name = "label1";
         this.label1.Size = new System.Drawing.Size(78, 13);
         this.label1.TabIndex = 2;
@@ -323,9 +360,10 @@ partial class ToolStripTests
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(881, 123);
+        this.ClientSize = new System.Drawing.Size(881, 200);
         this.Controls.Add(this.label1);
         this.Controls.Add(this.statusStrip1);
+        this.Controls.Add(this.toolStrip4);
         this.Controls.Add(this.toolStrip3);
         this.Controls.Add(this.toolStrip2);
         this.Controls.Add(this.toolStrip1);
@@ -339,6 +377,8 @@ partial class ToolStripTests
         this.toolStrip2.PerformLayout();
         this.toolStrip3.ResumeLayout(false);
         this.toolStrip3.PerformLayout();
+        this.toolStrip4.ResumeLayout(false);
+        this.toolStrip4.PerformLayout();
         this.ResumeLayout(false);
         this.PerformLayout();
 
@@ -348,6 +388,7 @@ partial class ToolStripTests
 
     private System.Windows.Forms.ToolStrip toolStrip1;
     private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+    private System.Windows.Forms.ToolStripLabel toolStrip4_Label1;
     private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
     private System.Windows.Forms.StatusStrip statusStrip1;
     private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
@@ -357,6 +398,7 @@ partial class ToolStripTests
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.ToolStrip toolStrip2;
     private System.Windows.Forms.ToolStrip toolStrip3;
+    private System.Windows.Forms.ToolStrip toolStrip4;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button1;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button2;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button3;
@@ -371,6 +413,8 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_SplitButton1_ChildButton2;
     private System.Windows.Forms.ToolStripMenuItem toolStrip3_MenuItem1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip3_MenuItem2;
+    private System.Windows.Forms.ToolStripMenuItem toolStrip4_MenuItem1;
+    private System.Windows.Forms.ToolStripMenuItem toolStrip4_SubMenuItem;
     private System.Windows.Forms.ToolStripMenuItem uncheckedCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkedCheckOnClickFToolStripMenuItem;

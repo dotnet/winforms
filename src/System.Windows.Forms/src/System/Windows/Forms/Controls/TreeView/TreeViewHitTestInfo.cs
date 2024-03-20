@@ -8,16 +8,16 @@ namespace System.Windows.Forms;
 /// </summary>
 public class TreeViewHitTestInfo
 {
-    private readonly TreeViewHitTestLocations loc;
-    private readonly TreeNode? node;
+    private readonly TreeViewHitTestLocations _location;
+    private readonly TreeNode? _node;
 
     /// <summary>
     ///  Creates a TreeViewHitTestInfo instance.
     /// </summary>
     public TreeViewHitTestInfo(TreeNode? hitNode, TreeViewHitTestLocations hitLocation)
     {
-        node = hitNode;
-        loc = hitLocation;
+        _node = hitNode;
+        _location = hitLocation;
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public class TreeViewHitTestInfo
     {
         get
         {
-            return loc;
+            return _location;
         }
     }
 
@@ -38,7 +38,7 @@ public class TreeViewHitTestInfo
     {
         get
         {
-            return node;
+            return _node;
         }
     }
 }

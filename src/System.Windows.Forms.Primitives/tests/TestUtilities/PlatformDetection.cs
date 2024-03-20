@@ -55,7 +55,7 @@ public static partial class PlatformDetection
         (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
         (OpenSslVersion.Major >= 1 && (OpenSslVersion.Minor >= 1 || OpenSslVersion.Build >= 2)));
     public static bool SupportsClientAlpn => SupportsAlpn ||
-        (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && PlatformDetection.OSXVersion > new Version(10, 12));
+        (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && OSXVersion > new Version(10, 12));
 
     // Officially, .Net Native only supports processes running in an AppContainer. However, the majority of tests still work fine
     // in a normal Win32 process and we often do so as running in an AppContainer imposes a substantial tax in debuggability
@@ -63,9 +63,9 @@ public static partial class PlatformDetection
     // running in AppContainer when running on .NetNative.
     public static bool IsNotNetNativeRunningAsConsoleApp => !(IsNetNative && !IsInAppContainer);
 
-    private static readonly Lazy<bool> m_isWindowsSubsystemForLinux = new(GetIsWindowsSubsystemForLinux);
+    private static readonly Lazy<bool> s_isWindowsSubsystemForLinux = new(GetIsWindowsSubsystemForLinux);
 
-    public static bool IsWindowsSubsystemForLinux => m_isWindowsSubsystemForLinux.Value;
+    public static bool IsWindowsSubsystemForLinux => s_isWindowsSubsystemForLinux.Value;
     public static bool IsNotWindowsSubsystemForLinux => !IsWindowsSubsystemForLinux;
 
     private static bool GetIsWindowsSubsystemForLinux()
@@ -116,7 +116,7 @@ public static partial class PlatformDetection
                 bool nonZeroLowerBoundArraysSupported = false;
                 try
                 {
-                    Array.CreateInstance(typeof(int), new int[] { 5 }, new int[] { 5 });
+                    Array.CreateInstance(typeof(int), [5], [5]);
                     nonZeroLowerBoundArraysSupported = true;
                 }
                 catch (PlatformNotSupportedException)
@@ -133,11 +133,11 @@ public static partial class PlatformDetection
     private static volatile Tuple<bool> s_lazyNonZeroLowerBoundArraySupported;
 
     // Tracked in: https://github.com/dotnet/corert/issues/3643 in case we change our mind about this.
-    public static bool IsInvokingStaticConstructorsSupported => !PlatformDetection.IsNetNative;
+    public static bool IsInvokingStaticConstructorsSupported => !IsNetNative;
 
     // System.Security.Cryptography.Xml.XmlDsigXsltTransform.GetOutput() relies on XslCompiledTransform which relies
     // heavily on Reflection.Emit
-    public static bool IsXmlDsigXsltTransformSupported => !PlatformDetection.IsUap;
+    public static bool IsXmlDsigXsltTransformSupported => !IsUap;
 
     private static bool GetIsRunningOnMonoInterpreter()
     {

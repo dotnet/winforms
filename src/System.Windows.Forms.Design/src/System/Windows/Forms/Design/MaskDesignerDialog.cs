@@ -30,7 +30,7 @@ internal class MaskDesignerDialog : Form
     private Button _btnCancel;
     private ErrorProvider _errorProvider;
 
-    private readonly List<MaskDescriptor> _maskDescriptors = new();
+    private readonly List<MaskDescriptor> _maskDescriptors = [];
     private MaskDescriptorTemplate _customMaskDescriptor;
     private SortOrder _listViewSortOrder = SortOrder.Ascending;
     private IContainer _components;
@@ -156,12 +156,12 @@ internal class MaskDesignerDialog : Form
         // listViewCannedMasks
         //
         resources.ApplyResources(_listViewCannedMasks, "listViewCannedMasks");
-        _listViewCannedMasks.Columns.AddRange(new ColumnHeader[]
-        {
+        _listViewCannedMasks.Columns.AddRange(
+        [
         _maskDescriptionHeader,
         _dataFormatHeader,
         _validatingTypeHeader
-        });
+        ]);
         _listViewCannedMasks.FullRowSelect = true;
         _listViewCannedMasks.HideSelection = false;
         _listViewCannedMasks.Margin = new Padding(0, 3, 0, 3);
@@ -517,12 +517,12 @@ internal class MaskDesignerDialog : Form
                 // Don't include prompt.
                 string sample = mtp.ToString(false, true);
 
-                _listViewCannedMasks.Items.Add(new ListViewItem(new string[] { maskDescriptor.Name!, sample, validatingType }));
+                _listViewCannedMasks.Items.Add(new ListViewItem([maskDescriptor.Name!, sample, validatingType]));
             }
 
             // Add the custom mask descriptor as the last entry.
             _maskDescriptors.Add(_customMaskDescriptor);
-            _listViewCannedMasks.Items.Add(new ListViewItem(new string[] { _customMaskDescriptor.Name, "", nullEntry }));
+            _listViewCannedMasks.Items.Add(new ListViewItem([_customMaskDescriptor.Name, "", nullEntry]));
 
             if (selectedMaskDex is not null)
             {

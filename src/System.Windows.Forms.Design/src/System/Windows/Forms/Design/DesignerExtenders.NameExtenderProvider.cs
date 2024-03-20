@@ -17,7 +17,7 @@ internal partial class DesignerExtenders
     [ProvideProperty("Name", typeof(IComponent))]
     private class NameExtenderProvider : IExtenderProvider
     {
-        private IComponent baseComponent;
+        private IComponent _baseComponent;
 
         /// <summary>
         ///  Creates a new DocumentExtenderProvider.
@@ -28,7 +28,7 @@ internal partial class DesignerExtenders
 
         protected IComponent GetBaseComponent(object o)
         {
-            if (baseComponent is null)
+            if (_baseComponent is null)
             {
                 ISite site = ((IComponent)o).Site;
                 if (site is not null)
@@ -36,12 +36,12 @@ internal partial class DesignerExtenders
                     IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     if (host is not null)
                     {
-                        baseComponent = host.RootComponent;
+                        _baseComponent = host.RootComponent;
                     }
                 }
             }
 
-            return baseComponent;
+            return _baseComponent;
         }
 
         /// <summary>
@@ -51,16 +51,13 @@ internal partial class DesignerExtenders
         public virtual bool CanExtend(object o)
         {
             // We always extend the root
-            //
             IComponent baseComp = GetBaseComponent(o);
             if (baseComp == o)
             {
                 return true;
             }
 
-            // See if this object is inherited.  If so, then we don't want to
-            // extend.
-            //
+            // See if this object is inherited.  If so, then we don't want to extend.
             if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)].Equals(InheritanceAttribute.NotInherited))
             {
                 return false;

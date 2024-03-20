@@ -1,4 +1,4 @@
-﻿﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -357,13 +357,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // Handle shadowed properties
         //
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "AutoSizeColumnsMode",
             "DataSource"
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
@@ -516,7 +516,6 @@ internal class DataGridViewDesigner : ControlDesigner
         return similarSchema;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void RefreshColumnCollection()
     {
         DataGridView dataGridView = Control;
@@ -623,7 +622,7 @@ internal class DataGridViewDesigner : ControlDesigner
             columnsToBeAdded = new List<DataGridViewColumn>(backEndProps!.Count);
             for (int i = 0; i < backEndProps.Count; i++)
             {
-                TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(System.Drawing.Image));
+                TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(Image));
 
                 Type propType = backEndProps[i].PropertyType;
 
@@ -660,9 +659,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 //
                 // 5. IContainer.Add(newDataGridView.Columns
                 //
-#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
                 DataGridViewColumn? dataGridViewColumn = TypeDescriptor.CreateInstance(host, columnType, null, null) as DataGridViewColumn;
-#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
 
                 if (dataGridViewColumn is not null)
                 {
@@ -745,7 +742,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // child modal dialog -launching in System Aware mode
         DataGridViewColumnCollectionDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
-            () => new DataGridViewColumnCollectionDialog(Control.Site));
+            () => new DataGridViewColumnCollectionDialog());
         dialog.SetLiveDataGridView(Control);
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;
@@ -819,10 +816,12 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
+            DesignerActionItemCollection items = [];
             DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
-                                                               SR.DataGridViewChooseDataSource);// displayName
-            chooseDataSource.RelatedComponent = _owner.Component;
+                                                               SR.DataGridViewChooseDataSource)
+            {
+                RelatedComponent = _owner.Component
+            };// displayName
             items.Add(chooseDataSource);
             return items;
         }
@@ -886,17 +885,9 @@ internal class DataGridViewDesigner : ControlDesigner
             return items;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-        public void EditColumns()
-        {
-            _owner.OnEditColumns(this, EventArgs.Empty);
-        }
+        public void EditColumns() => _owner.OnEditColumns(this, EventArgs.Empty);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-        public void AddColumn()
-        {
-            _owner.OnAddColumn(this, EventArgs.Empty);
-        }
+        public void AddColumn() => _owner.OnAddColumn(this, EventArgs.Empty);
     }
 
     private class DataGridViewPropertiesActionList : DesignerActionList
@@ -910,15 +901,17 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
-            items.Add(new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                        SR.DataGridViewEnableAdding));
-            items.Add(new DesignerActionPropertyItem("ReadOnly",
-                                                        SR.DataGridViewEnableEditing));
-            items.Add(new DesignerActionPropertyItem("AllowUserToDeleteRows",
-                                                        SR.DataGridViewEnableDeleting));
-            items.Add(new DesignerActionPropertyItem("AllowUserToOrderColumns",
-                                                        SR.DataGridViewEnableColumnReordering));
+            DesignerActionItemCollection items =
+            [
+                new DesignerActionPropertyItem("AllowUserToAddRows",
+                                                            SR.DataGridViewEnableAdding),
+                new DesignerActionPropertyItem("ReadOnly",
+                                                            SR.DataGridViewEnableEditing),
+                new DesignerActionPropertyItem("AllowUserToDeleteRows",
+                                                            SR.DataGridViewEnableDeleting),
+                new DesignerActionPropertyItem("AllowUserToOrderColumns",
+                                                            SR.DataGridViewEnableColumnReordering),
+            ];
             return items;
         }
 

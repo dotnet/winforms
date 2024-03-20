@@ -577,21 +577,21 @@ public class DragDropTests : ControlTestBase
         }
     }
 
-    class DragDropForm : Form
+    private class DragDropForm : Form
     {
         public ListBox ListDragSource;
         public ListBox ListDragTarget;
-        private CheckBox UseCustomCursorsCheck;
-        private Label DropLocationLabel;
+        private readonly CheckBox _useCustomCursorsCheck;
+        private readonly Label _dropLocationLabel;
 
-        private int indexOfItemUnderMouseToDrag;
-        private int indexOfItemUnderMouseToDrop;
+        private int _indexOfItemUnderMouseToDrag;
+        private int _indexOfItemUnderMouseToDrop;
 
-        private Rectangle dragBoxFromMouseDown;
-        private Point screenOffset;
+        private Rectangle _dragBoxFromMouseDown;
+        private Point _screenOffset;
 
-        private Cursor? MyNoDropCursor;
-        private Cursor? MyNormalCursor;
+        private Cursor? _myNoDropCursor;
+        private Cursor? _myNormalCursor;
 
         private readonly ITestOutputHelper _testOutputHelper;
 
@@ -599,18 +599,18 @@ public class DragDropTests : ControlTestBase
         {
             ListDragSource = new ListBox();
             ListDragTarget = new ListBox();
-            UseCustomCursorsCheck = new CheckBox();
-            DropLocationLabel = new Label();
+            _useCustomCursorsCheck = new CheckBox();
+            _dropLocationLabel = new Label();
 
             SuspendLayout();
 
             // ListDragSource
-            ListDragSource.Items.AddRange(new object[]
-            {
+            ListDragSource.Items.AddRange((object[])
+            [
                 "one", "two", "three", "four",
                 "five", "six", "seven", "eight",
                 "nine", "ten"
-            });
+            ]);
             ListDragSource.Location = new Point(10, 17);
             ListDragSource.Size = new Size(120, 225);
             ListDragSource.MouseDown += ListDragSource_MouseDown;
@@ -629,24 +629,24 @@ public class DragDropTests : ControlTestBase
             ListDragTarget.DragLeave += ListDragTarget_DragLeave;
 
             // UseCustomCursorsCheck
-            UseCustomCursorsCheck.Location = new Point(10, 243);
-            UseCustomCursorsCheck.Size = new Size(137, 24);
-            UseCustomCursorsCheck.Text = "Use Custom Cursors";
+            _useCustomCursorsCheck.Location = new Point(10, 243);
+            _useCustomCursorsCheck.Size = new Size(137, 24);
+            _useCustomCursorsCheck.Text = "Use Custom Cursors";
 
             // DropLocationLabel
-            DropLocationLabel.Location = new Point(154, 245);
-            DropLocationLabel.Size = new Size(137, 24);
-            DropLocationLabel.Text = "None";
+            _dropLocationLabel.Location = new Point(154, 245);
+            _dropLocationLabel.Size = new Size(137, 24);
+            _dropLocationLabel.Text = "None";
 
             // Form1
             ClientSize = new Size(292, 270);
-            Controls.AddRange(new Control[]
-            {
+            Controls.AddRange((Control[])
+            [
                 ListDragSource,
                 ListDragTarget,
-                UseCustomCursorsCheck,
-                DropLocationLabel
-            });
+                _useCustomCursorsCheck,
+                _dropLocationLabel
+            ]);
 
             _testOutputHelper = testOutputHelper;
         }
@@ -654,10 +654,10 @@ public class DragDropTests : ControlTestBase
         private void ListDragSource_MouseDown(object? sender, MouseEventArgs e)
         {
             // Get the index of the item the mouse is below.
-            indexOfItemUnderMouseToDrag = ListDragSource.IndexFromPoint(e.X, e.Y);
-            _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}). Index of element under mouse: {indexOfItemUnderMouseToDrag}");
+            _indexOfItemUnderMouseToDrag = ListDragSource.IndexFromPoint(e.X, e.Y);
+            _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}). Index of element under mouse: {_indexOfItemUnderMouseToDrag}");
 
-            if (indexOfItemUnderMouseToDrag != ListBox.NoMatches)
+            if (_indexOfItemUnderMouseToDrag != ListBox.NoMatches)
             {
                 // Remember the point where the mouse down occurred. The DragSize indicates
                 // the size that the mouse can move before a drag event should be started.
@@ -665,7 +665,7 @@ public class DragDropTests : ControlTestBase
 
                 // Create a rectangle using the DragSize, with the mouse position being
                 // at the center of the rectangle.
-                dragBoxFromMouseDown = new Rectangle(
+                _dragBoxFromMouseDown = new Rectangle(
                     new Point(e.X - (dragSize.Width / 2),
                               e.Y - (dragSize.Height / 2)),
                     dragSize);
@@ -673,14 +673,14 @@ public class DragDropTests : ControlTestBase
             else
             {
                 // Reset the rectangle if the mouse is not over an item in the ListBox.
-                dragBoxFromMouseDown = Rectangle.Empty;
+                _dragBoxFromMouseDown = Rectangle.Empty;
             }
         }
 
         private void ListDragSource_MouseUp(object? sender, MouseEventArgs e)
         {
             // Reset the drag rectangle when the mouse button is raised.
-            dragBoxFromMouseDown = Rectangle.Empty;
+            _dragBoxFromMouseDown = Rectangle.Empty;
             _testOutputHelper.WriteLine($"Mouse up on drag source at position ({e.X},{e.Y}).");
         }
 
@@ -690,41 +690,41 @@ public class DragDropTests : ControlTestBase
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
                 // If the mouse moves outside the rectangle, start the drag.
-                if (dragBoxFromMouseDown != Rectangle.Empty &&
-                    !dragBoxFromMouseDown.Contains(e.X, e.Y))
+                if (_dragBoxFromMouseDown != Rectangle.Empty &&
+                    !_dragBoxFromMouseDown.Contains(e.X, e.Y))
                 {
                     // Create custom cursors for the drag-and-drop operation.
                     try
                     {
-                        MyNormalCursor = new Cursor("./Resources/3dwarro.cur");
-                        MyNoDropCursor = new Cursor("./Resources/3dwno.cur");
+                        _myNormalCursor = new Cursor("./Resources/3dwarro.cur");
+                        _myNoDropCursor = new Cursor("./Resources/3dwno.cur");
                     }
                     catch
                     {
                         // An error occurred while attempting to load the cursors, so use
                         // standard cursors.
-                        UseCustomCursorsCheck.Checked = false;
+                        _useCustomCursorsCheck.Checked = false;
                     }
                     finally
                     {
                         // The screenOffset is used to account for any desktop bands
                         // that may be at the top or left side of the screen when
                         // determining when to cancel the drag drop operation.
-                        screenOffset = SystemInformation.WorkingArea.Location;
+                        _screenOffset = SystemInformation.WorkingArea.Location;
 
                         // Proceed with the drag-and-drop, passing in the list item.
                         DragDropEffects dropEffect = ListDragSource.DoDragDrop(
-                            ListDragSource.Items[indexOfItemUnderMouseToDrag],
+                            ListDragSource.Items[_indexOfItemUnderMouseToDrag],
                             DragDropEffects.All | DragDropEffects.Link);
 
                         // If the drag operation was a move then remove the item.
                         if (dropEffect == DragDropEffects.Move)
                         {
-                            ListDragSource.Items.RemoveAt(indexOfItemUnderMouseToDrag);
+                            ListDragSource.Items.RemoveAt(_indexOfItemUnderMouseToDrag);
 
                             // Selects the previous item in the list as long as the list has an item.
-                            if (indexOfItemUnderMouseToDrag > 0)
-                                ListDragSource.SelectedIndex = indexOfItemUnderMouseToDrag - 1;
+                            if (_indexOfItemUnderMouseToDrag > 0)
+                                ListDragSource.SelectedIndex = _indexOfItemUnderMouseToDrag - 1;
 
                             else if (ListDragSource.Items.Count > 0)
                                 // Selects the first item.
@@ -732,9 +732,9 @@ public class DragDropTests : ControlTestBase
                         }
 
                         // Dispose of the cursors since they are no longer needed.
-                        MyNormalCursor?.Dispose();
+                        _myNormalCursor?.Dispose();
 
-                        MyNoDropCursor?.Dispose();
+                        _myNoDropCursor?.Dispose();
                     }
                 }
             }
@@ -745,14 +745,14 @@ public class DragDropTests : ControlTestBase
             _testOutputHelper.WriteLine($"Give feedback on drag source.");
 
             // Use custom cursors if the check box is checked.
-            if (UseCustomCursorsCheck.Checked)
+            if (_useCustomCursorsCheck.Checked)
             {
                 // Sets the custom cursor based upon the effect.
                 e.UseDefaultCursors = false;
                 if ((e.Effect & DragDropEffects.Move) == DragDropEffects.Move)
-                    Cursor.Current = MyNormalCursor;
+                    Cursor.Current = _myNormalCursor;
                 else
-                    Cursor.Current = MyNoDropCursor;
+                    Cursor.Current = _myNoDropCursor;
             }
         }
 
@@ -765,7 +765,7 @@ public class DragDropTests : ControlTestBase
             if (e.Data is null || !e.Data.GetDataPresent(typeof(string)))
             {
                 e.Effect = DragDropEffects.None;
-                DropLocationLabel.Text = "None - no string data.";
+                _dropLocationLabel.Text = "None - no string data.";
                 return;
             }
 
@@ -811,17 +811,17 @@ public class DragDropTests : ControlTestBase
             // The mouse locations are relative to the screen, so they must be
             // converted to client coordinates.
 
-            indexOfItemUnderMouseToDrop =
+            _indexOfItemUnderMouseToDrop =
                 ListDragTarget.IndexFromPoint(ListDragTarget.PointToClient(new Point(e.X, e.Y)));
 
             // Updates the label text.
-            if (indexOfItemUnderMouseToDrop != ListBox.NoMatches)
+            if (_indexOfItemUnderMouseToDrop != ListBox.NoMatches)
             {
-                DropLocationLabel.Text = $"Drops before item #{(indexOfItemUnderMouseToDrop + 1)}";
+                _dropLocationLabel.Text = $"Drops before item #{(_indexOfItemUnderMouseToDrop + 1)}";
             }
             else
             {
-                DropLocationLabel.Text = "Drops at the end.";
+                _dropLocationLabel.Text = "Drops at the end.";
             }
         }
 
@@ -838,15 +838,15 @@ public class DragDropTests : ControlTestBase
                 if (item is not null && (e.Effect == DragDropEffects.Copy || e.Effect == DragDropEffects.Move))
                 {
                     // Insert the item.
-                    if (indexOfItemUnderMouseToDrop != ListBox.NoMatches)
-                        ListDragTarget.Items.Insert(indexOfItemUnderMouseToDrop, item);
+                    if (_indexOfItemUnderMouseToDrop != ListBox.NoMatches)
+                        ListDragTarget.Items.Insert(_indexOfItemUnderMouseToDrop, item);
                     else
                         ListDragTarget.Items.Add(item);
                 }
             }
 
             // Reset the label text.
-            DropLocationLabel.Text = "None";
+            _dropLocationLabel.Text = "None";
         }
 
         private void ListDragSource_QueryContinueDrag(object? sender, QueryContinueDragEventArgs e)
@@ -861,10 +861,10 @@ public class DragDropTests : ControlTestBase
                 // Cancel the drag if the mouse moves off the form. The screenOffset
                 // takes into account any desktop bands that may be at the top or left
                 // side of the screen.
-                if (((MousePosition.X - screenOffset.X) < form.DesktopBounds.Left) ||
-                    ((MousePosition.X - screenOffset.X) > form.DesktopBounds.Right) ||
-                    ((MousePosition.Y - screenOffset.Y) < form.DesktopBounds.Top) ||
-                    ((MousePosition.Y - screenOffset.Y) > form.DesktopBounds.Bottom))
+                if (((MousePosition.X - _screenOffset.X) < form.DesktopBounds.Left) ||
+                    ((MousePosition.X - _screenOffset.X) > form.DesktopBounds.Right) ||
+                    ((MousePosition.Y - _screenOffset.Y) < form.DesktopBounds.Top) ||
+                    ((MousePosition.Y - _screenOffset.Y) > form.DesktopBounds.Bottom))
                 {
                     _testOutputHelper.WriteLine($"Cancelling drag.");
                     e.Action = DragAction.Cancel;
@@ -877,7 +877,7 @@ public class DragDropTests : ControlTestBase
             _testOutputHelper.WriteLine($"Drag enter on target.");
 
             // Reset the label text.
-            DropLocationLabel.Text = "None";
+            _dropLocationLabel.Text = "None";
 
             // Also treat this as a DragOver to start the drag/drop operation
             ListDragTarget_DragOver(sender, e);
@@ -888,11 +888,11 @@ public class DragDropTests : ControlTestBase
             _testOutputHelper.WriteLine($"Drag leave on target.");
 
             // Reset the label text.
-            DropLocationLabel.Text = "None";
+            _dropLocationLabel.Text = "None";
         }
     }
 
-    class DragImageDropDescriptionForm : Form
+    private class DragImageDropDescriptionForm : Form
     {
         private readonly Bitmap _dragImage = new("./Resources/image.png");
         private readonly Bitmap _dragAcceptBmp = new("./Resources/DragAccept.bmp");
@@ -934,11 +934,11 @@ public class DragDropTests : ControlTestBase
 
             // Form1
             ClientSize = new Size(285, 175);
-            Controls.AddRange(new Control[]
-            {
+            Controls.AddRange((Control[])
+            [
                 PictureBoxDragSource,
                 RichTextBoxDropTarget
-            });
+            ]);
         }
 
         private void CreateToolStrip()
@@ -987,7 +987,7 @@ public class DragDropTests : ControlTestBase
             ContextMenuStrip = _contextMenuStrip;
         }
 
-        void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
+        private void ContextMenuStrip_Opening(object? sender, CancelEventArgs e)
         {
             if (_contextMenuStrip is null)
             {

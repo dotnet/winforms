@@ -29,9 +29,6 @@ public class ResXResourceWriter : IResourceWriter
 
     private Dictionary<string, string?>? _cachedAliases;
 
-    private static readonly TraceSwitch s_resValueProviderSwitch = new("ResX", "Debug the resource value provider");
-
-#pragma warning disable IDE1006 // Naming Styles (Shipped public API)
     public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
     public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
     public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
@@ -87,7 +84,6 @@ public class ResXResourceWriter : IResourceWriter
                 </xsd:element>
             </xsd:schema>
             """;
-#pragma warning restore IDE1006 // Naming Styles
 
     private readonly string? _fileName;
     private Stream? _stream;
@@ -238,7 +234,7 @@ public class ResXResourceWriter : IResourceWriter
         _xmlTextWriter.WriteEndElement();
     }
 
-    private XmlWriter Writer
+    private XmlTextWriter Writer
     {
         get
         {
@@ -253,7 +249,7 @@ public class ResXResourceWriter : IResourceWriter
     public virtual void AddAlias(string? aliasName, AssemblyName assemblyName)
     {
         ArgumentNullException.ThrowIfNull(assemblyName);
-        _cachedAliases ??= new();
+        _cachedAliases ??= [];
         _cachedAliases[assemblyName.FullName] = aliasName;
     }
 
@@ -341,7 +337,6 @@ public class ResXResourceWriter : IResourceWriter
     /// </summary>
     private void AddDataRow(string elementName, string name, object? value)
     {
-        s_resValueProviderSwitch.TraceVerbose($"  resx: adding resource {name}");
         switch (value)
         {
             case string str:
@@ -497,7 +492,7 @@ public class ResXResourceWriter : IResourceWriter
 
     private string? GetAliasFromName(AssemblyName assemblyName)
     {
-        _cachedAliases ??= new();
+        _cachedAliases ??= [];
         if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string? alias) || string.IsNullOrEmpty(alias))
         {
             alias = assemblyName.Name;
@@ -590,11 +585,8 @@ public class ResXResourceWriter : IResourceWriter
         }
 
         _hasBeenSaved = true;
-        s_resValueProviderSwitch.TraceVerbose("writing XML");
 
         Writer.WriteEndElement();
         Writer.Flush();
-
-        s_resValueProviderSwitch.TraceVerbose("done");
     }
 }

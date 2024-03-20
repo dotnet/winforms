@@ -9,15 +9,9 @@ namespace System.Windows.Forms;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class DockingAttribute : Attribute
 {
-    public DockingAttribute()
-    {
-        DockingBehavior = DockingBehavior.Never;
-    }
+    public DockingAttribute() => DockingBehavior = DockingBehavior.Never;
 
-    public DockingAttribute(DockingBehavior dockingBehavior)
-    {
-        DockingBehavior = dockingBehavior;
-    }
+    public DockingAttribute(DockingBehavior dockingBehavior) => DockingBehavior = dockingBehavior;
 
     public static readonly DockingAttribute Default = new();
 

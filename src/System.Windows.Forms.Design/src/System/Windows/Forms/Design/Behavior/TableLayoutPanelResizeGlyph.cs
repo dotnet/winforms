@@ -9,54 +9,47 @@ namespace System.Windows.Forms.Design.Behavior;
 
 internal class TableLayoutPanelResizeGlyph : Glyph
 {
-    private Rectangle bounds;
-    private Cursor hitTestCursor;
-    private TableLayoutStyle style;
-    private TableLayoutResizeType type;
+    private Rectangle _bounds;
+    private readonly Cursor _hitTestCursor;
+    private readonly TableLayoutStyle _style;
+    private readonly TableLayoutResizeType _type;
 
     /// <summary>
     ///  This constructor caches our necessary state and determine what 'type' it is.
     /// </summary>
     internal TableLayoutPanelResizeGlyph(Rectangle controlBounds, TableLayoutStyle style, Cursor hitTestCursor, Behavior behavior) : base(behavior)
     {
-        bounds = controlBounds;
-        this.hitTestCursor = hitTestCursor;
-        this.style = style;
+        _bounds = controlBounds;
+        _hitTestCursor = hitTestCursor;
+        _style = style;
 
-        if (style is ColumnStyle)
-        {
-            type = TableLayoutResizeType.Column;
-        }
-        else
-        {
-            type = TableLayoutResizeType.Row;
-        }
+        _type = style is ColumnStyle ? TableLayoutResizeType.Column : TableLayoutResizeType.Row;
     }
 
     /// <summary>
     ///  Represents the bounds of the row or column line being rendered by the TableLayoutPanelDesigner.
     /// </summary>
-    public override Rectangle Bounds => bounds;
+    public override Rectangle Bounds => _bounds;
 
     /// <summary>
     ///  Represents the Style associated with this glyph: Row or Column.
     ///  This is used by the behaviors resize methods to set the values.
     /// </summary>
-    public TableLayoutStyle Style => style;
+    public TableLayoutStyle Style => _style;
 
     /// <summary>
     ///  Used as quick check by our behavior when dragging/resizing.
     /// </summary>
-    public TableLayoutResizeType Type => type;
+    public TableLayoutResizeType Type => _type;
 
     /// <summary>
     ///  Simply returns the proper cursor if the mouse pointer is within our cached bounds.
     /// </summary>
     public override Cursor GetHitTest(Point p)
     {
-        if (bounds.Contains(p))
+        if (_bounds.Contains(p))
         {
-            return hitTestCursor;
+            return _hitTestCursor;
         }
 
         return null;

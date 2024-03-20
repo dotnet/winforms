@@ -24,9 +24,11 @@ public partial class MdiChild : Form
 
     private void btnOpenChild_Click(object sender, EventArgs e)
     {
-        Form frm = new();
-        frm.MdiParent = MdiParent;
-        frm.WindowState = FormWindowState.Maximized;
+        Form frm = new()
+        {
+            MdiParent = MdiParent,
+            WindowState = FormWindowState.Maximized
+        };
         frm.Show();
     }
 

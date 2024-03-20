@@ -52,9 +52,9 @@ internal class ListViewGroupConverter : TypeConverter
     /// </summary>
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        if (value is string)
+        if (value is string stringValue)
         {
-            string text = ((string)value).Trim();
+            string text = stringValue.Trim();
             if (context is not null && context.Instance is not null)
             {
                 if (context.Instance is ListViewItem item && item.ListView is not null)
@@ -89,12 +89,10 @@ internal class ListViewGroupConverter : TypeConverter
     {
         ArgumentNullException.ThrowIfNull(destinationType);
 
-        if (destinationType == typeof(InstanceDescriptor) && value is ListViewGroup)
+        if (destinationType == typeof(InstanceDescriptor) && value is ListViewGroup group)
         {
-            ListViewGroup group = (ListViewGroup)value;
-
             // Header
-            ConstructorInfo ctor = typeof(ListViewGroup).GetConstructor(new Type[] { typeof(string), typeof(HorizontalAlignment) })!;
+            ConstructorInfo ctor = typeof(ListViewGroup).GetConstructor([typeof(string), typeof(HorizontalAlignment)])!;
             Debug.Assert(ctor is not null, "Expected the constructor to exist.");
             return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
         }

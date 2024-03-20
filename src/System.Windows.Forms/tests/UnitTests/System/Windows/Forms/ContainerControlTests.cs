@@ -344,7 +344,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_BindingContext_Set_GetReturnsExpected()
     {
-        BindingContext value = new();
+        BindingContext value = [];
         using ContainerControl control = new()
         {
             BindingContext = value
@@ -377,7 +377,7 @@ public class ContainerControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext value1 = new();
+        BindingContext value1 = [];
         control.BindingContext = value1;
         Assert.Same(value1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -388,13 +388,13 @@ public class ContainerControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext value2 = new();
+        BindingContext value2 = [];
         control.BindingContext = value2;
         Assert.Equal(value2, control.BindingContext);
         Assert.Equal(2, callCount);
 
         // Remove handler.
-        BindingContext value3 = new();
+        BindingContext value3 = [];
         control.BindingContextChanged -= handler;
         control.BindingContext = value3;
         Assert.Same(value3, control.BindingContext);
@@ -582,7 +582,7 @@ public class ContainerControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext value1 = new();
+        BindingContext value1 = [];
         control.BindingContext = value1;
         Assert.Same(value1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -593,13 +593,13 @@ public class ContainerControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext value2 = new();
+        BindingContext value2 = [];
         control.BindingContext = value2;
         Assert.Equal(value2, control.BindingContext);
         Assert.Equal(2, callCount);
 
         // Remove handler.
-        BindingContext value3 = new();
+        BindingContext value3 = [];
         control.BindingContextChanged -= handler;
         control.BindingContext = value3;
         Assert.Same(value3, control.BindingContext);

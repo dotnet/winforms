@@ -168,7 +168,7 @@ internal abstract class ArrangedElement : Component, IArrangedElement
 
     protected virtual void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
     {
-        ((IArrangedElement)this).PerformLayout((IArrangedElement)this, PropertyNames.Size);
+        ((IArrangedElement)this).PerformLayout(this, PropertyNames.Size);
     }
 
     public void SetBounds(Rectangle bounds, BoundsSpecified specified)

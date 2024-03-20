@@ -149,7 +149,7 @@ public partial class TabPage : Panel
 
     private protected override IList<Rectangle> GetNeighboringToolsRectangles()
     {
-        List<Rectangle> neighbors = new();
+        List<Rectangle> neighbors = [];
 
         if (ParentInternal is not TabControl tabControl)
         {
@@ -474,7 +474,7 @@ public partial class TabPage : Panel
     /// </summary>
     internal override void AssignParent(Control? value)
     {
-        if (value is not null && value is not TabControl)
+        if (value is not null and not TabControl)
         {
             throw new ArgumentException(string.Format(SR.TabControlTabPageNotOnTabControl, value.GetType().FullName));
         }
@@ -494,7 +494,7 @@ public partial class TabPage : Panel
             return null;
         }
 
-        while (c is not null && c is not TabPage)
+        while (c is not null and not TabPage)
         {
             c = c.ParentInternal;
         }
@@ -546,7 +546,7 @@ public partial class TabPage : Panel
     ///  TabPage should fire enter when the focus is on the TabPage and not when the control
     ///  within the TabPage gets Focused.
     /// </summary>
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         if (ParentInternal is TabControl)
         {
@@ -569,7 +569,7 @@ public partial class TabPage : Panel
     ///  the TabPage gets Focused.
     ///  Similary the Leave should fire when the TabControl (and hence the TabPage) loses focus.
     /// </summary>
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         if (ParentInternal is TabControl)
         {
@@ -683,7 +683,7 @@ public partial class TabPage : Panel
         // In this case, the keyboard toolTip will show the text of the latest toolTip instance that was set.
         if (_associatedToolTips is null)
         {
-            _associatedToolTips = new List<ToolTip>() { _externalToolTip, toolTip };
+            _associatedToolTips = [_externalToolTip, toolTip];
             return;
         }
 
