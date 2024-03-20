@@ -268,21 +268,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// <summary>
     ///  Container controls support ImeMode only to allow child controls to inherit it from their parents.
     /// </summary>
-    protected override bool CanEnableIme
-    {
-        get
-        {
-            // Note: If overriding this property make sure to copy the Debug code and call this method.
-
-            Debug.Indent();
-            Debug.WriteLineIf(
-                CompModSwitches.ImeMode.Level >= TraceLevel.Info,
-                $"Inside get_CanEnableIme(), value = false, this = {this}");
-            Debug.Unindent();
-
-            return false;
-        }
-    }
+    protected override bool CanEnableIme => false;
 
     /// <summary>
     ///  Indicates the current active control on the container control.
@@ -1319,7 +1305,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
             _state[s_stateProcessingMnemonic] = false;
         }
 
-        Debug.Unindent();
         return processed;
     }
 

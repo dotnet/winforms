@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -31,18 +30,13 @@ public unsafe partial class DataObject :
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
-    internal DataObject(Com.IDataObject* data)
-    {
-        CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IComDataObject");
-        _innerData = ComposedDataObject.CreateFromNativeDataObject(data);
-    }
+    internal DataObject(Com.IDataObject* data) => _innerData = ComposedDataObject.CreateFromNativeDataObject(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     public DataObject()
     {
-        CompModSwitches.DataObject.TraceVerbose("Constructed DataObject standalone");
         _innerData = ComposedDataObject.CreateFromWinFormsDataObject(new DataStore());
     }
 
@@ -51,7 +45,6 @@ public unsafe partial class DataObject :
     /// </summary>
     public DataObject(object data)
     {
-        CompModSwitches.DataObject.TraceVerbose($"Constructed DataObject base on Object: {data}");
         if (data is DataObject dataObject)
         {
             _innerData = dataObject._innerData;
@@ -102,90 +95,49 @@ public unsafe partial class DataObject :
     ///  Retrieves the data associated with the specified data format, using an automated conversion parameter to
     ///  determine whether to convert the data to the format.
     /// </summary>
-    public virtual object? GetData(string format, bool autoConvert)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Request data: {format}, {autoConvert}");
-        return ((IDataObject)_innerData).GetData(format, autoConvert);
-    }
+    public virtual object? GetData(string format, bool autoConvert) =>
+        ((IDataObject)_innerData).GetData(format, autoConvert);
 
     /// <summary>
     ///  Retrieves the data associated with the specified data format.
     /// </summary>
-    public virtual object? GetData(string format)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Request data: {format}");
-        return GetData(format, autoConvert: true);
-    }
+    public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
     /// <summary>
     ///  Retrieves the data associated with the specified class type format.
     /// </summary>
-    public virtual object? GetData(Type format)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Request data: {format?.FullName ?? "(null)"}");
-        return format is null ? null : GetData(format.FullName!);
-    }
+    public virtual object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
 
     /// <summary>
     ///  Determines whether data stored in this instance is associated with, or can be converted to,
     ///  the specified format.
     /// </summary>
-    public virtual bool GetDataPresent(Type format)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Check data: {format?.FullName ?? "(null)"}");
-        if (format is null)
-        {
-            return false;
-        }
-
-        bool present = GetDataPresent(format.FullName!);
-        CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
-        return present;
-    }
+    public virtual bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
 
     /// <summary>
     ///  Determines whether data stored in this instance is associated with the specified format, using an
     ///  automatic conversion parameter to determine whether to convert the data to the format.
     /// </summary>
-    public virtual bool GetDataPresent(string format, bool autoConvert)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Check data: {format}, {autoConvert}");
-        bool present = ((IDataObject)_innerData).GetDataPresent(format, autoConvert);
-        CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
-        return present;
-    }
+    public virtual bool GetDataPresent(string format, bool autoConvert) =>
+        ((IDataObject)_innerData).GetDataPresent(format, autoConvert);
 
     /// <summary>
     ///  Determines whether data stored in this instance is associated with, or can be converted to,
     ///  the specified format.
     /// </summary>
-    public virtual bool GetDataPresent(string format)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Check data: {format}");
-        bool present = GetDataPresent(format, autoConvert: true);
-        CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
-        return present;
-    }
+    public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
     /// <summary>
     ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to,
     ///  using an automatic conversion parameter <paramref name="autoConvert"/> to determine whether to retrieve
     ///  all formats that the data can be converted to or only native data formats.
     /// </summary>
-    public virtual string[] GetFormats(bool autoConvert)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Check formats: {autoConvert}");
-        return ((IDataObject)_innerData).GetFormats(autoConvert);
-    }
+    public virtual string[] GetFormats(bool autoConvert) => ((IDataObject)_innerData).GetFormats(autoConvert);
 
     /// <summary>
     ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to.
     /// </summary>
-    public virtual string[] GetFormats()
-    {
-        CompModSwitches.DataObject.TraceVerbose("Check formats:");
-        return GetFormats(autoConvert: true);
-    }
+    public virtual string[] GetFormats() => GetFormats(autoConvert: true);
 
     public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
 
@@ -317,38 +269,23 @@ public unsafe partial class DataObject :
     ///  Stores the specified data and its associated format in this instance, using the automatic conversion
     ///  parameter to specify whether the data can be converted to another format.
     /// </summary>
-    public virtual void SetData(string format, bool autoConvert, object? data)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Set data: {format}, {autoConvert}, {data ?? "(null)"}");
+    public virtual void SetData(string format, bool autoConvert, object? data) =>
         ((IDataObject)_innerData).SetData(format, autoConvert, data);
-    }
 
     /// <summary>
     ///  Stores the specified data and its associated format in this instance.
     /// </summary>
-    public virtual void SetData(string format, object? data)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Set data: {format}, {data ?? "(null)"}");
-        ((IDataObject)_innerData).SetData(format, data);
-    }
+    public virtual void SetData(string format, object? data) => ((IDataObject)_innerData).SetData(format, data);
 
     /// <summary>
     ///  Stores the specified data and its associated class type in this instance.
     /// </summary>
-    public virtual void SetData(Type format, object? data)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Set data: {format?.FullName ?? "(null)"}, {data ?? "(null)"}");
-        ((IDataObject)_innerData).SetData(format!, data);
-    }
+    public virtual void SetData(Type format, object? data) => ((IDataObject)_innerData).SetData(format!, data);
 
     /// <summary>
     ///  Stores the specified data in this instance, using the class of the data for the format.
     /// </summary>
-    public virtual void SetData(object? data)
-    {
-        CompModSwitches.DataObject.TraceVerbose($"Set data: {data ?? "(null)"}");
-        ((IDataObject)_innerData).SetData(data);
-    }
+    public virtual void SetData(object? data) => ((IDataObject)_innerData).SetData(data);
 
     HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
         => ((Com.IDataObject.Interface)_innerData).GetData(pformatetcIn, pmedium);

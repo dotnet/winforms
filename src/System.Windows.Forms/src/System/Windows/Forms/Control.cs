@@ -2647,7 +2647,7 @@ public unsafe partial class Control :
     [Localizable(true)]
     public Padding Margin
     {
-        get { return CommonProperties.GetMargin(this); }
+        get => CommonProperties.GetMargin(this);
         set
         {
             // This should be done here rather than in the property store as
@@ -9193,10 +9193,6 @@ public unsafe partial class Control :
             if (charsToIgnore > 0)
             {
                 charsToIgnore--;
-                Debug.WriteLineIf(
-                    CompModSwitches.ImeMode.Level >= TraceLevel.Info,
-                    $"charsToIgnore decreased, new val = {charsToIgnore}, this={this}");
-
                 ImeWmCharsToIgnore = charsToIgnore;
                 return false;
             }
@@ -9766,9 +9762,6 @@ public unsafe partial class Control :
     /// </summary>
     public void ResumeLayout(bool performLayout)
     {
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
-
         bool performedLayout = false;
         if (LayoutSuspendCount > 0)
         {
@@ -10040,8 +10033,6 @@ public unsafe partial class Control :
                 excludedSpecified |= (~RequiredScaling & BoundsSpecified.All);
             }
 
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Scaling {this} Included: {includedFactor}, Excluded: {excludedFactor}");
-
             if (includedSpecified != BoundsSpecified.None)
             {
                 ScaleControl(includedFactor, includedSpecified);
@@ -10179,8 +10170,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected virtual void ScaleCore(float dx, float dy)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
-
         using SuspendLayoutScope scope = new(this);
 
         int sx = (int)Math.Round(_x * dx);
@@ -10313,6 +10302,7 @@ public unsafe partial class Control :
             }
         }
         while (ctl != start);
+
         return null;
     }
 
@@ -10322,8 +10312,7 @@ public unsafe partial class Control :
     /// </summary>
     private void SelectNextIfFocused()
     {
-        // We want to move focus away from hidden controls, so this
-        //           function was added.
+        // We want to move focus away from hidden controls, so this function was added.
         if (ContainsFocus && ParentInternal is not null)
         {
             IContainerControl? c = ParentInternal.GetContainerControl();
@@ -10442,9 +10431,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        Debug.WriteLineIf(CompModSwitches.SetBounds.TraceInfo,
-            $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified})");
-
         // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
         // end up in WmWindowPositionChanged which may cause the parent to layout.  We need to
         // suspend/resume to defer the parent from laying out until after InitLayout has been called
@@ -11065,8 +11051,6 @@ public unsafe partial class Control :
         }
 
         Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::SuspendLayout(newCount = {LayoutSuspendCount})");
     }
 
     /// <summary>
@@ -11182,15 +11166,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight)
     {
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"{Name}::UpdateBounds(");
-            Debug.Indent();
-            Debug.WriteLine($"oldBounds={{x={_x} y={_y} width={_width} height={_height} clientWidth={_clientWidth} clientHeight={_clientHeight}}}");
-        }
-#endif // DEBUG
-
         bool newLocation = _x != x || _y != y;
         bool newSize = Width != width || Height != height || _clientWidth != clientWidth || _clientHeight != clientHeight;
 
@@ -11203,51 +11178,18 @@ public unsafe partial class Control :
 
         if (newLocation)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnLocationChanged(EventArgs.Empty);
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnLocationChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
 
         if (newSize)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnSizeChanged(EventArgs.Empty);
             OnClientSizeChanged(EventArgs.Empty);
 
             // Clear PreferredSize cache for this control
             CommonProperties.xClearPreferredSizeCache(this);
             LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
-
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnSizeChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
-
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"newBounds={{x={x} y={y} width={width} height={height} clientWidth={clientWidth} clientHeight={clientHeight}}}");
-            Debug.Unindent();
-        }
-#endif
     }
 
     /// <summary>
@@ -11656,8 +11598,6 @@ public unsafe partial class Control :
     /// </summary>
     private unsafe void WmGetObject(ref Message m)
     {
-        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
-
         if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders)
         {
             // If the requested object identifier is UiaRootObjectId,
@@ -11686,7 +11626,6 @@ public unsafe partial class Control :
         {
             // Obtain the Lresult.
             m.ResultInternal = accessibleObject.GetLRESULT(m.WParamInternal);
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
         }
         catch (Exception e)
         {

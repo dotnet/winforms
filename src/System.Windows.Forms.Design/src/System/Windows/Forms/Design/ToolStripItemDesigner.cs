@@ -951,7 +951,6 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 acc.AddState(AccessibleStates.Selected);
                 if (tool is not null)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, tool = {tool}");
                     PInvoke.NotifyWinEvent(
                         (uint)AccessibleEvents.SelectionAdd,
                         owner,
