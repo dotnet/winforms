@@ -77,7 +77,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         response?.Close()
                     End Try
                 End Sub)
-                    Return listener
+            Return listener
         End Function
 
     End Class
