@@ -373,7 +373,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // We need to handle the case where a component's ctor adds itself to the container.  We don't want to do the
         // work of creating a name, and then immediately renaming.  So, DesignerHost's CreateComponent will set
         // _newComponentName to the newly created name before creating the component.
-        if (_newComponentName is not null)
+        if (!string.IsNullOrEmpty(_newComponentName))
         {
             name = _newComponentName;
             _newComponentName = null;
@@ -919,7 +919,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IDesignerHost.Activate() => _surface?.OnViewActivate();
 
     IComponent IDesignerHost.CreateComponent(Type componentType) =>
-        ((IDesignerHost)this).CreateComponent(componentType);
+        ((IDesignerHost)this).CreateComponent(componentType, string.Empty);
 
     IComponent IDesignerHost.CreateComponent(Type componentType, string name)
     {

@@ -140,7 +140,7 @@ public class DesignerHostTests
     {
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        Assert.Null(host.TransactionDescription);
+        host.TransactionDescription.Should().BeNullOrEmpty();
     }
 
     [WinFormsFact]
@@ -1995,7 +1995,7 @@ public class DesignerHostTests
         Assert.False(transaction2.Committed);
         Assert.Equal("Description2", transaction2.Description);
         Assert.False(host.InTransaction);
-        Assert.Null(host.TransactionDescription);
+        host.TransactionDescription.Should().BeNullOrEmpty();
     }
 
     [WinFormsFact]
@@ -2108,7 +2108,7 @@ public class DesignerHostTests
         Assert.True(transaction2.Committed);
         Assert.Equal("Description2", transaction2.Description);
         Assert.False(host.InTransaction);
-        Assert.Null(host.TransactionDescription);
+        host.TransactionDescription.Should().BeNullOrEmpty();
     }
 
     [WinFormsFact]
