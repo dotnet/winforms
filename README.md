@@ -35,15 +35,14 @@ And then there is the evolution of Windows: When new versions of Windows introdu
 And exactly **that** is still the primary motivation for once to modernize and innovate, but also the bar to reach for potential innovation areas we either need or want to consider:
 
 * Areas, where for example for security concerns, the Windows team needed to take an depending area out-of-proc, and we see and extreme performance hit in WinForms Apps running under a new Service Pack or a new Windows Version
-* New requests from governments in the area of accessibility
-* HighDPI and per Monitor V2-Scenarios, since they can quickly impose accessibility impediments.
-* Picking up changed or extended Win32 Control functionality, to keep controls in WinForms working the way, the Windows team wants them to be used.
-* Addressing Performance and Security issues in the underlying render layers WinForms is based on, like GDI, GDI+, conflicting rendering spots like the Windows Desktop Manager
-* Addressing accessibility and visual contrast issues like providing a general guide for implementing dark mode, which integrates in the current OS as seemless as possible without changing existing control behaviors or principle control rendering approaches
+* New features to comply with updated industry standards for accessibility.
+* HighDPI and per Monitor V2-Scenarios.
+* Picking up changed or extended Win32 Control functionality, to keep controls in WinForms working the way the Windows team wants them to be used.
+* Addressing Performance and Security issues
 * Introducing ways to support asynchronous calls interatively, to enable apps to pick up migration paths via Windows APIs projection/Windows Desktop Bridge, enable scenarios for async WebAPI, SignalR, Azure Function, etc. calls, so WinForms backends can modernized and even migrated to the cloud.
 
 What would not make the bar: 
-* New functionality, which modern Desktop UIs like WPF or WinUI clearly have already
+* New functionality which modern Desktop UIs like WPF or WinUI clearly have already
 * Functionality, which would "stretch" a Windows Desktop App to be a mobile, Multi-Media or IoT app.
 * Domain-specific custom controls, which are already provided by the vast variety of third party control vendors
 
