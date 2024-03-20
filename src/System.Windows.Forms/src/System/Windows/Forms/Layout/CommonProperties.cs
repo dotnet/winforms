@@ -23,10 +23,6 @@ internal partial class CommonProperties
     private static readonly int s_maximumSizeProperty = PropertyStore.CreateKey();
     private static readonly int s_layoutBoundsProperty = PropertyStore.CreateKey();
 
-#if DEBUG
-    private static readonly int s_lastKnownStateProperty = PropertyStore.CreateKey();
-#endif
-
     internal const ContentAlignment DefaultAlignment = ContentAlignment.TopLeft;
     internal const AnchorStyles DefaultAnchor = AnchorStyles.Top | AnchorStyles.Left;
     internal const bool DefaultAutoSize = false;
