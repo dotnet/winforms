@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports Microsoft.VisualBasic.FileIO
-
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -31,8 +30,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Directory.Delete(tmpFilePath, recursive:=True)
             End If
         End Sub
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String) -> Void"
 
         <WinFormsTheory>
         <InlineData(Nothing)>
@@ -96,10 +93,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Try
         End Sub
 
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String) -> Void"
-
         <WinFormsFact>
         Public Sub DownloadFile_Url_Password_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
@@ -145,10 +138,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 CleanUp(listener, tmpFilePath)
             End Try
         End Sub
-
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void"
 
         <WinFormsFact>
         Public Sub DownloadFile_Ur_InvalidUrl_Throws()
@@ -346,10 +335,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Try
         End Sub
 
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void"
-
         <WinFormsTheory>
         <InlineData("\")>
         <InlineData("/")>
@@ -486,10 +471,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanUp(listener, tmpFilePath)
         End Sub
 
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String) -> Void"
-
         <WinFormsFact>
         Public Sub DownloadFile_Uri_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
@@ -506,10 +487,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 CleanUp(listener, tmpFilePath)
             End Try
         End Sub
-
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, networkCredentials As System.Net.ICredentials, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void"
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_ICredentialsShowUiTimeOutOverwriteSpecified_Success()
@@ -531,10 +508,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 CleanUp(listener, tmpFilePath)
             End Try
         End Sub
-
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String) -> Void"
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_UserNamePassword_Success()
@@ -577,10 +550,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Try
         End Sub
 
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void"
-
         <WinFormsFact>
         Public Sub DownloadFile_Uri_OverwriteShowUISpecified_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
@@ -622,10 +591,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), DownloadSmallFileSize)
             CleanUp(listener, tmpFilePath)
         End Sub
-
-#End Region
-
-#Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void"
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_AllOptionsSpecified_Success()
@@ -694,8 +659,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 CleanUp(listener, tmpFilePath)
             End Try
         End Sub
-
-#End Region
 
     End Class
 
