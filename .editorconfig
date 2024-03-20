@@ -314,7 +314,7 @@ dotnet_diagnostic.CA5379.severity = warning
 # CA5384: Do not use digital signature algorithm (DSA)
 dotnet_diagnostic.CA5384.severity = warning
 
-# CA5385: Use Rivest–Shamir–Adleman (RSA) algorithm with sufficient key size
+# CA5385: Use Rivest-Shamir-Adleman (RSA) algorithm with sufficient key size
 dotnet_diagnostic.CA5385.severity = warning
 
 # CA5387: Do not use weak key derivation function with insufficient iteration count
