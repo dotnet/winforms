@@ -1571,7 +1571,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         HWND hwnd = GetCurrentToolHwnd();
         LRESULT result = default;
 
-        if (!hwnd.IsNull)
+        if (!hwnd.IsNull && tool.GetOwnerWindow() is not null)
         {
             ToolInfoWrapper<HandleRef<HWND>> info = new(Control.GetSafeHandle(tool.GetOwnerWindow()!));
             result = info.SendMessage(this, PInvoke.TTM_GETBUBBLESIZE);
