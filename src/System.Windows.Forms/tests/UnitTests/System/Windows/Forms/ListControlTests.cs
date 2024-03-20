@@ -3073,7 +3073,9 @@ public class ListControlTests
     {
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
+#pragma warning disable CA2201 // Do not raise reserved exception types
             throw new StackOverflowException();
+#pragma warning restore CA2201 // Do not raise reserved exception types
         }
     }
 }

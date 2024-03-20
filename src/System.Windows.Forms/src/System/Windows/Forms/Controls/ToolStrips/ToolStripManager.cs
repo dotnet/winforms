@@ -719,21 +719,17 @@ public static partial class ToolStripManager
     /// </summary>
     internal static bool ProcessCmdKey(ref Message m, Keys keyData)
     {
-        Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - processing: [{keyData}]");
         if (IsValidShortcut(keyData))
         {
             // If we're at the toplevel, check the toolstrips for matching shortcuts.
             // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
             // toolstrips will be hosted in a form. ToolStrips have a hash of shortcuts
             // per container, so this should hopefully be a quick search.
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - IsValidShortcut: [{keyData}]");
-
             return ProcessShortcut(ref m, keyData);
         }
 
         if (m.Msg == (int)PInvoke.WM_SYSKEYDOWN)
         {
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [{keyData}]");
             ModalMenuFilter.ProcessMenuKeyDown(ref m);
         }
 
@@ -756,132 +752,118 @@ public static partial class ToolStripManager
         Control? activeControl = Control.FromChildHandle(m.HWnd);
         Control? activeControlInChain = activeControl;
 
-        if (activeControlInChain is not null && IsValidShortcut(shortcut))
+        if (activeControlInChain is null || !IsValidShortcut(shortcut))
         {
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessShortcut - processing: [{shortcut}]");
-
-            // Start from the focused control and work your way up the parent chain
-            do
-            {
-                // Check the context menu strip first.
-                if (activeControlInChain.ContextMenuStrip is not null)
-                {
-                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
-                    {
-                        if (item.ProcessCmdKey(ref m, shortcut))
-                        {
-                            Control.s_controlKeyboardRouting.TraceVerbose(
-                                $"ToolStripManager.ProcessShortcut - found item on context menu: [{item}]");
-                            return true;
-                        }
-                    }
-                }
-
-                activeControlInChain = activeControlInChain.ParentInternal;
-            }
-            while (activeControlInChain is not null);
-
-            if (activeControlInChain is not null)
-            {
-                // The keystroke may applies to one of our parents...
-                // a WM_CONTEXTMENU message bubbles up to the parent control
-                activeControl = activeControlInChain;
-            }
-
-            bool retVal = false;
-
-            // Now search the toolstrips
-            foreach (ToolStrip toolStrip in ToolStrips)
-            {
-                bool isAssociatedContextMenu = false;
-                bool isDoublyAssignedContextMenuStrip = false;
-
-                if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
-                {
-                    continue;
-                }
-                else if (toolStrip.Shortcuts.ContainsKey(shortcut))
-                {
-                    if (toolStrip.IsDropDown)
-                    {
-                        // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
-                        // button2's context menu should not be processed if button1 is the one we're processing.
-
-                        ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
-
-                        // If a context menu is re-used between the main menu and the
-                        // and some other control's context menu, we should go ahead and evaluate it.
-
-                        if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
-                        {
-                            isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
-                            if (!isDoublyAssignedContextMenuStrip)
-                            {
-                                if (topLevelContextMenu != activeControl!.ContextMenuStrip)
-                                {
-                                    // The toplevel context menu is NOT the same as the active control's context menu.
-                                    continue;
-                                }
-                                else
-                                {
-                                    isAssociatedContextMenu = true;
-                                }
-                            }
-                        }
-
-                        // else it's not a child of a context menu
-                    }
-
-                    bool rootWindowsMatch = false;
-
-                    if (!isAssociatedContextMenu)
-                    {
-                        // Make sure that were processing shortcuts for the correct window.
-                        // since the shortcut lookup is faster than this check we've postponed this to the last
-                        // possible moment.
-                        ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
-                        if (topMostToolStrip is not null && activeControl is not null)
-                        {
-                            HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
-                            HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
-                            rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
-
-                            if (rootWindowsMatch)
-                            {
-                                // Double check this is not an MDIContainer type situation...
-                                if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
-                                {
-                                    Form? toolStripForm = topMostToolStrip.FindForm();
-                                    if (toolStripForm != mainForm && toolStripForm is not null)
-                                    {
-                                        // We should only process shortcuts of the ActiveMDIChild or the Main Form.
-                                        rootWindowsMatch = toolStripForm == mainForm.ActiveMdiChildInternal;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
-                    {
-                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
-                        {
-                            if (item.ProcessCmdKey(ref m, shortcut))
-                            {
-                                Control.s_controlKeyboardRouting.TraceVerbose(
-                                    $"ToolStripManager.ProcessShortcut - found item on toolstrip: [{item}]");
-                                retVal = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return retVal;
+            return false;
         }
 
-        return false;
+        // Start from the focused control and work your way up the parent chain
+        do
+        {
+            // Check the context menu strip first.
+            if (activeControlInChain.ContextMenuStrip is not null
+                && activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
+                && item.ProcessCmdKey(ref m, shortcut))
+            {
+                return true;
+            }
+
+            activeControlInChain = activeControlInChain.ParentInternal;
+        }
+        while (activeControlInChain is not null);
+
+        if (activeControlInChain is not null)
+        {
+            // The keystroke may apply to one of our parents, a WM_CONTEXTMENU message bubbles up to the parent control.
+            activeControl = activeControlInChain;
+        }
+
+        bool retVal = false;
+
+        // Now search the toolstrips
+        foreach (ToolStrip toolStrip in ToolStrips)
+        {
+            bool isAssociatedContextMenu = false;
+            bool isDoublyAssignedContextMenuStrip = false;
+
+            if ((activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
+                || !toolStrip.Shortcuts.ContainsKey(shortcut))
+            {
+                continue;
+            }
+
+            if (toolStrip.IsDropDown)
+            {
+                // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
+                // button2's context menu should not be processed if button1 is the one we're processing.
+
+                ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
+
+                // If a context menu is re-used between the main menu and the
+                // and some other control's context menu, we should go ahead and evaluate it.
+
+                if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
+                {
+                    isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
+                    if (!isDoublyAssignedContextMenuStrip)
+                    {
+                        if (topLevelContextMenu != activeControl!.ContextMenuStrip)
+                        {
+                            // The toplevel context menu is NOT the same as the active control's context menu.
+                            continue;
+                        }
+                        else
+                        {
+                            isAssociatedContextMenu = true;
+                        }
+                    }
+                }
+
+                // else it's not a child of a context menu
+            }
+
+            bool rootWindowsMatch = false;
+
+            if (!isAssociatedContextMenu)
+            {
+                // Make sure that were processing shortcuts for the correct window.
+                // since the shortcut lookup is faster than this check we've postponed this to the last
+                // possible moment.
+                ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
+                if (topMostToolStrip is not null && activeControl is not null)
+                {
+                    HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
+
+                    if (rootWindowsMatch)
+                    {
+                        // Double check this is not an MDIContainer type situation...
+                        if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
+                        {
+                            Form? toolStripForm = topMostToolStrip.FindForm();
+                            if (toolStripForm != mainForm && toolStripForm is not null)
+                            {
+                                // We should only process shortcuts of the ActiveMDIChild or the Main Form.
+                                rootWindowsMatch = toolStripForm == mainForm.ActiveMdiChildInternal;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
+            {
+                if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
+                    && item.ProcessCmdKey(ref m, shortcut))
+                {
+                    retVal = true;
+                    break;
+                }
+            }
+        }
+
+        return retVal;
     }
 
     /// <summary>
@@ -892,7 +874,6 @@ public static partial class ToolStripManager
     /// </summary>
     internal static bool ProcessMenuKey(ref Message m)
     {
-        Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessMenuKey: [{m}]");
         if (!IsThreadUsingToolStrips())
         {
             return false;

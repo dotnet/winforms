@@ -325,7 +325,6 @@ internal sealed class ToolStripPanelCell : ArrangedElement
                     }
                 }
 
-                ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] DRAGGING calling SetBounds {bounds}");
                 base.SetBoundsCore(bounds, specified);
                 InnerElement.SetBounds(bounds, specified);
             }
@@ -333,7 +332,6 @@ internal sealed class ToolStripPanelCell : ArrangedElement
             {
                 if (!ToolStripPanelRow.CachedBoundsMode)
                 {
-                    ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] NOT DRAGGING calling SetBounds {bounds}");
                     base.SetBoundsCore(bounds, specified);
                     InnerElement.SetBounds(bounds, specified);
                 }

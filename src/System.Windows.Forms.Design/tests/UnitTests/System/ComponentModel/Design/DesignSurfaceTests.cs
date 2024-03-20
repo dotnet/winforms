@@ -348,7 +348,7 @@ public class DesignSurfaceTests
     [WinFormsFact]
     public void DesignSurface_View_GetWithExceptionLoadErrors_ThrowsInvalidOperationException()
     {
-        Exception exception = new();
+        InvalidOperationException exception = new();
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         Mock<DesignerLoader> mockLoader = new(MockBehavior.Strict);
@@ -362,7 +362,7 @@ public class DesignSurfaceTests
     public static IEnumerable<object[]> View_GetLoadError_TestData()
     {
         yield return new object[] { Array.Empty<object>() };
-        yield return new object[] { new object[] { new Exception() } };
+        yield return new object[] { new object[] { new InvalidOperationException() } };
         yield return new object[] { new object[] { "Error" } };
         yield return new object[] { new object[] { null } };
     }
@@ -429,7 +429,7 @@ public class DesignSurfaceTests
     [WinFormsFact]
     public void DesignSurface_BeginLoad_ThrowsException_SetsLoadErrors()
     {
-        Exception exception = new();
+        InvalidOperationException exception = new();
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         Mock<DesignerLoader> mockLoader = new(MockBehavior.Strict);
@@ -467,7 +467,7 @@ public class DesignSurfaceTests
             .Returns(false);
         surface.BeginLoad(mockLoader.Object);
         Assert.False(surface.IsLoaded);
-        Exception error = Assert.IsType<Exception>(Assert.Single(surface.LoadErrors));
+        Exception error = Assert.IsType<InvalidOperationException>(Assert.Single(surface.LoadErrors));
         Assert.Contains("ExceptionText", error.Message);
         Assert.False(surface.Host.Loading);
     }
@@ -475,7 +475,7 @@ public class DesignSurfaceTests
     [WinFormsFact]
     public void DesignSurface_BeginLoad_ThrowsTargetInvocationException_SetsLoadErrors()
     {
-        Exception exception = new();
+        InvalidOperationException exception = new();
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         Mock<DesignerLoader> mockLoader = new(MockBehavior.Strict);
@@ -577,7 +577,7 @@ public class DesignSurfaceTests
         Mock<DesignerLoader> mockLoader = new(MockBehavior.Strict);
         mockLoader
             .Setup(l => l.BeginLoad(host))
-            .Throws(new Exception())
+            .Throws(new InvalidOperationException())
             .Verifiable();
         mockLoader
             .Setup(l => l.Loading)
@@ -904,7 +904,7 @@ public class DesignSurfaceTests
                 {
                 }
 
-                throw new Exception();
+                throw new InvalidOperationException();
             });
         surface.BeginLoad(mockLoader.Object);
         Assert.Equal(1, loadingCallCount);

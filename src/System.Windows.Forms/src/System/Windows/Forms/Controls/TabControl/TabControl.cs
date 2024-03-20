@@ -1330,7 +1330,7 @@ public partial class TabControl : Control
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         base.OnEnter(e);
         SelectedTab?.FireEnter(e);
@@ -1350,7 +1350,7 @@ public partial class TabControl : Control
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         SelectedTab?.FireLeave(e);
 

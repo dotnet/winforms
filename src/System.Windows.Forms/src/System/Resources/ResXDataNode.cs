@@ -74,10 +74,7 @@ public sealed class ResXDataNode : ISerializable
     public ResXDataNode(string name, object? value, Func<Type?, string>? typeNameConverter)
     {
         ArgumentNullException.ThrowIfNull(name);
-        if (name.Length == 0)
-        {
-            throw (new ArgumentException(nameof(name)));
-        }
+        ArgumentException.ThrowIfNullOrEmpty(name);
 
         _typeNameConverter = typeNameConverter;
 

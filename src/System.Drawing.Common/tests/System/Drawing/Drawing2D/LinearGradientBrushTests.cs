@@ -425,7 +425,9 @@ public class LinearGradientBrushTests
     public void InterpolationColors_SetBlendWithTooFewColors_ThrowsArgumentException(int colorsLength)
     {
         using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors = new ColorBlend { Colors = new Color[colorsLength] });
+        AssertExtensions.Throws<ArgumentException>(
+            colorsLength == 0 ? "value" : null,
+            () => brush.InterpolationColors = new ColorBlend { Colors = new Color[colorsLength] });
     }
 
     [Fact]
@@ -442,7 +444,7 @@ public class LinearGradientBrushTests
     public void InterpolationColors_SetInvalidBlendPositionsLength_ThrowsArgumentException(int positionsLength)
     {
         using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors = new ColorBlend
+        AssertExtensions.Throws<ArgumentException>("value", () => brush.InterpolationColors = new ColorBlend
         {
             Colors = new Color[2],
             Positions = new float[positionsLength]

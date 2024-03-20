@@ -1625,7 +1625,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         if (_inGridViewCreate)
         {
             _inGridViewCreate = false;
-            throw new Exception("PERF REGRESSION - Creating item in grid view create");
+            throw new InvalidOperationException("PERF REGRESSION - Creating item in grid view create");
         }
 #endif
     }

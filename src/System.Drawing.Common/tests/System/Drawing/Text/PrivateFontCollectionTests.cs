@@ -128,7 +128,7 @@ public class PrivateFontCollectionTests
         PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddFontFile("fileName"));
+        AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddFontFile(typeof(Font).Assembly.Location));
     }
 
     [Fact]

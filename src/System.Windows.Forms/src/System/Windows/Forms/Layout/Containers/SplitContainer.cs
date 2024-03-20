@@ -2295,20 +2295,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
     }
 
-    /// <summary>
-    ///  Processes a dialog key. Overrides Control.processDialogKey(). This
-    ///  method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
-    ///  keys in dialogs.
-    ///  The method performs no processing on keys that include the ALT or
-    ///  CONTROL modifiers. For the TAB key, the method selects the next control
-    ///  on the form. For the arrow keys,
-    ///  !!!
-    /// </summary>
     protected override bool ProcessDialogKey(Keys keyData)
     {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessDialogKey [{keyData}]");
-#endif
         if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
         {
             Keys keyCode = keyData & Keys.KeyCode;

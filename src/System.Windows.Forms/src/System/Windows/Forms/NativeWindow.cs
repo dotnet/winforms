@@ -18,8 +18,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
 #endif
 
-    private static TraceSwitch WndProcChoice { get; } = new("WndProcChoice", "Info about choice of WndProc");
-
     private const int InitializedFlags = 0x01;
     private const int UseDebuggableWndProc = 0x04;
 
@@ -197,7 +195,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             if (intWndProcFlags == 0)
             {
-                WndProcChoice.TraceVerbose("Init wndProcFlags");
                 Debug.Indent();
 
                 if (t_userSetProcFlags != 0)
@@ -212,29 +209,17 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                 {
                     if (Debugger.IsAttached)
                     {
-                        WndProcChoice.TraceVerbose("Debugger is attached, using debuggable WndProc");
                         intWndProcFlags |= UseDebuggableWndProc;
-                    }
-                    else
-                    {
-                        // Reading Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
-                        // default behaviour after applications deployed (otherwise, Developer/user can set this flag
-                        // via Application.SetUnhandledExceptionModeInternal(..).
-                        // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
-
-                        WndProcChoice.TraceVerbose("Debugger check from registry is not supported in this release of .Net version");
                     }
                 }
 
 #if DEBUG
                 if (AlwaysUseNormalWndProc.Enabled)
                 {
-                    WndProcChoice.TraceVerbose("Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
                     intWndProcFlags &= ~UseDebuggableWndProc;
                 }
 #endif
                 intWndProcFlags |= InitializedFlags;
-                WndProcChoice.TraceVerbose($"Final 0x{intWndProcFlags:X}");
                 t_wndProcFlags = (byte)intWndProcFlags;
                 Debug.Unindent();
             }
@@ -305,8 +290,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// <summary>
     ///  Assigns a handle to this <see cref="NativeWindow"/> instance.
     /// </summary>
-    public void AssignHandle(IntPtr handle)
-        => AssignHandle((HWND)handle, assignUniqueID: true);
+    public void AssignHandle(IntPtr handle) => AssignHandle((HWND)handle, assignUniqueID: true);
 
     internal unsafe void AssignHandle(HWND hwnd, bool assignUniqueID)
     {
@@ -319,9 +303,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             _priorWindowProcHandle = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             Debug.Assert(_priorWindowProcHandle is not null);
-
-            WndProcChoice.TraceVerbose(
-                WndProcShouldBeDebuggable ? "Using debuggable wndproc" : "Using normal wndproc");
 
             _windowProc = new WNDPROC(Callback);
 

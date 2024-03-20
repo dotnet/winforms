@@ -29,7 +29,7 @@ internal class DialogHostForm : Form
         PInvoke.PostMessage(dialogHandle, PInvoke.WM_CLOSE);
     }
 
-    protected unsafe void Accept(HWND handle)
+    protected static unsafe void Accept(HWND handle)
     {
         PInvoke.SendMessage(handle, PInvoke.WM_COMMAND, (WPARAM)(nint)MESSAGEBOX_RESULT.IDOK);
     }

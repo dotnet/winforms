@@ -286,7 +286,7 @@ namespace Paint
         VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
     }
 
-    private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
+    private static void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
     {
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
 

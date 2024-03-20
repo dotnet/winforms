@@ -62,6 +62,7 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.MenuCommands.SetStatusText")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.MenuCommands.SetStatusRectangle")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.ToolStripDesignerUtils.t_cachedToolboxItems")]
+[assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Drawing.Design.BitmapEditor.BitmapExtensions")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread Local", Scope = "member", Target = "~F:System.Windows.Forms.Design.ToolStripDesignerUtils.t_customToolStripItemCount")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread Local", Scope = "member", Target = "~F:System.Windows.Forms.Design.ToolStripDesignerUtils.t_cachedWinformsImages")]
 [assembly: SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "Creates ambiguity", Scope = "member", Target = "~M:System.ComponentModel.Design.Serialization.CodeDomSerializerBase.SerializeToExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager,System.Object)~System.CodeDom.CodeExpression")]

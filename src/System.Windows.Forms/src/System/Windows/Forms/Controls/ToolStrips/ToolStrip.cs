@@ -3389,7 +3389,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         ClearAllSelections();
     }
 
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         base.OnLeave(e);
         if (!IsDropDown)
