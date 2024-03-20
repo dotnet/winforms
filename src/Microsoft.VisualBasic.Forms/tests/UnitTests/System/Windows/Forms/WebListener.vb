@@ -10,12 +10,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
         Private ReadOnly _downloadFileUrlPrefix As String
         Private ReadOnly _fileSize As Integer
-        Public ReadOnly Address As String
-        Private _userName As String
+
         Private _password As String
+        Private _userName As String
+
+        Public ReadOnly Address As String
 
         ''' <summary>
-        ''' The name of the function that creates the server is uses to establish the file to be downloaded
+        '''  The name of the function that creates the server is uses to establish the file to be downloaded
         ''' </summary>
         ''' <param name="fileSize">Is used to create the file name and the size of download</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded</param>
@@ -26,7 +28,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         ''' <summary>
-        ''' Used for authenticated download
+        '''  Used for authenticated download
         ''' </summary>
         ''' <param name="fileSize">Passed to Me.New</param>
         ''' <param name="userName">Name to match for authorization</param>
@@ -41,6 +43,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
+
             listener.Prefixes.Add(_downloadFileUrlPrefix)
             If _userName IsNot Nothing OrElse _password IsNot Nothing Then
                 listener.AuthenticationSchemes = AuthenticationSchemes.Basic
@@ -50,6 +53,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     ' Start the listener to begin listening for requests.
                     Dim response As HttpListenerResponse = Nothing
+
                     Try
                         ' Note: GetContext blocks while waiting for a request.
                         Dim context As HttpListenerContext = listener.GetContext()
@@ -77,5 +81,4 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
     End Class
-
 End Namespace
