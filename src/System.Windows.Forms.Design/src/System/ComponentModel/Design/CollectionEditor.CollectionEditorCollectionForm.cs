@@ -894,7 +894,7 @@ public partial class CollectionEditor
                         }
                         else
                         {
-                            throw new Exception(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                            throw new InvalidOperationException(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                         }
                     }
                     catch (Exception ex)

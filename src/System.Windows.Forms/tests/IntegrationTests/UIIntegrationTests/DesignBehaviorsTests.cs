@@ -28,7 +28,7 @@ public class DesignBehaviorsTests : ControlTestBase
         Application.ThreadException += (s, e) =>
         {
             // This will preserve the full stack, which otherwise gets replaced
-            throw new Exception(e.Exception.Message, e.Exception);
+            throw new InvalidOperationException(e.Exception.Message, e.Exception);
         };
 
         await RunSingleControlTestAsync<TreeView>(async (form, treeView) =>

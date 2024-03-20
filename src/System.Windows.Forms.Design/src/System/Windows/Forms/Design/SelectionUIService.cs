@@ -1029,7 +1029,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         Rectangle newOffset = Rectangle.Empty;
         if (_dragHandler is null)
         {
-            throw new Exception(SR.DesignerBeginDragNotCalled);
+            throw new InvalidOperationException(SR.DesignerBeginDragNotCalled);
         }
 
         Debug.Assert(_dragComponents is not null, "We should have a set of drag controls here");

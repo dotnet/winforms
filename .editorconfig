@@ -92,14 +92,50 @@ dotnet_style_prefer_collection_expression = true:warning
 # IDE0040: Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = error
 
+# CA2208: Instantiate argument exceptions correctly
+dotnet_diagnostic.CA2208.severity = error
+
+# CA2211: Non-constant fields should not be visible
+dotnet_diagnostic.CA2211.severity = error
+
+# CA2241: Provide correct arguments to formatting methods
+dotnet_diagnostic.CA2241.severity = error
+
+# CA2245: Do not assign a property to itself
+dotnet_diagnostic.CA2245.severity = error
+
+# CA2248: Provide correct enumm argument to Enum.HasFlag
+dotnet_diagnostic.CA2248.severity = error
+
+# CA2249: Consider using String.Contains instead of String.IndexOf
+dotnet_diagnostic.CA2249.severity = error
+
+# CA2242: Test for NaN correctly
+dotnet_diagnostic.CA2242.severity = error
+
+# CA2251: Use String.Equals over String.Compare
+dotnet_diagnostic.CA2251.severity = error
+
+# CA2201: Do not raise reserved exception types
+dotnet_diagnostic.CA2201.severity = error
+
+# CA2219: Do not raise exceptions in exception clauses
+dotnet_diagnostic.CA2219.severity = error
+
 # C# files
 
 [*.cs]
 
-# These two conflict with our usage of CsWin32
+# CSIsNull001: Use 'is' pattern check
+dotnet_diagnostic.CSIsNull001.severity = error
+
+# CSIsNull002: Use 'is not' pattern check
+dotnet_diagnostic.CSIsNull002.severity = error
 
 # SYSLIB1045: Convert to 'GeneratedRegexAttribute'.
 dotnet_diagnostic.SYSLIB1045.severity = error
+
+# These two (1054 and 1096) conflict with our usage of CsWin32
 
 # SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 dotnet_diagnostic.SYSLIB1054.severity = none
@@ -118,6 +154,15 @@ dotnet_diagnostic.CA1510.severity = error
 
 # CA1725: Parameter names should match base declaration
 dotnet_diagnostic.CA1725.severity = error
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = warning
+
+# CA2244: Do not duplicate indexed element initializations
+dotnet_diagnostic.CA2244.severity = error
+
+# CA2246: Do not assign a symbol and its member in the same statement
+dotnet_diagnostic.CA2246.severity = error
 
 # CA1859: Use concrete types when possible for improved performance
 dotnet_diagnostic.CA1859.severity = error
@@ -355,3 +400,6 @@ dotnet_diagnostic.xUnit1042.severity = none
 
 # CA1859: Use concrete types when possible for improved performance
 dotnet_diagnostic.CA1859.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = suggestion

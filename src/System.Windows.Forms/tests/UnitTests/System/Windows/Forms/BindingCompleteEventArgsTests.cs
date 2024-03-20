@@ -46,7 +46,7 @@ public class BindingCompleteEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_TestData()
     {
-        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new Exception() };
+        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new InvalidOperationException() };
         yield return new object[] { null, BindingCompleteState.Success - 1, BindingCompleteContext.ControlUpdate - 1, null, null };
     }
 
@@ -65,7 +65,7 @@ public class BindingCompleteEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_Bool_TestData()
     {
-        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new Exception(), true };
+        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new InvalidOperationException(), true };
         yield return new object[] { null, BindingCompleteState.Success - 1, BindingCompleteContext.ControlUpdate - 1, null, null, false };
     }
 

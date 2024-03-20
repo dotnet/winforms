@@ -1429,7 +1429,6 @@ public abstract partial class TextBoxBase : Control
 
     protected override bool ProcessDialogKey(Keys keyData)
     {
-        s_controlKeyboardRouting.TraceVerbose($"TextBoxBase.ProcessDialogKey [{keyData}]");
         Keys keyCode = keyData & Keys.KeyCode;
 
         if (keyCode == Keys.Tab && AcceptsTab && (keyData & Keys.Control) != 0)
@@ -2052,16 +2051,9 @@ public abstract partial class TextBoxBase : Control
     private void WmGetDlgCode(ref Message m)
     {
         base.WndProc(ref m);
-        if (AcceptsTab)
-        {
-            s_controlKeyboardRouting.TraceVerbose("TextBox wants tabs");
-            m.ResultInternal = (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB);
-        }
-        else
-        {
-            s_controlKeyboardRouting.TraceVerbose("TextBox doesn't want tabs");
-            m.ResultInternal = (LRESULT)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB | PInvoke.DLGC_WANTALLKEYS));
-        }
+        m.ResultInternal = AcceptsTab
+            ? (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB)
+            : (LRESULT)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB | PInvoke.DLGC_WANTALLKEYS));
     }
 
     /// <summary>

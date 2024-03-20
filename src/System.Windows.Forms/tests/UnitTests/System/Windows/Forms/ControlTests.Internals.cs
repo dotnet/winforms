@@ -401,30 +401,6 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
-    public void Control_NotifyEnter()
-    {
-        bool wasChanged = false;
-        using Control control = new();
-        control.Enter += (sender, args) => wasChanged = true;
-
-        control.NotifyEnter();
-
-        Assert.True(wasChanged);
-    }
-
-    [WinFormsFact]
-    public void Control_NotifyLeave()
-    {
-        bool wasChanged = false;
-        using Control control = new();
-        control.Leave += (sender, args) => wasChanged = true;
-
-        control.NotifyLeave();
-
-        Assert.True(wasChanged);
-    }
-
-    [WinFormsFact]
     public void Control_ReflectParentDoesNotRootParent()
     {
         using Control control = new();

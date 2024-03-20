@@ -16,6 +16,7 @@ internal static class StatusExtensions
         }
     }
 
+#pragma warning disable CA2201 // Do not raise reserved exception types - Expected in this case as these are effectively "runtime" exceptions
     internal static Exception GetException(this Status status)
     {
         Debug.Assert(status != Status.Ok, "Throwing an exception for an 'Ok' return code");
@@ -74,4 +75,5 @@ internal static class StatusExtensions
 
         return new ExternalException($"{SR.GdiplusUnknown} [{status}]", (int)HRESULT.E_UNEXPECTED);
     }
+#pragma warning restore CA2201 // Do not raise reserved exception types
 }

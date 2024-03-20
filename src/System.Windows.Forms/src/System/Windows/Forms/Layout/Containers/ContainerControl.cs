@@ -403,8 +403,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     internal bool ActivateControl(Control? control, bool originator)
     {
-        s_focusTracing.TraceVerbose($"ContainerControl::ActivateControl({control?.Name ?? "null"},{originator}) - {Name}");
-
         // Recursive function that makes sure that the chain of active controls is coherent.
         bool ret = true;
         bool updateContainerActiveControl = false;
@@ -477,7 +475,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     {
         ContainerControl? cc;
         Debug.Assert(control is not null);
-        s_focusTracing.TraceVerbose($"ContainerControl::AfterControlRemoved({control.Name}) - {Name}");
+
         if (control == _activeControl || control.Contains(_activeControl))
         {
             bool selected = SelectNextControl(control, true, true, true, true);
@@ -548,7 +546,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
 #endif
 
-        s_focusTracing.TraceVerbose($"ContainerControl::AssignActiveControlInternal({value?.Name ?? "null"}) - {Name}");
         if (_activeControl != value)
         {
             try
@@ -595,18 +592,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// <summary>
     ///  Specifies whether this control can process the mnemonic or not.
     /// </summary>
-    internal override bool CanProcessMnemonic()
-    {
-#if DEBUG
-        TraceCanProcessMnemonic();
-#endif
-        if (_state[s_stateProcessingMnemonic])
-        {
-            return true;
-        }
-
-        return base.CanProcessMnemonic();
-    }
+    internal override bool CanProcessMnemonic() => _state[s_stateProcessingMnemonic] || base.CanProcessMnemonic();
 
     internal AxHost.AxContainer CreateAxContainer()
     {
@@ -649,15 +635,13 @@ public class ContainerControl : ScrollableControl, IContainerControl
     }
 
     /// <summary>
-    ///  Assigns focus to the activeControl. If there is no activeControl then focus is given to
-    ///  the form. package scope for Form
+    ///  Assigns focus to the active Control. If there is no active Control then focus is given to the Form.
     /// </summary>
     internal void FocusActiveControlInternal()
     {
-        s_focusTracing.TraceVerbose($"ContainerControl::FocusActiveControlInternal() - {Name}");
-
         // Things really get ugly if you try to pop up an assert dialog here
-        Debug.WriteLineIf(_activeControl is not null && !Contains(_activeControl), "ActiveControl is not a child of this ContainerControl");
+        Debug.WriteLineIf(_activeControl is not null
+            && !Contains(_activeControl), "ActiveControl is not a child of this ContainerControl");
 
         if (_activeControl is not null && _activeControl.Visible)
         {
@@ -1203,8 +1187,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override bool ProcessDialogChar(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessDialogChar [{charCode}]");
-
         // If we're the top-level form or control, we need to do the mnemonic handling
         if (GetContainerControl() is ContainerControl && charCode != ' ' && ProcessMnemonic(charCode))
         {
@@ -1214,16 +1196,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
         return base.ProcessDialogChar(charCode);
     }
 
-    /// <summary>
-    ///  Processes a dialog key. Overrides Control.processDialogKey(). This method implements
-    ///  handling of the TAB, LEFT, RIGHT, UP, and DOWN keys in dialogs.
-    ///  The method performs no processing on keys that include the ALT or CONTROL modifiers.
-    ///  For the TAB key, the method selects the next control on the form. For the arrow keys, !!!
-    /// </summary>
     protected override bool ProcessDialogKey(Keys keyData)
     {
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessDialogKey [{keyData}]");
-
         LastKeyData = keyData;
         if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
         {
@@ -1241,8 +1215,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                    if (ProcessArrowKey(keyCode is Keys.Right or
-                                        Keys.Down))
+                    if (ProcessArrowKey(keyCode is Keys.Right or Keys.Down))
                     {
                         return true;
                     }
@@ -1256,8 +1229,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessCmdKey {msg}");
-
         if (base.ProcessCmdKey(ref msg, keyData))
         {
             return true;
@@ -1279,10 +1250,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     protected internal override bool ProcessMnemonic(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"ContainerControl.ProcessMnemonic [{charCode}]");
-        Debug.Indent();
-        s_controlKeyboardRouting.TraceVerbose($"this == {this}");
-
         if (!CanProcessMnemonic())
         {
             return false;
@@ -1290,7 +1257,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
         if (Controls.Count == 0)
         {
-            Debug.Unindent();
             return false;
         }
 
@@ -1313,7 +1279,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
             bool wrapped = false;
 
             Control? ctl = start;
-            s_controlKeyboardRouting.TraceVerbose($"Check starting at '{start?.ToString() ?? "<null>"}'");
 
             do
             {
@@ -1329,21 +1294,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
                 if (ctl is not null)
                 {
-#if DEBUG
-                    s_controlKeyboardRouting.TraceVerbose($"  ...checking for mnemonics on {ctl}");
-                    // Control.TraceMnemonicProcessing.Enabled disables CanProcessMnemonic consistency check.
-                    bool canProcess = s_traceMnemonicProcessing.Enabled || ctl.CanProcessMnemonic(); // Processing the mnemonic can change the value of CanProcessMnemonic.
-#endif
                     // Processing the mnemonic can change the value of CanProcessMnemonic.
                     if (ctl.ProcessMnemonic(charCode))
                     {
-#if DEBUG
-                        s_controlKeyboardRouting.TraceVerbose("  ...mnemonics found");
-                        Debug.Assert(
-                            s_traceMnemonicProcessing.Enabled || canProcess,
-                            "ProcessMnemonic returned true, even though CanProcessMnemonic() is false. Someone probably overrode ProcessMnemonic and forgot to test CanSelect or CanProcessMnemonic().");
-                        Debug.Unindent();
-#endif
                         processed = true;
                         break;
                     }
@@ -1510,8 +1463,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     internal void SetActiveControl(Control? value)
     {
-        s_focusTracing.TraceVerbose($"ContainerControl::SetActiveControl({value?.Name ?? "null"}) - {Name}");
-
         if (_activeControl == value && (value is null || value.Focused))
         {
             return;
@@ -1597,8 +1548,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     internal void UpdateFocusedControl()
     {
-        s_focusTracing.TraceVerbose($"ContainerControl::UpdateFocusedControl() - {Name}");
-
         // Capture the current focusedControl as the unvalidatedControl if we don't have one/are not validating.
         EnsureUnvalidatedControl(_focusedControl);
         Control? pathControl = _focusedControl;
@@ -1632,13 +1581,13 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 pathControl = nextControlDown;
                 if (NativeWindow.WndProcShouldBeDebuggable)
                 {
-                    pathControl.NotifyEnter();
+                    pathControl.OnEnter(EventArgs.Empty);
                 }
                 else
                 {
                     try
                     {
-                        pathControl.NotifyEnter();
+                        pathControl.OnEnter(EventArgs.Empty);
                     }
                     catch (Exception e)
                     {
@@ -1701,13 +1650,13 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     {
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
-                            leaveControl.NotifyLeave();
+                            leaveControl.OnLeave(EventArgs.Empty);
                         }
                         else
                         {
                             try
                             {
-                                leaveControl.NotifyLeave();
+                                leaveControl.OnLeave(EventArgs.Empty);
                             }
                             catch (Exception e)
                             {
@@ -2051,52 +2000,38 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private void WmSetFocus(ref Message m)
     {
-        s_focusTracing.TraceVerbose($"ContainerControl::WmSetFocus() - {Name}");
-        if (!HostedInWin32DialogManager)
-        {
-            if (ActiveControl is not null)
-            {
-                WmImeSetFocus();
-                // Do not raise GotFocus event since the focus is given to the visible ActiveControl
-                if (!ActiveControl.Visible)
-                {
-                    InvokeGotFocus(this, EventArgs.Empty);
-                }
-
-                FocusActiveControlInternal();
-            }
-            else
-            {
-                if (ParentInternal is not null)
-                {
-                    IContainerControl? c = ParentInternal.GetContainerControl();
-                    if (c is not null)
-                    {
-                        bool succeeded;
-
-                        if (c is ContainerControl knowncontainer)
-                        {
-                            succeeded = knowncontainer.ActivateControl(this);
-                        }
-                        else
-                        {
-                            succeeded = c.ActivateControl(this);
-                        }
-
-                        if (!succeeded)
-                        {
-                            return;
-                        }
-                    }
-                }
-
-                base.WndProc(ref m);
-            }
-        }
-        else
+        if (HostedInWin32DialogManager)
         {
             base.WndProc(ref m);
+            return;
         }
+
+        if (ActiveControl is not null)
+        {
+            WmImeSetFocus();
+
+            // Do not raise GotFocus event since the focus is given to the visible ActiveControl
+            if (!ActiveControl.Visible)
+            {
+                InvokeGotFocus(this, EventArgs.Empty);
+            }
+
+            FocusActiveControlInternal();
+            return;
+        }
+
+        // Try to set the focus to the parent container if there is one.
+        if (ParentInternal?.GetContainerControl() is IContainerControl container)
+        {
+            if (!(container is ContainerControl knowncontainer
+                ? knowncontainer.ActivateControl(this)
+                : container.ActivateControl(this)))
+            {
+                return;
+            }
+        }
+
+        base.WndProc(ref m);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]

@@ -102,17 +102,11 @@ public class DataFormatsTests
         Assert.Same(result, DataFormats.GetFormat(result.Id));
     }
 
-    public static IEnumerable<object[]> GetFormat_InvalidString_TestData()
+    [Fact]
+    public void DataFormats_GetFormat_NullOrEmptyString_ArgumentException()
     {
-        yield return new object[] { null };
-        yield return new object[] { string.Empty };
-    }
-
-    [Theory]
-    [MemberData(nameof(GetFormat_InvalidString_TestData))]
-    public void DataFormats_GetFormat_NullOrEmptyString_ArgumentException(string format)
-    {
-        Assert.Throws<ArgumentException>(() => DataFormats.GetFormat(format));
+        Assert.Throws<ArgumentException>("format", () => DataFormats.GetFormat(""));
+        Assert.Throws<ArgumentNullException>("format", () => DataFormats.GetFormat(null));
     }
 
     public static IEnumerable<object[]> GetFormat_InvalidFormat_TestData()

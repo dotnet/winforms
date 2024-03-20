@@ -207,7 +207,9 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
 
         if (hbm.IsNull)
         {
+#pragma warning disable CA2201 // Do not raise reserved exception types - for compat we'll leave this as is, should probably be InvalidOperationException
             throw new OutOfMemoryException(SR.GraphicsBufferQueryFail);
+#pragma warning restore CA2201
         }
 
         bitmapInfo->bmiHeader.biSize = (uint)sizeof(BITMAPINFOHEADER);

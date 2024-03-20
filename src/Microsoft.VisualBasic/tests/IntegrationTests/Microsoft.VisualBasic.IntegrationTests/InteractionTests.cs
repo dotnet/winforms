@@ -95,10 +95,10 @@ public class InteractionTests
     }
 
     [Fact]
-    public void Shell_NullReferenceException()
+    public void Shell_ArgumentNullException()
     {
         // Exception.ToString() called to verify message is constructed successfully.
-        _ = Assert.Throws<NullReferenceException>(() => Interaction.Shell(null)).ToString();
+        _ = Assert.Throws<ArgumentNullException>(() => Interaction.Shell(null)).ToString();
     }
 
     [Fact]
