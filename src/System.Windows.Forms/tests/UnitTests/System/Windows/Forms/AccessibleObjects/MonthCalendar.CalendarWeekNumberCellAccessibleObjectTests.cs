@@ -145,7 +145,7 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         Assert.NotNull(secondRow);
 
         CalendarWeekNumberCellAccessibleObject weekNumber = secondRow.WeekNumberCellAccessibleObject;
-        CalendarCellAccessibleObject sunday = secondRow.CellsAccessibleObjects?.First?.Value as CalendarCellAccessibleObject;
+        CalendarCellAccessibleObject sunday = secondRow.CellsAccessibleObjects?.First?.Value;
 
         Assert.NotNull(weekNumber);
         Assert.NotNull(sunday);

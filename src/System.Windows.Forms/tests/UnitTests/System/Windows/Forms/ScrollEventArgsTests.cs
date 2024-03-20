@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests;
 public class ScrollEventArgsTests
 {
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2)]
+    [InlineData((ScrollEventType.EndScroll + 1), -2)]
     [InlineData(ScrollEventType.LargeIncrement, -1)]
     [InlineData(ScrollEventType.EndScroll, 0)]
     [InlineData(ScrollEventType.LargeIncrement, 1)]
@@ -21,7 +21,7 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, -2)]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, -2)]
     [InlineData(ScrollEventType.LargeIncrement, -1, -1)]
     [InlineData(ScrollEventType.EndScroll, 0, 0)]
     [InlineData(ScrollEventType.LargeIncrement, 1, 2)]
@@ -35,7 +35,7 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, (ScrollOrientation)(ScrollOrientation.HorizontalScroll - 1))]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, (ScrollOrientation.HorizontalScroll - 1))]
     [InlineData(ScrollEventType.LargeIncrement, -1, ScrollOrientation.HorizontalScroll)]
     [InlineData(ScrollEventType.EndScroll, 0, ScrollOrientation.VerticalScroll)]
     [InlineData(ScrollEventType.LargeIncrement, 1, ScrollOrientation.VerticalScroll)]
@@ -49,7 +49,7 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, -2, (ScrollOrientation)(ScrollOrientation.HorizontalScroll - 1))]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, -2, (ScrollOrientation.HorizontalScroll - 1))]
     [InlineData(ScrollEventType.LargeIncrement, -1, -1, ScrollOrientation.HorizontalScroll)]
     [InlineData(ScrollEventType.EndScroll, 0, 0, ScrollOrientation.VerticalScroll)]
     [InlineData(ScrollEventType.LargeIncrement, 1, 2, ScrollOrientation.VerticalScroll)]

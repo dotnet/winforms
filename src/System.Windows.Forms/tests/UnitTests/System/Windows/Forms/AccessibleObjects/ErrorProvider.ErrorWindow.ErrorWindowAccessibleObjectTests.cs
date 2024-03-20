@@ -106,7 +106,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorWindow window = new(provider, control);
         for (int i = 0; i < testCount; i++)
         {
-            window.ControlItems.Add(new(provider, control, (IntPtr)i));
+            window.ControlItems.Add(new(provider, control, i));
         }
 
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -122,8 +122,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
 
         window.ControlItems.AddRange(new[] { item1, item2 });
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -144,8 +144,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
         window.ControlItems.AddRange(new[] { item1, item2 });
 
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -162,9 +162,9 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
-        ControlItem item3 = new(provider, control, (IntPtr)300);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
+        ControlItem item3 = new(provider, control, 300);
 
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
         AccessibleObject accessibleObject = window.AccessibilityObject;

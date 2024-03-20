@@ -167,7 +167,7 @@ public class DesignSurfaceTests
     {
         Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface((Type)null));
-        Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, (Type)null));
+        Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, null));
     }
 
     [WinFormsFact]

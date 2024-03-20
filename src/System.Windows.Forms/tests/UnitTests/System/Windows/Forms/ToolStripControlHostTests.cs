@@ -4193,7 +4193,7 @@ public class ToolStripControlHostTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripControlHost_ProcessCmdKey_Invoke_ReturnsFalse(Keys keyData)
     {
         using Control c = new();
@@ -4234,7 +4234,7 @@ public class ToolStripControlHostTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripControlHost_ProcessCmdKey_InvokeDisposed_ReturnsFalse(Keys keyData)
     {
         using Control c = new();
@@ -4250,7 +4250,7 @@ public class ToolStripControlHostTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripControlHost_ProcessDialogKey_Invoke_ReturnsFalse(Keys keyData)
     {
         using Control c = new();
@@ -4294,7 +4294,7 @@ public class ToolStripControlHostTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripControlHost_ProcessDialogKey_InvokeDisposed_ReturnsFalse(Keys keyData)
     {
         using Control c = new();

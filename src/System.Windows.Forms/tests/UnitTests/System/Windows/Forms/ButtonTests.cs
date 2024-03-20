@@ -3384,7 +3384,7 @@ public class ButtonTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -3429,7 +3429,7 @@ public class ButtonTests
                 {
                     Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -3464,7 +3464,7 @@ public class ButtonTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3502,7 +3502,7 @@ public class ButtonTests
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -3544,7 +3544,7 @@ public class ButtonTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3638,7 +3638,7 @@ public class ButtonTests
         {
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);

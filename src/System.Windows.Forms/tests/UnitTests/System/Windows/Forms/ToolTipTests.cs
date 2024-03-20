@@ -852,7 +852,7 @@ public class ToolTipTests
         // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
         Assert.True(PInvoke.PostMessage(toolTip, PInvoke.WM_MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
         MSG msg = default;
-        Assert.True(PInvoke.PeekMessage(&msg, toolTip, (uint)PInvoke.WM_MOUSEMOVE, (uint)PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
+        Assert.True(PInvoke.PeekMessage(&msg, toolTip, PInvoke.WM_MOUSEMOVE, PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
         // Show the tooltip.
         PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);

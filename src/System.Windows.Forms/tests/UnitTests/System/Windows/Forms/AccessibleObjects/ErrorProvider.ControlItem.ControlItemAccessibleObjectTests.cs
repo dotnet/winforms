@@ -45,7 +45,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         parentControl.Controls.Add(control);
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
-        ControlItem item = new(provider, control, (IntPtr)100);
+        ControlItem item = new(provider, control, 100);
         window.Add(item);
         parentControl.CreateControl();
 
@@ -117,7 +117,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using Control control = new();
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
-        ControlItem item = new(provider, control, (IntPtr)100) { Error = testError };
+        ControlItem item = new(provider, control, 100) { Error = testError };
         window.Add(item);
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
@@ -144,7 +144,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using Control control = new();
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
-        ControlItem item = new(provider, control, (IntPtr)100);
+        ControlItem item = new(provider, control, 100);
         window.Add(item);
 
         Type type = typeof(ControlItem)
@@ -185,9 +185,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
-        ControlItem item3 = new(provider, control, (IntPtr)300);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
+        ControlItem item3 = new(provider, control, 300);
 
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
 
@@ -227,9 +227,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
-        ControlItem item3 = new(provider, control, (IntPtr)300);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
+        ControlItem item3 = new(provider, control, 300);
 
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
 
@@ -260,9 +260,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         using ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
-        ControlItem item3 = new(provider, control, (IntPtr)300);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
+        ControlItem item3 = new(provider, control, 300);
 
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
 

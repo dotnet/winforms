@@ -715,7 +715,7 @@ public class FontDialogTests
         };
         int applyCallCount = 0;
         dialog.Apply += (sender, e) => applyCallCount++;
-        Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)PInvoke.WM_COMMAND, (IntPtr)0x402, IntPtr.Zero));
+        Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)PInvoke.WM_COMMAND, 0x402, IntPtr.Zero));
     }
 
     [WinFormsTheory]

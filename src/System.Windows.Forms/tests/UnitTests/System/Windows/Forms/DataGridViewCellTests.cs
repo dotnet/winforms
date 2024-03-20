@@ -4249,9 +4249,9 @@ public class DataGridViewCellTests
         yield return new object[] { "value", -2, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter(), DataGridViewDataErrorContexts.Formatting, null };
         yield return new object[] { "value", -1, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter(), DataGridViewDataErrorContexts.Formatting, null };
         yield return new object[] { "value", 0, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter(), DataGridViewDataErrorContexts.Formatting, null };
-        yield return new object[] { null, -2, null, null, null, (DataGridViewDataErrorContexts)(DataGridViewDataErrorContexts.Formatting - 1), null };
-        yield return new object[] { null, -1, null, null, null, (DataGridViewDataErrorContexts)(DataGridViewDataErrorContexts.Formatting - 1), null };
-        yield return new object[] { null, 0, null, null, null, (DataGridViewDataErrorContexts)(DataGridViewDataErrorContexts.Formatting - 1), null };
+        yield return new object[] { null, -2, null, null, null, DataGridViewDataErrorContexts.Formatting - 1, null };
+        yield return new object[] { null, -1, null, null, null, DataGridViewDataErrorContexts.Formatting - 1, null };
+        yield return new object[] { null, 0, null, null, null, DataGridViewDataErrorContexts.Formatting - 1, null };
     }
 
     [WinFormsTheory]
@@ -6247,8 +6247,8 @@ public class DataGridViewCellTests
         yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Indeterminate, new DataGridViewCellStyle(), null, null, DBNull.Value };
         yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), null, null, true };
         yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Unchecked, new DataGridViewCellStyle(), null, null, false };
-        yield return new object[] { typeof(bool), typeof(CheckState), (CheckState)(CheckState.Unchecked - 1), new DataGridViewCellStyle(), null, null, false };
-        yield return new object[] { typeof(bool), typeof(CheckState), (CheckState)(CheckState.Indeterminate + 1), new DataGridViewCellStyle(), null, null, false };
+        yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Unchecked - 1, new DataGridViewCellStyle(), null, null, false };
+        yield return new object[] { typeof(bool), typeof(CheckState), CheckState.Indeterminate + 1, new DataGridViewCellStyle(), null, null, false };
         yield return new object[] { typeof(CheckState), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), null, null, CheckState.Checked };
         yield return new object[] { typeof(int), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), null, null, 1 };
         yield return new object[] { typeof(int), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), new EnumConverter(typeof(CheckState)), null, 1 };

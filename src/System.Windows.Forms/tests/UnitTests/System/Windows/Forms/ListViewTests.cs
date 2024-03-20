@@ -2021,7 +2021,7 @@ public class ListViewTests
             }
             else if (m.Msg == (int)PInvoke.CCM_SETVERSION)
             {
-                Assert.Equal((IntPtr)5, m.WParam);
+                Assert.Equal(5, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 SetVersionCallCount++;
                 return;
@@ -4168,7 +4168,7 @@ public class ListViewTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 

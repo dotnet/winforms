@@ -1492,7 +1492,7 @@ public class Control_ControlAccessibleObjectTests
         }
 
         toolStrip.Items.Add(host);
-        ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+        host.TestAccessor().Dynamic._parent = toolStrip;
         host.SetPlacement(ToolStripItemPlacement.Main);
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
@@ -1530,7 +1530,7 @@ public class Control_ControlAccessibleObjectTests
 
         toolStrip.Items.Add(host);
         toolStrip.Items.Add(button);
-        ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+        host.TestAccessor().Dynamic._parent = toolStrip;
         host.SetPlacement(ToolStripItemPlacement.Main);
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
@@ -1566,7 +1566,7 @@ public class Control_ControlAccessibleObjectTests
         }
 
         toolStrip.Items.Add(host);
-        ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+        host.TestAccessor().Dynamic._parent = toolStrip;
         host.SetPlacement(ToolStripItemPlacement.Main);
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);

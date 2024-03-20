@@ -8,13 +8,13 @@ public class DragEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData()
     {
-        yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1) };
+        yield return new object[] { null, -1, -2, -3, DragDropEffects.None - 1, DragDropEffects.None - 1 };
         yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move };
     }
 
     public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string_TestData()
     {
-        yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1), (DropImageType.Invalid - 1), null, null };
+        yield return new object[] { null, -1, -2, -3, DragDropEffects.None - 1, DragDropEffects.None - 1, (DropImageType.Invalid - 1), null, null };
         yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents" };
     }
 
@@ -50,7 +50,7 @@ public class DragEventArgsTests
 
     [Theory]
     [InlineData(DragDropEffects.Copy)]
-    [InlineData((DragDropEffects)(DragDropEffects.None - 1))]
+    [InlineData((DragDropEffects.None - 1))]
     public void Effect_Set_GetReturnsExpected(DragDropEffects value)
     {
         DragEventArgs e = new(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)

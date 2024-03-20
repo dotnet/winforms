@@ -220,7 +220,7 @@ public class CommonDialogTests
         var owner = new Mock<IWin32Window>(MockBehavior.Strict);
         owner
             .Setup(o => o.Handle)
-            .Returns((IntPtr)1);
+            .Returns(1);
         Assert.Throws<Win32Exception>(() => dialog.ShowDialog(owner.Object));
     }
 

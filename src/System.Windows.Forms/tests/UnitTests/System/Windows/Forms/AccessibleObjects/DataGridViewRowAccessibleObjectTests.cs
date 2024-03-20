@@ -328,8 +328,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
     public static IEnumerable<object[]> Navigate_TestData()
     {
-        yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), (AccessibleNavigation)(AccessibleNavigation.Up - 1), null };
-        yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), (AccessibleNavigation)(AccessibleNavigation.LastChild + 1), null };
+        yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), AccessibleNavigation.Up - 1, null };
+        yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), AccessibleNavigation.LastChild + 1, null };
         yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), AccessibleNavigation.Left, null };
         yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), AccessibleNavigation.Right, null };
     }

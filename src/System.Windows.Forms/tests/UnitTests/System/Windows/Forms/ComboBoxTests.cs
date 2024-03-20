@@ -2162,7 +2162,7 @@ public class ComboBoxTests
         // All the items are between a - z
         for (int j = 0; j < numItems; j++)
         {
-            string item = (random.Next() % 26 + (char)'a').ToString();
+            string item = (random.Next() % 26 + 'a').ToString();
             items[j] = item;
             comboBox.Items.Add(item);
         }
