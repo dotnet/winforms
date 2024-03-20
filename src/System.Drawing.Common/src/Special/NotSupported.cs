@@ -5,7 +5,7 @@
 // Changes to this file must follow the https://aka.ms/api-review process.
 // ------------------------------------------------------------------------------
 
-#pragma warning disable CS8618,CS0169,CA1725,CA1823,CA1066,IDE0001,IDE0002,IDE1006,IDE0034,IDE0044,IDE0051,IDE0055,IDE1006
+#pragma warning disable CS8618,CS0169,CA1725,CA1821,CA1823,CA1066,IDE0001,IDE0002,IDE1006,IDE0034,IDE0044,IDE0051,IDE0055,IDE1006
 
 namespace System.Drawing
 {
@@ -3221,4 +3221,4 @@ namespace System.Drawing.Text
     }
 }
 
-#pragma warning restore CS8618,CS0169,CA1725,CA1823,CA1066,IDE0001,IDE0002,IDE1006,IDE0034,IDE0044,IDE0051,IDE0055,IDE1006
+#pragma warning restore CS8618,CS0169,CA1725,CA1821,CA1823,CA1066,IDE0001,IDE0002,IDE1006,IDE0034,IDE0044,IDE0051,IDE0055,IDE1006
