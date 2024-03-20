@@ -57,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\IntegrationTests\WinformsControlsTest\Resources\media.mpg" Link="Resources\media.mpg">
+    <Content Include="..\IntegrationTests\WinFormsControlsTest\Resources\media.mpg" Link="Resources\media.mpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

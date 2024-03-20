@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("System.Windows.Forms.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.TestUtilities.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Design.Tests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("WinformsControlsTest, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("WinFormsControlsTest, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiListViewTests, PublicKey=00000000000000000400000000000000")]
 
 // This is needed in order to Moq internal interfaces for testing

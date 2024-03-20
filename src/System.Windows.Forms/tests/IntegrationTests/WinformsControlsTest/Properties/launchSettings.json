@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "WinformsControlsTest": {
+    "WinFormsControlsTest": {
       "commandName": "Project",
       "nativeDebugging": true
     }

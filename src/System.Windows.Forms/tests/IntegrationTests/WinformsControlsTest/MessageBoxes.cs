@@ -3,8 +3,9 @@
 
 #nullable enable
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class MessageBoxes : Form
 {
     private readonly ToolStripButton _btnOpen;

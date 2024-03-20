@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinFormsControlsTest\WinFormsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
@@ -165,6 +165,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C
 		NuGet.Config = NuGet.Config
 		eng\packageContent.targets = eng\packageContent.targets
 		eng\Publishing.props = eng\Publishing.props
+		start-code.cmd = start-code.cmd
 		start-vs.cmd = start-vs.cmd
 		eng\Versions.props = eng\Versions.props
 	EndProjectSection

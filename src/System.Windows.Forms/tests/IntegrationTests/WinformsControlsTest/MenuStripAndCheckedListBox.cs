@@ -3,8 +3,9 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class MenuStripAndCheckedListBox : Form
 {
     public MenuStripAndCheckedListBox()

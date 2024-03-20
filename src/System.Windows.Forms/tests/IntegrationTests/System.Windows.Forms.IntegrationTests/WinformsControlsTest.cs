@@ -9,12 +9,12 @@ using Xunit;
 
 namespace System.Windows.Forms.IntegrationTests;
 
-public partial class WinformsControlsTest
+public partial class WinFormsControlsTest
 {
-    private const string ProjectName = "WinformsControlsTest";
+    private const string ProjectName = "WinFormsControlsTest";
     private readonly string _exePath;
 
-    public WinformsControlsTest()
+    public WinFormsControlsTest()
     {
         _exePath = TestHelpers.GetExePath(ProjectName);
     }
@@ -22,7 +22,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_OpenAndClose()
+    public void WinFormsControlsTest_OpenAndClose()
     {
         Process process = TestHelpers.StartProcess(_exePath);
 
@@ -60,7 +60,7 @@ public partial class WinformsControlsTest
     [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
     [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
 #endif
-    public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
+    public void WinFormsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, tabOrder);
@@ -76,7 +76,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_CalendarTest()
+    public void WinFormsControlsTest_CalendarTest()
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.CalendarButton);
@@ -94,7 +94,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_ThreadExceptionDialogTest()
+    public void WinFormsControlsTest_ThreadExceptionDialogTest()
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
@@ -115,7 +115,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
+    public void WinFormsControlsTest_PropertyGrid_CollectionEditorTest()
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.PropertyGridButton);
@@ -137,7 +137,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_FileDialogTest()
+    public void WinFormsControlsTest_FileDialogTest()
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
@@ -180,7 +180,7 @@ public partial class WinformsControlsTest
 #if MAUI
     [Fact]
 #endif
-    public void WinformsControlsTest_OpenFolderBrowserDialogTest()
+    public void WinFormsControlsTest_OpenFolderBrowserDialogTest()
     {
         Process process = TestHelpers.StartProcess(_exePath);
         TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
