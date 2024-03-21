@@ -1638,8 +1638,8 @@ public class BitmapTests : FileCleanupTestBase
         // Format16bppGrayScale is not supported for conversion
         { PixelFormat.Format16bppGrayScale, DitherType.None, PaletteType.FixedHalftone256 },
         { PixelFormat.Format16bppGrayScale, DitherType.ErrorDiffusion, PaletteType.FixedHalftone8 },
-        { PixelFormat.Format16bppGrayScale, DitherType.None, PaletteType.FixedBW },
-        { PixelFormat.Format16bppGrayScale, DitherType.Solid, PaletteType.FixedBW },
+        { PixelFormat.Format16bppGrayScale, DitherType.None, PaletteType.FixedBlackAndWhite },
+        { PixelFormat.Format16bppGrayScale, DitherType.Solid, PaletteType.FixedBlackAndWhite },
         { PixelFormat.Format16bppRgb565, (DitherType)(-1), PaletteType.FixedHalftone256 },
         { PixelFormat.Format16bppRgb565, (DitherType)(-1), (PaletteType)(-1) },
     };

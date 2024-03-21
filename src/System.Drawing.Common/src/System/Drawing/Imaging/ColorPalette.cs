@@ -1,10 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if NET9_0_OR_GREATER
-using System.Runtime.Versioning;
-#endif
-
 namespace System.Drawing.Imaging;
 
 /// <summary>
@@ -38,17 +34,17 @@ public sealed unsafe class ColorPalette
     /// <summary>
     ///  Create a custom color palette.
     /// </summary>
-    /// <param name="entries">Color entries for the palette.</param>
-    public ColorPalette(params Color[] entries) : this(0, entries)
+    /// <param name="customColors">Color entries for the palette.</param>
+    public ColorPalette(params Color[] customColors) : this(0, customColors)
     {
     }
 
     /// <summary>
     ///  Create a standard color palette.
     /// </summary>
-    public ColorPalette(PaletteType paletteType)
+    public ColorPalette(PaletteType fixedPaletteType)
     {
-        ColorPalette palette = InitializePalette(paletteType, 0, useTransparentColor: false, bitmap: null);
+        ColorPalette palette = InitializePalette(fixedPaletteType, 0, useTransparentColor: false, bitmap: null);
         _flags = palette.Flags;
         _entries = palette.Entries;
     }
@@ -57,9 +53,8 @@ public sealed unsafe class ColorPalette
     ///  Create an optimal color palette based on the colors in a given bitmap.
     /// </summary>
     /// <inheritdoc cref="InitializePalette(PaletteType, int, bool, IPointer{GpBitmap}?)"/>
-    [RequiresPreviewFeatures]
-    public static ColorPalette CreateOptimalPalette(int colorCount, bool useTransparentColor, Bitmap bitmap) =>
-        InitializePalette((PaletteType)GdiPlus.PaletteType.PaletteTypeOptimal, colorCount, useTransparentColor, bitmap);
+    public static ColorPalette CreateOptimalPalette(int colors, bool useTransparentColor, Bitmap bitmap) =>
+        InitializePalette((PaletteType)GdiPlus.PaletteType.PaletteTypeOptimal, colors, useTransparentColor, bitmap);
 #endif
 
     // Memory layout is:
@@ -91,13 +86,13 @@ public sealed unsafe class ColorPalette
     /// <summary>
     ///  Initializes a standard, optimal, or custom color palette.
     /// </summary>
-    /// <param name="paletteType">The palette type.</param>
+    /// <param name="fixedPaletteType">The palette type.</param>
     /// <param name="colorCount">
     ///  The number of colors you want to have in an optimal palette based on a the specified bitmap.
     /// </param>
     /// <param name="useTransparentColor"><see langword="true"/> to include the transparent color in the palette.</param>
     internal static ColorPalette InitializePalette(
-        PaletteType paletteType,
+        PaletteType fixedPaletteType,
         int colorCount,
         bool useTransparentColor,
         IPointer<GpBitmap>? bitmap)
@@ -109,7 +104,7 @@ public sealed unsafe class ColorPalette
         {
             PInvoke.GdipInitializePalette(
                 (GdiPlus.ColorPalette*)b,
-                (GdiPlus.PaletteType)paletteType,
+                (GdiPlus.PaletteType)fixedPaletteType,
                 colorCount,
                 useTransparentColor,
                 bitmap is null ? null : bitmap.Pointer).ThrowIfFailed();
