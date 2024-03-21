@@ -153,6 +153,7 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ResourceSchema")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.GridItemCollection.Empty")]
 [assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
+[assembly: SuppressMessage("Performance", "CA1821:Remove empty Finalizers", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.AxHost.ConnectionPointCookie.Finalize")]
 
 // Thread locals (there is no way to configure this style yet)
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ButtonInternal.CheckBoxBaseAdapter.t_checkImageChecked")]
@@ -255,3 +256,7 @@
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.ListBox.NativeAdd(System.Object)~System.Int32")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.RichTextBox.Find(System.Char[],System.Int32,System.Int32)~System.Int32")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.RichTextBox.CharRangeToString(Windows.Win32.UI.Controls.RichEdit.CHARRANGE)~System.String")]
+[assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.BindingManagerBase.onCurrentChangedHandler")]
+[assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.BindingManagerBase.onPositionChangedHandler")]
+[assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.CurrencyManager.listposition")]
+[assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.CurrencyManager.finalType")]

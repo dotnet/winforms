@@ -57,8 +57,8 @@ public class ListViewGroupTests
         yield return new object[] { null, HorizontalAlignment.Left, string.Empty };
         yield return new object[] { string.Empty, HorizontalAlignment.Right, string.Empty };
         yield return new object[] { "reasonable", HorizontalAlignment.Center, "reasonable" };
-        yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Left - 1), "reasonable" };
-        yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Center + 1), "reasonable" };
+        yield return new object[] { "reasonable", HorizontalAlignment.Left - 1, "reasonable" };
+        yield return new object[] { "reasonable", HorizontalAlignment.Center + 1, "reasonable" };
     }
 
     [WinFormsTheory]
@@ -216,8 +216,8 @@ public class ListViewGroupTests
                 groupImageList.Images.Add(new Bitmap(10, 10));
                 groupImageList.Images.Add(new Bitmap(20, 20));
                 listView.GroupImageList = groupImageList;
-                Assert.Equal((nint)groupImageList.Handle,
-                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
+                Assert.Equal(groupImageList.Handle,
+                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
                 ListViewGroup group = new();
                 listView.Groups.Add(group);
@@ -356,8 +356,8 @@ public class ListViewGroupTests
                 using ImageList groupImageList = new();
                 groupImageList.Images.Add(value.Key, new Bitmap(10, 10));
                 listView.GroupImageList = groupImageList;
-                Assert.Equal((nint)groupImageList.Handle,
-                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
+                Assert.Equal(groupImageList.Handle,
+                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
                 ListViewGroup group = new();
                 listView.Groups.Add(group);

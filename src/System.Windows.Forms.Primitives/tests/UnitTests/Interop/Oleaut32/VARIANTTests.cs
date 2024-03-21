@@ -247,7 +247,7 @@ public unsafe class VARIANTTests
             yield return new object[] { VT_I4, unchecked((nint)long.MaxValue), -1 };
         }
 
-        yield return new object[] { VT_UI4, (nint)(-10), (uint)4294967286 };
+        yield return new object[] { VT_UI4, (nint)(-10), 4294967286 };
         yield return new object[] { VT_UI4, (nint)0, (uint)0 };
         yield return new object[] { VT_UI4, (nint)10, (uint)10 };
         yield return new object[] { VT_UI4, (nint)byte.MaxValue, (uint)byte.MaxValue };
@@ -278,7 +278,7 @@ public unsafe class VARIANTTests
             yield return new object[] { VT_INT, unchecked((nint)long.MaxValue), -1 };
         }
 
-        yield return new object[] { VT_UINT, (nint)(-10), (uint)4294967286 };
+        yield return new object[] { VT_UINT, (nint)(-10), 4294967286 };
         yield return new object[] { VT_UINT, (nint)0, (uint)0 };
         yield return new object[] { VT_UINT, (nint)10, (uint)10 };
         yield return new object[] { VT_UINT, (nint)byte.MaxValue, (uint)byte.MaxValue };
@@ -442,7 +442,7 @@ public unsafe class VARIANTTests
     {
         if (nint.Size == 8)
         {
-            yield return new object[] { (nint)(-10), (ulong)18446744073709551606 };
+            yield return new object[] { (nint)(-10), 18446744073709551606 };
         }
 
         yield return new object[] { (nint)0, (ulong)0 };
@@ -5716,7 +5716,7 @@ public unsafe class VARIANTTests
 
         public HRESULT GetSize(uint* pcbSize)
         {
-            *pcbSize = (uint)sizeof(int);
+            *pcbSize = sizeof(int);
             return HRESULT.S_OK;
         }
 

@@ -1669,7 +1669,7 @@ public partial class ToolStripButtonTests
     [WinFormsTheory]
     [InlineData(Keys.A)]
     [InlineData(Keys.None)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripButton_ProcessDialogKey_UnknownKey_ReturnsFalse(Keys keyData)
     {
         using SubToolStripButton item = new();

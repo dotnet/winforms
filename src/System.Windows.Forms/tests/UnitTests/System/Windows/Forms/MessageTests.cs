@@ -110,50 +110,50 @@ public class MessageTests
 
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
+            Create(1, 2, 3, 4, 5),
             true
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)2, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
+            Create(2, 2, 3, 4, 5),
             false
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)1, 3, (IntPtr)3, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
+            Create(1, 3, 3, 4, 5),
             false
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)1, 2, (IntPtr)4, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
+            Create(1, 2, 4, 4, 5),
             false
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)5, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
+            Create(1, 2, 3, 5, 5),
             false
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)6),
+            Create(1, 2, 3, 4, 5),
+            Create(1, 2, 3, 4, 6),
             false
         };
 
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
             new(),
             false
         };
         yield return new object[]
         {
-            Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
+            Create(1, 2, 3, 4, 5),
             null,
             false
         };
@@ -175,7 +175,7 @@ public class MessageTests
     [Fact]
     public void Message_GetHashCode_Invoke_ReturnsExpected()
     {
-        Message message = Message.Create((IntPtr)1, 1, (IntPtr)1, (IntPtr)1);
+        Message message = Message.Create(1, 1, 1, 1);
         Assert.NotEqual(0, message.GetHashCode());
         Assert.Equal(message.GetHashCode(), message.GetHashCode());
     }
@@ -501,8 +501,8 @@ public class MessageTests
     [MemberData(nameof(ToString_TestData))]
     public void Message_ToString_Invoke_ReturnsExpected(int msg, string expected, string additionalMsg = null)
     {
-        Message message = Message.Create((IntPtr)1, msg, (IntPtr)2, (IntPtr)3);
-        message.Result = (IntPtr)4;
+        Message message = Message.Create(1, msg, 2, 3);
+        message.Result = 4;
         Assert.Equal($"msg=0x{msg:x}{expected} hwnd=0x1 wparam=0x2 lparam=0x3{additionalMsg} result=0x4", message.ToString());
     }
 }

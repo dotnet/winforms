@@ -789,7 +789,7 @@ public class ImageCollectionTests
         using ImageList list = new();
         ImageList.ImageCollection collection = list.Images;
         Assert.Throws<ArgumentNullException>("value", () => collection.Add((Image)null));
-        Assert.Throws<ArgumentNullException>("value", () => collection.Add((Image)null, Color.Transparent));
+        Assert.Throws<ArgumentNullException>("value", () => collection.Add(null, Color.Transparent));
         Assert.Throws<InvalidOperationException>(() => collection.Add("Key", (Image)null));
         Assert.Throws<ArgumentNullException>("value", () => collection.Add((Icon)null));
         Assert.Throws<InvalidOperationException>(() => collection.Add("Key", (Icon)null));

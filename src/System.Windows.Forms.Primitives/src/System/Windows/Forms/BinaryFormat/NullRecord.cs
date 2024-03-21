@@ -15,10 +15,12 @@ internal abstract partial class NullRecord
         get => _count;
         private protected set
         {
+#pragma warning disable CA1512 // Use ArgumentOutOfRangeException throw helper - not possible in this case
             if (value == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
+#pragma warning restore CA1512
 
             _count = value;
         }

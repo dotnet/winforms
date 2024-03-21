@@ -27,8 +27,8 @@ public class RowStyleTests
     [InlineData(SizeType.AutoSize, 0)]
     [InlineData(SizeType.Absolute, 1)]
     [InlineData(SizeType.Percent, 2)]
-    [InlineData((SizeType)(SizeType.AutoSize - 1), 3)]
-    [InlineData((SizeType)(SizeType.Percent + 1), 4)]
+    [InlineData((SizeType.AutoSize - 1), 3)]
+    [InlineData((SizeType.Percent + 1), 4)]
     public void RowStyle_Ctor_SizeType_Float(SizeType sizeType, float width)
     {
         RowStyle style = new(sizeType, width);

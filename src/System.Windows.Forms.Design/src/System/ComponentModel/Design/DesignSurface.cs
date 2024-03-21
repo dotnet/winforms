@@ -114,10 +114,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     {
         get
         {
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(ToString());
-            }
+            ObjectDisposedException.ThrowIf(_host is null, this);
 
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)

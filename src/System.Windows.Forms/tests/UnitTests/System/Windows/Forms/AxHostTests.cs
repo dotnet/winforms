@@ -485,8 +485,8 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
     {
-        Cursor cursor1 = new((IntPtr)1);
-        Cursor cursor2 = new((IntPtr)1);
+        Cursor cursor1 = new(1);
+        Cursor cursor2 = new(1);
         Control child1 = new()
         {
             Cursor = cursor1

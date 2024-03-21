@@ -749,7 +749,7 @@ public class MenuStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -771,7 +771,7 @@ public class MenuStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -803,7 +803,7 @@ public class MenuStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);

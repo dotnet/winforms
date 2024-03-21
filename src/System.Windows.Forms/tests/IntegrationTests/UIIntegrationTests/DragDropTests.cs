@@ -605,12 +605,7 @@ public class DragDropTests : ControlTestBase
             SuspendLayout();
 
             // ListDragSource
-            ListDragSource.Items.AddRange((object[])
-            [
-                "one", "two", "three", "four",
-                "five", "six", "seven", "eight",
-                "nine", "ten"
-            ]);
+            ListDragSource.Items.AddRange("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
             ListDragSource.Location = new Point(10, 17);
             ListDragSource.Size = new Size(120, 225);
             ListDragSource.MouseDown += ListDragSource_MouseDown;
@@ -640,7 +635,7 @@ public class DragDropTests : ControlTestBase
 
             // Form1
             ClientSize = new Size(292, 270);
-            Controls.AddRange((Control[])
+            Controls.AddRange(
             [
                 ListDragSource,
                 ListDragTarget,
@@ -934,7 +929,7 @@ public class DragDropTests : ControlTestBase
 
             // Form1
             ClientSize = new Size(285, 175);
-            Controls.AddRange((Control[])
+            Controls.AddRange(
             [
                 PictureBoxDragSource,
                 RichTextBoxDropTarget

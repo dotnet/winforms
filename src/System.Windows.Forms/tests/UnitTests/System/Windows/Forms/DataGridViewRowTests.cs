@@ -5321,8 +5321,8 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.None - 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintCells_InvalidPaintParts_ThrowsArgumentException(DataGridViewPaintParts paintParts)
     {
         using Bitmap image = new(10, 10);
@@ -5659,8 +5659,8 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.None - 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintHeader_InvalidPaintParts_ThrowsInvalidEnumArgumentException(DataGridViewPaintParts paintParts)
     {
         using Bitmap image = new(10, 10);

@@ -1624,7 +1624,7 @@ public class RichTextBoxTests
         result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format1);
         Assert.NotEqual(0, result);
         Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
-        Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
+        Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), format1.yHeight);
         Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOBACKCOLOR));
         Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOCOLOR));
         Assert.Equal(0, format1.bPitchAndFamily);
@@ -4236,7 +4236,7 @@ public class RichTextBoxTests
             cbSize = (uint)sizeof(PARAFORMAT)
         };
         Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
-        Assert.Equal(expectedOffset, (int)format.dxOffset);
+        Assert.Equal(expectedOffset, format.dxOffset);
         Assert.Equal(expected, (int)format.wNumbering);
     }
 
@@ -4935,7 +4935,7 @@ public class RichTextBoxTests
         };
         Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal("Arial", format.FaceName.ToString());
-        Assert.Equal(expectedYHeight, (int)format.yHeight);
+        Assert.Equal(expectedYHeight, format.yHeight);
         Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
         Assert.Equal(0, format.bPitchAndFamily);
     }
@@ -8916,7 +8916,7 @@ public class RichTextBoxTests
     {
         using CustomLineFromCharRichTextBox control = new()
         {
-            LineFromCharResult = (IntPtr)result
+            LineFromCharResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(0, control.GetLineFromCharIndex(1));
@@ -8930,7 +8930,7 @@ public class RichTextBoxTests
         {
             if (m.Msg == (int)PInvoke.EM_LINEFROMCHAR)
             {
-                Assert.Equal((IntPtr)1, m.WParam);
+                Assert.Equal(1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 m.Result = LineFromCharResult;
                 return;
@@ -8956,7 +8956,7 @@ public class RichTextBoxTests
     {
         using CustomExLineFromCharRichTextBox control = new()
         {
-            ExLineFromCharResult = (IntPtr)result
+            ExLineFromCharResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.GetLineFromCharIndex(1));
@@ -8971,7 +8971,7 @@ public class RichTextBoxTests
             if (m.Msg == (int)PInvoke.EM_EXLINEFROMCHAR)
             {
                 Assert.Equal(IntPtr.Zero, m.WParam);
-                Assert.Equal((IntPtr)1, m.LParam);
+                Assert.Equal(1, m.LParam);
                 m.Result = ExLineFromCharResult;
                 return;
             }
@@ -9795,7 +9795,7 @@ public class RichTextBoxTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_GETDLGCODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -9822,7 +9822,7 @@ public class RichTextBoxTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_GETDLGCODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -9850,7 +9850,7 @@ public class RichTextBoxTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_IME_NOTIFY,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -9884,7 +9884,7 @@ public class RichTextBoxTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_IME_NOTIFY,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -9918,7 +9918,7 @@ public class RichTextBoxTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -9931,7 +9931,7 @@ public class RichTextBoxTests
 
     public static IEnumerable<object[]> WndProc_ReflectCommand_TestData()
     {
-        foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+        foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, 1 })
         {
             yield return new object[] { IntPtr.Zero, lParam, 0 };
             yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_CHANGE), lParam, 1 };
@@ -9967,10 +9967,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
         Assert.Equal(0, hScrollCallCount);
         Assert.Equal(0, vScrollCallCount);
@@ -10009,10 +10009,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
         Assert.Equal(0, hScrollCallCount);
         Assert.Equal(0, vScrollCallCount);
@@ -10075,10 +10075,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
             LParam = control.Handle,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
         Assert.Equal(expectedHScrollCallCount, hScrollCallCount);
         Assert.Equal(expectedVScrollCallCount, vScrollCallCount);
@@ -10091,7 +10091,7 @@ public class RichTextBoxTests
 
     public static IEnumerable<object[]> WndProc_ReflectNotify_TestData()
     {
-        foreach (IntPtr hWnd in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+        foreach (IntPtr hWnd in new IntPtr[] { IntPtr.Zero, 1 })
         {
             yield return new object[] { hWnd, (int)PInvoke.EN_LINK };
             yield return new object[] { hWnd, (int)PInvoke.EN_DROPFILES };
@@ -10118,11 +10118,11 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = hWnd,
             LParam = (IntPtr)(&nmhdr),
-            Result = (IntPtr)250
+            Result = 250
         };
 
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)0, m.Result);
+        Assert.Equal(0, m.Result);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -10146,10 +10146,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = control.Handle,
             LParam = (IntPtr)(&dropFiles),
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)1, m.Result);
+        Assert.Equal(1, m.Result);
         Assert.Equal("text", control.Text);
         Assert.True(control.IsHandleCreated);
     }
@@ -10199,10 +10199,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = control.Handle,
             LParam = (IntPtr)(&selChange),
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedSelectionChangedCallCount, selectionChangedCallCount);
         Assert.Equal(0, control.SelectionLength);
         Assert.Equal(0, control.SelectionStart);
@@ -10245,10 +10245,10 @@ public class RichTextBoxTests
                 Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
                 HWnd = control.Handle,
                 LParam = ptr,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)expectedResult, m.Result);
+            Assert.Equal(expectedResult, m.Result);
             Assert.Equal(expectedProtectedCallCount, protectedCallCount);
             Assert.True(control.IsHandleCreated);
         }
@@ -10281,11 +10281,11 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = hWnd,
             LParam = (IntPtr)(&nmhdr),
-            Result = (IntPtr)250
+            Result = 250
         };
 
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)0, m.Result);
+        Assert.Equal(0, m.Result);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -10320,10 +10320,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = control.Handle,
             LParam = (IntPtr)(&dropFiles),
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)1, m.Result);
+        Assert.Equal(1, m.Result);
         Assert.Equal("text", control.Text);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -10382,10 +10382,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = control.Handle,
             LParam = (IntPtr)(&reqResize),
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(1, contentsResizedCallCount);
         Assert.Equal(0, layoutCallCount);
         Assert.Equal(0, resizeCallCount);
@@ -10433,10 +10433,10 @@ public class RichTextBoxTests
             Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
             HWnd = control.Handle,
             LParam = (IntPtr)(&selChange),
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(expectedSelectionChangedCallCount, selectionChangedCallCount);
         Assert.Equal(0, control.SelectionLength);
         Assert.Equal(0, control.SelectionStart);
@@ -10481,10 +10481,10 @@ public class RichTextBoxTests
                 Msg = (int)(MessageId.WM_REFLECT_NOTIFY),
                 HWnd = control.Handle,
                 LParam = ptr,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)expectedResult, m.Result);
+            Assert.Equal(expectedResult, m.Result);
             Assert.Equal(expectedProtectedCallCount, protectedCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -10511,7 +10511,7 @@ public class RichTextBoxTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_SETFONT,
-                Result = (IntPtr)250
+                Result = 250
             };
             int textChangedCallCount = 0;
             control.TextChanged += (sender, e) => textChangedCallCount++;
@@ -10541,14 +10541,14 @@ public class RichTextBoxTests
         control.StyleChanged += (sender, e) => styleChangedCallCount++;
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
-        PInvoke.SendMessage(control, PInvoke.EM_SETMARGINS, (WPARAM)(uint)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN), LPARAM.MAKELPARAM(1, 2));
+        PInvoke.SendMessage(control, PInvoke.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN), LPARAM.MAKELPARAM(1, 2));
         int textChangedCallCount = 0;
         control.TextChanged += (sender, e) => textChangedCallCount++;
 
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFONT,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -11134,7 +11134,7 @@ public class RichTextBoxTests
                     _nativeDllHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(NativeDll);
 
                     int lastWin32Error = Marshal.GetLastWin32Error();
-                    if ((ulong)_nativeDllHandle < (ulong)32)
+                    if ((ulong)_nativeDllHandle < 32)
                     {
                         throw new Win32Exception(lastWin32Error, $"Failed to load '{NativeDll}'");
                     }

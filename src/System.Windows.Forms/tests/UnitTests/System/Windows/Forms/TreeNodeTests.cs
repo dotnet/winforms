@@ -4659,7 +4659,7 @@ public class TreeNodeTests
                 TVITEMW* pItem = (TVITEMW*)m.LParam;
                 pItem->state = GetItemStateResult;
                 Assert.Equal(IntPtr.Zero, m.WParam);
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -4678,9 +4678,9 @@ public class TreeNodeTests
             if (MakeInvalid && m.Msg == (int)PInvoke.TVM_GETITEMW)
             {
                 TVITEMW* pItem = (TVITEMW*)m.LParam;
-                pItem->state = (TREE_VIEW_ITEM_STATE_FLAGS)GetItemStateResult;
+                pItem->state = GetItemStateResult;
                 Assert.Equal(IntPtr.Zero, m.WParam);
-                m.Result = (IntPtr)0;
+                m.Result = 0;
                 return;
             }
 
@@ -4698,8 +4698,8 @@ public class TreeNodeTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                Assert.Equal((IntPtr)1, m.WParam);
-                m.Result = (IntPtr)1;
+                Assert.Equal(1, m.WParam);
+                m.Result = 1;
                 return;
             }
 

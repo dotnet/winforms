@@ -83,7 +83,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertTo_UnknownToString_ThrowsFormatException()
     {
         CursorConverter converter = new();
-        Assert.Throws<FormatException>(() => converter.ConvertTo(new Cursor((IntPtr)2), typeof(string)));
+        Assert.Throws<FormatException>(() => converter.ConvertTo(new Cursor(2), typeof(string)));
     }
 
     [Theory]
@@ -111,7 +111,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertTo_UnknownToInstanceDescriptor_ThrowsNotSupportedException()
     {
         CursorConverter converter = new();
-        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new Cursor((IntPtr)2), typeof(InstanceDescriptor)));
+        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new Cursor(2), typeof(InstanceDescriptor)));
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertTo_UnknownToByteArray_ThrowsFormatException()
     {
         CursorConverter converter = new();
-        Assert.Throws<InvalidOperationException>(() => converter.ConvertTo(new Cursor((IntPtr)2), typeof(byte[])));
+        Assert.Throws<InvalidOperationException>(() => converter.ConvertTo(new Cursor(2), typeof(byte[])));
     }
 
     [Fact]

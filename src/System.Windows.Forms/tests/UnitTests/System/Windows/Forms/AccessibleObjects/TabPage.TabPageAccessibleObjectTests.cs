@@ -144,7 +144,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         }
 
         Assert.NotNull(tabPage.AccessibilityObject.RuntimeId);
-        Assert.Equal(tabPage.HandleInternal, (IntPtr)tabPage.AccessibilityObject.RuntimeId[1]);
+        Assert.Equal(tabPage.HandleInternal, tabPage.AccessibilityObject.RuntimeId[1]);
         Assert.Equal(createControl, tabPage.IsHandleCreated);
     }
 
