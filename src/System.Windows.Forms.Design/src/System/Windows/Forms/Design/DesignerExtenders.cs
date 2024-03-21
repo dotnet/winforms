@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -14,8 +12,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class DesignerExtenders
 {
-    private IExtenderProvider[] _providers;
-    private IExtenderProviderService _extenderService;
+    private IExtenderProvider[]? _providers;
+    private IExtenderProviderService? _extenderService;
 
     /// <summary>
     ///  This is called by a root designer to add the correct extender providers.
