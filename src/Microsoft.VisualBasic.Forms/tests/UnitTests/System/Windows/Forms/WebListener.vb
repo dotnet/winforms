@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private _password As String
         Private _userName As String
 
-        Public ReadOnly Address As String
+        Public ReadOnly Property Address As String
 
         ''' <summary>
         '''  The name of the function that creates the server is uses to establish the file to be downloaded
