@@ -681,7 +681,6 @@ public partial class CurrencyManager : BindingManagerBase
             switch (dbe.ListChangedType)
             {
                 case ListChangedType.Reset:
-                    CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.Reset Position: {Position} Count: {_list.Count}");
                     if (listposition == -1 && _list.Count > 0)
                     {
                         ChangeRecordState(0, true, false, true, false);     // last false: we don't pull the data from the control when DM changes
@@ -691,11 +690,10 @@ public partial class CurrencyManager : BindingManagerBase
                         ChangeRecordState(Math.Min(listposition, _list.Count - 1), true, false, true, false);
                     }
 
-                    UpdateIsBinding(/*raiseItemChangedEvent:*/ false);
+                    UpdateIsBinding(raiseItemChangedEvent: false);
                     OnItemChanged(_resetEvent);
                     break;
                 case ListChangedType.ItemAdded:
-                    CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemAdded {dbe.NewIndex}");
                     if (dbe.NewIndex <= listposition && listposition < _list.Count - 1)
                     {
                         // this means the current row just moved down by one.
@@ -737,7 +735,6 @@ public partial class CurrencyManager : BindingManagerBase
                     OnItemChanged(_resetEvent);
                     break;
                 case ListChangedType.ItemDeleted:
-                    CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemDeleted {dbe.NewIndex}");
                     if (dbe.NewIndex == listposition)
                     {
                         // this means that the current row got deleted.
@@ -763,7 +760,6 @@ public partial class CurrencyManager : BindingManagerBase
                     OnItemChanged(_resetEvent);
                     break;
                 case ListChangedType.ItemChanged:
-                    CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemChanged {dbe.NewIndex}");
                     // the current item changed
                     if (dbe.NewIndex == listposition)
                     {
@@ -773,7 +769,6 @@ public partial class CurrencyManager : BindingManagerBase
                     OnItemChanged(new ItemChangedEventArgs(dbe.NewIndex));
                     break;
                 case ListChangedType.ItemMoved:
-                    CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemMoved {dbe.NewIndex}");
                     if (dbe.OldIndex == listposition)
                     {
                         // current got moved.
@@ -838,7 +833,6 @@ public partial class CurrencyManager : BindingManagerBase
     {
         if (!_state.HasFlag(CurrencyManagerStates.InChangeRecordState))
         {
-            CompModSwitches.DataView.TraceVerbose($"OnCurrentChanged() {e}");
             int curLastGoodKnownRow = _lastGoodKnownRow;
             bool positionChanged = false;
             if (!_state.HasFlag(CurrencyManagerStates.SuspendPushDataInCurrentChanged))
@@ -897,7 +891,6 @@ public partial class CurrencyManager : BindingManagerBase
             positionChanged = CurrencyManager_PushData();
         }
 
-        CompModSwitches.DataView.TraceVerbose($"OnItemChanged({e.Index}) {e}");
         try
         {
             _onItemChanged?.Invoke(this, e);
@@ -926,7 +919,6 @@ public partial class CurrencyManager : BindingManagerBase
 
     protected virtual void OnPositionChanged(EventArgs e)
     {
-        CompModSwitches.DataView.TraceVerbose($"OnPositionChanged({listposition}) {e}");
         try
         {
             onPositionChangedHandler?.Invoke(this, e);

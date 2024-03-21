@@ -2796,24 +2796,15 @@ public partial class Form : ContainerControl
     [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected void ApplyAutoScaling()
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "ApplyAutoScaling... ");
-        Debug.Indent();
-        // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
-        //      : them in sync
-        //
+        // NOTE : This function is cloned in FormDocumentDesigner, remember to keep them in sync.
 
-        // We also don't do this if the property is empty.  Otherwise we will perform
-        // two GetAutoScaleBaseSize calls only to find that they returned the same
-        // value.
-        //
+        // We also don't do this if the property is empty. Otherwise we will perform two GetAutoScaleBaseSize
+        // calls only to find that they returned the same value.
         if (!_autoScaleBaseSize.IsEmpty)
         {
             Size baseVar = AutoScaleBaseSize;
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"base  ={baseVar}");
             SizeF newVarF = GetAutoScaleSize(Font);
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(f)={newVarF}");
             Size newVar = new((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(i)={newVar}");
 
             // We save a significant amount of time by bailing early if there's no work to be done
             if (baseVar.Equals(newVar))
@@ -2823,16 +2814,11 @@ public partial class Form : ContainerControl
 
             float percY = AdjustScale(newVar.Height / ((float)baseVar.Height));
             float percX = AdjustScale(newVar.Width / ((float)baseVar.Width));
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"scale={percX}, {percY}");
             Scale(percX, percY);
-            // This would ensure that we use the new
-            // font information to calculate the AutoScaleBaseSize. According to Triage
-            // this was decided to Fix in this version.
-            //
+
+            // This would ensure that we use the new font information to calculate the AutoScaleBaseSize.
             AutoScaleBaseSize = newVar;
         }
-
-        Debug.Unindent();
     }
 
     /// <summary>
@@ -4900,8 +4886,6 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float x, float y)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({x}, {y})");
-
         using SuspendLayoutScope scope = new(this);
 
         // Get size values in advance to prevent one change from affecting another.

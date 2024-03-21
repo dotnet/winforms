@@ -1128,9 +1128,6 @@ public partial class DataGridView : Control, ISupportInitialize
         {
             bool canEnable = false;
 
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_CanEnableIme(), this = {this}");
-            Debug.Indent();
-
             if (_ptCurrentCell.X != -1 && ColumnEditable(_ptCurrentCell.X))
             {
                 DataGridViewCell dataGridViewCell = CurrentCellInternal;
@@ -1141,9 +1138,6 @@ public partial class DataGridView : Control, ISupportInitialize
                     canEnable = base.CanEnableIme;
                 }
             }
-
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {canEnable}");
-            Debug.Unindent();
 
             return canEnable;
         }
