@@ -8,7 +8,7 @@ public class FormClosedEventArgsTests
 {
     [Theory]
     [InlineData(CloseReason.None)]
-    [InlineData((CloseReason)(CloseReason.None - 1))]
+    [InlineData((CloseReason.None - 1))]
     public void Ctor_CloseReason(CloseReason closeReason)
     {
         FormClosedEventArgs e = new(closeReason);

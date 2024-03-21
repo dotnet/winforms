@@ -248,7 +248,7 @@ public class SingleInstanceTests
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             sendData(pipeName, Array.Empty<string>()); // valid
-            sendData(pipeName, (int)3); // invalid
+            sendData(pipeName, 3); // invalid
             sendData(pipeName, new[] { "ABC" }); // valid
             sendData(pipeName, new int[] { 1, 2, 3 }); // invalid
             sendData(pipeName, new[] { "", "" }); // valid

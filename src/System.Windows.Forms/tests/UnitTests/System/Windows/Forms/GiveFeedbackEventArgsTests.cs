@@ -10,7 +10,7 @@ public class GiveFeedbackEventArgsTests
 {
     [Theory]
     [InlineData(DragDropEffects.None, true)]
-    [InlineData((DragDropEffects)(DragDropEffects.None - 1), false)]
+    [InlineData((DragDropEffects.None - 1), false)]
     public void Ctor_DragDropEffects_Bool(DragDropEffects effect, bool useDefaultCursors)
     {
         GiveFeedbackEventArgs e = new(effect, useDefaultCursors);

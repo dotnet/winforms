@@ -1023,7 +1023,7 @@ public class TabControlTests
             ImageList = imageList
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
@@ -1298,7 +1298,7 @@ public class TabControlTests
         using ImageList imageList = new();
         control.ImageList = imageList;
         Assert.True(imageList.HandleCreated);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
 
         // Set null.
         control.ImageList = null;
@@ -1419,7 +1419,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(1, 2);
         Assert.Equal(1, recreateCallCount1);
         Assert.Same(imageList1, control.ImageList);
-        Assert.Equal((nint)imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1430,7 +1430,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(2, 3);
         Assert.Equal(2, recreateCallCount1);
         Assert.Same(imageList2, control.ImageList);
-        Assert.Equal((nint)imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3738,7 +3738,7 @@ public class TabControlTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 

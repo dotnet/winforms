@@ -2507,9 +2507,9 @@ public class HtmlElementTests
         Assert.True(element1 == element1);
         Assert.True(element1 == element2);
         Assert.False(element1 == element3);
-        Assert.False(element1 == (HtmlElement)null);
-        Assert.False(element1 == (HtmlElement)null);
-        Assert.True((HtmlElement)null == (HtmlElement)null);
+        Assert.False(element1 == null);
+        Assert.False(element1 == null);
+        Assert.True(null == (HtmlElement)null);
     }
 
     [WinFormsFact]
@@ -2530,9 +2530,9 @@ public class HtmlElementTests
         Assert.False(element1 != element1);
         Assert.False(element1 != element2);
         Assert.True(element1 != element3);
-        Assert.True(element1 != (HtmlElement)null);
-        Assert.True(element1 != (HtmlElement)null);
-        Assert.False((HtmlElement)null != (HtmlElement)null);
+        Assert.True(element1 != null);
+        Assert.True(element1 != null);
+        Assert.False(null != (HtmlElement)null);
     }
 #pragma warning restore CS1718, CSIsNull001, CSIsNull002
 

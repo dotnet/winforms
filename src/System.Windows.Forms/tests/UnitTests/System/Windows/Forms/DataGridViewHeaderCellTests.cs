@@ -2681,7 +2681,7 @@ public class DataGridViewHeaderCellTests
         {
             foreach (DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode in Enum.GetValues(typeof(DataGridViewColumnHeadersHeightSizeMode)))
             {
-                DataGridViewElementStates expected = rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing ? DataGridViewElementStates.Resizable : (DataGridViewElementStates)0;
+                DataGridViewElementStates expected = rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing ? DataGridViewElementStates.Resizable : 0;
                 yield return new object[] { rowHeadersWidthSizeMode, true, columnHeadersHeightSizeMode, true, DataGridViewElementStates.Visible | expected };
                 yield return new object[] { rowHeadersWidthSizeMode, true, columnHeadersHeightSizeMode, false, expected };
                 yield return new object[] { rowHeadersWidthSizeMode, false, columnHeadersHeightSizeMode, false, expected };

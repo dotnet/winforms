@@ -975,9 +975,9 @@ public class ControlControlCollectionTests
             parentChangedCallCount++;
         }
 
-        ((Control)control).ParentChanged += parentChangedHandler;
+        control.ParentChanged += parentChangedHandler;
         ((Control)control).EnabledChanged += (sender, e) => enabledChangedCallCount++;
-        ((Control)control).VisibleChanged += (sender, e) => visibleChangedCallCount++;
+        control.VisibleChanged += (sender, e) => visibleChangedCallCount++;
         ((Control)control).FontChanged += (sender, e) => fontChangedCallCount++;
         ((Control)control).ForeColorChanged += (sender, e) => foreColorChangedCallCount++;
         ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
@@ -1055,9 +1055,9 @@ public class ControlControlCollectionTests
             parentChangedCallCount++;
         }
 
-        ((Control)control).ParentChanged += parentChangedHandler;
+        control.ParentChanged += parentChangedHandler;
         ((Control)control).EnabledChanged += (sender, e) => enabledChangedCallCount++;
-        ((Control)control).VisibleChanged += (sender, e) => visibleChangedCallCount++;
+        control.VisibleChanged += (sender, e) => visibleChangedCallCount++;
         ((Control)control).FontChanged += (sender, e) => fontChangedCallCount++;
         ((Control)control).ForeColorChanged += (sender, e) => foreColorChangedCallCount++;
         ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
@@ -2632,9 +2632,9 @@ public class ControlControlCollectionTests
         int backColorChangedCallCount = 0;
         int rightToLeftChangedCallCount = 0;
         int bindingContextChangedCallCount = 0;
-        ((Control)control).ParentChanged += (sender, e) => parentChangedCallCount++;
+        control.ParentChanged += (sender, e) => parentChangedCallCount++;
         ((Control)control).EnabledChanged += (sender, e) => enabledChangedCallCount++;
-        ((Control)control).VisibleChanged += (sender, e) => visibleChangedCallCount++;
+        control.VisibleChanged += (sender, e) => visibleChangedCallCount++;
         ((Control)control).FontChanged += (sender, e) => fontChangedCallCount++;
         ((Control)control).ForeColorChanged += (sender, e) => foreColorChangedCallCount++;
         ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
@@ -2708,9 +2708,9 @@ public class ControlControlCollectionTests
             parentChangedCallCount++;
         }
 
-        ((Control)control).ParentChanged += parentChangedHandler;
+        control.ParentChanged += parentChangedHandler;
         ((Control)control).EnabledChanged += (sender, e) => enabledChangedCallCount++;
-        ((Control)control).VisibleChanged += (sender, e) => visibleChangedCallCount++;
+        control.VisibleChanged += (sender, e) => visibleChangedCallCount++;
         ((Control)control).FontChanged += (sender, e) => fontChangedCallCount++;
         ((Control)control).ForeColorChanged += (sender, e) => foreColorChangedCallCount++;
         ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;

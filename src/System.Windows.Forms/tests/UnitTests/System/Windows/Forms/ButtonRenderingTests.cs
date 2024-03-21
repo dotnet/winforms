@@ -6,12 +6,12 @@ using System.Windows.Forms.Metafiles;
 
 namespace System.Windows.Forms.Tests;
 
-public class ButtonRenderingTests
+public class ButtonRenderingTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public unsafe void CaptureButton()
     {
-        using Button button = new();
+        using Button button = (Button)CreateButton();
         using EmfScope emf = new();
         button.PrintToMetafile(emf);
 
@@ -33,7 +33,7 @@ public class ButtonRenderingTests
             return;
         }
 
-        using Button button = new();
+        using Button button = (Button)CreateButton();
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
         Rectangle bounds = button.Bounds;
@@ -77,7 +77,7 @@ public class ButtonRenderingTests
             return;
         }
 
-        using Button button = new();
+        using Button button = (Button)CreateButton();
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
         Rectangle bounds = button.Bounds;
@@ -117,7 +117,8 @@ public class ButtonRenderingTests
             return;
         }
 
-        using Button button = new() { Text = "Hello" };
+        using Button button = (Button)CreateButton();
+        button.Text = "Hello";
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
         Rectangle bounds = button.Bounds;
@@ -162,7 +163,8 @@ public class ButtonRenderingTests
             return;
         }
 
-        using Button button = new() { Text = "Hello" };
+        using Button button = (Button)CreateButton();
+        button.Text = "Hello";
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
         Rectangle bounds = button.Bounds;
@@ -210,7 +212,7 @@ public class ButtonRenderingTests
     public unsafe void CaptureButtonOnForm()
     {
         using Form form = new();
-        using Button button = new();
+        using Button button = (Button)CreateButton();
         form.Controls.Add(button);
 
         using EmfScope emf = new();
@@ -222,11 +224,9 @@ public class ButtonRenderingTests
     [WinFormsFact]
     public unsafe void Button_FlatStyle_WithText_Rectangle()
     {
-        using Button button = new()
-        {
-            Text = "Flat Style",
-            FlatStyle = FlatStyle.Flat,
-        };
+        using Button button = (Button)CreateButton();
+        button.Text = "Flat Style";
+        button.FlatStyle = FlatStyle.Flat;
 
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
@@ -245,4 +245,6 @@ public class ButtonRenderingTests
                 State.BrushStyle(BRUSH_STYLE.BS_NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
                 State.Rop2(R2_MODE.R2_COPYPEN)));
     }
+
+    protected override ButtonBase CreateButton() => new Button();
 }

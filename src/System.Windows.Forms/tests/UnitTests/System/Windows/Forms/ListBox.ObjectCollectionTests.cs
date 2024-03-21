@@ -2205,7 +2205,7 @@ public class ListBoxObjectCollectionTests
 
         using CustomAddStringListBox owner = new()
         {
-            AddStringResult = (IntPtr)result
+            AddStringResult = result
         };
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -3681,7 +3681,7 @@ public class ListBoxObjectCollectionTests
 
         using CustomAddStringListBox owner = new()
         {
-            AddStringResult = (IntPtr)result
+            AddStringResult = result
         };
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -5043,7 +5043,7 @@ public class ListBoxObjectCollectionTests
 
         using CustomInsertStringListBox owner = new()
         {
-            InsertStringResult = (IntPtr)result
+            InsertStringResult = result
         };
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -9010,7 +9010,7 @@ public class ListBoxObjectCollectionTests
 
         using CustomAddStringListBox owner = new()
         {
-            AddStringResult = (IntPtr)result
+            AddStringResult = result
         };
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -10365,7 +10365,7 @@ public class ListBoxObjectCollectionTests
 
         using CustomInsertStringListBox owner = new()
         {
-            InsertStringResult = (IntPtr)result
+            InsertStringResult = result
         };
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);

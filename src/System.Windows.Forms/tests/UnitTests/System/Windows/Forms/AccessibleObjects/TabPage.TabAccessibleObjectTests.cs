@@ -1060,10 +1060,10 @@ public class TabPage_TabAccessibleObjectTests
         TabAccessibleObject accessibleObject2 = Assert.IsType<TabAccessibleObject>(pages[1].TabAccessibilityObject);
 
         Assert.NotNull(accessibleObject1.RuntimeId);
-        Assert.Equal(tabControl.HandleInternal, (IntPtr)accessibleObject1.RuntimeId[1]);
+        Assert.Equal(tabControl.HandleInternal, accessibleObject1.RuntimeId[1]);
         Assert.Equal(accessibleObject1.GetHashCode(), accessibleObject1.RuntimeId[2]);
         Assert.NotNull(accessibleObject2.RuntimeId);
-        Assert.Equal(tabControl.HandleInternal, (IntPtr)accessibleObject2.RuntimeId[1]);
+        Assert.Equal(tabControl.HandleInternal, accessibleObject2.RuntimeId[1]);
         Assert.Equal(accessibleObject2.GetHashCode(), accessibleObject2.RuntimeId[2]);
         Assert.Equal(createControl, pages[0].IsHandleCreated);
         Assert.Equal(createControl, pages[1].IsHandleCreated);

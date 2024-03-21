@@ -2471,7 +2471,7 @@ public class MonthCalendarTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetMinReqRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 

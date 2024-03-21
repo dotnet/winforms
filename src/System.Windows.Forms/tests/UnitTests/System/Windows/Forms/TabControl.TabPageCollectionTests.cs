@@ -4688,7 +4688,7 @@ public class TabControlTabPageCollectionTests
     {
         using TabControl owner = new();
         var collection = new TabControl.TabPageCollection(owner);
-        Assert.Throws<ArgumentNullException>("value", () => collection.Remove((TabPage)null));
+        Assert.Throws<ArgumentNullException>("value", () => collection.Remove(null));
     }
 
     [WinFormsFact]
