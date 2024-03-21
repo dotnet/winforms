@@ -71,7 +71,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
                     if (string.IsNullOrEmpty(e.Message))
                     {
                         throw new TargetInvocationException(
-                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
+                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType?.FullName, e),
                             e);
                     }
                     else

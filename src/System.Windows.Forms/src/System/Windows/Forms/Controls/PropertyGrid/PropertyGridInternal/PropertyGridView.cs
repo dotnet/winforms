@@ -4886,7 +4886,7 @@ internal sealed partial class PropertyGridView :
         return result;
     }
 
-    private unsafe void ShowFormatExceptionMessage(string propertyName, Exception? ex)
+    private unsafe void ShowFormatExceptionMessage(string? propertyName, Exception? ex)
     {
         propertyName ??= "(unknown)";
 
@@ -4960,7 +4960,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal unsafe void ShowInvalidMessage(string propertyName, Exception? ex)
+    internal unsafe void ShowInvalidMessage(string? propertyName, Exception? ex)
     {
         propertyName ??= "(unknown)";
 
