@@ -3255,12 +3255,20 @@ public class TrackBarTests
         };
 
         trackBar.Paint += handler;
-        trackBar.OnPaint(new PaintEventArgs(graphics, rectangle));
+        using (var eventArgs = new PaintEventArgs(graphics, rectangle))
+        {
+            trackBar.OnPaint(eventArgs);
+        }
+
         callCount.Should().Be(1);
 
         callCount = 0;
         trackBar.Paint -= handler;
-        trackBar.OnPaint(new PaintEventArgs(graphics, rectangle));
+        using (var eventArgs = new PaintEventArgs(graphics, rectangle))
+        {
+            trackBar.OnPaint(eventArgs);
+        }
+
         trackBar.Invalidate();
         callCount.Should().Be(0);
     }
