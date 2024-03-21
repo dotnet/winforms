@@ -16,19 +16,30 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const InvalidUrlAddress As String = "invalidURL"
         Private Const TestingConnectionTimeout As Integer = 100000
 
-        Private Shared Function ValidateDownload(tmpDirectoryPath As String, destinationFilename As String) As Long
+        ''' <summary>
+        '''  Verify that tmpDirectoryPath exists, that destinationFilename exist and what its length is
+        ''' </summary>
+        ''' <param name="destinationFilename">The full path and filename of the new file</param>
+        ''' <returns>
+        '''  The size in bytes of the destination file, this saves the caller from having to
+        '''  do another FileInfo call
+        ''' </returns>
+        Private Shared Function ValidateDownload(destinationFilename As String) As Long
             Dim fileInfo As New FileInfo(destinationFilename)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            ' This directory should not be systems Temp Directory because it may be created
+            Assert.True(Directory.Exists(fileInfo.DirectoryName))
             Assert.True(fileInfo.Exists)
 
             Return fileInfo.Length
         End Function
 
         Private Sub CleanUp(listener As HttpListener, Optional tmpDirectoryPath As String = Nothing)
+            Debug.Assert(tmpDirectoryPath <> Path.GetTempPath)
             listener.Stop()
             listener.Close()
-            If tmpDirectoryPath IsNot Nothing Then
+            If Not String.IsNullOrWhiteSpace(tmpDirectoryPath) Then
+                Assert.True(tmpDirectoryPath.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase))
                 Directory.Delete(tmpDirectoryPath, recursive:=True)
             End If
         End Sub
@@ -69,7 +80,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(address,
                                   destinationFilename)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=18135)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -113,8 +124,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultUserName,
                                   DefaultPassword)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename),
-                             actual:=DownloadSmallFileSize)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -218,7 +228,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
 
             Assert.True(Directory.Exists(tmpDirectoryPath))
-            Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), 1)
+            Assert.Equal(ValidateDownload(destinationFilename), 1)
 
             CleanUp(listener, tmpDirectoryPath)
         End Sub
@@ -242,7 +252,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   overwrite:=True)
 
                 Assert.True(Directory.Exists(tmpDirectoryPath))
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), DownloadSmallFileSize)
+                Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -348,7 +358,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=False)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=DownloadSmallFileSize)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -490,7 +500,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               onUserCancel:=UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(tmpDirectoryPath))
-            Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), DownloadSmallFileSize)
+            Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, tmpDirectoryPath)
         End Sub
@@ -507,7 +517,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(New Uri(webListener.Address),
                                   destinationFilename)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=18135)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -529,7 +539,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   showUI:=False, TestingConnectionTimeout,
                                   overwrite:=True)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=18135)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -549,7 +559,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultUserName,
                                   DefaultPassword)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=18135)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -595,7 +605,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=True)
 
-                Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), actual:=104857600)
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadLargeFileSize)
             Finally
                 CleanUp(listener, tmpDirectoryPath)
             End Try
@@ -618,7 +628,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               overwrite:=True)
 
             Assert.True(Directory.Exists(tmpDirectoryPath))
-            Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), DownloadSmallFileSize)
+            Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, tmpDirectoryPath)
         End Sub
@@ -641,7 +651,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(tmpDirectoryPath))
-            Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), DownloadSmallFileSize)
+            Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, tmpDirectoryPath)
         End Sub
@@ -664,7 +674,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(tmpDirectoryPath))
-            Assert.Equal(ValidateDownload(tmpDirectoryPath, destinationFilename), DownloadSmallFileSize)
+            Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, tmpDirectoryPath)
         End Sub
