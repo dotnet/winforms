@@ -3590,7 +3590,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return iPicture.Value->ToImage();
+            return ImageExtensions.ToImage(iPicture);
         }
         catch (InvalidOperationException)
         {
@@ -3614,7 +3614,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return pictureDisp.Value->ToImage();
+            return ImageExtensions.ToImage(pictureDisp);
         }
         catch (InvalidOperationException)
         {

@@ -1584,18 +1584,18 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC hdc).Should().Be(HRESULT.E_FAIL);
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
         Assert.Equal(PICTYPE.PICTYPE_ICON, type);
         Assert.Equal(847, width);
         Assert.Equal(847, height);
-        Assert.Throws<COMException>(() => iPicture.CurDC);
         Assert.Equal(2u, attributes);
 
         Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1669,13 +1669,13 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
         iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
-        HDC curDc = iPicture.CurDC;
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC curDc).ThrowOnFailure();
 
         Assert.NotEqual(0u, handle);
         Assert.Equal(0u, hPal);
@@ -1698,18 +1698,18 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC hdc).Should().Be(HRESULT.E_FAIL);
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
         Assert.Equal(PICTYPE.PICTYPE_ENHMETAFILE, type);
         Assert.Equal(19972, width);
         Assert.Equal(28332, height);
-        Assert.Throws<COMException>(() => iPicture.CurDC);
         Assert.Equal(3u, attributes);
 
         var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));

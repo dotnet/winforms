@@ -38,9 +38,27 @@ public unsafe class COM2PictureConverterTests
             _type = type;
         }
 
-        public override OLE_HANDLE Handle => new((uint)(int)_handle);
+        public override unsafe HRESULT get_Handle(OLE_HANDLE* pHandle)
+        {
+            if (pHandle is null)
+            {
+                return HRESULT.E_POINTER;
+            }
 
-        public override PICTYPE Type => _type;
+            *pHandle = new((uint)(int)_handle);
+            return HRESULT.S_OK;
+        }
+
+        public override unsafe HRESULT get_Type(PICTYPE* pType)
+        {
+            if (pType is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pType = _type;
+            return HRESULT.S_OK;
+        }
     }
 
     [Fact]
@@ -123,9 +141,10 @@ public unsafe class COM2PictureConverterTests
         using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        int height = picture.Value->Height;
-        int width = picture.Value->Width;
-        Assert.Equal(PICTYPE.PICTYPE_ICON, picture.Value->Type);
+        picture.Value->get_Height(out int height).ThrowOnFailure();
+        picture.Value->get_Width(out int width).ThrowOnFailure();
+        picture.Value->get_Type(out PICTYPE type).ThrowOnFailure();
+        Assert.Equal(PICTYPE.PICTYPE_ICON, type);
         Assert.Equal(exclamationIcon.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(exclamationIcon.Width, GdiHelper.HimetricToPixelX(width));
 
@@ -143,9 +162,10 @@ public unsafe class COM2PictureConverterTests
         using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        int height = picture.Value->Height;
-        int width = picture.Value->Width;
-        Assert.Equal(PICTYPE.PICTYPE_BITMAP, picture.Value->Type);
+        picture.Value->get_Height(out int height).ThrowOnFailure();
+        picture.Value->get_Width(out int width).ThrowOnFailure();
+        picture.Value->get_Type(out PICTYPE type).ThrowOnFailure();
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, type);
         Assert.Equal(bitmap.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(bitmap.Width, GdiHelper.HimetricToPixelX(width));
 
@@ -168,31 +188,19 @@ public unsafe class COM2PictureConverterTests
 
     private unsafe class IPictureMock : IPicture.Interface, IManagedWrapper<IPicture>
     {
-        public virtual HRESULT Render(HDC hDC, int x, int y, int cx, int cy, int xSrc, int ySrc, int cxSrc, int cySrc, RECT* pRcWBounds)
-            => HRESULT.S_OK;
-
-        public virtual HRESULT PictureChanged() => HRESULT.S_OK;
-
-        public virtual HRESULT SaveAsFile(IStream* pStream, BOOL fSaveMemCopy, int* pCbSize) => HRESULT.S_OK;
-
-        public virtual OLE_HANDLE Handle => default;
-
-        public virtual HRESULT get_hPal(OLE_HANDLE* phPal) => HRESULT.S_OK;
-
-        public virtual PICTYPE Type => default;
-
-        public virtual int Width => default;
-
-        public virtual int Height => default;
-
-        public virtual HRESULT set_hPal(OLE_HANDLE hPal) => HRESULT.S_OK;
-
-        public HDC CurDC => default;
-
-        public virtual HRESULT SelectPicture(HDC hDCIn, HDC* phDCOut, OLE_HANDLE* phBmpOut) => HRESULT.S_OK;
-
-        public virtual BOOL KeepOriginalFormat { get => default; set { } }
-
-        public virtual uint Attributes => default;
+        public virtual HRESULT get_Handle(OLE_HANDLE* pHandle) => HRESULT.S_OK;
+        public virtual HRESULT get_Type(PICTYPE* pType) => HRESULT.S_OK;
+        public HRESULT get_Width(int* pWidth) => HRESULT.S_OK;
+        public HRESULT get_Height(int* pHeight) => HRESULT.S_OK;
+        public HRESULT get_CurDC(HDC* phDC) => HRESULT.S_OK;
+        public HRESULT get_KeepOriginalFormat(BOOL* pKeep) => HRESULT.S_OK;
+        public HRESULT put_KeepOriginalFormat(BOOL keep) => HRESULT.S_OK;
+        public HRESULT get_Attributes(uint* pDwAttr) => HRESULT.S_OK;
+        public HRESULT get_hPal(OLE_HANDLE* phPal) => HRESULT.S_OK;
+        public HRESULT Render(HDC hDC, int x, int y, int cx, int cy, int xSrc, int ySrc, int cxSrc, int cySrc, RECT* pRcWBounds) => HRESULT.S_OK;
+        public HRESULT set_hPal(OLE_HANDLE hPal) => HRESULT.S_OK;
+        public HRESULT SelectPicture(HDC hDCIn, HDC* phDCOut, OLE_HANDLE* phBmpOut) => HRESULT.S_OK;
+        public HRESULT PictureChanged() => HRESULT.S_OK;
+        public HRESULT SaveAsFile(IStream* pStream, BOOL fSaveMemCopy, int* pCbSize) => HRESULT.S_OK;
     }
 }
