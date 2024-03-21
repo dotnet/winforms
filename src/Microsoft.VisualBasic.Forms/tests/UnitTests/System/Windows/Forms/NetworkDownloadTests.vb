@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             listener.Stop()
             listener.Close()
             If Not String.IsNullOrWhiteSpace(tmpDirectoryPath) Then
-                Assert.True(tmpDirectoryPath.StartsWith(Path.GetTempPath))
+                Assert.True(tmpDirectoryPath.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase))
                 Directory.Delete(tmpDirectoryPath, recursive:=True)
             End If
         End Sub
