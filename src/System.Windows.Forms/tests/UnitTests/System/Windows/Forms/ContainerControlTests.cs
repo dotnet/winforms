@@ -1237,7 +1237,7 @@ public class ContainerControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -1267,7 +1267,7 @@ public class ContainerControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -1298,10 +1298,10 @@ public class ContainerControlTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Same(child2, control.ActiveControl);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);

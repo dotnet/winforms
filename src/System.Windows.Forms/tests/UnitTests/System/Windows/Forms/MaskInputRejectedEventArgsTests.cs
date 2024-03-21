@@ -12,7 +12,7 @@ public class MaskInputRejectedEventArgsTests
     [InlineData(-2, MaskedTextResultHint.Unknown)]
     [InlineData(-1, MaskedTextResultHint.Success)]
     [InlineData(0, MaskedTextResultHint.PromptCharNotAllowed)]
-    [InlineData(1, (MaskedTextResultHint)(MaskedTextResultHint.SignedDigitExpected - 1))]
+    [InlineData(1, (MaskedTextResultHint.SignedDigitExpected - 1))]
     [InlineData(1, MaskedTextResultHint.Unknown)]
     public void Ctor_Int_Int_Bool(int position, MaskedTextResultHint rejectionHint)
     {

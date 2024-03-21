@@ -84,7 +84,7 @@ public partial class ControlPaintTests
 
     public static IEnumerable<object[]> CreateHBitmapColorMask_TestData()
     {
-        foreach (IntPtr monochromeMask in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+        foreach (IntPtr monochromeMask in new IntPtr[] { IntPtr.Zero, 1 })
         {
             yield return new object[] { new Bitmap(10, 10, PixelFormat.Format1bppIndexed), monochromeMask };
             yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), monochromeMask };
@@ -1964,10 +1964,10 @@ public partial class ControlPaintTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+        ControlPaint.DrawStringDisabled(graphics, s, font, color, layoutRectangle, format);
 
         // Call again to test caching.
-        ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+        ControlPaint.DrawStringDisabled(graphics, s, font, color, layoutRectangle, format);
     }
 
     [WinFormsTheory]

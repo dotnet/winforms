@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests;
 public class QueryContinueDragEventArgsTests
 {
     [Theory]
-    [InlineData(-1, false, (DragAction)(DragAction.Continue - 1))]
+    [InlineData(-1, false, (DragAction.Continue - 1))]
     [InlineData(0, true, DragAction.Drop)]
     public void Ctor_Int_Bool_DragAction(int keyState, bool escapePressed, DragAction action)
     {
@@ -18,7 +18,7 @@ public class QueryContinueDragEventArgsTests
     }
 
     [Theory]
-    [InlineData((DragAction)(DragAction.Continue - 1))]
+    [InlineData((DragAction.Continue - 1))]
     [InlineData(DragAction.Drop)]
     public void Action_Set_GetReturnsExpected(DragAction value)
     {

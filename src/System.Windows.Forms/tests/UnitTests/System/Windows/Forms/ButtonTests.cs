@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class ButtonTests
+public class ButtonTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void Button_Ctor_Default()
@@ -3384,7 +3384,7 @@ public class ButtonTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -3429,7 +3429,7 @@ public class ButtonTests
                 {
                     Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -3464,7 +3464,7 @@ public class ButtonTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3502,7 +3502,7 @@ public class ButtonTests
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -3544,7 +3544,7 @@ public class ButtonTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3576,6 +3576,17 @@ public class ButtonTests
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
+    }
+
+    [WinFormsFact]
+    public void ButtonBase_Click_RaisesEvent()
+    {
+        using var button = (SubButton)CreateButton();
+        bool clickEventRaised = false;
+        button.Click += (sender, e) => clickEventRaised = true;
+        button.PerformClick();
+
+        clickEventRaised.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -3638,7 +3649,7 @@ public class ButtonTests
         {
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -3648,6 +3659,20 @@ public class ButtonTests
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
     }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Button_Flat_ValidBorder(int borderSize) => base.ButtonBase_FlatStyle_ValidFlatButtonBorder(borderSize);
+
+    [WinFormsTheory]
+    [InlineData(255, 0, 0)]
+    [InlineData(0, 255, 0)]
+    [InlineData(0, 0, 255)]
+    public void Button_Flat_ProperColor(int red, int green, int blue) => base.ButtonBase_FlatStyle_ProperFlatButtonColor(red, green, blue);
+
+    protected override ButtonBase CreateButton() => new SubButton();
 
     private class SubButton : Button
     {

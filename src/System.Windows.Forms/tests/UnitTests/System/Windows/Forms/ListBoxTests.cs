@@ -3308,13 +3308,13 @@ public class ListBoxTests
         control.MakeCustom = true;
 
         // Verify equal lengths.
-        control.GetSelCountResult = (IntPtr)1;
+        control.GetSelCountResult = 1;
         control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 2 }, control.SelectedIndices.Cast<int>());
 
         // Verify truncated
-        control.GetSelCountResult = (IntPtr)2;
+        control.GetSelCountResult = 2;
         control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 0, 2 }, control.SelectedIndices.Cast<int>());
@@ -3344,7 +3344,7 @@ public class ListBoxTests
             {
                 Assert.Equal(GetSelCountResult, m.WParam);
                 Marshal.Copy(GetSelResult, 0, m.LParam, GetSelResult.Length);
-                m.Result = (IntPtr)GetSelResult.Length;
+                m.Result = GetSelResult.Length;
                 return;
             }
 
@@ -5244,7 +5244,7 @@ public class ListBoxTests
         {
             DrawMode = drawMode,
             ExpectedIndex = expectedIndex,
-            GetItemHeightResult = (IntPtr)getItemRectResult
+            GetItemHeightResult = getItemRectResult
         };
         control.Items.Add("Item1");
         control.Items.Add("Item2");

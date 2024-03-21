@@ -68,7 +68,7 @@ public class DeviceContextScopeTests
         using Graphics graphics = dcScope.CreateGraphics();
         HGDIOBJ current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
-        HDC_MAP_MODE currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+        HDC_MAP_MODE currentMode = PInvoke.GetMapMode(dcScope);
         Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
 
         IntPtr hdc = graphics.GetHdc();
@@ -85,14 +85,14 @@ public class DeviceContextScopeTests
         finally
         {
             graphics.ReleaseHdc(hdc);
-            currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+            currentMode = PInvoke.GetMapMode(dcScope);
             Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
             current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
             graphics.GetHdc();
             try
             {
-                currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                currentMode = PInvoke.GetMapMode(dcScope);
                 Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
             }
             finally

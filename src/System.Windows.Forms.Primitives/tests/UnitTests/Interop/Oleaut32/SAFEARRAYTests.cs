@@ -140,7 +140,7 @@ public unsafe class SAFEARRAYTests
 
         public HRESULT GetSize(uint* pcbSize)
         {
-            *pcbSize = (uint)sizeof(int);
+            *pcbSize = sizeof(int);
             return HRESULT.S_OK;
         }
 

@@ -75,8 +75,8 @@ public class NativeWindowTests
         using (new NoAssertContext())
         {
             NativeWindow window = new();
-            window.AssignHandle((IntPtr)250);
-            Assert.Equal((IntPtr)250, window.Handle);
+            window.AssignHandle(250);
+            Assert.Equal(250, window.Handle);
         }
     }
 
@@ -87,7 +87,7 @@ public class NativeWindowTests
         NativeWindow window = new();
         window.AssignHandle(control.Handle);
         Assert.Equal(control.Handle, window.Handle);
-        Assert.Throws<InvalidOperationException>(() => window.AssignHandle((IntPtr)250));
+        Assert.Throws<InvalidOperationException>(() => window.AssignHandle(250));
         Assert.Equal(control.Handle, window.Handle);
     }
 
@@ -246,7 +246,7 @@ public class NativeWindowTests
         using (new NoAssertContext())
         {
             NativeWindow window = new();
-            window.AssignHandle((IntPtr)250);
+            window.AssignHandle(250);
             window.DestroyHandle();
             Assert.Equal(IntPtr.Zero, window.Handle);
         }
@@ -273,7 +273,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.DefWndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -299,7 +299,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.DefWndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -320,15 +320,15 @@ public class NativeWindowTests
         using (new NoAssertContext())
         {
             WndProcTrackingNativeWindow window = new();
-            window.AssignHandle((IntPtr)250);
+            window.AssignHandle(250);
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.DefWndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
-            Assert.Equal((IntPtr)250, window.Handle);
+            Assert.Equal(250, window.Handle);
         }
     }
 
@@ -390,7 +390,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.DefWndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -425,7 +425,7 @@ public class NativeWindowTests
         {
             using Control control = new();
             NativeWindow window = new();
-            window.AssignHandle((IntPtr)250);
+            window.AssignHandle(250);
             window.ReleaseHandle();
             Assert.Equal(IntPtr.Zero, window.Handle);
         }
@@ -453,7 +453,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -478,7 +478,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -499,15 +499,15 @@ public class NativeWindowTests
         using (new NoAssertContext())
         {
             SubNativeWindow window = new();
-            window.AssignHandle((IntPtr)250);
+            window.AssignHandle(250);
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
-            Assert.Equal((IntPtr)250, window.Handle);
+            Assert.Equal(250, window.Handle);
         }
     }
 
@@ -523,7 +523,7 @@ public class NativeWindowTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)1
+                Result = 1
             };
             window.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);

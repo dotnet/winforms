@@ -3134,7 +3134,7 @@ public class TrackBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3198,10 +3198,10 @@ public class TrackBarTests
         {
             Msg = msg,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(10, control.Value);
         Assert.Equal(0, scrollCallCount);
         Assert.Equal(0, valueChangedCallCount);

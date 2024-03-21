@@ -733,7 +733,7 @@ public class FileDialogTests
             Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
             return result;
         };
-        Assert.Equal(result, dialog.RunDialog((IntPtr)1));
+        Assert.Equal(result, dialog.RunDialog(1));
     }
 
     [WinFormsTheory]

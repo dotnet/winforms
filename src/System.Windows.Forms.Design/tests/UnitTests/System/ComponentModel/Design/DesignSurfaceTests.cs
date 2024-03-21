@@ -25,7 +25,7 @@ public class DesignSurfaceTests
         Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
         Assert.Null(surface.Host.RootComponent);
         Assert.Null(surface.Host.RootComponentClassName);
-        Assert.Null(surface.Host.TransactionDescription);
+        surface.Host.TransactionDescription.Should().BeNullOrEmpty();
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.NotNull(surface.ServiceContainer);
@@ -64,7 +64,7 @@ public class DesignSurfaceTests
         Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
         Assert.Null(surface.Host.RootComponent);
         Assert.Null(surface.Host.RootComponentClassName);
-        Assert.Null(surface.Host.TransactionDescription);
+        surface.Host.TransactionDescription.Should().BeNullOrEmpty();
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.NotNull(surface.ServiceContainer);
@@ -86,7 +86,7 @@ public class DesignSurfaceTests
         Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
         Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
         Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
-        Assert.Null(surface.Host.TransactionDescription);
+        surface.Host.TransactionDescription.Should().BeNullOrEmpty();
         Assert.True(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.NotNull(surface.ServiceContainer);
@@ -108,7 +108,7 @@ public class DesignSurfaceTests
         Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
         Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
         Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
-        Assert.Null(surface.Host.TransactionDescription);
+        surface.Host.TransactionDescription.Should().BeNullOrEmpty();
         Assert.True(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.NotNull(surface.ServiceContainer);
@@ -155,7 +155,7 @@ public class DesignSurfaceTests
         Assert.False(((IDesignerHostTransactionState)surface.Host).IsClosingTransaction);
         Assert.IsType<RootDesignerComponent>(surface.Host.RootComponent);
         Assert.Equal(typeof(RootDesignerComponent).FullName, surface.Host.RootComponentClassName);
-        Assert.Null(surface.Host.TransactionDescription);
+        surface.Host.TransactionDescription.Should().BeNullOrEmpty();
         Assert.True(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.NotNull(surface.ServiceContainer);
@@ -167,7 +167,7 @@ public class DesignSurfaceTests
     {
         Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface((Type)null));
-        Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, (Type)null));
+        Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, null));
     }
 
     [WinFormsFact]

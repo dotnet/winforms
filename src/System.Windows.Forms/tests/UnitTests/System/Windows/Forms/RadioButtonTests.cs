@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class RadioButtonTests
+public class RadioButtonTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void RadioButton_Ctor_Default()
@@ -123,7 +123,7 @@ public class RadioButtonTests
     [WinFormsFact]
     public void RadioButton_CreateParams_GetDefault_ReturnsExpected()
     {
-        using SubRadioButton control = new();
+        using SubRadioButton control = (SubRadioButton)CreateButton();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Button", createParams.ClassName);
@@ -145,7 +145,7 @@ public class RadioButtonTests
     [InlineData(false, 0x5600000B)]
     public void RadioButton_CreateParams_GetUserPaint_ReturnsExpected(bool userPaint, int expectedStyle)
     {
-        using SubRadioButton control = new();
+        using SubRadioButton control = (SubRadioButton)CreateButton();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
 
         CreateParams createParams = control.CreateParams;
@@ -1625,4 +1625,17 @@ public class RadioButtonTests
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }
+
+    [WinFormsTheory]
+    [InlineData(Appearance.Button, FlatStyle.Standard)]
+    [InlineData(Appearance.Button, FlatStyle.Flat)]
+    [InlineData(Appearance.Button, FlatStyle.Popup)]
+    [InlineData(Appearance.Button, FlatStyle.System)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat)]
+    [InlineData(Appearance.Normal, FlatStyle.Popup)]
+    [InlineData(Appearance.Normal, FlatStyle.System)]
+    public void RadioButton_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
+
+    protected override ButtonBase CreateButton() => new SubRadioButton();
 }

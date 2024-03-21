@@ -25,7 +25,7 @@ internal struct EMRTEXT
         {
             byte* b = (byte*)(void*)p;
             b += offset;
-            return new ReadOnlySpan<char>((void*)b, (int)nChars);
+            return new ReadOnlySpan<char>(b, (int)nChars);
         }
     }
 }

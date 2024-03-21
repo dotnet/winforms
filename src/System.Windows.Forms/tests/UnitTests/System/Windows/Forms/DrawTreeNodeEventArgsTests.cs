@@ -10,7 +10,7 @@ public class DrawTreeNodeEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Graphics_TreeNode_Rectangle_TreeNodeStates_TestData()
     {
-        yield return new object[] { null, Rectangle.Empty, (TreeNodeStates)(TreeNodeStates.Checked - 1) };
+        yield return new object[] { null, Rectangle.Empty, TreeNodeStates.Checked - 1 };
         yield return new object[] { new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked };
         yield return new object[] { new TreeNode(), new Rectangle(-1, -2, -3, -4), TreeNodeStates.Checked };
     }

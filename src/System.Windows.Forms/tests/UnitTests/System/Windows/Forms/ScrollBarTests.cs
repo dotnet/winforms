@@ -1613,7 +1613,7 @@ public class ScrollBarTests
         Assert.Equal(100, si.nMax);
         Assert.Equal(0, si.nMin);
         Assert.Equal(expectedPos, si.nPos);
-        Assert.Equal((uint)10u, si.nPage);
+        Assert.Equal(10u, si.nPage);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1635,7 +1635,7 @@ public class ScrollBarTests
         Assert.Equal(100, si.nMax);
         Assert.Equal(0, si.nMin);
         Assert.Equal(expectedPos, si.nPos);
-        Assert.Equal((uint)10u, si.nPage);
+        Assert.Equal(10u, si.nPage);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -2695,10 +2695,10 @@ public class ScrollBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.False(control.IsHandleCreated);
         Assert.Equal(0, paintCallCount);
     }
@@ -2815,10 +2815,10 @@ public class ScrollBarTests
             yield return new object[] { msg, RightToLeft.Yes, 10, ScrollEventType.ThumbPosition, 10, ScrollEventType.ThumbPosition };
             yield return new object[] { msg, RightToLeft.No, 10, ScrollEventType.ThumbTrack, 10, ScrollEventType.ThumbTrack };
             yield return new object[] { msg, RightToLeft.Yes, 10, ScrollEventType.ThumbTrack, 10, ScrollEventType.ThumbTrack };
-            yield return new object[] { msg, RightToLeft.No, 10, (ScrollEventType)(ScrollEventType.SmallDecrement - 1), 10, (ScrollEventType)ushort.MaxValue };
-            yield return new object[] { msg, RightToLeft.Yes, 10, (ScrollEventType)(ScrollEventType.SmallDecrement - 1), 10, (ScrollEventType)ushort.MaxValue };
-            yield return new object[] { msg, RightToLeft.No, 10, (ScrollEventType)(ScrollEventType.EndScroll + 1), 10, (ScrollEventType)(ScrollEventType.EndScroll + 1) };
-            yield return new object[] { msg, RightToLeft.Yes, 10, (ScrollEventType)(ScrollEventType.EndScroll + 1), 10, (ScrollEventType)(ScrollEventType.EndScroll + 1) };
+            yield return new object[] { msg, RightToLeft.No, 10, ScrollEventType.SmallDecrement - 1, 10, (ScrollEventType)ushort.MaxValue };
+            yield return new object[] { msg, RightToLeft.Yes, 10, ScrollEventType.SmallDecrement - 1, 10, (ScrollEventType)ushort.MaxValue };
+            yield return new object[] { msg, RightToLeft.No, 10, ScrollEventType.EndScroll + 1, 10, ScrollEventType.EndScroll + 1 };
+            yield return new object[] { msg, RightToLeft.Yes, 10, ScrollEventType.EndScroll + 1, 10, ScrollEventType.EndScroll + 1 };
         }
     }
 
@@ -2861,10 +2861,10 @@ public class ScrollBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SIZE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -2883,10 +2883,10 @@ public class ScrollBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SIZE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -2915,7 +2915,7 @@ public class ScrollBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);

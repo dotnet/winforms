@@ -50,7 +50,7 @@ public class ListViewTests : ControlTestBase
             ListViewItem item3 = new("g1-3") { Group = group };
 
             listView.Groups.Add(group);
-            listView.Items.AddRange((ListViewItem[])[item1, item2, item3]);
+            listView.Items.AddRange(item1, item2, item3);
             listView.Focus();
 
             bool collapsedStateChangedFired = false;
@@ -514,7 +514,7 @@ public class ListViewTests : ControlTestBase
         ColumnHeader columnHeader1 = new() { Text = "ColumnHeader1", Width = 140 };
         ColumnHeader columnHeader2 = new() { Text = "ColumnHeader2", Width = 140 };
         ColumnHeader columnHeader3 = new() { Text = "ColumnHeader3", Width = 140 };
-        listView.Columns.AddRange((ColumnHeader[])[columnHeader1, columnHeader2, columnHeader3]);
+        listView.Columns.AddRange([columnHeader1, columnHeader2, columnHeader3]);
         ListViewItem listViewItem1 = new(new[] { "row1", "row1Col2", "row1Col3" }, -1) { StateImageIndex = 0 };
         ListViewItem listViewItem2 = new(new[] { "row2", "row2Col2", "row2Col3" }, -1) { StateImageIndex = 0 };
         ListViewItem listViewItem3 = new(new[] { "row3", "row3Col2", "row3Col3" }, -1) { StateImageIndex = 0 };
@@ -536,7 +536,7 @@ public class ListViewTests : ControlTestBase
         listView.VirtualListSize = 3;
         if (!virtualModeEnabled)
         {
-            listView.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2, listViewItem3]);
+            listView.Items.AddRange(listViewItem1, listViewItem2, listViewItem3);
         }
     }
 

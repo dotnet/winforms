@@ -47,7 +47,7 @@ namespace System;
 public class TestAccessor<T> : ITestAccessor
 {
     private static readonly Type s_type = typeof(T);
-    protected readonly T? _instance;
+    private readonly T? _instance;
     private readonly DynamicWrapper _dynamicWrapper;
 
     /// <param name="instance">The type instance, can be null for statics.</param>

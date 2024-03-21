@@ -25,12 +25,12 @@ internal unsafe class DeviceContextState
     /// </summary>
     public DeviceContextState(HDC hdc)
     {
-        MapMode = (HDC_MAP_MODE)PInvoke.GetMapMode(hdc);
+        MapMode = PInvoke.GetMapMode(hdc);
         BackColor = PInvoke.GetBkColor(hdc);
         TextColor = PInvoke.GetTextColor(hdc);
-        Rop2Mode = (R2_MODE)PInvoke.GetROP2(hdc);
-        TextAlign = (TEXT_ALIGN_OPTIONS)PInvoke.GetTextAlign(hdc);
-        BackgroundMode = (BACKGROUND_MODE)PInvoke.GetBkMode(hdc);
+        Rop2Mode = PInvoke.GetROP2(hdc);
+        TextAlign = PInvoke.GetTextAlign(hdc);
+        BackgroundMode = PInvoke.GetBkMode(hdc);
 
         Matrix3x2 transform = default;
         PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
