@@ -726,8 +726,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             if (ParentGridEntry is not null)
             {
-                Type propertyType = ParentGridEntry.PropertyType;
-                treatAsValueType = propertyType.IsValueType || propertyType.IsArray;
+                Type? propertyType = ParentGridEntry.PropertyType;
+                if (propertyType is not null)
+                {
+                    treatAsValueType = propertyType.IsValueType || propertyType.IsArray;
+                }
             }
 
             if (realOwner is not null)

@@ -51,7 +51,7 @@ internal abstract partial class GridEntry
 
         internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out GridEntry? owner) || !owner.Expandable;
 
-        public override string Description
+        public override string? Description
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
         internal override bool CanGetDescriptionInternal => false;
@@ -61,7 +61,7 @@ internal abstract partial class GridEntry
                 ? owner.Expanded ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed
                 : ExpandCollapseState.ExpandCollapseState_LeafNode;
 
-        public override string Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
+        public override string? Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
         internal override bool CanGetHelpInternal => false;
 

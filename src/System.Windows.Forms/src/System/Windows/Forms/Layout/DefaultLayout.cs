@@ -3,7 +3,6 @@
 
 using System.Collections;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Primitives;
 using static System.Windows.Forms.Control;
@@ -151,15 +150,6 @@ internal partial class DefaultLayout : LayoutEngine
     private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
     {
         // Container can not be null since we AnchorControls takes a non-null container.
-        //
-        // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
-        // because it WILL execute GetCachedBounds(control).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
-        // This in turn will lead to a cascade of native calls and callbacks
-        if (CompModSwitches.RichLayout.TraceInfo)
-        {
-            Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element)}");
-        }
-
         return UseAnchorLayoutV2(element)
             ? ComputeAnchoredBoundsV2(element, displayRect)
             : ComputeAnchoredBounds(element, displayRect, measureOnly);
@@ -252,24 +242,20 @@ internal partial class DefaultLayout : LayoutEngine
         int top = layout.Top + displayRect.Y;
         int right = layout.Right + displayRect.X;
         int bottom = layout.Bottom + displayRect.Y;
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\t...anchor dim (l,t,r,b) {{{left}, {top}, {right}, {bottom}}}");
 
         AnchorStyles anchor = GetAnchor(element);
 
         if (IsAnchored(anchor, AnchorStyles.Right))
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting right");
             right += displayRect.Width;
 
             if (!IsAnchored(anchor, AnchorStyles.Left))
             {
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left");
                 left += displayRect.Width;
             }
         }
         else if (!IsAnchored(anchor, AnchorStyles.Left))
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left & right");
             int center = displayRect.Width / 2;
             right += center;
             left += center;
@@ -277,18 +263,15 @@ internal partial class DefaultLayout : LayoutEngine
 
         if (IsAnchored(anchor, AnchorStyles.Bottom))
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting bottom");
             bottom += displayRect.Height;
 
             if (!IsAnchored(anchor, AnchorStyles.Top))
             {
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top");
                 top += displayRect.Height;
             }
         }
         else if (!IsAnchored(anchor, AnchorStyles.Top))
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top & bottom");
             int center = displayRect.Height / 2;
             bottom += center;
             top += center;
@@ -350,8 +333,6 @@ internal partial class DefaultLayout : LayoutEngine
             }
         }
 
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\t...new anchor dim (l,t,r,b) {{{left}, {top}, {right}, {bottom}}}");
-
         return new Rectangle(left, top, right - left, bottom - top);
     }
 
@@ -368,9 +349,6 @@ internal partial class DefaultLayout : LayoutEngine
 
     private static void LayoutAnchoredControls(IArrangedElement container)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\tdisplayRect: {container.DisplayRectangle}");
-
         Rectangle displayRectangle = container.DisplayRectangle;
         if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
         {
@@ -395,7 +373,6 @@ internal partial class DefaultLayout : LayoutEngine
 
     private static Size LayoutDockedControls(IArrangedElement container, bool measureOnly)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tDock Processing");
         Debug.Assert(!HasCachedBounds(container), "Do not call this method with an active cached bounds list.");
 
         // If measuring, we start with an empty rectangle and add as needed.
@@ -655,9 +632,6 @@ internal partial class DefaultLayout : LayoutEngine
             }
         }
 
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tanchor : {anchor}");
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tdock :   {dock}");
-
         Size preferredSizeForDocking = Size.Empty;
         Size preferredSizeForAnchoring = Size.Empty;
 
@@ -737,10 +711,6 @@ internal partial class DefaultLayout : LayoutEngine
     {
         Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Update anchor info");
-        Debug.Indent();
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container is null ? "No parent" : "Parent");
-
         if (element.Container is null)
         {
             return;
@@ -776,7 +746,6 @@ internal partial class DefaultLayout : LayoutEngine
         anchorInfo.Bottom = elementBounds.Bottom;
 
         Rectangle parentDisplayRect = element.Container.DisplayRectangle;
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Parent displayRectangle{parentDisplayRect}");
         int parentWidth = parentDisplayRect.Width;
         int parentHeight = parentDisplayRect.Height;
 
@@ -844,9 +813,6 @@ internal partial class DefaultLayout : LayoutEngine
             anchorInfo.Bottom -= parentHeight / 2;
             anchorInfo.Top -= parentHeight / 2;
         }
-
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"anchor info (l,t,r,b): ({anchorInfo.Left}, {anchorInfo.Top}, {anchorInfo.Right}, {anchorInfo.Bottom})");
-        Debug.Unindent();
     }
 
     /// <summary>

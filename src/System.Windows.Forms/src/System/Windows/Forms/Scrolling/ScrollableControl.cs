@@ -301,9 +301,6 @@ public partial class ScrollableControl : Control, IArrangedElement
 
     private bool ApplyScrollbarChanges(Rectangle display)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ApplyScrollbarChanges({display}) {{");
-        Debug.Indent();
-
         bool needLayout = false;
         bool needHscroll = false;
         bool needVscroll = false;
@@ -527,9 +524,6 @@ public partial class ScrollableControl : Control, IArrangedElement
             maxY = clientToBe.Height;
         }
 
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Current scrollbars({HScroll}, {VScroll})");
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Needed  scrollbars({needHscroll}, {needVscroll})");
-
         // Show the needed scrollbars
         needLayout = (SetVisibleScrollbars(needHscroll, needVscroll) || needLayout);
 
@@ -538,20 +532,15 @@ public partial class ScrollableControl : Control, IArrangedElement
         {
             needLayout = (SetDisplayRectangleSize(maxX, maxY) || needLayout);
         }
-
-        // Else just update the display rect size. This keeps it as big as the client
-        // area in a resize scenario
         else
         {
+            // Else just update the display rect size. This keeps it as big as the client
+            // area in a resize scenario.
             SetDisplayRectangleSize(maxX, maxY);
         }
 
         // Sync up the scrollbars
         SyncScrollbars(true);
-
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, needLayout ? "Need layout" : "No layout changes");
-        Debug.Unindent();
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "}");
         return needLayout;
     }
 

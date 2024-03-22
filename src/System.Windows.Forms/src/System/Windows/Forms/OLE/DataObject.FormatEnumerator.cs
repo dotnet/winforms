@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -21,7 +20,6 @@ public partial class DataObject
 
         public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
         {
-            CompModSwitches.DataObject.TraceVerbose($"FormatEnumerator: Constructed: {parent}");
         }
 
         private FormatEnumerator(FormatEnumerator source)
@@ -33,8 +31,6 @@ public partial class DataObject
 
         public FormatEnumerator(IDataObject parent, string[]? formats)
         {
-            CompModSwitches.DataObject.TraceVerbose($"FormatEnumerator: Constructed: {parent}, string[{formats?.Length ?? 0}]");
-
             _parent = parent;
 
             if (formats is null)
@@ -60,7 +56,6 @@ public partial class DataObject
 
         public int Next(int celt, ComTypes.FORMATETC[] rgelt, int[]? pceltFetched)
         {
-            CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Next");
             if (_current >= _formats.Count || celt <= 0)
             {
                 if (pceltFetched is not null)
@@ -92,7 +87,6 @@ public partial class DataObject
 
         public int Skip(int celt)
         {
-            CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Skip");
             if (_current + celt >= _formats.Count)
             {
                 return (int)HRESULT.S_FALSE;
@@ -104,14 +98,12 @@ public partial class DataObject
 
         public int Reset()
         {
-            CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Reset");
             _current = 0;
             return (int)HRESULT.S_OK;
         }
 
         public void Clone(out ComTypes.IEnumFORMATETC ppenum)
         {
-            CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Clone");
             ppenum = new FormatEnumerator(this);
         }
 

@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-#if DEBUG
-using System.ComponentModel;
-using System.Text;
-#endif
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout;
@@ -26,11 +22,6 @@ internal partial class CommonProperties
     private static readonly int s_minimumSizeProperty = PropertyStore.CreateKey();
     private static readonly int s_maximumSizeProperty = PropertyStore.CreateKey();
     private static readonly int s_layoutBoundsProperty = PropertyStore.CreateKey();
-
-#if DEBUG
-    private static readonly int s_lastKnownStateProperty = PropertyStore.CreateKey();
-
-#endif
 
     internal const ContentAlignment DefaultAlignment = ContentAlignment.TopLeft;
     internal const AnchorStyles DefaultAnchor = AnchorStyles.Top | AnchorStyles.Left;
@@ -57,9 +48,9 @@ internal partial class CommonProperties
 
     #region AppliesToAllLayouts
 
-    ///  ClearMaximumSize
+    /// <summary>
     ///  Removes the maximum size from the property store, making it "unset".
-    ///
+    /// </summary>
     internal static void ClearMaximumSize(IArrangedElement element)
     {
         if (element.Properties.ContainsObject(s_maximumSizeProperty))
@@ -68,14 +59,17 @@ internal partial class CommonProperties
         }
     }
 
-    ///  GetAutoSize
-    ///  Determines whether or not the System.Windows.Forms.Layout LayoutEngines
-    ///  think the element is AutoSized.
-    ///
-    ///  A control can thwart the layout engine by overriding its virtual AutoSize
-    ///  property and not calling base.  If CommonProperties.GetAutoSize(element) is false,
-    ///  a layout engine will treat it as AutoSize = false and not size the element to its
-    ///  preferred size.
+    /// <summary>
+    ///  Determines whether or not the <see cref="Layout"/> <see cref="LayoutEngine"/>s
+    ///  think the element is auto sized.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   A control can thwart the layout engine by overriding its virtual <see cref="Control.AutoSize"/>
+    ///   property and not calling base. If <see cref="GetAutoSize(IArrangedElement)"/> is false, a layout engine will
+    ///   treat it as AutoSize = false and not size the element to its preferred size.
+    ///  </para>
+    /// </remarks>
     internal static bool GetAutoSize(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -83,12 +77,16 @@ internal partial class CommonProperties
         return value != 0;
     }
 
-    ///  GetMargin
-    ///  Returns the Margin (exterior space) for an item
-    ///
-    ///  We can not use our pattern of passing the default value into Margin because the
-    ///  LayoutEngines read this property and do not know each element's DefaultMargin.
-    ///  Instead the Element sets the Margin in its ctor.
+    /// <summary>
+    ///  Returns the margin (exterior space) for an item.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   We can not use our pattern of passing the default value into <see cref="Control.Margin"/> because the
+    ///   LayoutEngines read this property and do not know each element's <see cref="Control.DefaultMargin"/>.
+    ///   Instead the element sets the margin in its ctor.
+    ///  </para>
+    /// </remarks>
     internal static Padding GetMargin(IArrangedElement element)
     {
         Padding padding = element.Properties.GetPadding(s_marginProperty, out bool found);
@@ -100,8 +98,9 @@ internal partial class CommonProperties
         return DefaultMargin;
     }
 
-    ///  GetMaximumSize
-    ///  Returns the maximum size for an element
+    /// <summary>
+    ///  Returns the maximum size for an element.
+    /// </summary>
     internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize)
     {
         Size size = element.Properties.GetSize(s_maximumSizeProperty, out bool found);
@@ -113,8 +112,9 @@ internal partial class CommonProperties
         return defaultMaximumSize;
     }
 
-    ///  GetMinimumSize
-    ///  Returns the minimum size for an element
+    /// <summary>
+    ///  Returns the minimum size for an element.
+    /// </summary>
     internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize)
     {
         Size size = element.Properties.GetSize(s_minimumSizeProperty, out bool found);
@@ -126,13 +126,19 @@ internal partial class CommonProperties
         return defaultMinimumSize;
     }
 
-    ///  GetPadding
-    ///  Returns the padding for an element
-    ///  Typically the padding is accounted for in either the DisplayRectangle calculation
-    ///  and/or the GetPreferredSize calculation of a control.
-    ///
-    ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorporated into
-    ///  layout by modifying what the control reports for preferred size.
+    /// <summary>
+    ///  Returns the padding for an element.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Typically the padding is accounted for in either the <see cref="Control.DisplayRectangle"/> calculation
+    ///   and/or the <see cref="Control.GetPreferredSize(Size)"/> calculation of a control.
+    ///  </para>
+    ///  <para>
+    ///   NOTE:  <see cref="LayoutEngine"/>s should never read this property. Padding gets incorporated into
+    ///   layout by modifying what the control reports for preferred size.
+    ///  </para>
+    /// </remarks>
     internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
     {
         Padding padding = element.Properties.GetPadding(s_paddingProperty, out bool found);
@@ -144,8 +150,14 @@ internal partial class CommonProperties
         return defaultPadding;
     }
 
-    ///  GetSpecifiedBounds
-    ///  Returns the last size manually set into the element.  See UpdateSpecifiedBounds.
+    /// <summary>
+    ///  Returns the last size manually set into the element.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   See <see cref="UpdateSpecifiedBounds(IArrangedElement, int, int, int, int)"/>.
+    ///  </para>
+    /// </remarks>
     internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
     {
         Rectangle rectangle = element.Properties.GetRectangle(s_specifiedBoundsProperty, out bool found);
@@ -157,8 +169,9 @@ internal partial class CommonProperties
         return element.Bounds;
     }
 
-    ///  ResetPadding
-    ///  clears out the padding from the property store
+    /// <summary>
+    ///  Clears out the padding from the property store.
+    /// </summary>
     internal static void ResetPadding(IArrangedElement element)
     {
         object? value = element.Properties.GetObject(s_paddingProperty);
@@ -168,8 +181,9 @@ internal partial class CommonProperties
         }
     }
 
-    ///  SetAutoSize
+    /// <summary>
     ///  Sets whether or not the layout engines should treat this control as auto sized.
+    /// </summary>
     internal static void SetAutoSize(IArrangedElement element, bool value)
     {
         Debug.Assert(value != GetAutoSize(element), "PERF: Caller should guard against setting AutoSize to original value.");
@@ -186,8 +200,9 @@ internal partial class CommonProperties
         Debug.Assert(GetAutoSize(element) == value, "Error detected setting AutoSize.");
     }
 
-    ///  SetMargin
+    /// <summary>
     ///  Sets the margin (exterior space) for an element.
+    /// </summary>
     internal static void SetMargin(IArrangedElement element, Padding value)
     {
         Debug.Assert(value != GetMargin(element), "PERF: Caller should guard against setting Margin to original value.");
@@ -199,8 +214,9 @@ internal partial class CommonProperties
         LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Margin);
     }
 
-    ///  SetMaximumSize
+    /// <summary>
     ///  Sets the maximum size for an element.
+    /// </summary>
     internal static void SetMaximumSize(IArrangedElement element, Size value)
     {
         Debug.Assert(value != GetMaximumSize(element, new Size(-7109, -7107)),
@@ -209,7 +225,6 @@ internal partial class CommonProperties
         element.Properties.SetSize(s_maximumSizeProperty, value);
 
         // Element bounds may need to truncated to new maximum
-        //
         Rectangle bounds = element.Bounds;
         bounds.Width = Math.Min(bounds.Width, value.Width);
         bounds.Height = Math.Min(bounds.Height, value.Height);
@@ -221,8 +236,9 @@ internal partial class CommonProperties
         Debug.Assert(GetMaximumSize(element, new Size(-7109, -7107)) == value, "Error detected setting MaximumSize.");
     }
 
-    ///  SetMinimumSize
+    /// <summary>
     ///  Sets the minimum size for an element.
+    /// </summary>
     internal static void SetMinimumSize(IArrangedElement element, Size value)
     {
         Debug.Assert(value != GetMinimumSize(element, new Size(-7109, -7107)),
@@ -233,7 +249,6 @@ internal partial class CommonProperties
         using (new LayoutTransaction(element.Container as Control, element, PropertyNames.MinimumSize))
         {
             // Element bounds may need to inflated to new minimum
-            //
             Rectangle bounds = element.Bounds;
             bounds.Width = Math.Max(bounds.Width, value.Width);
             bounds.Height = Math.Max(bounds.Height, value.Height);
@@ -243,9 +258,15 @@ internal partial class CommonProperties
         Debug.Assert(GetMinimumSize(element, new Size(-7109, -7107)) == value, "Error detected setting MinimumSize.");
     }
 
-    ///  SetPadding
-    ///  Sets the padding (interior space) for an element. See GetPadding for more details.
-    ///  NOTE: It is the callers responsibility to do layout.  See Control.Padding for details.
+    /// <summary>
+    ///  Sets the padding (interior space) for an element.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   See <see cref="GetPadding(IArrangedElement, Padding)"/> for more details. NOTE: It is the callers
+    ///   responsibility to do layout. See <see cref="Control.Padding"/> for details.
+    ///  </para>
+    /// </remarks>
     internal static void SetPadding(IArrangedElement element, Padding value)
     {
         Debug.Assert(value != GetPadding(element, new Padding(-7105)),
@@ -257,20 +278,31 @@ internal partial class CommonProperties
         Debug.Assert(GetPadding(element, new Padding(-7105)) == value, "Error detected setting Padding.");
     }
 
-    ///  UpdateSpecifiedBounds
-    ///  The main purpose of this function is to remember what size someone specified in the Size, Width, Height, Bounds
-    ///  property.  (Its the whole reason the BoundsSpecified enum exists.)  Consider this scenario.  You set a Button
-    ///  to DockStyle.Fill, then DockStyle.None.  When Dock.Filled, the Size changed to 300,300.  When you
-    ///  set it back to DockStyle.None, the size switches back to 100,23.  How does this happen?
-    ///
-    ///  Setting the control to Dock.Fill (via DefaultLayout engine)
-    ///  element.SetBounds(newElementBounds, BoundsSpecified.None);
-    ///
-    ///  (If someone happens to set the Size property here the specified bounds gets updated via Control.Size)
-    ///  SetBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
-    ///
-    ///  Setting the control to Dock.None (via DefaultLayout.SetDock)
-    ///  element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
+    /// <summary>
+    ///  Updates the specified bounds for an element.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The main purpose of this function is to remember what size someone specified in the <see cref="Control.Size"/>,
+    ///   <see cref="Control.Width"/>, <see cref="Control.Height"/>, <see cref="Control.Bounds"/>, property. (Its the
+    ///   whole reason the <see cref="BoundsSpecified"/> enum exists.) Consider this scenario. You set a <see cref="Button"/>
+    ///   to <see cref="DockStyle.Fill"/>, then <see cref="DockStyle.None"/>. When filled, the <see cref="Control.Size"/>
+    ///   changed to 300,300.  When you set it back to <see cref="DockStyle.None"/> the size switches back to 100,23.
+    ///   How does this happen?
+    ///  </para>
+    ///  <para>
+    ///   Setting the control to <see cref="DockStyle.Fill"/> (via <see cref="DefaultLayout"/> engine)
+    ///   element.SetBounds(newElementBounds, BoundsSpecified.None);
+    ///  </para>
+    ///  <para>
+    ///   (If someone happens to set the Size property here the specified bounds gets updated via Control.Size)
+    ///   SetBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
+    ///  </para>
+    ///  <para>
+    ///   Setting the control to <see cref="DockStyle.None"/> (via DefaultLayout.SetDock)
+    ///   element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
+    ///  </para>
+    /// </remarks>
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height, BoundsSpecified specified)
     {
         Rectangle originalBounds = GetSpecifiedBounds(element);
@@ -284,7 +316,7 @@ internal partial class CommonProperties
 
         if (xChangedButNotSpecified | yChangedButNotSpecified | wChangedButNotSpecified | hChangedButNotSpecified)
         {
-            // if any of them are changed and specified cache the new value.
+            // If any of them are changed and specified cache the new value.
 
             if (!xChangedButNotSpecified)
             {
@@ -327,29 +359,26 @@ internal partial class CommonProperties
         element.Properties.SetRectangle(s_specifiedBoundsProperty, bounds);
     }
 
-    ///  xClearPreferredSizeCache
-    ///  clears the preferred size cached for any control that overrides
-    ///  the internal GetPreferredSizeCore method.  DO NOT CALL DIRECTLY
+    /// <summary>
+    ///  Clears the preferred size cached for any control that overrides the internal
+    ///  <see cref="Control.GetPreferredSizeCore(Size)"/> method.  DO NOT CALL DIRECTLY
     ///  unless it is understood how the size of the control is going to be updated.
-    ///
+    /// </summary>
     internal static void xClearPreferredSizeCache(IArrangedElement element)
     {
         element.Properties.SetSize(s_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
-#if DEBUG
-        Debug_ClearProperties(element);
-#endif
-
         Debug.Assert(xGetPreferredSizeCache(element) == Size.Empty, "Error detected in xClearPreferredSizeCache.");
     }
 
-    ///  xClearAllPreferredSizeCaches
-    ///  clears all the caching for an IArrangedElement hierarchy
-    ///  typically done in dispose.
+    /// <summary>
+    ///  Clears all the caching for an <see cref="IArrangedElement"/> hierarchy. Typically done in dispose.
+    /// </summary>
     internal static void xClearAllPreferredSizeCaches(IArrangedElement start)
     {
         xClearPreferredSizeCache(start);
 
         ArrangedElementCollection controlsCollection = start.Children;
+
         // This may have changed the sizes of our children.
         // PERFNOTE: This is more efficient than using Foreach.  Foreach
         // forces the creation of an array subset enum each time we
@@ -360,10 +389,11 @@ internal partial class CommonProperties
         }
     }
 
-    ///  xGetPreferredSizeCache
-    ///  This value is the cached result of the return value from
-    ///  a control's GetPreferredSizeCore implementation when asked
-    ///  for a constraining value of LayoutUtils.MaxValue (or Size.Empty too).
+    /// <summary>
+    ///  This value is the cached result of the return value from a control's
+    ///  <see cref="Control.GetPreferredSizeCore(Size)"/> implementation when asked for a constraining
+    ///  value of <see cref="LayoutUtils.s_maxSize"/> (or <see cref="Size.Empty"/> too).
+    /// </summary>
     internal static Size xGetPreferredSizeCache(IArrangedElement element)
     {
         Size size = element.Properties.GetSize(s_preferredSizeCacheProperty, out bool found);
@@ -375,14 +405,14 @@ internal partial class CommonProperties
         return Size.Empty;
     }
 
-    ///  xSetPreferredSizeCache
-    ///  Sets a control's preferred size.  See xGetPreferredSizeCache.
+    /// <summary>
+    ///  Sets a control's preferred size. See <see cref="xGetPreferredSizeCache(IArrangedElement)"/>.
+    /// </summary>
     internal static void xSetPreferredSizeCache(IArrangedElement element, Size value)
     {
-        Debug.Assert(value == Size.Empty || value != xGetPreferredSizeCache(element), "PERF: Caller should guard against setting PreferredSizeCache to original value.");
-#if DEBUG
-        Debug_SnapProperties(element);
-#endif
+        Debug.Assert(
+            value == Size.Empty || value != xGetPreferredSizeCache(element),
+            "PERF: Caller should guard against setting PreferredSizeCache to original value.");
         element.Properties.SetSize(s_preferredSizeCacheProperty, value);
         Debug.Assert(xGetPreferredSizeCache(element) == value, "Error detected in xGetPreferredSizeCache.");
     }
@@ -391,21 +421,23 @@ internal partial class CommonProperties
 
     #region DockAndAnchorLayoutSpecific
 
-    ///  GetAutoSizeMode
+    /// <summary>
     ///  Returns whether or not a control should snap to its smallest size
     ///  or retain its original size and only grow if the preferred size is larger.
     ///  We tried not having GrowOnly as the default, but it becomes difficult
     ///  to design panels or have Buttons maintain their default size of 100,23
+    /// </summary>
     internal static AutoSizeMode GetAutoSizeMode(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
         return state[s_autoSizeModeSection] == 0 ? AutoSizeMode.GrowOnly : AutoSizeMode.GrowAndShrink;
     }
 
-    ///  GetNeedsDockAndAnchorLayout
-    ///  Do not use.  Internal property for DockAndAnchor layout.
-    ///  Returns true if DefaultLayout needs to do any work for this element.
-    ///  (Returns false if the element is purely absolutely positioned)
+    /// <summary>
+    ///  Do not use. Internal property for DockAndAnchor layout.
+    ///  Returns <see langword="true"/> if DefaultLayout needs to do any work for this element.
+    ///  (Returns <see langword="false"/> if the element is purely absolutely positioned)
+    /// </summary>
     internal static bool GetNeedsDockAndAnchorLayout(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -420,9 +452,10 @@ internal partial class CommonProperties
         return result;
     }
 
-    ///  GetNeedsAnchorLayout
-    ///  Do not use.  Internal property for DockAndAnchor layout.
-    ///  Returns true if DefaultLayout needs to do anchoring for this element.
+    /// <summary>
+    ///  Do not use. Internal property for DockAndAnchor layout.
+    ///  Returns <see langword="true"/> if DefaultLayout needs to do anchoring for this element.
+    /// </summary>
     internal static bool GetNeedsAnchorLayout(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -436,9 +469,10 @@ internal partial class CommonProperties
         return result;
     }
 
-    ///  GetNeedsDockLayout
-    ///  Do not use.  Internal property for DockAndAnchor layout.
-    ///  Returns true if DefaultLayout needs to do docking for this element.
+    /// <summary>
+    ///  Do not use. Internal property for DockAndAnchor layout.
+    ///  Returns <see langword="true"/> if DefaultLayout needs to do docking for this element.
+    /// </summary>
     internal static bool GetNeedsDockLayout(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -464,11 +498,12 @@ internal partial class CommonProperties
         return (value == 1);
     }
 
-    ///  SetAutoSizeMode
+    /// <summary>
     ///  Returns whether or not a control should snap to its smallest size
     ///  or retain its original size and only grow if the preferred size is larger.
     ///  We tried not having GrowOnly as the default, but it becomes difficult
-    ///  to design panels or have Buttons maintain their default size of 100,23
+    ///  to design panels or have Buttons maintain their default size of 100,23.
+    /// </summary>
     internal static void SetAutoSizeMode(IArrangedElement element, AutoSizeMode mode)
     {
         BitVector32 state = GetLayoutState(element);
@@ -476,32 +511,32 @@ internal partial class CommonProperties
         SetLayoutState(element, state);
     }
 
-    ///  ShouldSelfSize
+    /// <summary>
     ///  Compat flag for controls that previously sized themselves.
-    ///  See GetSelfAutoSize comments.
+    ///  See <see cref="GetSelfAutoSizeInDefaultLayout(IArrangedElement)"/> comments.
+    /// </summary>
     internal static bool ShouldSelfSize(IArrangedElement element)
     {
         if (GetAutoSize(element))
         {
-            // check for legacy layout engine
+            // Check for legacy layout engine
             if (element.Container is Control { LayoutEngine: DefaultLayout })
             {
                 return GetSelfAutoSizeInDefaultLayout(element);
             }
 
-            // else
-            //   - unknown element type
-            //   - new LayoutEngine which should set the size to the preferredSize anyways.
+            // Unknown element type or new LayoutEngine which should set the size to the preferredSize anyways.
             return false;
         }
 
-        // autosize false things should selfsize.
+        // Autosize false things should selfsize.
         return true;
     }
 
-    ///  SetSelfAutoSizeInDefaultLayout
+    /// <summary>
     ///  Compat flag for controls that previously sized themselves.
-    ///  See GetSelfAutoSize comments.
+    ///  See <see cref="GetSelfAutoSizeInDefaultLayout(IArrangedElement)"/> comments.
+    /// </summary>
     internal static void SetSelfAutoSizeInDefaultLayout(IArrangedElement element, bool value)
     {
         Debug.Assert(value != GetSelfAutoSizeInDefaultLayout(element), "PERF: Caller should guard against setting AutoSize to original value.");
@@ -513,9 +548,10 @@ internal partial class CommonProperties
         Debug.Assert(GetSelfAutoSizeInDefaultLayout(element) == value, "Error detected setting AutoSize.");
     }
 
-    ///  xGetAnchor -
-    ///  Do not use this.  Use DefaultLayout.GetAnchor.
+    /// <summary>
+    ///  Do not use this. Use <see cref="DefaultLayout.GetAnchor(IArrangedElement)"/>.
     ///  NOTE that Dock and Anchor are exclusive, so we store their enums in the same section.
+    /// </summary>
     internal static AnchorStyles xGetAnchor(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -529,9 +565,10 @@ internal partial class CommonProperties
         return value;
     }
 
-    ///  xGetAutoSizedAndAnchored -
-    ///  Do not use.  Internal property for DockAndAnchor layout.
-    ///  Returns true if the element is both AutoSized and Anchored.
+    /// <summary>
+    ///  Do not use. Internal property for DockAndAnchor layout.
+    ///  Returns <see langword="true"/> if the element is both AutoSize and Anchored.
+    /// </summary>
     internal static bool xGetAutoSizedAndAnchored(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -623,8 +660,6 @@ internal partial class CommonProperties
     #endregion
 
     #region FlowLayoutSpecific
-    //
-
     internal static bool GetFlowBreak(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -650,11 +685,15 @@ internal partial class CommonProperties
     #endregion
     #region AutoScrollSpecific
 
-    ///  GetLayoutBounds -
+    /// <summary>
     ///  This is the size used to determine whether or not we need scrollbars.
-    ///
-    ///  Used if the layoutengine always want to return the same layout bounds regardless
-    ///  of how it lays out. Example is TLP in RTL and LTR.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Used if the layout engine always wants to return the same layout bounds regardless
+    ///   of how it lays out. Example is TLP in RTL and LTR.
+    ///  </para>
+    /// </remarks>
     internal static Size GetLayoutBounds(IArrangedElement element)
     {
         Size size = element.Properties.GetSize(s_layoutBoundsProperty, out bool found);
@@ -666,24 +705,27 @@ internal partial class CommonProperties
         return Size.Empty;
     }
 
-    ///  SetLayoutBounds -
+    /// <summary>
     ///  This is the size used to determine whether or not we need scrollbars.
-    ///
-    ///  The TableLayout engine now calls CommonProperties.SetLayoutBounds when
-    ///  it is done with its layout. The layoutbounds are the total column width
-    ///  and the total row height. ScrollableControl checks if the LayoutBounds
-    ///  has been set in the CommonProperties when it tries to figure out if it
-    ///  should add scrollbars - but only if the layout engine is not the default
-    ///  layout engine. If the bounds has been set, ScrollableControl will use
-    ///  those bounds to check if scrollbars should be added, rather than doing
-    ///  its own magic to figure it out.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The <see cref="TableLayout"/> engine now calls <see cref="SetLayoutBounds(IArrangedElement, Size)"/> when it
+    ///   is done with its layout. The layout bounds are the total column width and the total row height.
+    ///   <see cref="ScrollableControl"/> checks if the layout bounds has been set in the <see cref="CommonProperties"/>
+    ///   when it tries to figure out if it should add scrollbars - but only if the layout engine is not the default
+    ///   layout engine. If the bounds has been set, <see cref="ScrollableControl"/> will use those bounds to check if
+    ///   scrollbars should be added, rather than doing its own magic to figure it out.
+    ///  </para>
+    /// </remarks>
     internal static void SetLayoutBounds(IArrangedElement element, Size value)
     {
         element.Properties.SetSize(s_layoutBoundsProperty, value);
     }
 
-    ///  HasLayoutBounds -
+    /// <summary>
     ///  Returns whether we have layout bounds stored for this element.
+    /// </summary>
     internal static bool HasLayoutBounds(IArrangedElement element)
     {
         element.Properties.GetSize(s_layoutBoundsProperty, out bool found);
@@ -693,93 +735,19 @@ internal partial class CommonProperties
     #endregion
     #region InternalCommonPropertiesHelpers
 
-    ///  GetLayoutState - returns the layout state bit vector from the property store.
-    ///  CAREFUL: this is a copy of the state.  You need to SetLayoutState() to save your changes.
-    ///
-    internal static BitVector32 GetLayoutState(IArrangedElement element)
-    {
-        return new BitVector32(element.Properties.GetInteger(s_layoutStateProperty));
-    }
+    /// <summary>
+    ///  Returns the layout state bit vector from the property store.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   CAREFUL: this is a copy of the state. You need to <see cref="SetLayoutState(IArrangedElement, BitVector32)"/>
+    ///   to save your changes.
+    ///  </para>
+    /// </remarks>
+    internal static BitVector32 GetLayoutState(IArrangedElement element) =>
+        new BitVector32(element.Properties.GetInteger(s_layoutStateProperty));
 
-    internal static void SetLayoutState(IArrangedElement element, BitVector32 state)
-    {
+    internal static void SetLayoutState(IArrangedElement element, BitVector32 state) =>
         element.Properties.SetInteger(s_layoutStateProperty, state.Data);
-    }
-    #endregion
-
-    #region DebugHelpers
-#if DEBUG
-
-    internal static TraceSwitch PreferredSize { get; } = new("PreferredSize", "Debug preferred size assertion");
-
-    internal static string Debug_GetChangedProperties(IArrangedElement element)
-    {
-        string diff = string.Empty;
-        if (PreferredSize.TraceVerbose)
-        {
-            if (element.Properties.GetObject(s_lastKnownStateProperty) is Dictionary<string, string?> propertyHash)
-            {
-                StringBuilder sb = new();
-
-                foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
-                {
-                    if (propertyHash.TryGetValue(pd.Name, out string? value) && (value != pd.Converter.ConvertToString(pd.GetValue(element))))
-                    {
-                        sb.AppendLine($"Prop [{pd.Name}] OLD [{propertyHash[pd.Name]}] NEW [{pd.Converter.ConvertToString(pd.GetValue(element))}]");
-                    }
-                }
-
-                diff = sb.ToString();
-            }
-        }
-        else
-        {
-            diff = "For more info, try enabling PreferredSize trace switch";
-        }
-
-        return diff;
-    }
-
-    internal static void Debug_SnapProperties(IArrangedElement element)
-    {
-        // DEBUG - store off the old state so we can figure out what has changed in a GPS assert
-        element.Properties.SetObject(s_lastKnownStateProperty, Debug_GetCurrentPropertyState(element));
-    }
-
-    internal static void Debug_ClearProperties(IArrangedElement element)
-    {
-        // DEBUG - clear off the old state so we can figure out what has changed in a GPS assert
-        element.Properties.SetObject(s_lastKnownStateProperty, null);
-    }
-
-    public static Dictionary<string, string?> Debug_GetCurrentPropertyState(object obj)
-    {
-        Dictionary<string, string?> propertyHash = [];
-        if (PreferredSize.TraceVerbose)
-        {
-            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj))
-            {
-                if (pd.Name == "PreferredSize")
-                {
-                    continue;  // avoid accidentally forcing a call to GetPreferredSize
-                }
-
-                try
-                {
-                    if (pd.IsBrowsable && !pd.IsReadOnly && pd.SerializationVisibility != DesignerSerializationVisibility.Hidden)
-                    {
-                        propertyHash[pd.Name] = pd.Converter.ConvertToString(pd.GetValue(obj));
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        return propertyHash;
-    }
-
-#endif
     #endregion
 }
