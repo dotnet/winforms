@@ -28,7 +28,8 @@ jobs:
           # override some variables for debug
           _SignType: test
           # Code coverage uploads fail on internal PRs
-          _Coverage: false
+          ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            _Coverage: false
         Release:
           _BuildConfig: Release
           _Coverage: false
