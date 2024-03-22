@@ -103,12 +103,18 @@ public sealed partial class MultilineStringEditor
 
                 FORMATETC textFormat = new()
                 {
-                    cfFormat = (ushort)CLIPBOARD_FORMAT.CF_TEXT
+                    cfFormat = (ushort)CLIPBOARD_FORMAT.CF_TEXT,
+                    dwAspect = (uint)DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = (uint)(TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI)
                 };
 
                 FORMATETC unicodeFormat = new()
                 {
-                    cfFormat = (ushort)CLIPBOARD_FORMAT.CF_UNICODETEXT
+                    cfFormat = (ushort)CLIPBOARD_FORMAT.CF_UNICODETEXT,
+                    dwAspect = (uint)DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = (uint)(TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI)
                 };
 
                 return lpdataobj->QueryGetData(&textFormat).Succeeded || lpdataobj->QueryGetData(&unicodeFormat).Succeeded
