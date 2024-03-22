@@ -45,7 +45,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             return null;
         }
 
-        OLE_HANDLE handle = picture.Value->Handle;
+        picture.Value->get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
 
         if (_lastManaged is not null && handle == _lastNativeHandle)
         {
@@ -57,7 +57,9 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             // GDI handles are sign extended 32 bit values.
             // We need to first cast to int so sign extension happens correctly.
             nint extendedHandle = (int)handle.Value;
-            switch (picture.Value->Type)
+            picture.Value->get_Type(out PICTYPE type).ThrowOnFailure();
+
+            switch (type)
             {
                 case PICTYPE.PICTYPE_ICON:
                     _pictureType = typeof(Icon);
@@ -115,9 +117,9 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             }
 
             using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), own, picture).ThrowOnFailure();
+            PInvokeCore.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), own, picture).ThrowOnFailure();
             _lastManaged = managedValue;
-            _lastNativeHandle = picture.Value->Handle;
+            picture.Value->get_Handle(out _lastNativeHandle).ThrowOnFailure();
             IUnknown* unknown;
             picture.Value->QueryInterface(IID.Get<IUnknown>(), (void**)&unknown).ThrowOnFailure();
             return (VARIANT)unknown;

@@ -110,7 +110,7 @@ public unsafe partial class DataObject
 
             HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
             {
-                var adviseSink = (IAdviseSink)ComHelpers.GetObjectForIUnknown((Com.IUnknown*)pAdvSink);
+                var adviseSink = (IAdviseSink)ComHelpers.GetObjectForIUnknown(pAdvSink);
                 return (HRESULT)((ComTypes.IDataObject)this).DAdvise(ref *(FORMATETC*)pformatetc, (ADVF)advf, adviseSink, out *(int*)pdwConnection);
             }
 

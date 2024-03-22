@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Windows.Win32.System.Ole;
 
 namespace System.Drawing;
 
@@ -15,7 +16,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(IconConverter))]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
+public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IIcon
 {
     private static int s_bitDepth;
 
@@ -788,9 +789,29 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
 
     public override string ToString() => SR.toStringIcon;
 
-    internal static class Ole
+    /// <summary>
+    ///  Saves this <see cref="Icon"/> to the specified output <see cref="Stream"/>.
+    /// </summary>
+    /// <param name="outputStream">The <see cref="Stream"/> to save to.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="outputStream"/> was <see langword="null"/>.</exception>
+    public unsafe void Save(Stream outputStream)
     {
-        public const int PICTYPE_ICON = 3;
+        ArgumentNullException.ThrowIfNull(outputStream);
+
+        if (_iconData is not null)
+        {
+            outputStream.Write(_iconData, 0, _iconData.Length);
+        }
+        else
+        {
+            // Ideally, we would pick apart the icon using GetIconInfo, and then pull the individual bitmaps out,
+            // converting them to DIBS and saving them into the file. But, in the interest of simplicity, we just
+            // call to OLE to do it for us.
+
+            using var iPicture = IPicture.CreateFromIcon(this, copy: false);
+            using var iStream = outputStream.ToIStream(makeSeekable: true);
+            iPicture.Value->SaveAsFile(iStream, (BOOL)(-1), pCbSize: null).ThrowOnFailure();
+        }
     }
 
 #if NET8_0_OR_GREATER

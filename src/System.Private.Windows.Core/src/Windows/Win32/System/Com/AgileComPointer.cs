@@ -120,7 +120,7 @@ internal unsafe class AgileComPointer<TInterface> :
     public object GetManagedObject()
     {
         using var scope = GetInterface();
-        return ComHelpers.GetObjectForIUnknown(scope.AsUnknown);
+        return ComHelpers.GetObjectForIUnknown(scope);
     }
 
     ~AgileComPointer()
