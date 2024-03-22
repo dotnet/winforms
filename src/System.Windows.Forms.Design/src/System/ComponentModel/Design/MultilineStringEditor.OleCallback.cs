@@ -117,9 +117,9 @@ public sealed partial class MultilineStringEditor
                     tymed = (uint)(TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI)
                 };
 
-                return lpdataobj->QueryGetData(&textFormat).Succeeded || lpdataobj->QueryGetData(&unicodeFormat).Succeeded
-                    ? HRESULT.S_OK
-                    : HRESULT.E_FAIL;
+                bool success = lpdataobj->QueryGetData(&textFormat).Succeeded || lpdataobj->QueryGetData(&unicodeFormat).Succeeded;
+                Debug.Assert(success);
+                return success ? HRESULT.S_OK : HRESULT.E_FAIL;
             }
 
             return HRESULT.E_NOTIMPL;
