@@ -4,8 +4,6 @@
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
-using System.Windows.Forms.Design;
-using System.Xml.Linq;
 using Moq;
 
 namespace System.ComponentModel.Design.Tests;
