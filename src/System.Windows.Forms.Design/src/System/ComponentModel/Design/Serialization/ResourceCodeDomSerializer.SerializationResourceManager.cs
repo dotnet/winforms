@@ -166,6 +166,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  This method examines all the resources for the provided culture. When it finds a resource with a key in the format of  "[objectName].[property name]"; it will apply that resources value to the corresponding property on the object.
         /// </summary>
+        [RequiresUnreferencedCode("The Type of value cannot be statically discovered.")]
         public override void ApplyResources(object value, string objectName, CultureInfo? culture)
         {
             culture ??= ReadCulture;

@@ -1244,20 +1244,24 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         string? ICustomTypeDescriptor.GetComponentName() => TypeDescriptor.GetComponentName(DataGridViewColumn);
 
+        [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
         TypeConverter ICustomTypeDescriptor.GetConverter() => TypeDescriptor.GetConverter(DataGridViewColumn);
 
         EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(DataGridViewColumn);
 
         PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(DataGridViewColumn);
 
+        [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
         object? ICustomTypeDescriptor.GetEditor(Type type) => TypeDescriptor.GetEditor(DataGridViewColumn, type);
 
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(DataGridViewColumn);
 
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs) => TypeDescriptor.GetEvents(DataGridViewColumn, attrs!);
 
+        [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => ((ICustomTypeDescriptor)this).GetProperties(null);
 
+        [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attrs)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(DataGridViewColumn);
