@@ -789,16 +789,21 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
 
     public override string ToString() => SR.toStringIcon;
 
+    /// <summary>
+    ///  Saves this <see cref="Icon"/> to the specified output <see cref="Stream"/>.
+    /// </summary>
+    /// <param name="outputStream">The <see cref="Stream"/> to save to.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="outputStream"/> was <see langword="null"/>.</exception>
     public unsafe void Save(Stream outputStream)
     {
+        ArgumentNullException.ThrowIfNull(outputStream);
+
         if (_iconData is not null)
         {
             outputStream.Write(_iconData, 0, _iconData.Length);
         }
         else
         {
-            ArgumentNullException.ThrowIfNull(outputStream);
-
             // Ideally, we would pick apart the icon using GetIconInfo, and then pull the individual bitmaps out,
             // converting them to DIBS and saving them into the file. But, in the interest of simplicity, we just
             // call to OLE to do it for us.

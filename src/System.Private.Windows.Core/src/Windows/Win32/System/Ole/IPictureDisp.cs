@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace Windows.Win32.System.Ole;
 
@@ -12,7 +11,7 @@ internal unsafe partial struct IPictureDisp
     {
         // GetObjectForIUnknown increments the ref count so we need to dispose.
         using ComScope<IPictureDisp> picture = CreateFromImage(image);
-        return (Interface)Marshal.GetObjectForIUnknown(picture);
+        return (Interface)ComHelpers.GetObjectForIUnknown(picture);
     }
 
     public static ComScope<IPictureDisp> CreateFromImage(IImage image)

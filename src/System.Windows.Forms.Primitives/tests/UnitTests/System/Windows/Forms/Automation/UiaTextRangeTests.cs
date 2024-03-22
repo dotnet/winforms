@@ -30,7 +30,7 @@ public unsafe class UiaTextRangeTests
 
         using ComScope<IRawElementProviderSimple> elementProviderScope = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetEnclosingElement(elementProviderScope).Succeeded);
-        Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(elementProviderScope.AsUnknown));
+        Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(elementProviderScope));
 
         object actual = textRange.TestAccessor()._provider;
 
@@ -228,7 +228,7 @@ public unsafe class UiaTextRangeTests
 
         using ComScope<ITextRangeProvider> rangeScope = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).Clone(rangeScope).Succeeded);
-        UiaTextRange actual = (UiaTextRange)ComHelpers.GetObjectForIUnknown(rangeScope.AsUnknown);
+        UiaTextRange actual = (UiaTextRange)ComHelpers.GetObjectForIUnknown(rangeScope);
         Assert.Equal(textRange.Start, actual.Start);
         Assert.Equal(textRange.End, actual.End);
     }
@@ -843,7 +843,7 @@ and numbers 12345";
         UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         using ComScope<IRawElementProviderSimple> actual = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetEnclosingElement(actual).Succeeded);
-        Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(actual.AsUnknown));
+        Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(actual));
     }
 
     [StaTheory]

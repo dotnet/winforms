@@ -64,7 +64,7 @@ public unsafe partial class DataObject
                     throw new ExternalException(SR.ExternalException, (int)HRESULT.E_NOTIMPL);
                 }
 
-                return (IEnumFORMATETC)ComHelpers.GetObjectForIUnknown(nativeFormat.AsUnknown);
+                return (IEnumFORMATETC)ComHelpers.GetObjectForIUnknown(nativeFormat);
             }
 
             int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut)
