@@ -16,11 +16,11 @@ internal class ArrayElementGridEntry : GridEntry
 
     public override GridItemType GridItemType => GridItemType.ArrayValue;
 
-    public override bool IsValueEditable => ParentGridEntry.IsValueEditable;
+    public override bool IsValueEditable => ParentGridEntry?.IsValueEditable ?? false;
 
     public override string PropertyLabel => $"[{_index}]";
 
-    public override Type? PropertyType => ParentGridEntry.PropertyType?.GetElementType();
+    public override Type? PropertyType => ParentGridEntry?.PropertyType?.GetElementType();
 
     public override object? PropertyValue
     {
@@ -38,5 +38,5 @@ internal class ArrayElementGridEntry : GridEntry
         }
     }
 
-    public override bool ShouldRenderReadOnly => ParentGridEntry.ShouldRenderReadOnly;
+    public override bool ShouldRenderReadOnly => ParentGridEntry?.ShouldRenderReadOnly ?? false;
 }

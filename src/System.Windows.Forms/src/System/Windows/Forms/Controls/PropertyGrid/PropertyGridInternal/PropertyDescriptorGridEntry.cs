@@ -121,7 +121,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    internal override string LabelToolTipText => _toolTipText ?? base.LabelToolTipText;
+    internal override string? LabelToolTipText => _toolTipText ?? base.LabelToolTipText;
 
     internal override bool Enumerable => base.Enumerable && !IsPropertyReadOnly;
 
@@ -352,7 +352,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    protected virtual void NotifyParentsOfChanges(GridEntry entry)
+    protected virtual void NotifyParentsOfChanges(GridEntry? entry)
     {
         // See if we need to notify the parent(s) up the chain.
         while (entry is PropertyDescriptorGridEntry propertyEntry &&
