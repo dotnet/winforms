@@ -329,7 +329,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     internal static void ResolveVariantTypeConverterAndTypeEditor(
         object? propertyValue,
         ref TypeConverter currentConverter,
-        [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes.All))] Type editorType,
+        Type editorType,
         ref object? currentEditor)
     {
         if (propertyValue is not null && !Convert.IsDBNull(propertyValue))
