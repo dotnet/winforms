@@ -1585,8 +1585,8 @@ public partial class ToolStripDropDown : ToolStrip
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float dx, float dy)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
         SuspendLayout();
+
         try
         {
             // Get size values in advance to prevent one change from affecting another.

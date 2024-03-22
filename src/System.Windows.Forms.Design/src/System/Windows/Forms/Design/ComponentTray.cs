@@ -239,6 +239,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         object primary = ((ISelectionService)sender).PrimarySelection;
         Invalidate();
         _fSelectionChanged = true;
+
         // Accessibility information
         foreach (object selObj in _selectedObjects)
         {
@@ -247,7 +248,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 Control c = TrayControl.FromComponent(component);
                 if (c is not null)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, traycontrol = {c}");
                     PInvoke.NotifyWinEvent(
                         (uint)AccessibleEvents.SelectionAdd,
                         c,
@@ -847,7 +847,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         if (disposing && _controls is not null)
         {
             IExtenderProviderService es = (IExtenderProviderService)GetService(typeof(IExtenderProviderService));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (es is not null), "IExtenderProviderService not found");
             es?.RemoveExtenderProvider(this);
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -863,12 +862,12 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (componentChangeService is not null)
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved -= OnComponentRemoved;
             }
 
-            SystemEvents.DisplaySettingsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+            SystemEvents.DisplaySettingsChanged -= OnSystemSettingChanged;
+            SystemEvents.InstalledFontsChanged -= OnSystemSettingChanged;
+            SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
             IMenuCommandService mcs = MenuService;
             if (mcs is not null)
             {
@@ -1034,7 +1033,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         {
             OnLostCapture();
             IEventBindingService eps = (IEventBindingService)GetService(typeof(IEventBindingService));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (eps is not null), "IEventBindingService not found");
             eps?.ShowCode();
         }
     }
@@ -1055,14 +1053,15 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
     /// </summary>
     protected override void OnDragDrop(DragEventArgs de)
     {
-        // This will be used once during PositionComponent to place the component at the drop point. It is automatically set to null afterwards, so further components appear after the first one dropped.
+        // This will be used once during PositionComponent to place the component at the drop point. It is automatically
+        // set to null afterwards, so further components appear after the first one dropped.
         _mouseDropLocation = PointToClient(new Point(de.X, de.Y));
-        _autoScrollPosBeforeDragging = AutoScrollPosition; // save the scroll position
+        _autoScrollPosBeforeDragging = AutoScrollPosition;
+
         if (_mouseDragTool is not null)
         {
             ToolboxItem tool = _mouseDragTool;
             _mouseDragTool = null;
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (GetService(typeof(IDesignerHost)) is not null), "IDesignerHost not found");
             try
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -1257,7 +1256,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 try
                 {
                     ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss is not null), "ISelectionService not found");
                     ss?.SetSelectedComponents(new object[] { _mainDesigner.Component });
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
@@ -1345,7 +1343,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             try
             {
                 ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss is not null), "ISelectionService not found");
                 ss?.SetSelectedComponents(comps);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
@@ -1905,10 +1902,9 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             UpdateIconInfo();
 
             IComponentChangeService cs = (IComponentChangeService)tray.GetService(typeof(IComponentChangeService));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (cs is not null), "IComponentChangeService not found");
             if (cs is not null)
             {
-                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentRename += OnComponentRename;
             }
 
             ISite site = component.Site;
@@ -2003,16 +1999,15 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 ISite site = _component.Site;
                 if (site is not null)
                 {
-                    IComponentChangeService cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (cs is not null), "IComponentChangeService not found");
-                    if (cs is not null)
+                    if (site.TryGetService(out IComponentChangeService cs))
                     {
-                        cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                        cs.ComponentRename -= OnComponentRename;
                     }
 
-                    IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
-                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ds is not null), "IDictionaryService not found");
-                    ds?.SetValue(typeof(TrayControl), null);
+                    if (site.TryGetService(out IDictionaryService ds))
+                    {
+                        ds.SetValue(typeof(TrayControl), null);
+                    }
                 }
             }
 
@@ -2024,24 +2019,17 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         /// </summary>
         public static TrayControl FromComponent(IComponent component)
         {
-            TrayControl c = null;
             if (component is null)
             {
                 return null;
             }
 
-            ISite site = component.Site;
-            if (site is not null)
+            if (component.Site.TryGetService(out IDictionaryService ds))
             {
-                IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ds is not null), "IDictionaryService not found");
-                if (ds is not null)
-                {
-                    c = (TrayControl)ds.GetValue(typeof(TrayControl));
-                }
+                return (TrayControl)ds.GetValue(typeof(TrayControl));
             }
 
-            return c;
+            return null;
         }
 
         /// <summary>
@@ -2131,23 +2119,27 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         protected override void OnMouseDown(MouseEventArgs me)
         {
             base.OnMouseDown(me);
-            if (!_tray.TabOrderActive)
+            if (_tray.TabOrderActive)
             {
-                _tray.FocusDesigner();
-                // If this is the left mouse button, then begin a drag.
-                if (me.Button == MouseButtons.Left)
+                return;
+            }
+
+            _tray.FocusDesigner();
+
+            // If this is the left mouse button, then begin a drag.
+            if (me.Button == MouseButtons.Left)
+            {
+                Capture = true;
+                _mouseDragLast = PointToScreen(new Point(me.X, me.Y));
+
+                // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up.
+                // Make sure the component is selected.
+                _ctrlSelect = PInvoke.GetKeyState((int)Keys.ControlKey) != 0;
+                if (!_ctrlSelect)
                 {
-                    Capture = true;
-                    _mouseDragLast = PointToScreen(new Point(me.X, me.Y));
-                    // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-                    _ctrlSelect = PInvoke.GetKeyState((int)Keys.ControlKey) != 0;
-                    if (!_ctrlSelect)
-                    {
-                        ISelectionService sel = (ISelectionService)_tray.GetService(typeof(ISelectionService));
-                        // Make sure the component is selected
-                        Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (sel is not null), "ISelectionService not found");
-                        sel?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
-                    }
+                    ISelectionService sel = (ISelectionService)_tray.GetService(typeof(ISelectionService));
+                    // Make sure the component is selected
+                    sel?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
                 }
             }
         }
@@ -2443,7 +2435,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             PropertyDescriptor defaultPropEvent = null;
             bool eventChanged = false;
             IEventBindingService eps = (IEventBindingService)GetService(typeof(IEventBindingService));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (eps is not null), "IEventBindingService not found");
             if (eps is not null)
             {
                 defaultPropEvent = eps.GetEventProperty(defaultEvent);
@@ -2453,7 +2444,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             if (defaultPropEvent is null || defaultPropEvent.IsReadOnly)
             {
                 eps?.ShowCode();
-
                 return;
             }
 

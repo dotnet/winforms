@@ -1081,13 +1081,15 @@ public static partial class ToolStripManager
 
         // We only do this if the source and target toolstrips are the same
         bool canMerge = IsSpecialMDIStrip(sourceToolStrip);
-        canMerge = (canMerge || (sourceToolStrip.AllowMerge &&
-                                  targetToolStrip.AllowMerge &&
-                                  (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))));
+        canMerge = canMerge
+            || (sourceToolStrip.AllowMerge
+                && targetToolStrip.AllowMerge
+                && (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType())
+                    || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType())));
+
         MergeHistory? mergeHistory = null;
         if (canMerge)
         {
-            Debug.Indent();
             mergeHistory = new MergeHistory(sourceToolStrip);
 
             int originalCount = sourceToolStrip.Items.Count;
@@ -1113,7 +1115,6 @@ public static partial class ToolStripManager
                 }
                 finally
                 {
-                    Debug.Unindent();
                     sourceToolStrip.ResumeLayout();
                     targetToolStrip.ResumeLayout();
                 }
@@ -1131,8 +1132,8 @@ public static partial class ToolStripManager
 
     private static void MergeRecursive(ToolStripItem source, ToolStripItemCollection destinationItems, Stack<MergeHistoryItem> history)
     {
-        Debug.Indent();
         MergeHistoryItem maction;
+
         switch (source.MergeAction)
         {
             case MergeAction.MatchOnly:
@@ -1235,8 +1236,6 @@ public static partial class ToolStripManager
                 history.Push(maction);
                 break;
         }
-
-        Debug.Unindent();
     }
 
     /// <summary>
@@ -1314,7 +1313,6 @@ public static partial class ToolStripManager
                     reApply.Push(history.MergedToolStrip);
                 }
 
-                Debug.Indent();
                 while (history.MergeHistoryItemsStack.Count > 0)
                 {
                     MergeHistoryItem historyItem = history.MergeHistoryItemsStack.Pop();
@@ -1331,8 +1329,6 @@ public static partial class ToolStripManager
                             break;
                     }
                 }
-
-                Debug.Unindent();
             }
 
             // Re-apply the merges of the toolstrips we had to unmerge first.

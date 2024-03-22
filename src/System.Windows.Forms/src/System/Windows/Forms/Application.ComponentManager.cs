@@ -180,16 +180,12 @@ public sealed partial class Application
 
             if (uContext is msoccontext.All or msoccontext.Mine)
             {
-                Debug.Indent();
-
                 // We should notify all components we contain that the state has changed.
                 foreach (ComponentHashtableEntry entry in OleComponents.Values)
                 {
                     using var component = entry.component.GetInterface();
                     component.Value->OnEnterState(uStateID, false);
                 }
-
-                Debug.Unindent();
             }
 
             return false;

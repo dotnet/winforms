@@ -414,7 +414,7 @@
       </trans-unit>
       <trans-unit id="BindingNotSupported">
         <source>Binding operations are not supported when application trimming is enabled.</source>
-        <target state="new">Binding operations are not supported when application trimming is enabled.</target>
+        <target state="translated">Le operazioni di binding non sono supportate quando è abilitata la limitazione dell'applicazione.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
