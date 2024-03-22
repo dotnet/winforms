@@ -1161,81 +1161,78 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
     {
-        ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
-        if (svc is not null)
+        if (!TryGetService(out ISelectionService svc))
         {
-            ICollection selComponents = svc.GetSelectedComponents();
+            return;
+        }
 
-            // Setup the correct active accessibility selection / focus data
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionChanged");
-            foreach (object selObj in selComponents)
-            {
-                if (selObj is Control c)
-                {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, control = {c}");
-                    PInvoke.NotifyWinEvent(
-                        (uint)AccessibleEvents.SelectionAdd,
-                        c,
-                        (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
-                        (int)PInvoke.CHILDID_SELF);
-                }
-            }
+        ICollection selComponents = svc.GetSelectedComponents();
 
-            if (svc.PrimarySelection is Control primary)
+        // Setup the correct active accessibility selection / focus data
+        foreach (object selObj in selComponents)
+        {
+            if (selObj is Control c)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: Focus, control = {primary}");
                 PInvoke.NotifyWinEvent(
-                    (uint)AccessibleEvents.Focus,
-                    primary,
+                    (uint)AccessibleEvents.SelectionAdd,
+                    c,
                     (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
                     (int)PInvoke.CHILDID_SELF);
             }
+        }
 
-            // See if there are visual controls selected.  If so, we add a context attribute.
-            // Otherwise, we remove the attribute.  We do not count the form.
-            IHelpService hs = (IHelpService)GetService(typeof(IHelpService));
+        if (svc.PrimarySelection is Control primary)
+        {
+            PInvoke.NotifyWinEvent(
+                (uint)AccessibleEvents.Focus,
+                primary,
+                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                (int)PInvoke.CHILDID_SELF);
+        }
 
-            if (hs is not null)
-            {
-                ushort type = 0;
-                string[] types =
-                [
-                    "VisualSelection",
+        // See if there are visual controls selected.  If so, we add a context attribute.
+        // Otherwise, we remove the attribute.  We do not count the form.
+        IHelpService hs = (IHelpService)GetService(typeof(IHelpService));
+
+        if (hs is not null)
+        {
+            ushort type = 0;
+            string[] types =
+            [
+                "VisualSelection",
                     "NonVisualSelection",
                     "MixedSelection"
-                ];
+            ];
 
-                foreach (object obj in selComponents)
+            foreach (object obj in selComponents)
+            {
+                if (obj is Control)
                 {
-                    if (obj is Control)
+                    if (obj != Component)
                     {
-                        if (obj != Component)
-                        {
-                            type |= 1;
-                        }
-                    }
-                    else
-                    {
-                        type |= 2;
-                    }
-
-                    if (type == 3)
-                    {
-                        break;
+                        type |= 1;
                     }
                 }
-
-                // Remove any prior attribute
-                //
-                for (int i = 0; i < types.Length; i++)
+                else
                 {
-                    hs.RemoveContextAttribute("Keyword", types[i]);
+                    type |= 2;
                 }
 
-                if (type != 0)
+                if (type == 3)
                 {
-                    hs.AddContextAttribute("Keyword", types[type - 1], HelpKeywordType.GeneralKeyword);
+                    break;
                 }
+            }
+
+            // Remove any prior attribute
+            for (int i = 0; i < types.Length; i++)
+            {
+                hs.RemoveContextAttribute("Keyword", types[i]);
+            }
+
+            if (type != 0)
+            {
+                hs.AddContextAttribute("Keyword", types[type - 1], HelpKeywordType.GeneralKeyword);
             }
         }
     }

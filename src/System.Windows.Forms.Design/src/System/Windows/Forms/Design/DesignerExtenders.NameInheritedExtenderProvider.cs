@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms.Design;
@@ -30,7 +28,7 @@ internal partial class DesignerExtenders
         {
             // We never extend the root
             //
-            IComponent baseComp = GetBaseComponent(o);
+            IComponent? baseComp = GetBaseComponent(o);
             if (baseComp == o)
             {
                 return false;
@@ -38,7 +36,7 @@ internal partial class DesignerExtenders
 
             // See if this object is inherited.  If so, then we are interested in it.
             //
-            if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)].Equals(InheritanceAttribute.NotInherited))
+            if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)]?.Equals(InheritanceAttribute.NotInherited) ?? false)
             {
                 return true;
             }
@@ -47,7 +45,7 @@ internal partial class DesignerExtenders
         }
 
         [ReadOnly(true)]
-        public override string GetName(IComponent comp)
+        public override string? GetName(IComponent comp)
         {
             return base.GetName(comp);
         }

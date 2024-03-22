@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -78,10 +77,6 @@ public partial class AccessibleObject
             // NOTE: rgvar is a pointer to an array of variants
             if (_owner.IsClientObject)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"EnumVariantObject: owner = {_owner}, celt = {celt}");
-
-                Debug.Indent();
-
                 int childCount;
                 int[]? newOrder;
 
@@ -95,8 +90,6 @@ public partial class AccessibleObject
                     {
                         *pCeltFetched = 0;
                     }
-
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: no children to add");
                 }
                 else if ((newOrder = _owner.GetSysChildOrder()) is not null)
                 {
@@ -106,8 +99,6 @@ public partial class AccessibleObject
                 {
                     NextFromSystem(celt, rgVar, pCeltFetched);
                 }
-
-                Debug.Unindent();
             }
             else
             {
@@ -145,8 +136,6 @@ public partial class AccessibleObject
             {
                 *pCeltFetched = fetched;
             }
-
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
         }
 
         /// <remarks>
@@ -189,9 +178,6 @@ public partial class AccessibleObject
                 }
 
                 _currentChild++;
-                Debug.WriteLineIf(
-                    CompModSwitches.MSAA.TraceInfo,
-                     $"AccessibleObject.IEV.Next: adding sys child {_currentChild} of {newOrder.Length}");
             }
 
             if (pCeltFetched is not null)
@@ -213,9 +199,6 @@ public partial class AccessibleObject
 
                 // The type needs to be `int` or controls without UIA support build an incorrect Accessibility tree.
                 rgVar[i] = (VARIANT)(int)_currentChild;
-                Debug.WriteLineIf(
-                    CompModSwitches.MSAA.TraceInfo,
-                    $"AccessibleObject.IEV.Next: adding own child {_currentChild} of {childCount}");
             }
 
             if (pCeltFetched is not null)

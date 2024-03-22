@@ -376,21 +376,7 @@ public abstract partial class TextBoxBase : Control
 
     internal virtual bool CanRaiseTextChangedEvent => true;
 
-    protected override bool CanEnableIme
-    {
-        get
-        {
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_CanEnableIme(), this = {this}");
-            Debug.Indent();
-
-            bool canEnable = !(ReadOnly || PasswordProtect) && base.CanEnableIme;
-
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {canEnable}");
-            Debug.Unindent();
-
-            return canEnable;
-        }
-    }
+    protected override bool CanEnableIme => !(ReadOnly || PasswordProtect) && base.CanEnableIme;
 
     /// <summary>
     ///  Gets a value indicating whether the user can undo the previous operation in a text box control.
@@ -559,23 +545,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     protected override ImeMode ImeModeBase
     {
-        get
-        {
-            if (DesignMode)
-            {
-                return base.ImeModeBase;
-            }
-
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_ImeModeInternal(), this = {this}");
-            Debug.Indent();
-
-            ImeMode imeMode = CanEnableIme ? base.ImeModeBase : ImeMode.Disable;
-
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {imeMode}");
-            Debug.Unindent();
-
-            return imeMode;
-        }
+        get => (DesignMode || CanEnableIme) ? base.ImeModeBase : ImeMode.Disable;
         set => base.ImeModeBase = value;
     }
 

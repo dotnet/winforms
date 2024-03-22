@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Primitives;
@@ -436,8 +435,6 @@ public partial class Control
 
         public override int GetHelpTopic(out string? fileName)
         {
-            int topic = 0;
-
             if (!this.TryGetOwnerAs(out Control? owner)
                 || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler handler)
             {
@@ -448,7 +445,7 @@ public partial class Control
             handler(owner, args);
             fileName = args.HelpNamespace;
 
-            int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out topic);
+            int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out int topic);
 
             return topic;
         }
@@ -470,9 +467,6 @@ public partial class Control
             {
                 return;
             }
-
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
-                $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
             PInvoke.NotifyWinEvent(
                 (uint)accEvent,

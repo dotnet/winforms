@@ -352,7 +352,7 @@ public abstract partial class AxHost
             [MemberNotNull(nameof(_components))]
             void GetAllChildren(Control control)
             {
-                _components ??= new();
+                _components ??= [];
 
                 if (control != _parent)
                 {

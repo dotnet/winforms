@@ -195,8 +195,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             if (intWndProcFlags == 0)
             {
-                Debug.Indent();
-
                 if (t_userSetProcFlags != 0)
                 {
                     intWndProcFlags = t_userSetProcFlags;
@@ -221,7 +219,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 #endif
                 intWndProcFlags |= InitializedFlags;
                 t_wndProcFlags = (byte)intWndProcFlags;
-                Debug.Unindent();
             }
 
             return intWndProcFlags;

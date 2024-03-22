@@ -1249,22 +1249,14 @@ internal class ControlCommandSet : CommandSet
     /// </summary>
     protected void OnStatusShowGrid(object sender, EventArgs e)
     {
-        if (site is not null)
+        if (site.TryGetService(out IDesignerHost host)
+            && host.RootComponent is Control baseComponent
+            && GetProperty(baseComponent, "DrawGrid") is { } property)
         {
-            IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
-
-            if (host?.RootComponent is Control baseComponent)
-            {
-                PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
-                if (prop is not null)
-                {
-                    bool drawGrid = (bool)prop.GetValue(baseComponent);
-                    MenuCommand cmd = (MenuCommand)sender;
-                    cmd.Enabled = true;
-                    cmd.Checked = drawGrid;
-                }
-            }
+            bool drawGrid = (bool)property.GetValue(baseComponent);
+            MenuCommand cmd = (MenuCommand)sender;
+            cmd.Enabled = true;
+            cmd.Checked = drawGrid;
         }
     }
 
@@ -1274,22 +1266,14 @@ internal class ControlCommandSet : CommandSet
     /// </summary>
     protected void OnStatusSnapToGrid(object sender, EventArgs e)
     {
-        if (site is not null)
+        if (site.TryGetService(out IDesignerHost host)
+            && host.RootComponent is Control baseComponent
+            && GetProperty(baseComponent, "SnapToGrid") is { } property)
         {
-            IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
-
-            if (host?.RootComponent is Control baseComponent)
-            {
-                PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
-                if (prop is not null)
-                {
-                    bool snapToGrid = (bool)prop.GetValue(baseComponent);
-                    MenuCommand cmd = (MenuCommand)sender;
-                    cmd.Enabled = controlsOnlySelection;
-                    cmd.Checked = snapToGrid;
-                }
-            }
+            bool snapToGrid = (bool)property.GetValue(baseComponent);
+            MenuCommand cmd = (MenuCommand)sender;
+            cmd.Enabled = controlsOnlySelection;
+            cmd.Checked = snapToGrid;
         }
     }
 
@@ -1325,7 +1309,6 @@ internal class ControlCommandSet : CommandSet
 
                 // There must also be a control in the mix, and not the base component, and
                 // it cannot be privately inherited.
-                //
                 ICollection selectedComponents = SelectionService.GetSelectedComponents();
 
                 enable = false;

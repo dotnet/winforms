@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
 
@@ -28,12 +27,10 @@ public partial class DataObject
 
         public DataStore()
         {
-            CompModSwitches.DataObject.TraceVerbose("DataStore: Constructed DataStore");
         }
 
         public virtual object? GetData(string format, bool autoConvert)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetData: {format}, {autoConvert}");
             if (string.IsNullOrWhiteSpace(format))
             {
                 return null;
@@ -73,35 +70,18 @@ public partial class DataObject
                 }
             }
 
-            if (original is not null)
-            {
-                return original;
-            }
-            else
-            {
-                return baseVar;
-            }
+            return original ?? baseVar;
         }
 
-        public virtual object? GetData(string format)
-        {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetData: {format}");
-            return GetData(format, true);
-        }
+        public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
-        public virtual object? GetData(Type format)
-        {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetData: {format.FullName}");
-            return GetData(format.FullName!);
-        }
+        public virtual object? GetData(Type format) => GetData(format.FullName!);
 
         public virtual void SetData(string format, bool autoConvert, object? data)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format}, {autoConvert}, {data?.ToString() ?? "(null)"}");
             if (string.IsNullOrWhiteSpace(format))
             {
                 ArgumentNullException.ThrowIfNull(format);
-
                 throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
             }
 
@@ -123,23 +103,16 @@ public partial class DataObject
             _data[format] = new DataStoreEntry(data, autoConvert);
         }
 
-        public virtual void SetData(string format, object? data)
-        {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format}, {data?.ToString() ?? "(null)"}");
-            SetData(format, true, data);
-        }
+        public virtual void SetData(string format, object? data) => SetData(format, autoConvert: true, data);
 
         public virtual void SetData(Type format, object? data)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format?.FullName ?? "(null)"}, {data?.ToString() ?? "(null)"}");
             ArgumentNullException.ThrowIfNull(format);
-
             SetData(format.FullName!, data);
         }
 
         public virtual void SetData(object? data)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {data?.ToString() ?? "(null)"}");
             ArgumentNullException.ThrowIfNull(data);
 
             if (data is ISerializable
@@ -153,13 +126,11 @@ public partial class DataObject
 
         public virtual bool GetDataPresent(Type format)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetDataPresent: {format.FullName}");
             return GetDataPresent(format.FullName!);
         }
 
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetDataPresent: {format}, {autoConvert}");
             if (string.IsNullOrWhiteSpace(format))
             {
                 return false;
@@ -173,42 +144,34 @@ public partial class DataObject
             else
             {
                 string[] formats = GetFormats(autoConvert);
-                CompModSwitches.DataObject.TraceVerbose($"DataStore:  got {formats.Length} formats from get formats");
                 Debug.Assert(formats is not null, "Null returned from GetFormats");
+
                 for (int i = 0; i < formats.Length; i++)
                 {
                     Debug.Assert(formats[i] is not null, $"Null format inside of formats at index {i}");
                     if (format.Equals(formats[i]))
                     {
-                        CompModSwitches.DataObject.TraceVerbose("DataStore: GetDataPresent: returning true");
                         return true;
                     }
                 }
 
-                CompModSwitches.DataObject.TraceVerbose("DataStore: GetDataPresent: returning false");
                 return false;
             }
         }
 
-        public virtual bool GetDataPresent(string format)
-        {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetDataPresent: {format}");
-            return GetDataPresent(format, true);
-        }
+        public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
         public virtual string[] GetFormats(bool autoConvert)
         {
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: GetFormats: {autoConvert}");
             Debug.Assert(_data is not null, "data collection can't be null");
             Debug.Assert(_data.Keys is not null, "data Keys collection can't be null");
 
             string[] baseVar = new string[_data.Keys.Count];
             _data.Keys.CopyTo(baseVar, 0);
             Debug.Assert(baseVar is not null, "Collections should never return NULL arrays!!!");
+
             if (autoConvert)
             {
-                CompModSwitches.DataObject.TraceVerbose("DataStore: applying autoConvert");
-
                 // Since we are only adding elements to the HashSet, the order will be preserved.
                 int baseVarLength = baseVar.Length;
                 HashSet<string> distinctFormats = new(baseVarLength);
@@ -233,14 +196,9 @@ public partial class DataObject
                 baseVar = [.. distinctFormats];
             }
 
-            CompModSwitches.DataObject.TraceVerbose($"DataStore: returning {baseVar.Length} formats from GetFormats");
             return baseVar;
         }
 
-        public virtual string[] GetFormats()
-        {
-            CompModSwitches.DataObject.TraceVerbose("DataStore: GetFormats");
-            return GetFormats(true);
-        }
+        public virtual string[] GetFormats() => GetFormats(autoConvert: true);
     }
 }

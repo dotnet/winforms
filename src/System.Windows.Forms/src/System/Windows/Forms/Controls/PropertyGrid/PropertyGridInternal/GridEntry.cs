@@ -119,7 +119,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public virtual bool AllowMerge => true;
 
-    protected virtual AttributeCollection Attributes => TypeDescriptor.GetAttributes(PropertyType);
+    protected virtual AttributeCollection Attributes => TypeDescriptor.GetAttributes(PropertyType!);
 
     /// <summary>
     ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
@@ -366,7 +366,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 _flags |= Flags.TextEditable;
             }
 
-            bool hasImmutableAttribute = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]!
+            bool hasImmutableAttribute = TypeDescriptor.GetAttributes(PropertyType!)[typeof(ImmutableObjectAttribute)]!
                 .Equals(ImmutableObjectAttribute.Yes);
             bool isImmutable = hasImmutableAttribute || converter.GetCreateInstanceSupported(this);
 
@@ -413,7 +413,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 {
                     case UITypeEditorEditStyle.Modal:
                         _flags |= Flags.ModalEditable;
-                        if (!isImmutable && !PropertyType.IsValueType)
+                        if (!isImmutable && !(PropertyType?.IsValueType ?? false))
                         {
                             _flags |= Flags.ReadOnlyEditable;
                         }
@@ -476,7 +476,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Returns the label including the object name, and properties.  For example, the value
     ///  of the Font size property on a Button called Button1 would be "Button1.Font.Size"
     /// </summary>
-    public string FullLabel
+    public string? FullLabel
     {
         get
         {
@@ -693,7 +693,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return ParentGridEntry;
         }
     }
-
+#nullable enable
     /// <summary>
     ///  Returns the category name of the current property.
     /// </summary>
@@ -708,23 +708,23 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the description helpstring for this GridEntry.
     /// </summary>
-    public virtual string PropertyDescription => null;
+    public virtual string? PropertyDescription => null;
 
     /// <summary>
     ///  Returns the label of this property. Usually this is the property name.
     /// </summary>
-    public virtual string PropertyLabel => null;
+    public virtual string? PropertyLabel => null;
 
     /// <summary>
     ///  Returns non-localized name of this property.
     /// </summary>
-    public virtual string PropertyName => PropertyLabel;
+    public virtual string? PropertyName => PropertyLabel;
 
     /// <summary>
     ///  Returns the Type of the value of this <see cref="GridEntry"/>, or null if the value is null.
     /// </summary>
-    public virtual Type PropertyType => PropertyValue?.GetType();
-#nullable enable
+    public virtual Type? PropertyType => PropertyValue?.GetType();
+
     /// <summary>
     ///  Gets or sets the value for the property that is represented by this <see cref="GridEntry"/>.
     /// </summary>
@@ -745,7 +745,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Returns the type converter for this entry.
     /// </summary>
     internal virtual TypeConverter TypeConverter
-        => _typeConverter ??= TypeDescriptor.GetConverter(PropertyValue ?? PropertyType);
+        => _typeConverter ??= TypeDescriptor.GetConverter((PropertyValue ?? PropertyType)!);
 
     /// <summary>
     ///  Returns the type editor for this entry. This may return null if there is no type editor.
@@ -1109,7 +1109,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
 
         return entry is not null
+            && entry.PropertyLabel is not null
             && entry.PropertyLabel.Equals(PropertyLabel)
+            && entry.PropertyType is not null
             && entry.PropertyType.Equals(PropertyType)
             && entry.PropertyDepth == PropertyDepth;
     }
@@ -1163,7 +1165,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         return null;
     }
 
-    protected int GetLabelTextWidth(string text, Graphics graphics, Font font)
+    protected int GetLabelTextWidth(string? text, Graphics graphics, Font font)
     {
         if (_cacheItems is null)
         {
@@ -1237,7 +1239,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     private GridEntry[]? GetChildEntries()
     {
         object? value = PropertyValue;
-        Type objectType = PropertyType;
+        Type? objectType = PropertyType;
 
         // We don't want to create child entries for null objects.
         if (value is null)
@@ -1479,7 +1481,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
     {
         PropertyGridView ownerGrid = OwnerGridView;
-        string label = PropertyLabel;
+        string? label = PropertyLabel;
         int borderWidth = ownerGrid.OutlineIconSize + OutlineIconPadding;
 
         // Fill the background if necessary.
@@ -2146,7 +2148,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public void Refresh()
     {
-        Type type = PropertyType;
+        Type? type = PropertyType;
         if (type is not null && type.IsArray)
         {
             CreateChildren(useExistingChildren: true);
