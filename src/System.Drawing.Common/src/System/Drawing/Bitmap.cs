@@ -155,20 +155,21 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IntPtr GetHbitmap(Color background)
     {
-        HBITMAP hbitmap;
-        Status status = PInvoke.GdipCreateHBITMAPFromBitmap(
-            this.Pointer(),
-            &hbitmap,
-            (uint)ColorTranslator.ToWin32(background));
-
-        if (status == Status.InvalidParameter && (Width >= short.MaxValue || Height >= short.MaxValue))
+        try
         {
-            throw new ArgumentException(SR.GdiplusInvalidSize);
+            return this.GetHBITMAP(background);
         }
-
-        status.ThrowIfFailed();
-        GC.KeepAlive(this);
-        return hbitmap;
+        catch (ArgumentException)
+        {
+            if (Width >= short.MaxValue || Height >= short.MaxValue)
+            {
+                throw new ArgumentException(SR.GdiplusInvalidSize);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]

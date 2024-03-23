@@ -48,7 +48,11 @@ public abstract partial class EventBindingService
         /// <summary>
         ///  Retrieves the type converter for this property.
         /// </summary>
-        public override TypeConverter Converter => _converter ??= new EventConverter(Event);
+        public override TypeConverter Converter
+        {
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
+            get => _converter ??= new EventConverter(Event);
+        }
 
         /// <summary>
         ///  Retrieves the event descriptor we are representing.

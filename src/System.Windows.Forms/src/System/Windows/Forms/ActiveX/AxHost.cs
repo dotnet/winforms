@@ -3590,7 +3590,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return iPicture.Value->ToImage();
+            return ImageExtensions.ToImage(iPicture);
         }
         catch (InvalidOperationException)
         {
@@ -3614,7 +3614,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return pictureDisp.Value->ToImage();
+            return ImageExtensions.ToImage(pictureDisp);
         }
         catch (InvalidOperationException)
         {
@@ -3688,7 +3688,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return ComHelpers.GetObjectForIUnknown((IUnknown*)ifont);
+            return ComHelpers.GetObjectForIUnknown(ifont);
         }
         catch
         {
@@ -3769,7 +3769,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             FONTDESC fontdesc = GetFONTDESCFromFont(font);
             fontdesc.lpstrName = n;
             PInvoke.OleCreateFontIndirect(in fontdesc, in IID.GetRef<IFontDisp>(), out void* lplpvObj).ThrowOnFailure();
-            return ComHelpers.GetObjectForIUnknown((IUnknown*)lplpvObj);
+            return ComHelpers.GetObjectForIUnknown((IFontDisp*)lplpvObj);
         }
     }
 

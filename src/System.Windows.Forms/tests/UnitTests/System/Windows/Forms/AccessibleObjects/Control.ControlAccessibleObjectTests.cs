@@ -1431,7 +1431,7 @@ public class Control_ControlAccessibleObjectTests
         using ComScope<IRawElementProviderFragmentRoot> actual = new(null);
         Assert.True(((IRawElementProviderFragment.Interface)control.AccessibilityObject).get_FragmentRoot(actual).Succeeded);
 
-        Assert.Equal(toolStrip.AccessibilityObject, ComHelpers.GetObjectForIUnknown(actual.AsUnknown));
+        Assert.Equal(toolStrip.AccessibilityObject, ComHelpers.GetObjectForIUnknown(actual));
         Assert.True(control.IsHandleCreated);
         Assert.True(toolStrip.IsHandleCreated);
     }

@@ -79,7 +79,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         using ComScope<IRawElementProviderFragment> previousAccessibleObject = new(null);
         Assert.True(editFieldAccessibleObject.Navigate(NavigateDirection.NavigateDirection_PreviousSibling, previousAccessibleObject).Succeeded);
         Assert.False(previousAccessibleObject.IsNull);
-        Assert.Same(dropDownHolder.AccessibilityObject, ComHelpers.GetObjectForIUnknown(previousAccessibleObject.AsUnknown));
+        Assert.Same(dropDownHolder.AccessibilityObject, ComHelpers.GetObjectForIUnknown(previousAccessibleObject));
     }
 
     public class TestEntityWithTextField
