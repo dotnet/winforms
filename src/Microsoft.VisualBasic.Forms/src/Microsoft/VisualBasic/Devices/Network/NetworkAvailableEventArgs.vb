@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Namespace Microsoft.VisualBasic.Devices
+
     ''' <summary>
     '''  Used to pass network connectivity status.
     ''' </summary>
@@ -14,5 +15,4 @@ Namespace Microsoft.VisualBasic.Devices
 
         Public ReadOnly Property IsNetworkAvailable() As Boolean
     End Class
-
 End Namespace

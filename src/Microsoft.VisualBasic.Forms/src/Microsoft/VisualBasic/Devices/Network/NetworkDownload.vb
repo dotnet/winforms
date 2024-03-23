@@ -303,7 +303,7 @@ Namespace Microsoft.VisualBasic.Devices
             'Download the file
             Try
                 Await copier.DownloadFileAsync(address:=addressUri,
-                                destinationFileName:=fullFilename).ConfigureAwait(continueOnCapturedContext:=False)
+                    destinationFileName:=fullFilename).ConfigureAwait(continueOnCapturedContext:=False)
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
                     Throw
@@ -798,5 +798,4 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
     End Class
-
 End Namespace

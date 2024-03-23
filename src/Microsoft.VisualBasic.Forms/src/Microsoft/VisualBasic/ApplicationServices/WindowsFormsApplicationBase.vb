@@ -1027,5 +1027,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
     End Class
-
 End Namespace

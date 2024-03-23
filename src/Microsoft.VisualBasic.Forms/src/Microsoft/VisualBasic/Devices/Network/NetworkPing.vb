@@ -95,5 +95,4 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
     End Class
-
 End Namespace

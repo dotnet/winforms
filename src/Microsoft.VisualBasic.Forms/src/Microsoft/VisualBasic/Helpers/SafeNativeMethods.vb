@@ -27,7 +27,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         Private Sub New()
         End Sub
+
     End Class
-
 End Namespace
-

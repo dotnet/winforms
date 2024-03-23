@@ -49,6 +49,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     End If
                 End If
             End Sub
+
         End Class
     End Class
 End Namespace

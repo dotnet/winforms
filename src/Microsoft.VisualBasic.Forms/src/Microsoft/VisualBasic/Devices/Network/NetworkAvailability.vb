@@ -125,5 +125,4 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
     End Class
-
 End Namespace

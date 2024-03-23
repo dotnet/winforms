@@ -21,6 +21,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
+
         ''' <summary>
         ''' Gets the total size of physical memory on the machine.
         ''' </summary>
@@ -70,6 +71,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
@@ -119,11 +121,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' so we offer a view that doesn't have that field.
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
+
             Public Sub New(RealClass As ComputerInfo)
                 _instanceBeingWatched = RealClass
             End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
@@ -151,6 +155,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
@@ -176,6 +181,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             <DebuggerBrowsable(DebuggerBrowsableState.Never)>
             Private ReadOnly _instanceBeingWatched As ComputerInfo
+
         End Class
 
         ''' <summary>
@@ -197,10 +203,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Calls GlobalMemoryStatusEx and returns the correct value.
         ''' </summary>
         Private NotInheritable Class InternalMemoryStatus
+
             Friend Sub New()
             End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -228,6 +236,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
             Private Sub Refresh()
@@ -239,6 +248,7 @@ Namespace Microsoft.VisualBasic.Devices
             End Sub
 
             Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
+
         End Class
     End Class
 End Namespace
