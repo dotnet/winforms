@@ -108,7 +108,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
         IOleClientSite* clientSite;
         oleObject.Value->GetClientSite(&clientSite);
-        object clientSiteObject = ComHelpers.GetObjectForIUnknown((IUnknown*)clientSite);
+        object clientSiteObject = ComHelpers.GetObjectForIUnknown(clientSite);
         if (clientSiteObject is WebBrowserSiteBase webBrowserSiteBase)
         {
             control = webBrowserSiteBase.Host;

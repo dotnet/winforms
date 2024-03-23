@@ -31,4 +31,18 @@ internal static unsafe class GpBitmapExtensions
         PInvokeCore.GdipBitmapUnlockBits(bitmap.Pointer, (BitmapData*)Unsafe.AsPointer(ref data)).ThrowIfFailed();
         GC.KeepAlive(bitmap);
     }
+
+    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap) => bitmap.GetHBITMAP(Color.LightGray);
+
+    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap, Color background)
+    {
+        HBITMAP hbitmap;
+        PInvokeCore.GdipCreateHBITMAPFromBitmap(
+            bitmap.Pointer,
+            &hbitmap,
+            (uint)ColorTranslator.ToWin32(background)).ThrowIfFailed();
+
+        GC.KeepAlive(bitmap);
+        return hbitmap;
+    }
 }

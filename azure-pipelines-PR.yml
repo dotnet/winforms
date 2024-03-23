@@ -66,9 +66,15 @@ variables:
   - name: NativeToolsOnMachine
     value: true
 
-  # used for post-build phases, no value for non-internal build
-  - name: _InternalRuntimeDownloadArgs
-    value: ''
+  - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
+    - name: _InternalRuntimeDownloadArgs
+      value: ''
+  - ${{ if eq(variables['System.TeamProject'], 'internal') }}:
+    - group: DotNetBuilds storage account read tokens
+    - group: AzureDevOps-Artifact-Feeds-Pats
+    - name: _InternalRuntimeDownloadArgs
+      value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
+             /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
 
   # Produce test-signed build for PR and Public builds
   # needed for darc (dependency flow) publishing

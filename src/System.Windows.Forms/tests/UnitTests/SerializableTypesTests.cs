@@ -58,7 +58,7 @@ public class SerializableTypesTests
 
             using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
-            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out ComManagedStream managedStream));
+            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut, out ComManagedStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);

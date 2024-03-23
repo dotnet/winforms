@@ -98,7 +98,6 @@ GdipCreateFromHDC
 GdipCreateFromHDC2
 GdipCreateHalftonePalette
 GdipCreateHatchBrush
-GdipCreateHBITMAPFromBitmap
 GdipCreateHICONFromBitmap
 GdipCreateImageAttributes
 GdipCreateLineBrush
@@ -246,7 +245,6 @@ GdipGetGenericFontFamilySerif
 GdipGetHatchBackgroundColor
 GdipGetHatchForegroundColor
 GdipGetHatchStyle
-GdipGetHemfFromMetafile
 GdipGetImageAttributesAdjustedPalette
 GdipGetImageDecoders
 GdipGetImageDecodersSize

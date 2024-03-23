@@ -64,6 +64,8 @@ GdipBitmapLockBits
 GdipBitmapUnlockBits
 GdipCreateFromHWND
 GdipDeleteGraphics
+GdipCreateHBITMAPFromBitmap
+GdipGetHemfFromMetafile
 GdipGetImageBounds
 GdipGetImageEncoders
 GdipGetImageEncodersSize
@@ -124,6 +126,8 @@ ImageFormat*
 ImageLockMode
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
+IPicture
+IPictureDisp
 IStream
 ITypeInfo
 ITypeLib
@@ -144,13 +148,14 @@ OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
+OleCreatePictureIndirect
 PixelFormat*
 POINTS
 PRINTDLGEX_FLAGS
 PropVariantClear
 PWSTR
-RECT
 Rect
+RECT
 RectF
 REGDB_E_CLASSNOTREG
 ReleaseDC

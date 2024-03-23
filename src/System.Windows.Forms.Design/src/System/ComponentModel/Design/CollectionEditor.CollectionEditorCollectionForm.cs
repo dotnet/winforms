@@ -1244,6 +1244,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the type converter for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
             TypeConverter? ICustomTypeDescriptor.GetConverter() => null;
 
             /// <summary>
@@ -1259,6 +1260,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the an editor for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
             object? ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
             /// <summary>
@@ -1284,6 +1286,7 @@ public partial class CollectionEditor
             ///  This may differ from the set of properties the class provides.
             ///  If the component is sited, the site may add or remove additional properties.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => _properties;
 
             /// <summary>
@@ -1292,6 +1295,7 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional properties.
             ///  The returned array of properties will be filtered by the given set of attributes.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes) => _properties;
 
             /// <summary>

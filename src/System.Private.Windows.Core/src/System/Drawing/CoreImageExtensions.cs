@@ -6,7 +6,9 @@ using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Drawing;
 
-internal static unsafe class ImageExtensions
+// We also have an ImageExtensions in Primitives
+
+internal static unsafe class CoreImageExtensions
 {
     internal static void Save(this IImage image, Stream stream, Guid encoder, Guid format, EncoderParameters* encoderParameters)
     {

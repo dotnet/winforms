@@ -371,8 +371,6 @@ IPerPropertyBrowsing
 IPersistPropertyBag
 IPersistStorage
 IPersistStreamInit
-IPicture
-IPictureDisp
 IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
@@ -538,7 +536,6 @@ OLECMDF
 OLECMDID
 OLECONTF
 OleCreateFontIndirect
-OleCreatePictureIndirect
 OleCreatePropertyFrame
 OleCreatePropertyFrameIndirect
 OleDuplicateData
