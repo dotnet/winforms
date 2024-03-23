@@ -1520,7 +1520,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
         int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
         var ownerWindow = tool.GetOwnerWindow();
-        Debug.Assert(ownerWindow is not null);
+        if (ownerWindow is null)
+        {
+            return;
+        }
 
         SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
