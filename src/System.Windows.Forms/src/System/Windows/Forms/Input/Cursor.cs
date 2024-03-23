@@ -403,17 +403,19 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         try
         {
             using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(lpPictDesc: null, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
+            PInvokeCore.OleCreatePictureIndirect(lpPictDesc: null, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
 
             using ComScope<IPersistStream> persist = new(null);
             picture.Value->QueryInterface(IID.Get<IPersistStream>(), persist).ThrowOnFailure();
 
             using var pStream = ComHelpers.GetComScope<IStream>(stream);
             persist.Value->Load(pStream);
+            picture.Value->get_Type(out PICTYPE type).ThrowOnFailure();
 
-            if (picture.Value->Type == PICTYPE.PICTYPE_ICON)
+            if (type == PICTYPE.PICTYPE_ICON)
             {
-                HICON cursorHandle = (HICON)picture.Value->Handle;
+                picture.Value->get_Handle(out OLE_HANDLE oleHandle);
+                HICON cursorHandle = (HICON)oleHandle;
                 Size picSize = ScaleHelper.ScaleToDpi(GetIconSize(cursorHandle), ScaleHelper.InitialSystemDpi);
 
                 _handle = (HCURSOR)PInvokeCore.CopyImage(

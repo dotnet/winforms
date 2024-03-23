@@ -160,8 +160,8 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             using ComScope<ITextRangeProvider> range = new(provider.DocumentRange);
             using ComScope<IRawElementProviderSimple> elementProvider = new(range.Value->GetEnclosingElement());
-            Assert.Equal(comboBox.ChildEditAccessibleObject, ComHelpers.GetObjectForIUnknown(elementProvider.AsUnknown));
-            UiaTextRange rangeObj = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+            Assert.Equal(comboBox.ChildEditAccessibleObject, ComHelpers.GetObjectForIUnknown(elementProvider));
+            UiaTextRange rangeObj = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
             Assert.Equal(provider, rangeObj?.TestAccessor().Dynamic._provider);
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -594,7 +594,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Rectangle providerRectangle = provider.BoundingRectangle;
 
-            Assert.Equal(Drawing.Rectangle.Empty, providerRectangle);
+            Assert.Equal(Rectangle.Empty, providerRectangle);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -956,7 +956,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
         Assert.True(provider.GetSelection(selection).Succeeded);
         using ComScope<ITextRangeProvider> range = new(selection[0]);
-        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
 
         Assert.False(selection.IsNull);
         Assert.NotNull(textRange);
@@ -1019,7 +1019,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.False(selection.IsEmpty);
 
             using ComScope<ITextRangeProvider> range = new(selection[0]);
-            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
 
             Assert.NotNull(textRange);
             Assert.Equal(0, textRange.Start);

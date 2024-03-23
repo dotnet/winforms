@@ -96,6 +96,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
 
     internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
+    [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
     internal static object? GetEditor(object component, Type baseEditorType)
         => TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
 

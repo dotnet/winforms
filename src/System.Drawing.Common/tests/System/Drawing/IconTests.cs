@@ -447,10 +447,10 @@ public class IconTests
     }
 
     [Fact]
-    public void Save_NullOutputStreamIconData_ThrowsNullReferenceException()
+    public void Save_NullOutputStreamIconData_ThrowsArgumentNullException()
     {
         using Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
-        Assert.Throws<NullReferenceException>(() => icon.Save(null));
+        Assert.Throws<ArgumentNullException>(() => icon.Save(null));
     }
 
     [Fact]

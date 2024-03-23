@@ -414,7 +414,7 @@
       </trans-unit>
       <trans-unit id="BindingNotSupported">
         <source>Binding operations are not supported when application trimming is enabled.</source>
-        <target state="new">Binding operations are not supported when application trimming is enabled.</target>
+        <target state="translated">Operace vytvoření vazby nejsou podporovány, pokud je povolen trimming aplikací.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
