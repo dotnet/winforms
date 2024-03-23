@@ -1514,17 +1514,20 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                 string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
         }
 
-        Rectangle toolRectangle = tool.GetNativeScreenRectangle();
-
-        // At first, place the tooltip at the middle of the tool (default location).
-        int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
-        int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
         var ownerWindow = tool.GetOwnerWindow();
+
         if (ownerWindow is null)
         {
             return;
         }
 
+        Rectangle toolRectangle = tool.GetNativeScreenRectangle();
+
+        // At first, place the tooltip at the middle of the tool (default location).
+        int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
+        int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
+
+ 
         SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
         // Then look for a better ToolTip location.
