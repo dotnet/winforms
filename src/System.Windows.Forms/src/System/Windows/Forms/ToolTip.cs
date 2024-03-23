@@ -1527,11 +1527,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
         int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
 
- 
         SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
         // Then look for a better ToolTip location.
-        if (TryGetBubbleSize(tool, out Size bubbleSize))
+        if (TryGetBubbleSize(tool, ownerWindow, out Size bubbleSize))
         {
             Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
@@ -1569,7 +1568,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
     }
 
-    private bool TryGetBubbleSize(IKeyboardToolTip tool, out Size bubbleSize)
+    private bool TryGetBubbleSize(IKeyboardToolTip tool, IWin32Window ownerWindow, out Size bubbleSize)
     {
         // Get bubble size to use it for optimal position calculation. Requesting the bubble
         // size will AV if there isn't a current tool window.
@@ -1577,7 +1576,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         HWND hwnd = GetCurrentToolHwnd();
         LRESULT result = default;
 
-        if (!hwnd.IsNull && tool.GetOwnerWindow() is IWin32Window ownerWindow)
+        if (!hwnd.IsNull)
         {
             ToolInfoWrapper<HandleRef<HWND>> info = new(Control.GetSafeHandle(ownerWindow));
             result = info.SendMessage(this, PInvoke.TTM_GETBUBBLESIZE);
