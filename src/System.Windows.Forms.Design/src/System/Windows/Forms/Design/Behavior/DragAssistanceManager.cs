@@ -534,7 +534,7 @@ internal sealed partial class DragAssistanceManager
                 int numInternalDesigners = designer.NumberOfInternalControlDesigners();
                 for (int i = 0; i < numInternalDesigners; i++)
                 {
-                    ControlDesigner internalDesigner = designer.InternalControlDesigner(i);
+                    ControlDesigner? internalDesigner = designer.InternalControlDesigner(i);
                     if (internalDesigner is not null &&
                         AddChildCompSnaplines(internalDesigner.Component, dragComponents, clipBounds, targetControl) &&
                         AddControlSnaplinesWhenResizing(internalDesigner, (Control)internalDesigner.Component, targetControl))

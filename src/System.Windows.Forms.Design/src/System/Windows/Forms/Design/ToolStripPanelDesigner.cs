@@ -88,7 +88,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     public override ToolStripPanel Control => (ToolStripPanel)Component;
 
     // ToolStripPanels if Inherited ACT as Readonly.
-    protected override InheritanceAttribute InheritanceAttribute
+    protected override InheritanceAttribute? InheritanceAttribute
     {
         get => Control.Parent is ToolStripContainer && (base.InheritanceAttribute == InheritanceAttribute.Inherited)
                ? InheritanceAttribute.InheritedReadOnly
@@ -355,7 +355,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return;
         }
 
-        BehaviorService.Invalidate(_containerSelectorGlyph.Bounds);
+        BehaviorService?.Invalidate(_containerSelectorGlyph.Bounds);
     }
 
     /// <summary>
