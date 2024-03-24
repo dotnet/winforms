@@ -31,7 +31,7 @@ In Visual Studio 2022 Version 17.8, we are introducing a new [configuration]((ht
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-	<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
   </PropertyGroup>
 ```
