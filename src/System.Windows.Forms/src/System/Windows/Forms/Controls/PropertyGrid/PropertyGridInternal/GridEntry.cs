@@ -589,10 +589,10 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  return null if there is no component responsible for the call.
     /// </summary>
     public object Instance => GetValueOwner() ?? _parent?.Instance;
+#nullable enable
+    public override string? Label => PropertyLabel;
 
-    public override string Label => PropertyLabel;
-
-    public override PropertyDescriptor PropertyDescriptor => null;
+    public override PropertyDescriptor? PropertyDescriptor => null;
 
     /// <summary>
     ///  Returns the pixel indent of the current GridEntry's label.
@@ -608,7 +608,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     internal virtual Point GetLabelToolTipLocation(int mouseX, int mouseY) => _labelTipPoint;
 
-    internal virtual string LabelToolTipText => PropertyLabel;
+    internal virtual string? LabelToolTipText => PropertyLabel;
 
     /// <summary>
     ///  The entry needs a drop down button to invoke its editor.
@@ -663,7 +663,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
     }
 
-    public GridEntry ParentGridEntry
+    public GridEntry? ParentGridEntry
     {
         get => _parent;
         set
@@ -685,7 +685,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
     }
 
-    public override GridItem Parent
+    public override GridItem? Parent
     {
         get
         {
@@ -693,7 +693,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return ParentGridEntry;
         }
     }
-#nullable enable
+
     /// <summary>
     ///  Returns the category name of the current property.
     /// </summary>
