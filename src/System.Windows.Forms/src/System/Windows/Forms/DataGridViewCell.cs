@@ -414,7 +414,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => false;
 
-    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
+    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView != null && DataGridView.RightToLeft == RightToLeft.Yes;
 
     bool IKeyboardToolTip.AllowsToolTip() => true;
 
