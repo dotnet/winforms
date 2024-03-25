@@ -7,7 +7,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    internal sealed partial class CodeDomSerializationStore
+    private sealed partial class CodeDomSerializationStore
     {
         private class PassThroughSerializationManager : IDesignerSerializationManager
         {

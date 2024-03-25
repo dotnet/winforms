@@ -9,7 +9,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    internal sealed partial class CodeDomSerializationStore
+    private sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  This is a serialization manager that can load assemblies and search for types and provide a resource manager from our serialization store.
@@ -55,9 +55,17 @@ public sealed partial class CodeDomComponentSerializationService
 
                 AssemblyName[] names = new AssemblyName[_store.AssemblyNameInfos!.Length];
                 int idx = 0;
-                foreach (AssemblyNameInfo assemblyNameInfo in _store.AssemblyNameInfos!)
+                foreach (AssemblyNameInfo assemblyNameInfo in _store.AssemblyNameInfos)
                 {
-                    names[idx++] = new AssemblyName(assemblyNameInfo.FullName);
+                    names[idx] = new AssemblyName(assemblyNameInfo.FullName)
+                    {
+                        Name = assemblyNameInfo.Name,
+                        Version = assemblyNameInfo.Version,
+                        CultureName = assemblyNameInfo.CultureName,
+                        Flags = assemblyNameInfo.Flags!,
+                        ContentType = assemblyNameInfo.ContentType
+                    };
+                    idx++;
                 }
 
                 // First try the assembly names directly.

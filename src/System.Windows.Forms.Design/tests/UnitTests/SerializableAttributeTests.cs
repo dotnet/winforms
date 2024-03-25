@@ -18,9 +18,9 @@ public class SerializableAttributeTests
                 typeof(OleDragDropHandler.CfCodeToolboxItem).FullName,
                 typeof(ExceptionCollection).FullName,
                 typeof(CodeDomSerializerException).FullName,
-                typeof(CodeDomComponentSerializationService.CodeDomSerializationStore.AssemblyNameInfo).FullName,
+                typeof(CodeDomComponentSerializationService.AssemblyNameInfo).FullName,
                 typeof(CodeDomComponentSerializationService.CodeDomComponentSerializationState).FullName,
-                typeof(CodeDomComponentSerializationService.CodeDomSerializationStore).FullName,
+                { "System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService+CodeDomSerializationStore" },
                 { "System.Windows.Forms.Design.Behavior.DesignerActionKeyboardBehavior+<>c" }
             });
     }

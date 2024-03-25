@@ -18,15 +18,8 @@ public sealed partial class CodeDomComponentSerializationService
     ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </summary>
     [Serializable]
-    internal sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
+    private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
-#if DEBUG
-        private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
-#else
-#pragma warning disable CS0649  // Field is never assigned to, and will always have its default value null
-        private static readonly TraceSwitch? s_trace;
-#pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
-#endif
         private const string StateKey = "State";
         private const string NameKey = "Names";
         private const string AssembliesKey = "Assemblies";
@@ -326,64 +319,6 @@ public sealed partial class CodeDomComponentSerializationService
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
-        [Conditional("DEBUG")]
-        internal static void TraceCode(Dictionary<string, CodeDomComponentSerializationState> state)
-        {
-            if (!s_trace!.TraceVerbose)
-            {
-                return;
-            }
-
-            foreach (KeyValuePair<string, CodeDomComponentSerializationState> stateEntry in state)
-            {
-                object? code = stateEntry.Value.Code;
-
-                if (code is null)
-                {
-                    continue;
-                }
-
-                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-                using StringWriter stringWriter = new(CultureInfo.InvariantCulture);
-                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
-                Debug.Indent();
-
-                if (code is CodeTypeDeclaration codeTypeDeclaration)
-                {
-                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, stringWriter, o: null);
-                }
-                else if (code is CodeStatementCollection statements)
-                {
-                    foreach (CodeStatement statement in statements)
-                    {
-                        codeGenerator.GenerateCodeFromStatement(statement, stringWriter, o: null);
-                    }
-                }
-                else if (code is CodeStatement codeStatement)
-                {
-                    codeGenerator.GenerateCodeFromStatement(codeStatement, stringWriter, o: null);
-                }
-                else if (code is CodeExpression codeExpression)
-                {
-                    codeGenerator.GenerateCodeFromExpression(codeExpression, stringWriter, o: null);
-                }
-                else
-                {
-                    stringWriter.Write("Unknown code type: ");
-                    stringWriter.WriteLine(code.GetType().Name);
-                }
-
-                // spit this line by line so it respects the indent.
-                StringReader stringReader = new(stringWriter.ToString());
-                for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
-                {
-                    Debug.WriteLine(ln);
-                }
-
-                Debug.Unindent();
-            }
-        }
-
         /// <summary>
         ///  Implements the save part of ISerializable. Used in unit tests only.
         /// </summary>
@@ -396,6 +331,15 @@ public sealed partial class CodeDomComponentSerializationService
             info.AddValue(AssembliesKey, AssemblyNameInfos);
             info.AddValue(ResourcesKey, _resources?.Data);
             info.AddValue(ShimKey, _shimObjectNames);
+        }
+
+        private CodeDomSerializationStore(SerializationInfo info, StreamingContext streamingContext)
+        {
+            ArgumentNullException.ThrowIfNull(info);
+
+            _objects = [];
+            _objectNames = [];
+            _shimObjectNames = [];
         }
     }
 }

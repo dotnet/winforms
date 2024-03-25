@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    internal sealed partial class CodeDomSerializationStore
+    private sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  This is a simple code dom serializer that serializes a set of objects as a unit.

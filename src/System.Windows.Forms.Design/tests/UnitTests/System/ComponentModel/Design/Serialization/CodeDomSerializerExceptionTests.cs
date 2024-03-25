@@ -92,13 +92,12 @@ public class CodeDomSerializerExceptionTests
         BinaryFormatter formatter = new();
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
         Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
-#pragma warning restore SYSLIB0011
     }
 
     [Fact]
     public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
+        Assert.Throws<ArgumentNullException>(() => exception.GetObjectData(null, new StreamingContext()));
     }
 }

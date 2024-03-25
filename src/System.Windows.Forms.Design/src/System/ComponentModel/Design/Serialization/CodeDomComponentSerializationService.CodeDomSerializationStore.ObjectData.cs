@@ -5,7 +5,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    internal sealed partial class CodeDomSerializationStore
+    private sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  We create one of these for each object we process.
@@ -57,31 +57,6 @@ public sealed partial class CodeDomComponentSerializationService
             ///  A list of MemberData objects representing specific members that should be serialized.
             /// </summary>
             internal IList<MemberData> Members => _members ??= [];
-        }
-
-        /// <summary>
-        ///  We create one of these for each specific member on an object.
-        /// </summary>
-        private class MemberData
-        {
-            /// <summary>
-            ///  The member we're serializing.
-            /// </summary>
-            internal readonly MemberDescriptor _member;
-
-            /// <summary>
-            ///  True if we should try to serialize values that contain their defaults as well.
-            /// </summary>
-            internal readonly bool _absolute;
-
-            /// <summary>
-            ///  Creates a new member data ready to be serialized.
-            /// </summary>
-            internal MemberData(MemberDescriptor member, bool absolute)
-            {
-                _member = member;
-                _absolute = absolute;
-            }
         }
     }
 }

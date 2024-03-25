@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    internal sealed partial class CodeDomSerializationStore
+    private sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  LocalServices contains the services that we add to our serialization manager.  We do this, rather than implement interfaces directly on CodeDomSerializationStore to prevent people from assuming what our implementation is (CodeDomSerializationStore is returned publicly as SerializationStore).

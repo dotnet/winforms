@@ -3,14 +3,16 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.Design;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+
+using Moq;
+
+using static System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService;
+
 using CodeDomComponentSerializationState = System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationState;
-using static System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomSerializationStore;
 
 namespace System.ComponentModel.Design.Serialization.Tests;
 
@@ -648,7 +650,7 @@ public class CodeDomComponentSerializationServiceTests
 
         AssertNullState(info);
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>))));
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -666,7 +668,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         AssertNullState(info);
         Assert.NotEmpty(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>))));
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -712,7 +714,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -723,7 +725,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -749,7 +751,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -762,7 +764,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -797,7 +799,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -811,7 +813,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -856,7 +858,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -869,7 +871,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -920,7 +922,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -931,7 +933,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -957,7 +959,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -970,7 +972,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1005,7 +1007,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1019,7 +1021,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1064,7 +1066,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1077,7 +1079,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1130,7 +1132,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1141,7 +1143,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1152,7 +1154,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1180,7 +1182,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1193,7 +1195,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1206,7 +1208,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1243,7 +1245,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1257,7 +1259,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1271,7 +1273,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1318,7 +1320,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1331,7 +1333,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1344,7 +1346,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1409,7 +1411,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1420,7 +1422,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1431,7 +1433,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1459,7 +1461,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1472,7 +1474,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1485,7 +1487,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches("^object_........_...._...._...._............$", nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1522,7 +1524,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1536,7 +1538,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1550,7 +1552,7 @@ public class CodeDomComponentSerializationServiceTests
         AssertNullState(info);
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1597,7 +1599,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1610,7 +1612,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
 
@@ -1623,7 +1625,7 @@ public class CodeDomComponentSerializationServiceTests
         serializable.GetObjectData(info, new StreamingContext());
         nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
         Assert.Matches(expectedPattern, nameResult);
-        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        Assert.Null(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
@@ -1670,6 +1672,36 @@ public class CodeDomComponentSerializationServiceTests
         store.Close();
         MemberDescriptor member = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.IntValue)];
         Assert.Throws<InvalidOperationException>(() => service.SerializeMemberAbsolute(store, new DataClass(), member));
+    }
+
+    public static IEnumerable<object[]> ControlObject_TestData()
+    {
+        return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ControlObject_TestData))]
+    public void SerializeControl_SerializeAndDeserialize_Success(Type type)
+    {
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+        BinaryFormatter _binaryFormatter = new();
+        CodeDomComponentSerializationService service = new();
+        using SerializationStore store = service.CreateStore();
+        using MemoryStream stream = new();
+
+        service.Serialize(store, control);
+        store.Close();
+        Assert.Empty(store.Errors);
+        Action act = () => store.Save(stream);
+        act.Should().NotThrow();
+        IEnumerator obj = service.Deserialize(store).GetEnumerator();
+        obj.MoveNext();
+        obj.Current.Should().BeOfType(type);
+
+        stream.Position = 0;
+        Func<object> func = () => _binaryFormatter.Deserialize(stream);
+        func.Should().NotThrow();
     }
 
     private class DataClass : Component

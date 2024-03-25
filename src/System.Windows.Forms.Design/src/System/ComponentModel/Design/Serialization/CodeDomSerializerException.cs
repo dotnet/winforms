@@ -40,11 +40,16 @@ public class CodeDomSerializerException : SystemException
     [Obsolete(DiagnosticId = "SYSLIB0051")]
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        throw new PlatformNotSupportedException();
+        ArgumentNullException.ThrowIfNull(info);
+
+        info.AddValue("linePragma", LinePragma);
+        base.GetObjectData(info, context);
     }
 
-    protected CodeDomSerializerException(SerializationInfo info, StreamingContext streamingContext)
+    [Obsolete(DiagnosticId = "SYSLIB0051")]
+    protected CodeDomSerializerException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
         ArgumentNullException.ThrowIfNull(info);
+        LinePragma = (CodeLinePragma?)info.GetValue("linePragma", typeof(CodeLinePragma));
     }
 }
