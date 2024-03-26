@@ -94,10 +94,25 @@ public class CodeDomSerializerExceptionTests
         Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
     }
 
-    [Fact]
-    public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
+    public static IEnumerable<object[]> Ctor_Exception_SerializationInfo_TestData()
+    {
+        yield return new object[] { null };
+        yield return new object[] { new SerializationInfo(typeof(CodeDomSerializerException), new FormatterConverter())};
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_Exception_SerializationInfo_TestData))]
+    public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException(SerializationInfo info)
     {
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        Assert.Throws<ArgumentNullException>(() => exception.GetObjectData(null, new StreamingContext()));
+        Action act = () => exception.GetObjectData(info, new StreamingContext());
+        if(info is not null)
+        {
+            act.Should().NotThrow();
+        }
+        else
+        {
+            act.Should().Throw<ArgumentNullException>();
+        }
     }
 }
