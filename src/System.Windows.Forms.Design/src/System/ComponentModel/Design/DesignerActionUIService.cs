@@ -45,31 +45,26 @@ public sealed class DesignerActionUIService : IDisposable
         remove => _designerActionUIStateChangedEventHandler -= value;
     }
 
-    public void HideUI(IComponent? component)
-    {
-        OnDesignerActionUIStateChange(new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Hide));
-    }
+    public void HideUI(IComponent? component) =>
+        OnDesignerActionUIStateChange(
+            new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Hide));
 
-    public void ShowUI(IComponent? component)
-    {
-        OnDesignerActionUIStateChange(new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Show));
-    }
+    public void ShowUI(IComponent? component) =>
+        OnDesignerActionUIStateChange(
+            new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Show));
 
     /// <summary>
     ///  Refreshes the <see cref="DesignerActionGlyph">designer action glyph</see> as well as <see cref="DesignerActionPanel">designer action panels</see>.
     /// </summary>
-    public void Refresh(IComponent? component)
-    {
-        OnDesignerActionUIStateChange(new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Refresh));
-    }
+    public void Refresh(IComponent? component) =>
+        OnDesignerActionUIStateChange(
+            new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Refresh));
 
     /// <summary>
     ///  This fires our DesignerActionsChanged event.
     /// </summary>
-    private void OnDesignerActionUIStateChange(DesignerActionUIStateChangeEventArgs e)
-    {
+    private void OnDesignerActionUIStateChange(DesignerActionUIStateChangeEventArgs e) =>
         _designerActionUIStateChangedEventHandler?.Invoke(this, e);
-    }
 
     public bool ShouldAutoShow(IComponent component)
     {
