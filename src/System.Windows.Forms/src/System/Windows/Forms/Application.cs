@@ -328,7 +328,9 @@ public sealed partial class Application
             {
                 DarkMode.Enabled => true,
                 DarkMode.Disabled => false,
-                _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
+
+                // We return false even if DarkMode is not supported so that we ALWAYS have a valid result here.
+                _ => false
             }
         };
 
