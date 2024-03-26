@@ -1779,7 +1779,7 @@ internal sealed partial class PropertyGridView :
             {
                 entries[depth] = gridEntry;
                 gridEntry = gridEntry.ParentGridEntry;
-                depth = gridEntry.PropertyDepth;
+                depth = gridEntry?.PropertyDepth ?? 0;
             }
 
             return new GridEntryCollection(entries, disposeItems: false);
@@ -3040,7 +3040,7 @@ internal sealed partial class PropertyGridView :
         if ((rowMoveCurrent != TipRow || point.X != TipColumn) && !_flags.HasFlag(Flags.IsSplitterMove))
         {
             GridEntry? gridItem = GetGridEntryFromRow(rowMoveCurrent);
-            string tip = string.Empty;
+            string? tip = string.Empty;
             _tipInfo = -1;
 
             if (gridItem is not null)
@@ -5099,7 +5099,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    private static void UpdateHelpAttributes(IHelpService helpService, GridEntry entry, bool addAsF1)
+    private static void UpdateHelpAttributes(IHelpService helpService, GridEntry? entry, bool addAsF1)
     {
         if (entry is null)
         {

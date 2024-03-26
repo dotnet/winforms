@@ -192,7 +192,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         }
     }
 
-    protected override void NotifyParentsOfChanges(GridEntry entry)
+    protected override void NotifyParentsOfChanges(GridEntry? entry)
     {
         // Now see if we need to notify the parent(s) up the chain.
         while (entry is PropertyDescriptorGridEntry propertyEntry &&
@@ -230,7 +230,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             {
                 for (int i = 0; i < ownerArray.Length; i++)
                 {
-                    PropertyDescriptor propertyInfo = entry.PropertyDescriptor;
+                    PropertyDescriptor? propertyInfo = entry.PropertyDescriptor;
 
                     if (propertyInfo is MergePropertyDescriptor descriptor)
                     {
