@@ -1621,7 +1621,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     [Conditional("DEBUG")]
+#pragma warning disable CA1822 // Mark members as static
     internal void CheckInCreate()
+#pragma warning restore CA1822 // Mark members as static
     {
 #if DEBUG
         if (_inGridViewCreate)
