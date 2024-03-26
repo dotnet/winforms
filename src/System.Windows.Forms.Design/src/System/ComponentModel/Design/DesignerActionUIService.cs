@@ -31,7 +31,7 @@ public sealed class DesignerActionUIService : IDisposable
     {
         if (_serviceProvider is not null)
         {
-            IDesignerHost? host = (IDesignerHost?)_serviceProvider.GetService(typeof(IDesignerHost));
+            IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
             host?.RemoveService<DesignerActionUIService>();
         }
     }
