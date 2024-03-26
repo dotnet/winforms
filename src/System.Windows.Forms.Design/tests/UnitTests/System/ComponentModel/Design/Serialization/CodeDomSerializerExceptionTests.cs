@@ -102,7 +102,7 @@ public class CodeDomSerializerExceptionTests
 
     [Theory]
     [MemberData(nameof(Ctor_Exception_SerializationInfo_TestData))]
-    public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException(SerializationInfo info)
+    public void CodeDomSerializerException_GetObjectData_ThrowsArgumentNullException(SerializationInfo info)
     {
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
         Action act = () => exception.GetObjectData(info, new StreamingContext());
