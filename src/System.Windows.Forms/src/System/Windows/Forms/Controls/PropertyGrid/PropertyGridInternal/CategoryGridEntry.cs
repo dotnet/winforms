@@ -110,7 +110,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
 
     public override Type PropertyType => typeof(void);
 
-    internal override object? GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
+    internal override object? GetValueOwnerInternal() => ParentGridEntry?.GetValueOwnerInternal();
 
     protected override bool CreateChildren(bool diffOldChildren) => true;
 
@@ -141,7 +141,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
@@ -158,7 +158,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         base.PaintValue(g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected, text);
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
@@ -166,5 +166,5 @@ internal sealed partial class CategoryGridEntry : GridEntry
     }
 
     internal override bool SendNotification(GridEntry entry, Notify notification)
-        => ParentGridEntry.SendNotification(entry, notification);
+        => ParentGridEntry?.SendNotification(entry, notification) ?? false;
 }

@@ -4591,7 +4591,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 if (item != _currentlyActiveTooltipItem)
                 {
                     ToolTip.Hide(this);
-                    _currentlyActiveTooltipItem = item;
+                    if(!refresh)
+                        _currentlyActiveTooltipItem = item;
                 }
 
                 if (_currentlyActiveTooltipItem is not null && !GetToolStripState(STATE_DRAGGING))

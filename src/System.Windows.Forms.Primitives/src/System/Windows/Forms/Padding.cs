@@ -44,7 +44,7 @@ public struct Padding : IEquatable<Padding>
         readonly get => _all ? _top : -1;
         set
         {
-            if (_all != true || _top != value)
+            if (!_all || _top != value)
             {
                 _all = true;
                 _top = _left = _right = _bottom = value;
