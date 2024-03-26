@@ -430,7 +430,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
     {
-        if (DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
+        if (DataGridView is not null && DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
         {
             return ErrorText;
         }
