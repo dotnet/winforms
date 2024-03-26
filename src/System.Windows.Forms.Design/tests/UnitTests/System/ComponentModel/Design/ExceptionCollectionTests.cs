@@ -55,7 +55,7 @@ public class ExceptionCollectionTests
 
     [Theory]
     [MemberData(nameof(Ctor_ArrayList_TestData))]
-    public void ExceptionCollection_Serialize_Deserialize_Success(ArrayList exceptions)
+    public void ExceptionCollection_Deserialize_ThrowsExceptionAsExpected(ArrayList exceptions)
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         using MemoryStream stream = new();

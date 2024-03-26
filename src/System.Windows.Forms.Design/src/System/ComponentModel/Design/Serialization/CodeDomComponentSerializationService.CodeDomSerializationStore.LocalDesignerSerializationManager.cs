@@ -57,13 +57,13 @@ public sealed partial class CodeDomComponentSerializationService
                 int idx = 0;
                 foreach (AssemblyNameInfo assemblyNameInfo in _store.AssemblyNameInfos)
                 {
-                    names[idx] = new AssemblyName(assemblyNameInfo.FullName)
+                    names[idx] = new AssemblyName(assemblyName: assemblyNameInfo.FullName!)
                     {
                         Name = assemblyNameInfo.Name,
                         Version = assemblyNameInfo.Version,
                         CultureName = assemblyNameInfo.CultureName,
-                        Flags = assemblyNameInfo.Flags!,
-                        ContentType = assemblyNameInfo.ContentType
+                        Flags = assemblyNameInfo.Flags ?? default,
+                        ContentType = assemblyNameInfo.ContentType ?? default
                     };
                     idx++;
                 }

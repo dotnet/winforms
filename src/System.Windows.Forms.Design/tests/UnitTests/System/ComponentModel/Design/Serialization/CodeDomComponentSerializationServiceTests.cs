@@ -7,11 +7,8 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.TestUtilities;
-
 using Moq;
-
 using static System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService;
-
 using CodeDomComponentSerializationState = System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationState;
 
 namespace System.ComponentModel.Design.Serialization.Tests;
@@ -682,15 +679,24 @@ public class CodeDomComponentSerializationServiceTests
         Assert.Throws<ArgumentNullException>("info", () => serializable.GetObjectData(null, new StreamingContext()));
     }
 
-    [Fact]
-    public void LoadStore_SerializedStore_ThrowsSerializationException()
+    [Theory]
+    [BoolData]
+    public void LoadStore_SerializedStore_ThrowsSerializationException(bool formatterEnabled)
     {
-        using BinaryFormatterScope formatterScope = new(enable: false);
+        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
         CodeDomComponentSerializationService service = new();
         SerializationStore store = service.CreateStore();
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
-        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, store));
+        Action serialize =() => formatter.Serialize(stream, store);
+        if (formatterEnabled)
+        {
+            serialize.Should().NotThrow<SerializationException>();
+        }
+        else
+        {
+            serialize.Should().Throw<NotSupportedException>();
+        }
     }
 
     [Fact]
@@ -1693,15 +1699,42 @@ public class CodeDomComponentSerializationServiceTests
         service.Serialize(store, control);
         store.Close();
         Assert.Empty(store.Errors);
-        Action act = () => store.Save(stream);
-        act.Should().NotThrow();
-        IEnumerator obj = service.Deserialize(store).GetEnumerator();
+        Action serialize = () => store.Save(stream);
+        serialize.Should().NotThrow();
+        ICollection objCollection = service.Deserialize(store);
+        objCollection.Count.Should().Be(1);
+        IEnumerator obj = objCollection.GetEnumerator();
         obj.MoveNext();
         obj.Current.Should().BeOfType(type);
 
         stream.Position = 0;
-        Func<object> func = () => _binaryFormatter.Deserialize(stream);
-        func.Should().NotThrow();
+        Func<object> deserialize = () => _binaryFormatter.Deserialize(stream);
+        deserialize.Should().NotThrow();
+    }
+
+    [Fact]
+    public void CodeDomComponentSerializationState_GetObjectData_SetsSerializationInfoValues()
+    {
+        var properties = new List<string> { "Property1", "Property2" };
+        var resources = new Dictionary<string, object> { { "Resource1", null }, { "Resource2", new object() } };
+        var events = new List<string> { "Event1", "Event2" };
+        object modifier = new();
+        var state = new CodeDomComponentSerializationState(
+        code: null,
+        ctxStatements: null,
+        properties: properties,
+        resources: resources,
+        events: events,
+        modifier: modifier
+        );
+
+        var info = new SerializationInfo(typeof(CodeDomComponentSerializationState), new FormatterConverter());
+
+        state.GetObjectData(info, new StreamingContext());
+        info.GetValue("Properties", typeof(List<string>)).Should().BeEquivalentTo(properties);
+        info.GetValue("Resources", typeof(Dictionary<string, object>)).Should().BeEquivalentTo(resources);
+        info.GetValue("Events", typeof(List<string>)).Should().BeEquivalentTo(events);
+        info.GetValue("Modifier", typeof(object)).Should().Be(modifier);
     }
 
     private class DataClass : Component

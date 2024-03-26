@@ -8,20 +8,25 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
+    /// <summary>
+    /// Because AssemblyName and CultureInfo are no longer serializable in .NET, we define this binary serializable class instead.
+    /// This class contains the text content from AssemblyName and CultureInfo classes.
+    /// Note that this breaks binary compatibility with the .NET Framework.
+    /// </summary>
     [Serializable]
     internal sealed class AssemblyNameInfo : ISerializable
     {
-        private const string StrContentType = "ContentType";
-        private const string StrCultureName = "CultureName";
-        private const string StrFlags = "Flags";
-        private const string StrFullName = "FullName";
-        private const string StrName = "Name";
-        private const string StrVersion = "Version";
+        private const string ContentTypeKey = "ContentType";
+        private const string CultureNameKey = "CultureName";
+        private const string FlagsKey = "Flags";
+        private const string FullNameKey = "FullName";
+        private const string NameKey = "Name";
+        private const string VersionKey = "Version";
 
-        public AssemblyContentType ContentType { get; set; }
+        public AssemblyContentType? ContentType { get; set; }
         public string? CultureName { get; set; }
-        public AssemblyNameFlags Flags { get; set; }
-        public string FullName { get; set; }
+        public AssemblyNameFlags? Flags { get; set; }
+        public string? FullName { get; set; }
         public string? Name { get; set; }
         public Version? Version { get; set; }
 
@@ -39,27 +44,24 @@ public sealed partial class CodeDomComponentSerializationService
         {
             ArgumentNullException.ThrowIfNull(info);
 
-            info.AddValue(StrContentType, ContentType);
-            info.AddValue(StrCultureName, CultureName);
-            info.AddValue(StrFlags, Flags);
-            info.AddValue(StrFullName, FullName);
-            info.AddValue(StrName, Name);
-            info.AddValue(StrVersion, Version);
+            info.AddValue(ContentTypeKey, ContentType);
+            info.AddValue(CultureNameKey, CultureName);
+            info.AddValue(FlagsKey, Flags);
+            info.AddValue(FullNameKey, FullName);
+            info.AddValue(NameKey, Name);
+            info.AddValue(VersionKey, Version);
         }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private AssemblyNameInfo(SerializationInfo info, StreamingContext streamingContext)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             ArgumentNullException.ThrowIfNull(info);
 
-            CultureName = (string?)info.GetValue(StrCultureName, type: typeof(string));
-            Name = (string?)info.GetValue(StrName, type: typeof(string));
-            Version = (Version?)info.GetValue(StrVersion, type: typeof(Version));
-#nullable disable
-            FullName = (string)info.GetValue(StrFullName, type: typeof(string));
-            Flags = (AssemblyNameFlags)info.GetValue(StrFlags, type: typeof(AssemblyNameFlags));
-            ContentType = (AssemblyContentType)info.GetValue(StrContentType, type: typeof(AssemblyContentType));
+            CultureName = (string?)info.GetValue(CultureNameKey, type: typeof(string));
+            Name = (string?)info.GetValue(NameKey, type: typeof(string));
+            Version = (Version?)info.GetValue(VersionKey, type: typeof(Version));
+            FullName = (string?)info.GetValue(FullNameKey, type: typeof(string));
+            Flags = (AssemblyNameFlags?)info.GetValue(FlagsKey, type: typeof(AssemblyNameFlags));
+            ContentType = (AssemblyContentType?)info.GetValue(ContentTypeKey, type: typeof(AssemblyContentType));
         }
     }
 }
