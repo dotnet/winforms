@@ -14,6 +14,7 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
@@ -202,6 +203,7 @@ public unsafe partial class Control :
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
+    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
 
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
@@ -1682,10 +1684,109 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Gets or sets the dark mode for the control.
+    /// </summary>
+    /// <value>
+    ///  The dark mode for the control. The default value is <see cref="DarkMode.Inherits"/>. This property is ambient.
+    ///  Deriving classes should override <see cref="SetDarkModeCore(DarkMode)"/> to implement their own dark-mode detection logic.
+    /// </value>
+    public DarkMode DarkMode
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_darkModeProperty))
+            {
+                return (DarkMode)Properties.GetObject(s_darkModeProperty)!;
+            }
+
+            return ParentInternal?.DarkMode ?? DarkMode.Inherits;
+        }
+
+        set => SetDarkMode(value);
+    }
+
+    private bool ShouldSerializeDarkMode()
+        => DarkMode != DefaultDarkMode;
+
+    private void ResetDarkMode()
+        => DarkMode = DefaultDarkMode;
+
+    /// <summary>
+    ///  Tests, if the control is currently in dark mode. This property is ambient. Inherited controls can return false,
+    ///  to prevent their base classes to apply their dark-mode logic, and can still test for dark-mode by calling base.IsDarkModeEnabled.
+    /// </summary>
+    protected virtual bool IsDarkModeEnabled
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_darkModeProperty))
+            {
+                // If we inherit, it's the parent's dark-mode, otherwise it's the value we have.
+                return (DarkMode == DarkMode.Inherits
+                    && (ParentInternal?.IsDarkModeEnabled ?? false))
+                    || DarkMode == DarkMode.Enabled;
+            }
+            else
+            {
+                // We're ambient: It's either the parent's or the application's dark-mode.
+                return ParentInternal?.IsDarkModeEnabled ?? Application.IsDarkModeEnabled;
+            }
+        }
+    }
+
+    private void SetDarkMode(DarkMode darkMode)
+    {
+        if (Equals(darkMode, DarkMode))
+        {
+            return;
+        }
+
+        if (darkMode switch
+        {
+            DarkMode.Inherits or
+            DarkMode.Enabled or
+            DarkMode.Disabled => Application.EnvironmentDarkMode == DarkMode.NotSupported || !DarkModeSupported
+                    ? throw new ArgumentException("${darkModeSetting} is not supported in this Environment.")
+                    : true,
+            _ => throw new ArgumentException("${darkModeSetting} is not supported in this context.")
+        })
+        {
+            // When DarkModeSetting was different than its parent before, but now it is about to become the same,
+            // we're removing it altogether, so it can inherit the value from its parent.
+            if (Properties.ContainsObject(s_darkModeProperty) && Equals(ParentInternal?.DarkMode, darkMode))
+            {
+                Properties.RemoveObject(s_darkModeProperty);
+            }
+            else
+            {
+                Properties.SetObject(s_darkModeProperty, darkMode);
+            }
+
+            SetDarkModeCore(darkMode);
+        }
+    }
+
+    /// <summary>
+    ///  Inherited classes should override this method to implement their own dark-mode changed logic, if they need it.
+    /// </summary>
+    /// <param name="darkModeSetting">A value of type <see cref="DarkMode"/> with the new dark-mode setting.</param>
+    /// <returns><see langword="true"/>, if the setting succeeded, otherwise <see langword="false"/>.</returns>
+    protected virtual bool SetDarkModeCore(DarkMode darkModeSetting) => true;
+
+    /// <summary>
+    ///  Determines whether the control supports dark mode.
+    /// </summary>
+    /// <returns><see langword="true"/>, if the control supports dark mode; otherwise, <see langword="false"/>.</returns>
+    protected virtual bool DarkModeSupported
+        => Application.EnvironmentDarkMode != DarkMode.NotSupported;
+
+    private static DarkMode DefaultDarkMode => DarkMode.Inherits;
+
+    /// <summary>
     ///  The default BackColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultBackColor => SystemColors.Control;
+    public static Color DefaultBackColor => Application.SystemColors.Control;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1716,7 +1817,7 @@ public unsafe partial class Control :
     ///  The default ForeColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultForeColor => SystemColors.ControlText;
+    public static Color DefaultForeColor => Application.SystemColors.ControlText;
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -1762,7 +1863,7 @@ public unsafe partial class Control :
                     if (control is null)
                     {
                         // Don't know what to do, this seems good as anything
-                        color = SystemColors.Control;
+                        color = Application.SystemColors.Control;
                         break;
                     }
 
@@ -3748,7 +3849,7 @@ public unsafe partial class Control :
             // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
             // if we don't know, we shouldn't throw.
             if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
-                || (returnValue == false && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
+                || (!returnValue && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
                 || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
@@ -7636,6 +7737,59 @@ public unsafe partial class Control :
                 PInvoke.SetWindowText(this, _text);
             }
 
+            if (IsDarkModeEnabled)
+            {
+                if (this is
+
+                    // Controls with 4 levels of inheritance, sorted alphabetically by type name
+                    DomainUpDown         // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
+                    or NumericUpDown     // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
+
+                    // Controls with 3 levels of inheritance, sorted alphabetically by type name
+                    or CheckedListBox    // Inherits from ListBox, ListControl, Control
+                    or Form              // Excluded - too invasive.
+                    or FlowLayoutPanel   // Inherits from Panel, ScrollableControl, Control
+                    or SplitContainer    // Inherits from ContainerControl, ScrollableControl, Control
+                    or TabPage           // Inherits from Panel, ScrollableControl, Control
+                    or TableLayoutPanel  // Inherits from Panel, ScrollableControl, Control
+
+                    // Controls with 2 levels of inheritance, sorted alphabetically by type name
+                    // or ComboBox       // Excluded - directly handled.
+                    or ListBox           // Inherits from ListControl, Control
+
+                    or Button            // Inherits from ButtonBase, Control
+                    or CheckBox          // Inherits from ButtonBase, Control
+                    or MaskedTextBox     // Inherits from TextBoxBase, Control
+                    or Panel             // Inherits from ScrollableControl, Control
+                    or RadioButton       // Inherits from ButtonBase, Control
+                    or RichTextBox       // Inherits from TextBoxBase, Control
+                    or TextBox           // Inherits from TextBoxBase, Control
+                    or HScrollBar        // Inherits from ScrollBar, Control
+                    or VScrollBar        // Inherits from ScrollBar, Control
+
+                    // Base classes and controls with direct inheritance from Control, sorted alphabetically by type name
+                    or ButtonBase        // Inherits from Control
+                    or DateTimePicker    // Inherits from Control
+                    // or GroupBox       // Inherits from Control directly, but behaves like a container
+                    or Label             // Inherits from Control
+                    or LinkLabel         // Inherits from Label, Control
+                    // or ListView       // Excluded - directly handled.
+                    or MonthCalendar     // Inherits from Control
+                    or PictureBox        // Inherits from Control
+                    or ProgressBar       // Inherits from Control
+                    or ScrollableControl // Inherits from Control
+                    // or TextBoxBase    // Excluded - probably too invasive.
+                    or TrackBar          // Inherits from Control
+                    or TreeView          // Inherits from Control
+                    or UpDownBase)       // Inherits from Control
+
+                // Base class for all UI controls in WinForms
+                // or Control           // Excluded.
+                {
+                    _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+                }
+            }
+
             if (this is not ScrollableControl
                 && !IsMirrored
                 && GetExtendedState(ExtendedStates.SetScrollPosition)
@@ -8534,7 +8688,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using CreateBrushScope hbrush = new(SystemColors.Control);
+            using CreateBrushScope hbrush = new(Application.SystemColors.Control);
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }
@@ -10677,6 +10831,17 @@ public unsafe partial class Control :
         }
     }
 
+    private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+    {
+        BOOL value = darkModeEnabled;
+
+        PInvoke.DwmSetWindowAttribute(
+            hwnd,
+            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &value,
+            (uint)sizeof(BOOL));
+    }
+
     protected virtual void SetVisibleCore(bool value)
     {
         if (value != Visible)
@@ -10694,7 +10859,12 @@ public unsafe partial class Control :
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    PInvoke.ShowWindow(this, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
+                    if (value)
+                    {
+                        PrepareDarkMode(HWND, IsDarkModeEnabled);
+                    }
+
+                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
             else if (IsHandleCreated || (value && _parent?.Created == true))

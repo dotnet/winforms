@@ -224,7 +224,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
                 DataGridView.InvalidateColumn(Index);
             }
 
-            if (value && DefaultCellStyle.NullValue is bool boolValue && boolValue == false)
+            if (value && DefaultCellStyle.NullValue is bool boolValue && !boolValue)
             {
                 DefaultCellStyle.NullValue = CheckState.Indeterminate;
             }

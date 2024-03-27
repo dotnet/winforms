@@ -169,9 +169,9 @@ public partial class TabControl : Control
         get
         {
             // The tab control can only be rendered in 1 color: System's Control color.
-            // So, always return this value... otherwise, we're inheriting the forms backcolor
+            // So, always return this value... otherwise, we're inheriting the forms BackColor
             // and passing it on to the pab pages.
-            return SystemColors.Control;
+            return Application.SystemColors.Control;
         }
         set
         {
@@ -557,7 +557,7 @@ public partial class TabControl : Control
             if (Multiline != value)
             {
                 SetState(State.Multiline, value);
-                if (Multiline == false && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
+                if (!Multiline && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
                 {
                     _alignment = TabAlignment.Top;
                 }
@@ -1225,7 +1225,7 @@ public partial class TabControl : Control
             return;
         }
 
-        // Add the handle to hashtable for Ids ..
+        // Add the handle to HashTable for Ids ..
         _windowId = NativeWindow.CreateWindowId(this);
         _handleInTable = true;
 
@@ -1240,6 +1240,7 @@ public partial class TabControl : Control
         base.OnHandleCreated(e);
         _cachedDisplayRect = Rectangle.Empty;
         ApplyItemSize();
+
         if (_imageList is not null)
         {
             PInvoke.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, _imageList.Handle);

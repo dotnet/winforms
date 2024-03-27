@@ -300,7 +300,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             g.FillRectangle(brush, item.SplitterBounds);
         }
 
-        DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, SystemColors.ControlText, ArrowDirection.Down));
+        DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, Application.SystemColors.ControlText, ArrowDirection.Down));
     }
 
     protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
@@ -564,7 +564,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 {
                     if (UseSystemColors)
                     {
-                        borderColor = SystemColors.Highlight;
+                        borderColor = Application.SystemColors.Highlight;
                         RenderSelectedButtonFill(g, bounds);
                     }
                     else
@@ -621,7 +621,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 {
                     if (UseSystemColors)
                     {
-                        borderColor = SystemColors.Highlight;
+                        borderColor = Application.SystemColors.Highlight;
                         RenderSelectedButtonFill(g, bounds);
                     }
                     else
@@ -674,7 +674,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         if (item is ToolStripDropDownItem)
         {
-            e.DefaultArrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
+            e.DefaultArrowColor = item.Enabled ? Application.SystemColors.ControlText : Application.SystemColors.ControlDark;
         }
 
         base.OnRenderArrow(e);

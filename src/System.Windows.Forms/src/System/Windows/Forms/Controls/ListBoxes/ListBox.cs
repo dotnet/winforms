@@ -156,7 +156,7 @@ public partial class ListBox : ListControl
             }
             else
             {
-                return SystemColors.Window;
+                return Application.SystemColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -430,7 +430,7 @@ public partial class ListBox : ListControl
         {
             base.Font = value;
 
-            if (_integralHeight == false)
+            if (!_integralHeight)
             {
                 // Refresh the list to force the scroll bars to display
                 // when the integral height is false.
@@ -449,7 +449,7 @@ public partial class ListBox : ListControl
             }
             else
             {
-                return SystemColors.WindowText;
+                return Application.SystemColors.WindowText;
             }
         }
         set => base.ForeColor = value;

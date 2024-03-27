@@ -167,7 +167,7 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         remove => Events.RemoveHandler(s_eventDefaultItemChanged, value);
     }
 
-    protected internal override bool DismissWhenClicked => DropDown.Visible != true;
+    protected internal override bool DismissWhenClicked => !DropDown.Visible;
 
     internal override Rectangle DropDownButtonArea => DropDownButtonBounds;
 

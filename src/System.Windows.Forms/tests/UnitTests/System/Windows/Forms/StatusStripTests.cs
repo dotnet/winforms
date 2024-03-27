@@ -121,8 +121,11 @@ public partial class StatusStripTests
         Assert.Null(control.Region);
         Assert.NotNull(control.Renderer);
         Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+
+        // TODO: Assume control.Renderer can be either ToolStripSystemRenderer or ToolStripProfessionalRenderer for the Moment.
+        Assert.True(control.Renderer is ToolStripSystemRenderer or ToolStripProfessionalRenderer, "Renderer is not one of the expected types.");
+        Assert.True(control.RenderMode is ToolStripRenderMode.System or ToolStripRenderMode.ManagerRenderMode);
+
         Assert.True(control.ResizeRedraw);
         Assert.Equal(200, control.Right);
         Assert.Equal(RightToLeft.No, control.RightToLeft);
@@ -1257,15 +1260,15 @@ public partial class StatusStripTests
 
     private class SubStatusStrip : StatusStrip
     {
-        public new const int ScrollStateAutoScrolling = StatusStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = StatusStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = StatusStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = StatusStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = StatusStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

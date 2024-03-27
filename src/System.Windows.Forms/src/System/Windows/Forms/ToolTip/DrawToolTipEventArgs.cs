@@ -98,6 +98,6 @@ public class DrawToolTipEventArgs : EventArgs
     /// </summary>
     public void DrawBorder()
     {
-        ControlPaint.DrawBorder(Graphics, Bounds, SystemColors.WindowFrame, ButtonBorderStyle.Solid);
+        ControlPaint.DrawBorder(Graphics, Bounds, Application.SystemColors.WindowFrame, ButtonBorderStyle.Solid);
     }
 }

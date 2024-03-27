@@ -2012,7 +2012,7 @@ public partial class ToolStripDropDown : ToolStrip
 
     private bool ShouldSerializeDropShadowEnabled()
     {
-        return _dropShadowEnabled == false;
+        return !_dropShadowEnabled;
     }
 
     internal override bool ShouldSerializeLayoutStyle()

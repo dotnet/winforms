@@ -67,7 +67,7 @@ public partial class ProfessionalColorTable
     /// <summary>
     ///  When this is specified, professional colors picks from SystemColors
     ///  rather than colors that match the current theme. If theming is not
-    ///  turned on, we'll fall back to SystemColors.
+    ///  turned on, we'll fall back to Application.SystemColors.
     /// </summary>
     public bool UseSystemColors
     {
@@ -113,13 +113,13 @@ public partial class ProfessionalColorTable
     public virtual Color ButtonPressedHighlight => FromKnownColor(KnownColors.ButtonPressedHighlight);
 
     [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightBorderDescr))]
-    public virtual Color ButtonPressedHighlightBorder => SystemColors.Highlight;
+    public virtual Color ButtonPressedHighlightBorder => Application.SystemColors.Highlight;
 
     [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightDescr))]
     public virtual Color ButtonCheckedHighlight => FromKnownColor(KnownColors.ButtonCheckedHighlight);
 
     [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr))]
-    public virtual Color ButtonCheckedHighlightBorder => SystemColors.Highlight;
+    public virtual Color ButtonCheckedHighlightBorder => Application.SystemColors.Highlight;
 
     [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]
     public virtual Color ButtonPressedBorder => FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver);
@@ -175,7 +175,7 @@ public partial class ProfessionalColorTable
     public virtual Color ImageMarginGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle);
 
     [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientEndDescr))]
-    public virtual Color ImageMarginGradientEnd => (_usingSystemColors) ? SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd);
+    public virtual Color ImageMarginGradientEnd => (_usingSystemColors) ? Application.SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd);
 
     [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]
     public virtual Color ImageMarginRevealedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin);
@@ -230,7 +230,7 @@ public partial class ProfessionalColorTable
 
     [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
     // Note: the color is retained for backwards compatibility
-    public virtual Color StatusStripBorder => SystemColors.ButtonHighlight;
+    public virtual Color StatusStripBorder => Application.SystemColors.ButtonHighlight;
 
     [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
     public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
@@ -343,21 +343,21 @@ public partial class ProfessionalColorTable
             using var screen = GdiCache.GetScreenDCGraphics();
             rgbTable[KnownColors.ButtonPressedHighlight] = GetAlphaBlendedColor(
                 screen,
-                SystemColors.Window,
-                GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 160),
+                Application.SystemColors.Window,
+                GetAlphaBlendedColor(screen, Application.SystemColors.Highlight, Application.SystemColors.Window, 160),
                 50);
             rgbTable[KnownColors.ButtonCheckedHighlight] = GetAlphaBlendedColor(
                 screen,
-                SystemColors.Window,
-                GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 80),
+                Application.SystemColors.Window,
+                GetAlphaBlendedColor(screen, Application.SystemColors.Highlight, Application.SystemColors.Window, 80),
                 20);
             rgbTable[KnownColors.ButtonSelectedHighlight] = rgbTable[KnownColors.ButtonCheckedHighlight];
         }
         else
         {
-            rgbTable[KnownColors.ButtonPressedHighlight] = SystemColors.Highlight;
-            rgbTable[KnownColors.ButtonCheckedHighlight] = SystemColors.ControlLight;
-            rgbTable[KnownColors.ButtonSelectedHighlight] = SystemColors.ControlLight;
+            rgbTable[KnownColors.ButtonPressedHighlight] = Application.SystemColors.Highlight;
+            rgbTable[KnownColors.ButtonCheckedHighlight] = Application.SystemColors.ControlLight;
+            rgbTable[KnownColors.ButtonSelectedHighlight] = Application.SystemColors.ControlLight;
         }
     }
 
@@ -368,16 +368,16 @@ public partial class ProfessionalColorTable
         InitCommonColors(ref rgbTable);
 
         // use locals so we aren't fetching again and again.
-        Color buttonFace = SystemColors.ButtonFace;
-        Color buttonShadow = SystemColors.ButtonShadow;
-        Color highlight = SystemColors.Highlight;
-        Color window = SystemColors.Window;
+        Color buttonFace = Application.SystemColors.ButtonFace;
+        Color buttonShadow = Application.SystemColors.ButtonShadow;
+        Color highlight = Application.SystemColors.Highlight;
+        Color window = Application.SystemColors.Window;
         Color empty = Color.Empty;
-        Color controlText = SystemColors.ControlText;
-        Color buttonHighlight = SystemColors.ButtonHighlight;
-        Color grayText = SystemColors.GrayText;
-        Color highlightText = SystemColors.HighlightText;
-        Color windowText = SystemColors.WindowText;
+        Color controlText = Application.SystemColors.ControlText;
+        Color buttonHighlight = Application.SystemColors.ButtonHighlight;
+        Color grayText = Application.SystemColors.GrayText;
+        Color highlightText = Application.SystemColors.HighlightText;
+        Color windowText = Application.SystemColors.WindowText;
 
         // initialize to high contrast
         Color gradientBegin = buttonFace;
@@ -397,7 +397,7 @@ public partial class ProfessionalColorTable
         {
             gradientBegin = GetAlphaBlendedColorHighRes(null, buttonFace, window, 23);
             gradientMiddle = GetAlphaBlendedColorHighRes(null, buttonFace, window, 50);
-            gradientEnd = SystemColors.ButtonFace;
+            gradientEnd = Application.SystemColors.ButtonFace;
 
             msocbvcrCBCtlBkgdMouseOver = GetAlphaBlendedColorHighRes(null, highlight, window, 30);
             msocbvcrCBCtlBkgdMouseDown = GetAlphaBlendedColorHighRes(null, highlight, window, 50);
@@ -405,18 +405,18 @@ public partial class ProfessionalColorTable
 
         if (lowResolution || highContrast)
         {
-            rgbTable[KnownColors.msocbvcrCBBkgd] = buttonFace;
-            rgbTable[KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver] = SystemColors.ControlLight;
-            rgbTable[KnownColors.msocbvcrCBDragHandle] = controlText;
-            rgbTable[KnownColors.msocbvcrCBGradMainMenuHorzEnd] = buttonFace;
-            rgbTable[KnownColors.msocbvcrCBGradOptionsBegin] = buttonShadow;
-            rgbTable[KnownColors.msocbvcrCBGradOptionsMiddle] = buttonShadow;
-            rgbTable[KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin] = buttonShadow;
-            rgbTable[KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle] = buttonShadow;
-            rgbTable[KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd] = buttonShadow;
-            rgbTable[KnownColors.msocbvcrCBMenuBdrOuter] = controlText;
-            rgbTable[KnownColors.msocbvcrCBMenuBkgd] = window;
-            rgbTable[KnownColors.msocbvcrCBSplitterLine] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBkgd] = buttonFace;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver] = Application.SystemColors.ControlLight;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBDragHandle] = controlText;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMainMenuHorzEnd] = buttonFace;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsBegin] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradOptionsMiddle] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd] = buttonShadow;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter] = controlText;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd] = window;
+            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] = buttonShadow;
         }
         else
         {
@@ -434,7 +434,7 @@ public partial class ProfessionalColorTable
             rgbTable[KnownColors.msocbvcrCBSplitterLine] = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
         }
 
-        rgbTable[KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? SystemColors.ControlLight : highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? Application.SystemColors.ControlLight : highlight;
 
         rgbTable[KnownColors.msocbvcrCBBdrOuterDocked] = buttonFace;
         rgbTable[KnownColors.msocbvcrCBBdrOuterDocked] = buttonShadow;
@@ -502,167 +502,167 @@ public partial class ProfessionalColorTable
 
         rgbTable[KnownColors.msocbvcrCBShadow] = rgbTable[KnownColors.msocbvcrCBBkgd];
 
-        rgbTable[KnownColors.msocbvcrCBSplitterLineLight] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrCBTearOffHandle] = empty;
-        rgbTable[KnownColors.msocbvcrCBTearOffHandleMouseOver] = empty;
-        rgbTable[KnownColors.msocbvcrCBTitleBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrCBTitleText] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrDisabledFocuslessHighlightedText] = grayText;
-        rgbTable[KnownColors.msocbvcrDisabledHighlightedText] = grayText;
-        rgbTable[KnownColors.msocbvcrDlgGroupBoxText] = controlText;
-        rgbTable[KnownColors.msocbvcrDocTabBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrDocTabBdrDark] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDocTabBdrDarkMouseDown] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabBdrDarkMouseOver] = SystemColors.MenuText;
-        rgbTable[KnownColors.msocbvcrDocTabBdrLight] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDocTabBdrLightMouseDown] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabBdrLightMouseOver] = SystemColors.MenuText;
-        rgbTable[KnownColors.msocbvcrDocTabBdrMouseDown] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabBdrMouseOver] = SystemColors.MenuText;
-        rgbTable[KnownColors.msocbvcrDocTabBdrSelected] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrDocTabBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDocTabBkgdMouseDown] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabBkgdMouseOver] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabBkgdSelected] = window;
-        rgbTable[KnownColors.msocbvcrDocTabText] = controlText;
-        rgbTable[KnownColors.msocbvcrDocTabTextMouseDown] = highlightText;
-        rgbTable[KnownColors.msocbvcrDocTabTextMouseOver] = highlight;
-        rgbTable[KnownColors.msocbvcrDocTabTextSelected] = windowText;
-        rgbTable[KnownColors.msocbvcrDWActiveTabBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDWActiveTabBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrDWActiveTabText] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDWActiveTabText] = controlText;
-        rgbTable[KnownColors.msocbvcrDWActiveTabTextDisabled] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrDWActiveTabTextDisabled] = controlText;
-        rgbTable[KnownColors.msocbvcrDWInactiveTabBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDWInactiveTabBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrDWInactiveTabText] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrDWInactiveTabText] = controlText;
-        rgbTable[KnownColors.msocbvcrDWTabBkgdMouseDown] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDWTabBkgdMouseOver] = buttonFace;
-        rgbTable[KnownColors.msocbvcrDWTabTextMouseDown] = controlText;
-        rgbTable[KnownColors.msocbvcrDWTabTextMouseOver] = controlText;
-        rgbTable[KnownColors.msocbvcrFocuslessHighlightedBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrFocuslessHighlightedBkgd] = SystemColors.InactiveCaption;
-        rgbTable[KnownColors.msocbvcrFocuslessHighlightedText] = controlText;
-        rgbTable[KnownColors.msocbvcrFocuslessHighlightedText] = SystemColors.InactiveCaptionText;
-        rgbTable[KnownColors.msocbvcrGDHeaderBdr] = highlight;
-        rgbTable[KnownColors.msocbvcrGDHeaderBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGDHeaderCellBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrGDHeaderCellBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrGDHeaderCellBkgdSelected] = empty;
-        rgbTable[KnownColors.msocbvcrGDHeaderSeeThroughSelection] = highlight;
-        rgbTable[KnownColors.msocbvcrGSPDarkBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrGSPDarkBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGSPGroupContentDarkBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGSPGroupContentLightBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGSPGroupContentText] = windowText;
-        rgbTable[KnownColors.msocbvcrGSPGroupContentTextDisabled] = grayText;
-        rgbTable[KnownColors.msocbvcrGSPGroupHeaderDarkBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGSPGroupHeaderLightBkgd] = window;
-        rgbTable[KnownColors.msocbvcrGSPGroupHeaderText] = controlText;
-        rgbTable[KnownColors.msocbvcrGSPGroupHeaderText] = windowText;
-        rgbTable[KnownColors.msocbvcrGSPGroupline] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrGSPGroupline] = window;
-        rgbTable[KnownColors.msocbvcrGSPHyperlink] = empty;
-        rgbTable[KnownColors.msocbvcrGSPLightBkgd] = window;
-        rgbTable[KnownColors.msocbvcrHyperlink] = empty;
-        rgbTable[KnownColors.msocbvcrHyperlinkFollowed] = empty;
-        rgbTable[KnownColors.msocbvcrJotNavUIBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrJotNavUIBdr] = windowText;
-        rgbTable[KnownColors.msocbvcrJotNavUIGradBegin] = buttonFace;
-        rgbTable[KnownColors.msocbvcrJotNavUIGradBegin] = window;
-        rgbTable[KnownColors.msocbvcrJotNavUIGradEnd] = window;
-        rgbTable[KnownColors.msocbvcrJotNavUIGradMiddle] = buttonFace;
-        rgbTable[KnownColors.msocbvcrJotNavUIGradMiddle] = window;
-        rgbTable[KnownColors.msocbvcrJotNavUIText] = windowText;
-        rgbTable[KnownColors.msocbvcrListHeaderArrow] = controlText;
-        rgbTable[KnownColors.msocbvcrNetLookBkgnd] = empty;
-        rgbTable[KnownColors.msocbvcrOABBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOBBkgdBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOBBkgdBdrContrast] = window;
-        rgbTable[KnownColors.msocbvcrOGMDIParentWorkspaceBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOGRulerActiveBkgd] = window;
-        rgbTable[KnownColors.msocbvcrOGRulerBdr] = controlText;
-        rgbTable[KnownColors.msocbvcrOGRulerBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOGRulerInactiveBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOGRulerTabBoxBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOGRulerTabBoxBdrHighlight] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrOGRulerTabStopTicks] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOGRulerText] = windowText;
-        rgbTable[KnownColors.msocbvcrOGTaskPaneGroupBoxHeaderBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOGWorkspaceBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKFlagNone] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrOLKFolderbarDark] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKFolderbarLight] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKFolderbarText] = window;
-        rgbTable[KnownColors.msocbvcrOLKGridlines] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKGroupLine] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKGroupNested] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKGroupShaded] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKGroupText] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKIconBar] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKInfoBarBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKInfoBarText] = controlText;
-        rgbTable[KnownColors.msocbvcrOLKPreviewPaneLabelText] = windowText;
-        rgbTable[KnownColors.msocbvcrOLKTodayIndicatorDark] = highlight;
-        rgbTable[KnownColors.msocbvcrOLKTodayIndicatorLight] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKWBActionDividerLine] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKWBButtonDark] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKWBButtonLight] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKWBButtonLight] = buttonHighlight;
-        rgbTable[KnownColors.msocbvcrOLKWBDarkOutline] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKWBFoldersBackground] = window;
-        rgbTable[KnownColors.msocbvcrOLKWBHoverButtonDark] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBHoverButtonLight] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBLabelText] = windowText;
-        rgbTable[KnownColors.msocbvcrOLKWBPressedButtonDark] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBPressedButtonLight] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBSelectedButtonDark] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBSelectedButtonLight] = empty;
-        rgbTable[KnownColors.msocbvcrOLKWBSplitterDark] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrOLKWBSplitterLight] = buttonFace;
-        rgbTable[KnownColors.msocbvcrOLKWBSplitterLight] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrPlacesBarBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrPPOutlineThumbnailsPaneTabAreaBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrPPOutlineThumbnailsPaneTabBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrPPOutlineThumbnailsPaneTabInactiveBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrPPOutlineThumbnailsPaneTabText] = windowText;
-        rgbTable[KnownColors.msocbvcrPPSlideBdrActiveSelected] = highlight;
-        rgbTable[KnownColors.msocbvcrPPSlideBdrActiveSelectedMouseOver] = highlight;
-        rgbTable[KnownColors.msocbvcrPPSlideBdrInactiveSelected] = grayText;
-        rgbTable[KnownColors.msocbvcrPPSlideBdrMouseOver] = highlight;
-        rgbTable[KnownColors.msocbvcrPubPrintDocScratchPageBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrPubWebDocScratchPageBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrSBBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrScrollbarBkgd] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrToastGradBegin] = buttonFace;
-        rgbTable[KnownColors.msocbvcrToastGradEnd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPBdrInnerDocked] = empty;
-        rgbTable[KnownColors.msocbvcrWPBdrOuterDocked] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPBdrOuterFloating] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPBkgd] = window;
-        rgbTable[KnownColors.msocbvcrWPCtlBdr] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPCtlBdrDefault] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPCtlBdrDefault] = controlText;
-        rgbTable[KnownColors.msocbvcrWPCtlBdrDisabled] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPCtlBkgd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPCtlBkgdDisabled] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPCtlText] = controlText;
-        rgbTable[KnownColors.msocbvcrWPCtlTextDisabled] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPCtlTextMouseDown] = highlightText;
-        rgbTable[KnownColors.msocbvcrWPGroupline] = buttonShadow;
-        rgbTable[KnownColors.msocbvcrWPInfoTipBkgd] = SystemColors.Info;
-        rgbTable[KnownColors.msocbvcrWPInfoTipText] = SystemColors.InfoText;
-        rgbTable[KnownColors.msocbvcrWPNavBarBkgnd] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPText] = controlText;
-        rgbTable[KnownColors.msocbvcrWPText] = windowText;
-        rgbTable[KnownColors.msocbvcrWPTextDisabled] = grayText;
-        rgbTable[KnownColors.msocbvcrWPTitleBkgdActive] = highlight;
-        rgbTable[KnownColors.msocbvcrWPTitleBkgdInactive] = buttonFace;
-        rgbTable[KnownColors.msocbvcrWPTitleTextActive] = highlightText;
-        rgbTable[KnownColors.msocbvcrWPTitleTextInactive] = controlText;
-        rgbTable[KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLineLight] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandle] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTearOffHandleMouseOver] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTitleBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBTitleText] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDisabledFocuslessHighlightedText] = grayText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDisabledHighlightedText] = grayText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDlgGroupBoxText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrDark] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrDarkMouseDown] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrDarkMouseOver] = Application.SystemColors.MenuText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrLight] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrLightMouseDown] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrLightMouseOver] = Application.SystemColors.MenuText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrMouseDown] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrMouseOver] = Application.SystemColors.MenuText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBdrSelected] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgdMouseDown] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgdMouseOver] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabBkgdSelected] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabTextMouseDown] = highlightText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabTextMouseOver] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDocTabTextSelected] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabText] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabTextDisabled] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWActiveTabTextDisabled] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWInactiveTabBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWInactiveTabBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWInactiveTabText] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWInactiveTabText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWTabBkgdMouseDown] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWTabBkgdMouseOver] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWTabTextMouseDown] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrDWTabTextMouseOver] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrFocuslessHighlightedBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrFocuslessHighlightedBkgd] = Application.SystemColors.InactiveCaption;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrFocuslessHighlightedText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrFocuslessHighlightedText] = Application.SystemColors.InactiveCaptionText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderBdr] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderCellBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderCellBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderCellBkgdSelected] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGDHeaderSeeThroughSelection] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPDarkBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPDarkBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupContentDarkBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupContentLightBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupContentText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupContentTextDisabled] = grayText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupHeaderDarkBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupHeaderLightBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupHeaderText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupHeaderText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupline] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPGroupline] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPHyperlink] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrGSPLightBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrHyperlink] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrHyperlinkFollowed] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIBdr] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIGradBegin] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIGradBegin] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIGradEnd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIGradMiddle] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIGradMiddle] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrJotNavUIText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrListHeaderArrow] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrNetLookBkgnd] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOABBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOBBkgdBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOBBkgdBdrContrast] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGMDIParentWorkspaceBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerActiveBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerBdr] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerInactiveBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerTabBoxBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerTabBoxBdrHighlight] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerTabStopTicks] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGRulerText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGTaskPaneGroupBoxHeaderBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOGWorkspaceBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKFlagNone] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKFolderbarDark] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKFolderbarLight] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKFolderbarText] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKGridlines] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKGroupLine] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKGroupNested] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKGroupShaded] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKGroupText] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKIconBar] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKInfoBarBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKInfoBarText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKPreviewPaneLabelText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKTodayIndicatorDark] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKTodayIndicatorLight] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBActionDividerLine] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBButtonDark] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBButtonLight] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBButtonLight] = buttonHighlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBDarkOutline] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBFoldersBackground] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBHoverButtonDark] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBHoverButtonLight] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBLabelText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBPressedButtonDark] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBPressedButtonLight] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBSelectedButtonDark] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBSelectedButtonLight] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBSplitterDark] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBSplitterLight] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrOLKWBSplitterLight] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPlacesBarBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPOutlineThumbnailsPaneTabAreaBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPOutlineThumbnailsPaneTabBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPOutlineThumbnailsPaneTabInactiveBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPOutlineThumbnailsPaneTabText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPSlideBdrActiveSelected] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPSlideBdrActiveSelectedMouseOver] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPSlideBdrInactiveSelected] = grayText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPPSlideBdrMouseOver] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPubPrintDocScratchPageBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPubWebDocScratchPageBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrSBBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrScrollbarBkgd] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrToastGradBegin] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrToastGradEnd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPBdrInnerDocked] = empty;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPBdrOuterDocked] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPBdrOuterFloating] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPBkgd] = window;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBdr] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBdrDefault] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBdrDefault] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBdrDisabled] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBkgd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlBkgdDisabled] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlTextDisabled] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPCtlTextMouseDown] = highlightText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPGroupline] = buttonShadow;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPInfoTipBkgd] = Application.SystemColors.Info;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPInfoTipText] = Application.SystemColors.InfoText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPNavBarBkgnd] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPText] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPText] = windowText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTextDisabled] = grayText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleBkgdActive] = highlight;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleBkgdInactive] = buttonFace;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextActive] = highlightText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextInactive] = controlText;
+        rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
     }
 
     private static void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)

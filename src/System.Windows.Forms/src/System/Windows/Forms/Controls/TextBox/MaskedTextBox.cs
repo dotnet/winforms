@@ -2321,7 +2321,7 @@ public partial class MaskedTextBox : TextBoxBase
         {
             string? message = null;
 
-            if (!_flagState[s_isNullMask] && _maskedTextProvider.MaskCompleted == false)
+            if (!_flagState[s_isNullMask] && !_maskedTextProvider.MaskCompleted)
             {
                 message = SR.MaskedTextBoxIncompleteMsg;
             }

@@ -2593,7 +2593,7 @@ public partial class RichTextBox : TextBoxBase
 
     protected override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
-        if (RichTextShortcutsEnabled == false)
+        if (!RichTextShortcutsEnabled)
         {
             foreach (int shortcutValue in s_shortcutsToDisable!)
             {

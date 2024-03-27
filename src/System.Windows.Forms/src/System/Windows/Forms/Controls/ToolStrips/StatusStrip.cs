@@ -29,7 +29,11 @@ public partial class StatusStrip : ToolStrip
         SuspendLayout();
         CanOverflow = false;
         LayoutStyle = ToolStripLayoutStyle.Table;
-        RenderMode = ToolStripRenderMode.System;
+
+        // Default changed for DarkMode from System to ManagerRenderMode.
+        // Also to be consistent to the MenuStrip.
+        // TODO: We'd need to quirk that!
+        RenderMode = ToolStripRenderMode.ManagerRenderMode;
         GripStyle = ToolStripGripStyle.Hidden;
 
         SetStyle(ControlStyles.ResizeRedraw, true);

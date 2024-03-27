@@ -191,7 +191,7 @@ internal partial class CommonProperties
         BitVector32 state = GetLayoutState(element);
         state[s_autoSizeSection] = value ? 1 : 0;
         SetLayoutState(element, state);
-        if (value == false)
+        if (!value)
         {
             // If autoSize is being turned off, restore the control to its specified bounds.
             element.SetBounds(GetSpecifiedBounds(element), BoundsSpecified.None);
