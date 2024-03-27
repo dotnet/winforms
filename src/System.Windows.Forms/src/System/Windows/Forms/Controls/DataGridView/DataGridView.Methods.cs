@@ -10925,7 +10925,7 @@ public partial class DataGridView
 
     public virtual void NotifyCurrentCellDirty(bool dirty)
     {
-        if (_dataGridViewState1[State1_IgnoringEditingChanges] == false)
+        if (!_dataGridViewState1[State1_IgnoringEditingChanges])
         {
             // autosizing has no effect since edited value hasn't been committed
             // and autosizing code only looks at committed values.

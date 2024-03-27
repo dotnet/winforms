@@ -175,7 +175,7 @@ public abstract partial class TextBoxBase : Control
         // the shortcut key we are not supported in TextBox.
         bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
 
-        if (ShortcutsEnabled == false && s_shortcutsToDisable is not null)
+        if (!ShortcutsEnabled && s_shortcutsToDisable is not null)
         {
             foreach (int shortcutValue in s_shortcutsToDisable)
             {

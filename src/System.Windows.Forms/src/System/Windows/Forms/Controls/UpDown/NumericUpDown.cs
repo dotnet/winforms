@@ -745,7 +745,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
                          "DecimalValue lies outside of [minimum, maximum]");
 
             Text = GetNumberText(_currentValue);
-            Debug.Assert(ChangingText == false, "ChangingText should have been set to false");
+            Debug.Assert(!ChangingText, "ChangingText should have been set to false");
         }
     }
 

@@ -328,7 +328,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // of the column collection but there is no event there and we are restricted from adding any
         // Note: this does not break Undo/Redo because Undo/Redo uses serialization the same way
         // the build does and DisplayIndex is not serialized
-        if (e.Column is not null && e.Column.IsDataBound == false)
+        if (e.Column is not null && !e.Column.IsDataBound)
             e.Column.DisplayIndex = -1;
     }
 
