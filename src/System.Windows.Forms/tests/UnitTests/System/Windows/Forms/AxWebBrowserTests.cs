@@ -5,12 +5,12 @@ using System.ComponentModel;
 using AxSHDocVw;
 
 namespace System.Windows.Forms.Tests.System.Windows.Forms;
-public class AxMicrosoftWebBrowserTests
+public class AxWebBrowserTests
 {
     private readonly Form _form;
-    private readonly AxMicrosoftWebBrowserTests _control;
+    private readonly AxWebBrowserTests _control;
 
-   public AxMicrosoftWebBrowserTests()
+   public AxWebBrowserTests()
     {
         using Form form = new();
         using AxWebBrowser control = new();
