@@ -934,7 +934,7 @@ public partial class Binding
             // on this binding because we know the value in the control was valid and has been accepted by
             // the data source. But if the operation failed (or was cancelled), we must leave the dirty flag
             // alone, so that the control's value will continue to be re-validated and re-pulled later.
-            if (args.BindingCompleteState == BindingCompleteState.Success && args.Cancel == false)
+            if (args.BindingCompleteState == BindingCompleteState.Success && !args.Cancel)
             {
                 _state.ChangeFlags(BindingStates.Modified, false);
             }

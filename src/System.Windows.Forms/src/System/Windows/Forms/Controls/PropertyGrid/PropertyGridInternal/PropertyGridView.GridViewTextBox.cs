@@ -274,7 +274,7 @@ internal partial class PropertyGridView
         protected override void SetVisibleCore(bool value)
         {
             // Make sure we don't have the mouse captured if we're going invisible.
-            if (value == false && HookMouseDown)
+            if (!value && HookMouseDown)
             {
                 _mouseHook.HookMouseDown = false;
             }

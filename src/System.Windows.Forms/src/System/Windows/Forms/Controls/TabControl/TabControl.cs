@@ -557,7 +557,7 @@ public partial class TabControl : Control
             if (Multiline != value)
             {
                 SetState(State.Multiline, value);
-                if (Multiline == false && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
+                if (!Multiline && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
                 {
                     _alignment = TabAlignment.Top;
                 }

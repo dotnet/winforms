@@ -75,7 +75,7 @@ public sealed partial class ListViewGroup : ISerializable
     }
 
     internal AccessibleObject AccessibilityObject
-        => _accessibilityObject ??= new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
+        => _accessibilityObject ??= new ListViewGroupAccessibleObject(this, !ListView?.Groups.Contains(this));
 
     /// <summary>
     ///  The text displayed in the group header.
