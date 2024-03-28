@@ -315,7 +315,7 @@ internal abstract partial class GridEntry
 
         internal override void Expand()
         {
-            if (this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable && owner.Expanded == false)
+            if (this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable && !owner.Expanded)
             {
                 owner.Expanded = true;
             }

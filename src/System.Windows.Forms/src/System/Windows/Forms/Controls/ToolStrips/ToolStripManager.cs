@@ -188,7 +188,7 @@ public static partial class ToolStripManager
             return false;
         }
 
-        bool canChange = toolStrip.TabStop == false &&
+        bool canChange = !toolStrip.TabStop &&
                              toolStrip.Enabled &&
                              toolStrip.Visible &&
                              !toolStrip.IsDisposed &&

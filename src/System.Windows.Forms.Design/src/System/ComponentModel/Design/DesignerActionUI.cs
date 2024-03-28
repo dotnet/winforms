@@ -573,7 +573,7 @@ internal partial class DesignerActionUI : IDisposable
             e.Cancel = false;
         }
 
-        if (e.Cancel == false)
+        if (!e.Cancel)
         {
             // We WILL disappear
             Debug.Assert(_lastPanelComponent is not null, "last panel component should not be null here... " +

@@ -593,7 +593,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 // send the item to the overflow.
                 item.SetPlacement(ToolStripItemPlacement.Overflow);
-                if (OverflowRequired == false)
+                if (!OverflowRequired)
                 {
                     // this is the first item we're sending down.
                     // we now need to account for the width or height of the overflow button

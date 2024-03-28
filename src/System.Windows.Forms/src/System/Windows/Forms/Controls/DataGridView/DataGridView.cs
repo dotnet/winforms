@@ -3106,7 +3106,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 Debug.Assert(_individualReadOnlyCells.Count == 0);
                 for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
                 {
-                    Debug.Assert(Columns[columnIndex].ReadOnly == false);
+                    Debug.Assert(!Columns[columnIndex].ReadOnly);
                 }
 
                 int rowCount = Rows.Count;

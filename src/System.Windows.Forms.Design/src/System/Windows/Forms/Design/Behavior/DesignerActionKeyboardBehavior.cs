@@ -47,7 +47,7 @@ internal sealed class DesignerActionKeyboardBehavior : Behavior
             // in case of a ctrl-tab we need to close the DAP
             if (_daUISvc is not null && commandId.Guid == s_vSStandardCommandSet97 && commandId.ID == 1124)
             {
-                _daUISvc.HideUI(null);
+                _daUISvc.HideUI(component: null);
             }
         }
 

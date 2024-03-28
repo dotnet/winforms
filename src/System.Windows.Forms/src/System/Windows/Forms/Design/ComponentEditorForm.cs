@@ -102,7 +102,7 @@ public partial class ComponentEditorForm : Form
         _cancelButton.Text = SR.CloseCaption;
         _dirty = false;
 
-        if (lastApply == false)
+        if (!lastApply)
         {
             for (int n = 0; n < _pageSites.Length; n++)
             {

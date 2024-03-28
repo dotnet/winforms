@@ -346,7 +346,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => false;
 
-    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView!.RightToLeft == RightToLeft.Yes;
+    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView is not null && DataGridView.RightToLeft == RightToLeft.Yes;
 
     bool IKeyboardToolTip.AllowsToolTip() => true;
 
@@ -362,7 +362,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
     {
-        if (DataGridView!.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
+        if (DataGridView is not null && DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
         {
             return ErrorText;
         }
