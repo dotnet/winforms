@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
@@ -12,12 +9,12 @@ Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Logging
 
     ''' <summary>
-    ''' Enables logging to configured TraceListeners
+    '''  Enables logging to configured TraceListeners
     ''' </summary>
     Public Class Log
 
         ''' <summary>
-        ''' Creates a Log and the underlying TraceSource based on the platform
+        '''  Creates a Log and the underlying TraceSource based on the platform
         ''' </summary>
         ''' <remarks>Right now we only support WinApp as an application platform</remarks>
         Public Sub New()
@@ -31,7 +28,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Creates a Log and the underlying TraceSource based on the passed in name
+        '''  Creates a Log and the underlying TraceSource based on the passed in name
         ''' </summary>
         ''' <param name="name">The name of the TraceSource to be created</param>
         Public Sub New(name As String)
@@ -42,7 +39,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all of its listeners
+        '''  Has the TraceSource fire a TraceEvent for all of its listeners
         ''' </summary>
         ''' <param name="message">The message to be logged</param>
         Public Sub WriteEntry(message As String)
@@ -50,7 +47,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all of its listeners
+        '''  Has the TraceSource fire a TraceEvent for all of its listeners
         ''' </summary>
         ''' <param name="message">The message to be logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
@@ -59,7 +56,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all of its listeners
+        '''  Has the TraceSource fire a TraceEvent for all of its listeners
         ''' </summary>
         ''' <param name="message">The message to be logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
@@ -72,7 +69,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
+        '''  Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
         ''' </summary>
         ''' <param name="ex">The exception being logged</param>
         Public Sub WriteException(ex As Exception)
@@ -80,8 +77,8 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
-        ''' and appending additional info
+        '''  Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
+        '''  and appending additional info
         ''' </summary>
         ''' <param name="ex">The exception being logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
@@ -91,8 +88,8 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
-        ''' and appending additional info
+        '''  Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
+        '''  and appending additional info
         ''' </summary>
         ''' <param name="ex">The exception being logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
@@ -117,7 +114,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Gives access to the log's underlying TraceSource
+        '''  Gives access to the log's underlying TraceSource
         ''' </summary>
         ''' <value>The log's underlying TraceSource</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -128,7 +125,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        ''' Returns the file log trace listener we create for the Log
+        '''  Returns the file log trace listener we create for the Log
         ''' </summary>
         ''' <value>The file log trace listener</value>
         Public ReadOnly Property DefaultFileLogWriter() As FileLogTraceListener
@@ -138,14 +135,14 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        ''' Encapsulates a System.Diagnostics.TraceSource.  The value add is that it knows if it was initialized
-        ''' using a config file or not.
+        '''  Encapsulates a System.Diagnostics.TraceSource.  The value add is that it knows if it was initialized
+        '''  using a config file or not.
         ''' </summary>
         Friend NotInheritable Class DefaultTraceSource
             Inherits TraceSource
 
             ''' <summary>
-            ''' TraceSource has other constructors, this is the only one we care about for this internal class
+            '''  TraceSource has other constructors, this is the only one we care about for this internal class
             ''' </summary>
             ''' <param name="name"></param>
             Public Sub New(name As String)
@@ -153,7 +150,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            ''' Tells us whether this TraceSource found a config file to configure itself from
+            '''  Tells us whether this TraceSource found a config file to configure itself from
             ''' </summary>
             ''' <value>True - The TraceSource was configured from a config file</value>
             Public ReadOnly Property HasBeenConfigured() As Boolean
@@ -163,7 +160,7 @@ Namespace Microsoft.VisualBasic.Logging
                         _listenerAttributes = Attributes
                     End If
 
-                    ' TODO: This is a tempory fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    ' TODO: This is a temporary fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
                     Return False
                 End Get
             End Property
@@ -173,8 +170,8 @@ Namespace Microsoft.VisualBasic.Logging
         End Class
 
         ''' <summary>
-        ''' When there is no config file to configure the trace source, this function is called in order to
-        ''' configure the trace source according to the defaults they would have had in a default AppConfig
+        '''  When there is no config file to configure the trace source, this function is called in order to
+        '''  configure the trace source according to the defaults they would have had in a default AppConfig
         ''' </summary>
         Protected Friend Overridable Sub InitializeWithDefaultsSinceNoConfigExists()
             'By default, you get a file log listener that picks everything from level Information on up.
@@ -183,7 +180,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Make sure we flush the log on exit
+        '''  Make sure we flush the log on exit
         ''' </summary>
         Private Sub CloseOnProcessExit(sender As Object, e As EventArgs)
             RemoveHandler AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
@@ -191,7 +188,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Adds the default id values
+        '''  Adds the default id values
         ''' </summary>
         ''' <remarks>Fix FxCop violation InitializeReferenceTypeStaticFieldsInline</remarks>
         Private Shared Function InitializeIDHash() As Dictionary(Of TraceEventType, Integer)
@@ -215,7 +212,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        ''' Converts a TraceEventType to an Id
+        '''  Converts a TraceEventType to an Id
         ''' </summary>
         ''' <param name="traceEventValue"></param>
         ''' <returns>The Id</returns>
@@ -233,6 +230,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
+
         Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appconfig
 
     End Class
