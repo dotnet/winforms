@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Runtime.InteropServices
 Imports System.Text
 
@@ -94,7 +91,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
         ''' <summary>
-        ''' Contains information about the current state of both physical and virtual memory, including extended memory.
+        '''  Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
@@ -128,7 +125,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
-        ''' Obtains information about the system's current usage of both physical and virtual memory.
+        '''  Obtains information about the system's current usage of both physical and virtual memory.
         ''' </summary>
         ''' <param name="lpBuffer">Pointer to a MEMORYSTATUSEX structure.</param>
         ''' <returns>True if the function succeeds. Otherwise, False.</returns>
@@ -137,11 +134,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
+        '''  Adding a private constructor to prevent the compiler from generating a default constructor.
         ''' </summary>
         Private Sub New()
         End Sub
 
     End Class
-
 End Namespace
