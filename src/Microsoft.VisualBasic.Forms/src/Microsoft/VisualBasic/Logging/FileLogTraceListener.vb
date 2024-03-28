@@ -1069,6 +1069,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
+
         Private Const KEY_APPEND_PASCAL As String = "Append"
 
         Private Const KEY_AUTOFLUSH As String = "autoflush"
@@ -1118,14 +1119,14 @@ Namespace Microsoft.VisualBasic.Logging
         Private Const STACK_DELIMITER As String = ", "
 
         ''' <summary>
-        ''' Wraps a StreamWriter and keeps a reference count. This enables multiple
-        ''' FileLogTraceListeners on multiple threads to access the same file.
+        '''  Wraps a StreamWriter and keeps a reference count. This enables multiple
+        '''  FileLogTraceListeners on multiple threads to access the same file.
         ''' </summary>
         Friend NotInheritable Class ReferencedStream
             Implements IDisposable
 
             ''' <summary>
-            ''' Creates a new referenced stream
+            '''  Creates a new referenced stream
             ''' </summary>
             ''' <param name="stream">The stream that does the actual writing</param>
             Friend Sub New(stream As StreamWriter)
@@ -1133,7 +1134,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            ''' Writes a message to the stream
+            '''  Writes a message to the stream
             ''' </summary>
             ''' <param name="message">The message to write</param>
             Friend Sub Write(message As String)
@@ -1143,7 +1144,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            ''' Writes a message to the stream as a line
+            '''  Writes a message to the stream as a line
             ''' </summary>
             ''' <param name="message">The message to write</param>
             Friend Sub WriteLine(message As String)
