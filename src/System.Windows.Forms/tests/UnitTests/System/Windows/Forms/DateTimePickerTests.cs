@@ -305,7 +305,7 @@ public class DateTimePickerTests
         };
 
         control.BackgroundImageChanged += handler;
-        using (Bitmap bmp = new Bitmap(10, 10))
+        using (Bitmap bmp = new(10, 10))
         {
             control.BackgroundImage = bmp;
         }
@@ -313,7 +313,7 @@ public class DateTimePickerTests
         callCount.Should().Be(1);
 
         control.BackgroundImageChanged -= handler;
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         {
             control.BackgroundImage = bmp;
         }
