@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
 Imports System.IO
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -12,8 +10,10 @@ Namespace Microsoft.VisualBasic
     '''  Enum for three ways to play a .wav file
     ''' </summary>
     Public Enum AudioPlayMode
+
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
         WaitToComplete = 0 'Synchronous
+
         Background = 1     'Asynchronous
         BackgroundLoop = 2 'Asynchronous and looping
     End Enum
@@ -40,12 +40,12 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            ''' Plays a .wav file in the passed in mode
+            '''  Plays a .wav file in the passed in mode
             ''' </summary>
             ''' <param name="location">The name of the file</param>
             ''' <param name="playMode">
-            ''' An enum value representing the mode, Background (async), 
-            ''' WaitToComplete (sync) or BackgroundLoop
+            '''  An enum value representing the mode, Background (async),
+            '''  WaitToComplete (sync) or BackgroundLoop
             ''' </param>
             Public Sub Play(location As String, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic
             End Function
 
             ''' <summary>
-            ''' Validates that the value being passed as an AudioPlayMode enum is a legal value
+            '''  Validates that the value being passed as an AudioPlayMode enum is a legal value
             ''' </summary>
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
@@ -162,4 +162,5 @@ Namespace Microsoft.VisualBasic
 
         End Class 'Audio
     End Namespace
+
 End Namespace

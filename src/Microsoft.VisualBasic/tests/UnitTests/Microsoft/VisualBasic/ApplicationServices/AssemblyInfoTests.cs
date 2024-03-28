@@ -20,7 +20,7 @@ public class AssemblyInfoTests
         AssemblyInfo assemblyInfo = new(assembly);
         var assemblyName = assembly.GetName();
         Assert.Equal(assemblyName.Name, assemblyInfo.AssemblyName);
-        Assert.Equal(System.IO.Path.GetDirectoryName(assembly.Location), assemblyInfo.DirectoryPath);
+        Assert.Equal(Path.GetDirectoryName(assembly.Location), assemblyInfo.DirectoryPath);
         Assert.Equal(GetAttributeValue<AssemblyCompanyAttribute>(assembly, attr => attr.Company), assemblyInfo.CompanyName);
         Assert.Equal(GetAttributeValue<AssemblyCopyrightAttribute>(assembly, attr => attr.Copyright), assemblyInfo.Copyright);
         Assert.Equal(GetAttributeValue<AssemblyDescriptionAttribute>(assembly, attr => attr.Description), assemblyInfo.Description);

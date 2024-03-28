@@ -1,10 +1,10 @@
-<Project>
+﻿<Project>
   <!--
     https://github.com/dotnet/winforms/issues/2107#issuecomment-559289716
     https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
     -->
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-  
+
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
@@ -43,6 +43,10 @@
     <EmbeddedResource Update="Resources\Microsoft\VisualBasic\CompilerServices\VBInputBox.resx">
       <LogicalName>Microsoft.VisualBasic.CompilerServices.VBInputBox.resources</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

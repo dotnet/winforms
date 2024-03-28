@@ -7,7 +7,7 @@ Imports Microsoft.Win32
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    ''' An extremely thin wrapper around Microsoft.Win32.Registry to expose the type through My.
+    '''  An extremely thin wrapper around Microsoft.Win32.Registry to expose the type through My.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class RegistryProxy
@@ -65,11 +65,10 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Proxy class can only created by internal classes.
+        '''  Proxy class can only created by internal classes.
         ''' </summary>
         Friend Sub New()
         End Sub
 
     End Class
 End Namespace
-

@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Runtime.InteropServices
 Imports Microsoft.Win32.SafeHandles
 
@@ -13,6 +10,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class NativeTypes
 
 #Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
+
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
 #Enable Warning CA1812
@@ -38,11 +36,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose()
                 MyBase.Finalize()
             End Sub
+
         End Class
 
         ''' <summary>
-        ''' Inherits SafeHandleZeroOrMinusOneIsInvalid, with additional InitialSetHandle method.
-        ''' This is required because call to constructor of SafeHandle is not allowed in constrained region.
+        '''  Inherits SafeHandleZeroOrMinusOneIsInvalid, with additional InitialSetHandle method.
+        '''  This is required because call to constructor of SafeHandle is not allowed in constrained region.
         ''' </summary>
         Friend NotInheritable Class LateInitSafeHandleZeroOrMinusOneIsInvalid
             Inherits SafeHandleZeroOrMinusOneIsInvalid
@@ -59,16 +58,17 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Protected Overrides Function ReleaseHandle() As Boolean
                 Return NativeMethods.CloseHandle(handle) <> 0
             End Function
+
         End Class
 
         ''' <summary>
-        ''' Represent Win32 PROCESS_INFORMATION structure. IMPORTANT: Copy the handles to a SafeHandle before use them.
+        '''  Represent Win32 PROCESS_INFORMATION structure. IMPORTANT: Copy the handles to a SafeHandle before use them.
         ''' </summary>
         ''' <remarks>
-        ''' The handles in PROCESS_INFORMATION are initialized in unmanaged function.
-        ''' We can't use SafeHandle here because Interop doesn't support [out] SafeHandles in structure / classes yet.
-        ''' This class makes no attempt to free the handles. To use the handle, first copy it to a SafeHandle class
-        ''' (using LateInitSafeHandleZeroOrMinusOneIsInvalid.InitialSetHandle) to correctly use and dispose the handle.
+        '''  The handles in PROCESS_INFORMATION are initialized in unmanaged function.
+        '''  We can't use SafeHandle here because Interop doesn't support [out] SafeHandles in structure / classes yet.
+        '''  This class makes no attempt to free the handles. To use the handle, first copy it to a SafeHandle class
+        '''  (using LateInitSafeHandleZeroOrMinusOneIsInvalid.InitialSetHandle) to correctly use and dispose the handle.
         ''' </remarks>
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class PROCESS_INFORMATION
@@ -79,15 +79,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Friend Sub New()
             End Sub
+
         End Class
 
         ''' <summary>
-        ''' Important!  This class should be used where the API being called has allocated the strings.  That is why lpReserved, etc. are declared as IntPtrs instead
-        ''' of Strings - so that the marshaling layer won't release the memory.  This caused us problems in the shell() functions.  We would call GetStartupInfo()
-        ''' which doesn't expect the memory for the strings to be freed.  But because the strings were previously defined as type String, the marshaller would
-        ''' and we got memory corruption problems detectable while running AppVerifier.
-        ''' If you use this structure with an API like CreateProcess() then you are supplying the strings so you'll need another version of this class that defines lpReserved, etc.
-        ''' as String so that the memory will get cleaned up.
+        '''  Important!  This class should be used where the API being called has allocated the strings.  That is why lpReserved, etc. are declared as IntPtrs instead
+        '''  of Strings - so that the marshaling layer won't release the memory.  This caused us problems in the shell() functions.  We would call GetStartupInfo()
+        '''  which doesn't expect the memory for the strings to be freed.  But because the strings were previously defined as type String, the marshaller would
+        '''  and we got memory corruption problems detectable while running AppVerifier.
+        '''  If you use this structure with an API like CreateProcess() then you are supplying the strings so you'll need another version of this class that defines lpReserved, etc.
+        '''  as String so that the memory will get cleaned up.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)>
         Friend NotInheritable Class STARTUPINFO
@@ -155,6 +156,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
+
         End Class
 
         ' Handle Values
@@ -162,6 +164,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
+
         Friend Const GW_HWNDLAST As Integer = 1
         Friend Const GW_HWNDNEXT As Integer = 2
         Friend Const GW_HWNDPREV As Integer = 3

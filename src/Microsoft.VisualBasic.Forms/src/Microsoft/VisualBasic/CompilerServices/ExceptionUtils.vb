@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -69,7 +67,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of ArgumentException with the message from resource file and the Exception.ArgumentName property set.
+        '''  Returns a new instance of ArgumentException with the message from resource file and the Exception.ArgumentName property set.
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <param name="ResourceID">The resource ID.</param>
@@ -83,7 +81,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of ArgumentNullException with message: "Argument cannot be Nothing."
+        '''  Returns a new instance of ArgumentNullException with message: "Argument cannot be Nothing."
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <returns>A new instance of ArgumentNullException.</returns>
@@ -93,7 +91,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of ArgumentNullException with the message from resource file.
+        '''  Returns a new instance of ArgumentNullException with the message from resource file.
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <param name="ResourceID">The resource ID.</param>
@@ -106,7 +104,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of IO.DirectoryNotFoundException with the message from resource file.
+        '''  Returns a new instance of IO.DirectoryNotFoundException with the message from resource file.
         ''' </summary>
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
@@ -118,7 +116,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of IO.FileNotFoundException with the message from resource file.
+        '''  Returns a new instance of IO.FileNotFoundException with the message from resource file.
         ''' </summary>
         ''' <param name="FileName">The file name (path) of the not found file.</param>
         ''' <param name="ResourceID">The resource ID.</param>
@@ -131,7 +129,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of InvalidOperationException with the message from resource file.
+        '''  Returns a new instance of InvalidOperationException with the message from resource file.
         ''' </summary>
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
@@ -143,7 +141,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of IO.IOException with the message from resource file.
+        '''  Returns a new instance of IO.IOException with the message from resource file.
         ''' </summary>
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
@@ -154,15 +152,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of Win32Exception with the message from resource file and the last Win32 error.
+        '''  Returns a new instance of Win32Exception with the message from resource file and the last Win32 error.
         ''' </summary>
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of Win32Exception.</returns>
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
 
-        Friend Shared Function GetWin32Exception(
-            ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
+        Friend Shared Function GetWin32Exception(ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 
             Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
         End Function

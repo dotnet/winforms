@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Collections.ObjectModel
 Imports System.Reflection
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -15,12 +12,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  specified using the assembly attributes (contained in AssemblyInfo.vb file in case of
     '''  a VB project in Visual Studio .NET).
     ''' </summary>
-    ''' <remarks>This class is based on the FileVersionInfo class of the framework, but
-    ''' reduced to a number of relevant properties.</remarks>
+    ''' <remarks>
+    '''  This class is based on the FileVersionInfo class of the framework, but
+    '''  reduced to a number of relevant properties.
+    ''' </remarks>
     Public Class AssemblyInfo
 
         ''' <summary>
-        ''' Creates an AssemblyInfo from an assembly
+        '''  Creates an AssemblyInfo from an assembly
         ''' </summary>
         ''' <param name="CurrentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
@@ -31,7 +30,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Gets the description associated with the assembly.
+        '''  Gets the description associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyDescriptionAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyDescriptionAttribute is not defined.</exception>
@@ -51,7 +50,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the company name associated with the assembly.
+        '''  Gets the company name associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyCompanyAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyCompanyAttribute is not defined.</exception>
@@ -71,7 +70,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the title associated with the assembly.
+        '''  Gets the title associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyTitleAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyTitleAttribute is not defined.</exception>
@@ -91,7 +90,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the copyright notices associated with the assembly.
+        '''  Gets the copyright notices associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyCopyrightAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyCopyrightAttribute is not defined.</exception>
@@ -110,7 +109,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the trademark notices associated with the assembly.
+        '''  Gets the trademark notices associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyTrademarkAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyTrademarkAttribute is not defined.</exception>
@@ -129,7 +128,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the product name associated with the assembly.
+        '''  Gets the product name associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyProductAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyProductAttribute is not defined.</exception>
@@ -148,7 +147,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the version number of the assembly.
+        '''  Gets the version number of the assembly.
         ''' </summary>
         ''' <value>A System.Version class containing the version number of the assembly</value>
         ''' <remarks>Cannot use AssemblyVersionAttribute since it always return Nothing.</remarks>
@@ -159,7 +158,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the name of the file containing the manifest (usually the .exe file).
+        '''  Gets the name of the file containing the manifest (usually the .exe file).
         ''' </summary>
         ''' <value>A String containing the file name.</value>
         Public ReadOnly Property AssemblyName() As String
@@ -169,7 +168,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the directory where the assembly lives.
+        '''  Gets the directory where the assembly lives.
         ''' </summary>
         Public ReadOnly Property DirectoryPath() As String
             Get
@@ -178,7 +177,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Returns the names of all assemblies loaded by the current application.
+        '''  Returns the names of all assemblies loaded by the current application.
         ''' </summary>
         ''' <value>A ReadOnlyCollection(Of Assembly) containing all the loaded assemblies.</value>
         ''' <exception cref="AppDomainUnloadedException">attempt on an unloaded application domain.</exception>
@@ -193,7 +192,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Returns the current stack trace information.
+        '''  Returns the current stack trace information.
         ''' </summary>
         ''' <value>A string containing stack trace information. Value can be String.Empty.</value>
         ''' <exception cref="ArgumentOutOfRangeException">The requested stack trace information is out of range.</exception>
@@ -204,10 +203,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the amount of physical memory mapped to the process context.
+        '''  Gets the amount of physical memory mapped to the process context.
         ''' </summary>
         ''' <value>
-        ''' A 64-bit signed integer containing the size of physical memory mapped to the process context, in bytes.
+        '''  A 64-bit signed integer containing the size of physical memory mapped to the process context, in bytes.
         ''' </value>
         Public ReadOnly Property WorkingSet() As Long
             Get
@@ -216,7 +215,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets an attribute from the assembly and throw exception if the attribute does not exist.
+        '''  Gets an attribute from the assembly and throw exception if the attribute does not exist.
         ''' </summary>
         ''' <param name="AttributeType">The type of the required attribute.</param>
         ''' <returns>The attribute with the given type gotten from the assembly, or Nothing.</returns>
@@ -239,6 +238,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Since these properties will not change during runtime, they're cached.
         ' "" is not Nothing so use Nothing to mark an un-accessed property.
         Private _description As String ' Cache the assembly's description.
+
         Private _title As String ' Cache the assembly's title.
         Private _productName As String ' Cache the assembly's product name.
         Private _companyName As String ' Cache the assembly's company name.

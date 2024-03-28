@@ -1,16 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Abstract class that defines the application Startup/Shutdown model for VB
-    ''' Windows Applications such as console, WinForms, dll, service.
+    '''  Abstract class that defines the application Startup/Shutdown model for VB
+    '''  Windows Applications such as console, WinForms, dll, service.
     ''' </summary>
     Public Class ApplicationBase
 
@@ -18,7 +15,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Returns the value of the specified environment variable.
+        '''  Returns the value of the specified environment variable.
         ''' </summary>
         ''' <param name="Name">A String containing the name of the environment variable.</param>
         ''' <returns>A string containing the value of the environment variable.</returns>
@@ -38,10 +35,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        ''' Provides access to logging capability.
+        '''  Provides access to logging capability.
         ''' </summary>
-        ''' <value>Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
-        ''' and a delimited text file or xml log.</value>
+        ''' <value>
+        '''  Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
+        '''  and a delimited text file or xml log.
+        ''' </value>
         Public ReadOnly Property Log() As Logging.Log
             Get
                 If _log Is Nothing Then
@@ -52,8 +51,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Returns the info about the application.  If we are executing in a DLL, we still return the info
-        ''' about the application, not the DLL.
+        '''  Returns the info about the application.  If we are executing in a DLL, we still return the info
+        '''  about the application, not the DLL.
         ''' </summary>
         Public ReadOnly Property Info() As AssemblyInfo
             Get
@@ -66,7 +65,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the information about the current culture used by the current thread.
+        '''  Gets the information about the current culture used by the current thread.
         ''' </summary>
         Public ReadOnly Property Culture() As Globalization.CultureInfo
             Get
@@ -75,12 +74,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Gets the information about the current culture used by the Resource
-        ''' Manager to look up culture-specific resource at run time.
+        '''  Gets the information about the current culture used by the Resource
+        '''  Manager to look up culture-specific resource at run time.
         ''' </summary>
         ''' <returns>
-        ''' The CultureInfo object that represents the culture used by the
-        ''' Resource Manager to look up culture-specific resources at run time.
+        '''  The CultureInfo object that represents the culture used by the
+        '''  Resource Manager to look up culture-specific resources at run time.
         ''' </returns>
         Public ReadOnly Property UICulture() As Globalization.CultureInfo
             Get
@@ -89,23 +88,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Changes the culture currently in used by the current thread.
+        '''  Changes the culture currently in used by the current thread.
         ''' </summary>
         ''' <remarks>
-        ''' CultureInfo constructor will throw exceptions if cultureName is Nothing
-        ''' or an invalid CultureInfo ID. We are not catching those exceptions.
+        '''  CultureInfo constructor will throw exceptions if cultureName is Nothing
+        '''  or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeCulture(cultureName As String)
             Threading.Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
         ''' <summary>
-        ''' Changes the culture currently used by the Resource Manager to look
-        ''' up culture-specific resource at runtime.
+        '''  Changes the culture currently used by the Resource Manager to look
+        '''  up culture-specific resource at runtime.
         ''' </summary>
         ''' <remarks>
-        ''' CultureInfo constructor will throw exceptions if cultureName is Nothing
-        ''' or an invalid CultureInfo ID. We are not catching those exceptions.
+        '''  CultureInfo constructor will throw exceptions if cultureName is Nothing
+        '''  or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeUICulture(cultureName As String)
             Threading.Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)

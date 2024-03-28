@@ -12,7 +12,7 @@ Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic
 
-    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll. 
+    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
     ' Do not change this API without also updating that dependent module.
     Friend Module _Interaction
 
@@ -275,6 +275,7 @@ Namespace Microsoft.VisualBasic
                     Return _exception
                 End Get
             End Property
+
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
@@ -317,7 +318,7 @@ Namespace Microsoft.VisualBasic
 
             Dim Title As String
 
-            'Get the Assembly name of the calling assembly 
+            'Get the Assembly name of the calling assembly
             'Assembly.GetName requires PathDiscovery permission so we try this first
             'and if it throws we catch the security exception and parse the name
             'from the full assembly name
@@ -392,7 +393,7 @@ Namespace Microsoft.VisualBasic
                         sTitle = vbhost.GetWindowTitle()
                     End If
                 Else
-                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
+                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgBox(prompt, Title:=1+5)
                 End If
             Catch ex As StackOverflowException
                 Throw
@@ -415,4 +416,3 @@ Namespace Microsoft.VisualBasic
     End Module
 
 End Namespace
-
