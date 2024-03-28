@@ -275,27 +275,50 @@ public class DateTimePickerTests
     public void DateTimePicker_BackColorChangedEvent_Raised_Success()
     {
         using DateTimePicker control = new();
-        bool eventWasRaised = false;
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
 
-        control.BackColorChanged += (sender, args) => eventWasRaised = true;
+        control.BackColorChanged += handler;
         control.BackColor = Color.Red;
+        callCount.Should().Be(1);
 
-        eventWasRaised.Should().BeTrue();
+        control.BackColorChanged -= handler;
+        control.BackColor = Color.Green;
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
     public void DateTimePicker_BackgroundImageChangedEvent_Raised_Success()
     {
         using DateTimePicker control = new();
-        bool eventWasRaised = false;
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
 
-        control.BackgroundImageChanged += (sender, args) => eventWasRaised = true;
-        using (Bitmap bmp = new Bitmap(10, 10))
+        control.BackgroundImageChanged += handler;
+        using (Bitmap bmp = new(10, 10))
         {
             control.BackgroundImage = bmp;
         }
 
-        eventWasRaised.Should().BeTrue();
+        callCount.Should().Be(1);
+
+        control.BackgroundImageChanged -= handler;
+        using (Bitmap bmp = new(20, 20))
+        {
+            control.BackgroundImage = bmp;
+        }
+
+        callCount.Should().Be(1);
     }
 
     [WinFormsTheory]
