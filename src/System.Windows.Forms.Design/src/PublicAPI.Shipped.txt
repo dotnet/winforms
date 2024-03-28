@@ -49,12 +49,12 @@
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.get -> System.ComponentModel.IComponent
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.set -> void
-~System.ComponentModel.Design.DesignerActionUIService.HideUI(System.ComponentModel.IComponent component) -> void
-~System.ComponentModel.Design.DesignerActionUIService.Refresh(System.ComponentModel.IComponent component) -> void
-~System.ComponentModel.Design.DesignerActionUIService.ShouldAutoShow(System.ComponentModel.IComponent component) -> bool
-~System.ComponentModel.Design.DesignerActionUIService.ShowUI(System.ComponentModel.IComponent component) -> void
-~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.DesignerActionUIStateChangeEventArgs(object relatedObject, System.ComponentModel.Design.DesignerActionUIStateChangeType changeType) -> void
-~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
+System.ComponentModel.Design.DesignerActionUIService.HideUI(System.ComponentModel.IComponent? component) -> void
+System.ComponentModel.Design.DesignerActionUIService.Refresh(System.ComponentModel.IComponent? component) -> void
+System.ComponentModel.Design.DesignerActionUIService.ShouldAutoShow(System.ComponentModel.IComponent! component) -> bool
+System.ComponentModel.Design.DesignerActionUIService.ShowUI(System.ComponentModel.IComponent? component) -> void
+System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.DesignerActionUIStateChangeEventArgs(object? relatedObject, System.ComponentModel.Design.DesignerActionUIStateChangeType changeType) -> void
+System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object?
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) -> void
 ~System.Drawing.Design.IToolboxService.AddLinkedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem, string category, System.ComponentModel.Design.IDesignerHost host) -> void
@@ -495,7 +495,7 @@ System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.
 System.ComponentModel.Design.DesignerActionTextItem
 System.ComponentModel.Design.DesignerActionTextItem.DesignerActionTextItem(string? displayName, string? category) -> void
 System.ComponentModel.Design.DesignerActionUIService
-System.ComponentModel.Design.DesignerActionUIService.DesignerActionUIStateChange -> System.ComponentModel.Design.DesignerActionUIStateChangeEventHandler
+System.ComponentModel.Design.DesignerActionUIService.DesignerActionUIStateChange -> System.ComponentModel.Design.DesignerActionUIStateChangeEventHandler?
 System.ComponentModel.Design.DesignerActionUIService.Dispose() -> void
 System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs
 System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.ChangeType.get -> System.ComponentModel.Design.DesignerActionUIStateChangeType
