@@ -2,20 +2,80 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Reflection;
 using AxSHDocVw;
 
-namespace System.Windows.Forms.Tests.System.Windows.Forms;
-public class AxWebBrowserTests
+namespace System.Windows.Forms.Tests;
+public class AxWebBrowserTests : IDisposable
 {
     private readonly Form _form;
-    private readonly AxWebBrowserTests _control;
+    private readonly AxWebBrowser _control;
+    private const string Url = "https://github.com/dotnet/winforms";
 
-   public AxWebBrowserTests()
+    public AxWebBrowserTests()
     {
-        using Form form = new();
-        using AxWebBrowser control = new();
-        ((ISupportInitialize)control).BeginInit();
-        form.Controls.Add(control);
-        ((ISupportInitialize)control).EndInit();
-    } 
+        _form = new Form();
+        _control = new AxWebBrowser();
+        ((ISupportInitialize)_control).BeginInit();
+        _form.Controls.Add(_control);
+        ((ISupportInitialize)_control).EndInit();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_WhenInitialized_ExpectsProperties()
+    {
+        var properties = TypeDescriptor.GetProperties(_control);
+        var events = TypeDescriptor.GetEvents(_control);
+
+        properties.Count.Should().BeGreaterThan(0);
+        events.Count.Should().BeGreaterThan(0);
+
+        // Filters testing control properties and events so only those related to the AxWebBrowser assembly remain.
+        Type assemblyType = typeof(AxWebBrowser);
+        Assembly assembly = Assembly.GetAssembly(assemblyType);
+        string assemblyNameFromType = assembly.GetName().Name;
+
+        var testingControlProps = properties
+            .Cast<PropertyDescriptor>()
+            .Where(prop => prop.ComponentType.Assembly.GetName().Name == assemblyNameFromType)
+            .Select(prop => prop.Name)
+            .ToList();
+
+        var testingControlEvents = events
+            .Cast<EventDescriptor>()
+        .Where(ev => ev.ComponentType.Assembly.GetName().Name == assemblyNameFromType)
+            .Select(ev => ev.Name)
+            .ToList();
+
+        // Compares testing control's properties and events to those of the assembly
+        TypeInfo assemblyTypeInfo = assembly.GetType(assemblyType.FullName).GetTypeInfo();
+        testingControlProps.All(p => assemblyTypeInfo.DeclaredProperties.Any(ap => ap.Name == p)).Should().BeTrue();
+        testingControlEvents.All(e => assemblyTypeInfo.DeclaredEvents.Any(ae => ae.Name == e)).Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_GoHome_InvokesMethod()
+    {
+        _control.GoHome();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_GoSearch_InvokesMethod()
+    {
+        _control.GoSearch();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_Navigate_InvokesMethod()
+    {
+        _control.Navigate(Url);
+    }
+
+    public void Dispose()
+    {
+        // This line was added due to https://github.com/dotnet/winforms/issues/10692
+        using NoAssertContext context = new NoAssertContext();
+        _control.Dispose();
+        _form.Dispose();
+    }
 }
