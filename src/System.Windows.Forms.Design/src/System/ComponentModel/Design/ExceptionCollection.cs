@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design;
 
+[Serializable]
 public sealed class ExceptionCollection : Exception
 {
     private readonly List<Exception>? _exceptions;
@@ -35,6 +36,16 @@ public sealed class ExceptionCollection : Exception
     [Obsolete(DiagnosticId = "SYSLIB0051")]
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        throw new PlatformNotSupportedException();
+        ArgumentNullException.ThrowIfNull(info);
+
+        info.AddValue("exceptions", _exceptions);
+        base.GetObjectData(info, context);
+    }
+
+    private ExceptionCollection(SerializationInfo info, StreamingContext streamingContext)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        _exceptions = info?.GetValue(name: "exceptions", typeof(List<Exception>)) as List<Exception>;
     }
 }

@@ -23,14 +23,14 @@ public class ExceptionCollectionTests
         ExceptionCollection collection = new(exceptions);
         if (exceptions is null)
         {
-            Assert.Null(collection.Exceptions);
+            collection.Exceptions.Should().BeNull();
         }
         else
         {
-            Assert.Equal(exceptions, collection.Exceptions);
-            Assert.NotSame(exceptions, collection.Exceptions);
-            Assert.Equal(collection.Exceptions, collection.Exceptions);
-            Assert.NotSame(collection.Exceptions, collection.Exceptions);
+            collection.Exceptions.Should().BeEquivalentTo(exceptions);
+            collection.Exceptions.Should().NotBeSameAs(exceptions);
+            collection.Exceptions.Should().BeEquivalentTo(collection.Exceptions);
+            collection.Exceptions.Should().NotBeSameAs(collection.Exceptions);
         }
     }
 
@@ -38,24 +38,47 @@ public class ExceptionCollectionTests
     public void ExceptionCollection_Ctor_ArguementException()
     {
         ArrayList exceptions = [1, 2, 3];
-        Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
+        Action act = () => new ExceptionCollection(exceptions);
+        act.Should().Throw<ArgumentException>();
     }
 
-    [Theory]
-    [BoolData]
-    public void ExceptionCollection_Serialize_ThrowsSerializationException(bool formatterEnabled)
+    [Fact]
+    public void ExceptionCollection_Serialize_ThrowsNotSupportedException()
     {
-        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
         ExceptionCollection collection = new(new ArrayList());
-        if (formatterEnabled)
+        Action act = () => formatter.Serialize(stream, collection);
+        act.Should().Throw<NotSupportedException>();
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_ArrayList_TestData))]
+    public void ExceptionCollection_Deserialize_ThrowsExceptionAsExpected(ArrayList exceptions)
+    {
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using MemoryStream stream = new();
+        BinaryFormatter formatter = new();
+        var collection = new ExceptionCollection(exceptions);
+        formatter.Serialize(stream, collection);
+
+        stream.Position = 0;
+        ExceptionCollection deserialized = Assert.IsType<ExceptionCollection>(formatter.Deserialize(stream));
+        if (exceptions is null)
         {
-            Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
+            deserialized.Exceptions.Should().BeNull();
         }
         else
         {
-            Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
+            for(int i = 0; i < exceptions.Count; i++)
+            {
+                ((Exception)deserialized.Exceptions[i]).Message.Should().Be(((Exception)exceptions[i]).Message);
+            }
+
+            deserialized.Exceptions.Should().NotBeSameAs(exceptions);
+            deserialized.Exceptions.Should().BeEquivalentTo(deserialized.Exceptions);
+            deserialized.Exceptions.Should().NotBeSameAs(deserialized.Exceptions);
         }
     }
 
@@ -63,6 +86,7 @@ public class ExceptionCollectionTests
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         ExceptionCollection collection = new(new ArrayList());
-        Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
+        Action act = () => collection.GetObjectData(null, new StreamingContext());
+        act.Should().Throw<ArgumentNullException>();
     }
 }

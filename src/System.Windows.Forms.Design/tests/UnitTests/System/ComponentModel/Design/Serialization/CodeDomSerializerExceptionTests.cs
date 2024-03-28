@@ -84,28 +84,35 @@ public class CodeDomSerializerExceptionTests
         Assert.Throws<ArgumentNullException>("manager", () => new CodeDomSerializerException(new InvalidOperationException(), (IDesignerSerializationManager)null));
     }
 
-    [Theory]
-    [BoolData]
-    public void CodeDomSerializerException_Serialize_ThrowsSerializationException(bool formatterEnabled)
+    [Fact]
+    public void CodeDomSerializerException_Serialize_ThrowsSerializationException()
     {
-        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        if (formatterEnabled)
+        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
+    }
+
+    public static IEnumerable<object[]> Ctor_Exception_SerializationInfo_TestData()
+    {
+        yield return new object[] { null };
+        yield return new object[] { new SerializationInfo(typeof(CodeDomSerializerException), new FormatterConverter())};
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_Exception_SerializationInfo_TestData))]
+    public void CodeDomSerializerException_GetObjectData_ThrowsArgumentNullException(SerializationInfo info)
+    {
+        CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
+        Action act = () => exception.GetObjectData(info, new StreamingContext());
+        if(info is not null)
         {
-            Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
+            act.Should().NotThrow();
         }
         else
         {
-            Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
+            act.Should().Throw<ArgumentNullException>();
         }
-    }
-
-    [Fact]
-    public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
-    {
-        CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
     }
 }

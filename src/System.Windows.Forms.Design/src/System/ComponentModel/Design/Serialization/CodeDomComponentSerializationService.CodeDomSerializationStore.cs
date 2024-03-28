@@ -17,6 +17,7 @@ public sealed partial class CodeDomComponentSerializationService
     ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
     ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </summary>
+    [Serializable]
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
         private const string StateKey = "State";
@@ -54,7 +55,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// <summary>
         ///  Nested classes within us access this property to get to our array of saved assembly names.
         /// </summary>
-        private AssemblyName[]? AssemblyNames { get; set; }
+        private AssemblyNameInfo[]? AssemblyNameInfos { get; set; }
 
         /// <summary>
         ///  If there were errors generated during serialization or deserialization of the store, they will be added to this collection.
@@ -171,8 +172,12 @@ public sealed partial class CodeDomComponentSerializationService
                 }
             }
 
-            AssemblyNames = new AssemblyName[assemblies.Count];
-            assemblies.Values.CopyTo(AssemblyNames, 0);
+            AssemblyNameInfos = new AssemblyNameInfo[assemblies.Count];
+            int idx = 0;
+            foreach (AssemblyName assemblyName in assemblies.Values)
+            {
+                AssemblyNameInfos[idx++] = new AssemblyNameInfo(assemblyName);
+            }
 
             _objectState = state;
             _objects.Clear();
@@ -306,7 +311,13 @@ public sealed partial class CodeDomComponentSerializationService
         /// <summary>
         ///  The Save method is not supported.
         /// </summary>
-        public override void Save(Stream stream) => throw new PlatformNotSupportedException();
+        public override void Save(Stream stream)
+        {
+            Close();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+            new BinaryFormatter().Serialize(stream, this);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+        }
 
         /// <summary>
         ///  Implements the save part of ISerializable. Used in unit tests only.
@@ -317,9 +328,18 @@ public sealed partial class CodeDomComponentSerializationService
 
             info.AddValue(StateKey, _objectState);
             info.AddValue(NameKey, _objectNames);
-            info.AddValue(AssembliesKey, AssemblyNames);
+            info.AddValue(AssembliesKey, AssemblyNameInfos);
             info.AddValue(ResourcesKey, _resources?.Data);
             info.AddValue(ShimKey, _shimObjectNames);
+        }
+
+        private CodeDomSerializationStore(SerializationInfo info, StreamingContext streamingContext)
+        {
+            ArgumentNullException.ThrowIfNull(info);
+
+            _objects = [];
+            _objectNames = [];
+            _shimObjectNames = [];
         }
     }
 }

@@ -58,30 +58,5 @@ public sealed partial class CodeDomComponentSerializationService
             /// </summary>
             internal IList<MemberData> Members => _members ??= [];
         }
-
-        /// <summary>
-        ///  We create one of these for each specific member on an object.
-        /// </summary>
-        private class MemberData
-        {
-            /// <summary>
-            ///  The member we're serializing.
-            /// </summary>
-            internal readonly MemberDescriptor _member;
-
-            /// <summary>
-            ///  True if we should try to serialize values that contain their defaults as well.
-            /// </summary>
-            internal readonly bool _absolute;
-
-            /// <summary>
-            ///  Creates a new member data ready to be serialized.
-            /// </summary>
-            internal MemberData(MemberDescriptor member, bool absolute)
-            {
-                _member = member;
-                _absolute = absolute;
-            }
-        }
     }
 }

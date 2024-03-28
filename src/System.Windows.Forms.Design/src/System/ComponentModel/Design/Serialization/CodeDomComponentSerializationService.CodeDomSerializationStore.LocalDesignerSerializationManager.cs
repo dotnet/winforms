@@ -53,7 +53,21 @@ public sealed partial class CodeDomComponentSerializationService
                     return t;
                 }
 
-                AssemblyName[] names = _store.AssemblyNames!;
+                AssemblyName[] names = new AssemblyName[_store.AssemblyNameInfos!.Length];
+                int idx = 0;
+                foreach (AssemblyNameInfo assemblyNameInfo in _store.AssemblyNameInfos)
+                {
+                    names[idx] = new AssemblyName(assemblyName: assemblyNameInfo.FullName!)
+                    {
+                        Name = assemblyNameInfo.Name,
+                        Version = assemblyNameInfo.Version,
+                        CultureName = assemblyNameInfo.CultureName,
+                        Flags = assemblyNameInfo.Flags ?? default,
+                        ContentType = assemblyNameInfo.ContentType ?? default
+                    };
+                    idx++;
+                }
+
                 // First try the assembly names directly.
                 foreach (AssemblyName n in names)
                 {
