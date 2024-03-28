@@ -379,11 +379,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             _newComponentName = null;
         }
 
-        INameCreationService? nameCreate = GetService(typeof(INameCreationService)) as INameCreationService;
+        this.TryGetService(out INameCreationService? nameCreate);
 
         // Fabricate a name if one wasn't provided.  We try to use the name creation service, but if it is not available
         // we will just use an empty string.
-        if (name is null)
+        if (string.IsNullOrEmpty(name))
         {
             if (nameCreate is not null)
             {
