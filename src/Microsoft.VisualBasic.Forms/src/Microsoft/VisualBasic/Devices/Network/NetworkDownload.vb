@@ -212,7 +212,7 @@ Namespace Microsoft.VisualBasic.Devices
 
 #If False Then ' Here in case DownloadFileAsync becomes public
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -220,7 +220,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="dialog">A ProgressDialog or Nothing</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        ''' <remarks>
+        '''  Calls to all the other overloads will come through here
+        ''' </remarks>
         Private Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         networkCredentials As ICredentials,

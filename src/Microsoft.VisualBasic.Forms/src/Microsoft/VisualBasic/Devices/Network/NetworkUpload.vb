@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.Devices
     Partial Public Class Network
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">The full name and path of the host destination</param>
@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">The full name and path of the host destination</param>
@@ -42,7 +42,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -127,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -152,7 +152,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -169,7 +169,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>

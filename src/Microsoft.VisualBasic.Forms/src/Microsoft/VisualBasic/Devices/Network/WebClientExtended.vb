@@ -6,9 +6,11 @@ Imports System.Net
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' Temporary class used to provide WebClient with a timeout property.
+    '''  Temporary class used to provide WebClient with a timeout property.
     ''' </summary>
-    ''' <remarks>This class will be deleted when Timeout is added to WebClient</remarks>
+    ''' <remarks>
+    '''  This class will be deleted when Timeout is added to WebClient
+    ''' </remarks>
     Friend NotInheritable Class WebClientExtended
         Inherits WebClient
 

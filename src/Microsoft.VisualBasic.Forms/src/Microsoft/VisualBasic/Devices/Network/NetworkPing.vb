@@ -36,7 +36,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in address.
+        '''  Sends and receives a packet to and from the passed in address.
         ''' </summary>
         ''' <param name="hostNameOrAddress"></param>
         ''' <returns>True if ping was successful, otherwise False</returns>
@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
+        '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
         ''' <param name="address">A Uri representing the host</param>
         ''' <returns>True if ping was successful, otherwise False</returns>
@@ -80,7 +80,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
+        '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
         ''' <param name="address">A Uri representing the host</param>
         ''' <param name="timeout">Time to wait before aborting ping</param>

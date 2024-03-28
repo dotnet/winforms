@@ -29,18 +29,6 @@ Namespace Microsoft.VisualBasic.Devices
         Private _synchronizationContext As SynchronizationContext
 
         ''' <summary>
-        '''  Indicates whether or not the local machine is connected to an IP network.
-        ''' </summary>
-        ''' <value>True if connected, otherwise False</value>
-        Public ReadOnly Property IsAvailable() As Boolean
-            Get
-
-                Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
-
-            End Get
-        End Property
-
-        ''' <summary>
         '''  Event fired when connected to the network
         ''' </summary>
         ''' <param name="Sender">Has no meaning for this event</param>
@@ -98,6 +86,18 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             End RaiseEvent
         End Event
+
+        ''' <summary>
+        '''  Indicates whether or not the local machine is connected to an IP network.
+        ''' </summary>
+        ''' <value>True if connected, otherwise False</value>
+        Public ReadOnly Property IsAvailable() As Boolean
+            Get
+
+                Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
+
+            End Get
+        End Property
 
         'Listens to the AddressChanged event which will come on the same thread that this class was created on (AsyncEventManager is responsible for getting the event here)
         Private Sub NetworkAvailabilityChangedHandler(state As Object)
