@@ -180,7 +180,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     {
         if (TryGetService(out SelectionManager? selMgr))
         {
-            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel1!);
+            Rectangle translatedBounds = BehaviorService?.ControlRectInAdornerWindow(_splitterPanel1!) ?? Rectangle.Empty;
             var panelDesigner = _designerHost?.GetDesigner(_splitterPanel1!) as SplitterPanelDesigner;
             OnSetCursor();
 
@@ -191,7 +191,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
                 selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
             }
 
-            translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel2!);
+            translatedBounds = BehaviorService?.ControlRectInAdornerWindow(_splitterPanel2!) ?? Rectangle.Empty;
             panelDesigner = _designerHost?.GetDesigner(_splitterPanel2!) as SplitterPanelDesigner;
 
             if (panelDesigner is not null)
@@ -297,7 +297,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             // Enable all adorners except for BodyGlyph adorner. But only if we turned off the adorners.
             if (_disabledGlyphs)
             {
-                BehaviorService.EnableAllAdorners(true);
+                BehaviorService?.EnableAllAdorners(true);
 
                 var selMgr = GetService<SelectionManager>();
                 selMgr?.Refresh();
@@ -340,17 +340,20 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
         Adorner? bodyGlyphAdorner = selMgr?.BodyGlyphAdorner;
 
         // Disable all adorners except for BodyGlyph adorner.
-        foreach (Adorner adorner in BehaviorService.Adorners)
+        if (BehaviorService is not null)
         {
-            if (bodyGlyphAdorner is not null && adorner.Equals(bodyGlyphAdorner))
+            foreach (Adorner adorner in BehaviorService.Adorners)
             {
-                continue;
+                if (bodyGlyphAdorner is not null && adorner.Equals(bodyGlyphAdorner))
+                {
+                    continue;
+                }
+
+                adorner.EnabledInternal = false;
             }
 
-            adorner.EnabledInternal = false;
+            BehaviorService.Invalidate();
         }
-
-        BehaviorService.Invalidate();
 
         // From the BodyAdorners Remove all Glyphs Except the ones for SplitterPanels.
         List<ControlBodyGlyph> glyphsToRemove = [];
