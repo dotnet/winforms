@@ -15,7 +15,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_Bounds(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -25,7 +25,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -52,7 +52,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_MinMaxSizeNotChanged_Default(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -62,12 +62,12 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
             var maxSize = new Drawing.Size(500, 500);
-            using var form = new Form();
+            using Form form = new();
             form.MinimumSize = minSize;
             form.MaximumSize = maxSize;
             form.AutoScaleMode = AutoScaleMode.Dpi;
@@ -86,7 +86,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_MinMaxSizeChanged_WithRuntimeSetting(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -96,12 +96,12 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
             var maxSize = new Drawing.Size(500, 500);
-            using var form = new Form();
+            using Form form = new();
             form.MinimumSize = minSize;
             form.MaximumSize = maxSize;
             form.AutoScaleMode = AutoScaleMode.Dpi;
@@ -128,7 +128,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_NonLinear_DesiredSize(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -138,22 +138,22 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
-            Drawing.Size nonLInearSize = form.Size;
+            Drawing.Size nonLinearSize = form.Size;
 
             // Rollback to 96 Dpi, and change AutoScaleMode to check with linear size
-            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, (int)DpiHelper.LogicalDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, ScaleHelper.OneHundredPercentLogicalDpi);
             form.AutoScaleMode = AutoScaleMode.Dpi;
 
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
-            Assert.NotEqual(form.Size, nonLInearSize);
+            Assert.NotEqual(form.Size, nonLinearSize);
             form.Close();
         }
         finally
@@ -164,7 +164,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_FormCacheSize(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -174,10 +174,10 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 
@@ -196,7 +196,7 @@ public class FormDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void Form_DpiChanged_AutoScaleMode_Dpi_FormDoesNotCacheSize(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -206,10 +206,10 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Dpi;
             form.Show();
 
@@ -234,10 +234,10 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 

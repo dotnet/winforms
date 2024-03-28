@@ -17,13 +17,15 @@ internal class RichTextBoxActionList : DesignerActionList
 
     public void EditLines()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Lines");
+        EditorServiceContext.EditValue(_designer, Component!, "Lines");
     }
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
-        items.Add(new DesignerActionMethodItem(this, "EditLines", SR.EditLinesDisplayName, SR.LinksCategoryName, SR.EditLinesDescription, true));
+        DesignerActionItemCollection items =
+        [
+            new DesignerActionMethodItem(this, "EditLines", SR.EditLinesDisplayName, SR.LinksCategoryName, SR.EditLinesDescription, true),
+        ];
         return items;
     }
 }

@@ -12,16 +12,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_TestData()
     {
         yield return new object[] { null, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty };
-        yield return new object[] { "propertyName", new object(), "dataMember" };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember" };
+        yield return new object[] { string.Empty, new(), string.Empty };
+        yield return new object[] { "propertyName", new(), "dataMember" };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_TestData))]
     public void Binding_Ctor_String_Object_String(string propertyName, object dataSource, string dataMember)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember);
+        Binding binding = new(propertyName, dataSource, dataMember);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -41,16 +41,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_TestData()
     {
         yield return new object[] { null, null, null, true };
-        yield return new object[] { string.Empty, new object(), string.Empty, true };
-        yield return new object[] { "propertyName", new object(), "dataMember", false };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false };
+        yield return new object[] { string.Empty, new(), string.Empty, true };
+        yield return new object[] { "propertyName", new(), "dataMember", false };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_Bool_TestData))]
     public void Binding_Ctor_String_Object_String_Bool(string propertyName, object dataSource, string dataMember, bool formattingEnabled)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -70,16 +70,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1 };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1 };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1 };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1 };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_Bool_DataSourceUpdateMode_TestData))]
     public void Binding_Ctor_String_Object_String_Bool_DataSourceUpdateMode(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -99,16 +99,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object() };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object() };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new() };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new() };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_TestData))]
     public void Binding_Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -128,16 +128,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString" };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString" };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new(), "formatString" };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new(), "formatString" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_TestData))]
     public void Binding_Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -157,16 +157,16 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString", CultureInfo.InvariantCulture };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString", CultureInfo.CurrentCulture };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new(), "formatString", CultureInfo.InvariantCulture };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new(), "formatString", CultureInfo.CurrentCulture };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_TestData))]
     public void Binding_Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
     {
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, formatInfo);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, formatInfo);
         Assert.Null(binding.BindableComponent);
         Assert.Null(binding.BindingManagerBase);
         Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
@@ -186,7 +186,7 @@ public class BindingTests
     public static IEnumerable<object[]> DataSourceNullValue_Set_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { DBNull.Value };
     }
 
@@ -194,7 +194,7 @@ public class BindingTests
     [MemberData(nameof(DataSourceNullValue_Set_TestData))]
     public void Binding_DataSourceNullValue_Set_GetReturnsExpected(object value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             DataSourceNullValue = value
         };
@@ -210,7 +210,7 @@ public class BindingTests
     [InvalidEnumData<ControlUpdateMode>]
     public void Binding_ControlUpdateMode_Set_GetReturnsExpected(ControlUpdateMode value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             ControlUpdateMode = value
         };
@@ -226,7 +226,7 @@ public class BindingTests
     [InvalidEnumData<DataSourceUpdateMode>]
     public void Binding_DataSourceUpdateMode_Set_GetReturnsExpected(DataSourceUpdateMode value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             DataSourceUpdateMode = value
         };
@@ -247,7 +247,7 @@ public class BindingTests
     [MemberData(nameof(FormatInfo_Set_TestData))]
     public void Binding_FormatInfo_Set_GetReturnsExpected(IFormatProvider value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             FormatInfo = value
         };
@@ -262,7 +262,7 @@ public class BindingTests
     [NormalizedStringData]
     public void Binding_FormatString_Set_GetReturnsExpected(string value, string expected)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             FormatString = value
         };
@@ -277,7 +277,7 @@ public class BindingTests
     [BoolData]
     public void Binding_FormattingEnabled_Set_GetReturnsExpected(bool value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             FormattingEnabled = value
         };
@@ -295,7 +295,7 @@ public class BindingTests
     public static IEnumerable<object[]> NullValue_Set_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { DBNull.Value };
     }
 
@@ -303,7 +303,7 @@ public class BindingTests
     [MemberData(nameof(NullValue_Set_TestData))]
     public void Binding_NullValue_Set_GetReturnsExpected(object value)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             NullValue = value
         };
@@ -324,7 +324,7 @@ public class BindingTests
     [MemberData(nameof(BindingCompleteEventArgs_TestData))]
     public void Binding_OnBindingComplete_Invoke_CallsBindingComplete(BindingCompleteEventArgs eventArgs)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember");
+        SubBinding binding = new("propertyName", new object(), "dataMember");
 
         // No handler.
         binding.OnBindingComplete(eventArgs);
@@ -352,7 +352,7 @@ public class BindingTests
     [MemberData(nameof(BindingCompleteEventArgs_TestData))]
     public void Binding_OnBindingComplete_InvokeInsideBindingComplete_DoesNotCallBindingComplete(BindingCompleteEventArgs eventArgs)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember");
+        SubBinding binding = new("propertyName", new object(), "dataMember");
 
         int callCount = 0;
         BindingCompleteEventHandler handler = (sender, e) =>
@@ -371,15 +371,17 @@ public class BindingTests
 
     public static IEnumerable<object[]> OnBindingComplete_CriticalException_TestData()
     {
+#pragma warning disable CA2201 // Do not raise reserved exception types
         yield return new object[] { null, new NullReferenceException() };
         yield return new object[] { new BindingCompleteEventArgs(null, BindingCompleteState.Success, BindingCompleteContext.ControlUpdate), new NullReferenceException() };
+#pragma warning restore CA2201 // Do not raise reserved exception types
     }
 
     [Theory]
     [MemberData(nameof(OnBindingComplete_CriticalException_TestData))]
     public void Binding_OnBindingComplete_ThrowsCriticalException_Rethrows(BindingCompleteEventArgs eventArgs, Exception exception)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember");
+        SubBinding binding = new("propertyName", new object(), "dataMember");
 
         int callCount = 0;
         BindingCompleteEventHandler handler = (sender, e) =>
@@ -411,7 +413,7 @@ public class BindingTests
     [MemberData(nameof(OnBindingComplete_NonCriticalException_TestData))]
     public void Binding_OnBindingComplete_ThrowsNonCriticalException_SetsCancelToTrue(BindingCompleteEventArgs eventArgs, Exception exception)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember");
+        SubBinding binding = new("propertyName", new object(), "dataMember");
 
         int callCount = 0;
         BindingCompleteEventHandler handler = (sender, e) =>
@@ -443,7 +445,7 @@ public class BindingTests
         yield return new object[] { false, new ConvertEventArgs(1.1.ToString(CultureInfo.CurrentCulture), typeof(double)), 1.1 };
         yield return new object[] { false, new ConvertEventArgs(DBNull.Value, typeof(int)), DBNull.Value };
 
-        var o = new object();
+        object o = new();
         yield return new object[] { false, new ConvertEventArgs(o, typeof(object)), o };
         yield return new object[] { false, new ConvertEventArgs(o, typeof(int)), o };
 
@@ -455,7 +457,7 @@ public class BindingTests
     [MemberData(nameof(ConvertEventArgs_TestData))]
     public void Binding_OnFormat_Invoke_CallsFormat(bool formattingEnabled, ConvertEventArgs eventArgs, object expectedValue)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember")
+        SubBinding binding = new("propertyName", new object(), "dataMember")
         {
             FormattingEnabled = formattingEnabled
         };
@@ -500,7 +502,7 @@ public class BindingTests
     [MemberData(nameof(ConvertEventArgs_TestData))]
     public void Binding_OnParse_Invoke_CallsParse(bool formattingEnabled, ConvertEventArgs eventArgs, object expectedValue)
     {
-        var binding = new SubBinding("propertyName", new object(), "dataMember")
+        SubBinding binding = new("propertyName", new object(), "dataMember")
         {
             FormattingEnabled = formattingEnabled
         };
@@ -554,7 +556,7 @@ public class BindingTests
     [MemberData(nameof(ReadValue_TestData))]
     public void Binding_ReadValue_Invoke_CallsBindingCompleteIfFormattingEnabled(ControlUpdateMode controlUpdateMode, bool formattingEnabled, int expectedCallCount)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             ControlUpdateMode = controlUpdateMode,
             FormattingEnabled = formattingEnabled
@@ -600,7 +602,7 @@ public class BindingTests
     [MemberData(nameof(WriteValue_TestData))]
     public void Binding_WriteValue_Invoke_DoesNotCallBindingComplete(ControlUpdateMode controlUpdateMode, bool formattingEnabled)
     {
-        var binding = new Binding("propertyName", new object(), "dataMember")
+        Binding binding = new("propertyName", new object(), "dataMember")
         {
             ControlUpdateMode = controlUpdateMode,
             FormattingEnabled = formattingEnabled

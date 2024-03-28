@@ -44,7 +44,7 @@ public partial class ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
+            DesignerActionItemCollection items = [];
             string? actionName = GetActionName();
             if (actionName is not null)
             {

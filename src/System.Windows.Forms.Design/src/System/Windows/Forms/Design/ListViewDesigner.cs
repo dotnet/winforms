@@ -3,11 +3,10 @@
 
 #nullable disable
 
-using System.ComponentModel.Design;
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -18,7 +17,7 @@ namespace System.Windows.Forms.Design;
 internal class ListViewDesigner : ControlDesigner
 {
     private DesignerActionListCollection _actionLists;
-    private ComCtl32.HDHITTESTINFO _hdrhit;
+    private HDHITTESTINFO _hdrhit;
     private bool _inShowErrorDialog;
 
     /// <summary>
@@ -117,14 +116,14 @@ internal class ListViewDesigner : ControlDesigner
 
         if (ownerDrawProp is not null)
         {
-            properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, Array.Empty<Attribute>());
+            properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, []);
         }
 
         PropertyDescriptor viewProp = (PropertyDescriptor)properties["View"];
 
         if (viewProp is not null)
         {
-            properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, Array.Empty<Attribute>());
+            properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, []);
         }
 
         base.PreFilterProperties(properties);
@@ -137,7 +136,7 @@ internal class ListViewDesigner : ControlDesigner
             case (int)PInvoke.WM_NOTIFY:
             case (int)MessageId.WM_REFLECT_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                if ((int)nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
+                if (nmhdr->code == PInvoke.HDN_ENDTRACKW)
                 {
                     // Re-codegen if the columns have been resized
                     try
@@ -185,7 +184,7 @@ internal class ListViewDesigner : ControlDesigner
         }
     }
 
-    private static void ShowErrorDialog(IUIService uiService, Exception ex, Control control)
+    private static void ShowErrorDialog(IUIService uiService, InvalidOperationException ex, Control control)
     {
         if (uiService is not null)
         {

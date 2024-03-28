@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 internal sealed partial class SelectionUIService
@@ -10,10 +8,10 @@ internal sealed partial class SelectionUIService
     private readonly struct HitTestInfo : IEquatable<HitTestInfo>
     {
         public readonly int hitTest;
-        public readonly SelectionUIItem selectionUIHit;
+        public readonly SelectionUIItem? selectionUIHit;
         public readonly bool containerSelector;
 
-        public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit)
+        public HitTestInfo(int hitTest, SelectionUIItem? selectionUIHit)
         {
             this.hitTest = hitTest;
             this.selectionUIHit = selectionUIHit;
@@ -27,11 +25,11 @@ internal sealed partial class SelectionUIService
         }
 
         // Standard 'catch all - rethrow critical' exception pattern
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             try
             {
-                return Equals((HitTestInfo)obj);
+                return Equals((HitTestInfo)obj!);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -51,7 +49,7 @@ internal sealed partial class SelectionUIService
 
         public override int GetHashCode()
         {
-            int hash = hitTest | selectionUIHit.GetHashCode();
+            int hash = hitTest | (selectionUIHit?.GetHashCode() ?? 0);
             if (containerSelector)
             {
                 hash |= 0x10000;

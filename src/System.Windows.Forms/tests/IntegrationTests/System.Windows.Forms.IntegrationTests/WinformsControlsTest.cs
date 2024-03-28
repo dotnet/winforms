@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-//#define MAUI
+// #define MAUI
 
 using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
@@ -204,11 +204,13 @@ public partial class WinformsControlsTest
 #endif
     public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
     {
-        var mainObject = new Mocks.MainObject();
-        mainObject.Text = "Test text";
-        Form form = new Form();
-        TextBox textBox = new TextBox();
-        Binding binding = new Binding("Text", mainObject, "Text");
+        var mainObject = new Mocks.MainObject
+        {
+            Text = "Test text"
+        };
+        Form form = new();
+        TextBox textBox = new();
+        Binding binding = new("Text", mainObject, "Text");
         textBox.DataBindings.Add(binding);
         textBox.Parent = form;
         form.Show();

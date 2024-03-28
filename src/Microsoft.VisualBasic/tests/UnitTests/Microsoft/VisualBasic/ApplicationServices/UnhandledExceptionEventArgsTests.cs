@@ -8,14 +8,14 @@ public class UnhandledExceptionEventArgsTests
     public static IEnumerable<object[]> Ctor_Bool_Exception_TestData()
     {
         yield return new object[] { true, null };
-        yield return new object[] { false, new Exception() };
+        yield return new object[] { false, new InvalidOperationException() };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Bool_Exception_TestData))]
     public void Ctor_Bool_Exception(bool exitApplication, Exception exception)
     {
-        var args = new UnhandledExceptionEventArgs(exitApplication, exception);
+        UnhandledExceptionEventArgs args = new(exitApplication, exception);
         Assert.Same(exception, args.Exception);
         Assert.Equal(exitApplication, args.ExitApplication);
     }
@@ -25,8 +25,10 @@ public class UnhandledExceptionEventArgsTests
     [InlineData(false)]
     public void ExitApplication_Set_GetReturnsExpected(bool value)
     {
-        var args = new UnhandledExceptionEventArgs(true, null);
-        args.ExitApplication = value;
+        UnhandledExceptionEventArgs args = new(true, null)
+        {
+            ExitApplication = value
+        };
         Assert.Equal(value, args.ExitApplication);
     }
 }

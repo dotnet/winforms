@@ -9,8 +9,8 @@ public class WebBrowserNavigatedEventArgsTests
     [Fact]
     public void Ctor_Uri()
     {
-        var url = new Uri("http://google.com");
-        var e = new WebBrowserNavigatedEventArgs(url);
+        Uri url = new("http://google.com");
+        WebBrowserNavigatedEventArgs e = new(url);
         Assert.Equal(url, e.Url);
     }
 }

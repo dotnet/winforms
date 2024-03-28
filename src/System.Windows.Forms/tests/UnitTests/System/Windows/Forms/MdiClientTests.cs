@@ -15,7 +15,7 @@ public class MdiClientTests
     [WinFormsFact]
     public void MdiClient_Ctor_Default()
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -91,7 +91,7 @@ public class MdiClientTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void MdiClient_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             BackColor = value
         };
@@ -107,7 +107,7 @@ public class MdiClientTests
     [WinFormsFact]
     public void MdiClient_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -143,7 +143,7 @@ public class MdiClientTests
     public void MdiClient_BackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(MdiClient.BackColor)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.False(property.CanResetValue(control));
 
         control.BackColor = Color.Red;
@@ -159,7 +159,7 @@ public class MdiClientTests
     public void MdiClient_BackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(MdiClient.BackColor)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.BackColor = Color.Red;
@@ -175,12 +175,12 @@ public class MdiClientTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void MdiClient_BackgroundImage_GetWithParent_GetReturnsExpected(Image parentBackgroundImage)
     {
-        using var image = new Bitmap(10, 10);
-        using var parent = new Control
+        using Bitmap image = new(10, 10);
+        using Control parent = new()
         {
             BackgroundImage = parentBackgroundImage
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent
         };
@@ -195,7 +195,7 @@ public class MdiClientTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void MdiClient_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             BackgroundImage = value
         };
@@ -211,7 +211,7 @@ public class MdiClientTests
     [WinFormsFact]
     public void MdiClient_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -222,7 +222,7 @@ public class MdiClientTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -233,7 +233,7 @@ public class MdiClientTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -254,12 +254,12 @@ public class MdiClientTests
     [EnumData<ImageLayout>]
     public void MdiClient_BackgroundImageLayout_GetWithParent_GetReturnsExpected(ImageLayout parentBackgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
-        using var parent = new Control
+        using Bitmap image = new(10, 10);
+        using Control parent = new()
         {
             BackgroundImageLayout = parentBackgroundImageLayout
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent
         };
@@ -274,7 +274,7 @@ public class MdiClientTests
     [EnumData<ImageLayout>]
     public void MdiClient_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             BackgroundImageLayout = value
         };
@@ -290,7 +290,7 @@ public class MdiClientTests
     [WinFormsFact]
     public void MdiClient_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -326,7 +326,7 @@ public class MdiClientTests
     [EnumData<RightToLeft>]
     public void MdiClient_Handle_Get_Success(RightToLeft rightToLeft)
     {
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -340,7 +340,7 @@ public class MdiClientTests
     [InlineData(RightToLeft.Yes, true)]
     public void MdiClient_Handle_GetDesignMode_Success(RightToLeft rightToleft, bool designMode)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -350,7 +350,7 @@ public class MdiClientTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Site = mockSite.Object,
             RightToLeft = rightToleft
@@ -371,11 +371,11 @@ public class MdiClientTests
     [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
     public void MdiClient_Handle_GetWithParent_Success(RightToLeft parentRightToLeft, RightToLeft rightToLeft)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             RightToLeft = parentRightToLeft
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent,
             RightToLeft = rightToLeft
@@ -405,7 +405,7 @@ public class MdiClientTests
     [InlineData(RightToLeft.Yes, RightToLeft.Yes, false)]
     public void MdiClient_Handle_GetParentDesignMode_SetsDisabled(RightToLeft parentRightToLeft, RightToLeft rightToLeft, bool designMode)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -415,12 +415,12 @@ public class MdiClientTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
-        using var parent = new Control
+        using Control parent = new()
         {
             Site = mockSite.Object,
             RightToLeft = parentRightToLeft
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent,
             RightToLeft = rightToLeft
@@ -433,7 +433,7 @@ public class MdiClientTests
     public void MdiClient_Location_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(MdiClient.Location)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.True(property.CanResetValue(control));
 
         control.Location = new Point(1, 0);
@@ -457,7 +457,7 @@ public class MdiClientTests
     public void MdiClient_Location_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(MdiClient.Location)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.True(property.ShouldSerializeValue(control));
 
         control.Location = new Point(1, 0);
@@ -490,7 +490,7 @@ public class MdiClientTests
     [MemberData(nameof(Size_Set_TestData))]
     public void MdiClient_Size_Set_GetReturnsExpected(Size value, int expectedWidth, int expectedHeight, int expectedLayoutCallCount)
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -585,7 +585,7 @@ public class MdiClientTests
     [MemberData(nameof(Size_SetWithHandle_TestData))]
     public void MdiClient_Size_SetWithHandle_GetReturnsExpected(Size value, int expectedWidth, int expectedHeight, int expectedClientWidth, int expectedClientHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -693,8 +693,8 @@ public class MdiClientTests
     [MemberData(nameof(Size_SetWithParentHandle_TestData))]
     public void MdiClient_Size_SetWithParentWithHandle_GetReturnsExpected(Size value, int expectedLayoutCallCount, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new MdiClient
+        using Control parent = new();
+        using MdiClient control = new()
         {
             Parent = parent
         };
@@ -832,7 +832,7 @@ public class MdiClientTests
     [MemberData(nameof(Size_SetWithParentHandle_TestData))]
     public void MdiClient_Size_SetWithNonDesignModeParentWithHandle_GetReturnsExpected(Size value, int expectedLayoutCallCount, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -842,11 +842,11 @@ public class MdiClientTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
-        using var parent = new Control
+        using Control parent = new()
         {
             Site = mockSite.Object
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent
         };
@@ -994,7 +994,7 @@ public class MdiClientTests
     [MemberData(nameof(Size_SetWithDesignModeParentHandle_TestData))]
     public void MdiClient_Size_SetWithDesignModeParentWithHandle_GetReturnsExpected(Size value, int expectedWidth, int expectedHeight, int expectedClientWidth, int expectedClientHeight, int expectedLayoutCallCount1, int expectedLayoutCallCount2, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1004,11 +1004,11 @@ public class MdiClientTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
-        using var parent = new Control
+        using Control parent = new()
         {
             Site = mockSite.Object
         };
-        using var control = new MdiClient
+        using MdiClient control = new()
         {
             Parent = parent
         };
@@ -1146,7 +1146,7 @@ public class MdiClientTests
     public void MdiClient_Size_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(Control.Size)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.False(property.CanResetValue(control));
 
         control.Size = new Size(1, 0);
@@ -1170,7 +1170,7 @@ public class MdiClientTests
     public void MdiClient_Size_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(MdiClient))[nameof(Control.Size)];
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.Size = new Size(1, 0);
@@ -1195,7 +1195,7 @@ public class MdiClientTests
     [InvalidEnumData<MdiLayout>]
     public void MdiClient_LayoutMdi_InvokeWithoutHandle_Nop(MdiLayout value)
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         control.LayoutMdi(value);
         Assert.True(control.IsHandleCreated);
     }
@@ -1205,7 +1205,7 @@ public class MdiClientTests
     [InvalidEnumData<MdiLayout>]
     public void MdiClient_LayoutMdi_InvokeWithHandle_Success(MdiLayout value)
     {
-        using var control = new MdiClient();
+        using MdiClient control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;

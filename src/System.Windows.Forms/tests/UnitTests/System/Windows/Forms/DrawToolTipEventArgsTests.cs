@@ -19,17 +19,15 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font_TestData))]
     public void Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
-            Assert.Same(graphics, e.Graphics);
-            Assert.Same(associatedWindow, e.AssociatedWindow);
-            Assert.Same(associatedControl, e.AssociatedControl);
-            Assert.Equal(bounds, e.Bounds);
-            Assert.Equal(toolTipText, e.ToolTipText);
-            Assert.Same(font, e.Font);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+        Assert.Same(graphics, e.Graphics);
+        Assert.Same(associatedWindow, e.AssociatedWindow);
+        Assert.Same(associatedControl, e.AssociatedControl);
+        Assert.Equal(bounds, e.Bounds);
+        Assert.Equal(toolTipText, e.ToolTipText);
+        Assert.Same(font, e.Font);
     }
 
     public static IEnumerable<object[]> Draw_TestData()
@@ -46,48 +44,40 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawBackground_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
-            e.DrawBackground();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+        e.DrawBackground();
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawText_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
-            e.DrawText();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+        e.DrawText();
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawText_InvokeTextFormatFlags_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
-            e.DrawText(TextFormatFlags.Bottom);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+        e.DrawText(TextFormatFlags.Bottom);
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Draw_TestData))]
     public void DrawBorder_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
-            e.DrawBorder();
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+        e.DrawBorder();
     }
 
     private class SubWin32Window : IWin32Window

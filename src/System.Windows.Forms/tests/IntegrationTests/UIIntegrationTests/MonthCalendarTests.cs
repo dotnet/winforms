@@ -5,15 +5,14 @@ using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.UITests;
 
 public class MonthCalendarTests : ControlTestBase
 {
-    private static readonly DateTime CurrentDate = new(2021, 12, 1);
-    private static readonly DateTime MaxDate = new(2021, 12, 3, 18, 0, 0);
-    private static readonly DateTime MinDate = new(2021, 11, 30, 17, 0, 0);
+    private static readonly DateTime s_currentDate = new(2021, 12, 1);
+    private static readonly DateTime s_maxDate = new(2021, 12, 3, 18, 0, 0);
+    private static readonly DateTime s_minDate = new(2021, 11, 30, 17, 0, 0);
 
     public MonthCalendarTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -56,7 +55,7 @@ public class MonthCalendarTests : ControlTestBase
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT)
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT));
 
-            DateTime selectedDate = new DateTime(2020, 4, 10);
+            DateTime selectedDate = new(2020, 4, 10);
             SYSTEMTIME date = new()
             {
                 wYear = (ushort)selectedDate.Year,
@@ -68,7 +67,7 @@ public class MonthCalendarTests : ControlTestBase
             {
                 nmhdr = new NMHDR
                 {
-                    code = unchecked((uint)MCN.SELCHANGE),
+                    code = PInvoke.MCN_SELCHANGE,
                 },
                 stSelStart = date,
                 stSelEnd = date,
@@ -86,8 +85,8 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunClickTestAsync(async (form, calendar) =>
         {
-            calendar.SetDate(CurrentDate);
-            DateTime newDate = CurrentDate.Date.AddDays(delta);
+            calendar.SetDate(s_currentDate);
+            DateTime newDate = s_currentDate.Date.AddDays(delta);
             int callDateSelectedCount = 0;
             int callDateChangedCount = 0;
             calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
@@ -108,8 +107,8 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunClickTestAsync(async (form, calendar) =>
         {
-            calendar.SetDate(CurrentDate);
-            DateTime newDate = CurrentDate.Date.AddDays(delta);
+            calendar.SetDate(s_currentDate);
+            DateTime newDate = s_currentDate.Date.AddDays(delta);
             int callDateSelectedCount = 0;
             int callDateChangedCount = 0;
             calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
@@ -145,7 +144,7 @@ public class MonthCalendarTests : ControlTestBase
             var centerOnScreen = calendar.PointToScreen(centerOfRect);
             await MoveMouseAsync(form, centerOnScreen);
 
-            TaskCompletionSource<VoidResult> dateChanged = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            TaskCompletionSource<VoidResult> dateChanged = new(TaskCreationOptions.RunContinuationsAsynchronously);
             calendar.DateChanged += (sender, e) => dateChanged.TrySetResult(default);
 
             await InputSimulator.SendAsync(
@@ -207,8 +206,8 @@ public class MonthCalendarTests : ControlTestBase
                 MonthCalendar control = new()
                 {
                     Location = new Point(0, 0),
-                    MinDate = MinDate,
-                    MaxDate = MaxDate
+                    MinDate = s_minDate,
+                    MaxDate = s_maxDate
                 };
 
                 return control;

@@ -25,15 +25,15 @@ internal partial class LayoutUtils
     public const AnchorStyles HorizontalAnchorStyles = AnchorStyles.Left | AnchorStyles.Right;
     public const AnchorStyles VerticalAnchorStyles = AnchorStyles.Top | AnchorStyles.Bottom;
 
-    private static readonly AnchorStyles[] s_dockingToAnchor = new AnchorStyles[]
-    {
+    private static readonly AnchorStyles[] s_dockingToAnchor =
+    [
         /* None   */ AnchorStyles.Top | AnchorStyles.Left,
         /* Top    */ AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
         /* Bottom */ AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
         /* Left   */ AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom,
         /* Right  */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom,
         /* Fill   */ AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
-    };
+    ];
 
     // A good, short test string for measuring control height.
     public const string TestString = "j^";
@@ -96,7 +96,7 @@ internal partial class LayoutUtils
         // zero isn't used, so we can subtract 1 and start with index 0.
         result--;
 
-        Debug.Assert(result >= 0x00 && result <= 0x0A, "ContentAlignmentToIndex result out of range.");
+        Debug.Assert(result is >= 0x00 and <= 0x0A, "ContentAlignmentToIndex result out of range.");
         Debug.Assert(result != 0x00 || alignment == ContentAlignment.TopLeft, "Error detected in ContentAlignmentToIndex.");
         Debug.Assert(result != 0x01 || alignment == ContentAlignment.TopCenter, "Error detected in ContentAlignmentToIndex.");
         Debug.Assert(result != 0x02 || alignment == ContentAlignment.TopRight, "Error detected in ContentAlignmentToIndex.");
@@ -115,7 +115,7 @@ internal partial class LayoutUtils
     // Converts 0x00, 0x01, 0x02, 0x04 (3b flag) to 0, 1, 2, 3 (2b index)
     private static byte xContentAlignmentToIndex(int threeBitFlag)
     {
-        Debug.Assert(threeBitFlag >= 0x00 && threeBitFlag <= 0x04 && threeBitFlag != 0x03, "threeBitFlag out of range.");
+        Debug.Assert(threeBitFlag is >= 0x00 and <= 0x04 and not 0x03, "threeBitFlag out of range.");
         byte result = threeBitFlag == 0x04 ? (byte)3 : (byte)threeBitFlag;
         Debug.Assert((result & 0x03) == result, "Result out of range.");
         return result;
@@ -225,13 +225,13 @@ internal partial class LayoutUtils
 
         if (rect1.X <= rect2.X && rect1.X + rect1.Width >= rect2.X + rect2.Width)
         {
-            //rect 1 contains rect 2 horizontally
+            // rect 1 contains rect 2 horizontally
             return true;
         }
 
         if (rect2.X <= rect1.X && rect2.X + rect2.Width >= rect1.X + rect1.Width)
         {
-            //rect 2 contains rect 1 horizontally
+            // rect 2 contains rect 1 horizontally
             return true;
         }
 
@@ -247,20 +247,20 @@ internal partial class LayoutUtils
 
         if (rect1.Y <= rect2.Y && rect1.Y + rect1.Width >= rect2.Y + rect2.Width)
         {
-            //rect 1 contains rect 2 vertically
+            // rect 1 contains rect 2 vertically
             return true;
         }
 
         if (rect2.Y <= rect1.Y && rect2.Y + rect2.Width >= rect1.Y + rect1.Width)
         {
-            //rect 2 contains rect 1 vertically
+            // rect 2 contains rect 1 vertically
             return true;
         }
 
         return false;
     }
 
-    //returns anchorStyles, transforms from DockStyle if necessary
+    // returns anchorStyles, transforms from DockStyle if necessary
     internal static AnchorStyles GetUnifiedAnchor(IArrangedElement element)
     {
         DockStyle dockStyle = DefaultLayout.GetDock(element);
@@ -353,7 +353,7 @@ internal partial class LayoutUtils
 
     public static Size Stretch(Size stretchThis, Size withinThis, AnchorStyles anchorStyles)
     {
-        Size stretchedSize = new Size(
+        Size stretchedSize = new(
             (anchorStyles & HorizontalAnchorStyles) == HorizontalAnchorStyles ? withinThis.Width : stretchThis.Width,
             (anchorStyles & VerticalAnchorStyles) == VerticalAnchorStyles ? withinThis.Height : stretchThis.Height);
         if (stretchedSize.Width > withinThis.Width)
@@ -433,9 +433,7 @@ internal partial class LayoutUtils
     public static Point FlipPoint(Point point)
     {
         // Point is a struct (passed by value, no need to make a copy)
-        int temp = point.X;
-        point.X = point.Y;
-        point.Y = temp;
+        (point.Y, point.X) = (point.X, point.Y);
         return point;
     }
 
@@ -455,9 +453,7 @@ internal partial class LayoutUtils
     public static Size FlipSize(Size size)
     {
         // Size is a struct (passed by value, no need to make a copy)
-        int temp = size.Width;
-        size.Width = size.Height;
-        size.Height = temp;
+        (size.Height, size.Width) = (size.Width, size.Height);
         return size;
     }
 

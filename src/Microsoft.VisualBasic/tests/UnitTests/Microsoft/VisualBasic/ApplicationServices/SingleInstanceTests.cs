@@ -14,7 +14,7 @@ public class SingleInstanceTests
 
     private sealed class ReceivedArgs
     {
-        private List<string[]> _received = new();
+        private List<string[]> _received = [];
 
         internal void Add(string[] args)
         {
@@ -25,7 +25,7 @@ public class SingleInstanceTests
         {
             var received = _received;
             Interlocked.CompareExchange(ref _received, null, received);
-            return received.ToImmutableArray();
+            return [.. received];
         }
     }
 
@@ -33,7 +33,7 @@ public class SingleInstanceTests
 
     private static dynamic GetTestHelper()
     {
-        var assembly = typeof(Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase).Assembly;
+        var assembly = typeof(WindowsFormsApplicationBase).Assembly;
         var type = assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
         return type.TestAccessor().Dynamic;
     }
@@ -55,7 +55,7 @@ public class SingleInstanceTests
 
     private bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
     {
-        var tokenSource = new CancellationTokenSource();
+        CancellationTokenSource tokenSource = new();
         tokenSource.CancelAfter(timeout);
         try
         {
@@ -75,7 +75,7 @@ public class SingleInstanceTests
     [Fact]
     public void MultipleDistinctServers()
     {
-        var pipeServers = new List<NamedPipeServerStream>();
+        List<NamedPipeServerStream> pipeServers = [];
         int n = 5;
         try
         {
@@ -96,9 +96,9 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public void MultipleServers_Overlapping()
+    public async void MultipleServers_Overlapping()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         const int n = 10;
         int completed = 0;
         int created = 0;
@@ -117,7 +117,7 @@ public class SingleInstanceTests
 
             Interlocked.Increment(ref completed);
         }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
-        Task.WaitAll(tasks);
+        await Task.WhenAll(tasks);
         Assert.Equal(n, completed);
         Assert.True(created >= 1);
     }
@@ -125,13 +125,13 @@ public class SingleInstanceTests
     [Fact]
     public void MultipleClients_Sequential()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
             const int n = 5;
-            var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
-            var receivedArgs = new ReceivedArgs();
+            string[][] sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
             for (int i = 0; i < n; i++)
             {
@@ -144,18 +144,18 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public void MultipleClients_Overlapping()
+    public async void MultipleClients_Overlapping()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
             const int n = 5;
-            var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
-            var receivedArgs = new ReceivedArgs();
-            WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+            string[][] sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
+            ReceivedArgs receivedArgs = new();
+            _ = WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
             var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
-            Task.WaitAll(tasks);
+            await Task.WhenAll(tasks);
             FlushLastConnection(pipeName);
             var receivedSorted = receivedArgs.Freeze().Sort((x, y) => x.Length - y.Length);
             Assert.Equal(sentArgs, receivedSorted);
@@ -166,26 +166,26 @@ public class SingleInstanceTests
     [Fact]
     public void ManyArgs()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var expectedArgs = getStrings(20000).ToArray();
-            var receivedArgs = new ReceivedArgs();
+            string[] expectedArgs = getStrings(20000).ToArray();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
             Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, expectedArgs));
             FlushLastConnection(pipeName);
-            var actualArgs = receivedArgs.Freeze().Single();
+            string[] actualArgs = receivedArgs.Freeze().Single();
             Assert.Equal(expectedArgs, actualArgs);
         }
 
         static IEnumerable<string> getStrings(int maxTotalLength)
         {
-            var r = new Random();
+            Random r = new();
             int n = 0;
             while (n < maxTotalLength)
             {
-                var str = getString(r);
+                string str = getString(r);
                 n += str.Length;
                 yield return str;
             }
@@ -194,7 +194,7 @@ public class SingleInstanceTests
         static string getString(Random r)
         {
             int n = r.Next(1000);
-            var builder = new StringBuilder();
+            StringBuilder builder = new();
             for (int i = 0; i < n; i++)
             {
                 builder.Append((char)('a' + r.Next(26)));
@@ -205,32 +205,32 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public void ClientConnectionTimeout()
+    public async void ClientConnectionTimeout()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, timeout: 300, Array.Empty<string>()), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
-            bool result = task.Result;
+            var task = Task.Factory.StartNew(() => SendSecondInstanceArgs(pipeName, timeout: 300, []), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
+            bool result = await task;
             Assert.False(result);
         }
     }
 
     // Corresponds to second instance crash sending incomplete args.
     [Fact]
-    public void ClientConnectBeforeWaitForClientConnection()
+    public async void ClientConnectBeforeWaitForClientConnection()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
-            var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
+            ReceivedArgs receivedArgs = new();
+            var task = Task.Factory.StartNew(() => SendSecondInstanceArgs(pipeName, SendTimeout, ["1", "ABC"]), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
             // Allow time for connection.
             Thread.Sleep(100);
-            WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
-            task.Wait();
+            _ = WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+            await task;
             FlushLastConnection(pipeName);
             Assert.Equal(new[] { new[] { "1", "ABC" } }, receivedArgs.Freeze());
         }
@@ -240,15 +240,15 @@ public class SingleInstanceTests
     [Fact]
     public void InvalidClientData()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             sendData(pipeName, Array.Empty<string>()); // valid
-            sendData(pipeName, (int)3); // invalid
+            sendData(pipeName, 3); // invalid
             sendData(pipeName, new[] { "ABC" }); // valid
             sendData(pipeName, new int[] { 1, 2, 3 }); // invalid
             sendData(pipeName, new[] { "", "" }); // valid
@@ -256,7 +256,7 @@ public class SingleInstanceTests
 
             FlushLastConnection(pipeName);
 
-            Assert.Equal(new[] { Array.Empty<string>(), new[] { "ABC" }, new[] { "", "" } }, receivedArgs.Freeze());
+            Assert.Equal(new[] { (string[])[], ["ABC"], ["", ""] }, receivedArgs.Freeze());
         }
 
         static void sendData<T>(string pipeName, T obj)
@@ -269,7 +269,7 @@ public class SingleInstanceTests
 
             using (pipeClient)
             {
-                var serializer = new DataContractSerializer(typeof(T));
+                DataContractSerializer serializer = new(typeof(T));
                 serializer.WriteObject(pipeClient, obj);
             }
         }
@@ -279,16 +279,16 @@ public class SingleInstanceTests
     [Fact]
     public void CloseClientAfterClientConnect()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             // Send valid args.
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, Array.Empty<string>()));
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, []));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, ["1", "ABC"]));
 
             // Send bad args: close client after connect.
             closeAfterConnect(pipeName);
@@ -297,11 +297,11 @@ public class SingleInstanceTests
             sendUnexpectedArgs(pipeName);
 
             // Send valid args.
-            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "DEF", "2" }));
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, ["DEF", "2"]));
 
             FlushLastConnection(pipeName);
 
-            Assert.Equal(new[] { Array.Empty<string>(), new[] { "1", "ABC" }, new[] { "DEF", "2" } }, receivedArgs.Freeze());
+            Assert.Equal(new[] { (string[])[], ["1", "ABC"], ["DEF", "2"] }, receivedArgs.Freeze());
         }
 
         static void closeAfterConnect(string pipeName)
@@ -319,7 +319,7 @@ public class SingleInstanceTests
 
             using (pipeClient)
             {
-                pipeClient.Write(new byte[] { 1, 2, 3 }, 0, 3);
+                pipeClient.Write([1, 2, 3], 0, 3);
             }
         }
     }
@@ -328,11 +328,11 @@ public class SingleInstanceTests
     [Fact]
     public void CloseServerAfterClientConnect()
     {
-        var pipeName = GetUniqueName();
+        string pipeName = GetUniqueName();
         NamedPipeClientStream pipeClient = null;
         try
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
             using (pipeServer)
             {
@@ -358,7 +358,7 @@ public class SingleInstanceTests
 
     private static NamedPipeClientStream CreateClientConnection(string pipeName, int timeout)
     {
-        var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
+        NamedPipeClientStream pipeClient = new(".", pipeName, PipeDirection.Out);
         try
         {
             pipeClient.Connect(timeout);

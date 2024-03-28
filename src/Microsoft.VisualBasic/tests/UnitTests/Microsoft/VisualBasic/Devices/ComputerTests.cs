@@ -8,7 +8,7 @@ public class ComputerTests
     [Fact]
     public void Properties()
     {
-        var computer = new Computer();
+        Computer computer = new();
 
         var audio = computer.Audio;
         Assert.NotNull(audio);
@@ -30,7 +30,7 @@ public class ComputerTests
     [Fact]
     public void Screen()
     {
-        var computer = new Computer();
+        Computer computer = new();
         Assert.Equal(System.Windows.Forms.Screen.PrimaryScreen, computer.Screen);
     }
 }

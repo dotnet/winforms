@@ -10,7 +10,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_InstanceField()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
         access._integer = 5;
         Assert.Equal(5, access._integer);
@@ -26,7 +26,7 @@ public class TestAccessorTests
         Assert.Equal(16, access.s_integer);
 
         // Attempt using an instance as well
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         access = testClass.TestAccessor().Dynamic;
         access.s_integer = 18;
         Assert.Equal(18, access.s_integer);
@@ -40,7 +40,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_ReadOnlyInstanceField()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
         access._readOnlyInteger = 7;
         Assert.Equal(7, access._readOnlyInteger);
@@ -49,7 +49,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_ObjectInstanceField()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
         List<string> list = access._list;
         Assert.NotNull(list);
@@ -60,7 +60,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_InstanceProperty()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
         access.Long = 1970;
         Assert.Equal(1970, access.Long);
@@ -69,7 +69,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_StaticProperty()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
         access.Int = 1989;
         Assert.Equal(1989, access.Int);
@@ -88,7 +88,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_PublicField()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
 
         // If the API is public we want to access "normally", so we prevent this.
@@ -98,7 +98,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_PublicProperty()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         dynamic access = testClass.TestAccessor().Dynamic;
 
         // If the API is public we want to access "normally", so we prevent this.
@@ -108,7 +108,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_InstanceMethod()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         Assert.Equal(4, testClass.TestAccessor().Dynamic.ToStringLength(2001));
         Assert.Equal(7, testClass.TestAccessor().Dynamic.ToStringLength("Flubber"));
     }
@@ -116,7 +116,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_FuncDelegateAccess_InstanceMethod()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         ITestAccessor accessor = testClass.TestAccessor();
         Assert.Equal(4, accessor.CreateDelegate<Func<int, int>>("ToStringLength")(2001));
         Assert.Equal(7, accessor.CreateDelegate<Func<string, int>>("ToStringLength")("Flubber"));
@@ -125,7 +125,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_NamedDelegateAccess_InstanceMethod()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         ITestAccessor accessor = testClass.TestAccessor();
         Assert.Equal(5, accessor.CreateDelegate<ToStringLength>()("25624"));
     }
@@ -133,7 +133,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_DynamicAccess_StaticMethod()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         Assert.Equal(2, testClass.TestAccessor().Dynamic.AddOne(1));
 
         // Hit the static class version
@@ -143,7 +143,7 @@ public class TestAccessorTests
     [Fact]
     public void TestAccessor_FuncDelegateAccess_StaticMethod()
     {
-        var testClass = new PrivateTestClass();
+        PrivateTestClass testClass = new();
         Assert.Equal(2000, testClass.TestAccessor().CreateDelegate<Func<int, int>>("AddOne")(1999));
 
         // Hit the static class version
@@ -187,6 +187,8 @@ public class TestAccessorTests
 #pragma warning disable IDE0052   // unaccessed private
 #pragma warning disable CS0169    // unused field
 #pragma warning disable CA1823    // unused field
+#pragma warning disable CA1822    // Mark members as static
+#pragma warning disable CA1051 // Do not declare visible instance fields
 
     public class A
     {
@@ -203,7 +205,7 @@ public class TestAccessorTests
     {
         private int _integer;
         private readonly int _readOnlyInteger;
-        private List<string> _list = new() { "42" };
+        private List<string> _list = ["42"];
 
         private long Long { get; set; }
 
@@ -229,6 +231,9 @@ public class TestAccessorTests
     }
 #pragma warning restore IDE0044
 #pragma warning restore IDE0051
+#pragma warning restore IDE0052
 #pragma warning restore CS0169
 #pragma warning restore CA1823
+#pragma warning restore CA1822
+#pragma warning restore CA1051
 }

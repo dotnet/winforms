@@ -39,7 +39,7 @@ internal readonly struct MessageId
     public const uint WM_REFLECT_CTLCOLORSTATIC = WM_REFLECT + PInvoke.WM_CTLCOLORSTATIC;
 
     /// <summary>
-    ///  Returns the symbolic name of the msg value, or null if it isn't one of the existing constants.
+    ///  Returns the symbolic name of the message value, or null if it isn't one of the existing constants.
     /// </summary>
     internal string? MessageIdToString()
     {
@@ -306,7 +306,7 @@ internal readonly struct MessageId
             PInvoke.EM_FINDTEXTW => "EM_FINDTEXTW",
             PInvoke.EM_FINDTEXTEXW => "EM_FINDTEXTEXW",
 
-            // Rich Edit 3.0 Asia msgs
+            // Rich Edit 3.0 Asia messages
             PInvoke.EM_RECONVERSION => "EM_RECONVERSION",
             PInvoke.EM_SETIMEMODEBIAS => "EM_SETIMEMODEBIAS",
             PInvoke.EM_GETIMEMODEBIAS => "EM_GETIMEMODEBIAS",

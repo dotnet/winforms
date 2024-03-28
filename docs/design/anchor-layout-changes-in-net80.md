@@ -110,14 +110,14 @@ private static void ComputeAnchorInfo(IArrangedElement element)
 
 ## Risk mitigation
 
-The layout engine, in general, is quite complex, and any changes in it carry a very high risk. In order to reduce the risks and to provide backward compatibility, the new anchor calculations are put behind a feature switch `System.Windows.Forms.AnchorLayoutV2`. The switch is enabled by default for Windows Forms applications targeting .NET 8.
+The layout engine, in general, is quite complex, and any changes in it carry a very high risk. In order to reduce the risks and to provide backward compatibility, the new anchor calculations are put behind a feature switch `System.Windows.Forms.AnchorLayoutV2`. The switch is disabled by default for Windows Forms applications.
 
-It is possible to retain the original anchor calculations by setting the swtich to `false` in the [runtimeconfig.json](https://learn.microsoft.com/dotnet/core/runtime-config/#runtimeconfigjson).
+Developers need to opt-in to get this new feature by setting the switch value to `true` in the [runtimeconfig.json](https://learn.microsoft.com/dotnet/core/runtime-config/#runtimeconfigjson).
 Snippet for runtimeconfig.template.json:
 ```JSON
 {
   "configProperties": {
-    "System.Windows.Forms.AnchorLayoutV2": false
+    "System.Windows.Forms.AnchorLayoutV2": true
   }
 }
 ```

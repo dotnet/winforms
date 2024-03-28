@@ -19,32 +19,33 @@ internal class CodeMethodMap
     private CodeStatementCollection? _variables;
     private readonly CodeStatementCollection _targetStatements;
 
-    internal CodeMethodMap(CodeMemberMethod method) : this(null, method)
-    {
-    }
-
-    internal CodeMethodMap(CodeStatementCollection? targetStatements, CodeMemberMethod method)
+    internal CodeMethodMap(CodeMemberMethod method)
     {
         Method = method;
-        _targetStatements = targetStatements ?? Method.Statements;
+        _targetStatements = Method.Statements;
     }
 
-    internal CodeStatementCollection BeginStatements => _begin ??= new CodeStatementCollection();
+    internal CodeMethodMap(CodeStatementCollection targetStatements)
+    {
+        _targetStatements = targetStatements;
+    }
 
-    internal CodeStatementCollection EndStatements => _end ??= new CodeStatementCollection();
+    internal CodeStatementCollection BeginStatements => _begin ??= [];
 
-    internal CodeStatementCollection ContainerStatements => _container ??= new CodeStatementCollection();
+    internal CodeStatementCollection EndStatements => _end ??= [];
 
-    internal CodeMemberMethod Method { get; }
+    internal CodeStatementCollection ContainerStatements => _container ??= [];
 
-    internal CodeStatementCollection Statements => _statements ??= new CodeStatementCollection();
+    internal CodeMemberMethod? Method { get; }
 
-    internal CodeStatementCollection LocalVariables => _locals ??= new CodeStatementCollection();
+    internal CodeStatementCollection Statements => _statements ??= [];
 
-    internal CodeStatementCollection FieldAssignments => _fields ??= new CodeStatementCollection();
+    internal CodeStatementCollection LocalVariables => _locals ??= [];
 
-    //TODO: Should we update RootCodeDomSerializer as well?
-    internal CodeStatementCollection VariableAssignments => _variables ??= new CodeStatementCollection();
+    internal CodeStatementCollection FieldAssignments => _fields ??= [];
+
+    // TODO: Should we update RootCodeDomSerializer as well?
+    internal CodeStatementCollection VariableAssignments => _variables ??= [];
 
     internal void Add(CodeStatementCollection statements)
     {

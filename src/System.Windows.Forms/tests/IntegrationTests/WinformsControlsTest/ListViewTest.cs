@@ -15,7 +15,7 @@ public partial class ListViewTest : Form
         listView1.LabelEdit = true;
         listView1.View = View.Tile;
 
-        var random = new Random();
+        Random random = new();
         int i = random.Next(100, 300);
 
         listView1.TileSize = new Size(200, 50);
@@ -24,11 +24,11 @@ public partial class ListViewTest : Form
         listView1.Items[2].ImageIndex = 2;
         listView1.Click += (s, e) =>
         {
-            //listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
+            // listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
 
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
-            var index = listView1.InsertionMark.NearestIndex(pos);
+            int index = listView1.InsertionMark.NearestIndex(pos);
             Console.WriteLine($"nearest index: {index}");
         };
 
@@ -97,7 +97,7 @@ public partial class ListViewTest : Form
                 0 => item1,
                 1 => item2,
                 2 => item3,
-                _ => throw new IndexOutOfRangeException(),
+                _ => throw new ArgumentOutOfRangeException(),
             };
         };
 
@@ -114,10 +114,10 @@ public partial class ListViewTest : Form
         ImageList imageListLarge = new(components);
 
         // Initialize the ImageList objects with bitmaps.
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallA.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeA.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeABlue.bmp"));
 
         // Assign the ImageList objects to the ListView.
         listView2.LargeImageList = imageListLarge;
@@ -130,7 +130,7 @@ public partial class ListViewTest : Form
 
     private void AddCollapsibleGroupToListView()
     {
-        var lvgroup1 = new ListViewGroup
+        ListViewGroup lvgroup1 = new()
         {
             Header = "CollapsibleGroup1",
             CollapsedState = ListViewGroupCollapsedState.Expanded
@@ -143,7 +143,7 @@ public partial class ListViewTest : Form
             Group = lvgroup1
         });
 
-        var lvgroup2 = new ListViewGroup
+        ListViewGroup lvgroup2 = new()
         {
             Header = "CollapsibleGroup2",
             CollapsedState = ListViewGroupCollapsedState.Collapsed
@@ -170,7 +170,7 @@ public partial class ListViewTest : Form
         listView1.Groups[0].Subtitle = "Subtitle";
         listView1.GroupTaskLinkClick += listView1_GroupTaskLinkClick;
 
-        var lvgroup1 = new ListViewGroup
+        ListViewGroup lvgroup1 = new()
         {
             Header = "TaskGroup",
             TaskLink = "Task2"
@@ -199,13 +199,12 @@ public partial class ListViewTest : Form
     {
         // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
 
-        var listView2 = sender as ListView;
-        if (listView2 is null)
+        if (sender is not ListView listView2)
         {
             return;
         }
 
-        var random = new Random();
+        Random random = new();
         listView2.Columns[random.Next(0, listView2.Columns.Count)].ImageIndex = random.Next(0, 2);
     }
 
@@ -227,7 +226,7 @@ public partial class ListViewTest : Form
 
         foreach (string file in openFileDialog1.FileNames)
         {
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+            Bitmap bitmap = (Bitmap)Image.FromFile(file);
             LargeImageList.Images.Add(file, bitmap);
 
             ListViewItem item = new ListViewItem
@@ -258,7 +257,7 @@ public partial class ListViewTest : Form
         }
 
         string file = openFileDialog1.FileName;
-        Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+        Bitmap bitmap = (Bitmap)Image.FromFile(file);
         LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
 
         listView1.Refresh();

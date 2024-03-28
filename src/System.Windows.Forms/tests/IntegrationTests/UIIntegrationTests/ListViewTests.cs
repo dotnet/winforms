@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit.Abstractions;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.UITests;
 
@@ -44,13 +44,13 @@ public class ListViewTests : ControlTestBase
     {
         await RunTestAsync(async (form, listView) =>
         {
-            var group = new ListViewGroup($"Group 1", HorizontalAlignment.Left) { CollapsedState = ListViewGroupCollapsedState.Expanded };
-            var item1 = new ListViewItem("g1-1") { Group = group };
-            var item2 = new ListViewItem("g1-2") { Group = group };
-            var item3 = new ListViewItem("g1-3") { Group = group };
+            ListViewGroup group = new($"Group 1", HorizontalAlignment.Left) { CollapsedState = ListViewGroupCollapsedState.Expanded };
+            ListViewItem item1 = new("g1-1") { Group = group };
+            ListViewItem item2 = new("g1-2") { Group = group };
+            ListViewItem item3 = new("g1-3") { Group = group };
 
             listView.Groups.Add(group);
-            listView.Items.AddRange(new[] { item1, item2, item3 });
+            listView.Items.AddRange(item1, item2, item3);
             listView.Focus();
 
             bool collapsedStateChangedFired = false;
@@ -109,11 +109,11 @@ public class ListViewTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.FirstChild)]
-    [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.LastChild)]
-    [InlineData(4, 1, 150, 150, 0, 1, (int)NavigateDirection.LastChild)]
-    [InlineData(2, 5, 150, 150, 0, 1, (int)NavigateDirection.LastChild)]
-    [InlineData(10, 10, 100, 100, 0, 5, (int)NavigateDirection.LastChild)]
+    [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(4, 1, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(2, 5, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(10, 10, 100, 100, 0, 5, (int)NavigateDirection.NavigateDirection_LastChild)]
     public async Task ListView_Tile_FragmentNavigate_WorksExpectedAsync(int columnCount, int subItemsCount, int width, int height, int itemIndex, int subItemIndex, int direction)
     {
         await RunTestAsync((form, listView) =>
@@ -122,7 +122,7 @@ public class ListViewTests : ControlTestBase
 
             Application.DoEvents();
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            IRawElementProviderFragment? actualAccessibleObject = accessibleObject.FragmentNavigate((NavigateDirection)direction);
+            IRawElementProviderFragment.Interface? actualAccessibleObject = accessibleObject.FragmentNavigate((NavigateDirection)direction);
             AccessibleObject? expectedAccessibleObject = listView.Items[itemIndex].SubItems[subItemIndex].AccessibilityObject;
 
             Assert.Equal(expectedAccessibleObject, actualAccessibleObject);
@@ -132,12 +132,12 @@ public class ListViewTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(1, 0, 150, 150, (int)NavigateDirection.FirstChild)]
-    [InlineData(1, 2, 150, 150, (int)NavigateDirection.FirstChild)]
-    [InlineData(2, 1, 10, 10, (int)NavigateDirection.FirstChild)]
-    [InlineData(4, 0, 150, 150, (int)NavigateDirection.LastChild)]
-    [InlineData(1, 2, 150, 150, (int)NavigateDirection.LastChild)]
-    [InlineData(2, 1, 10, 10, (int)NavigateDirection.LastChild)]
+    [InlineData(1, 0, 150, 150, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(1, 2, 150, 150, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(2, 1, 10, 10, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(4, 0, 150, 150, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(1, 2, 150, 150, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(2, 1, 10, 10, (int)NavigateDirection.NavigateDirection_LastChild)]
     public async Task ListView_Tile_FragmentNavigate_ReturnsNullAsync(int columnCount, int subItemsCount, int width, int height, int direction)
     {
         await RunTestAsync((form, listView) =>
@@ -162,8 +162,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount, subItemsCount, tileSize: new Size(100, 100));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
+            IRawElementProviderFragment.Interface? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment.Interface? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);
@@ -262,9 +262,9 @@ public class ListViewTests : ControlTestBase
 
             Application.DoEvents();
             AccessibleObject? accessibleObject1 = listView.Items[0].SubItems[1].AccessibilityObject;
-            AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1?.FragmentNavigate(NavigateDirection.NextSibling);
-            AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2?.FragmentNavigate(NavigateDirection.NextSibling);
-            AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3?.FragmentNavigate(NavigateDirection.NextSibling);
+            AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
             Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject, accessibleObject2);
             Assert.Equal(listView.Items[0].SubItems[3].AccessibilityObject, accessibleObject3);
@@ -308,8 +308,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
+            IRawElementProviderFragment.Interface? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment.Interface? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);
@@ -326,10 +326,10 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
             Application.DoEvents();
-            AccessibleObject accessibleObject = (AccessibleObject)listView.Items[0].AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild)!;
+            AccessibleObject accessibleObject = (AccessibleObject)listView.Items[0].AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild)!;
 
-            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
             return Task.CompletedTask;
         });
@@ -511,13 +511,13 @@ public class ListViewTests : ControlTestBase
 
     private void InitializeItems(ListView listView, View view, bool virtualModeEnabled, bool checkBoxesEnabled)
     {
-        var columnHeader1 = new ColumnHeader { Text = "ColumnHeader1", Width = 140 };
-        var columnHeader2 = new ColumnHeader { Text = "ColumnHeader2", Width = 140 };
-        var columnHeader3 = new ColumnHeader { Text = "ColumnHeader3", Width = 140 };
-        listView.Columns.AddRange(new[] { columnHeader1, columnHeader2, columnHeader3 });
-        var listViewItem1 = new ListViewItem(new[] { "row1", "row1Col2", "row1Col3" }, -1) { StateImageIndex = 0 };
-        var listViewItem2 = new ListViewItem(new[] { "row2", "row2Col2", "row2Col3" }, -1) { StateImageIndex = 0 };
-        var listViewItem3 = new ListViewItem(new[] { "row3", "row3Col2", "row3Col3" }, -1) { StateImageIndex = 0 };
+        ColumnHeader columnHeader1 = new() { Text = "ColumnHeader1", Width = 140 };
+        ColumnHeader columnHeader2 = new() { Text = "ColumnHeader2", Width = 140 };
+        ColumnHeader columnHeader3 = new() { Text = "ColumnHeader3", Width = 140 };
+        listView.Columns.AddRange([columnHeader1, columnHeader2, columnHeader3]);
+        ListViewItem listViewItem1 = new(new[] { "row1", "row1Col2", "row1Col3" }, -1) { StateImageIndex = 0 };
+        ListViewItem listViewItem2 = new(new[] { "row2", "row2Col2", "row2Col3" }, -1) { StateImageIndex = 0 };
+        ListViewItem listViewItem3 = new(new[] { "row3", "row3Col2", "row3Col3" }, -1) { StateImageIndex = 0 };
         listView.RetrieveVirtualItem += (s, e) =>
         {
             e.Item = e.ItemIndex switch
@@ -536,7 +536,7 @@ public class ListViewTests : ControlTestBase
         listView.VirtualListSize = 3;
         if (!virtualModeEnabled)
         {
-            listView.Items.AddRange(new[] { listViewItem1, listViewItem2, listViewItem3 });
+            listView.Items.AddRange(listViewItem1, listViewItem2, listViewItem3);
         }
     }
 
@@ -550,7 +550,7 @@ public class ListViewTests : ControlTestBase
             listView.Columns.Add(new ColumnHeader() { Text = $"ColumnHeader{i}" });
         }
 
-        ListViewItem listViewItem = new ListViewItem("Test");
+        ListViewItem listViewItem = new("Test");
         for (int i = 0; i < subItemsCount; i++)
         {
             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"Test SubItem{i}" });

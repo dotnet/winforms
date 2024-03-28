@@ -653,122 +653,122 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnTransactionString">
         <source>Add Column</source>
-        <target state="new">Add Column</target>
+        <target state="translated">열 추가</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">열 추가(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
         <source>Bound Column &amp;Properties</source>
-        <target state="new">Bound Column &amp;Properties</target>
+        <target state="translated">바인딩된 열 속성(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSource">
         <source>Choose Data Source:</source>
-        <target state="new">Choose Data Source:</target>
+        <target state="translated">데이터 소스 선택:</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">{0} DataSource가 변경되었습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
         <source>The DataGridViewColumn type.</source>
-        <target state="new">The DataGridViewColumn type.</target>
+        <target state="translated">DataGridViewColumn 형식입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataSourceNoLongerValid">
         <source>Unable to create columns for the data source. The data source is no longer valid</source>
-        <target state="new">Unable to create columns for the data source. The data source is no longer valid</target>
+        <target state="translated">데이터 원본에 대한 열을 만들 수 없습니다. 데이터 원본이 더 이상 유효하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableAddingTransactionString">
         <source>Disable Adding</source>
-        <target state="new">Disable Adding</target>
+        <target state="translated">추가 사용 안 함</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableColumnReorderingTransactionString">
         <source>Disable Column Reordering</source>
-        <target state="new">Disable Column Reordering</target>
+        <target state="translated">열 다시 정렬 사용 안 함</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableDeletingTransactionString">
         <source>Disable Deleting</source>
-        <target state="new">Disable Deleting</target>
+        <target state="translated">삭제 사용 안 함</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableEditingTransactionString">
         <source>Disable Editing</source>
-        <target state="new">Disable Editing</target>
+        <target state="translated">편집 사용 안 함</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDuplicateColumnName">
         <source>The name {0} is already in use by another column.</source>
-        <target state="new">The name {0} is already in use by another column.</target>
+        <target state="translated">이름 {0}은(는) 다른 열에서 이미 사용 중입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsTransactionString">
         <source>Edit Columns</source>
-        <target state="new">Edit Columns</target>
+        <target state="translated">열 편집</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">열 편집(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">추가 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAddingTransactionString">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">추가 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReordering">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">열 다시 정렬 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReorderingTransactionString">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">열 다시 정렬 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeleting">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">삭제 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeletingTransactionString">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">삭제 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditing">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">편집 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditingTransactionString">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">편집 사용</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">속성(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewUnboundColumnProperties">
         <source>Unbound Column &amp;Properties</source>
-        <target state="new">Unbound Column &amp;Properties</target>
+        <target state="translated">바인딩되지 않은 열 속성(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
@@ -778,7 +778,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_Close">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">닫기</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
@@ -791,7 +791,7 @@
         <target state="translated">DataSource 속성이 설정된 경우에는 Items 컬렉션을 수정할 수 없습니다.</target>
         <note />
       </trans-unit>
-<trans-unit id="DesignBindingPickerAccessibleName">
+      <trans-unit id="DesignBindingPickerAccessibleName">
         <source>Data binding editor</source>
         <target state="translated">데이터 바인딩 편집기</target>
         <note />
@@ -863,12 +863,12 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeOther">
         <source>Other Data Sources</source>
-        <target state="translated">기타 데이터 원본</target>
+        <target state="translated">기타 데이터 소스</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeProject">
         <source>Project Data Sources</source>
-        <target state="translated">프로젝트 데이터 원본</target>
+        <target state="translated">프로젝트 데이터 소스</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerTreeViewAccessibleName">

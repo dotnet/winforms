@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -36,16 +34,16 @@ public class ByteViewer : TableLayoutPanel
     private const int DUMP_START_X = HEX_START_X + HEX_WIDTH + HEX_DUMP_GAP;
     private const int SCROLLBAR_START_X = DUMP_START_X + DUMP_WIDTH + HEX_DUMP_GAP;
 
-    private static readonly Font ADDRESS_FONT = new("Microsoft Sans Serif", 8.0f);
-    private static readonly Font HEXDUMP_FONT = new("Courier New", 8.0f);
+    private static readonly Font s_addressFont = new("Microsoft Sans Serif", 8.0f);
+    private static readonly Font s_hexDumpFont = new("Courier New", 8.0f);
 
-    private int SCROLLBAR_HEIGHT;
-    private int SCROLLBAR_WIDTH;
+    private int _scrollbarHeight;
+    private int _scrollbarWidth;
     private VScrollBar _scrollBar;
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
     private int _rowCount = DEFAULT_ROW_COUNT;
-    private byte[] _dataBuf;
+    private byte[] _dataBuf = [];
     private int _startLine;
     private int _displayLinesCount;
     private int _linesCount;
@@ -84,21 +82,21 @@ public class ByteViewer : TableLayoutPanel
         int c2 = buffer[index + 2] << 8 | buffer[index + 3];
         int c4, c5;
 
-        //Assign an index (label) value for first two bytes
+        // Assign an index (label) value for first two bytes
         c4 = GetEncodingIndex(c1);
-        //Assign an index (label) value for 3rd and 4th byte
+        // Assign an index (label) value for 3rd and 4th byte
         c5 = GetEncodingIndex(c2);
 
-        //Bellow table is to identify Encoding type based on
-        //first four bytes, those we have converted in index
-        //values for this look up table
-        //values on column are first two bytes and
-        //values on rows are 3rd and 4th byte
+        // Bellow table is to identify Encoding type based on
+        // first four bytes, those we have converted in index
+        // values for this look up table
+        // values on column are first two bytes and
+        // values on rows are 3rd and 4th byte
 
 #pragma warning disable SA1001 // Commas should be spaced correctly
         int[,] encodings =
         {
-               //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
+               // Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
        /*Unknown*/ { 1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
           /*0000*/ { 1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },
           /*feff*/ { 2   ,9   ,5   ,2    ,2   ,2   ,2   ,2   ,2    ,2    ,2    ,2    ,2   },
@@ -119,49 +117,18 @@ public class ByteViewer : TableLayoutPanel
     }
 
     /// <summary>
-    ///  Calculates an index for a cell in the HEX grid
-    /// </summary>
-    private int CellToIndex(int column, int row)
-    {
-        return row * _columnCount + column;
-    }
-
-    /// <summary>
-    ///  Copies the line from main data buffer to a line buffer
-    /// </summary>
-    private byte[] ComposeLineBuffer(int startLine, int line)
-    {
-        byte[] lineBuffer;
-
-        int offset = startLine * _columnCount;
-        if (offset + (line + 1) * _columnCount > _dataBuf.Length)
-        {
-            lineBuffer = new byte[_dataBuf.Length % _columnCount];
-        }
-        else
-        {
-            lineBuffer = new byte[_columnCount];
-        }
-
-        for (int i = 0; i < lineBuffer.Length; i++)
-        {
-            lineBuffer[i] = _dataBuf[offset + CellToIndex(i, line)];
-        }
-
-        return lineBuffer;
-    }
-
-    /// <summary>
     ///  Draws an address part in the HEXDUMP view
     /// </summary>
     private void DrawAddress(Graphics g, int startLine, int line)
     {
-        Font font = ADDRESS_FONT;
+        Font font = s_addressFont;
 
-        string hexString = ((startLine + line) * _columnCount).ToString("X8", CultureInfo.InvariantCulture);
+        Span<char> hexChars = stackalloc char[8];
+        bool success = ((startLine + line) * _columnCount).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
+        Debug.Assert(success && charCount == 8);
 
-        using var foreground = new SolidBrush(ForeColor);
-        g.DrawString(hexString, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        using SolidBrush foreground = new(ForeColor);
+        g.DrawString(hexChars, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
@@ -172,23 +139,30 @@ public class ByteViewer : TableLayoutPanel
     {
         using (Brush brush = new SolidBrush(SystemColors.ControlLightLight))
         {
-            g.FillRectangle(brush, new Rectangle(HEX_START_X,
-                                                 CLIENT_START_Y,
-                                                 HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP,
-                                                 _rowCount * CELL_HEIGHT));
+            g.FillRectangle(
+                brush,
+                new Rectangle(
+                    HEX_START_X,
+                    CLIENT_START_Y,
+                    HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP,
+                    _rowCount * CELL_HEIGHT));
         }
 
-        using (Pen pen = new Pen(SystemColors.ControlDark))
-        {
-            g.DrawRectangle(pen, new Rectangle(HEX_START_X,
-                                               CLIENT_START_Y,
-                                               HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP - 1,
-                                               _rowCount * CELL_HEIGHT - 1));
-            g.DrawLine(pen, DUMP_START_X - HEX_DUMP_GAP,
-                            CLIENT_START_Y,
-                            DUMP_START_X - HEX_DUMP_GAP,
-                            CLIENT_START_Y + _rowCount * CELL_HEIGHT - 1);
-        }
+        using Pen pen = new(SystemColors.ControlDark);
+        g.DrawRectangle(
+            pen,
+            new Rectangle(
+                HEX_START_X,
+                CLIENT_START_Y,
+                HEX_WIDTH + HEX_DUMP_GAP + DUMP_WIDTH + HEX_DUMP_GAP - 1,
+                _rowCount * CELL_HEIGHT - 1));
+
+        g.DrawLine(
+            pen,
+            DUMP_START_X - HEX_DUMP_GAP,
+            CLIENT_START_Y,
+            DUMP_START_X - HEX_DUMP_GAP,
+            CLIENT_START_Y + _rowCount * CELL_HEIGHT - 1);
     }
 
     // Char.IsPrintable is going away because it's a mostly meaningless concept.
@@ -196,51 +170,58 @@ public class ByteViewer : TableLayoutPanel
     private static bool CharIsPrintable(char c)
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);
-        return (!(uc == UnicodeCategory.Control) || (uc == UnicodeCategory.Format) ||
-                (uc == UnicodeCategory.LineSeparator) || (uc == UnicodeCategory.ParagraphSeparator) ||
-                (uc == UnicodeCategory.OtherNotAssigned));
+        return uc is not UnicodeCategory.Control
+            or UnicodeCategory.Format
+            or UnicodeCategory.LineSeparator
+            or UnicodeCategory.ParagraphSeparator
+            or UnicodeCategory.OtherNotAssigned;
     }
 
     /// <summary>
     ///  Draws the "DUMP" part in the HEXDUMP view
     /// </summary>
-    private void DrawDump(Graphics g, byte[] lineBuffer, int line)
+    private void DrawDump(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
-        string stringToDraw = string.Create(lineBuffer.Length, lineBuffer, static (span, lineBuffer) =>
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length);
+        Span<char> charsToDraw = charsBuffer[..lineBuffer.Length];
+        for (int i = 0; i < lineBuffer.Length; i++)
         {
-            for (int i = 0; i < lineBuffer.Length; i++)
-            {
-                char c = Convert.ToChar(lineBuffer[i]);
-                span[i] = CharIsPrintable(c) ? c : '.';
-            }
-        });
+            char c = Convert.ToChar(lineBuffer[i]);
+            charsToDraw[i] = CharIsPrintable(c) ? c : '.';
+        }
 
-        Font font = HEXDUMP_FONT;
+        Font font = s_hexDumpFont;
 
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(stringToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(charsToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
     ///  Draws the "HEX" part in the HEXDUMP view
     /// </summary>
     /// <internalonly/>
-    private void DrawHex(Graphics g, byte[] lineBuffer, int line)
+    private void DrawHex(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
-        Font font = HEXDUMP_FONT;
+        Font font = s_hexDumpFont;
 
-        StringBuilder result = new StringBuilder(lineBuffer.Length * 3 + 1);
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length * 3 + 1);
+        int charsWritten = 0;
         for (int i = 0; i < lineBuffer.Length; i++)
         {
-            result.Append($"{lineBuffer[i]:X2} ");
+            lineBuffer[i].TryFormat(charsBuffer.Slice(charsWritten, 2), out _, "X2");
+            charsWritten += 2;
+
             if (i == _columnCount / 2 - 1)
             {
-                result.Append(' ');  // Add one extra in the middle.
+                charsBuffer[charsWritten] = ' ';  // Add one extra in the middle.
+                charsWritten++;
             }
         }
 
+        ReadOnlySpan<char> result = charsBuffer[..charsWritten];
+
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(result.ToString(), font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(result, font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
 
         /* ISSUE a-gregka: If perf problem, could be done this way to eliminate drawing twice on repaint
            The current solution good enough for a dialog box
@@ -258,12 +239,27 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void DrawLines(Graphics g, int startLine, int linesCount)
     {
+        if (linesCount == 0)
+        {
+            return;
+        }
+
+        int maxLength = _columnCount * 3 + 1;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256], maxLength);
         for (int i = 0; i < linesCount; i++)
         {
-            byte[] lineBuffer = ComposeLineBuffer(startLine, i);
+            ReadOnlySpan<byte> lineBuffer = GetLineBytes(startLine + i);
             DrawAddress(g, startLine, i);
-            DrawHex(g, lineBuffer, i);
-            DrawDump(g, lineBuffer, i);
+            DrawHex(g, lineBuffer, i, charsBuffer);
+            DrawDump(g, lineBuffer, i, charsBuffer);
+        }
+
+        ReadOnlySpan<byte> GetLineBytes(int line)
+        {
+            int offset = line * _columnCount;
+            int length = offset + _columnCount > _dataBuf.Length ? _dataBuf.Length % _columnCount : _columnCount;
+
+            return _dataBuf.AsSpan(offset, length);
         }
     }
 
@@ -284,7 +280,7 @@ public class ByteViewer : TableLayoutPanel
         int unicodeCount = 0;
         int size;
 
-        if ((_dataBuf is null) || (_dataBuf.Length >= 0 && (_dataBuf.Length < 8)))
+        if (_dataBuf.Length is >= 0 and < 8)
         {
             return DisplayMode.Hexdump;
         }
@@ -292,37 +288,37 @@ public class ByteViewer : TableLayoutPanel
         switch (AnalyzeByteOrderMark(_dataBuf, 0))
         {
             case 2:
-                //_Encoding = Encoding.BigEndianUnicode;
+                // _Encoding = Encoding.BigEndianUnicode;
                 return DisplayMode.Hexdump;
             case 3:
-                //_Encoding = Encoding.Unicode;
+                // _Encoding = Encoding.Unicode;
                 return DisplayMode.Unicode;
             case 4:
             case 5:
-                //_Encoding = Ucs4Encoding.UCS4_Bigendian;
+                // _Encoding = Ucs4Encoding.UCS4_Bigendian;
                 return DisplayMode.Hexdump;
             case 6:
             case 7:
-                //_Encoding = Ucs4Encoding.UCS4_Littleendian;
+                // _Encoding = Ucs4Encoding.UCS4_Littleendian;
                 return DisplayMode.Hexdump;
             case 8:
             case 9:
-                //_Encoding = Ucs4Encoding.UCS4_3412;
+                // _Encoding = Ucs4Encoding.UCS4_3412;
                 return DisplayMode.Hexdump;
             case 10:
             case 11:
-                //_Encoding = Ucs4Encoding.UCS4_2143;
+                // _Encoding = Ucs4Encoding.UCS4_2143;
                 return DisplayMode.Hexdump;
             case 12:
-                //8 ebcdic
+                // 8 ebcdic
                 return DisplayMode.Hexdump;
-            case 13: //9
-                     //_Encoding = new UTF8Encoding(false);
+            case 13: // 9
+                     // _Encoding = new UTF8Encoding(false);
                 return DisplayMode.Ansi;
             case 14:
                 return DisplayMode.Ansi;
             default:
-                //If ByteOrderMark not detected try
+                // If ByteOrderMark not detected try
                 if (_dataBuf.Length > 1024)
                 {
                     size = 512;
@@ -334,7 +330,7 @@ public class ByteViewer : TableLayoutPanel
 
                 for (int i = 0; i < size; i++)
                 {
-                    char c = (char)_dataBuf[i]; //OK we do not care for Unicode now
+                    char c = (char)_dataBuf[i]; // OK we do not care for Unicode now
                     if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
                     {
                         printablesCount++;
@@ -343,9 +339,9 @@ public class ByteViewer : TableLayoutPanel
 
                 for (int i = 0; i < size; i += 2)
                 {
-                    char[] unicodeChars = new char[1];
-                    Encoding.Unicode.GetChars(_dataBuf, i, 2, unicodeChars, 0);
-                    if (CharIsPrintable(unicodeChars[0]))
+                    char unicodeChar = default;
+                    Encoding.Unicode.GetChars(_dataBuf.AsSpan(i, 2), new Span<char>(ref unicodeChar));
+                    if (CharIsPrintable(unicodeChar))
                     {
                         unicodeCount++;
                     }
@@ -368,79 +364,53 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Gets the bytes in the buffer.
     /// </summary>
-    public virtual byte[] GetBytes()
-    {
-        return _dataBuf;
-    }
+    public virtual byte[] GetBytes() => _dataBuf;
 
     /// <summary>
     ///  Gets the display mode for the control.
     /// </summary>
-    public virtual DisplayMode GetDisplayMode()
-    {
-        return _displayMode;
-    }
+    public virtual DisplayMode GetDisplayMode() => _displayMode;
 
     // Stole this code from  XmlScanner
-    private static int GetEncodingIndex(int c1)
+    private static int GetEncodingIndex(int c1) => c1 switch
     {
-        switch (c1)
-        {
-            case 0x0000:
-                return 1;
-            case 0xfeff:
-                return 2;
-            case 0xfffe:
-                return 3;
-            case 0xefbb:
-                return 4;
-            case 0x3c00:
-                return 5;
-            case 0x003c:
-                return 6;
-            case 0x3f00:
-                return 7;
-            case 0x003f:
-                return 8;
-            case 0x3c3f:
-                return 9;
-            case 0x786d:
-                return 10;
-            case 0x4c6f:
-                return 11;
-            case 0xa794:
-                return 12;
-            default:
-                return 0; //unknown
-        }
-    }
+        0x0000 => 1,
+        0xfeff => 2,
+        0xfffe => 3,
+        0xefbb => 4,
+        0x3c00 => 5,
+        0x003c => 6,
+        0x3f00 => 7,
+        0x003f => 8,
+        0x3c3f => 9,
+        0x786d => 10,
+        0x4c6f => 11,
+        0xa794 => 12,
+        _ => 0, // unknown
+    };
 
     /// <summary>
     ///  Initializes the ansi string variable that will be assigned to the edit box.
     /// </summary>
     private unsafe void InitAnsi()
     {
-        char[] text;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256]);
         int size;
+        int bufferSize;
         fixed (byte* pDataBuff = _dataBuf)
         {
-            size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
-            text = new char[size + 1];
-            fixed (char* pText = text)
+            bufferSize = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
+            charsBuffer.EnsureCapacity(bufferSize + 1);
+            fixed (char* pText = charsBuffer)
             {
-                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, size, pText, size);
+                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, bufferSize, pText, bufferSize);
             }
         }
+
+        Span<char> text = charsBuffer.Slice(0, bufferSize + 1);
 
         text[size] = '\0';
-
-        for (int i = 0; i < size; i++)
-        {
-            if (text[i] == '\0')
-            {
-                text[i] = (char)0x0B;
-            }
-        }
+        text[..size].Replace('\0', '\v');
 
         _edit.Text = new string(text);
     }
@@ -450,25 +420,25 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        char[] text = new char[_dataBuf.Length / 2 + 1];
-        Encoding.Unicode.GetChars(_dataBuf, 0, _dataBuf.Length, text, 0);
-        for (int i = 0; i < text.Length; i++)
-            if (text[i] == '\0')
-                text[i] = (char)0x0B;
-
-        text[text.Length - 1] = '\0';
-        _edit.Text = new string(text);
+        _edit.Text = string.Create(_dataBuf.Length / sizeof(char) + 1, _dataBuf, static (text, dataBuf) =>
+        {
+            Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
+            text.Replace('\0', '\v');
+            text[^1] = '\0';
+        });
     }
 
     /// <summary>
     ///  Initializes the UI components of a control
     /// </summary>
+    [MemberNotNull(nameof(_edit))]
+    [MemberNotNull(nameof(_scrollBar))]
     private void InitUI()
     {
-        SCROLLBAR_HEIGHT = SystemInformation.HorizontalScrollBarHeight;
-        SCROLLBAR_WIDTH = SystemInformation.VerticalScrollBarWidth;
+        _scrollbarHeight = SystemInformation.HorizontalScrollBarHeight;
+        _scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
         // For backwards compat
-        Size = new Size(SCROLLBAR_START_X + SCROLLBAR_WIDTH + BORDER_GAP + INSET_GAP,
+        Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
                              2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
 
         _scrollBar = new VScrollBar();
@@ -478,18 +448,20 @@ public class ByteViewer : TableLayoutPanel
         _scrollBar.Dock = DockStyle.Right;
         _scrollBar.Visible = false;
 
-        _edit = new TextBox();
-        _edit.AutoSize = false;
-        _edit.BorderStyle = BorderStyle.None;
-        _edit.Multiline = true;
-        _edit.ReadOnly = true;
-        _edit.ScrollBars = ScrollBars.Both;
-        _edit.AcceptsTab = true;
-        _edit.AcceptsReturn = true;
-        _edit.Dock = DockStyle.Fill;
-        _edit.Margin = Padding.Empty;
-        _edit.WordWrap = false;
-        _edit.Visible = false;
+        _edit = new TextBox
+        {
+            AutoSize = false,
+            BorderStyle = BorderStyle.None,
+            Multiline = true,
+            ReadOnly = true,
+            ScrollBars = ScrollBars.Both,
+            AcceptsTab = true,
+            AcceptsReturn = true,
+            Dock = DockStyle.Fill,
+            Margin = Padding.Empty,
+            WordWrap = false,
+            Visible = false
+        };
 
         Controls.Add(_scrollBar, 0, 0);
         Controls.Add(_edit, 0, 0);
@@ -585,7 +557,7 @@ public class ByteViewer : TableLayoutPanel
         if (Dock == DockStyle.None)
         {
             // For backwards compatibility
-            Size = new Size(SCROLLBAR_START_X + SCROLLBAR_WIDTH + BORDER_GAP + INSET_GAP,
+            Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
                             2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
         }
 
@@ -614,28 +586,14 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SaveToFile(string path)
     {
-        if (_dataBuf is null)
-        {
-            return;
-        }
-
-        FileStream currentFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        try
-        {
-            currentFile.Write(_dataBuf, 0, _dataBuf.Length);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        using FileStream currentFile = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        currentFile.Write(_dataBuf.AsSpan());
     }
 
     /// <summary>
     ///  Scroll event handler.
     /// </summary>
-    protected virtual void ScrollChanged(object source, EventArgs e)
+    protected virtual void ScrollChanged(object? source, EventArgs e)
     {
         _startLine = _scrollBar.Value;
 
@@ -648,11 +606,6 @@ public class ByteViewer : TableLayoutPanel
     public virtual void SetBytes(byte[] bytes)
     {
         ArgumentNullException.ThrowIfNull(bytes);
-
-        if (_dataBuf is not null)
-        {
-            _dataBuf = null;
-        }
 
         _dataBuf = bytes;
         InitState();
@@ -692,19 +645,12 @@ public class ByteViewer : TableLayoutPanel
             case DisplayMode.Hexdump:
                 SuspendLayout();
                 _edit.Hide();
-                if (_linesCount > _rowCount)
+                if (_linesCount > _rowCount && !_scrollBar.Visible)
                 {
-                    if (!_scrollBar.Visible)
-                    {
-                        _scrollBar.Show();
-                        ResumeLayout();
-                        _scrollBar.Invalidate();
-                        _scrollBar.Select();
-                    }
-                    else
-                    {
-                        ResumeLayout();
-                    }
+                    _scrollBar.Show();
+                    ResumeLayout();
+                    _scrollBar.Invalidate();
+                    _scrollBar.Select();
                 }
                 else
                 {
@@ -720,20 +666,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetFile(string path)
     {
-        FileStream currentFile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-        try
-        {
-            int length = (int)currentFile.Length;
-            byte[] buf = new byte[length + 1];
-            currentFile.Read(buf, 0, length);
-            SetBytes(buf);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        SetBytes(File.ReadAllBytes(path));
     }
 
     /// <summary>

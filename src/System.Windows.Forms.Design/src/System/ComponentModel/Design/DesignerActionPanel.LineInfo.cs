@@ -5,18 +5,17 @@ namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel
 {
-    private class LineInfo
+    private abstract class LineInfo
     {
-        public Line Line;
-        public DesignerActionItem Item;
-        public DesignerActionList List;
+        public abstract DesignerActionItem? Item { get; }
 
-        public LineInfo(DesignerActionList list, DesignerActionItem item, Line line)
-        {
-            Debug.Assert(line is not null);
-            Line = line;
-            Item = item;
-            List = list;
-        }
+        public abstract Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel);
+        public abstract Type LineType { get; }
+    }
+
+    private abstract class StandardLineInfo(DesignerActionList list) : LineInfo
+    {
+        public abstract override DesignerActionItem Item { get; }
+        public DesignerActionList List { get; } = list;
     }
 }

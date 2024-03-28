@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design.Behavior;
 [DebuggerDisplay("{GetType().Name, nq}:: Behavior={Behavior.GetType().Name, nq}, {_hitTestCursor}")]
 public class ControlBodyGlyph : ComponentGlyph
 {
-    private Rectangle _bounds;                  //bounds of the related control
-    private readonly Cursor? _hitTestCursor;    //cursor used to hit test
+    private Rectangle _bounds;                  // bounds of the related control
+    private readonly Cursor? _hitTestCursor;    // cursor used to hit test
     private readonly IComponent? _component;
 
     /// <summary>
@@ -48,7 +48,8 @@ public class ControlBodyGlyph : ComponentGlyph
     /// </summary>
     public override Cursor? GetHitTest(Point p)
     {
-        bool isVisible = (_component is Control control) ? control.Visible : true; /*non-controls are always visible here*/
+        // non-controls are always visible here
+        bool isVisible = _component is not Control control || control.Visible;
 
         if (isVisible && _bounds.Contains(p))
         {

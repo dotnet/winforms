@@ -20,7 +20,7 @@ internal class TreeViewActionList : DesignerActionList
 
     public void InvokeNodesDialog()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Nodes");
+        EditorServiceContext.EditValue(_designer, Component!, "Nodes");
     }
 
     public ImageList? ImageList
@@ -37,9 +37,11 @@ internal class TreeViewActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
-        items.Add(new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.InvokeNodesDialogDisplayName, SR.PropertiesCategoryName, SR.InvokeNodesDialogDescription, true));
-        items.Add(new DesignerActionPropertyItem("ImageList", SR.ImageListDisplayName, SR.PropertiesCategoryName, SR.ImageListDescription));
+        DesignerActionItemCollection items =
+        [
+            new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.InvokeNodesDialogDisplayName, SR.PropertiesCategoryName, SR.InvokeNodesDialogDescription, true),
+            new DesignerActionPropertyItem("ImageList", SR.ImageListDisplayName, SR.PropertiesCategoryName, SR.ImageListDescription),
+        ];
         return items;
     }
 }

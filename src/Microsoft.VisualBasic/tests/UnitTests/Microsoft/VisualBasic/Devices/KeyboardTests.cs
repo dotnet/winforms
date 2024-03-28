@@ -8,7 +8,7 @@ public class KeyboardTests
     [Fact]
     public void Properties()
     {
-        var keyboard = new Keyboard();
+        Keyboard keyboard = new();
         _ = keyboard.ShiftKeyDown;
         _ = keyboard.AltKeyDown;
         _ = keyboard.CtrlKeyDown;

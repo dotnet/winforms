@@ -9,14 +9,14 @@ namespace System.Windows.Forms.Tests;
 [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
 public class AxHostConnectionPointCookieTests
 {
-    private static readonly Guid CLSID_WebBrowser = new("8856f961-340a-11d0-a96b-00c04fd705a2");
+    private static Guid CLSID_WebBrowser { get; } = new("8856f961-340a-11d0-a96b-00c04fd705a2");
 
     [WinFormsFact]
     public void ConnectionPointCookie_Ctor_Object_Object_Type()
     {
         Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
         object source = Activator.CreateInstance(type);
-        var sink = new CustomPropertyNotifySink();
+        CustomPropertyNotifySink sink = new();
         Type eventType = typeof(IPropertyNotifySink.Interface);
 
         // Just verify that creation succeeded.
@@ -27,7 +27,7 @@ public class AxHostConnectionPointCookieTests
     public static IEnumerable<object[]> Ctor_InvalidSource_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -61,7 +61,7 @@ public class AxHostConnectionPointCookieTests
     public static IEnumerable<object[]> Ctor_InvalidSink_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -79,7 +79,7 @@ public class AxHostConnectionPointCookieTests
     {
         Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
         object source = Activator.CreateInstance(type);
-        var sink = new CustomPropertyNotifySink();
+        CustomPropertyNotifySink sink = new();
         Type eventType = typeof(IPropertyNotifySink.Interface);
         var cookie = new AxHost.ConnectionPointCookie(source, sink, eventType);
         cookie.Disconnect();

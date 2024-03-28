@@ -8,7 +8,7 @@ public class BindingManagerDataErrorEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Exception_TestData()
     {
-        yield return new object[] { new Exception() };
+        yield return new object[] { new InvalidOperationException() };
         yield return new object[] { null };
     }
 
@@ -16,7 +16,7 @@ public class BindingManagerDataErrorEventArgsTests
     [MemberData(nameof(Ctor_Exception_TestData))]
     public void Ctor_Exception(Exception exception)
     {
-        var e = new BindingManagerDataErrorEventArgs(exception);
+        BindingManagerDataErrorEventArgs e = new(exception);
         Assert.Equal(exception, e.Exception);
     }
 }

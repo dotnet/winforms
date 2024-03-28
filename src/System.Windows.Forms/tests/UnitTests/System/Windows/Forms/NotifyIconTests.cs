@@ -12,7 +12,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Ctor_Default()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         Assert.Equal(ToolTipIcon.None, notifyIcon.BalloonTipIcon);
         Assert.Empty(notifyIcon.BalloonTipText);
         Assert.Empty(notifyIcon.BalloonTipTitle);
@@ -28,8 +28,8 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Ctor_IContainer()
     {
-        var container = new Container();
-        using var notifyIcon = new NotifyIcon(container);
+        Container container = new();
+        using NotifyIcon notifyIcon = new(container);
         Assert.Equal(ToolTipIcon.None, notifyIcon.BalloonTipIcon);
         Assert.Empty(notifyIcon.BalloonTipText);
         Assert.Empty(notifyIcon.BalloonTipTitle);
@@ -52,7 +52,7 @@ public class NotifyIconTests
     [EnumData<ToolTipIcon>]
     public void NotifyIcon_BalloonTipIcon_Set_GetReturnsExpected(ToolTipIcon value)
     {
-        var notifyIcon = new NotifyIcon
+        NotifyIcon notifyIcon = new()
         {
             BalloonTipIcon = value
         };
@@ -67,7 +67,7 @@ public class NotifyIconTests
     [InvalidEnumData<ToolTipIcon>]
     public void NotifyIcon_BalloonTipIcon_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolTipIcon value)
     {
-        var notifyIcon = new NotifyIcon();
+        NotifyIcon notifyIcon = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => notifyIcon.BalloonTipIcon = value);
     }
 
@@ -75,7 +75,7 @@ public class NotifyIconTests
     [StringWithNullData]
     public void CollectionForm_BalloonTipText_Set_GetReturnsExpected(string value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipText = value
         };
@@ -90,7 +90,7 @@ public class NotifyIconTests
     [StringWithNullData]
     public void CollectionForm_BalloonTipText_SetWithCustomOldValue_GetReturnsExpected(string value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipText = "OldValue"
         };
@@ -107,7 +107,7 @@ public class NotifyIconTests
     [StringWithNullData]
     public void CollectionForm_BalloonTipTitle_Set_GetReturnsExpected(string value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = value
         };
@@ -122,7 +122,7 @@ public class NotifyIconTests
     [StringWithNullData]
     public void CollectionForm_BalloonTipTitle_SetWithCustomOldValue_GetReturnsExpected(string value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = "OldValue"
         };
@@ -145,7 +145,7 @@ public class NotifyIconTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void CollectionForm_ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             ContextMenuStrip = value
         };
@@ -160,8 +160,8 @@ public class NotifyIconTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void CollectionForm_ContextMenuStrip_SetWithCustomOldValue_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var menu = new ContextMenuStrip();
-        using var notifyIcon = new NotifyIcon
+        using ContextMenuStrip menu = new();
+        using NotifyIcon notifyIcon = new()
         {
             ContextMenuStrip = menu
         };
@@ -178,7 +178,7 @@ public class NotifyIconTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void CollectionForm_ContextMenuStrip_SetDisposed_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         notifyIcon.Dispose();
 
         notifyIcon.ContextMenuStrip = value;
@@ -199,7 +199,7 @@ public class NotifyIconTests
     [MemberData(nameof(Icon_Set_TestData))]
     public void NotifyIcon_Icon_Set_GetReturnsExpected(Icon value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Icon = value
         };
@@ -214,8 +214,8 @@ public class NotifyIconTests
     [MemberData(nameof(Icon_Set_TestData))]
     public void NotifyIcon_Icon_SetWithCustomOldValue_GetReturnsExpected(Icon value)
     {
-        using var oldValue = new Icon(new Icon("bitmaps/10x16_one_entry_32bit.ico"), 10, 10);
-        using var notifyIcon = new NotifyIcon
+        using Icon oldValue = new(new Icon("bitmaps/10x16_one_entry_32bit.ico"), 10, 10);
+        using NotifyIcon notifyIcon = new()
         {
             Icon = oldValue
         };
@@ -232,7 +232,7 @@ public class NotifyIconTests
     [MemberData(nameof(Icon_Set_TestData))]
     public void NotifyIcon_Icon_SetWithVisible_GetReturnsExpected(Icon value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = true,
             Icon = value
@@ -254,14 +254,14 @@ public class NotifyIconTests
     [MemberData(nameof(Icon_SetDesignMode_TestData))]
     public void NotifyIcon_Icon_SetDesignMode_GetReturnsExpected(Icon value, int expectedDesignModeCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Site = mockSite.Object,
             Icon = value
@@ -279,14 +279,14 @@ public class NotifyIconTests
     [MemberData(nameof(Icon_SetDesignMode_TestData))]
     public void NotifyIcon_Icon_SetDesignModeWithVisible_GetReturnsExpected(Icon value, int expectedDesignModeCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = true,
             Site = mockSite.Object,
@@ -304,9 +304,9 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Icon_SetDisposed_ThrowsNullReferenceException()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         notifyIcon.Dispose();
-        using var value = new Icon("bitmaps/10x16_one_entry_32bit.ico");
+        using Icon value = new("bitmaps/10x16_one_entry_32bit.ico");
         Assert.Throws<NullReferenceException>(() => notifyIcon.Icon = value);
         Assert.Same(value, notifyIcon.Icon);
     }
@@ -315,7 +315,7 @@ public class NotifyIconTests
     [StringData]
     public void CollectionForm_Tag_Set_GetReturnsExpected(object value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Tag = value
         };
@@ -330,7 +330,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon, null, string.Empty };
                 yield return new object[] { visible, icon, string.Empty, string.Empty };
@@ -344,7 +344,7 @@ public class NotifyIconTests
     [MemberData(nameof(Text_Set_TestData))]
     public void CollectionForm_Text_Set_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = visible,
             Icon = icon,
@@ -361,7 +361,7 @@ public class NotifyIconTests
     [MemberData(nameof(Text_Set_TestData))]
     public void CollectionForm_Text_SetWithCustomOldValue_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = visible,
             Icon = icon,
@@ -380,7 +380,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon, null, string.Empty, 0 };
                 yield return new object[] { visible, icon, string.Empty, string.Empty, 0 };
@@ -400,14 +400,14 @@ public class NotifyIconTests
     [MemberData(nameof(Text_SetDesignMode_TestData))]
     public void CollectionForm_Text_SetDesignMode_GetReturnsExpected(bool visible, Icon icon, string value, string expected, int expectedDesignModeCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = visible,
             Icon = icon,
@@ -426,7 +426,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Text_SetLongValue_ThrowsArgumentOutOfRangeException()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', NotifyIcon.MaxTextSize + 1));
     }
 
@@ -434,7 +434,7 @@ public class NotifyIconTests
     [MemberData(nameof(Text_Set_TestData))]
     public void CollectionForm_Text_SetDisposed_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = visible,
             Icon = icon
@@ -453,7 +453,7 @@ public class NotifyIconTests
     [BoolData]
     public void NotifyIcon_Visible_Set_GetReturnsExpected(bool value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = value
         };
@@ -472,8 +472,8 @@ public class NotifyIconTests
     [BoolData]
     public void NotifyIcon_Visible_SetWithIcon_GetReturnsExpected(bool value)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             Icon = icon,
             Visible = value
@@ -494,14 +494,14 @@ public class NotifyIconTests
     [InlineData(false, 0)]
     public void NotifyIcon_Visible_SetDesignMode_GetReturnsExpected(bool value, int expectedDesignModeCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Site = mockSite.Object,
             Visible = value
@@ -525,15 +525,15 @@ public class NotifyIconTests
     [InlineData(false, 0)]
     public void NotifyIcon_Visible_SetDesignModeWithIcon_GetReturnsExpected(bool value, int expectedDesignModeCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             Icon = icon,
             Site = mockSite.Object,
@@ -557,7 +557,7 @@ public class NotifyIconTests
     [BoolData]
     public void NotifyIcon_Visible_SetDisposed_ThrowsNullReferenceException(bool value)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Visible = value
         };
@@ -569,7 +569,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_BalloonTipClicked_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -584,7 +584,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_BalloonTipClosed_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -599,7 +599,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_BalloonTipShown_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -614,7 +614,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Click_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -629,7 +629,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_DoubleClick_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -644,7 +644,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_MouseClick_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -659,7 +659,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_MouseDoubleClick_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -674,7 +674,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_MouseDown_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -689,7 +689,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_MouseMove_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -704,7 +704,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_MouseUp_AddRemoveEvent_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -719,7 +719,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_Dispose_Invoke_Success()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         int callCount = 0;
         notifyIcon.Disposed += (sender, e) => callCount++;
 
@@ -756,7 +756,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon };
             }
@@ -767,8 +767,8 @@ public class NotifyIconTests
     [MemberData(nameof(Dispose_WithProperties_TestData))]
     public void NotifyIcon_Dispose_InvokePropertiesSet_Success(bool visible, Icon icon)
     {
-        using var contextMenuStrip = new ContextMenuStrip();
-        using var notifyIcon = new NotifyIcon
+        using ContextMenuStrip contextMenuStrip = new();
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipIcon = ToolTipIcon.Error,
             BalloonTipText = "BalloonTipText",
@@ -821,7 +821,7 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeInt_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = "BalloonTipTitle",
             BalloonTipText = "BalloonTipText",
@@ -834,8 +834,8 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntAdded_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = "BalloonTipTitle",
             BalloonTipText = "BalloonTipText",
@@ -850,15 +850,15 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntAddedDesignMode_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = "BalloonTipTitle",
             BalloonTipText = "BalloonTipText",
@@ -875,8 +875,8 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntDisposed_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipTitle = "BalloonTipTitle",
             BalloonTipText = "BalloonTipText",
@@ -893,7 +893,7 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntStringStringToolTipIcon_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         notifyIcon.ShowBalloonTip(timeout, "tipTitle", "tipText", tipIcon);
     }
 
@@ -901,8 +901,8 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntStringStringToolTipIconAdded_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             Icon = icon,
             Visible = true
@@ -914,8 +914,8 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntStringStringToolTipIconDisposed_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var notifyIcon = new NotifyIcon
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using NotifyIcon notifyIcon = new()
         {
             Icon = icon,
             Visible = true
@@ -928,15 +928,15 @@ public class NotifyIconTests
     [MemberData(nameof(ShowBalloonTip_TestData))]
     public void NotifyIcon_ShowBalloonTip_InvokeIntStringStringToolTipIconAddedDesignMode_Success(int timeout, ToolTipIcon tipIcon)
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             Icon = icon,
             Visible = true,
@@ -949,7 +949,7 @@ public class NotifyIconTests
     [WinFormsFact]
     public void NotifyIcon_ShowBalloonTip_InvokeNegativeTimeout_ThrowsArgumentOutOfRangeException()
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         Assert.Throws<ArgumentOutOfRangeException>("timeout", () => notifyIcon.ShowBalloonTip(-1));
         Assert.Throws<ArgumentOutOfRangeException>("timeout", () => notifyIcon.ShowBalloonTip(-1, "Title", "Text", ToolTipIcon.Error));
     }
@@ -958,7 +958,7 @@ public class NotifyIconTests
     [NullAndEmptyStringData]
     public void NotifyIcon_ShowBalloonTip_InvokeInvalidText_ThrowsArgumentException(string tipText)
     {
-        using var notifyIcon = new NotifyIcon
+        using NotifyIcon notifyIcon = new()
         {
             BalloonTipText = tipText
         };
@@ -970,7 +970,7 @@ public class NotifyIconTests
     [InvalidEnumData<ToolTipIcon>]
     public void NotifyIcon_ShowBalloonTip_InvokeInvalidTipIcon_ThrowsInvalidEnumArgumentException(ToolTipIcon tipIcon)
     {
-        using var notifyIcon = new NotifyIcon();
+        using NotifyIcon notifyIcon = new();
         Assert.Throws<InvalidEnumArgumentException>("tipIcon", () => notifyIcon.ShowBalloonTip(0, "Title", "Text", tipIcon));
     }
 }

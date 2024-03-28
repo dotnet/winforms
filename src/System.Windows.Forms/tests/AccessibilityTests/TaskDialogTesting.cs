@@ -9,7 +9,7 @@ public partial class TaskDialogTesting
 {
     internal void ShowEventsDemoTaskDialog()
     {
-        var page1 = new TaskDialogPage()
+        TaskDialogPage page1 = new()
         {
             Caption = nameof(TaskDialogTesting),
             Heading = "Event Demo",
@@ -29,9 +29,9 @@ public partial class TaskDialogTesting
 
         var buttonOK = TaskDialogButton.OK;
         var buttonHelp = TaskDialogButton.Help;
-        var buttonCancelClose = new TaskDialogCommandLinkButton("C&ancel Close", allowCloseDialog: false);
-        var buttonShowInnerDialog = new TaskDialogCommandLinkButton("&Show (modeless) Inner Dialog", "(and don't cancel the Close)");
-        var buttonNavigate = new TaskDialogCommandLinkButton("&Navigate", allowCloseDialog: false);
+        TaskDialogCommandLinkButton buttonCancelClose = new("C&ancel Close", allowCloseDialog: false);
+        TaskDialogCommandLinkButton buttonShowInnerDialog = new("&Show (modeless) Inner Dialog", "(and don't cancel the Close)");
+        TaskDialogCommandLinkButton buttonNavigate = new("&Navigate", allowCloseDialog: false);
 
         page1.Buttons.Add(buttonOK);
         page1.Buttons.Add(buttonHelp);
@@ -62,7 +62,7 @@ public partial class TaskDialogTesting
             Console.WriteLine($"Button '{s}' Click");
 
             // Navigate to a new page.
-            var page2 = new TaskDialogPage()
+            TaskDialogPage page2 = new()
             {
                 Heading = "AfterNavigation.",
                 Buttons =
@@ -89,4 +89,3 @@ public partial class TaskDialogTesting
         Console.WriteLine($"---> Dialog Result: {dialogResult}");
     }
 }
-

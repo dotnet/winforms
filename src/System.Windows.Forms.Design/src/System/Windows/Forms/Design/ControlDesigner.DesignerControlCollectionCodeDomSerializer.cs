@@ -14,19 +14,19 @@ public partial class ControlDesigner
     // that aren't sited in the host's container.
     internal class DesignerControlCollectionCodeDomSerializer : CollectionCodeDomSerializer
     {
-        protected override object SerializeCollection(
+        protected override object? SerializeCollection(
             IDesignerSerializationManager manager,
-            CodeExpression targetExpression,
+            CodeExpression? targetExpression,
             Type targetType,
             ICollection originalCollection,
             ICollection valuesToSerialize)
         {
-            ArrayList subset = new ArrayList();
+            List<IComponent> subset = [];
             if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
             {
                 foreach (object val in valuesToSerialize)
                 {
-                    if (val is IComponent comp && comp.Site is not null && !(comp.Site is INestedSite))
+                    if (val is IComponent { Site: not null and not INestedSite } comp)
                     {
                         subset.Add(comp);
                     }

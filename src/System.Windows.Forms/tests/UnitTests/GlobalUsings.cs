@@ -3,6 +3,7 @@
 
 global using System.Diagnostics;
 global using System.Windows.Forms;
+global using System.Private.Windows.Core;
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
@@ -12,3 +13,4 @@ global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;
 global using Windows.Win32.UI.WindowsAndMessaging;
 global using Xunit;
+global using FluentAssertions;

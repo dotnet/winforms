@@ -19,7 +19,7 @@ public class ImageConverterTest
         _image = Image.FromFile(Path.Combine("bitmaps", "TestImage.bmp"));
         _imageStr = _image.ToString();
 
-        using (MemoryStream destStream = new MemoryStream())
+        using (MemoryStream destStream = new())
         {
             _image.Save(destStream, _image.RawFormat);
             _imageBytes = destStream.ToArray();
@@ -35,30 +35,24 @@ public class ImageConverterTest
     [InlineData("pngwithheight_icon.ico")]
     public void ImageConverterFromIconTest(string name)
     {
-        using (var icon = new Icon(Helpers.GetTestBitmapPath(name)))
-        {
-            Bitmap IconBitmap = (Bitmap)_imgConv.ConvertFrom(icon);
-            Assert.NotNull(IconBitmap);
-            Assert.Equal(32, IconBitmap.Width);
-            Assert.Equal(32, IconBitmap.Height);
-            Assert.Equal(new Size(32, 32), IconBitmap.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath(name));
+        Bitmap IconBitmap = (Bitmap)_imgConv.ConvertFrom(icon);
+        Assert.NotNull(IconBitmap);
+        Assert.Equal(32, IconBitmap.Width);
+        Assert.Equal(32, IconBitmap.Height);
+        Assert.Equal(new Size(32, 32), IconBitmap.Size);
     }
 
     [Fact]
     public void ImageWithOleHeader()
     {
         string path = Path.Combine("bitmaps", "TestImageWithOleHeader.bmp");
-        using (FileStream fileStream = File.Open(path, FileMode.Open))
-        {
-            using (var ms = new MemoryStream())
-            {
-                fileStream.CopyTo(ms);
-                var converter = new ImageConverter();
-                object image = converter.ConvertFrom(ms.ToArray());
-                Assert.NotNull(image);
-            }
-        }
+        using FileStream fileStream = File.Open(path, FileMode.Open);
+        using MemoryStream ms = new();
+        fileStream.CopyTo(ms);
+        ImageConverter converter = new();
+        object image = converter.ConvertFrom(ms.ToArray());
+        Assert.NotNull(image);
     }
 
     [Fact]
@@ -191,8 +185,8 @@ public class ImageConverterTest
     [Fact]
     public void ConvertTo_FromBitmapToByteArray()
     {
-        Bitmap value = new Bitmap(64, 64);
-        ImageConverter converter = new ImageConverter();
+        Bitmap value = new(64, 64);
+        ImageConverter converter = new();
         byte[] converted = (byte[])converter.ConvertTo(value, typeof(byte[]));
         Assert.NotNull(converted);
     }
@@ -243,7 +237,6 @@ public class ImageConverterTest
         Assert.Equal(browsablePropertiesCount, propsColl.Count);
         propsColl = _imgConv.GetProperties(_image);
         Assert.Equal(browsablePropertiesCount, propsColl.Count);
-
 
         // Returns all properties of Image class.
         propsColl = TypeDescriptor.GetProperties(typeof(Image));

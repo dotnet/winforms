@@ -16,7 +16,7 @@ public class BindingCompleteEventArgsTests
     [MemberData(nameof(Ctor_Binding_BindingCompleteState_BindingCompleteContext_TestData))]
     public void Ctor_Binding_BindingCompleteState_BindingCompleteContext(Binding binding, BindingCompleteState state, BindingCompleteContext context)
     {
-        var e = new BindingCompleteEventArgs(binding, state, context);
+        BindingCompleteEventArgs e = new(binding, state, context);
         Assert.Equal(binding, e.Binding);
         Assert.Equal(state, e.BindingCompleteState);
         Assert.Equal(context, e.BindingCompleteContext);
@@ -35,7 +35,7 @@ public class BindingCompleteEventArgsTests
     [MemberData(nameof(Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_TestData))]
     public void Ctor_Binding_BindingCompleteState_BindingCompleteContext_String(Binding binding, BindingCompleteState state, BindingCompleteContext context, string errorText)
     {
-        var e = new BindingCompleteEventArgs(binding, state, context, errorText);
+        BindingCompleteEventArgs e = new(binding, state, context, errorText);
         Assert.Equal(binding, e.Binding);
         Assert.Equal(state, e.BindingCompleteState);
         Assert.Equal(context, e.BindingCompleteContext);
@@ -46,7 +46,7 @@ public class BindingCompleteEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_TestData()
     {
-        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new Exception() };
+        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new InvalidOperationException() };
         yield return new object[] { null, BindingCompleteState.Success - 1, BindingCompleteContext.ControlUpdate - 1, null, null };
     }
 
@@ -54,7 +54,7 @@ public class BindingCompleteEventArgsTests
     [MemberData(nameof(Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_TestData))]
     public void Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception(Binding binding, BindingCompleteState state, BindingCompleteContext context, string errorText, Exception exception)
     {
-        var e = new BindingCompleteEventArgs(binding, state, context, errorText, exception);
+        BindingCompleteEventArgs e = new(binding, state, context, errorText, exception);
         Assert.Equal(binding, e.Binding);
         Assert.Equal(state, e.BindingCompleteState);
         Assert.Equal(context, e.BindingCompleteContext);
@@ -65,7 +65,7 @@ public class BindingCompleteEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_Bool_TestData()
     {
-        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new Exception(), true };
+        yield return new object[] { new Binding(null, new object(), "member"), BindingCompleteState.DataError, BindingCompleteContext.DataSourceUpdate, "errorText", new InvalidOperationException(), true };
         yield return new object[] { null, BindingCompleteState.Success - 1, BindingCompleteContext.ControlUpdate - 1, null, null, false };
     }
 
@@ -73,7 +73,7 @@ public class BindingCompleteEventArgsTests
     [MemberData(nameof(Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_Bool_TestData))]
     public void Ctor_Binding_BindingCompleteState_BindingCompleteContext_String_Exception_Bool(Binding binding, BindingCompleteState state, BindingCompleteContext context, string errorText, Exception exception, bool cancel)
     {
-        var e = new BindingCompleteEventArgs(binding, state, context, errorText, exception, cancel);
+        BindingCompleteEventArgs e = new(binding, state, context, errorText, exception, cancel);
         Assert.Equal(binding, e.Binding);
         Assert.Equal(state, e.BindingCompleteState);
         Assert.Equal(context, e.BindingCompleteContext);

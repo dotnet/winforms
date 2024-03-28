@@ -11,16 +11,18 @@ namespace System;
 /// </summary>
 /// <typeparam name="T">The type of the class being accessed.</typeparam>
 /// <remarks>
-///  Does not allow access to public members- use the object directly.
-///
-///  One should strive to *not* access internal state where otherwise avoidable.
-///  Ask yourself if you can test the contract of the object in question
-///  *without* manipulating internals directly. Often you can.
-///
-///  Where internals access is more useful are testing building blocks of more
-///  complicated objects, such as internal helper methods or classes.
-///
-///  This can be used to access private/internal objects as well via
+///  <para>
+///   Does not allow access to public members- use the object directly.
+///  </para>
+///  <para>
+///   One should strive to *not* access internal state where otherwise avoidable.
+///   Ask yourself if you can test the contract of the object in question
+///   *without* manipulating internals directly. Often you can.
+///  </para>
+///  <para>
+///   Where internals access is more useful are testing building blocks of more
+///   complicated objects, such as internal helper methods or classes.
+///  </para>
 /// </remarks>
 /// <example>
 ///  This class can also be derived from to create a strongly typed wrapper
@@ -45,7 +47,7 @@ namespace System;
 public class TestAccessor<T> : ITestAccessor
 {
     private static readonly Type s_type = typeof(T);
-    protected readonly T? _instance;
+    private readonly T? _instance;
     private readonly DynamicWrapper _dynamicWrapper;
 
     /// <param name="instance">The type instance, can be null for statics.</param>
@@ -61,7 +63,7 @@ public class TestAccessor<T> : ITestAccessor
     {
         Type type = typeof(TDelegate);
         MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
-        Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+        Type[] types = invokeMethodInfo is null ? [] : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
 
         // To make it easier to write a class wrapper with a number of delegates,
         // we'll take the name from the delegate itself when unspecified.
@@ -72,10 +74,7 @@ public class TestAccessor<T> : ITestAccessor
             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
             binder: null,
             types,
-            modifiers: null);
-
-        if (methodInfo is null)
-            throw new ArgumentException($"Could not find non public method {methodName}.");
+            modifiers: null) ?? throw new ArgumentException($"Could not find non public method {methodName}.");
 
         return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
     }
@@ -83,7 +82,7 @@ public class TestAccessor<T> : ITestAccessor
     /// <inheritdoc/>
     public dynamic Dynamic => _dynamicWrapper;
 
-    private class DynamicWrapper : DynamicObject
+    private sealed class DynamicWrapper : DynamicObject
     {
         private readonly object? _instance;
 
@@ -122,11 +121,11 @@ public class TestAccessor<T> : ITestAccessor
 
                 if (methodInfo is not null || type == typeof(object))
                 {
-                    // Found something, or already at the top of the type heirarchy
+                    // Found something, or already at the top of the type hierarchy
                     break;
                 }
 
-                // Walk up the heirarchy
+                // Walk up the hierarchy
                 type = type?.BaseType;
             }
             while (true);
@@ -140,7 +139,7 @@ public class TestAccessor<T> : ITestAccessor
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -152,7 +151,7 @@ public class TestAccessor<T> : ITestAccessor
         {
             result = null;
 
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -160,7 +159,7 @@ public class TestAccessor<T> : ITestAccessor
             return true;
         }
 
-        private MemberInfo? GetFieldOrPropertyInfo(string memberName)
+        private static MemberInfo? GetFieldOrPropertyInfo(string memberName)
         {
             Type? type = s_type;
             MemberInfo? info;
@@ -176,11 +175,11 @@ public class TestAccessor<T> : ITestAccessor
 
                 if (info is not null || type == typeof(object))
                 {
-                    // Found something, or already at the top of the type heirarchy
+                    // Found something, or already at the top of the type hierarchy
                     break;
                 }
 
-                // Walk up the type heirarchy
+                // Walk up the type hierarchy
                 type = type?.BaseType;
             }
             while (true);

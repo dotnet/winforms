@@ -8,7 +8,7 @@ public class LinkLabelTests
     [WinFormsFact]
     public void LinkLabel_Constructor()
     {
-        using var label = new LinkLabel();
+        using LinkLabel label = new();
 
         Assert.NotNull(label);
         Assert.True(label.LinkArea.IsEmpty);

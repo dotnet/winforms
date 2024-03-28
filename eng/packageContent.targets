@@ -4,6 +4,10 @@
     <_DotnetApiDocsPackageName>Microsoft.Private.Intellisense</_DotnetApiDocsPackageName>
     <!-- Using ToLower below to unlock Linux build, even if it's unsupported. -->
     <_DotnetApiDocsFilesRoot>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', '$(_DotnetApiDocsPackageName.ToLower())', '$(MicrosoftPrivateIntellisenseVersion)', 'IntellisenseFiles', 'windowsdesktop', '1033'))</_DotnetApiDocsFilesRoot>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeProjectReferencesWithPackAttributeInPackage</TargetsForTfmSpecificContentInPackage>
+
+    <!-- During NoBuild pack invocations, skip project reference build. Necessary for the IncludeProjectReferencesWithPackAttributeInPackage target. -->
+    <BuildProjectReferences Condition="'$(NoBuild)' == 'true'">false</BuildProjectReferences>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +44,7 @@
       <PackagePath Condition="'$(IsAnalyzerProject)' == 'true'">sdk/analyzers/dotnet$(AnalyzerTargetLanguage)</PackagePath>
     </PropertyGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(HasNoPublicIntellisense)' != 'true'">
       <!-- The intellisense provided by the Docs system -->
       <IntellisenseXmlFileSource>$([MSBuild]::NormalizePath('$(_DotnetApiDocsFilesRoot)', '$(AssemblyName).xml'))</IntellisenseXmlFileSource>
 
@@ -52,12 +56,12 @@
     </PropertyGroup>
 
     <!-- 
-      If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error. 
+      If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error.
       This means we build a real assembly that has no associated official intellisense docs.
       Contact the intellisense team for guidance.
     -->
-    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true'" 
-            Text="$(AssemblyName).xml was not found in $(_DotnetApiDocsPackageName) package. Contact the intellisense team about adding the docs for this assembly."
+    <Error Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true' and '$(HasNoPublicIntellisense)' != 'true'"
+           Text="$(AssemblyName).xml was not found in $(_DotnetApiDocsPackageName) package. Contact the intellisense team about adding the docs for this assembly."
     />
 
     <ItemGroup>
@@ -91,5 +95,38 @@
           Condition="Exists('$(IntellisenseXmlFileSource)')"
           DestinationFiles="$(IntellisenseXmlDest)"
           SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- This is copied from runtime/eng/packaging.targets to allow adding additional project references to packages. -->
+  <Target Name="IncludeProjectReferencesWithPackAttributeInPackage"
+          Condition="'@(ProjectReference)' != '' and @(ProjectReference->AnyHaveMetadataValue('Pack', 'true'))"
+          DependsOnTargets="BuildOnlySettings;ResolveReferences">
+    <PropertyGroup>
+      <_referringTargetFramework>$(TargetFramework)</_referringTargetFramework>
+      <_referringTargetFramework Condition="'$(PackageUsePlatformTargeting)' != 'true' and $(TargetFramework.Contains('-'))">$(TargetFramework.SubString(0, $(TargetFramework.IndexOf('-'))))</_referringTargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <!-- Add ReferenceCopyLocalPaths for ProjectReferences which are flagged as Pack="true" into the package. -->
+      <_projectReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('Pack', 'true'))" />
+      <TfmSpecificPackageFile Include="@(_projectReferenceCopyLocalPaths)"
+                              PackagePath="$([MSBuild]::ValueOrDefault('%(ReferenceCopyLocalPaths.PackagePath)', '$(BuildOutputTargetFolder)\$(_referringTargetFramework)\'))" />
+      <TfmSpecificDebugSymbolsFile Include="@(TfmSpecificPackageFile->WithMetadataValue('Extension', '.pdb'))"
+                                   TargetPath="/%(TfmSpecificPackageFile.PackagePath)/%(Filename)%(Extension)"
+                                   TargetFramework="$(_referringTargetFramework)"
+                                   Condition="'$(IncludeSymbols)' == 'true'" />
+      <!-- Remove symbol from the non symbol package. -->
+      <TfmSpecificPackageFile Remove="@(TfmSpecificPackageFile->WithMetadataValue('Extension', '.pdb'))" />
+      <!-- If the reference assembly is included, don't put the documentation file next to the lib assembly. -->
+      <TfmSpecificPackageFile Remove="@(_projectReferenceCopyLocalPaths->WithMetadataValue('Extension', '.xml')->WithMetadataValue('IncludeReferenceAssemblyInPackage', 'true'))" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- Include the reference assembly and put the documentation file next to it. -->
+      <_referenceAssemblyPaths Include="@(_projectReferenceCopyLocalPaths->WithMetadataValue('Extension', '.dll')->WithMetadataValue('IncludeReferenceAssemblyInPackage', 'true')->Metadata('ReferenceAssembly'))" />
+      <_referenceAssemblyPaths Include="@(_projectReferenceCopyLocalPaths->WithMetadataValue('Extension', '.xml')->WithMetadataValue('IncludeReferenceAssemblyInPackage', 'true'))" />
+      <TfmSpecificPackageFile Include="@(_referenceAssemblyPaths)"
+                              PackagePath="ref\$(_referringTargetFramework)\" />
+    </ItemGroup>
   </Target>
 </Project>

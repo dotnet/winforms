@@ -11,7 +11,7 @@ public class DataGridViewAutoSizeModeEventArgsTests
     [InlineData(false)]
     public void Ctor_Bool(bool previousModeAutoSized)
     {
-        var e = new DataGridViewAutoSizeModeEventArgs(previousModeAutoSized);
+        DataGridViewAutoSizeModeEventArgs e = new(previousModeAutoSized);
         Assert.Equal(previousModeAutoSized, e.PreviousModeAutoSized);
     }
 }

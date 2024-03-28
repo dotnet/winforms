@@ -15,7 +15,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_Ctor_Default()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -138,7 +138,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("ListBox", createParams.ClassName);
@@ -160,7 +160,7 @@ public class ListBoxTests
     [InlineData(false, 0x562100C1)]
     public void ListBox_CreateParams_GetScrollAlwaysVisible_ReturnsExpected(bool scrollAlwaysVisible, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             ScrollAlwaysVisible = scrollAlwaysVisible
         };
@@ -186,7 +186,7 @@ public class ListBoxTests
     [InlineData(false, 0x562101C1)]
     public void ListBox_CreateParams_GetIntegralHeight_ReturnsExpected(bool integralHeight, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             IntegralHeight = integralHeight
         };
@@ -212,7 +212,7 @@ public class ListBoxTests
     [InlineData(false, 0x56210041)]
     public void ListBox_CreateParams_GetUseTabStops_ReturnsExpected(bool useTabStops, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             UseTabStops = useTabStops
         };
@@ -239,7 +239,7 @@ public class ListBoxTests
     [InlineData(BorderStyle.FixedSingle, 0x56A100C1, 0)]
     public void ListBox_CreateParams_GetBorderStyle_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             BorderStyle = borderStyle
         };
@@ -267,7 +267,7 @@ public class ListBoxTests
     [InlineData(false, false, 0x562100C1)]
     public void ListBox_CreateParams_GetMultiColumn_ReturnsExpected(bool multiColumn, bool horizontalScrollBar, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             MultiColumn = multiColumn,
             HorizontalScrollbar = horizontalScrollBar
@@ -296,7 +296,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.One, 0x562100C1)]
     public void ListBox_CreateParams_GetSelectionMode_ReturnsExpected(SelectionMode selectionMode, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -323,7 +323,7 @@ public class ListBoxTests
     [InlineData(DrawMode.OwnerDrawVariable, 0x562100E1)]
     public void ListBox_CreateParams_GetDrawMode_ReturnsExpected(DrawMode drawMode, int expectedStyle)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -354,7 +354,7 @@ public class ListBoxTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void ListBox_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BackColor = value
         };
@@ -377,7 +377,7 @@ public class ListBoxTests
     [MemberData(nameof(BackColor_SetWithHandle_TestData))]
     public void ListBox_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -405,7 +405,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -441,7 +441,7 @@ public class ListBoxTests
     public void ListBox_BackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.BackColor)];
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.False(property.CanResetValue(control));
 
         control.BackColor = Color.Red;
@@ -457,7 +457,7 @@ public class ListBoxTests
     public void ListBox_BackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.BackColor)];
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.BackColor = Color.Red;
@@ -473,7 +473,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void ListBox_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BackgroundImage = value
         };
@@ -489,7 +489,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -500,7 +500,7 @@ public class ListBoxTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -511,7 +511,7 @@ public class ListBoxTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -532,7 +532,7 @@ public class ListBoxTests
     [EnumData<ImageLayout>]
     public void ListBox_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BackgroundImageLayout = value
         };
@@ -548,7 +548,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -584,7 +584,7 @@ public class ListBoxTests
     [InvalidEnumData<ImageLayout>]
     public void ListBox_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
@@ -592,7 +592,7 @@ public class ListBoxTests
     [EnumData<BorderStyle>]
     public void ListBox_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new ListBox()
+        using ListBox control = new()
         {
             BorderStyle = value
         };
@@ -613,7 +613,7 @@ public class ListBoxTests
     [InlineData(BorderStyle.None, 1)]
     public void ListBox_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -644,7 +644,7 @@ public class ListBoxTests
     [InvalidEnumData<BorderStyle>]
     public void ListBox_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -655,7 +655,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_ColumnWidth_Set_GetReturnsExpected(int value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             ColumnWidth = value
         };
@@ -674,7 +674,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_ColumnWidth_SetWithCustomOldValue_GetReturnsExpected(int value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             ColumnWidth = 10
         };
@@ -695,7 +695,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_ColumnWidth_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -726,7 +726,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue, 0)]
     public void ListBox_ColumnWidth_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             ColumnWidth = 10
         };
@@ -756,7 +756,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ColumnWidth_GetItemRect_ReturnsExpected()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = true
         };
@@ -773,7 +773,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ColumnWidth_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ColumnWidth = -1);
     }
 
@@ -783,7 +783,7 @@ public class ListBoxTests
         yield return new object[] { new List<int>() };
         yield return new object[] { Array.Empty<int>() };
 
-        var mockSource = new Mock<IListSource>(MockBehavior.Strict);
+        Mock<IListSource> mockSource = new(MockBehavior.Strict);
         mockSource
             .Setup(s => s.GetList())
             .Returns(new int[] { 1 });
@@ -794,7 +794,7 @@ public class ListBoxTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ListBox_DataSource_Set_GetReturnsExpected(object value)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             DataSource = value
         };
@@ -814,7 +814,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_DataSource_SetWithHandler_CallsDataSourceChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int dataSourceCallCount = 0;
         int displayMemberCallCount = 0;
         EventHandler dataSourceHandler = (sender, e) =>
@@ -833,7 +833,7 @@ public class ListBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        var dataSource1 = new List<int>();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(1, dataSourceCallCount);
@@ -846,7 +846,7 @@ public class ListBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        var dataSource2 = new List<int>();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(2, dataSourceCallCount);
@@ -885,7 +885,7 @@ public class ListBoxTests
     [MemberData(nameof(DrawMode_Set_TestData))]
     public void ListBox_DrawMode_Set_GetReturnsExpected(bool autoSize, bool multiColumn, DrawMode value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             AutoSize = autoSize,
             MultiColumn = multiColumn
@@ -925,8 +925,8 @@ public class ListBoxTests
     [MemberData(nameof(DrawMode_SetWithParent_TestData))]
     public void ListBox_DrawMode_SetWithParent_GetReturnsExpected(bool autoSize, bool multiColumn, DrawMode value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new ListBox
+        using Control parent = new();
+        using ListBox control = new()
         {
             AutoSize = autoSize,
             MultiColumn = multiColumn,
@@ -986,7 +986,7 @@ public class ListBoxTests
     [MemberData(nameof(DrawMode_SetWithHandle_TestData))]
     public void ListBox_DrawMode_SetWithHandle_GetReturnsExpected(bool autoSize, bool multiColumn, DrawMode value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             AutoSize = autoSize,
             MultiColumn = multiColumn
@@ -1023,14 +1023,14 @@ public class ListBoxTests
     [InvalidEnumData<DrawMode>]
     public void ListBox_DrawMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DrawMode value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.DrawMode = value);
     }
 
     [WinFormsFact]
     public void ListBox_DrawMode_SetMultiColumnOwnerDrawVariable_ThrowsArgumentException()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = true
         };
@@ -1050,7 +1050,7 @@ public class ListBoxTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ListBox_Font_Set_GetReturnsExpected(bool integralHeight, Font value)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             IntegralHeight = integralHeight,
             Font = value
@@ -1074,7 +1074,7 @@ public class ListBoxTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ListBox_Font_SetWithItems_GetReturnsExpected(bool integralHeight, Font value)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             IntegralHeight = integralHeight
         };
@@ -1110,7 +1110,7 @@ public class ListBoxTests
     [MemberData(nameof(Font_SetWithHandle_TestData))]
     public void ListBox_Font_SetWithHandle_GetReturnsExpected(bool integralHeight, Font value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             IntegralHeight = integralHeight
         };
@@ -1156,7 +1156,7 @@ public class ListBoxTests
     [MemberData(nameof(Font_SetHandleWithItems_TestData))]
     public void ListBox_Font_SetWithItemsWithHandle_GetReturnsExpected(bool integralHeight, Font value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
-        using var control = new SubListBox
+        using SubListBox control = new()
         {
             IntegralHeight = integralHeight
         };
@@ -1196,7 +1196,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1207,7 +1207,7 @@ public class ListBoxTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -1248,7 +1248,7 @@ public class ListBoxTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void ListBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             ForeColor = value
         };
@@ -1274,7 +1274,7 @@ public class ListBoxTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void ListBox_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1302,7 +1302,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1338,7 +1338,7 @@ public class ListBoxTests
     public void ListBox_ForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ForeColor)];
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ForeColor = Color.Red;
@@ -1354,7 +1354,7 @@ public class ListBoxTests
     public void ListBox_ForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ForeColor)];
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ForeColor = Color.Red;
@@ -1383,7 +1383,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalExtent_Set_TestData))]
     public void ListBox_HorizontalExtent_Set_GetReturnsExpected(bool multiColumn, bool horizontalScrollBar, int value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn,
             HorizontalScrollbar = horizontalScrollBar,
@@ -1415,7 +1415,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalExtent_SetWithHandle_TestData))]
     public void ListBox_HorizontalExtent_SetWithHandle_GetReturnsExpected(bool multiColumn, bool horizontalScrollBar, int value, int expectedInvalidatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn,
             HorizontalScrollbar = horizontalScrollBar
@@ -1451,7 +1451,7 @@ public class ListBoxTests
     [InlineData(false, false, 0)]
     public void ListBox_HorizontalExtent_GetHorizontalExtent_Success(bool multiColumn, bool horizontalScrollBar, int expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn,
             HorizontalScrollbar = horizontalScrollBar
@@ -1477,7 +1477,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalScrollbar_Set_TestData))]
     public void ListBox_HorizontalScrollbar_Set_GetReturnsExpected(bool multiColumn, bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn,
             HorizontalScrollbar = value
@@ -1503,7 +1503,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalScrollbar_Set_TestData))]
     public void ListBox_HorizontalScrollbar_SetWithItems_GetReturnsExpected(bool multiColumn, bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn
         };
@@ -1541,7 +1541,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalScrollbar_SetWithHandle_TestData))]
     public void ListBox_HorizontalScrollbar_SetWithHandle_GetReturnsExpected(bool multiColumn, bool value, int expectedInvalidatedCallCount1, int expectedCreatedCallCount1, int expectedInvalidatedCallCount2, int expectedCreatedCallCount2)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn
         };
@@ -1592,7 +1592,7 @@ public class ListBoxTests
     [MemberData(nameof(HorizontalScrollbar_SetWithItemsWithHandle_TestData))]
     public void ListBox_HorizontalScrollbar_SetWithItemsWithHandle_GetReturnsExpected(bool multiColumn, bool value, int expectedInvalidatedCallCount1, int expectedCreatedCallCount1, int expectedInvalidatedCallCount2, int expectedCreatedCallCount2)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             MultiColumn = multiColumn
         };
@@ -1638,7 +1638,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_IntegralHeight_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             IntegralHeight = value
         };
@@ -1664,7 +1664,7 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_IntegralHeight_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1717,7 +1717,7 @@ public class ListBoxTests
     [MemberData(nameof(ItemHeight_Set_TestData))]
     public void ListBox_ItemHeight_Set_GetReturnsExpected(DrawMode drawMode, bool integralHeight, int value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             IntegralHeight = integralHeight,
@@ -1754,7 +1754,7 @@ public class ListBoxTests
     [MemberData(nameof(ItemHeight_SetWithHandle_TestData))]
     public void ListBox_ItemHeight_SetWithHandle_GetReturnsExpected(DrawMode drawMode, bool integralHeight, int value, int expectedInvalidatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             IntegralHeight = integralHeight
@@ -1791,7 +1791,7 @@ public class ListBoxTests
     [InlineData(DrawMode.OwnerDrawVariable, false)]
     public void ListBox_ItemHeight_Set_GetItemHeight_ReturnsExpected(DrawMode drawMode, bool expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             ItemHeight = 25
@@ -1806,7 +1806,7 @@ public class ListBoxTests
     [InlineData(256)]
     public void ListBox_ItemHeight_SetInvalidValue_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemHeight = value);
     }
 
@@ -1814,12 +1814,13 @@ public class ListBoxTests
     public void ListBox_ItemHeight_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
-        using var control = new ListBox();
+        using ListBox control = new();
+        Assert.True(control.DrawMode is DrawMode.Normal);
         Assert.False(property.CanResetValue(control));
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.CanResetValue(control));
+        Assert.False(property.CanResetValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
@@ -1830,12 +1831,12 @@ public class ListBoxTests
     public void ListBox_ItemHeight_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
@@ -1852,7 +1853,7 @@ public class ListBoxTests
     [MemberData(nameof(Items_CustomCreateItemCollection_TestData))]
     public void ListBox_Items_GetCustomCreateItemCollection_ReturnsExpected(ListBox.ObjectCollection result)
     {
-        using var control = new CustomCreateItemCollectionListBox
+        using CustomCreateItemCollectionListBox control = new()
         {
             CreateListBoxResult = result
         };
@@ -1880,7 +1881,7 @@ public class ListBoxTests
     [MemberData(nameof(MultiColumn_Set_TestData))]
     public void ListBox_MultiColumn_Set_GetReturnsExpected(DrawMode drawMode, bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             MultiColumn = value
@@ -1911,7 +1912,7 @@ public class ListBoxTests
     [MemberData(nameof(MultiColumn_SetWithHandle_TestData))]
     public void ListBox_MultiColumn_SetWithHandle_GetReturnsExpected(DrawMode drawMode, bool value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -1950,7 +1951,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_MultiColumn_SetOwnerDrawVariable_ThrowsArgumentException()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = DrawMode.OwnerDrawVariable
         };
@@ -1965,7 +1966,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             Padding = value
         };
@@ -1982,7 +1983,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ListBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2010,7 +2011,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2021,7 +2022,7 @@ public class ListBoxTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -2032,7 +2033,7 @@ public class ListBoxTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -2064,7 +2065,7 @@ public class ListBoxTests
     [MemberData(nameof(PreferredHeight_GetEmpty_TestData))]
     public void ListBox_PreferredHeight_GetEmpty_ReturnsExpected(DrawMode drawMode, BorderStyle borderStyle, int expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             BorderStyle = borderStyle
@@ -2093,7 +2094,7 @@ public class ListBoxTests
     [MemberData(nameof(PreferredHeight_GetNotEmpty_TestData))]
     public void ListBox_PreferredHeight_GetNotEmpty_ReturnsExpected(DrawMode drawMode, BorderStyle borderStyle, int expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             BorderStyle = borderStyle
@@ -2123,7 +2124,7 @@ public class ListBoxTests
     [MemberData(nameof(PreferredHeight_GetWithHandle_TestData))]
     public void ListBox_PreferredHeight_GetEmptyWithHandle_ReturnsExpected(DrawMode drawMode, BorderStyle borderStyle)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             BorderStyle = borderStyle
@@ -2147,7 +2148,7 @@ public class ListBoxTests
     [MemberData(nameof(PreferredHeight_GetWithHandle_TestData))]
     public void ListBox_PreferredHeight_GetNotEmptyWithHandle_ReturnsExpected(DrawMode drawMode, BorderStyle borderStyle)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode,
             BorderStyle = borderStyle
@@ -2173,7 +2174,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
     public void ListBox_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             RightToLeft = value
         };
@@ -2189,7 +2190,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2225,7 +2226,7 @@ public class ListBoxTests
     [InvalidEnumData<RightToLeft>]
     public void ListBox_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
     }
 
@@ -2233,7 +2234,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_ScrollAlwaysVisible_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             ScrollAlwaysVisible = value
         };
@@ -2256,7 +2257,7 @@ public class ListBoxTests
     [InlineData(false, 0)]
     public void ListBox_ScrollAlwaysVisible_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2293,7 +2294,7 @@ public class ListBoxTests
     [EnumData<SelectionMode>]
     public void ListBox_SelectedIndex_GetEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2306,7 +2307,7 @@ public class ListBoxTests
     [EnumData<SelectionMode>]
     public void ListBox_SelectedIndex_GetNotEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2322,7 +2323,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.One)]
     public void ListBox_SelectedIndex_SetEmpty_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode,
             SelectedIndex = -1
@@ -2345,7 +2346,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedIndex_SetSelectionModeOne_GetReturnsExpected()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -2390,7 +2391,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedIndex_SetSelectionModeMultiple_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2438,9 +2439,9 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedIndex_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        var bindingContext = new BindingContext();
-        var dataSource = new List<string> { "item1", "item2", "item3" };
-        using var control = new SubListBox
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
+        using SubListBox control = new()
         {
             BindingContext = bindingContext,
             DataSource = dataSource,
@@ -2488,7 +2489,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedIndex_SetSelectionModeOneWithHandle_GetReturnsExpected()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -2552,7 +2553,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedIndex_SetSelectionModeMultipleWithHandle_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2615,7 +2616,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedIndex_GetCurSelOne_Success()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -2642,7 +2643,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedIndex_GetCurSelMultiple_Success(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2677,7 +2678,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedIndex_SetWithHandler_CallsSelectedIndexChanged(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2728,7 +2729,7 @@ public class ListBoxTests
     [InlineData(1)]
     public void ListBox_SelectedIndex_SetInvalidValueEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectedIndex = value);
     }
 
@@ -2737,7 +2738,7 @@ public class ListBoxTests
     [InlineData(1)]
     public void ListBox_SelectedIndex_SetInvalidValueNotEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item");
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectedIndex = value);
     }
@@ -2745,7 +2746,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedIndex_SetNoSelection_ThrowsArgumentException()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.None
         };
@@ -2756,7 +2757,7 @@ public class ListBoxTests
     [EnumData<SelectionMode>]
     public void ListBox_SelectedItem_GetEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2769,7 +2770,7 @@ public class ListBoxTests
     [EnumData<SelectionMode>]
     public void ListBox_SelectedItem_GetNotEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2788,7 +2789,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.One, "item")]
     public void ListBox_SelectedItem_SetEmpty_GetReturnsExpected(SelectionMode selectionMode, string value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode,
             SelectedItem = value
@@ -2811,7 +2812,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedItem_SetSelectionModeOne_GetReturnsExpected()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -2864,7 +2865,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedItem_SetSelectionModeMultiple_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -2920,9 +2921,9 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedItem_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        var bindingContext = new BindingContext();
-        var dataSource = new List<string> { "item1", "item2", "item3" };
-        using var control = new SubListBox
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
+        using SubListBox control = new()
         {
             BindingContext = bindingContext,
             DataSource = dataSource,
@@ -2979,7 +2980,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedItem_SetSelectionModeOneWithHandle_GetReturnsExpected()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -3054,7 +3055,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedItem_SetSelectionModeMultipleWithHandle_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3128,7 +3129,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedItem_GetCurSelOne_Success()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.One
         };
@@ -3159,7 +3160,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedItem_GetCurSelMultiple_Success(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3201,7 +3202,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectedItem_SetWithHandler_CallsSelectedIndexChanged(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3257,7 +3258,7 @@ public class ListBoxTests
     [InlineData("NoSuchItem")]
     public void ListBox_SelectedItem_SetNoSelectionEmpty_Nop(object value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.None
         };
@@ -3268,7 +3269,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedItem_SetNoSelectionNotEmpty_ThrowsArgumentException()
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = SelectionMode.None
         };
@@ -3286,7 +3287,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectedItems_GetDirtyCustom_ReturnsExpected()
     {
-        using var control = new CustomListBox
+        using CustomListBox control = new()
         {
             SelectionMode = SelectionMode.MultiSimple
         };
@@ -3307,14 +3308,14 @@ public class ListBoxTests
         control.MakeCustom = true;
 
         // Verify equal lengths.
-        control.GetSelCountResult = (IntPtr)1;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelCountResult = 1;
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 2 }, control.SelectedIndices.Cast<int>());
 
         // Verify truncated
-        control.GetSelCountResult = (IntPtr)2;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelCountResult = 2;
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 0, 2 }, control.SelectedIndices.Cast<int>());
 
@@ -3343,7 +3344,7 @@ public class ListBoxTests
             {
                 Assert.Equal(GetSelCountResult, m.WParam);
                 Marshal.Copy(GetSelResult, 0, m.LParam, GetSelResult.Length);
-                m.Result = (IntPtr)GetSelResult.Length;
+                m.Result = GetSelResult.Length;
                 return;
             }
 
@@ -3355,7 +3356,7 @@ public class ListBoxTests
     [EnumData<SelectionMode>]
     public void ListBox_SelectionMode_SetEmpty_GetReturnsExpected(SelectionMode value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = value
         };
@@ -3391,7 +3392,7 @@ public class ListBoxTests
     [MemberData(nameof(SelectionMode_SetWithCustomOldValue_TestData))]
     public void ListBox_SelectionMode_SetEmptyWithCustomOldValue_GetReturnsExpected(SelectionMode selectionMode, SelectionMode value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3419,7 +3420,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiExtended)]
     public void ListBox_SelectionMode_SetWithItemsOneSelectedToMulti_GetReturnsExpected(SelectionMode value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -3455,7 +3456,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectionMode_SetWithItemsOneSelectedToNone_GetReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -3493,7 +3494,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectionMode_SetWithItemsMultiSelectedToOne_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3535,7 +3536,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectionMode_SetWithItemsMultiSelectedToNone_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3579,7 +3580,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.One, 0)]
     public void ListBox_SelectionMode_SetEmptyWithHandle_GetReturnsExpected(SelectionMode value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3638,7 +3639,7 @@ public class ListBoxTests
     [MemberData(nameof(SelectionMode_SetWithCustomOldValueWithHandle_TestData))]
     public void ListBox_SelectionMode_SetEmptyWithCustomOldValueWithHandle_GetReturnsExpected(SelectionMode selectionMode, SelectionMode value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3679,7 +3680,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiExtended)]
     public void ListBox_SelectionMode_SetWithItemsOneSelectedToMultiWithHandle_GetReturnsExpected(SelectionMode value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -3731,7 +3732,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SelectionMode_SetWithItemsOneSelectedToNoneWithHandle_GetReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -3785,7 +3786,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectionMode_SetWithItemsMultiSelectedToOneWithHandle_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3843,7 +3844,7 @@ public class ListBoxTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBox_SelectionMode_SetWithItemsMultiSelectedToNoneWithHandle_GetReturnsExpected(SelectionMode selectionMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             SelectionMode = selectionMode
         };
@@ -3900,7 +3901,7 @@ public class ListBoxTests
     [InvalidEnumData<SelectionMode>]
     public void ListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.SelectionMode = value);
     }
 
@@ -3908,7 +3909,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_Sorted_SetWithoutItems_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             Sorted = value
         };
@@ -3933,7 +3934,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_Sorted_SetWithEmptyItems_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Empty(control.Items);
 
         control.Sorted = value;
@@ -3964,7 +3965,7 @@ public class ListBoxTests
     [MemberData(nameof(Sorted_SetWithItems_TestData))]
     public void ListBox_Sorted_SetWithItems_GetReturnsExpected(bool value, string[] expected)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item2");
         control.Items.Add("item1");
 
@@ -3990,7 +3991,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_Sorted_SetWithoutItemsWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4030,7 +4031,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_Sorted_SetWithEmptyItemsWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4071,7 +4072,7 @@ public class ListBoxTests
     [MemberData(nameof(Sorted_SetWithItems_TestData))]
     public void ListBox_Sorted_SetWithItemsWithHandle_GetReturnsExpected(bool value, string[] expected)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item2");
         control.Items.Add("item1");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4113,7 +4114,7 @@ public class ListBoxTests
     [NormalizedStringData]
     public void ListBox_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             Text = value
         };
@@ -4155,7 +4156,7 @@ public class ListBoxTests
     [MemberData(nameof(Text_SetWithItems_TestData))]
     public void ListBox_Text_SetWithItems_GetReturnsExpected(bool formattingEnabled, SelectionMode selectionMode, string value, string expected, int expectedSelectedIndex)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             FormattingEnabled = formattingEnabled,
             SelectionMode = selectionMode
@@ -4206,7 +4207,7 @@ public class ListBoxTests
     [MemberData(nameof(Text_SetWithItemsWithSelection_TestData))]
     public void ListBox_Text_SetWithItemsWithSelection_GetReturnsExpected(bool formattingEnabled, SelectionMode selectionMode, string value, string expected, int expectedSelectedIndex)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             FormattingEnabled = formattingEnabled
         };
@@ -4232,7 +4233,7 @@ public class ListBoxTests
     [NormalizedStringData]
     public void ListBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4262,7 +4263,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4297,7 +4298,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_TopIndex_GetWithHandle_ReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         Assert.Equal(0, control.TopIndex);
@@ -4311,7 +4312,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_TopIndex_SetEmpty_GetReturnsExpected(int value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             TopIndex = value
         };
@@ -4332,7 +4333,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_TopIndex_SetNotEmpty_GetReturnsExpected(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -4355,7 +4356,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_TopIndex_SetWithHandleEmpty_GetReturnsExpected(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4390,7 +4391,7 @@ public class ListBoxTests
     [InlineData(int.MaxValue)]
     public void ListBox_TopIndex_SetWithHandleNotEmpty_GetReturnsExpected(int value)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4420,7 +4421,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_TopIndex_GetTopIndex_ReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         control.Items.Add("item1");
@@ -4434,7 +4435,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_UseCustomTabOffsets_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             UseCustomTabOffsets = value
         };
@@ -4457,7 +4458,7 @@ public class ListBoxTests
     [InlineData(false, 0)]
     public void ListBox_UseCustomTabOffsets_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4494,7 +4495,7 @@ public class ListBoxTests
     [BoolData]
     public void ListBox_UseTabStops_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             UseTabStops = value
         };
@@ -4517,7 +4518,7 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_UseTabStops_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4553,15 +4554,15 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_AddItemsCore_Invoke_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
@@ -4579,7 +4580,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_AddItemsCore_InvokeWithHandle_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4589,7 +4590,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(1, invalidatedCallCount);
@@ -4597,7 +4598,7 @@ public class ListBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(2, invalidatedCallCount);
@@ -4624,7 +4625,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_BeginUpdate_InvokeWithoutHandle_Nop()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.BeginUpdate();
         Assert.False(control.IsHandleCreated);
 
@@ -4644,7 +4645,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_BeginUpdate_InvokeWithHandle_Nop()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4684,7 +4685,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_EndUpdate_InvokeWithoutHandle_Success()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
 
         // End without beginning.
         control.EndUpdate();
@@ -4706,7 +4707,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_EndUpdate_InvokeWithHandle_Success()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4749,7 +4750,7 @@ public class ListBoxTests
     [InlineData(false, AccessibleRole.None)]
     public void ListBox_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
 
         if (createControl)
         {
@@ -4768,7 +4769,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_CreateControlsInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         ListBox.ObjectCollection items = Assert.IsType<ListBox.ObjectCollection>(control.CreateItemCollection());
         Assert.Empty(items);
         Assert.False(items.IsReadOnly);
@@ -4778,7 +4779,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -4798,7 +4799,7 @@ public class ListBoxTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ListBox_GetPreferredSize_Invoke_ReturnsExpected(BorderStyle borderStyle, Size proposedSize)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BorderStyle = borderStyle
         };
@@ -4814,7 +4815,7 @@ public class ListBoxTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ListBox_GetPreferredSize_InvokeWithPadding_ReturnsExpected(BorderStyle borderStyle, Size proposedSize)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BorderStyle = borderStyle,
             Padding = new Padding(1, 2, 3, 4)
@@ -4831,7 +4832,7 @@ public class ListBoxTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ListBox_GetPreferredSize_InvokeWithHandle_ReturnsExpected(BorderStyle borderStyle, Size proposedSize)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BorderStyle = borderStyle
         };
@@ -4844,7 +4845,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4863,7 +4864,7 @@ public class ListBoxTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ListBox_GetPreferredSize_InvokeWithHandleWithPadding_ReturnsExpected(BorderStyle borderStyle, Size proposedSize)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             BorderStyle = borderStyle,
             Padding = new Padding(1, 2, 3, 4)
@@ -4877,7 +4878,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight + 6, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4915,7 +4916,7 @@ public class ListBoxTests
     [InlineData((ControlStyles)(-1), false)]
     public void ListBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -4925,7 +4926,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -4937,14 +4938,14 @@ public class ListBoxTests
             yield return new object[] { new ListBox(), string.Empty, startIndex, -1 };
             yield return new object[] { new ListBox(), "s", startIndex, -1 };
 
-            using var controlWithNoItems = new ListBox();
+            using ListBox controlWithNoItems = new();
             Assert.Empty(controlWithNoItems.Items);
             yield return new object[] { new ListBox(), null, startIndex, -1 };
             yield return new object[] { new ListBox(), string.Empty, startIndex, -1 };
             yield return new object[] { new ListBox(), "s", startIndex, -1 };
         }
 
-        using var controlWithItems = new ListBox
+        using ListBox controlWithItems = new()
         {
             DisplayMember = "Value"
         };
@@ -5028,7 +5029,7 @@ public class ListBoxTests
     [InlineData(2)]
     public void ListBox_FindString_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item");
         Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindString("s", startIndex));
     }
@@ -5041,14 +5042,14 @@ public class ListBoxTests
             yield return new object[] { new ListBox(), string.Empty, startIndex, -1 };
             yield return new object[] { new ListBox(), "s", startIndex, -1 };
 
-            using var controlWithNoItems = new ListBox();
+            using ListBox controlWithNoItems = new();
             Assert.Empty(controlWithNoItems.Items);
             yield return new object[] { new ListBox(), null, startIndex, -1 };
             yield return new object[] { new ListBox(), string.Empty, startIndex, -1 };
             yield return new object[] { new ListBox(), "s", startIndex, -1 };
         }
 
-        using var controlWithItems = new ListBox
+        using ListBox controlWithItems = new()
         {
             DisplayMember = "Value"
         };
@@ -5132,7 +5133,7 @@ public class ListBoxTests
     [InlineData(2)]
     public void ListBox_FindStringExact_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("item");
         Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex));
     }
@@ -5141,7 +5142,7 @@ public class ListBoxTests
     [EnumData<DrawMode>]
     public void ListBox_GetItemHeight_InvokeEmptyWithoutHandle_ReturnsExpected(DrawMode drawMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -5162,7 +5163,7 @@ public class ListBoxTests
     [MemberData(nameof(GetItemHeight_NotEmpty_TestData))]
     public void ListBox_GetItemHeight_InvokeNotEmptyWithoutHandle_ReturnsExpected(DrawMode drawMode, int index)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -5178,7 +5179,7 @@ public class ListBoxTests
     [InlineData(DrawMode.OwnerDrawVariable)]
     public void ListBox_GetItemHeight_InvokeEmptyWithHandle_ReturnsExpected(DrawMode drawMode)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -5201,7 +5202,7 @@ public class ListBoxTests
     [MemberData(nameof(GetItemHeight_NotEmpty_TestData))]
     public void ListBox_GetItemHeight_InvokeNotEmptyWithHandle_ReturnsExpected(DrawMode drawMode, int index)
     {
-        using var control = new ListBox
+        using ListBox control = new()
         {
             DrawMode = drawMode
         };
@@ -5239,11 +5240,11 @@ public class ListBoxTests
     [MemberData(nameof(GetItemHeight_CustomGetItemHeight_TestData))]
     public void ListBox_GetItemHeight_InvokeCustomGetItemHeight_ReturnsExpected(DrawMode drawMode, int index, int expectedIndex, int getItemRectResult, int expected)
     {
-        using var control = new CustomGetItemHeightListBox
+        using CustomGetItemHeightListBox control = new()
         {
             DrawMode = drawMode,
             ExpectedIndex = expectedIndex,
-            GetItemHeightResult = (IntPtr)getItemRectResult
+            GetItemHeightResult = getItemRectResult
         };
         control.Items.Add("Item1");
         control.Items.Add("Item2");
@@ -5275,7 +5276,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemHeight_InvokeInvalidGetItemHeight_ThrowsWin32Exception()
     {
-        using var control = new InvalidGetItemHeightListBox();
+        using InvalidGetItemHeightListBox control = new();
         control.Items.Add("Item");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -5304,7 +5305,7 @@ public class ListBoxTests
     [InlineData(1)]
     public void ListBox_GetItemHeight_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemHeight(index));
     }
 
@@ -5314,7 +5315,7 @@ public class ListBoxTests
     [InlineData(2)]
     public void ListBox_GetItemHeight_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item");
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemHeight(index));
     }
@@ -5322,7 +5323,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item1");
 
@@ -5345,7 +5346,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item1");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5388,7 +5389,7 @@ public class ListBoxTests
     [MemberData(nameof(GetItemRectangle_CustomGetItemRect_TestData))]
     public void ListBox_GetItemRectangle_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
     {
-        using var control = new CustomGetItemRectListBox
+        using CustomGetItemRectListBox control = new()
         {
             GetItemRectResult = (RECT)getItemRectResult
         };
@@ -5419,7 +5420,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvokeInvalidGetItemRect_ReturnsExpected()
     {
-        using var control = new InvalidGetItemRectListBox();
+        using InvalidGetItemRectListBox control = new();
         control.Items.Add("Item");
         Assert.NotEqual(0, control.Handle);
 
@@ -5448,7 +5449,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
@@ -5457,7 +5458,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item");
 
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
@@ -5468,7 +5469,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
@@ -5477,7 +5478,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_GetItemRectangle_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add("Item");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -5490,7 +5491,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5514,7 +5515,7 @@ public class ListBoxTests
     {
         yield return new object[] { null };
 
-        var bitmap = new Bitmap(10, 10);
+        Bitmap bitmap = new(10, 10);
         Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, DrawItemState.Checked) };
     }
@@ -5523,7 +5524,7 @@ public class ListBoxTests
     [MemberData(nameof(OnDrawItem_TestData))]
     public void ListBox_OnDrawItem_Invoke_CallsDrawItem(DrawItemEventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         void handler(object sender, DrawItemEventArgs e)
         {
@@ -5547,7 +5548,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5573,7 +5574,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5599,7 +5600,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5635,7 +5636,7 @@ public class ListBoxTests
 
     public static IEnumerable<object[]> OnMeasureItem_TestData()
     {
-        using var bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { null };
         yield return new object[] { new MeasureItemEventArgs(graphics, 0, 0) };
@@ -5645,7 +5646,7 @@ public class ListBoxTests
     [MemberData(nameof(OnMeasureItem_TestData))]
     public void ListBox_OnMeasureItem_Invoke_CallsMeasureItem(MeasureItemEventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         void handler(object sender, MeasureItemEventArgs e)
         {
@@ -5669,7 +5670,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void ListBox_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -5693,7 +5694,7 @@ public class ListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ListBox_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -5717,7 +5718,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnSelectedIndexChanged_Invoke_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int selectedValueChangedCallCount = 0;
         control.SelectedValueChanged += (sender, e) =>
         {
@@ -5753,7 +5754,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnSelectedIndexChanged_InvokeWithHandle_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5814,9 +5815,9 @@ public class ListBoxTests
     [MemberData(nameof(OnSelectedIndexChanged_WithDataManager_TestData))]
     public void ListBox_OnSelectedIndexChanged_InvokeWithDataManager_CallsSelectedIndexChanged(bool formattingEnabled, int position, EventArgs eventArgs)
     {
-        var bindingContext = new BindingContext();
-        var dataSource = new List<string> { "item1", "item2", "item3" };
-        using var control = new SubListBox
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
+        using SubListBox control = new()
         {
             BindingContext = bindingContext,
             DataSource = dataSource,
@@ -5858,7 +5859,7 @@ public class ListBoxTests
     [NewAndDefaultData<EventArgs>]
     public void ListBox_OnSelectedValueChanged_Invoke_CallsSelectedValueChanged(EventArgs eventArgs)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5881,7 +5882,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_RefreshItems_InvokeEmpty_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         control.RefreshItems();
         Assert.Empty(control.Items);
         Assert.False(control.IsHandleCreated);
@@ -5895,7 +5896,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_RefreshItems_InvokeNotEmpty_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
 
@@ -5912,7 +5913,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_RefreshItems_InvokeEmptyWithHandle_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5940,7 +5941,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_RefreshItems_InvokeNotEmptyWithHandle_Success()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5970,7 +5971,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ResetBackColor_Invoke_Success()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
 
         // Reset without value.
         control.ResetBackColor();
@@ -5989,7 +5990,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ResetForeColor_Invoke_Success()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
 
         // Reset without value.
         control.ResetForeColor();
@@ -6015,7 +6016,7 @@ public class ListBoxTests
     [MemberData(nameof(SetItemsCore_TestData))]
     public void ListBox_SetItemsCore_Invoke_Success(object[] value)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         control.SetItemsCore(value);
         Assert.Equal(value, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
@@ -6030,7 +6031,7 @@ public class ListBoxTests
     [MemberData(nameof(SetItemsCore_TestData))]
     public void ListBox_SetItemsCore_InvokeWithHandle_Success(object[] value)
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6058,7 +6059,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SetItemsCore_NullValueEmpty_ThrowsArgumentNullException()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         Assert.Throws<ArgumentNullException>("value", () => control.SetItemsCore(null));
         Assert.Empty(control.Items);
     }
@@ -6066,7 +6067,7 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_SetItemsCore_NullValueNotEmpty_ThrowsArgumentNullException()
     {
-        using var control = new SubListBox();
+        using SubListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         Assert.Throws<ArgumentNullException>("value", () => control.SetItemsCore(null));
@@ -6076,14 +6077,14 @@ public class ListBoxTests
     [WinFormsFact]
     public void ListBox_ToString_InvokeWithoutItems_ReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Equal("System.Windows.Forms.ListBox", control.ToString());
     }
 
     [WinFormsFact]
     public void ListBox_ToString_InvokeWithEmptyItems_ReturnsExpected()
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         Assert.Empty(control.Items);
         Assert.Equal("System.Windows.Forms.ListBox, Items.Count: 0", control.ToString());
     }
@@ -6099,7 +6100,7 @@ public class ListBoxTests
     [MemberData(nameof(ToString_WithItems_TestData))]
     public void ListBox_ToString_InvokeWithItems_ReturnsExpected(string item1, string expected)
     {
-        using var control = new ListBox();
+        using ListBox control = new();
         control.Items.Add(item1);
         control.Items.Add("item2");
         Assert.Equal(expected, control.ToString());
@@ -6117,7 +6118,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
         listBox.SelectedItem = listBox.Items[0];
 
         Assert.Equal(3, listBox.Items.Count);
@@ -6158,7 +6159,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3", "4" });
+        listBox.Items.AddRange((object[])["1", "2", "3", "4"]);
         listBox.SelectedItems.Add(listBox.Items[0]);
         listBox.SelectedItems.Add(listBox.Items[1]);
 
@@ -6198,7 +6199,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {
@@ -6234,7 +6235,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {

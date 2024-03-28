@@ -28,7 +28,7 @@ internal sealed class BinaryFormattedObject
     internal const int MaxNewCollectionSize = 10;
 #endif
 
-    private readonly List<IRecord> _records = new();
+    private readonly List<IRecord> _records = [];
     private readonly RecordMap _recordMap = new();
 
     /// <summary>
@@ -72,7 +72,7 @@ internal sealed class BinaryFormattedObject
     public IRecord this[int index] => _records[index];
 
     /// <summary>
-    ///  Gets a record by it's identfier. Not all records have identifiers, only ones that
+    ///  Gets a record by it's identifier. Not all records have identifiers, only ones that
     ///  can be referenced by other records.
     /// </summary>
     public IRecord this[Id id] => _recordMap[id];

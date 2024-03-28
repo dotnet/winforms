@@ -38,7 +38,7 @@ public class SystemInformationTests
     public void SystemInformation_BootMode_Get_ReturnsExpected()
     {
         BootMode bootMode = SystemInformation.BootMode;
-        Assert.True(Enum.IsDefined(typeof(BootMode), bootMode));
+        Assert.True(Enum.IsDefined(bootMode));
         Assert.Equal(bootMode, SystemInformation.BootMode);
     }
 
@@ -114,7 +114,7 @@ public class SystemInformationTests
     public void SystemInformation_CursorSize_Get_ReturnsExpected()
     {
         Size size = SystemInformation.CursorSize;
-        Assert.Contains(size, new Size[] { new Size(32, 32), new Size(48, 48), new Size(64, 64) });
+        Assert.Contains(size, new Size[] { new(32, 32), new(48, 48), new(64, 64) });
         Assert.Equal(size, SystemInformation.CursorSize);
     }
 
@@ -609,7 +609,7 @@ public class SystemInformationTests
     public void SystemInformation_PopupMenuAlignment_Get_ReturnsExpected()
     {
         LeftRightAlignment alignment = SystemInformation.PopupMenuAlignment;
-        Assert.True(Enum.IsDefined(typeof(LeftRightAlignment), alignment));
+        Assert.True(Enum.IsDefined(alignment));
         Assert.Equal(alignment, SystemInformation.PopupMenuAlignment);
     }
 
@@ -649,7 +649,7 @@ public class SystemInformationTests
     public void SystemInformation_ScreenOrientation_Get_ReturnsExpected()
     {
         ScreenOrientation orientation = SystemInformation.ScreenOrientation;
-        Assert.True(Enum.IsDefined(typeof(ScreenOrientation), orientation));
+        Assert.True(Enum.IsDefined(orientation));
         Assert.Equal(orientation, SystemInformation.ScreenOrientation);
     }
 

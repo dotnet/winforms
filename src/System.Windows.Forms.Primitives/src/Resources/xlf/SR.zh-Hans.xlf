@@ -2,14 +2,9 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="../SR.resx">
     <body>
-      <trans-unit id="COM2UnhandledVT">
-        <source>Unhandled VT: {0}.</source>
-        <target state="translated">未处理的 VT: {0}。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
-        <target state="new">Unable to retrieve the root folder.</target>
+        <target state="translated">无法检索根文件夹。</target>
         <note />
       </trans-unit>
       <trans-unit id="General_MissingService">
@@ -20,6 +15,11 @@
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">在 IDictionary 参数中有一个或多个无效项。请验证所有值均与对象的属性匹配。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="translated">无法在类“{0}”中找到资源“{1}”。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

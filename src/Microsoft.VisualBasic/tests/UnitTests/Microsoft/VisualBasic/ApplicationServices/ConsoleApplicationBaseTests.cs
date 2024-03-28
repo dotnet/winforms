@@ -8,8 +8,8 @@ public class ConsoleApplicationBaseTests
     [Fact]
     public void CommandLineArgs()
     {
-        var app = new ConsoleApplicationBase();
-        var expected = System.Environment.GetCommandLineArgs().Skip(1).ToArray();
+        ConsoleApplicationBase app = new();
+        string[] expected = System.Environment.GetCommandLineArgs().Skip(1).ToArray();
         Assert.Equal(expected, app.CommandLineArgs);
     }
 }

@@ -9,6 +9,7 @@ namespace Microsoft.VisualStudio.Shell;
 /// </summary>
 internal enum PROPCAT : int
 {
+#pragma warning disable format
     Nil         = unchecked((int)0xFFFFFFFF),
     Misc        = unchecked((int)0xFFFFFFFE),
     Font        = unchecked((int)0xFFFFFFFD),
@@ -20,4 +21,5 @@ internal enum PROPCAT : int
     Text        = unchecked((int)0xFFFFFFF7),
     Scale       = unchecked((int)0xFFFFFFF6),
     DDE         = unchecked((int)0xFFFFFFF5),
+#pragma warning restore format
 }

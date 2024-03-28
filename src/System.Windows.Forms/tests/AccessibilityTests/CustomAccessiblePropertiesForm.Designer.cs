@@ -28,7 +28,7 @@ partial class CustomAccessiblePropertiesForm
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomAccessiblePropertiesForm));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(CustomAccessiblePropertiesForm));
         this.button1 = new System.Windows.Forms.Button();
         this.checkBox1 = new System.Windows.Forms.CheckBox();
         this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();

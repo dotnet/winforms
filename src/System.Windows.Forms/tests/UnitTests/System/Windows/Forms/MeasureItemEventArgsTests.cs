@@ -10,7 +10,7 @@ public class MeasureItemEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Graphics_Int_Int_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { null, -1, -1 };
@@ -22,7 +22,7 @@ public class MeasureItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_Int_Int_TestData))]
     public void Ctor_Graphics_Int_Int(Graphics graphics, int index, int itemHeight)
     {
-        var e = new MeasureItemEventArgs(graphics, index, itemHeight);
+        MeasureItemEventArgs e = new(graphics, index, itemHeight);
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(index, e.Index);
         Assert.Equal(itemHeight, e.ItemHeight);
@@ -31,7 +31,7 @@ public class MeasureItemEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Graphics_Int_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { null, -1 };
@@ -43,7 +43,7 @@ public class MeasureItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_Int_TestData))]
     public void Ctor_Graphics_Int(Graphics graphics, int index)
     {
-        var e = new MeasureItemEventArgs(graphics, index);
+        MeasureItemEventArgs e = new(graphics, index);
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(index, e.Index);
         Assert.Equal(0, e.ItemHeight);
@@ -56,15 +56,13 @@ public class MeasureItemEventArgsTests
     [InlineData(1)]
     public void ItemHeight_Set_GetReturnsExpected(int value)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        MeasureItemEventArgs e = new(graphics, 1)
         {
-            var e = new MeasureItemEventArgs(graphics, 1)
-            {
-                ItemHeight = value
-            };
-            Assert.Equal(value, e.ItemHeight);
-        }
+            ItemHeight = value
+        };
+        Assert.Equal(value, e.ItemHeight);
     }
 
     [Theory]
@@ -73,14 +71,12 @@ public class MeasureItemEventArgsTests
     [InlineData(1)]
     public void ItemWidth_Set_GetReturnsExpected(int value)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        MeasureItemEventArgs e = new(graphics, 1)
         {
-            var e = new MeasureItemEventArgs(graphics, 1)
-            {
-                ItemWidth = value
-            };
-            Assert.Equal(value, e.ItemWidth);
-        }
+            ItemWidth = value
+        };
+        Assert.Equal(value, e.ItemWidth);
     }
 }

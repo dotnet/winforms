@@ -11,7 +11,7 @@ public class IconConverter : ExpandableObjectConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
     {
-        return (sourceType == typeof(byte[]));
+        return sourceType == typeof(byte[]);
     }
 
     public override bool CanConvertTo(ITypeDescriptorContext? context, [NotNullWhen(true)] Type? destinationType)
@@ -29,7 +29,7 @@ public class IconConverter : ExpandableObjectConverter
     {
         if (destinationType == typeof(string))
         {
-            if (value == null)
+            if (value is null)
             {
                 return SR.none;
             }
@@ -42,7 +42,7 @@ public class IconConverter : ExpandableObjectConverter
         {
             if (value is Icon icon)
             {
-                using var ms = new MemoryStream();
+                using MemoryStream ms = new();
                 icon.Save(ms);
                 return ms.ToArray();
             }

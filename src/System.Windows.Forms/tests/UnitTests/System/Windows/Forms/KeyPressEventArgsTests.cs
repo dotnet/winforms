@@ -11,7 +11,7 @@ public class KeyPressEventArgsTests
     [InlineData('a')]
     public void Ctor_Char(char keyChar)
     {
-        var e = new KeyPressEventArgs(keyChar);
+        KeyPressEventArgs e = new(keyChar);
         Assert.Equal(keyChar, e.KeyChar);
         Assert.False(e.Handled);
     }
@@ -21,7 +21,7 @@ public class KeyPressEventArgsTests
     [InlineData('a')]
     public void KeyChar_Set_GetReturnsExpected(char value)
     {
-        var e = new KeyPressEventArgs('b')
+        KeyPressEventArgs e = new('b')
         {
             KeyChar = value
         };
@@ -33,7 +33,7 @@ public class KeyPressEventArgsTests
     [InlineData(false)]
     public void Handled_Set_GetReturnsExpected(bool value)
     {
-        var e = new KeyPressEventArgs('a')
+        KeyPressEventArgs e = new('a')
         {
             Handled = value
         };

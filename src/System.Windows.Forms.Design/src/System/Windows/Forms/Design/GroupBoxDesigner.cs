@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class GroupBoxDesigner : ParentControlDesigner
 {
-    private InheritanceUI inheritanceUI;
+    private InheritanceUI _inheritanceUI;
 
     /// <summary>
     /// Determines the default location for a control added to this designer.
@@ -48,7 +48,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
     private void OnGetUIValueItem(object component, PropertyDescriptor propDesc, ArrayList valueUIItemList){
     
         if (propDesc.PropertyType == typeof(string)) {
-            Bitmap bmp = new Bitmap(typeof(GroupBoxDesigner), "BoundProperty.bmp");
+            Bitmap bmp = new(typeof(GroupBoxDesigner), "BoundProperty.bmp");
             bmp.MakeTransparent();
             valueUIItemList.Add(new LocalUIItem(bmp, new PropertyValueUIItemInvokeHandler(this.OnPropertyValueUIItemInvoke), "Data Can"));
             
@@ -86,9 +86,9 @@ internal class GroupBoxDesigner : ParentControlDesigner
         //
         if (Inherited)
         {
-            inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
+            _inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
 
-            if (inheritanceUI is not null)
+            if (_inheritanceUI is not null)
             {
                 pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
             }

@@ -27,13 +27,12 @@ internal class TextBoxBaseDesigner : ControlDesigner
         get
         {
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
-
             BorderStyle borderStyle = BorderStyle.Fixed3D;
-            PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
-            if (prop is not null)
-            {
-                borderStyle = (BorderStyle)prop.GetValue(Component)!;
-            }
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            props.TryGetPropertyDescriptorValue(
+                "BorderStyle",
+                Component,
+                ref borderStyle);
 
             if (borderStyle == BorderStyle.None)
             {
@@ -53,20 +52,15 @@ internal class TextBoxBaseDesigner : ControlDesigner
                 baseline += 0;
             }
 
-            IList snapLines = base.SnapLines;
-
+            IList<SnapLine> snapLines = SnapLinesInternal;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
-
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 
     private string Text
     {
-        get
-        {
-            return Control.Text;
-        }
+        get => Control.Text;
         set
         {
             Control.Text = value;
@@ -108,12 +102,12 @@ internal class TextBoxBaseDesigner : ControlDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "Text",
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {

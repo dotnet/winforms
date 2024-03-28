@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
@@ -11,18 +9,19 @@ namespace System.Windows.Forms.Design;
 
 internal class FormatStringEditor : UITypeEditor
 {
-    private FormatStringDialog _formatStringDialog;
+    private FormatStringDialog? _formatStringDialog;
 
     /// Edits the specified value using the specified provider within the specified context.
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
 
-        var cellStyle = context.Instance as DataGridViewCellStyle;
-        var listControl = context.Instance as ListControl;
+        object component = context?.Instance!;
+        DataGridViewCellStyle? cellStyle = component as DataGridViewCellStyle;
+        ListControl? listControl = component as ListControl;
 
         Debug.Assert(
             listControl is not null || cellStyle is not null,
@@ -38,10 +37,10 @@ internal class FormatStringEditor : UITypeEditor
         }
         else
         {
-            _formatStringDialog.DataGridViewCellStyle = cellStyle;
+            _formatStringDialog.DataGridViewCellStyle = cellStyle!;
         }
 
-        if (provider.TryGetService(out IComponentChangeService changeService))
+        if (provider.TryGetService(out IComponentChangeService? changeService))
         {
             if (cellStyle is not null)
             {
@@ -51,8 +50,8 @@ internal class FormatStringEditor : UITypeEditor
             }
             else
             {
-                changeService.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"]);
-                changeService.OnComponentChanging(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"]);
+                changeService.OnComponentChanging(component, TypeDescriptor.GetProperties(component)["FormatString"]);
+                changeService.OnComponentChanging(component, TypeDescriptor.GetProperties(component)["FormatInfo"]);
             }
         }
 
@@ -65,7 +64,7 @@ internal class FormatStringEditor : UITypeEditor
         }
 
         // Since the bindings may have changed, the properties listed in the properties window need to be refreshed.
-        TypeDescriptor.Refresh(context.Instance);
+        TypeDescriptor.Refresh(component);
 
         if (changeService is not null)
         {
@@ -77,14 +76,14 @@ internal class FormatStringEditor : UITypeEditor
             }
             else
             {
-                changeService.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatString"]);
-                changeService.OnComponentChanged(listControl, TypeDescriptor.GetProperties(listControl)["FormatInfo"]);
+                changeService.OnComponentChanged(component, TypeDescriptor.GetProperties(component)["FormatString"]);
+                changeService.OnComponentChanged(component, TypeDescriptor.GetProperties(component)["FormatInfo"]);
             }
         }
 
         return value;
     }
 
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         => UITypeEditorEditStyle.Modal;
 }

@@ -10,7 +10,7 @@ public class SendKeysTests
     {
         // Regression https://github.com/dotnet/winforms/issues/6666
 
-        using var form = new CaptureForm();
+        using CaptureForm form = new();
         form.Show();
         form.Focus();
         SendKeys.SendWait("^(a)^(c)");
@@ -26,7 +26,7 @@ public class SendKeysTests
 
     private class CaptureForm : Form
     {
-        public List<KeyEventArgs> KeyEvents { get; } = new();
+        public List<KeyEventArgs> KeyEvents { get; } = [];
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

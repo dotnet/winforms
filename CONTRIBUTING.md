@@ -57,5 +57,5 @@ There are lots of thoughts and [approaches](https://github.com/antlr/antlr4-cpp/
 [api-review-process]: https://github.com/dotnet/runtime/blob/master/docs/project/api-review-process.md
 [breaking-changes]: https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/breaking-changes.md#bucket-1-public-contract
 [breaking-changes-public-contract]: https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/breaking-changes.md#bucket-1-public-contract
-[coding-style]: https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md
+[coding-style]: docs/coding-style.md
 [net-contributing]: https://github.com/dotnet/runtime/blob/master/CONTRIBUTING.md

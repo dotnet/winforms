@@ -10,20 +10,20 @@ namespace Microsoft.VisualStudio.Shell;
 
 internal unsafe struct IProvidePropertyBuilder : IComIID
 {
-    internal static readonly Guid Guid = new(0x33C0C1D8, 0x33CF, 0x11d3, 0xBF, 0xF2, 0x00, 0xC0, 0x4F, 0x99, 0x02, 0x35);
+    internal static Guid Guid { get; } = new(0x33C0C1D8, 0x33CF, 0x11d3, 0xBF, 0xF2, 0x00, 0xC0, 0x4F, 0x99, 0x02, 0x35);
 
     static ref readonly Guid IComIID.Guid
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            ReadOnlySpan<byte> data = new byte[]
-            {
+            ReadOnlySpan<byte> data =
+            [
                 0xd8, 0xc1, 0xc0, 0x33,
                 0xcf, 0x33,
                 0xd3, 0x11,
                 0xbf, 0xf2, 0x00, 0xc0, 0x4f, 0x99, 0x02, 0x35
-            };
+            ];
 
             return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
         }

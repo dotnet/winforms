@@ -14,7 +14,7 @@ public class ComboBox_ComboBoxChildNativeWindowTests
         var childNativeWindow = comboBox.GetListNativeWindow();
         Type childWindowTypeEnum = typeof(ComboBox).GetNestedType("ChildWindowType", Reflection.BindingFlags.NonPublic);
 
-        foreach (var childWindowType in Enum.GetValues(childWindowTypeEnum))
+        foreach (object childWindowType in Enum.GetValues(childWindowTypeEnum))
         {
             Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
         }

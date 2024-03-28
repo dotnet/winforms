@@ -19,7 +19,7 @@ public class PropertyValueUIItemTests
     [MemberData(nameof(Ctor_Image_PropertyValueUIItemInvokeHandler_String_TestData))]
     public void PropertyValueUIItem_Ctor_Image_PropertyValueUIItemInvokeHandler_String(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string tooltip)
     {
-        var item = new PropertyValueUIItem(uiItemImage, handler, tooltip);
+        PropertyValueUIItem item = new(uiItemImage, handler, tooltip);
         Assert.Same(uiItemImage, item.Image);
         Assert.Same(handler, item.InvokeHandler);
         Assert.Same(tooltip, item.ToolTip);
@@ -34,10 +34,8 @@ public class PropertyValueUIItemTests
     [Fact]
     public void PropertyValueUIItem_Ctor_NullHandler_ThrowsArgumentNullException()
     {
-        using (var uiItemImage = new Bitmap(10, 10))
-        {
-            Assert.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(uiItemImage, null, "tooltip"));
-        }
+        using Bitmap uiItemImage = new(10, 10);
+        Assert.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(uiItemImage, null, "tooltip"));
     }
 
     private static void Dummy_PropertyValueUIItemInvokeHandler(ITypeDescriptorContext context, PropertyDescriptor propDesc, PropertyValueUIItem invokedItem) { }

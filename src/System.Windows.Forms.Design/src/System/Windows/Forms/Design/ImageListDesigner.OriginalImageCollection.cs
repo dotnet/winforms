@@ -6,18 +6,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 
 namespace System.Windows.Forms.Design;
 
 internal partial class ImageListDesigner
 {
-    //  Shadow ImageList.Images to allow arbitrary handle recreation.
+    // Shadow ImageList.Images to allow arbitrary handle recreation.
     [Editor($"System.Windows.Forms.Design.ImageCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     internal class OriginalImageCollection : IList
     {
         private readonly ImageListDesigner _owner;
-        private readonly List<object> _items = new();
+        private readonly List<object> _items = [];
 
         internal OriginalImageCollection(ImageListDesigner owner)
         {
@@ -50,23 +49,16 @@ internal partial class ImageListDesigner
         {
             get
             {
-                return index < 0 || index >= Count
-                    ? throw new ArgumentOutOfRangeException(string.Format(SR.InvalidArgument,
-                                                              nameof(index),
-                                                              index.ToString(CultureInfo.CurrentCulture)))
-                    : (ImageListImage)_items[index];
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+
+                return (ImageListImage)_items[index];
             }
             set
             {
-                if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException(string.Format(SR.InvalidArgument,
-                                                              nameof(index),
-                                                              index.ToString(CultureInfo.CurrentCulture)));
-
-                if (value is null)
-                    throw new ArgumentException(string.Format(SR.InvalidArgument,
-                                                              nameof(value),
-                                                              "null"));
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+                ArgumentNullException.ThrowIfNull(value);
 
                 AssertInvariant();
                 _items[index] = value;
@@ -187,10 +179,8 @@ internal partial class ImageListDesigner
         public void RemoveAt(int index)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(index, 0, nameof(index));
-            if (index < 0 || index >= Count)
-                throw new ArgumentOutOfRangeException(string.Format(SR.InvalidArgument,
-                                                          nameof(index),
-                                                          index.ToString(CultureInfo.CurrentCulture)));
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             AssertInvariant();
             _items.RemoveAt(index);

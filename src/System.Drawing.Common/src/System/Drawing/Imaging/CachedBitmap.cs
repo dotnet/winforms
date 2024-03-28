@@ -5,9 +5,6 @@ using System.Threading;
 
 #if NET8_0_OR_GREATER
 
-
-using static System.Drawing.SafeNativeMethods;
-
 namespace System.Drawing.Imaging;
 
 /// <summary>
@@ -28,7 +25,7 @@ namespace System.Drawing.Imaging;
 ///   <see cref="CachedBitmap"/> cannot be used to draw to a printer or metafile.
 ///  </para>
 /// </remarks>
-public sealed class CachedBitmap : IDisposable
+public sealed unsafe class CachedBitmap : IDisposable
 {
     private nint _handle;
 
@@ -44,10 +41,12 @@ public sealed class CachedBitmap : IDisposable
         ArgumentNullException.ThrowIfNull(bitmap);
         ArgumentNullException.ThrowIfNull(graphics);
 
-        Gdip.CheckStatus(Gdip.GdipCreateCachedBitmap(
-            new(bitmap, bitmap._nativeImage),
-            new(graphics, graphics.NativeGraphics),
-            out _handle));
+        GpCachedBitmap* cachedBitmap;
+        PInvoke.GdipCreateCachedBitmap(
+            bitmap.Pointer(),
+            graphics.Pointer(),
+            &cachedBitmap);
+        _handle = (nint)cachedBitmap;
     }
 
     internal nint Handle => _handle;
@@ -60,7 +59,7 @@ public sealed class CachedBitmap : IDisposable
             return;
         }
 
-        int status = Gdip.GdipDeleteCachedBitmap(handle);
+        Status status = PInvoke.GdipDeleteCachedBitmap((GpCachedBitmap*)handle);
         if (disposing)
         {
             // Don't want to throw on the finalizer thread.

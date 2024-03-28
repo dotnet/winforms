@@ -14,7 +14,7 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_Ctor_Default()
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -95,7 +95,7 @@ public partial class ToolStripButtonTests
     [StringWithNullData]
     public void ToolStripButton_Ctor_String(string text)
     {
-        using var item = new SubToolStripButton(text);
+        using SubToolStripButton item = new(text);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -182,7 +182,7 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(Ctor_Image_TestData))]
     public void ToolStripButton_Ctor_Image(Image image)
     {
-        using var item = new SubToolStripButton(image);
+        using SubToolStripButton item = new(image);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -272,7 +272,7 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(Ctor_String_Image_TestData))]
     public void ToolStripButton_Ctor_String_Image(string text, Image image)
     {
-        using var item = new SubToolStripButton(text, image);
+        using SubToolStripButton item = new(text, image);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -362,7 +362,7 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(Ctor_String_Image_EventHandler_TestData))]
     public void ToolStripButton_Ctor_String_Image_EventHandler(string text, Image image, EventHandler onClick)
     {
-        using var item = new SubToolStripButton(text, image, onClick);
+        using SubToolStripButton item = new(text, image, onClick);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
         Assert.Null(item.AccessibleDescription);
@@ -442,7 +442,7 @@ public partial class ToolStripButtonTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var item = new ToolStripButton("text", null, onClick);
+        using ToolStripButton item = new("text", null, onClick);
         item.PerformClick();
         Assert.Equal(1, callCount);
     }
@@ -460,7 +460,7 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(Ctor_String_Image_EventHandler_String_TestData))]
     public void ToolStripButton_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name, string expectedName)
     {
-        using var item = new SubToolStripButton(text, image, onClick, name);
+        using SubToolStripButton item = new(text, image, onClick, name);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
         Assert.Null(item.AccessibleDescription);
@@ -540,7 +540,7 @@ public partial class ToolStripButtonTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var item = new ToolStripButton("text", null, onClick, "name");
+        using ToolStripButton item = new("text", null, onClick, "name");
         item.PerformClick();
         Assert.Equal(1, callCount);
     }
@@ -549,7 +549,7 @@ public partial class ToolStripButtonTests
     [BoolData]
     public void ToolStripButton_AutoToolTip_Set_GetReturnsExpected(bool value)
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             AutoToolTip = value
         };
@@ -617,7 +617,7 @@ public partial class ToolStripButtonTests
     [BoolData]
     public void ToolStripButton_CheckOnClick_Set_GetReturnsExpected(bool value)
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             CheckOnClick = value
         };
@@ -637,7 +637,7 @@ public partial class ToolStripButtonTests
     [InlineData(false, CheckState.Unchecked, CheckState.Checked)]
     public void ToolStripButton_Checked_Set_GetReturnsExpected(bool value, CheckState expectedCheckState1, CheckState expectedCheckState2)
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             Checked = value
         };
@@ -660,8 +660,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, CheckState.Unchecked, CheckState.Checked)]
     public void ToolStripButton_Checked_SetWithOwner_GetReturnsExpected(bool value, CheckState expectedCheckState1, CheckState expectedCheckState2)
     {
-        using var owner = new ToolStrip();
-        using var item = new ToolStripButton
+        using ToolStrip owner = new();
+        using ToolStripButton item = new()
         {
             Owner = owner,
             Checked = value
@@ -688,8 +688,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, CheckState.Unchecked, CheckState.Checked)]
     public void ToolStripButton_Checked_SetWithOwnerWithHandle_GetReturnsExpected(bool value, CheckState expectedCheckState1, CheckState expectedCheckState2)
     {
-        using var owner = new ToolStrip();
-        using var item = new ToolStripButton
+        using ToolStrip owner = new();
+        using ToolStripButton item = new()
         {
             Owner = owner
         };
@@ -733,8 +733,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, CheckState.Unchecked, CheckState.Checked)]
     public void ToolStripButton_Checked_SetWithParent_GetReturnsExpected(bool value, CheckState expectedCheckState1, CheckState expectedCheckState2)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripButton
+        using ToolStrip parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent,
             Checked = value
@@ -761,8 +761,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0, CheckState.Unchecked, CheckState.Checked)]
     public void ToolStripButton_Checked_SetWithParentWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount, CheckState expectedCheckState1, CheckState expectedCheckState2)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripButton
+        using ToolStrip parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent
         };
@@ -804,7 +804,7 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_Checked_SetWithHandler_CallsCheckedChanged()
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             Checked = true
         };
@@ -862,7 +862,7 @@ public partial class ToolStripButtonTests
     [EnumData<CheckState>]
     public void ToolStripButton_CheckState_Set_GetReturnsExpected(CheckState value)
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             CheckState = value
         };
@@ -879,8 +879,8 @@ public partial class ToolStripButtonTests
     [EnumData<CheckState>]
     public void ToolStripButton_CheckState_SetWithOwner_GetReturnsExpected(CheckState value)
     {
-        using var owner = new ToolStrip();
-        using var item = new ToolStripButton
+        using ToolStrip owner = new();
+        using ToolStripButton item = new()
         {
             Owner = owner,
             CheckState = value
@@ -900,8 +900,8 @@ public partial class ToolStripButtonTests
     [EnumData<CheckState>]
     public void ToolStripButton_CheckState_SetWithOwnerWithHandle_GetReturnsExpected(CheckState value)
     {
-        using var owner = new ToolStrip();
-        using var item = new ToolStripButton
+        using ToolStrip owner = new();
+        using ToolStripButton item = new()
         {
             Owner = owner
         };
@@ -934,7 +934,7 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_CheckState_SetWithHandler_CallsCheckedChanged()
     {
-        using var item = new ToolStripButton
+        using ToolStripButton item = new()
         {
             CheckState = CheckState.Checked
         };
@@ -992,14 +992,14 @@ public partial class ToolStripButtonTests
     [InvalidEnumData<CheckState>]
     public void ToolStripButton_CheckState_SetInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
     {
-        using var item = new ToolStripButton();
+        using ToolStripButton item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.CheckState = value);
     }
 
     [WinFormsFact]
     public void ToolStripButton_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
         Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);
         Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
@@ -1010,7 +1010,7 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -1024,7 +1024,7 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeCheckOnClick_ReturnsExpected()
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             CheckOnClick = true
         };
@@ -1042,7 +1042,7 @@ public partial class ToolStripButtonTests
     [InlineData(false, CheckState.Indeterminate, AccessibleStates.None)]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeChecked_ReturnsExpected(bool enabled, CheckState checkState, AccessibleStates expectedState)
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             Enabled = enabled,
             CheckState = checkState
@@ -1059,7 +1059,7 @@ public partial class ToolStripButtonTests
     [InlineData(false, AccessibleStates.None)]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeSelected_ReturnsExpected(bool enabled, AccessibleStates expectedState)
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             Enabled = enabled
         };
@@ -1086,7 +1086,7 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ToolStripButton_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
     {
-        using var item = new ToolStripButton();
+        using ToolStripButton item = new();
         Assert.Equal(new Size(23, 4), item.GetPreferredSize(proposedSize));
 
         // Call again.
@@ -1097,7 +1097,7 @@ public partial class ToolStripButtonTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripButton_OnCheckedChanged_Invoke_CallsCheckedChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1121,7 +1121,7 @@ public partial class ToolStripButtonTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripButton_OnCheckStateChanged_Invoke_CallsCheckStateChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1145,7 +1145,7 @@ public partial class ToolStripButtonTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripButton_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1171,7 +1171,7 @@ public partial class ToolStripButtonTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripButton_OnClick_InvokeCheckOnClick_CallsClick(EventArgs eventArgs)
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             CheckOnClick = true
         };
@@ -1200,7 +1200,7 @@ public partial class ToolStripButtonTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ToolStripButton_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -1261,17 +1261,17 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(OnPaint_TestData))]
     public void ToolStripButton_OnPaint_InvokeWithOwner_DoesNotCallPaint(ContentAlignment textAlign, RightToLeft rightToLeft, ToolStripItemDisplayStyle displayStyle, int expectedRenderItemImageCallCount, int expectedRenderItemTextCallCount, TextFormatFlags expectedTextFormat)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        var renderer = new SubToolStripRenderer();
-        using var owner = new ToolStrip
+        SubToolStripRenderer renderer = new();
+        using ToolStrip owner = new()
         {
             Renderer = renderer
         };
-        using var font = new Font("Arial", 8.25f);
-        using var item = new SubToolStripButton
+        using Font font = new("Arial", 8.25f);
+        using SubToolStripButton item = new()
         {
             DisplayStyle = displayStyle,
             Font = font,
@@ -1352,17 +1352,17 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(OnPaint_TestData))]
     public void ToolStripButton_OnPaint_InvokeWithOwnerCantShowKeyboardCues_DoesNotCallPaint(ContentAlignment textAlign, RightToLeft rightToLeft, ToolStripItemDisplayStyle displayStyle, int expectedRenderItemImageCallCount, int expectedRenderItemTextCallCount, TextFormatFlags expectedTextFormat)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        var renderer = new SubToolStripRenderer();
-        using var owner = new ToolStrip
+        SubToolStripRenderer renderer = new();
+        using ToolStrip owner = new()
         {
             Renderer = renderer
         };
-        using var font = new Font("Arial", 8.25f);
-        using var item = new CantShowKeyboardCuesToolStripButton
+        using Font font = new("Arial", 8.25f);
+        using CantShowKeyboardCuesToolStripButton item = new()
         {
             DisplayStyle = displayStyle,
             Font = font,
@@ -1445,7 +1445,7 @@ public partial class ToolStripButtonTests
         {
             yield return new object[] { displayStyle, null };
 
-            var image = new Bitmap(10, 10);
+            Bitmap image = new(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { displayStyle, new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4)) };
         }
@@ -1455,13 +1455,13 @@ public partial class ToolStripButtonTests
     [MemberData(nameof(OnPaint_WithParent_TestData))]
     public void ToolStripButton_OnPaint_InvokeWithParent_DoesNotCallPaint(ToolStripItemDisplayStyle displayStyle, PaintEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
-        using var parent = new ToolStrip
+        SubToolStripRenderer renderer = new();
+        using ToolStrip parent = new()
         {
             Renderer = renderer
         };
-        using var font = new Font("Arial", 8.25f);
-        using var item = new SubToolStripButton
+        using Font font = new("Arial", 8.25f);
+        using SubToolStripButton item = new()
         {
             DisplayStyle = displayStyle,
             Font = font,
@@ -1500,8 +1500,8 @@ public partial class ToolStripButtonTests
     [WinFormsFact]
     public void ToolStripButton_OnPaint_NullE_ThrowsNullReferenceException()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripButton
+        using ToolStrip owner = new();
+        using SubToolStripButton item = new()
         {
             Owner = owner
         };
@@ -1513,7 +1513,7 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_EnterKey_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             Enabled = enabled
         };
@@ -1538,8 +1538,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_EnterKeyWithParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripButton
+        using ToolStrip parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -1565,8 +1565,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_EnterKeyWithDropDownParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        var parent = new ToolStripDropDown();
-        using var item = new SubToolStripButton
+        ToolStripDropDown parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -1592,7 +1592,7 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_SpaceKey_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var item = new SubToolStripButton
+        using SubToolStripButton item = new()
         {
             Enabled = enabled
         };
@@ -1617,8 +1617,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_SpaceKeyWithParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        var parent = new ToolStripDropDown();
-        using var item = new SubToolStripButton
+        ToolStripDropDown parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -1644,8 +1644,8 @@ public partial class ToolStripButtonTests
     [InlineData(false, 0)]
     public void ToolStripButton_ProcessDialogKey_SpaceKeyWithDropDownParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        var parent = new ToolStripDropDown();
-        using var item = new SubToolStripButton
+        ToolStripDropDown parent = new();
+        using SubToolStripButton item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -1669,10 +1669,10 @@ public partial class ToolStripButtonTests
     [WinFormsTheory]
     [InlineData(Keys.A)]
     [InlineData(Keys.None)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripButton_ProcessDialogKey_UnknownKey_ReturnsFalse(Keys keyData)
     {
-        using var item = new SubToolStripButton();
+        using SubToolStripButton item = new();
         int callCount = 0;
         item.Click += (sender, e) => callCount++;
         Assert.False(item.ProcessDialogKey(keyData));

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -13,10 +13,10 @@ public class MarginsConverterTests
     [Fact]
     public void CanConvertFrom()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (MyTypeDescriptorContext context = new(); context is not null; context = null)
         {
             Assert.True(mc.CanConvertFrom(context, typeof(string)));
             Assert.False(mc.CanConvertFrom(context, typeof(Guid)));
@@ -28,10 +28,10 @@ public class MarginsConverterTests
     [Fact]
     public void CanConvertTo()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (MyTypeDescriptorContext context = new(); context is not null; context = null)
         {
             Assert.True(mc.CanConvertTo(context, typeof(string)));
             Assert.False(mc.CanConvertTo(context, typeof(Guid)));
@@ -43,13 +43,16 @@ public class MarginsConverterTests
     [Fact]
     public void CreateInstance()
     {
-        MarginsConverter mc = new MarginsConverter();
-        MyTypeDescriptorContext context = new MyTypeDescriptorContext();
+        MarginsConverter mc = new();
+        MyTypeDescriptorContext context = new();
 
-        IDictionary values = new Dictionary<string, int>();
-        values.Add("Left", 1);
-        values.Add("Right", 2);
-        values.Add("Top", 3);
+        IDictionary values = new Dictionary<string, int>
+        {
+            { "Left", 1 },
+            { "Right", 2 },
+            { "Top", 3 }
+        };
+
         Assert.Throws<ArgumentException>(() => mc.CreateInstance(context, values));
         values.Add("Bottom", 4);
 
@@ -67,7 +70,7 @@ public class MarginsConverterTests
     [Fact]
     public void GetCreateInstanceSupported()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
         Assert.True(mc.GetCreateInstanceSupported(null));
         Assert.True(mc.GetCreateInstanceSupported(new MyTypeDescriptorContext()));
     }
@@ -75,11 +78,11 @@ public class MarginsConverterTests
     [Fact]
     public void ConvertFrom()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
         CultureInfo culture = CultureInfo.InvariantCulture;
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (MyTypeDescriptorContext context = new(); context is not null; context = null)
         {
             object result;
             Assert.Equal(',', culture.TextInfo.ListSeparator[0]);
@@ -97,11 +100,11 @@ public class MarginsConverterTests
     [Fact]
     public void ConvertFrom_Throws()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
         CultureInfo culture = CultureInfo.InvariantCulture;
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (MyTypeDescriptorContext context = new(); context is not null; context = null)
         {
             Assert.Throws<NotSupportedException>(() => mc.ConvertFrom(context, null, null));
             Assert.Throws<NotSupportedException>(() => mc.ConvertFrom(context, culture, null));
@@ -114,13 +117,13 @@ public class MarginsConverterTests
     [Fact]
     public void ConvertTo()
     {
-        MarginsConverter mc = new MarginsConverter();
+        MarginsConverter mc = new();
         Guid guid = Guid.NewGuid();
         CultureInfo culture = CultureInfo.InvariantCulture;
-        Margins margins = new Margins() { Left = 1, Right = 2, Top = 3, Bottom = 4 };
+        Margins margins = new() { Left = 1, Right = 2, Top = 3, Bottom = 4 };
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (MyTypeDescriptorContext context = new(); context is not null; context = null)
         {
             Assert.Equal("1;2;3;4", mc.ConvertTo(context, culture, "1;2;3;4", typeof(string)));
 

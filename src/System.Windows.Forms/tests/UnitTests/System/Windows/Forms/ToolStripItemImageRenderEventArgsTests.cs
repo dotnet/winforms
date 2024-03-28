@@ -9,7 +9,7 @@ public class ToolStripItemImageRenderEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStripItem_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { null, null };
@@ -26,7 +26,7 @@ public class ToolStripItemImageRenderEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), null };
@@ -61,7 +61,7 @@ public class ToolStripItemImageRenderEventArgsTests
     [MemberData(nameof(Ctor_Graphics_ToolStripItem_Rectangle_TestData))]
     public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Rectangle(Graphics g, ToolStripItem item, Rectangle imageRectangle, Image expectedImage)
     {
-        var e = new ToolStripItemImageRenderEventArgs(g, item, imageRectangle);
+        ToolStripItemImageRenderEventArgs e = new(g, item, imageRectangle);
         Assert.Equal(g, e.Graphics);
         Assert.Equal(item, e.Item);
         Assert.Equal(imageRectangle, e.ImageRectangle);
@@ -71,22 +71,20 @@ public class ToolStripItemImageRenderEventArgsTests
     [WinFormsFact]
     public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Rectangle_MirroredImage()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics g = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using Graphics g = Graphics.FromImage(image);
+        ToolStripButton item = new()
         {
-            var item = new ToolStripButton
-            {
-                RightToLeftAutoMirrorImage = true,
-                RightToLeft = RightToLeft.Yes,
-                Image = image
-            };
-            var e = new ToolStripItemImageRenderEventArgs(g, item, new Rectangle(1, 2, 3, 4));
-            Assert.Equal(g, e.Graphics);
-            Assert.Equal(item, e.Item);
-            Assert.Equal(new Rectangle(1, 2, 3, 4), e.ImageRectangle);
-            Assert.NotSame(image, e.Image);
-            Assert.Equal(image.Size, e.Image.Size);
-        }
+            RightToLeftAutoMirrorImage = true,
+            RightToLeft = RightToLeft.Yes,
+            Image = image
+        };
+        ToolStripItemImageRenderEventArgs e = new(g, item, new Rectangle(1, 2, 3, 4));
+        Assert.Equal(g, e.Graphics);
+        Assert.Equal(item, e.Item);
+        Assert.Equal(new Rectangle(1, 2, 3, 4), e.ImageRectangle);
+        Assert.NotSame(image, e.Image);
+        Assert.Equal(image.Size, e.Image.Size);
     }
 
     public static IEnumerable<object[]> Ctor_ToolStripItem_Image_Rectangle_TestData()
@@ -101,7 +99,7 @@ public class ToolStripItemImageRenderEventArgsTests
     {
         using Graphics graphics = Graphics.FromImage(image);
 
-        var e = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+        ToolStripItemImageRenderEventArgs e = new(graphics, item, image, imageRectangle);
 
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(item, e.Item);

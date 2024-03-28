@@ -5,9 +5,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
-using static Interop.ComCtl32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -18,7 +17,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Ctor_Default()
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -156,7 +155,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("SysListView32", createParams.ClassName);
@@ -177,7 +176,7 @@ public class ListViewTests
     [EnumData<ItemActivation>]
     public void ListView_Activation_Set_GetReturnsExpected(ItemActivation value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             Activation = value
         };
@@ -196,7 +195,7 @@ public class ListViewTests
     [InlineData(ItemActivation.TwoClick, 1)]
     public void ListView_Activation_SetWithHandle_GetReturnsExpected(ItemActivation value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -224,7 +223,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Activation_SetHotTrackingOneClick_Nop()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true,
             Activation = ItemActivation.OneClick
@@ -242,7 +241,7 @@ public class ListViewTests
     [InvalidEnumData<ItemActivation>]
     public void ListView_Activation_SetInvalidValue_ThrowsInvalidEnumArgumentException(ItemActivation value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => listView.Activation = value);
     }
 
@@ -250,7 +249,7 @@ public class ListViewTests
     [InvalidEnumData<ItemActivation>]
     public void ListView_Activation_SetHotTrackingInvalidValue_ThrowsInvalidEnumArgumentException(ItemActivation value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true
         };
@@ -262,7 +261,7 @@ public class ListViewTests
     [InlineData(ItemActivation.TwoClick)]
     public void ListView_Activation_SetHotTrackingNotOneClick_ThrowsArgumentException(ItemActivation value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true
         };
@@ -274,7 +273,7 @@ public class ListViewTests
     [EnumData<ListViewAlignment>]
     public void ListView_Alignment_Set_GetReturnsExpected(ListViewAlignment value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             Alignment = value
         };
@@ -294,7 +293,7 @@ public class ListViewTests
     [InlineData(ListViewAlignment.SnapToGrid, 2, 1)]
     public void ListView_Alignment_SetWithHandle_GetReturnsExpected(ListViewAlignment value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -323,7 +322,7 @@ public class ListViewTests
     [InvalidEnumData<ListViewAlignment>]
     public void ListView_Alignment_SetInvalidValue_ThrowsInvalidEnumArgumentException(ListViewAlignment value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => listView.Alignment = value);
     }
 
@@ -331,7 +330,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_AllowColumnReorder_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AllowColumnReorder = value
         };
@@ -354,7 +353,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_AllowColumnReorder_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -391,7 +390,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_AutoArrange_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = value
         };
@@ -414,7 +413,7 @@ public class ListViewTests
     [InlineData(false, 1)]
     public void ListView_AutoArrange_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -457,7 +456,7 @@ public class ListViewTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void ListView_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ListView
+        using ListView control = new()
         {
             BackColor = value
         };
@@ -480,7 +479,7 @@ public class ListViewTests
     [MemberData(nameof(BackColor_SetWithHandle_TestData))]
     public void ListView_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -508,7 +507,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_BackColor_GetBkColor_Success()
     {
-        using var control = new ListView();
+        using ListView control = new();
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56);
@@ -518,7 +517,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new ListView();
+        using ListView control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -554,7 +553,7 @@ public class ListViewTests
     [EnumData<ImageLayout>]
     public void ListView_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubListView
+        using SubListView control = new()
         {
             BackgroundImageLayout = value
         };
@@ -572,7 +571,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new ListView();
+        using ListView control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -608,7 +607,7 @@ public class ListViewTests
     [InvalidEnumData<ImageLayout>]
     public void ListView_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
@@ -616,7 +615,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_BackgroundImageTiled_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             BackgroundImageTiled = value
         };
@@ -638,7 +637,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_BackgroundImageTiled_SetWithBackgroundImage_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             BackgroundImage = new Bitmap(10, 10),
             BackgroundImageTiled = value
@@ -661,7 +660,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_BackgroundImageTiled_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -698,7 +697,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_BackgroundImageTiled_SetWithBackgroundImageWithHandle_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             BackgroundImage = new Bitmap(10, 10)
         };
@@ -738,7 +737,7 @@ public class ListViewTests
     [EnumData<BorderStyle>]
     public void ListView_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             BorderStyle = value
         };
@@ -757,7 +756,7 @@ public class ListViewTests
     [InlineData(BorderStyle.None, 1)]
     public void ListView_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -786,7 +785,7 @@ public class ListViewTests
     [InvalidEnumData<BorderStyle>]
     public void ListView_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => listView.BorderStyle = value);
     }
 
@@ -814,7 +813,7 @@ public class ListViewTests
     [MemberData(nameof(CheckBoxes_Set_TestData))]
     public void ListView_CheckBoxes_Set_GetReturnsExpected(bool useCompatibleStateImageBehavior, View view, ListViewAlignment alignment, ImageList stateImageList, bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             View = view,
@@ -840,7 +839,7 @@ public class ListViewTests
     [MemberData(nameof(CheckBoxes_Set_TestData))]
     public void ListView_CheckBoxes_SetAutoArrange_GetReturnsExpected(bool useCompatibleStateImageBehavior, View view, ListViewAlignment alignment, ImageList stateImageList, bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = true,
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
@@ -867,12 +866,12 @@ public class ListViewTests
     [BoolData]
     public void ListView_CheckBoxes_SetWithCheckedItems_Success(bool value)
     {
-        var item1 = new ListViewItem
+        ListViewItem item1 = new()
         {
             Checked = true
         };
-        var item2 = new ListViewItem();
-        using var listView = new ListView();
+        ListViewItem item2 = new();
+        using ListView listView = new();
         listView.Items.Add(item1);
         listView.Items.Add(item2);
         Assert.Equal(new ListViewItem[] { item1, item2 }, listView.Items.Cast<ListViewItem>());
@@ -953,7 +952,7 @@ public class ListViewTests
     [MemberData(nameof(CheckBoxes_SetWithHandle_TestData))]
     public void ListView_CheckBoxes_SetWithHandle_GetReturnsExpected(bool useCompatibleStateImageBehavior, View view, ListViewAlignment alignment, ImageList stateImageList, bool value, int expectedInvalidatedCallCount1, int expectedCreatedCallCount1, int expectedInvalidatedCallCount2, int expectedCreatedCallCount2)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             View = view,
@@ -996,7 +995,7 @@ public class ListViewTests
     [MemberData(nameof(CheckBoxes_SetWithHandle_TestData))]
     public void ListView_CheckBoxes_SetAutoArrangeWithHandle_GetReturnsExpected(bool useCompatibleStateImageBehavior, View view, ListViewAlignment alignment, ImageList stateImageList, bool value, int expectedInvalidatedCallCount1, int expectedCreatedCallCount1, int expectedInvalidatedCallCount2, int expectedCreatedCallCount2)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = true,
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
@@ -1040,12 +1039,12 @@ public class ListViewTests
     [BoolData]
     public void ListView_CheckBoxes_SetWithCheckedItemsWithHandle_Success(bool value)
     {
-        var item1 = new ListViewItem
+        ListViewItem item1 = new()
         {
             Checked = true
         };
-        var item2 = new ListViewItem();
-        using var listView = new ListView();
+        ListViewItem item2 = new();
+        using ListView listView = new();
         listView.Items.Add(item1);
         listView.Items.Add(item2);
         Assert.Equal(new ListViewItem[] { item1, item2 }, listView.Items.Cast<ListViewItem>());
@@ -1076,7 +1075,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_CheckBoxes_SetTile_ThrowsNotSupportedException(bool useCompatibleStateImageBehavior)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             View = View.Tile
@@ -1095,7 +1094,7 @@ public class ListViewTests
         static WeakReference CreateAndDisposeListViewWithImageListReference(ImageList imageList)
         {
             // short lived test code, whatever you need to trigger the leak
-            using var listView = new ListView();
+            using ListView listView = new();
             listView.LargeImageList = imageList;
 
             // return a weak reference to whatever you want to track GC of
@@ -1104,7 +1103,7 @@ public class ListViewTests
         }
 
         // simulate a long-living ImageList by keeping it alive for the test
-        using var imageList = new ImageList();
+        using ImageList imageList = new();
 
         // simulate a short-living ListView by disposing it (returning a WeakReference to track finalization)
         var listViewRef = CreateAndDisposeListViewWithImageListReference(imageList);
@@ -1142,7 +1141,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
         Assert.Equal(value, control.DoubleBuffered);
     }
@@ -1151,7 +1150,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_DoubleBuffered_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubListView
+        using SubListView control = new()
         {
             DoubleBuffered = value
         };
@@ -1177,7 +1176,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1223,7 +1222,7 @@ public class ListViewTests
     [MemberData(nameof(FocusedItem_Set_TestData))]
     public void ListView_FocusedItem_Set_GetReturnsExpected(ListViewItem value, bool? expectedFocused)
     {
-        using var control = new SubListView
+        using SubListView control = new()
         {
             FocusedItem = value
         };
@@ -1241,8 +1240,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_FocusedItem_SetChild_GetReturnsExpected()
     {
-        var value = new ListViewItem();
-        using var control = new SubListView();
+        ListViewItem value = new();
+        using SubListView control = new();
         control.Items.Add(value);
 
         control.FocusedItem = value;
@@ -1267,7 +1266,7 @@ public class ListViewTests
     [MemberData(nameof(FocusedItem_Set_TestData))]
     public void ListView_FocusedItem_SetWithHandle_GetReturnsExpected(ListViewItem value, bool? expectedFocused)
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         control.FocusedItem = value;
@@ -1283,8 +1282,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_FocusedItem_SetChildWithHandle_GetReturnsExpected()
     {
-        var value = new ListViewItem();
-        using var control = new SubListView();
+        ListViewItem value = new();
+        using SubListView control = new();
         control.Items.Add(value);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -1316,7 +1315,7 @@ public class ListViewTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void ListView_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ListView
+        using ListView control = new()
         {
             ForeColor = value
         };
@@ -1342,7 +1341,7 @@ public class ListViewTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void ListView_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1370,7 +1369,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_ForeColor_GetTxtColor_Success()
     {
-        using var control = new ListView();
+        using ListView control = new();
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
@@ -1380,7 +1379,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new ListView();
+        using ListView control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1416,7 +1415,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_FullRowSelect_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             FullRowSelect = value
         };
@@ -1439,7 +1438,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_FullRowSelect_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1476,7 +1475,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_GridLines_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             GridLines = value
         };
@@ -1499,7 +1498,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_GridLines_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1556,7 +1555,7 @@ public class ListViewTests
     [MemberData(nameof(GroupImageList_Set_GetReturnsExpected))]
     public void ListView_GroupImageList_Set_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -1577,8 +1576,8 @@ public class ListViewTests
     [MemberData(nameof(GroupImageList_Set_GetReturnsExpected))]
     public void ListView_GroupImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -1651,7 +1650,7 @@ public class ListViewTests
     [MemberData(nameof(GroupImageList_SetWithHandle_GetReturnsExpected))]
     public void ListView_GroupImageList_SetWithHandle_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -1737,7 +1736,7 @@ public class ListViewTests
     [MemberData(nameof(GroupImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
     public void ListView_GroupImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -1772,9 +1771,9 @@ public class ListViewTests
     [BoolData]
     public void ListView_GroupImageList_Dispose_DetachesFromListView(bool autoArrange)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             GroupImageList = imageList1
@@ -1797,9 +1796,9 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_GroupImageList_DisposeWithHandle_DetachesFromListView(bool autoArrange, int expectedInvalidatedCallCount)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange
         };
@@ -1839,7 +1838,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Handle_GetWithBackColor_Success()
     {
-        using var control = new ListView
+        using ListView control = new()
         {
             BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
         };
@@ -1850,7 +1849,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Handle_GetWithForeColor_Success()
     {
-        using var control = new ListView
+        using ListView control = new()
         {
             ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
         };
@@ -1862,7 +1861,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_Handle_GetWithoutGroups_Success(bool showGroups)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             ShowGroups = showGroups
         };
@@ -1913,12 +1912,12 @@ public class ListViewTests
 
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView
+                using ListView listView = new()
                 {
                     ShowGroups = showGroups
                 };
-                var group1 = new ListViewGroup();
-                var group2 = new ListViewGroup
+                ListViewGroup group1 = new();
+                ListViewGroup group2 = new()
                 {
                     Header = header,
                     HeaderAlignment = headerAlignment,
@@ -1930,10 +1929,10 @@ public class ListViewTests
 
                 Assert.Equal(2, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
 
-                var lvgroup1 = new LVGROUPW
+                LVGROUP lvgroup1 = new()
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszHeader = headerBuffer,
                     cchHeader = 256,
                     pszFooter = footerBuffer,
@@ -1945,10 +1944,10 @@ public class ListViewTests
                 Assert.True(lvgroup1.iGroupId >= 0);
                 Assert.Equal(0x00000009, (int)lvgroup1.uAlign);
 
-                var lvgroup2 = new LVGROUPW
+                LVGROUP lvgroup2 = new()
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszHeader = headerBuffer,
                     cchHeader = 256,
                     pszFooter = footerBuffer,
@@ -1970,7 +1969,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Handle_GetTextBackColor_Success()
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         nint expected = unchecked((nint)0xFFFFFFFF);
@@ -1980,7 +1979,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Handle_GetVersion_ReturnsExpected()
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int version = Application.UseVisualStyles ? 6 : 5;
         Assert.Equal(version, (int)PInvoke.SendMessage(control, PInvoke.CCM_GETVERSION));
@@ -1998,7 +1997,7 @@ public class ListViewTests
     [MemberData(nameof(Handle_CustomGetVersion_TestData))]
     public void ListView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
     {
-        using var control = new CustomGetVersionListView
+        using CustomGetVersionListView control = new()
         {
             GetVersionResult = getVersionResult
         };
@@ -2022,7 +2021,7 @@ public class ListViewTests
             }
             else if (m.Msg == (int)PInvoke.CCM_SETVERSION)
             {
-                Assert.Equal((IntPtr)5, m.WParam);
+                Assert.Equal(5, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 SetVersionCallCount++;
                 return;
@@ -2036,7 +2035,7 @@ public class ListViewTests
     [EnumData<ColumnHeaderStyle>]
     public void ListView_HeaderStyle_Set_GetReturnsExpected(ColumnHeaderStyle value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HeaderStyle = value
         };
@@ -2055,7 +2054,7 @@ public class ListViewTests
     [InlineData(ColumnHeaderStyle.None, 1, 1, 0)]
     public void ListView_HeaderStyle_SetClickableWithHandle_GetReturnsExpected(ColumnHeaderStyle value, int expectedInvalidatedCallCount, int expectedStyleChangedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2086,7 +2085,7 @@ public class ListViewTests
     [InlineData(ColumnHeaderStyle.None, 1, 1, 0)]
     public void ListView_HeaderStyle_SetNonClickableWithHandle_GetReturnsExpected(ColumnHeaderStyle value, int expectedInvalidatedCallCount, int expectedStyleChangedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HeaderStyle = ColumnHeaderStyle.Nonclickable
         };
@@ -2118,7 +2117,7 @@ public class ListViewTests
     [InvalidEnumData<ColumnHeaderStyle>]
     public void ListView_HeaderStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ColumnHeaderStyle value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => listView.HeaderStyle = value);
     }
 
@@ -2126,7 +2125,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_HideSelection_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HideSelection = value
         };
@@ -2149,7 +2148,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_HideSelection_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2186,7 +2185,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_HotTracking_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = value
         };
@@ -2209,7 +2208,7 @@ public class ListViewTests
     [InlineData(false, 0, 3)]
     public void ListView_HotTracking_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2245,7 +2244,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_HotTracking_Set_SetsHoverSelectionAndActivationIfTrue()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true
         };
@@ -2273,7 +2272,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_HoverSelection_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HoverSelection = value
         };
@@ -2296,7 +2295,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_HoverSelection_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2332,7 +2331,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_HoverSelection_SetHotTrackingTrue_Nop()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true,
             HoverSelection = true
@@ -2349,7 +2348,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_HoverSelection_SetHotTrackingFalse_ThrowsArgumentException()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             HotTracking = true
         };
@@ -2361,7 +2360,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_LabelEdit_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             LabelEdit = value
         };
@@ -2384,7 +2383,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_LabelEdit_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2421,7 +2420,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_LabelWrap_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             LabelWrap = value
         };
@@ -2444,7 +2443,7 @@ public class ListViewTests
     [InlineData(false, 1)]
     public void ListView_LabelWrap_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2501,7 +2500,7 @@ public class ListViewTests
     [MemberData(nameof(LargeImageList_Set_GetReturnsExpected))]
     public void ListView_LargeImageList_Set_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -2521,8 +2520,8 @@ public class ListViewTests
     [MemberData(nameof(LargeImageList_Set_GetReturnsExpected))]
     public void ListView_LargeImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -2595,7 +2594,7 @@ public class ListViewTests
     [MemberData(nameof(LargeImageList_SetWithHandle_GetReturnsExpected))]
     public void ListView_LargeImageList_SetWithHandle_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -2680,8 +2679,8 @@ public class ListViewTests
     [MemberData(nameof(LargeImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
     public void ListView_LargeImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -2716,9 +2715,9 @@ public class ListViewTests
     [BoolData]
     public void ListView_LargeImageList_Dispose_DetachesFromListView(bool autoArrange)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             LargeImageList = imageList1
@@ -2740,9 +2739,9 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_LargeImageList_DisposeWithHandle_DetachesFromListView(bool autoArrange, int expectedInvalidatedCallCount)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange
         };
@@ -2782,7 +2781,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_MultiSelect_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             MultiSelect = value
         };
@@ -2805,7 +2804,7 @@ public class ListViewTests
     [InlineData(false, 1)]
     public void ListView_MultiSelect_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2842,7 +2841,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_OwnerDraw_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             OwnerDraw = value
         };
@@ -2865,7 +2864,7 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_OwnerDraw_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2902,7 +2901,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_Scrollable_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             Scrollable = value
         };
@@ -2925,7 +2924,7 @@ public class ListViewTests
     [InlineData(false, 2, 1)]
     public void ListView_Scrollable_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2962,7 +2961,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_ShowGroups_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             ShowGroups = value
         };
@@ -2984,7 +2983,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_ShowGroups_VirtualMode_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             ShowGroups = value,
             VirtualMode = true,
@@ -3007,7 +3006,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_ShowGroups_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3044,7 +3043,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_ShowGroups_VirtualMode_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             VirtualMode = true,
         };
@@ -3085,7 +3084,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_ShowItemToolTips_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             ShowItemToolTips = value
         };
@@ -3108,7 +3107,7 @@ public class ListViewTests
     [InlineData(false, 0, 0)]
     public void ListView_ShowItemToolTips_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3165,7 +3164,7 @@ public class ListViewTests
     [MemberData(nameof(SmallImageList_Set_GetReturnsExpected))]
     public void ListView_SmallImageList_Set_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -3185,8 +3184,8 @@ public class ListViewTests
     [MemberData(nameof(SmallImageList_Set_GetReturnsExpected))]
     public void ListView_SmallImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -3285,7 +3284,7 @@ public class ListViewTests
     [MemberData(nameof(SmallImageList_SetWithHandle_GetReturnsExpected))]
     public void ListView_SmallImageList_SetWithHandle_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedStyleChangedCallCount)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -3396,8 +3395,8 @@ public class ListViewTests
     [MemberData(nameof(SmallImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
     public void ListView_SmallImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedStyleChangedCallCount)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             VirtualMode = virtualMode,
@@ -3432,9 +3431,9 @@ public class ListViewTests
     [BoolData]
     public void ListView_SmallImageList_Dispose_DetachesFromListView(bool autoArrange)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange,
             SmallImageList = imageList1
@@ -3456,9 +3455,9 @@ public class ListViewTests
     [InlineData(false, 0)]
     public void ListView_SmallImageList_DisposeWithHandle_DetachesFromListView(bool autoArrange, int expectedInvalidatedCallCount)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             AutoArrange = autoArrange
         };
@@ -3528,7 +3527,7 @@ public class ListViewTests
     [MemberData(nameof(StateImageList_Set_GetReturnsExpected))]
     public void ListView_StateImageList_Set_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             CheckBoxes = checkBoxes,
@@ -3550,8 +3549,8 @@ public class ListViewTests
     [MemberData(nameof(StateImageList_Set_GetReturnsExpected))]
     public void ListView_StateImageList_SetWithNonNullOldValue_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             CheckBoxes = checkBoxes,
@@ -3724,7 +3723,7 @@ public class ListViewTests
     [MemberData(nameof(StateImageList_SetWithHandle_GetReturnsExpected))]
     public void ListView_StateImageList_SetWithHandle_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             CheckBoxes = checkBoxes,
@@ -3910,8 +3909,8 @@ public class ListViewTests
     [MemberData(nameof(StateImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
     public void ListView_StateImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             CheckBoxes = checkBoxes,
@@ -3953,9 +3952,9 @@ public class ListViewTests
     [InlineData(false, false)]
     public void ListView_StateImageList_Dispose_DetachesFromListView(bool useCompatibleStateImageBehavior, bool autoArrange)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             AutoArrange = autoArrange,
@@ -3980,9 +3979,9 @@ public class ListViewTests
     [InlineData(false, false, 0, 0, 0)]
     public void ListView_StateImageList_DisposeWithHandle_DetachesFromListView(bool useCompatibleStateImageBehavior, bool autoArrange, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2, int expectedInvalidatedCallCount3)
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
             AutoArrange = autoArrange
@@ -4023,7 +4022,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_UseCompatibleStateImageBehavior_Set_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             UseCompatibleStateImageBehavior = value
         };
@@ -4045,7 +4044,7 @@ public class ListViewTests
     [BoolData]
     public void ListView_UseCompatibleStateImageBehavior_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
         listView.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4073,16 +4072,16 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
     [WinFormsFact]
     public void ListView_GetItemRect_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
     {
-        using var control = new ListView();
-        var item1 = new ListViewItem();
-        var item2 = new ListViewItem();
+        using ListView control = new();
+        ListViewItem item1 = new();
+        ListViewItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -4104,9 +4103,9 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new ListView();
-        var item1 = new ListViewItem();
-        var item2 = new ListViewItem();
+        using ListView control = new();
+        ListViewItem item1 = new();
+        ListViewItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4148,11 +4147,11 @@ public class ListViewTests
     [MemberData(nameof(GetItemRect_InvokeCustomGetItemRect_TestData))]
     public void ListView_GetItemRect_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
     {
-        using var control = new CustomGetItemRectListView
+        using CustomGetItemRectListView control = new()
         {
             GetItemRectResult = (RECT)getItemRectResult
         };
-        var item = new ListViewItem();
+        ListViewItem item = new();
         control.Items.Add(item);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -4169,7 +4168,7 @@ public class ListViewTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -4180,8 +4179,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvokeInvalidGetItemRect_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new InvalidGetItemRectListView();
-        var item = new ListViewItem();
+        using InvalidGetItemRectListView control = new();
+        ListViewItem item = new();
         control.Items.Add(item);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -4210,7 +4209,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
@@ -4219,8 +4218,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListView();
-        var item1 = new ListViewItem();
+        using ListView control = new();
+        ListViewItem item1 = new();
         control.Items.Add(item1);
 
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
@@ -4231,7 +4230,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
@@ -4240,8 +4239,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetItemRect_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ListView();
-        var item1 = new ListViewItem();
+        using ListView control = new();
+        ListViewItem item1 = new();
         control.Items.Add(item1);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -4273,7 +4272,7 @@ public class ListViewTests
     [InlineData((ControlStyles)(-1), false)]
     public void ListView_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -4283,13 +4282,13 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubListView();
+        using SubListView control = new();
         Assert.False(control.GetTopLevel());
     }
 
     private static ImageList CreateImageListNonEmpty()
     {
-        var nonEmptyImageList = new ImageList();
+        ImageList nonEmptyImageList = new();
         nonEmptyImageList.Images.Add(new Bitmap(10, 10));
         return nonEmptyImageList;
     }
@@ -4318,7 +4317,7 @@ public class ListViewTests
     [MemberData(nameof(ListView_InvokeOnSelectedIndexChanged_TestData))]
     public void ListView_OnSelectedIndexChanged_Invoke(View view, bool showGroups, bool focused, bool selected, int expectedCallCount)
     {
-        using var listView = new SubListView
+        using SubListView listView = new()
         {
             View = view,
             VirtualMode = false,
@@ -4327,11 +4326,11 @@ public class ListViewTests
 
         listView.CreateControl();
 
-        SubListViewItem testItem = new SubListViewItem("Test 1");
+        SubListViewItem testItem = new("Test 1");
 
         listView.Items.Add(testItem);
 
-        SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(testItem);
+        SubListViewItemAccessibleObject customAccessibleObject = new(testItem);
         testItem.CustomAccessibleObject = customAccessibleObject;
 
         // Enforce accessible object creation
@@ -4373,7 +4372,7 @@ public class ListViewTests
     [MemberData(nameof(ListView_InvokeOnSelectedIndexChanged_VirtualMode_TestData))]
     public void ListView_OnSelectedIndexChanged_VirtualMode_Invoke(View view, bool showGroups, bool focused, bool selected, int expectedCallCount)
     {
-        SubListViewItem listItem1 = new SubListViewItem("Test 1");
+        SubListViewItem listItem1 = new("Test 1");
 
         using ListView listView = new ListView
         {
@@ -4397,7 +4396,7 @@ public class ListViewTests
 
         Assert.NotNull(listView.AccessibilityObject);
 
-        SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(listItem1);
+        SubListViewItemAccessibleObject customAccessibleObject = new(listItem1);
         listItem1.CustomAccessibleObject = customAccessibleObject;
 
         listView.Items[0].Focused = focused;
@@ -4430,7 +4429,7 @@ public class ListViewTests
     [MemberData(nameof(ListView_Checkboxes_VirtualMode_Disabling_TestData))]
     public void ListView_Checkboxes_VirtualMode_Disabling_Succeeds(View view, bool showGroups, bool useCompatibleStateImageBehavior)
     {
-        using var listView = new SubListView
+        using SubListView listView = new()
         {
             View = view,
             VirtualMode = true,
@@ -4445,7 +4444,7 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_WmReflectNotify_LVN_KEYDOWN_WithoutGroups_and_CheckBoxes_DoesntHaveSelectedItems()
     {
-        using var control = new ListView();
+        using ListView control = new();
         control.Items.Add(new ListViewItem());
         control.Items.Add(new ListViewItem());
         control.CreateControl();
@@ -4464,12 +4463,16 @@ public class ListViewTests
     [InlineData(false, false, false)]
     public unsafe void ListView_WmReflectNotify_LVN_KEYDOWN_SpaceKey_HasCheckBoxes_WithoutGroups_CheckedExpected(bool focusItem, bool checkItem, bool selectItems)
     {
-        using var control = new ListView();
+        using ListView control = new();
         control.CheckBoxes = true;
-        ListViewItem item1 = new ListViewItem();
-        item1.Text = "First";
-        ListViewItem item2 = new ListViewItem();
-        item2.Text = "Second";
+        ListViewItem item1 = new()
+        {
+            Text = "First"
+        };
+        ListViewItem item2 = new()
+        {
+            Text = "Second"
+        };
 
         control.Items.Add(item1);
         control.Items.Add(item2);
@@ -4492,13 +4495,17 @@ public class ListViewTests
     [InlineData(Keys.Up)]
     public unsafe void ListView_WmReflectNotify_LVN_KEYDOWN_WithGroups_WithoutSelection_DoesntFocusGroup(Keys key)
     {
-        using var control = new ListView();
-        ListViewItem item1 = new ListViewItem();
-        item1.Text = "First";
-        ListViewItem item2 = new ListViewItem();
-        item2.Text = "Second";
+        using ListView control = new();
+        ListViewItem item1 = new()
+        {
+            Text = "First"
+        };
+        ListViewItem item2 = new()
+        {
+            Text = "Second"
+        };
 
-        ListViewGroup group = new ListViewGroup("Test group");
+        ListViewGroup group = new("Test group");
         group.Items.Add(item1);
         group.Items.Add(item2);
 
@@ -4523,16 +4530,22 @@ public class ListViewTests
         {
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
-            ListViewGroup group1 = new ListViewGroup("Test group1");
-            ListViewGroup group2 = new ListViewGroup("Test group2");
-            ListViewGroup group3 = new ListViewGroup("Test group3");
-            ListViewItem item1 = new ListViewItem(group1);
-            item1.Text = "First";
-            ListViewItem item2 = new ListViewItem(group2);
-            item2.Text = "Second";
-            ListViewItem item3 = new ListViewItem(group3);
-            item3.Text = "Third";
+            using ListView control = new();
+            ListViewGroup group1 = new("Test group1");
+            ListViewGroup group2 = new("Test group2");
+            ListViewGroup group3 = new("Test group3");
+            ListViewItem item1 = new(group1)
+            {
+                Text = "First"
+            };
+            ListViewItem item2 = new(group2)
+            {
+                Text = "Second"
+            };
+            ListViewItem item3 = new(group3)
+            {
+                Text = "Third"
+            };
             control.Items.Add(item1);
             control.Items.Add(item2);
             control.Items.Add(item3);
@@ -4569,7 +4582,7 @@ public class ListViewTests
             VirtualListSize = 2 // we can't add items, just indicate how many we have
         };
 
-        ListViewGroup group = new ListViewGroup("Test group");
+        ListViewGroup group = new("Test group");
         control.Groups.Add(group);
         control.VirtualMode = true;
         control.RetrieveVirtualItem += (s, e) =>
@@ -4601,8 +4614,8 @@ public class ListViewTests
             VirtualListSize = 2 // we can't add items, just indicate how many we have
         };
 
-        ListViewItem item1 = new ListViewItem();
-        ListViewItem item2 = new ListViewItem();
+        ListViewItem item1 = new();
+        ListViewItem item2 = new();
 
         control.RetrieveVirtualItem += (s, e) =>
         {
@@ -4670,7 +4683,7 @@ public class ListViewTests
             VirtualListSize = 1
         };
 
-        var listItem = new ListViewItem();
+        ListViewItem listItem = new();
 
         if (virtualMode)
         {
@@ -4737,7 +4750,7 @@ public class ListViewTests
     [MemberData(nameof(ListView_OnGotFocus_Invoke_TestData))]
     public void ListView_OnGotFocus_Invoke(View view, bool virtualMode, bool showGroups, bool createHandle, bool focused, int expectedCount)
     {
-        using var listView = new SubListView
+        using SubListView listView = new()
         {
             View = view,
             VirtualMode = virtualMode,
@@ -4745,7 +4758,7 @@ public class ListViewTests
             VirtualListSize = 1
         };
 
-        SubListViewItem listItem = new SubListViewItem("Test 1");
+        SubListViewItem listItem = new("Test 1");
 
         if (virtualMode)
         {
@@ -4772,7 +4785,7 @@ public class ListViewTests
 
         Assert.NotNull(listView.AccessibilityObject);
 
-        SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(listItem);
+        SubListViewItemAccessibleObject customAccessibleObject = new(listItem);
         listItem.CustomAccessibleObject = customAccessibleObject;
         listView.Items[0].Focused = focused;
         listView.OnGotFocus(new EventArgs());
@@ -4787,27 +4800,27 @@ public class ListViewTests
     [InlineData(false, false)]
     public unsafe void ListView_InvokeGetToolInfoWrapper_ReturnsExpected(bool showItemToolTips, bool useKeyboardToolTip)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ToolTip toolTip = useKeyboardToolTip ? listView.KeyboardToolTip : new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
         Assert.Equal("Test caption", wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.Equal(string.Empty, new string(wrapper.Info.lpszText));
     }
 
     [WinFormsFact]
     public unsafe void ListView_ShowNodesEnabled_ExternalToolTip_InvokeGetToolInfoWrapper_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = true;
-        ToolTip toolTip = new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolTip toolTip = new();
+        ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.True(wrapper.Info.lpszText == expected);
     }
 
@@ -4816,9 +4829,9 @@ public class ListViewTests
     [InlineData(false)]
     public void ListView_InvokeAdd_AddListViewItemToTrackList(bool showItemToolTips)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         listView.Items.Add(listViewItem);
 
         Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
@@ -4829,14 +4842,14 @@ public class ListViewTests
     [InlineData(false)]
     public void ListView_InvokeAddRange_AddlistViewItemsToTrackList(bool showItemToolTips)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
-        ListViewItem listViewItem1 = new ListViewItem();
-        ListViewItem listViewItem2 = new ListViewItem();
-        ListViewItem listViewItem3 = new ListViewItem();
+        ListViewItem listViewItem1 = new();
+        ListViewItem listViewItem2 = new();
+        ListViewItem listViewItem3 = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
-        listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
+        listView.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2, listViewItem3]);
 
         Assert.True(accessor.IsToolTracked(listViewItem1));
         Assert.True(accessor.IsToolTracked(listViewItem2));
@@ -4848,9 +4861,9 @@ public class ListViewTests
     [InlineData(false)]
     public void ListView_InvokeInsert_AddlistViewItemToTrackList(bool showItemToolTips)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         listView.Items.Insert(0, listViewItem);
 
         Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
@@ -4861,9 +4874,9 @@ public class ListViewTests
     [InlineData(false)]
     public void ListView_InvokeRemove_RemoveListViewItemFromTrackList(bool showItemToolTips)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
@@ -4878,9 +4891,9 @@ public class ListViewTests
     [InlineData(false)]
     public void ListView_InvokeDispose_RemoveListViewItemFromTrackList(bool showItemToolTips)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
@@ -4893,8 +4906,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_NormalMode_InvokeNotifyAboutGotFocus_DoesNotAddListViewItemToTrackList()
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem = new ListViewItem();
+        using ListView listView = new();
+        ListViewItem listViewItem = new();
         listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
         Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
     }
@@ -4902,8 +4915,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_VirtualMode_InvokeNotifyAboutGotFocus_AddListViewItemToTrackList()
     {
-        using var listView = new ListView() { VirtualMode = true };
-        ListViewItem listViewItem = new ListViewItem();
+        using ListView listView = new() { VirtualMode = true };
+        ListViewItem listViewItem = new();
         listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
         Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
     }
@@ -4911,8 +4924,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_NormalMode_InvokeNotifyAboutLostFocus_DoesNotRemoveListViewItemFromTrackList()
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem = new ListViewItem();
+        using ListView listView = new();
+        ListViewItem listViewItem = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
@@ -4925,8 +4938,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_VirtualMode_InvokeNotifyAboutLostFocus_RemoveListViewItemFromTrackList()
     {
-        using var listView = new ListView() { VirtualMode = true };
-        ListViewItem listViewItem = new ListViewItem();
+        using ListView listView = new() { VirtualMode = true };
+        ListViewItem listViewItem = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
@@ -4953,27 +4966,27 @@ public class ListViewTests
     [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
     public void ListView_FindNearestItem(int item, int? leftitem, int? upitem, int? rightitem, int? downitem)
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem1 = new ListViewItem("1");
-        ListViewItem listViewItem2 = new ListViewItem("2");
-        ListViewItem listViewItem3 = new ListViewItem("3");
-        ListViewItem listViewItem4 = new ListViewItem("4");
-        ListViewItem listViewItem5 = new ListViewItem("5");
-        ListViewItem listViewItem6 = new ListViewItem("6");
-        ListViewItem listViewItem7 = new ListViewItem("7");
-        ListViewItem listViewItem8 = new ListViewItem("8");
-        ListViewItem listViewItem9 = new ListViewItem("9");
+        using ListView listView = new();
+        ListViewItem listViewItem1 = new("1");
+        ListViewItem listViewItem2 = new("2");
+        ListViewItem listViewItem3 = new("3");
+        ListViewItem listViewItem4 = new("4");
+        ListViewItem listViewItem5 = new("5");
+        ListViewItem listViewItem6 = new("6");
+        ListViewItem listViewItem7 = new("7");
+        ListViewItem listViewItem8 = new("8");
+        ListViewItem listViewItem9 = new("9");
 
-        using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
-        using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+        using ColumnHeader columnHeader1 = new();
+        using ColumnHeader columnHeader2 = new();
 
-        listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-        {
+        listView.Columns.AddRange(
+        [
         columnHeader1,
         columnHeader2
-        });
+        ]);
         listView.HideSelection = false;
-        var listItems = new System.Windows.Forms.ListViewItem[]
+        var listItems = new ListViewItem[]
         {
         listViewItem1,
         listViewItem2,
@@ -4986,8 +4999,8 @@ public class ListViewTests
         listViewItem9
         };
         listView.Items.AddRange(listItems);
-        listView.View = System.Windows.Forms.View.SmallIcon;
-        listView.Size = new System.Drawing.Size(200, 200);
+        listView.View = View.SmallIcon;
+        listView.Size = new Size(200, 200);
 
         var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
@@ -5000,36 +5013,36 @@ public class ListViewTests
     [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
     public void ListView_FindNearestItem_With_Images(int item, int? leftitem, int? upitem, int? rightitem, int? downitem)
     {
-        using var imagecollection = new ImageList();
+        using ImageList imagecollection = new();
         imagecollection.Images.Add(Form.DefaultIcon);
         imagecollection.Images.Add(Form.DefaultIcon);
 
-        imagecollection.TransparentColor = System.Drawing.Color.Transparent;
+        imagecollection.TransparentColor = Color.Transparent;
         imagecollection.Images.SetKeyName(0, "SmallA.bmp");
         imagecollection.Images.SetKeyName(1, "SmallABlue.bmp");
 
-        using var listView = new ListView();
+        using ListView listView = new();
         listView.SmallImageList = imagecollection;
-        ListViewItem listViewItem1 = new ListViewItem("Item1");
-        ListViewItem listViewItem2 = new ListViewItem("item2") { ImageKey = "SmallABlue.bmp" };
-        ListViewItem listViewItem3 = new ListViewItem("item3");
-        ListViewItem listViewItem4 = new ListViewItem("Items 4") { ImageKey = "SmallA.bmp" };
-        ListViewItem listViewItem5 = new ListViewItem("Items 5");
-        ListViewItem listViewItem6 = new ListViewItem("Items 6") { ImageKey = "SmallABlue.bmp" };
-        ListViewItem listViewItem7 = new ListViewItem("Items 7") { ImageKey = "SmallA.bmp" };
-        ListViewItem listViewItem8 = new ListViewItem("Items 8");
-        ListViewItem listViewItem9 = new ListViewItem("Items 9");
+        ListViewItem listViewItem1 = new("Item1");
+        ListViewItem listViewItem2 = new("item2") { ImageKey = "SmallABlue.bmp" };
+        ListViewItem listViewItem3 = new("item3");
+        ListViewItem listViewItem4 = new("Items 4") { ImageKey = "SmallA.bmp" };
+        ListViewItem listViewItem5 = new("Items 5");
+        ListViewItem listViewItem6 = new("Items 6") { ImageKey = "SmallABlue.bmp" };
+        ListViewItem listViewItem7 = new("Items 7") { ImageKey = "SmallA.bmp" };
+        ListViewItem listViewItem8 = new("Items 8");
+        ListViewItem listViewItem9 = new("Items 9");
 
-        using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
-        using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+        using ColumnHeader columnHeader1 = new();
+        using ColumnHeader columnHeader2 = new();
 
-        listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-        {
+        listView.Columns.AddRange(
+        [
         columnHeader1,
         columnHeader2
-        });
+        ]);
         listView.HideSelection = false;
-        var listItems = new System.Windows.Forms.ListViewItem[]
+        var listItems = new ListViewItem[]
         {
         listViewItem1,
         listViewItem2,
@@ -5042,8 +5055,8 @@ public class ListViewTests
         listViewItem9
         };
         listView.Items.AddRange(listItems);
-        listView.View = System.Windows.Forms.View.SmallIcon;
-        listView.Size = new System.Drawing.Size(200, 200);
+        listView.View = View.SmallIcon;
+        listView.Size = new Size(200, 200);
 
         var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
@@ -5067,8 +5080,8 @@ public class ListViewTests
     [WinFormsFact]
     public void ListView_Invokes_SetToolTip_IfExternalToolTipIsSet()
     {
-        using ListView listView = new ListView();
-        using ToolTip toolTip = new ToolTip();
+        using ListView listView = new();
+        using ToolTip toolTip = new();
         listView.CreateControl();
 
         dynamic listViewDynamic = listView.TestAccessor().Dynamic;
@@ -5092,7 +5105,7 @@ public class ListViewTests
     [InlineData(View.Tile)]
     public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHandle(View view)
     {
-        using ListView listView = new ListView()
+        using ListView listView = new()
         {
             Size = new Size(300, 200),
             View = view
@@ -5119,7 +5132,7 @@ public class ListViewTests
     [InlineData(View.Tile)]
     public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHeader(View view)
     {
-        using ListView listView = new ListView()
+        using ListView listView = new()
         {
             Size = new Size(300, 200),
             View = view
@@ -5144,7 +5157,7 @@ public class ListViewTests
     [InlineData(View.Tile)]
     public void ListView_AnnounceColumnHeader_DoesNotWork_InvalidPoint(View view)
     {
-        using ListView listView = new ListView()
+        using ListView listView = new()
         {
             Size = new Size(300, 200),
             View = view
@@ -5167,7 +5180,7 @@ public class ListViewTests
     [InlineData(250, 40, "Column 3")]
     public void ListView_AnnounceColumnHeader_WorksCorrectly(int x, int y, string expectedColumnName)
     {
-        using ListView listView = new ListView()
+        using ListView listView = new()
         {
             Size = new Size(300, 200),
             View = View.Details
@@ -5241,7 +5254,7 @@ public class ListViewTests
         Assert.NotNull(listView.AccessibilityObject);
         Assert.NotNull(listViewItem.AccessibilityObject);
 
-        SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
+        SubListViewItemAccessibleObject accessibleObject = new(listViewItem);
         listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
         listView.CreateControl();
         listViewItem.Focused = true;
@@ -5321,12 +5334,11 @@ public class ListViewTests
         };
 
         listView.Columns.AddRange(
-            new ColumnHeader[]
-            {
+            [
                 new() { Text = "Column 1", Width = 100 },
                 new() { Text = "Column 2", Width = 100 },
                 new() { Text = "Column 3", Width = 100 }
-            });
+            ]);
 
         ListViewItem item = new("Test");
         item.SubItems.Add("Sub1");
@@ -5418,9 +5430,9 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_TestData))]
     public void ListView_Remove_NotSelectedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+        using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         listView.Items[0].Selected = true;
 
@@ -5450,9 +5462,9 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_TestData))]
     public void ListView_Remove_SelectedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+        using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         for (int count = listView.Items.Count; count > 1; count -= 1)
         {
@@ -5480,9 +5492,9 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
     public void ListView_Remove_NotCheckedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+        using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         listView.Items[0].Checked = true;
 
@@ -5510,9 +5522,9 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
     public void ListView_Remove_CheckedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+        using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
-        listView.Items.AddRange(new ListViewItem[] { new("test 1"), new("test 2"), new("test 3") });
+        listView.Items.AddRange((ListViewItem[])[new("test 1"), new("test 2"), new("test 3")]);
 
         for (int count = listView.Items.Count; count > 1; count -= 1)
         {
@@ -5540,12 +5552,12 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_TestData))]
     public void ListView_Remove_Group_WithNotSelectedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+        using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         listView.Items[0].Selected = true;
 
@@ -5578,12 +5590,12 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_TestData))]
     public void ListView_Remove_Group_WithSelectedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups };
+        using ListView listView = new() { View = view, ShowGroups = showGroups };
         listView.CreateControl();
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         int count = 3;
         for (int i = 0; i < 2; i++)
@@ -5615,12 +5627,12 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
     public void ListView_Remove_Group_WithNotCheckedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+        using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         listView.Items[0].Checked = true;
 
@@ -5651,12 +5663,12 @@ public class ListViewTests
     [MemberData(nameof(ListView_View_ShowGroup_Checked_TestData))]
     public void ListView_Remove_Group_WithCheckedItems(View view, bool showGroups)
     {
-        using ListView listView = new ListView() { View = view, ShowGroups = showGroups, CheckBoxes = true };
+        using ListView listView = new() { View = view, ShowGroups = showGroups, CheckBoxes = true };
         listView.CreateControl();
 
         var groups = new ListViewGroup[] { new("Group 1"), new("Group 2"), new("Group 3") };
         listView.Groups.AddRange(groups);
-        listView.Items.AddRange(new ListViewItem[] { new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2]) });
+        listView.Items.AddRange((ListViewItem[])[new("test 1", groups[0]), new("test 2", groups[1]), new("test 3", groups[2])]);
 
         int count = 3;
         for (int i = 0; i < 2; i++)
@@ -5781,7 +5793,7 @@ public class ListViewTests
         {
         }
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCalls++;
             return base.RaiseAutomationEvent(eventId);

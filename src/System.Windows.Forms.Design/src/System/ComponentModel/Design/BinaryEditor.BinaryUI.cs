@@ -54,7 +54,7 @@ public sealed partial class BinaryEditor
                 }
                 else
                 {
-                    _byteViewer.SetBytes(Array.Empty<byte>());
+                    _byteViewer.SetBytes([]);
                     _byteViewer.Enabled = false;
                 }
             }
@@ -103,10 +103,12 @@ public sealed partial class BinaryEditor
         {
             try
             {
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.FileName = SR.BinaryEditorFileName;
-                sfd.Title = SR.BinaryEditorSaveFile;
-                sfd.Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*";
+                SaveFileDialog sfd = new()
+                {
+                    FileName = SR.BinaryEditorFileName,
+                    Title = SR.BinaryEditorSaveFile,
+                    Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*"
+                };
 
                 DialogResult result = sfd.ShowDialog();
                 if (result == DialogResult.OK)
@@ -146,7 +148,7 @@ public sealed partial class BinaryEditor
         [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(BinaryEditor));
+            ComponentResourceManager resources = new(typeof(BinaryEditor));
             _byteViewer = new ByteViewer();
             _buttonOK = new Button();
             _buttonSave = new Button();

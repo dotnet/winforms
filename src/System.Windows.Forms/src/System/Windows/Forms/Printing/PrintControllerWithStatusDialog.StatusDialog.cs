@@ -9,9 +9,9 @@ public partial class PrintControllerWithStatusDialog
 {
     private class StatusDialog : Form
     {
-        internal Label _label1;
-        private Button _button1;
-        private TableLayoutPanel? _tableLayoutPanel1;
+        internal Label _cancellingLabel;
+        private Button _cancelButton;
+        private TableLayoutPanel? _tableLayoutPanel;
         private readonly BackgroundThread _backgroundThread;
 
         internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle)
@@ -22,82 +22,70 @@ public partial class PrintControllerWithStatusDialog
             MinimumSize = Size;
         }
 
-        /// <summary>
-        ///  Tells whether the current resources for this dll have been
-        ///  localized for a RTL language.
-        /// </summary>
-        private static bool IsRTLResources
-        {
-            get
-            {
-                return SR.RTL != "RTL_False";
-            }
-        }
-
-        [MemberNotNull(nameof(_label1))]
-        [MemberNotNull(nameof(_button1))]
+        [MemberNotNull(nameof(_cancellingLabel))]
+        [MemberNotNull(nameof(_cancelButton))]
         private void InitializeComponent()
         {
-            if (IsRTLResources)
+            if (SR.RTL != "RTL_False")
             {
+                // Resources have been localized for an RTL language.
                 RightToLeft = RightToLeft.Yes;
             }
 
-            _tableLayoutPanel1 = new TableLayoutPanel();
-            _label1 = new Label();
-            _button1 = new Button();
+            _cancellingLabel = new Label()
+            {
+                AutoSize = true,
+                Location = new Point(8, 16),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(240, 64),
+                TabIndex = 1,
+                Anchor = AnchorStyles.None
+            };
 
-            _label1.AutoSize = true;
-            _label1.Location = new Point(8, 16);
-            _label1.TextAlign = ContentAlignment.MiddleCenter;
-            _label1.Size = new Size(240, 64);
-            _label1.TabIndex = 1;
-            _label1.Anchor = AnchorStyles.None;
+            _cancelButton = new Button()
+            {
+                AutoSize = true,
+                Size = new Size(75, 23),
+                TabIndex = 0,
+                Text = SR.PrintControllerWithStatusDialog_Cancel,
+                Location = new Point(88, 88),
+                Anchor = AnchorStyles.None
+            };
 
-            _button1.AutoSize = true;
-            _button1.Size = new Size(75, 23);
-            _button1.TabIndex = 0;
-            _button1.Text = SR.PrintControllerWithStatusDialog_Cancel;
-            _button1.Location = new Point(88, 88);
-            _button1.Anchor = AnchorStyles.None;
-            _button1.Click += new EventHandler(button1_Click);
+            _cancelButton.Click += CancelClick;
 
-            _tableLayoutPanel1.AutoSize = true;
-            _tableLayoutPanel1.ColumnCount = 1;
-            _tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            _tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            _tableLayoutPanel1.Location = new Point(0, 0);
-            _tableLayoutPanel1.RowCount = 2;
-            _tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            _tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            _tableLayoutPanel1.TabIndex = 0;
-            _tableLayoutPanel1.Controls.Add(_label1, 0, 0);
-            _tableLayoutPanel1.Controls.Add(_button1, 0, 1);
+            _tableLayoutPanel = new TableLayoutPanel()
+            {
+                AutoSize = true,
+                ColumnCount = 1,
+                Dock = DockStyle.Fill,
+                Location = new Point(0, 0),
+                RowCount = 2,
+                TabIndex = 0,
+            };
+
+            _tableLayoutPanel.ColumnStyles.Add(new(SizeType.Percent, 100F));
+            _tableLayoutPanel.RowStyles.Add(new(SizeType.Percent, 50F));
+            _tableLayoutPanel.RowStyles.Add(new(SizeType.Percent, 50F));
+            _tableLayoutPanel.Controls.Add(_cancellingLabel, 0, 0);
+            _tableLayoutPanel.Controls.Add(_cancelButton, 0, 1);
 
             AutoScaleDimensions = new Size(6, 13);
             AutoScaleMode = AutoScaleMode.Font;
             MaximizeBox = false;
             ControlBox = false;
             MinimizeBox = false;
-            Size clientSize = new Size(256, 122);
-            if (DpiHelper.IsScalingRequired)
-            {
-                ClientSize = DpiHelper.LogicalToDeviceUnits(clientSize);
-            }
-            else
-            {
-                ClientSize = clientSize;
-            }
+            ClientSize = ScaleHelper.ScaleToDpi(new Size(256, 122), ScaleHelper.InitialSystemDpi);
 
-            CancelButton = _button1;
-            SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            Controls.Add(_tableLayoutPanel1);
+            CancelButton = _cancelButton;
+            SizeGripStyle = SizeGripStyle.Hide;
+            Controls.Add(_tableLayoutPanel);
         }
 
-        private void button1_Click(object? sender, EventArgs e)
+        private void CancelClick(object? sender, EventArgs e)
         {
-            _button1.Enabled = false;
-            _label1.Text = SR.PrintControllerWithStatusDialog_Canceling;
+            _cancelButton.Enabled = false;
+            _cancellingLabel.Text = SR.PrintControllerWithStatusDialog_Canceling;
             _backgroundThread._canceled = true;
         }
     }

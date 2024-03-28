@@ -5,13 +5,13 @@ namespace System.Collections.Specialized;
 
 internal class BackCompatibleStringComparer : IEqualityComparer<string>
 {
-    internal static IEqualityComparer<string> Default = new BackCompatibleStringComparer();
+    internal static IEqualityComparer<string> Default { get; } = new BackCompatibleStringComparer();
 
     internal BackCompatibleStringComparer()
     {
     }
 
-    //For backcompat
+    // For backcompat
     public int GetHashCode([DisallowNull] string obj)
     {
         unsafe

@@ -12,7 +12,7 @@ public class TableLayoutStyleTests
     [WinFormsFact]
     public void TableLayoutStyle_Ctor_Default()
     {
-        var style = new SubTableLayoutStyle();
+        SubTableLayoutStyle style = new();
         Assert.Equal(SizeType.AutoSize, style.SizeType);
     }
 
@@ -21,7 +21,7 @@ public class TableLayoutStyleTests
     [InvalidEnumData<SizeType>]
     public void TableLayoutStyle_SizeType_Set_GetReturnsExpected(SizeType value)
     {
-        var style = new SubTableLayoutStyle
+        SubTableLayoutStyle style = new()
         {
             SizeType = value
         };
@@ -40,8 +40,8 @@ public class TableLayoutStyleTests
     [InlineData((SizeType.Percent + 1), 1)]
     public void TableLayoutStyle_SizeType_SetWithOwner_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -72,8 +72,8 @@ public class TableLayoutStyleTests
     [InlineData((SizeType.Percent + 1), 1)]
     public void TableLayoutStyle_SizeType_SetWithOwnerWithHandle_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -124,11 +124,11 @@ public class TableLayoutStyleTests
     public static IEnumerable<object[]> ConvertTo_TestData()
     {
         yield return new object[] { new RowStyle(SizeType.AutoSize, 1), typeof(RowStyle).GetConstructor(Array.Empty<Type>()), Array.Empty<object>() };
-        yield return new object[] { new RowStyle(SizeType.Absolute, 1), typeof(RowStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Absolute, 1f } };
-        yield return new object[] { new RowStyle(SizeType.Percent, 1), typeof(RowStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Percent, 1f } };
+        yield return new object[] { new RowStyle(SizeType.Absolute, 1), typeof(RowStyle).GetConstructor([typeof(SizeType), typeof(int)]), new object[] { SizeType.Absolute, 1f } };
+        yield return new object[] { new RowStyle(SizeType.Percent, 1), typeof(RowStyle).GetConstructor([typeof(SizeType), typeof(int)]), new object[] { SizeType.Percent, 1f } };
         yield return new object[] { new ColumnStyle(SizeType.AutoSize, 1), typeof(ColumnStyle).GetConstructor(Array.Empty<Type>()), Array.Empty<object>() };
-        yield return new object[] { new ColumnStyle(SizeType.Absolute, 1), typeof(ColumnStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Absolute, 1f } };
-        yield return new object[] { new ColumnStyle(SizeType.Percent, 1), typeof(ColumnStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Percent, 1f } };
+        yield return new object[] { new ColumnStyle(SizeType.Absolute, 1), typeof(ColumnStyle).GetConstructor([typeof(SizeType), typeof(int)]), new object[] { SizeType.Absolute, 1f } };
+        yield return new object[] { new ColumnStyle(SizeType.Percent, 1), typeof(ColumnStyle).GetConstructor([typeof(SizeType), typeof(int)]), new object[] { SizeType.Percent, 1f } };
     }
 
     [WinFormsTheory]

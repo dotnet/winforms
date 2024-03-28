@@ -3,61 +3,74 @@
 
 using System.IO;
 using System.ComponentModel;
-using System.Drawing.Internal;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Defines a graphic metafile. A metafile contains records that describe a sequence of graphics operations that
-/// can be recorded and played back.
+///  Defines a graphic metafile. A metafile contains records that describe a sequence of graphics operations that
+///  can be recorded and played back.
 /// </summary>
 [Editor($"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed class Metafile : Image
+public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
 {
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
 
+    GpMetafile* IPointer<GpMetafile>.Pointer => this.Pointer();
+
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
-    /// <see cref='WmfPlaceableFileHeader'/>.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
+    ///  <see cref='WmfPlaceableFileHeader'/>.
     /// </summary>
     public Metafile(IntPtr hmetafile, WmfPlaceableFileHeader wmfHeader, bool deleteWmf)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateMetafileFromWmf(hmetafile, deleteWmf, wmfHeader, out IntPtr metafile));
-        SetNativeImage(metafile);
+        fixed (GdiPlus.WmfPlaceableFileHeader* header = &wmfHeader._header)
+        {
+            GpMetafile* metafile;
+            PInvoke.GdipCreateMetafileFromWmf(
+                (HMETAFILE)hmetafile,
+                deleteWmf,
+                header,
+                &metafile).ThrowIfFailed();
+
+            SetNativeImage((GpImage*)metafile);
+        }
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
-    /// <see cref='WmfPlaceableFileHeader'/>.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
+    ///  <see cref='WmfPlaceableFileHeader'/>.
     /// </summary>
     public Metafile(IntPtr henhmetafile, bool deleteEmf)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateMetafileFromEmf(henhmetafile, deleteEmf, out IntPtr metafile));
-        SetNativeImage(metafile);
+        GpMetafile* metafile;
+        PInvoke.GdipCreateMetafileFromEmf((HENHMETAFILE)henhmetafile, deleteEmf, &metafile).ThrowIfFailed();
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified filename.
     /// </summary>
     public Metafile(string filename)
     {
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(filename);
-        Gdip.CheckStatus(Gdip.GdipCreateMetafileFromFile(filename, out IntPtr metafile));
-        SetNativeImage(metafile);
+        fixed (char* fn = filename)
+        {
+            GpMetafile* metafile;
+            PInvoke.GdipCreateMetafileFromFile(fn, &metafile).ThrowIfFailed();
+            SetNativeImage((GpImage*)metafile);
+        }
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, Rectangle frameRect) :
         this(referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -65,7 +78,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified handle to a device context.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle to a device context.
     /// </summary>
     public Metafile(IntPtr referenceHdc, EmfType emfType) :
         this(referenceHdc, emfType, null)
@@ -73,8 +86,8 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, RectangleF frameRect) :
         this(referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -82,8 +95,8 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit) :
         this(referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -91,8 +104,8 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(referenceHdc, frameRect, frameUnit, type, null)
@@ -100,25 +113,31 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {
-        Gdip.CheckStatus(Gdip.GdipRecordMetafile(
-            referenceHdc,
-            type,
-            ref frameRect,
-            frameUnit,
-            description,
-            out IntPtr metafile));
+        RectF rect = frameRect;
 
-        SetNativeImage(metafile);
+        GpMetafile* metafile;
+        fixed (char* d = description)
+        {
+            PInvoke.GdipRecordMetafile(
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
+        }
+
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit) :
         this(referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -126,8 +145,8 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(referenceHdc, frameRect, frameUnit, type, null)
@@ -135,7 +154,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc) :
         this(fileName, referenceHdc, EmfType.EmfPlusDual, null)
@@ -143,7 +162,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, EmfType type) :
         this(fileName, referenceHdc, type, null)
@@ -151,7 +170,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, RectangleF frameRect) :
         this(fileName, referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -159,7 +178,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit) :
         this(fileName, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -167,7 +186,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(fileName, referenceHdc, frameRect, frameUnit, type, null)
@@ -175,7 +194,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, string? desc) :
         this(fileName, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual, desc)
@@ -183,7 +202,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {
@@ -194,20 +213,26 @@ public sealed class Metafile : Image
             throw new PathTooLongException();
         }
 
-        Gdip.CheckStatus(Gdip.GdipRecordMetafileFileName(
-            fileName,
-            referenceHdc,
-            type,
-            ref frameRect,
-            frameUnit,
-            description,
-            out IntPtr metafile));
+        RectF rect = frameRect;
+        GpMetafile* metafile;
+        fixed (char* f = fileName)
+        fixed (char* d = description)
+        {
+            PInvoke.GdipRecordMetafileFileName(
+                f,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
+        }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect) :
         this(fileName, referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -215,7 +240,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit) :
         this(fileName, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -223,7 +248,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(fileName, referenceHdc, frameRect, frameUnit, type, null)
@@ -231,7 +256,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, string? description) :
         this(fileName, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual, description)
@@ -239,7 +264,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc) :
         this(stream, referenceHdc, EmfType.EmfPlusDual, null)
@@ -247,7 +272,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, EmfType type) :
         this(stream, referenceHdc, type, null)
@@ -255,7 +280,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, RectangleF frameRect) :
         this(stream, referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -263,7 +288,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit) :
         this(stream, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -271,7 +296,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(stream, referenceHdc, frameRect, frameUnit, type, null)
@@ -279,7 +304,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, Rectangle frameRect) :
         this(stream, referenceHdc, frameRect, MetafileFrameUnit.GdiCompatible)
@@ -287,7 +312,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit) :
         this(stream, referenceHdc, frameRect, frameUnit, EmfType.EmfPlusDual)
@@ -295,7 +320,7 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(Stream stream, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type) :
         this(stream, referenceHdc, frameRect, frameUnit, type, null)
@@ -303,8 +328,8 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
-    /// <see cref='WmfPlaceableFileHeader'/>.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
+    ///  <see cref='WmfPlaceableFileHeader'/>.
     /// </summary>
     public Metafile(IntPtr hmetafile, WmfPlaceableFileHeader wmfHeader) :
         this(hmetafile, wmfHeader, false)
@@ -312,86 +337,85 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified stream.
     /// </summary>
     public unsafe Metafile(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
+        using var iStream = stream.ToIStream(makeSeekable: true);
 
-        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
-
-        IntPtr metafile = IntPtr.Zero;
-        Gdip.CheckStatus(Gdip.GdipCreateMetafileFromStream(streamWrapper.Ptr, &metafile));
-
-        SetNativeImage(metafile);
+        GpMetafile* metafile = null;
+        PInvoke.GdipCreateMetafileFromStream(iStream, &metafile).ThrowIfFailed();
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified handle to a device context.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle to a device context.
     /// </summary>
     public Metafile(IntPtr referenceHdc, EmfType emfType, string? description)
     {
-        Gdip.CheckStatus(Gdip.GdipRecordMetafile(
-            referenceHdc,
-            emfType,
-            IntPtr.Zero,
-            MetafileFrameUnit.GdiCompatible,
-            description,
-            out IntPtr metafile));
+        GpMetafile* metafile;
+        fixed (char* d = description)
+        {
+            PInvoke.GdipRecordMetafile(
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)emfType,
+                null,
+                GdiPlus.MetafileFrameUnit.MetafileFrameUnitGdi,
+                d,
+                &metafile).ThrowIfFailed();
+        }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
-    /// by the specified rectangle.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified device context, bounded
+    ///  by the specified rectangle.
     /// </summary>
     public Metafile(IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type, string? desc)
     {
-        IntPtr metafile;
+        GpMetafile* metafile;
 
-        if (frameRect.IsEmpty)
+        RectF rect = (RectangleF)frameRect;
+
+        fixed (char* d = desc)
         {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafile(
-                referenceHdc,
-                type,
-                IntPtr.Zero,
-                MetafileFrameUnit.GdiCompatible,
-                desc,
-                out metafile));
-        }
-        else
-        {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafileI(
-                referenceHdc,
-                type,
-                ref frameRect,
-                frameUnit,
-                desc,
-                out metafile));
+            PInvoke.GdipRecordMetafile(
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                frameRect.IsEmpty ? null : &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
         }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, EmfType type, string? description)
     {
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(fileName);
 
-        Gdip.CheckStatus(Gdip.GdipRecordMetafileFileName(
-            fileName,
-            referenceHdc,
-            type,
-            IntPtr.Zero,
-            MetafileFrameUnit.GdiCompatible,
-            description,
-            out IntPtr metafile));
+        GpMetafile* metafile;
+        fixed (char* f = fileName)
+        fixed (char* d = description)
+        {
+            PInvoke.GdipRecordMetafileFileName(
+                f,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                null,
+                GdiPlus.MetafileFrameUnit.MetafileFrameUnitGdi,
+                d,
+                &metafile).ThrowIfFailed();
+        }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
@@ -402,106 +426,96 @@ public sealed class Metafile : Image
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(fileName);
 
-        IntPtr metafile;
-
-        if (frameRect.IsEmpty)
+        RectF rect = (RectangleF)frameRect;
+        GpMetafile* metafile;
+        fixed (char* f = fileName)
+        fixed (char* d = description)
         {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafileFileName(
-                fileName,
-                referenceHdc,
-                type,
-                IntPtr.Zero,
-                frameUnit,
-                description,
-                out metafile));
-        }
-        else
-        {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafileFileNameI(
-                fileName,
-                referenceHdc,
-                type,
-                ref frameRect,
-                frameUnit,
-                description,
-                out metafile));
+            PInvoke.GdipRecordMetafileFileName(
+                f,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                frameRect.IsEmpty ? null : &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
         }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified data stream.
     /// </summary>
     public unsafe Metafile(Stream stream, IntPtr referenceHdc, EmfType type, string? description)
     {
-        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
+        ArgumentNullException.ThrowIfNull(stream);
+        using var iStream = stream.ToIStream(makeSeekable: true);
 
-        IntPtr metafile = IntPtr.Zero;
-        Gdip.CheckStatus(Gdip.GdipRecordMetafileStream(
-            streamWrapper.Ptr,
-            referenceHdc,
-            type,
-            IntPtr.Zero,
-            MetafileFrameUnit.GdiCompatible,
-            description,
-            &metafile));
+        GpMetafile* metafile = null;
+        fixed (char* d = description)
+        {
+            PInvoke.GdipRecordMetafileStream(
+                iStream,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                null,
+                GdiPlus.MetafileFrameUnit.MetafileFrameUnitGdi,
+                d,
+                &metafile).ThrowIfFailed();
+        }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public unsafe Metafile(Stream stream, IntPtr referenceHdc, RectangleF frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {
-        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
+        ArgumentNullException.ThrowIfNull(stream);
+        using var iStream = stream.ToIStream(makeSeekable: true);
 
-        IntPtr metafile = IntPtr.Zero;
-        Gdip.CheckStatus(Gdip.GdipRecordMetafileStream(
-            streamWrapper.Ptr,
-            referenceHdc,
-            type,
-            &frameRect,
-            frameUnit,
-            description,
-            &metafile));
+        GpMetafile* metafile = null;
+        fixed (char* d = description)
+        {
+            RectF rect = frameRect;
+            PInvoke.GdipRecordMetafileStream(
+                iStream,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
+        }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public unsafe Metafile(Stream stream, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {
-        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
+        ArgumentNullException.ThrowIfNull(stream);
+        using var iStream = stream.ToIStream(makeSeekable: true);
 
-        IntPtr metafile = IntPtr.Zero;
-        if (frameRect.IsEmpty)
+        GpMetafile* metafile = null;
+        fixed (char* d = description)
         {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafileStream(
-                streamWrapper.Ptr,
-                referenceHdc,
-                type,
-                IntPtr.Zero,
-                frameUnit,
-                description,
-                &metafile));
-        }
-        else
-        {
-            Gdip.CheckStatus(Gdip.GdipRecordMetafileStreamI(
-                streamWrapper.Ptr,
-                referenceHdc,
-                type,
-                &frameRect,
-                frameUnit,
-                description,
-                &metafile));
+            RectF rect = (RectangleF)frameRect;
+            PInvoke.GdipRecordMetafileStream(
+                iStream,
+                (HDC)referenceHdc,
+                (GdiPlus.EmfType)type,
+                frameRect.IsEmpty ? null : &rect,
+                (GdiPlus.MetafileFrameUnit)frameUnit,
+                d,
+                &metafile).ThrowIfFailed();
         }
 
-        SetNativeImage(metafile);
+        SetNativeImage((GpImage*)metafile);
     }
 
     private Metafile(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -509,12 +523,12 @@ public sealed class Metafile : Image
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Metafile"/> class from a native metafile handle.
+    ///  Initializes a new instance of the <see cref="Metafile"/> class from a native metafile handle.
     /// </summary>
-    internal Metafile(IntPtr ptr) => SetNativeImage(ptr);
+    internal Metafile(IntPtr ptr) => SetNativeImage((GpImage*)ptr);
 
     /// <summary>
-    /// Plays an EMF+ file.
+    ///  Plays an EMF+ file.
     /// </summary>
     public void PlayRecord(EmfPlusRecordType recordType, int flags, int dataSize, byte[] data)
     {
@@ -522,179 +536,99 @@ public sealed class Metafile : Image
         // The data must be DWORD aligned if it's an EMF or EMF+.  It must be
         // WORD aligned if it's a WMF.
 
-        Gdip.CheckStatus(Gdip.GdipPlayMetafileRecord(
-            new HandleRef(this, _nativeImage),
-            recordType,
-            flags,
-            dataSize,
-            data));
+        fixed (byte* d = data)
+        {
+            PInvoke.GdipPlayMetafileRecord(
+                this.Pointer(),
+                (GdiPlus.EmfPlusRecordType)recordType,
+                (uint)flags,
+                (uint)dataSize,
+                d).ThrowIfFailed();
+
+            GC.KeepAlive(this);
+        }
     }
 
     /// <summary>
-    /// Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
+    ///  Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
     /// </summary>
     public static MetafileHeader GetMetafileHeader(IntPtr hmetafile, WmfPlaceableFileHeader wmfHeader)
     {
-        MetafileHeader header = new MetafileHeader
-        {
-            wmf = new MetafileHeaderWmf()
-        };
+        MetafileHeader header = new();
 
-        Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromWmf(hmetafile, wmfHeader, header.wmf));
-        return header;
+        fixed (GdiPlus.MetafileHeader* mf = &header._header)
+        fixed (GdiPlus.WmfPlaceableFileHeader* wmf = &wmfHeader._header)
+        {
+            PInvoke.GdipGetMetafileHeaderFromWmf((HMETAFILE)hmetafile, wmf, mf).ThrowIfFailed();
+            return header;
+        }
     }
 
     /// <summary>
-    /// Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
+    ///  Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
     /// </summary>
     public static MetafileHeader GetMetafileHeader(IntPtr henhmetafile)
     {
-        MetafileHeader header = new MetafileHeader
+        MetafileHeader header = new();
+        fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            emf = new MetafileHeaderEmf()
-        };
-
-        Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromEmf(henhmetafile, header.emf));
-        return header;
+            PInvoke.GdipGetMetafileHeaderFromEmf((HENHMETAFILE)henhmetafile, mf).ThrowIfFailed();
+            return header;
+        }
     }
 
     /// <summary>
-    /// Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
+    ///  Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
     /// </summary>
     public static MetafileHeader GetMetafileHeader(string fileName)
     {
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(fileName);
 
-        MetafileHeader header = new MetafileHeader();
+        MetafileHeader header = new();
 
-        IntPtr memory = Marshal.AllocHGlobal(Marshal.SizeOf<MetafileHeaderEmf>());
-
-        try
+        fixed (char* fn = fileName)
+        fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromFile(fileName, memory));
-
-            int[] type = new int[] { 0 };
-
-            Marshal.Copy(memory, type, 0, 1);
-
-            MetafileType metafileType = (MetafileType)type[0];
-
-            if (metafileType == MetafileType.Wmf ||
-                metafileType == MetafileType.WmfPlaceable)
-            {
-                // WMF header
-                header.wmf = Marshal.PtrToStructure<MetafileHeaderWmf>(memory)!;
-                header.emf = null;
-            }
-            else
-            {
-                // EMF header
-                header.wmf = null;
-                header.emf = Marshal.PtrToStructure<MetafileHeaderEmf>(memory)!;
-            }
+            PInvoke.GdipGetMetafileHeaderFromFile(fn, mf).ThrowIfFailed();
+            return header;
         }
-        finally
-        {
-            Marshal.FreeHGlobal(memory);
-        }
-
-        return header;
     }
 
     /// <summary>
-    /// Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
+    ///  Returns the <see cref='MetafileHeader'/> associated with the specified <see cref='Metafile'/>.
     /// </summary>
     public static MetafileHeader GetMetafileHeader(Stream stream)
     {
-        MetafileHeader header;
+        ArgumentNullException.ThrowIfNull(stream);
 
-        IntPtr memory = Marshal.AllocHGlobal(Marshal.SizeOf<MetafileHeaderEmf>());
+        MetafileHeader header = new();
 
-        try
+        fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
-            Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromStream(streamWrapper.Ptr, memory));
-
-            int[] type = new int[] { 0 };
-
-            Marshal.Copy(memory, type, 0, 1);
-
-            MetafileType metafileType = (MetafileType)type[0];
-
-            header = new MetafileHeader();
-
-            if (metafileType == MetafileType.Wmf ||
-                metafileType == MetafileType.WmfPlaceable)
-            {
-                // WMF header
-                header.wmf = Marshal.PtrToStructure<MetafileHeaderWmf>(memory)!;
-                header.emf = null;
-            }
-            else
-            {
-                // EMF header
-                header.wmf = null;
-                header.emf = Marshal.PtrToStructure<MetafileHeaderEmf>(memory)!;
-            }
+            using var iStream = stream.ToIStream(makeSeekable: true);
+            PInvoke.GdipGetMetafileHeaderFromStream(iStream, mf).ThrowIfFailed();
+            return header;
         }
-        finally
-        {
-            Marshal.FreeHGlobal(memory);
-        }
-
-        return header;
     }
 
     /// <summary>
-    /// Returns the <see cref='MetafileHeader'/> associated with this <see cref='Metafile'/>.
+    ///  Returns the <see cref='MetafileHeader'/> associated with this <see cref='Metafile'/>.
     /// </summary>
     public MetafileHeader GetMetafileHeader()
     {
-        MetafileHeader header;
+        MetafileHeader header = new();
 
-        IntPtr memory = Marshal.AllocHGlobal(Marshal.SizeOf<MetafileHeaderEmf>());
-
-        try
+        fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromMetafile(new HandleRef(this, _nativeImage), memory));
-
-            int[] type = new int[] { 0 };
-
-            Marshal.Copy(memory, type, 0, 1);
-
-            MetafileType metafileType = (MetafileType)type[0];
-
-            header = new MetafileHeader();
-
-            if (metafileType == MetafileType.Wmf ||
-                metafileType == MetafileType.WmfPlaceable)
-            {
-                // WMF header
-                header.wmf = Marshal.PtrToStructure<MetafileHeaderWmf>(memory)!;
-                header.emf = null;
-            }
-            else
-            {
-                // EMF header
-                header.wmf = null;
-                header.emf = Marshal.PtrToStructure<MetafileHeaderEmf>(memory)!;
-            }
+            PInvoke.GdipGetMetafileHeaderFromMetafile(this.Pointer(), mf).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return header;
         }
-        finally
-        {
-            Marshal.FreeHGlobal(memory);
-        }
-
-        return header;
     }
 
     /// <summary>
-    /// Returns a Windows handle to an enhanced <see cref='Metafile'/>.
+    ///  Returns a Windows handle to an enhanced <see cref='Metafile'/>.
     /// </summary>
-    public IntPtr GetHenhmetafile()
-    {
-        Gdip.CheckStatus(Gdip.GdipGetHemfFromMetafile(new HandleRef(this, _nativeImage), out IntPtr hEmf));
-        return hEmf;
-    }
+    public IntPtr GetHenhmetafile() => this.GetHENHMETAFILE();
 }

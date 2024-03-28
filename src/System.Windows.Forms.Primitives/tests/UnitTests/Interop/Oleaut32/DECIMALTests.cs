@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32;
 
@@ -19,7 +18,7 @@ public class DECIMALTests
     [Fact]
     public void DECIMAL_ToDecimal_InvokeEmpty_ReturnsExpected()
     {
-        var dec = new DECIMAL();
+        DECIMAL dec = new();
         Assert.Equal(0m, dec.ToDecimal());
     }
 

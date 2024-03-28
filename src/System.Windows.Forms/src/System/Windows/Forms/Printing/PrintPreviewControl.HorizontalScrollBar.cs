@@ -7,9 +7,7 @@ public partial class PrintPreviewControl : Control
 {
     internal class HorizontalScrollBar : HScrollBar
     {
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new PrintPreviewControl.ScrollBarAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() =>
+            new PrintPreviewControl.ScrollBarAccessibleObject(this);
     }
 }

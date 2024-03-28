@@ -16,13 +16,13 @@ public class ARGBTests
     [InlineData(0x0000_00CC, 0x00, 0x00, 0xCC, 0x00)]
     public void Construction_Raw(uint value, byte r, byte g, byte b, byte a)
     {
-        ARGB fromValue = new ARGB((int)value);
+        ARGB fromValue = new(value);
         Assert.Equal(a, fromValue.A);
         Assert.Equal(r, fromValue.R);
         Assert.Equal(g, fromValue.G);
         Assert.Equal(b, fromValue.B);
-        ARGB fromBytes = new ARGB(a, r, g, b);
-        Assert.Equal((int)value, fromBytes.Value);
+        ARGB fromBytes = new(a, r, g, b);
+        Assert.Equal(value, fromBytes.Value);
     }
 
     [Theory]
@@ -30,7 +30,7 @@ public class ARGBTests
     public void ToFromColor(Color color)
     {
         ARGB argb = color;
-        Assert.Equal(color.ToArgb(), argb.Value);
+        Assert.Equal((uint)color.ToArgb(), argb.Value);
         Color backAgain = argb;
         Assert.Equal(color.ToArgb(), backAgain.ToArgb());
     }

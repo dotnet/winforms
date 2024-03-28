@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetMenuItemCount(HMENU)"/>
     public static int GetMenuItemCount<T>(T hMenu)
         where T : IHandle<HMENU>
     {

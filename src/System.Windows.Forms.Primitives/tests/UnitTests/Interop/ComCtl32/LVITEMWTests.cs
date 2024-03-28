@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.ComCtl32;
+using Windows.Win32.UI.Controls;
 
 namespace System.Windows.Forms.Tests.InteropTests;
 
@@ -10,7 +10,7 @@ public class LVITEMWTests
     [Fact]
     public unsafe void UpdateText_should_throw_AOOR_if_cchTextMax_less_than_1()
     {
-        var lvi = new LVITEMW
+        LVITEMW lvi = new()
         {
             cchTextMax = 0,
         };
@@ -25,7 +25,7 @@ public class LVITEMWTests
     {
         fixed (char* pOriginalText = originalText)
         {
-            var lvi = new LVITEMW
+            LVITEMW lvi = new()
             {
                 cchTextMax = maxLength,
                 pszText = pOriginalText
@@ -33,7 +33,7 @@ public class LVITEMWTests
 
             lvi.UpdateText(newText);
 
-            var text = new string(lvi.pszText);
+            string text = new(lvi.pszText);
             Assert.Equal(expected, text);
             Assert.Equal(maxLength - 1, text.Length);
             Assert.Equal(text.Length + 1, lvi.cchTextMax);
@@ -54,7 +54,7 @@ public class LVITEMWTests
         string originalText = "abcdefghi";
         fixed (char* pOriginalText = originalText)
         {
-            var lvi = new LVITEMW
+            LVITEMW lvi = new()
             {
                 cchTextMax = originalText.Length,
                 pszText = pOriginalText
@@ -62,9 +62,9 @@ public class LVITEMWTests
 
             lvi.UpdateText("012345");
 
-            var sText = new ReadOnlySpan<char>(lvi.pszText, lvi.cchTextMax);
+            ReadOnlySpan<char> sText = new(lvi.pszText, lvi.cchTextMax);
 
-            var text = new string(lvi.pszText);
+            string text = new(lvi.pszText);
             Assert.Equal("012345", text);
             Assert.Equal(lvi.cchTextMax, text.Length + 1);
         }
@@ -76,7 +76,7 @@ public class LVITEMWTests
         string originalText = "abcdefghi";
         fixed (char* pOriginalText = originalText)
         {
-            var lvi = new LVITEMW
+            LVITEMW lvi = new()
             {
                 cchTextMax = originalText.Length,
                 pszText = pOriginalText
@@ -84,7 +84,7 @@ public class LVITEMWTests
 
             lvi.UpdateText("012345");
 
-            var sText = new ReadOnlySpan<char>(lvi.pszText, lvi.cchTextMax);
+            ReadOnlySpan<char> sText = new(lvi.pszText, lvi.cchTextMax);
             Assert.Equal(sText.ToArray(), new char[] { '0', '1', '2', '3', '4', '5', '\0' });
         }
     }

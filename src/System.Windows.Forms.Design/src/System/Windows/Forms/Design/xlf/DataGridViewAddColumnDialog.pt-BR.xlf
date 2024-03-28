@@ -29,12 +29,12 @@
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">&amp;Congelado</target>
+        <target state="translated">Cong&amp;elado</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">&amp;Texto do cabeçalho:</target>
+        <target state="translated">Texto do ca&amp;beçalho:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
@@ -54,7 +54,7 @@
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">&amp;Coluna não associada</target>
+        <target state="translated">C&amp;oluna não associada</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">

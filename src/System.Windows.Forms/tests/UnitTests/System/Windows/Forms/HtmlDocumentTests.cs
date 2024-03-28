@@ -4,7 +4,8 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop.Mshtml;
+using Windows.Win32.System.Variant;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms.Tests;
 
@@ -14,8 +15,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveLinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -32,8 +33,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -46,8 +47,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ActiveLinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -64,8 +65,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -78,8 +79,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ActiveLinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -87,40 +88,53 @@ public class HtmlDocumentTests
         const string Html = "<html><head><title>Title</title></head></html>";
         HtmlDocument document = await GetDocument(control, Html);
 
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetAlinkColor(value);
-        Assert.Equal(expected, document.ActiveLinkColor);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+
+            using var variantValue = VARIANT.FromObject(value);
+            Assert.True(iHTMLDocument2.Value->put_alinkColor(variantValue).Succeeded);
+            Assert.Equal(expected, document.ActiveLinkColor);
+        }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.ActiveLinkColor = value;
+            Assert.Equal(expected, document.ActiveLinkColor);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            VARIANT color = default;
+            Assert.True(iHTMLDocument2.Value->get_alinkColor(&color).Succeeded);
+            Assert.Equal(expectedNative, (string)color.ToObject());
 
-        document.ActiveLinkColor = value;
-        Assert.Equal(expected, document.ActiveLinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetAlinkColor());
-
-        // Set same.
-        document.ActiveLinkColor = value;
-        Assert.Equal(expected, document.ActiveLinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetAlinkColor());
+            // Set same.
+            document.ActiveLinkColor = value;
+            Assert.Equal(expected, document.ActiveLinkColor);
+            VARIANT color2 = default;
+            Assert.True(iHTMLDocument2.Value->get_alinkColor(&color2).Succeeded);
+            Assert.Equal(expectedNative, (string)color2.ToObject());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_All_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -139,8 +153,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_All_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -159,8 +173,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNotActiveWithBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -176,8 +190,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNotActiveWithoutBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -193,8 +207,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNoActiveElement_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -204,8 +218,12 @@ public class HtmlDocumentTests
         HtmlElement target = document.GetElementById("target");
 
         HtmlElement active = document.ActiveElement;
-        IHTMLElement2 iHtmlElement2 = (IHTMLElement2)active.DomElement;
-        iHtmlElement2.Blur();
+        blur();
+        unsafe void blur()
+        {
+            using var iHtmlElement2 = ComHelpers.GetComScope<IHTMLElement2>(active.DomElement);
+            iHtmlElement2.Value->blur();
+        }
 
         HtmlElement element = document.ActiveElement;
         Assert.Null(document.ActiveElement);
@@ -214,8 +232,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_BackColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -232,8 +250,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -246,8 +264,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(BackColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_BackColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -264,8 +282,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -278,18 +296,22 @@ public class HtmlDocumentTests
     [MemberData(nameof(BackColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_BackColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><head><title>Title</title></head></html>";
         HtmlDocument document = await GetDocument(control, Html);
-
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetBgColor(value);
-        Assert.Equal(expected, document.BackColor);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using var variantValue = VARIANT.FromObject(value);
+            Assert.True(iHTMLDocument2.Value->put_bgColor(variantValue).Succeeded);
+            Assert.Equal(expected, document.BackColor);
+        }
     }
 
     public static IEnumerable<object[]> Color_Set_TestData()
@@ -304,31 +326,38 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_BackColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.BackColor = value;
+            Assert.Equal(expected, document.BackColor);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            VARIANT color = default;
+            Assert.True(iHTMLDocument2.Value->get_bgColor(&color).Succeeded);
+            Assert.Equal(expectedNative, (string)color.ToObject());
 
-        document.BackColor = value;
-        Assert.Equal(expected, document.BackColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetBgColor());
-
-        // Set same.
-        document.BackColor = value;
-        Assert.Equal(expected, document.BackColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetBgColor());
+            // Set same.
+            document.BackColor = value;
+            Assert.Equal(expected, document.BackColor);
+            VARIANT color2 = default;
+            Assert.True(iHTMLDocument2.Value->get_bgColor(&color2).Succeeded);
+            Assert.Equal(expectedNative, (string)color2.ToObject());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetWithBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -344,8 +373,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetWithoutBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -361,8 +390,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetNoBody_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -370,17 +399,24 @@ public class HtmlDocumentTests
         const string Html = "<html><body>InnerText</body></html>";
         HtmlDocument document = await GetDocument(control, Html);
         HtmlElement element = document.Body;
-        IHTMLDOMNode iHtmlDomNode = (IHTMLDOMNode)element.Parent.DomElement;
-        iHtmlDomNode.RemoveChild((IHTMLDOMNode)element.DomElement);
+        DomNodeRemoveChild();
 
         Assert.Null(document.Body);
+
+        unsafe void DomNodeRemoveChild()
+        {
+            using var iHtmlDomNode = ComHelpers.GetComScope<IHTMLDOMNode>(element.Parent.DomElement);
+            using var domElement = ComHelpers.GetComScope<IHTMLDOMNode>(element.DomElement);
+            using ComScope<IHTMLDOMNode> node = new(null);
+            Assert.True(iHtmlDomNode.Value->removeChild(domElement, node).Succeeded);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Cookie_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -396,35 +432,43 @@ public class HtmlDocumentTests
     [InlineData("cookie", "cookie")]
     public async Task HtmlDocument_Cookie_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
 
         // Cleanup!
         // WebBrowser is notorious for not cleaning after itself - clean all cookies before we set new ones
         document.ExecCommand("ClearAuthenticationCache", false, null);
+        validate();
 
-        document.Cookie = value;
-        Assert.Equal(expected, document.Cookie);
-        Assert.Equal(expected, iHTMLDocument2.GetCookie());
+        unsafe void validate()
+        {
+            document.Cookie = value;
+            Assert.Equal(expected, document.Cookie);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using BSTR cookie = default;
+            Assert.True(iHTMLDocument2.Value->get_cookie(&cookie).Succeeded);
+            Assert.Equal(expected, cookie.ToString());
 
-        // Set same.
-        document.Cookie = value;
-        Assert.Equal(expected, document.Cookie);
-        Assert.Equal(expected, iHTMLDocument2.GetCookie());
+            // Set same.
+            document.Cookie = value;
+            Assert.Equal(expected, document.Cookie);
+            using BSTR cookie2 = default;
+            Assert.True(iHTMLDocument2.Value->get_cookie(&cookie2).Succeeded);
+            Assert.Equal(expected, cookie2.ToString());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -438,8 +482,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_GetWithCustomValueOnMeta_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -453,25 +497,30 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_GetCustomValueSet_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetDefaultCharset("UTF-8");
-        Assert.NotEmpty(document.DefaultEncoding);
-        Assert.DoesNotContain('\0', document.DefaultEncoding);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using BSTR charSet = new("UTF-8");
+            Assert.True(iHTMLDocument2.Value->put_defaultCharset(charSet).Succeeded);
+            Assert.NotEmpty(document.DefaultEncoding);
+            Assert.DoesNotContain('\0', document.DefaultEncoding);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Domain_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -485,8 +534,8 @@ public class HtmlDocumentTests
     [StringWithNullData]
     public async Task HtmlDocument_Domain_Set_ThrowsCOMException(string value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -501,8 +550,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DomDocument_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -513,18 +562,18 @@ public class HtmlDocumentTests
         object domDocument = document.DomDocument;
         Assert.Same(domDocument, document.DomDocument);
         Assert.True(domDocument.GetType().IsCOMObject);
-        Assert.False(domDocument is IHTMLDOMNode);
-        Assert.True(domDocument is IHTMLDocument);
-        Assert.True(domDocument is IHTMLDocument2);
-        Assert.True(domDocument is IHTMLDocument3);
-        Assert.True(domDocument is IHTMLDocument4);
+        Assert.False(domDocument is IHTMLDOMNode.Interface);
+        Assert.True(domDocument is IHTMLDocument.Interface);
+        Assert.True(domDocument is IHTMLDocument2.Interface);
+        Assert.True(domDocument is IHTMLDocument3.Interface);
+        Assert.True(domDocument is IHTMLDocument4.Interface);
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -538,8 +587,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_GetWithCustomValueOnMeta_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -552,17 +601,23 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_GetCustomValueSet_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetCharset("UTF-8");
-        Assert.Equal("utf-8", document.Encoding);
+
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope <IHTMLDocument2>(document.DomDocument);
+            using BSTR charSet = new("UTF-8");
+            Assert.True(iHTMLDocument2.Value->put_charset(charSet).Succeeded);
+            Assert.Equal("utf-8", document.Encoding);
+        }
     }
 
     [WinFormsTheory]
@@ -570,24 +625,32 @@ public class HtmlDocumentTests
     [InlineData("UTF-8", "utf-8")]
     public async Task HtmlDocument_Encoding_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
 
-        document.Encoding = value;
-        Assert.Equal(expected, document.Encoding);
-        Assert.Equal(expected, iHTMLDocument2.GetCharset());
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            document.Encoding = value;
+            Assert.Equal(expected, document.Encoding);
+            BSTR charset = default;
+            Assert.True(iHTMLDocument2.Value->get_charset(&charset).Succeeded);
+            Assert.Equal(expected, charset.ToStringAndFree());
 
-        // Set same.
-        document.Encoding = value;
-        Assert.Equal(expected, document.Encoding);
-        Assert.Equal(expected, iHTMLDocument2.GetCharset());
+            // Set same.
+            document.Encoding = value;
+            Assert.Equal(expected, document.Encoding);
+            BSTR charset2 = default;
+            Assert.True(iHTMLDocument2.Value->get_charset(&charset2).Succeeded);
+            Assert.Equal(expected, charset2.ToStringAndFree());
+        }
     }
 
     [WinFormsTheory]
@@ -596,8 +659,8 @@ public class HtmlDocumentTests
     [InlineData("reasonable")]
     public async Task HtmlDocument_Charset_SetInvalid_ThrowsArgumentException(string value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -610,8 +673,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Focused_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -625,28 +688,32 @@ public class HtmlDocumentTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
     public async Task HtmlDocument_Focused_GetFocused_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
-        iHTMLDocument4.Focus();
-        Assert.False(document.Focused);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            iHTMLDocument4.Value->focus();
+            Assert.False(document.Focused);
 
-        // Have to do it again.
-        iHTMLDocument4.Focus();
-        Assert.True(document.Focused);
+            // Have to do it again.
+            iHTMLDocument4.Value->focus();
+            Assert.True(document.Focused);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_ForeColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -663,8 +730,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -677,8 +744,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ForeColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_ForeColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -695,8 +762,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -709,49 +776,61 @@ public class HtmlDocumentTests
     [MemberData(nameof(ForeColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_ForeColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><head><title>Title</title></head></html>";
         HtmlDocument document = await GetDocument(control, Html);
-
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetFgColor(value);
-        Assert.Equal(expected, document.ForeColor);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using var variantValue = VARIANT.FromObject(value);
+            Assert.True(iHTMLDocument2.Value->put_fgColor(variantValue).Succeeded);
+            Assert.Equal(expected, document.ForeColor);
+        }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_ForeColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
 
-        document.ForeColor = value;
-        Assert.Equal(expected, document.ForeColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetFgColor());
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            document.ForeColor = value;
+            Assert.Equal(expected, document.ForeColor);
+            VARIANT color = default;
+            Assert.True(iHTMLDocument2.Value->get_fgColor(&color).Succeeded);
+            Assert.Equal(expectedNative, (string)color.ToObject());
 
-        // Set same.
-        document.ForeColor = value;
-        Assert.Equal(expected, document.ForeColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetFgColor());
+            // Set same.
+            document.ForeColor = value;
+            Assert.Equal(expected, document.ForeColor);
+            VARIANT color2 = default;
+            Assert.True(iHTMLDocument2.Value->get_fgColor(&color2).Succeeded);
+            Assert.Equal(expectedNative, (string)color2.ToObject());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Forms_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -770,8 +849,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Forms_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -786,8 +865,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Images_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -806,8 +885,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Images_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -822,8 +901,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_LinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -840,8 +919,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -854,8 +933,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(LinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_LinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -872,8 +951,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -886,49 +965,60 @@ public class HtmlDocumentTests
     [MemberData(nameof(LinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_LinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><head><title>Title</title></head></html>";
         HtmlDocument document = await GetDocument(control, Html);
-
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetLinkColor(value);
-        Assert.Equal(expected, document.LinkColor);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using var variantValue = VARIANT.FromObject(value);
+            Assert.True(iHTMLDocument2.Value->put_linkColor(variantValue).Succeeded);
+            Assert.Equal(expected, document.LinkColor);
+        }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_LinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.LinkColor = value;
+            Assert.Equal(expected, document.LinkColor);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            VARIANT color = default;
+            Assert.True(iHTMLDocument2.Value->get_linkColor(&color).Succeeded);
+            Assert.Equal(expectedNative, (string)color.ToObject());
 
-        document.LinkColor = value;
-        Assert.Equal(expected, document.LinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetLinkColor());
-
-        // Set same.
-        document.LinkColor = value;
-        Assert.Equal(expected, document.LinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetLinkColor());
+            // Set same.
+            document.LinkColor = value;
+            Assert.Equal(expected, document.LinkColor);
+            VARIANT color2 = default;
+            Assert.True(iHTMLDocument2.Value->get_linkColor(&color2).Succeeded);
+            Assert.Equal(expectedNative, (string)color2.ToObject());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Links_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -947,8 +1037,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Links_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -963,8 +1053,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_RightToLeft_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -988,8 +1078,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(RightToLeft_CustomValueOnHtml_TestData))]
     public async Task HtmlDocument_RightToLeft_GetCustomValueOnHtml_ReturnsExpected(string rtl, bool expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1011,8 +1101,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(RightToLeft_CustomValueSet_TestData))]
     public async Task HtmlDocument_RightToLeft_GetCustomValueSet_ReturnsExpected(string rtl, bool expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1020,9 +1110,14 @@ public class HtmlDocumentTests
         string html = $"<html></html>";
         HtmlDocument document = await GetDocument(control, html);
 
-        IHTMLDocument3 iHTMLDocument3 = (IHTMLDocument3)document.DomDocument;
-        iHTMLDocument3.SetDir(rtl);
-        Assert.Equal(expected, document.RightToLeft);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
+            using BSTR bstrRtl = new(rtl);
+            Assert.True(iHTMLDocument3.Value->put_dir(bstrRtl).Succeeded);
+            Assert.Equal(expected, document.RightToLeft);
+        }
     }
 
     [WinFormsTheory]
@@ -1030,36 +1125,45 @@ public class HtmlDocumentTests
     [InlineData(false, "ltr", "rtl")]
     public async Task HtmlDocument_RightToLeft_Set_GetReturnsExpected(bool value, string expectedNative1, string expectedNative2)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument3 iHTMLDocument3 = (IHTMLDocument3)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.RightToLeft = value;
+            Assert.Equal(value, document.RightToLeft);
+            using var iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
+            using BSTR dir = default;
+            Assert.True(iHTMLDocument3.Value->get_dir(&dir).Succeeded);
+            Assert.Equal(expectedNative1, dir.ToString());
 
-        document.RightToLeft = value;
-        Assert.Equal(value, document.RightToLeft);
-        Assert.Equal(expectedNative1, iHTMLDocument3.GetDir());
+            // Set same.
+            document.RightToLeft = value;
+            Assert.Equal(value, document.RightToLeft);
+            using BSTR dir2 = default;
+            Assert.True(iHTMLDocument3.Value->get_dir(&dir2).Succeeded);
+            Assert.Equal(expectedNative1, dir2.ToString());
 
-        // Set same.
-        document.RightToLeft = value;
-        Assert.Equal(value, document.RightToLeft);
-        Assert.Equal(expectedNative1, iHTMLDocument3.GetDir());
-
-        // Set different.
-        document.RightToLeft = !value;
-        Assert.Equal(!value, document.RightToLeft);
-        Assert.Equal(expectedNative2, iHTMLDocument3.GetDir());
+            // Set different.
+            document.RightToLeft = !value;
+            Assert.Equal(!value, document.RightToLeft);
+            using BSTR dir3 = default;
+            Assert.True(iHTMLDocument3.Value->get_dir(&dir3).Succeeded);
+            Assert.Equal(expectedNative2, dir3.ToString());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Title_GetWithTitle_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1072,8 +1176,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Title_GetNoTitle_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1087,54 +1191,66 @@ public class HtmlDocumentTests
     [NormalizedStringData]
     public async Task HtmlDocument_Title_GetCustomValueSet_ReturnsExpected(string title, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetTitle(title);
-        Assert.Equal(expected, document.Title);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using BSTR bstrTitle = new(title);
+            Assert.True(iHTMLDocument2.Value->put_title(bstrTitle).Succeeded);
+            Assert.Equal(expected, document.Title);
+        }
     }
 
     [WinFormsTheory]
     [NormalizedStringData]
     public async Task HtmlDocument_Title_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.Title = value;
+            Assert.Equal(expected, document.Title);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using BSTR title = default;
+            Assert.True(iHTMLDocument2.Value->get_title(&title).Succeeded);
+            Assert.Equal(expected, title.ToString());
 
-        document.Title = value;
-        Assert.Equal(expected, document.Title);
-        Assert.Equal(expected, iHTMLDocument2.GetTitle());
-
-        // Set same.
-        document.Title = value;
-        Assert.Equal(expected, document.Title);
-        Assert.Equal(expected, iHTMLDocument2.GetTitle());
+            // Set same.
+            document.Title = value;
+            Assert.Equal(expected, document.Title);
+            using BSTR title2 = default;
+            Assert.True(iHTMLDocument2.Value->get_title(&title2).Succeeded);
+            Assert.Equal(expected, title2.ToString());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Url_GetDocument_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
-        var source = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(Html);
@@ -1148,8 +1264,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_VisitedLinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1166,8 +1282,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -1180,8 +1296,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(VisitedLinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1198,8 +1314,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x80, 0x00, 0x80) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x80, 0x00, 0x80) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -1212,49 +1328,60 @@ public class HtmlDocumentTests
     [MemberData(nameof(VisitedLinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><head><title>Title</title></head></html>";
         HtmlDocument document = await GetDocument(control, Html);
-
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
-        iHTMLDocument2.SetVlinkColor(value);
-        Assert.Equal(expected, document.VisitedLinkColor);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using var variantValue = VARIANT.FromObject(value);
+            Assert.True(iHTMLDocument2.Value->put_vlinkColor(variantValue).Succeeded);
+            Assert.Equal(expected, document.VisitedLinkColor);
+        }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
+        validate();
+        unsafe void validate()
+        {
+            document.VisitedLinkColor = value;
+            Assert.Equal(expected, document.VisitedLinkColor);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            VARIANT color = default;
+            Assert.True(iHTMLDocument2.Value->get_vlinkColor(&color).Succeeded);
+            Assert.Equal(expectedNative, (string)color.ToObject());
 
-        document.VisitedLinkColor = value;
-        Assert.Equal(expected, document.VisitedLinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetVlinkColor());
-
-        // Set same.
-        document.VisitedLinkColor = value;
-        Assert.Equal(expected, document.VisitedLinkColor);
-        Assert.Equal(expectedNative, iHTMLDocument2.GetVlinkColor());
+            // Set same.
+            document.VisitedLinkColor = value;
+            Assert.Equal(expected, document.VisitedLinkColor);
+            VARIANT color2 = default;
+            Assert.True(iHTMLDocument2.Value->get_vlinkColor(&color2).Succeeded);
+            Assert.Equal(expectedNative, (string)color2.ToObject());
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Window_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1272,8 +1399,8 @@ public class HtmlDocumentTests
     [InlineData("onclick")]
     public async Task HtmlDocument_AttachEventHandler_AttachDetach_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1334,15 +1461,15 @@ public class HtmlDocumentTests
     [InlineData("onbeforedeactivate")]
     public async Task HtmlDocument_AttachEventHandler_InvokeClick_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
+
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -1351,21 +1478,29 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.AttachEventHandler(eventName, handler);
-        Assert.Equal(0, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.AttachEventHandler(eventName, handler);
+            Assert.Equal(0, callCount);
 
-        iHTMLDocument4.FireEvent(eventName, null);
-        Assert.Equal(1, callCount);
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR name = new(eventName);
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(name, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        document.DetachEventHandler(eventName, handler);
-        Assert.Equal(1, callCount);
+            document.DetachEventHandler(eventName, handler);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_AttachEventHandler_EmptyEventName_ThrowsCOMException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1382,8 +1517,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_AttachEventHandler_NullEventName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1402,8 +1537,8 @@ public class HtmlDocumentTests
     [InlineData("h1", "H1")]
     public async Task HtmlDocument_CreateElement_Invoke_ReturnsExpected(string tagName, string expectedTagName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1419,8 +1554,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_CreateElement_NullElementTag_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1435,8 +1570,8 @@ public class HtmlDocumentTests
     [InlineData("onclick")]
     public async Task HtmlDocument_DetachEventHandler_AttachDetach_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1463,8 +1598,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DetachEventHandler_EmptyEventName_ThrowsCOMException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1480,8 +1615,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DetachEventHandler_NullEventName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1497,8 +1632,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Equals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1520,8 +1655,8 @@ public class HtmlDocumentTests
     [InlineData("copy", false, "def")]
     public async Task HtmlDocument_ExecCommand_Invoke_Success(string command, bool showUI, object value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1538,8 +1673,8 @@ public class HtmlDocumentTests
     [InlineData("NoSuchCommand", false, null)]
     public async Task HtmlDocument_ExecCommand_InvalidCommand_ThrowsCOMException(string command, bool showUI, object value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1553,8 +1688,8 @@ public class HtmlDocumentTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
     public async Task HtmlDocument_Focus_Invoke_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1572,8 +1707,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementById_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1590,8 +1725,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementById_NullId_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1604,8 +1739,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementFromPoint_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1621,8 +1756,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1644,10 +1779,30 @@ public class HtmlDocumentTests
     }
 
     [WinFormsFact]
+    public async Task HtmlDocument_GetElementsByTagName_IndexIntoByString_ReturnsExpected()
+    {
+        using Control parent = new();
+        using WebBrowser control = new()
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><body><img id=\"img1\" /><img id=\"img2\" /><a id=\"link1\">Href</a><a id=\"link2\">Href</a><form id=\"form1\"></form><form id=\"form2\"></form></body></html>";
+        HtmlDocument document = await GetDocument(control, Html);
+
+        HtmlElementCollection collection = document.GetElementsByTagName("form");
+        Assert.NotSame(collection, document.GetElementsByTagName("form"));
+        Assert.Equal(2, collection.Count);
+        Assert.NotNull(collection["form1"]);
+        Assert.NotNull(collection["form2"]);
+        Assert.Null(collection["form3"]);
+    }
+
+    [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_NullTagName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1660,8 +1815,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetHashCode_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1678,8 +1833,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_InvokeScript_ScriptExists_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1709,16 +1864,16 @@ public class HtmlDocumentTests
         Assert.Equal("NoParameter1", document.InvokeScript("divide"));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", null));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", Array.Empty<object>()));
-        Assert.Equal("NoParameter2", document.InvokeScript("divide", new object[] { 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
+        Assert.Equal("NoParameter2", document.InvokeScript("divide", [2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_InvokeScript_NoSuchScript_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1729,7 +1884,7 @@ public class HtmlDocumentTests
         Assert.Null(document.InvokeScript("NoSuchScript"));
         Assert.Null(document.InvokeScript("NoSuchScript", null));
         Assert.Null(document.InvokeScript("NoSuchScript", Array.Empty<object>()));
-        Assert.Null(document.InvokeScript("NoSuchScript", new object[] { 1 }));
+        Assert.Null(document.InvokeScript("NoSuchScript", [1]));
     }
 
     public static IEnumerable<object[]> Write_TestData()
@@ -1744,8 +1899,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Write_TestData))]
     public async Task HtmlDocument_Write_InvokeEmpty_Success(string text, string expectedInnerHtml)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1761,8 +1916,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Write_TestData))]
     public async Task HtmlDocument_Write_InvokeNotEmpty_Success(string text, string expectedInnerHtml)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1778,8 +1933,8 @@ public class HtmlDocumentTests
     [BoolData]
     public async Task HtmlDocument_OpenNew_Invoke_Success(bool replaceInHistory)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1796,8 +1951,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_OperatorEquals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1808,16 +1963,16 @@ public class HtmlDocumentTests
 
         Assert.True(document == document);
         Assert.False(document == newDocument);
-        Assert.False(document == (HtmlDocument)null);
-        Assert.False(document == (HtmlDocument)null);
-        Assert.True((HtmlDocument)null == (HtmlDocument)null);
+        Assert.False(document == null);
+        Assert.False(document == null);
+        Assert.True(null == (HtmlDocument)null);
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_OperatorNotEquals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1828,24 +1983,23 @@ public class HtmlDocumentTests
 
         Assert.False(document != document);
         Assert.True(document != newDocument);
-        Assert.True(document != (HtmlDocument)null);
-        Assert.True(document != (HtmlDocument)null);
-        Assert.False((HtmlDocument)null != (HtmlDocument)null);
+        Assert.True(document != null);
+        Assert.True(document != null);
+        Assert.False(null != (HtmlDocument)null);
     }
 #pragma warning restore CS1718, CSIsNull001, CSIsNull002
 
     [WinFormsFact]
     public async Task HtmlDocument_Click_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -1855,28 +2009,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.Click += handler;
-        iHTMLDocument4.FireEvent("onclick", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            document.Click += handler;
+            using BSTR onClick = new("onclick");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onClick, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.Click -= handler;
-        iHTMLDocument4.FireEvent("onclick", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.Click -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onClick, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_ContextMenuShowing_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -1886,28 +2047,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.ContextMenuShowing += handler;
-        iHTMLDocument4.FireEvent("oncontextmenu", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.ContextMenuShowing += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onContextMenu = new("oncontextmenu");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onContextMenu, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.ContextMenuShowing -= handler;
-        iHTMLDocument4.FireEvent("oncontextmenu", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.ContextMenuShowing -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onContextMenu, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Focusing_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -1917,28 +2085,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.Focusing += handler;
-        iHTMLDocument4.FireEvent("onfocusin", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.Focusing += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onFocusing = new("onfocusin");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onFocusing, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.Focusing -= handler;
-        iHTMLDocument4.FireEvent("onfocusin", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.Focusing -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onFocusing, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_LosingFocus_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -1948,28 +2123,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.LosingFocus += handler;
-        iHTMLDocument4.FireEvent("onfocusout", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.LosingFocus += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onFocusOut = new("onfocusout");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onFocusOut, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.LosingFocus -= handler;
-        iHTMLDocument4.FireEvent("onfocusout", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.LosingFocus -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onFocusOut, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_MouseDown_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -1979,28 +2161,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.MouseDown += handler;
-        iHTMLDocument4.FireEvent("onmousedown", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.MouseDown += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onMouseDown = new("onmousedown");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseDown, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.MouseDown -= handler;
-        iHTMLDocument4.FireEvent("onmousedown", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.MouseDown -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseDown, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_MouseLeave_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -2010,28 +2199,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.MouseLeave += handler;
-        iHTMLDocument4.FireEvent("onmouseout", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.MouseLeave += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onMouseOut = new("onmouseout");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseOut, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.MouseLeave -= handler;
-        iHTMLDocument4.FireEvent("onmouseout", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.MouseLeave -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseOut, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_MouseMove_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -2041,28 +2237,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.MouseMove += handler;
-        iHTMLDocument4.FireEvent("onmousemove", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.MouseMove += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onMouseMove = new("onmousemove");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseMove, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.MouseMove -= handler;
-        iHTMLDocument4.FireEvent("onmousemove", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.MouseMove -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseMove, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_MouseOver_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -2072,28 +2275,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.MouseOver += handler;
-        iHTMLDocument4.FireEvent("onmouseover", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.MouseOver += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onMouseOver = new("onmouseover");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseOver, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.MouseOver -= handler;
-        iHTMLDocument4.FireEvent("onmouseover", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.MouseOver -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseOver, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_MouseUp_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -2103,28 +2313,35 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.MouseUp += handler;
-        iHTMLDocument4.FireEvent("onmouseup", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.MouseUp += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onMouseUp = new("onmouseup");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseUp, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.MouseUp -= handler;
-        iHTMLDocument4.FireEvent("onmouseup", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.MouseUp -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onMouseUp, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     [WinFormsFact]
     public async Task HtmlDocument_Stop_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html><body><p>InnerText</p></body></html>";
         HtmlDocument document = await GetDocument(control, Html);
-        IHTMLDocument4 iHTMLDocument4 = (IHTMLDocument4)document.DomDocument;
 
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -2134,19 +2351,27 @@ public class HtmlDocumentTests
             callCount++;
         }
 
-        document.Stop += handler;
-        iHTMLDocument4.FireEvent("onstop", null);
-        Assert.Equal(1, callCount);
+        validate();
+        unsafe void validate()
+        {
+            document.Stop += handler;
+            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using BSTR onStop = new("onstop");
+            VARIANT eventObj = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onStop, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
 
-        // Remove handler.
-        document.Stop -= handler;
-        iHTMLDocument4.FireEvent("onstop", null);
-        Assert.Equal(1, callCount);
+            // Remove handler.
+            document.Stop -= handler;
+            Assert.True(iHTMLDocument4.Value->fireEvent(onStop, &eventObj, &cancelled).Succeeded);
+            Assert.Equal(1, callCount);
+        }
     }
 
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
     {
-        var source = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(html);

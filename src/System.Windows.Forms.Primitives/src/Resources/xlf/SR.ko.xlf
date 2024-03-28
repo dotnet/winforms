@@ -2,14 +2,9 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ko" original="../SR.resx">
     <body>
-      <trans-unit id="COM2UnhandledVT">
-        <source>Unhandled VT: {0}.</source>
-        <target state="translated">처리되지 않은 VT입니다. {0}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
-        <target state="new">Unable to retrieve the root folder.</target>
+        <target state="translated">루트 폴더를 검색할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="General_MissingService">
@@ -20,6 +15,11 @@
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">IDictionary 매개 변수에 잘못된 항목이 하나 이상 있습니다. 모든 값이 개체의 속성과 일치하는지 확인하십시오.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="translated">'{0}' 클래스에서 '{1}' 리소스를 찾을 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

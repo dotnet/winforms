@@ -1,7 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
 using ScrollAmount = Windows.Win32.UI.Accessibility.ScrollAmount;
 
@@ -9,18 +10,18 @@ namespace System.Windows.Forms;
 
 public partial class PrintPreviewControl
 {
-    internal class PrintPreviewControlAccessibleObject : ControlAccessibleObject, IScrollProvider.Interface
+    internal sealed class PrintPreviewControlAccessibleObject : ControlAccessibleObject, IScrollProvider.Interface
     {
         public PrintPreviewControlAccessibleObject(PrintPreviewControl owner) : base(owner)
         {
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? null : propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
+            => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? default : propertyID switch
             {
-                UiaCore.UIA.AutomationIdPropertyId => owner.Name,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => owner.Focused,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => (VARIANT)owner.Name,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -54,39 +55,41 @@ public partial class PrintPreviewControl
             };
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        private protected override bool IsInternal => true;
+
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ScrollPatternId => this.TryGetOwnerAs(out PrintPreviewControl? owner)
+                UIA_PATTERN_ID.UIA_ScrollPatternId => this.TryGetOwnerAs(out PrintPreviewControl? owner)
                     && (owner._vScrollBar.Visible || owner._hScrollBar.Visible),
                 _ => base.IsPatternSupported(patternId)
             };
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out PrintPreviewControl? owner))
             {
                 return base.FragmentNavigate(direction);
             }
 
-            switch (direction)
+            return direction switch
             {
-                case UiaCore.NavigateDirection.FirstChild:
-                    return owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
-                        : owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
-                        : null;
-
-                case UiaCore.NavigateDirection.LastChild:
-                    return owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
-                        : owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
-                        : null;
-
-                default:
-                    return base.FragmentNavigate(direction);
-            }
+                NavigateDirection.NavigateDirection_FirstChild
+                    => owner._vScrollBar.Visible
+                        ? owner._vScrollBar.AccessibilityObject
+                        : owner._hScrollBar.Visible
+                            ? owner._hScrollBar.AccessibilityObject
+                            : null,
+                NavigateDirection.NavigateDirection_LastChild
+                    => owner._hScrollBar.Visible
+                        ? owner._hScrollBar.AccessibilityObject
+                        : owner._vScrollBar.Visible
+                            ? owner._vScrollBar.AccessibilityObject
+                            : null,
+                _ => base.FragmentNavigate(direction),
+            };
         }
 
         HRESULT IScrollProvider.Interface.Scroll(ScrollAmount horizontalAmount, ScrollAmount verticalAmount)

@@ -15,7 +15,7 @@ public class HScrollPropertiesTests
     [MemberData(nameof(Ctor_ScrollableControl_TestData))]
     public void HScrollProperties_Ctor_Control(ScrollableControl container)
     {
-        var properties = new SubHScrollProperties(container);
+        SubHScrollProperties properties = new(container);
         Assert.Equal(container, properties.ParentControlEntry);
         Assert.True(properties.Enabled);
         Assert.Equal(10, properties.LargeChange);

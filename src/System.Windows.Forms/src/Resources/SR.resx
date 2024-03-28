@@ -2188,7 +2188,7 @@ To replace this default dialog please handle the DataError event.</value>
     <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
   </data>
   <data name="DataGridView_SortedDescr" xml:space="preserve">
-    <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
+    <value>Occurs when the DataGridView control completes a sorting operation.</value>
   </data>
   <data name="DataGridView_StandardTabDescr" xml:space="preserve">
     <value>Indicates whether the TAB key moves the focus to the next control in the tab order rather than moving focus to the next cell in the control.</value>
@@ -3462,9 +3462,6 @@ Stack trace where the illegal operation occurred was:
   <data name="InvalidCrossThreadControlCall" xml:space="preserve">
     <value>Action being performed on this control is being called from the wrong thread. Marshal to the correct thread using Control.Invoke or Control.BeginInvoke to perform this action.</value>
   </data>
-  <data name="InvalidExBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</value>
-  </data>
   <data name="InvalidFileFormat" xml:space="preserve">
     <value>File format is not valid.</value>
   </data>
@@ -3473,18 +3470,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="InvalidGDIHandle" xml:space="preserve">
     <value>Win32 handle passed to {0} is not valid or is the wrong type.</value>
-  </data>
-  <data name="InvalidHighBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</value>
-  </data>
-  <data name="InvalidHighBoundArgumentEx" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</value>
-  </data>
-  <data name="InvalidLowBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</value>
-  </data>
-  <data name="InvalidLowBoundArgumentEx" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</value>
   </data>
   <data name="InvalidNullArgument" xml:space="preserve">
     <value>Null is not a valid value for '{0}'.</value>
@@ -4341,9 +4326,6 @@ Stack trace where the illegal operation occurred was:
   <data name="NumericUpDownIncrementDescr" xml:space="preserve">
     <value>Indicates the amount to increment or decrement on each button click.</value>
   </data>
-  <data name="NumericUpDownLessThanZeroError" xml:space="preserve">
-    <value>Parameter value must be greater than or equal to 0.</value>
-  </data>
   <data name="NumericUpDownMaximumDescr" xml:space="preserve">
     <value>Indicates the maximum value for the numeric up-down control.</value>
   </data>
@@ -4811,9 +4793,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="PropertyCategoryText" xml:space="preserve">
     <value>Text</value>
-  </data>
-  <data name="PropertyGridBadTabIndex" xml:space="preserve">
-    <value>Tab index not valid.</value>
   </data>
   <data name="PropertyGridCanShowCommandsDesc" xml:space="preserve">
     <value>Sets whether the commands window will be displayed for components with commands.</value>
@@ -5895,6 +5874,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripItemsDescr" xml:space="preserve">
     <value>Collection of items to display on the ToolStrip.</value>
   </data>
+  <data name="ToolStripItemSelectedChangedDescr" xml:space="preserve">
+    <value>Occurs when the Selected property value changes.</value>
+  </data>
   <data name="ToolStripItemSize" xml:space="preserve">
     <value>The size of the item.</value>
   </data>
@@ -6128,52 +6110,52 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="toStringAlt" xml:space="preserve">
     <value>Alt</value>
-	<comment>{Locked="Alt"}</comment>
+    <comment>{Locked="Alt"}</comment>
   </data>
   <data name="toStringBack" xml:space="preserve">
     <value>Back</value>
   </data>
   <data name="toStringControl" xml:space="preserve">
     <value>Ctrl</value>
-	<comment>{Locked=!de; "Ctrl"}</comment>
+    <comment>{Locked=!de; "Ctrl"}</comment>
   </data>
   <data name="toStringDefault" xml:space="preserve">
     <value>(default)</value>
   </data>
   <data name="toStringDelete" xml:space="preserve">
     <value>Del</value>
-	<comment>{Locked=!fr,de,it,es; "Del"}</comment>
+    <comment>{Locked=!fr,de,it,es; "Del"}</comment>
   </data>
   <data name="toStringEnd" xml:space="preserve">
     <value>End</value>
-	<comment>{Locked=!fr,de,it,es; "End"}</comment>
+    <comment>{Locked=!fr,de,it,es; "End"}</comment>
   </data>
   <data name="toStringEnter" xml:space="preserve">
     <value>Enter</value>
-	<comment>{Locked=!fr,de,it,es; "Enter"}</comment>
+    <comment>{Locked=!fr,de,it,es; "Enter"}</comment>
   </data>
   <data name="toStringHome" xml:space="preserve">
     <value>Home</value>
-	<comment>{Locked=!fr,de,es; "Home"}</comment>
+    <comment>{Locked=!fr,de,es; "Home"}</comment>
   </data>
   <data name="toStringInsert" xml:space="preserve">
     <value>Insert</value>
-	<comment>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</comment>
+    <comment>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</comment>
   </data>
   <data name="toStringNone" xml:space="preserve">
     <value>(none)</value>
   </data>
   <data name="toStringPageDown" xml:space="preserve">
     <value>PgDn</value>
-	<comment>{Locked=!fr,de,it,es; "PgDn"}</comment>
+    <comment>{Locked=!fr,de,it,es; "PgDn"}</comment>
   </data>
   <data name="toStringPageUp" xml:space="preserve">
     <value>PgUp</value>
-	<comment>{Locked=!fr,de,it,es; "PgUp"}</comment>
+    <comment>{Locked=!fr,de,it,es; "PgUp"}</comment>
   </data>
   <data name="toStringShift" xml:space="preserve">
     <value>Shift</value>
-	<comment>{Locked=!fr,de,it,es; "Shift"}</comment>
+    <comment>{Locked=!fr,de,it,es; "Shift"}</comment>
   </data>
   <data name="TrackBarAutoSizeDescr" xml:space="preserve">
     <value>Indicates whether the control will resize itself automatically based on a computation of the default scroll bar dimensions.</value>
@@ -6955,9 +6937,6 @@ Stack trace where the illegal operation occurred was:
   <data name="AccessDenied" xml:space="preserve">
     <value>Access denied</value>
   </data>
-  <data name="ArgumentOutOfRange_NeedNonNegNum" xml:space="preserve">
-    <value>Non-negative number required.</value>
-  </data>
   <data name="Argument_IncompatibleArrayType" xml:space="preserve">
     <value>Target array type is not compatible with the type of items in the collection.</value>
   </data>
@@ -6978,5 +6957,14 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ResourceValueNotFound" xml:space="preserve">
     <value>The resource value '{0}' was not found.</value>
+  </data>
+  <data name="FolderBrowserDialogSelectedPathsDescr" xml:space="preserve">
+    <value>Retrieves the paths of all selected folders in the dialog box.</value>
+  </data>
+  <data name="FolderBrowserDialogMultiSelectDescr" xml:space="preserve">
+    <value>Controls whether multiple folders can be selected in the dialog.</value>
+  </data>
+  <data name="BindingNotSupported" xml:space="preserve">
+    <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
 </root>

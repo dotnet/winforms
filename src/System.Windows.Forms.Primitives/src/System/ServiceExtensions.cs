@@ -38,7 +38,7 @@ internal static class ServiceExtensions
     /// <param name="service">If found, contains the service object when this method returns; otherwise, <see langword="null"/>.</param>
     /// <returns>A service object of type <typeparamref name="T"/> or <see langword="null"/> if there is no such service.</returns>
     public static bool TryGetService<T>(
-        this IServiceProvider? provider,
+        [NotNullWhen(true)] this IServiceProvider? provider,
         [NotNullWhen(true)] out T? service)
         where T : class
         => (service = provider?.GetService(typeof(T)) as T) is not null;
@@ -51,7 +51,7 @@ internal static class ServiceExtensions
     /// <param name="service">If found, contains the service object when this method returns; otherwise, <see langword="null"/>.</param>
     /// <returns>A service object of type <typeparamref name="T"/> or <see langword="null"/> if there is no such service.</returns>
     public static bool TryGetService<T>(
-        this IDesignerHost? designerHost,
+        [NotNullWhen(true)] this IDesignerHost? designerHost,
         [NotNullWhen(true)] out T? service)
         where T : class
         => (service = designerHost?.GetService(typeof(T)) as T) is not null;
@@ -64,7 +64,7 @@ internal static class ServiceExtensions
     /// <param name="service">If found, contains the service object when this method returns; otherwise, <see langword="null"/>.</param>
     /// <returns>A service object of type <typeparamref name="T"/> or <see langword="null"/> if there is no such service.</returns>
     public static bool TryGetService<T>(
-        this ITypeDescriptorContext? context,
+        [NotNullWhen(true)] this ITypeDescriptorContext? context,
         [NotNullWhen(true)] out T? service)
         where T : class
         => (service = context?.GetService(typeof(T)) as T) is not null;
@@ -78,15 +78,11 @@ internal static class ServiceExtensions
         where TService : class
         where TInterface : class
     {
-        var service = provider.GetService<TService, TInterface>();
-
-        if (service is null)
-        {
-            throw new InvalidOperationException(string.Format(SR.General_MissingService, typeof(TInterface).FullName))
+        TInterface service = provider.GetService<TService, TInterface>()
+            ?? throw new InvalidOperationException(string.Format(SR.General_MissingService, typeof(TInterface).FullName))
             {
                 HelpLink = SR.General_MissingService
             };
-        }
 
         return service;
     }

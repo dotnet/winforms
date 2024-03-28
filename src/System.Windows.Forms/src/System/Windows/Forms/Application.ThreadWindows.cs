@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-
 namespace System.Windows.Forms;
 
 public sealed partial class Application
@@ -14,8 +12,7 @@ public sealed partial class Application
     /// </summary>
     private sealed class ThreadWindows
     {
-        private HWND[] _windows;
-        private int _windowCount;
+        private readonly List<HWND> _windows;
         private HWND _activeHwnd;
         private HWND _focusedHwnd;
         internal ThreadWindows? _previousThreadWindows;
@@ -23,41 +20,21 @@ public sealed partial class Application
 
         internal ThreadWindows(bool onlyWinForms)
         {
-            _windows = new HWND[16];
+            _windows = new List<HWND>(16);
             _onlyWinForms = onlyWinForms;
-            PInvoke.EnumThreadWindows(
-                PInvoke.GetCurrentThreadId(),
-                Callback);
+            PInvoke.EnumCurrentThreadWindows(Callback);
         }
 
-        private BOOL Callback(HWND hWnd)
+        private BOOL Callback(HWND hwnd)
         {
             // We only do visible and enabled windows.  Also, we only do top level windows.
             // Finally, we only include windows that are DNA windows, since other MSO components
             // will be responsible for disabling their own windows.
-            if (PInvoke.IsWindowVisible(hWnd) && PInvoke.IsWindowEnabled(hWnd))
+            if (PInvoke.IsWindowVisible(hwnd) && PInvoke.IsWindowEnabled(hwnd))
             {
-                bool add = true;
-
-                if (_onlyWinForms)
+                if (!_onlyWinForms || Control.FromHandle(hwnd) is not null)
                 {
-                    Control? c = Control.FromHandle(hWnd);
-                    if (c is null)
-                    {
-                        add = false;
-                    }
-                }
-
-                if (add)
-                {
-                    if (_windowCount == _windows.Length)
-                    {
-                        HWND[] newWindows = new HWND[_windowCount * 2];
-                        Array.Copy(_windows, 0, newWindows, 0, _windowCount);
-                        _windows = newWindows;
-                    }
-
-                    _windows[_windowCount++] = hWnd;
+                    _windows.Add(hwnd);
                 }
             }
 
@@ -67,44 +44,30 @@ public sealed partial class Application
         // Disposes all top-level Controls on this thread
         internal void Dispose()
         {
-            for (int i = 0; i < _windowCount; i++)
+            foreach (HWND hwnd in _windows)
             {
-                HWND hWnd = _windows[i];
-                if (PInvoke.IsWindow(hWnd))
+                if (PInvoke.IsWindow(hwnd))
                 {
-                    Control? c = Control.FromHandle(hWnd);
-                    c?.Dispose();
+                    Control.FromHandle(hwnd)?.Dispose();
                 }
             }
         }
 
         // Enables/disables all top-level Controls on this thread
-        internal void Enable(bool state)
+        internal void Enable(bool enable)
         {
-            if (!_onlyWinForms && !state)
+            if (!_onlyWinForms && !enable)
             {
                 _activeHwnd = PInvoke.GetActiveWindow();
                 Control? activatingControl = ThreadContext.FromCurrent().ActivatingControl;
-                if (activatingControl is not null)
-                {
-                    _focusedHwnd = activatingControl.HWND;
-                }
-                else
-                {
-                    _focusedHwnd = PInvoke.GetFocus();
-                }
+                _focusedHwnd = activatingControl is not null ? activatingControl.HWND : PInvoke.GetFocus();
             }
 
-            for (int i = 0; i < _windowCount; i++)
+            foreach (HWND hwnd in _windows)
             {
-                HWND hWnd = _windows[i];
-                Debug.WriteLineIf(
-                    CompModSwitches.MSOComponentManager.TraceInfo,
-                    $"ComponentManager : Changing enabled on window: {hWnd} : {state}");
-
-                if (PInvoke.IsWindow(hWnd))
+                if (PInvoke.IsWindow(hwnd))
                 {
-                    PInvoke.EnableWindow(hWnd, state);
+                    PInvoke.EnableWindow(hwnd, enable);
                 }
             }
 
@@ -116,7 +79,7 @@ public sealed partial class Application
             // But, DON'T change other people's state when we're simply
             // responding to external MSOCM events about modality.  When we are,
             // we are created with a TRUE for onlyWinForms.
-            if (!_onlyWinForms && state)
+            if (!_onlyWinForms && enable)
             {
                 if (!_activeHwnd.IsNull && PInvoke.IsWindow(_activeHwnd))
                 {

@@ -14,8 +14,8 @@ public class ExceptionTests
         format.RecordCount.Should().Be(3);
         var systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.Name.Should().Be(typeof(NotSupportedException).FullName);
-        systemClass.MemberNames.Should().BeEquivalentTo(new string[]
-        {
+        systemClass.MemberNames.Should().BeEquivalentTo(
+        [
             "ClassName",
             "Message",
             "Data",
@@ -28,7 +28,7 @@ public class ExceptionTests
             "HResult",
             "Source",
             "WatsonBuckets"
-        });
+        ]);
 
         systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType, object?)[]
         {

@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-using System.Windows.Forms;
 
 namespace System.Resources;
 
@@ -81,7 +80,7 @@ public partial class ResXFileRef
             return string.Empty;
         }
 
-        StringBuilder relPath = new StringBuilder();
+        StringBuilder relPath = new();
 
         for (; i < path1.Length; ++i)
         {

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,14 +10,10 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class CheckBoxPropertyLine : PropertyLine
     {
-        private CheckBox _checkBox;
+        private readonly CheckBox _checkBox;
 
-        public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
-        {
-        }
-
-        protected override void AddControls(List<Control> controls)
         {
             _checkBox = new CheckBox
             {
@@ -31,10 +25,10 @@ internal sealed partial class DesignerActionPanel
             };
             _checkBox.CheckedChanged += new EventHandler(OnCheckBoxCheckedChanged);
 
-            controls.Add(_checkBox);
+            AddedControls.Add(_checkBox);
         }
 
-        public sealed override void Focus() => _checkBox.Focus();
+        public override void Focus() => _checkBox.Focus();
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
@@ -48,14 +42,14 @@ internal sealed partial class DesignerActionPanel
             return checkBoxPreferredSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
         }
 
-        private void OnCheckBoxCheckedChanged(object sender, EventArgs e)
+        private void OnCheckBoxCheckedChanged(object? sender, EventArgs e)
         {
             SetValue(_checkBox.Checked);
         }
 
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
-            _checkBox.Text = StripAmpersands(PropertyItem.DisplayName);
+            _checkBox.Text = StripAmpersands(PropertyItem!.DisplayName);
             _checkBox.AccessibleDescription = PropertyItem.Description;
             _checkBox.TabIndex = currentTabIndex++;
 
@@ -64,7 +58,19 @@ internal sealed partial class DesignerActionPanel
 
         protected override void OnValueChanged()
         {
-            _checkBox.Checked = (bool)Value;
+            _checkBox.Checked = (bool)Value!;
+        }
+
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionPropertyItem item) => new Info(list, item);
+
+        private sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new CheckBoxPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(CheckBoxPropertyLine);
         }
     }
 }

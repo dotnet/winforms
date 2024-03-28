@@ -10,7 +10,7 @@ public class BaseCollectionTests
     [WinFormsFact]
     public void BaseCollection_Ctor_Default()
     {
-        var collection = new SubBaseCollection();
+        SubBaseCollection collection = new();
         Assert.Throws<NullReferenceException>(() => collection.Count);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);
@@ -21,30 +21,30 @@ public class BaseCollectionTests
     [WinFormsFact]
     public void BaseCollection_Count_GetWithList_ReturnsExpected()
     {
-        var collection = new CustomBaseCollection(new ArrayList { 1, 2, 3 });
+        CustomBaseCollection collection = new([1, 2, 3]);
         Assert.Equal(3, collection.Count);
     }
 
     [WinFormsFact]
     public void BaseCollection_CopyTo_InvokeWithList_Success()
     {
-        var collection = new CustomBaseCollection(new ArrayList { 1, 2, 3 });
-        var array = new object[] { 0, 0, 0, 0, 4 };
+        CustomBaseCollection collection = new([1, 2, 3]);
+        object[] array = [0, 0, 0, 0, 4];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 0, 1, 2, 3, 4 }, array);
+        Assert.Equal([0, 1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
     public void BaseCollection_CopyTo_InvokeDefault_ThrowsNullReferenceException()
     {
-        var collection = new BaseCollection();
+        BaseCollection collection = new();
         Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
     }
 
     [WinFormsFact]
     public void BaseCollection_GetEnumerator_InvokeWithList_Success()
     {
-        var collection = new CustomBaseCollection(new ArrayList { 1, 2, 3 });
+        CustomBaseCollection collection = new([1, 2, 3]);
         IEnumerator enumerator = collection.GetEnumerator();
         Assert.True(enumerator.MoveNext());
         Assert.Equal(1, enumerator.Current);
@@ -53,7 +53,7 @@ public class BaseCollectionTests
     [WinFormsFact]
     public void BaseCollection_GetEnumerator_InvokeDefault_ThrowsNullReferenceException()
     {
-        var collection = new BaseCollection();
+        BaseCollection collection = new();
         Assert.Throws<NullReferenceException>(() => collection.CopyTo(Array.Empty<object>(), 0));
     }
 

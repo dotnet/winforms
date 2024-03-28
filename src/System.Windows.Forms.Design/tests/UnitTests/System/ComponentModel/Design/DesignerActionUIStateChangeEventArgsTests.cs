@@ -8,7 +8,7 @@ public class DesignerActionUIStateChangeEventArgsTests
     public static IEnumerable<object[]> Ctor_Object_DesignerActionUIStateChangeType_TestData()
     {
         yield return new object[] { null, DesignerActionUIStateChangeType.Show - 1 };
-        yield return new object[] { new object(), DesignerActionUIStateChangeType.Show };
+        yield return new object[] { new(), DesignerActionUIStateChangeType.Show };
     }
 
     [Theory]

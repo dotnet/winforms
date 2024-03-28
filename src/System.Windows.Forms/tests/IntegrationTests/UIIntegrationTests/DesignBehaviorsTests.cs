@@ -28,7 +28,7 @@ public class DesignBehaviorsTests : ControlTestBase
         Application.ThreadException += (s, e) =>
         {
             // This will preserve the full stack, which otherwise gets replaced
-            throw new Exception(e.Exception.Message, e.Exception);
+            throw new InvalidOperationException(e.Exception.Message, e.Exception);
         };
 
         await RunSingleControlTestAsync<TreeView>(async (form, treeView) =>
@@ -115,7 +115,7 @@ public class DesignBehaviorsTests : ControlTestBase
 
                 var dataObject = toolboxService.SerializeToolboxItem(toolboxItem) as DataObject;
 
-                var effects = node.TreeView.DoDragDrop(dataObject!, DragDropEffects.Copy);
+                var effects = node.TreeView!.DoDragDrop(dataObject!, DragDropEffects.Copy);
             }
 
             async Task InitiateDrangDropAsync(Form form, Point startCoordinates, Control rootView)
@@ -303,7 +303,7 @@ public class DesignBehaviorsTests : ControlTestBase
             if (LoaderHost is null)
                 return;
 
-            ArrayList errors = new();
+            ArrayList errors = [];
 
             LoaderHost.CreateComponent(typeof(Form));
 

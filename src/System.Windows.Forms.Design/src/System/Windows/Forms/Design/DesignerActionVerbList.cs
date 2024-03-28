@@ -17,7 +17,7 @@ internal class DesignerActionVerbList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        DesignerActionItemCollection items = [];
         for (int i = 0; i < _verbs.Length; i++)
         {
             if (_verbs[i].Visible && _verbs[i].Enabled && _verbs[i].Supported)

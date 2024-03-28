@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -28,7 +26,7 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         base.InitializeNewComponent(defaultValues);
 
-        PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["UseVisualStyleBackColor"];
+        PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["UseVisualStyleBackColor"];
         if (prop is not null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
         {
             // Dev10 Bug 685319: We should set the UseVisualStyleBackColor to trun only
@@ -49,36 +47,36 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         get
         {
-            ArrayList snapLines = base.SnapLines as ArrayList;
+            IList<SnapLine> snapLines = SnapLinesInternal;
             FlatStyle flatStyle = FlatStyle.Standard;
             ContentAlignment alignment = ContentAlignment.MiddleCenter;
 
-            PropertyDescriptor prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            if ((prop = props["TextAlign"]) is not null)
-            {
-                alignment = (ContentAlignment)prop.GetValue(Component);
-            }
+            props.TryGetPropertyDescriptorValue(
+                "TextAlign",
+                Component,
+                ref alignment);
 
-            if ((prop = props["FlatStyle"]) is not null)
-            {
-                flatStyle = (FlatStyle)prop.GetValue(Component);
-            }
+            props.TryGetPropertyDescriptorValue(
+                "FlatStyle",
+                Component,
+                ref flatStyle);
 
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
-            //based on the type of control and it's style, we need to add certain deltas to make
-            //the snapline appear in the right place. Rather than adding a class for each control
-            //we special case it here - for perf reasons.
+            // based on the type of control and it's style, we need to add certain deltas to make
+            // the snapline appear in the right place. Rather than adding a class for each control
+            // we special case it here - for perf reasons.
 
-            if ((Control is CheckBox) || (Control is RadioButton))
+            if (Control is CheckBox or RadioButton)
             {
                 Appearance appearance = Appearance.Normal;
-                if ((prop = props["Appearance"]) is not null)
-                {
-                    appearance = (Appearance)prop.GetValue(Component);
-                }
+
+                props.TryGetPropertyDescriptorValue(
+                    "Appearance",
+                    Component,
+                    ref appearance);
 
                 if (appearance == Appearance.Normal)
                 {
@@ -97,13 +95,13 @@ internal class ButtonBaseDesigner : ControlDesigner
                 }
             }
             else
-            { //default case
+            { // default case
                 baseline += DefaultBaselineOffset(alignment, flatStyle);
             }
 
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 
@@ -111,13 +109,13 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
         {
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.System))
+            if (flatStyle is FlatStyle.Standard or FlatStyle.System)
             {
                 return -1;
             }
             else
             {
-                return 0; //FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
+                return 0; // FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
             }
         }
         else if ((alignment & DesignerUtils.AnyTopAlignment) != 0)
@@ -130,18 +128,19 @@ internal class ButtonBaseDesigner : ControlDesigner
             {
                 return 0;
             }
-            else if ((flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            else if (flatStyle is FlatStyle.Flat or FlatStyle.Popup)
             {
                 return 2;
             }
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
         else
-        {//bottom alignment
+        {
+            // Bottom alignment
             if (flatStyle == FlatStyle.Standard)
             {
                 return -3;
@@ -150,14 +149,14 @@ internal class ButtonBaseDesigner : ControlDesigner
             {
                 return 0;
             }
-            else if ((flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            else if (flatStyle is FlatStyle.Flat or FlatStyle.Popup)
             {
                 return -2;
             }
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }
@@ -172,12 +171,12 @@ internal class ButtonBaseDesigner : ControlDesigner
             }
             else
             {
-                return 0; //FlatStyle.Standard || FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
+                return 0; // FlatStyle.Standard || FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
             }
         }
         else
         {// Top or bottom alignment
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.Flat) || (flatStyle == FlatStyle.Popup))
+            if (flatStyle is FlatStyle.Standard or FlatStyle.Flat or FlatStyle.Popup)
             {
                 return ((alignment & DesignerUtils.AnyTopAlignment) != 0) ? 2 : -2;
             }
@@ -188,7 +187,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }
@@ -200,8 +199,9 @@ internal class ButtonBaseDesigner : ControlDesigner
             return 0;
         }
         else
-        { // Top or bottom alignment
-            if ((flatStyle == FlatStyle.Standard) || (flatStyle == FlatStyle.Popup))
+        {
+            // Top or bottom alignment
+            if (flatStyle is FlatStyle.Standard or FlatStyle.Popup)
             {
                 return ((alignment & DesignerUtils.AnyTopAlignment) != 0) ? 4 : -4;
             }
@@ -216,7 +216,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }

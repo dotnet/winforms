@@ -262,11 +262,6 @@
         <target state="translated">Nur eindimensionale Arrays werden für die angeforderte Aktion unterstützt.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Nicht negative Zahl erforderlich.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Der Typ des Zielarrays ist mit dem Typ der Elemente in der Sammlung nicht kompatibel.</target>
@@ -415,6 +410,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">BindingNavigator</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Bindungsvorgänge werden nicht unterstützt, wenn das Kürzen von Anwendungen aktiviert ist.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -4140,8 +4140,8 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">Tritt auf, wenn DataGridView zwei Zellwerte vergleicht, um einen Sortiervorgang auszuführen.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">Tritt auf, wenn das DataGridView-Steuerelement einen Sortiervorgang abschließt.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -5210,6 +5210,11 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Zeichenfolge, die im Dialogfeld über dem Strukturansicht-Steuerelement angezeigt wird. Sie kann zum Angeben von Benutzeranweisungen verwendet werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="translated">Steuert, ob mehrere Ordner im Dialogfeld ausgewählt werden können.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
@@ -5223,6 +5228,11 @@ Möchten Sie sie ersetzen?</target>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">Der Pfad für den Ordner, der im Dialogfeld zuerst ausgewählt war oder vom Benutzer zuletzt gewählt wurde.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="translated">Fragt die Pfade aller ausgewählten Ordner im Dialogfeld ab.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -5854,11 +5864,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der für dieses Steuerelement durchgeführte Vorgang wird vom falschen Thread aufgerufen. Marshallen Sie den richtigen Thread mit Control.Invoke oder Control.BeginInvoke, um den Vorgang auszuführen.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss größer als {2} und kleiner als {3} sein.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Ungültiges Dateiformat.</target>
@@ -5877,26 +5882,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">Ungültiger HDC-Typ: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss kleiner als {2} sein.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss kleiner als oder gleich {2} sein.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss größer als {2} sein.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss größer als oder gleich {2} sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">
@@ -7409,11 +7394,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Zeigt das Intervall an, in dem das Element bei jedem Klicken auf die Schaltfläche erhöht oder verringert wird.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">Der Parameterwert muss größer als oder gleich 0 sein.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Zeigt den maximalen Wert für das numerische Auf-Ab-Steuerelement an.</target>
@@ -8267,11 +8247,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Text</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Ungültiger Registerkartenindex.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
@@ -10242,6 +10217,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ToolStripItemRightToLeftDescr">
         <source>Indicates whether the item should draw right-to-left for RTL languages.</source>
         <target state="translated">Zeigt an, ob das Element für RTL-Sprachen von rechts nach links gezeichnet werden soll.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="translated">Tritt ein, wenn sich der ausgewählte Eigenschaftswert ändert.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

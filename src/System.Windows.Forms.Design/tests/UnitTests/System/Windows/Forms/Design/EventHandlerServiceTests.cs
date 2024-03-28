@@ -48,10 +48,10 @@ public class EventHandlerServiceTests
     public void GetHandler_should_not_remove_from_handlers()
     {
         EventHandlerService service = new(null);
-        A a = new A();
+        A a = new();
         service.PushHandler(a);
 
-        var foundHandler = service.GetHandler(typeof(A));
+        object foundHandler = service.GetHandler(typeof(A));
         Assert.Same(a, foundHandler);
         foundHandler = service.GetHandler(typeof(A));
         Assert.Same(a, foundHandler);
@@ -61,12 +61,12 @@ public class EventHandlerServiceTests
     public void GetHandler_should_return_derived_handler_if_found()
     {
         EventHandlerService service = new(null);
-        A a = new A();
+        A a = new();
         service.PushHandler(a);
-        B b = new B();
+        B b = new();
         service.PushHandler(b);
 
-        var foundHandler = service.GetHandler(typeof(A));
+        object foundHandler = service.GetHandler(typeof(A));
 
         Assert.Same(b, foundHandler);
     }
@@ -104,7 +104,7 @@ public class EventHandlerServiceTests
     public void PopHandler_should_not_pop_if_handler_not_found_on_stack()
     {
         EventHandlerService service = new(null);
-        A a = new A();
+        A a = new();
         service.PushHandler(a);
 
         // PopHandler asserts when an item isn't found
@@ -120,7 +120,7 @@ public class EventHandlerServiceTests
     public void PopHandler_should_pop_if_handler_found_on_stack()
     {
         EventHandlerService service = new(null);
-        A a = new A();
+        A a = new();
         service.PushHandler(a);
         service.PopHandler(a);
         Assert.Null(service.GetHandler(typeof(A)));
@@ -131,7 +131,7 @@ public class EventHandlerServiceTests
     {
         EventHandlerService service = new(null);
 
-        A a = new A();
+        A a = new();
         service.PushHandler(a);
 
         int callCount = 0;
@@ -155,9 +155,9 @@ public class EventHandlerServiceTests
     {
         EventHandlerService service = new(null);
 
-        A a1 = new A();
+        A a1 = new();
         service.PushHandler(a1);
-        A a2 = new A();
+        A a2 = new();
         service.PushHandler(a2);
 
         Assert.Same(a2, service.GetHandler(typeof(A)));

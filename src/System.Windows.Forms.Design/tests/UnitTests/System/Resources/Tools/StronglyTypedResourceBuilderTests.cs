@@ -25,7 +25,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public void StronglyTypedResourceBuilder_Create_NullBaseName_ThrowsArgumentNull()
     {
-        Hashtable resources = new();
+        Hashtable resources = [];
         Assert.Throws<ArgumentNullException>(
             "baseName",
             () => StronglyTypedResourceBuilder.Create(
@@ -73,7 +73,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public void StronglyTypedResourceBuilder_Create_NullCodeProvider_ThrowsArgumentNull()
     {
-        Hashtable resources = new();
+        Hashtable resources = [];
         Assert.Throws<ArgumentNullException>(
             "codeProvider",
             () => StronglyTypedResourceBuilder.Create(
@@ -121,7 +121,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public void StronglyTypedResourceBuilder_Create_NullResourceList_ThrowsArgumentNull()
     {
-        Hashtable resources = new();
+        Hashtable resources = [];
         Assert.Throws<ArgumentNullException>(
             "resourceList",
             () => StronglyTypedResourceBuilder.Create(
@@ -695,7 +695,7 @@ public partial class StronglyTypedResourceBuilderTests
     {
         using UnmanagedMemoryStream resourceAudio =
             Assert.IsType<UnmanagedMemoryStream>(audioPropertyInfo.GetValue(obj: null));
-        var contents = new byte[resourceAudio.Length];
+        byte[] contents = new byte[resourceAudio.Length];
         int pos = (int)(resourceAudio.Position = 0);
         while (pos < resourceAudio.Length)
         {

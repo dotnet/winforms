@@ -8,7 +8,7 @@ namespace System.Windows.Forms.UITests;
 
 internal static class ScreenshotService
 {
-    private static readonly object Gate = new();
+    private static readonly object s_gate = new();
 
     /// <summary>
     /// Takes a picture of the screen and saves it to the location specified by
@@ -22,7 +22,7 @@ internal static class ScreenshotService
         // 1. Only one screenshot is held in memory at a time to prevent running out of memory for large displays
         // 2. Only one screenshot is written to disk at a time to avoid exceptions if concurrent calls are writing
         //    to the same file
-        lock (Gate)
+        lock (s_gate)
         {
             using var bitmap = TryCaptureFullScreen();
             if (bitmap is null)
@@ -30,7 +30,7 @@ internal static class ScreenshotService
                 return;
             }
 
-            var directory = Path.GetDirectoryName(fullPath)!;
+            string directory = Path.GetDirectoryName(fullPath)!;
             Directory.CreateDirectory(directory);
 
             bitmap.Save(fullPath, ImageFormat.Png);
@@ -44,13 +44,13 @@ internal static class ScreenshotService
     /// A <see cref="Bitmap"/> containing the screen capture of the desktop, or <see langword="null"/> if a screen
     /// capture can't be created.
     /// </returns>
-    private static Bitmap? TryCaptureFullScreen()
+    internal static Bitmap? TryCaptureFullScreen()
     {
         if (Screen.PrimaryScreen is not { } primaryScreen)
             return null;
 
-        var width = primaryScreen.Bounds.Width;
-        var height = primaryScreen.Bounds.Height;
+        int width = primaryScreen.Bounds.Width;
+        int height = primaryScreen.Bounds.Height;
 
         if (width <= 0 || height <= 0)
         {
@@ -59,25 +59,23 @@ internal static class ScreenshotService
             return null;
         }
 
-        var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+        Bitmap bitmap = new(width, height, PixelFormat.Format32bppArgb);
 
-        using (var graphics = Graphics.FromImage(bitmap))
+        using var graphics = Graphics.FromImage(bitmap);
+        graphics.CopyFromScreen(
+            sourceX: primaryScreen.Bounds.X,
+            sourceY: primaryScreen.Bounds.Y,
+            destinationX: 0,
+            destinationY: 0,
+            blockRegionSize: bitmap.Size,
+            copyPixelOperation: CopyPixelOperation.SourceCopy);
+
+        if (Cursor.Current is { } cursor)
         {
-            graphics.CopyFromScreen(
-                sourceX: primaryScreen.Bounds.X,
-                sourceY: primaryScreen.Bounds.Y,
-                destinationX: 0,
-                destinationY: 0,
-                blockRegionSize: bitmap.Size,
-                copyPixelOperation: CopyPixelOperation.SourceCopy);
-
-            if (Cursor.Current is { } cursor)
-            {
-                var bounds = new Rectangle(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
-                cursor.Draw(graphics, bounds);
-            }
-
-            return bitmap;
+            Rectangle bounds = new(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
+            cursor.Draw(graphics, bounds);
         }
+
+        return bitmap;
     }
 }

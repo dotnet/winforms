@@ -8,7 +8,7 @@ public class DataGridViewAutoSizeColumnModeEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn_TestData()
     {
-        yield return new object[] { null, (DataGridViewAutoSizeColumnMode)(DataGridViewAutoSizeColumnMode.NotSet - 1) };
+        yield return new object[] { null, DataGridViewAutoSizeColumnMode.NotSet - 1 };
         yield return new object[] { new DataGridViewColumn(), DataGridViewAutoSizeColumnMode.AllCells };
     }
 
@@ -16,7 +16,7 @@ public class DataGridViewAutoSizeColumnModeEventArgsTests
     [MemberData(nameof(Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn_TestData))]
     public void Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousMode)
     {
-        var e = new DataGridViewAutoSizeColumnModeEventArgs(dataGridViewColumn, previousMode);
+        DataGridViewAutoSizeColumnModeEventArgs e = new(dataGridViewColumn, previousMode);
         Assert.Equal(dataGridViewColumn, e.Column);
         Assert.Equal(previousMode, e.PreviousMode);
     }

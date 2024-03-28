@@ -32,8 +32,8 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     {
         _parentProvider = parentProvider;
 
-        ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
-        ServiceContainer.AddService(typeof(IDesignerEventService), callback);
+        ServiceCreatorCallback callback = new(OnCreateService);
+        ServiceContainer.AddService<IDesignerEventService>(callback);
     }
 
     /// <summary>

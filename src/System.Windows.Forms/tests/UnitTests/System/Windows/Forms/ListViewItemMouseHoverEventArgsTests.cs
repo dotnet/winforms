@@ -16,7 +16,7 @@ public class ListViewItemMouseHoverEventArgsTests
     [MemberData(nameof(Ctor_ListViewItem_TestData))]
     public void Ctor_ListViewItem(ListViewItem item)
     {
-        var e = new ListViewItemMouseHoverEventArgs(item);
+        ListViewItemMouseHoverEventArgs e = new(item);
         Assert.Equal(item, e.Item);
     }
 }

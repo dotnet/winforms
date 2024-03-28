@@ -3,7 +3,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -17,7 +16,7 @@ internal class ResizeBehavior : Behavior
 {
     private struct ResizeComponent
     {
-        public object resizeControl;
+        public Control resizeControl;
         public Rectangle resizeBounds;
         public SelectionRules resizeRules;
     }
@@ -25,24 +24,24 @@ internal class ResizeBehavior : Behavior
     private ResizeComponent[] _resizeComponents;
     private readonly IServiceProvider _serviceProvider;
     private BehaviorService _behaviorService;
-    private SelectionRules _targetResizeRules; //rules dictating which sizes we can change
-    private Point _initialPoint; //the initial point of the mouse down
-    private bool _dragging; //indicates that the behavior is currently 'dragging'
+    private SelectionRules _targetResizeRules; // rules dictating which sizes we can change
+    private Point _initialPoint; // the initial point of the mouse down
+    private bool _dragging; // indicates that the behavior is currently 'dragging'
     private bool _pushedBehavior;
-    private bool _initialResize; //true for the first resize of the control, false after that.
-    private DesignerTransaction _resizeTransaction; //the transaction we create for the resize
+    private bool _initialResize; // true for the first resize of the control, false after that.
+    private DesignerTransaction _resizeTransaction; // the transaction we create for the resize
     private const int MINSIZE = 10;
     private const int BorderSize = 2;
-    private DragAssistanceManager _dragManager; //this object will integrate SnapLines into the resize
-    private Point _lastMouseLoc; //helps us avoid re-entering code if the mouse hasn't moved
-    private Point _parentLocation; //used to snap resize ops to the grid
-    private Size _parentGridSize; //used to snap resize ops to the grid
+    private DragAssistanceManager _dragManager; // this object will integrate SnapLines into the resize
+    private Point _lastMouseLoc; // helps us avoid re-entering code if the mouse hasn't moved
+    private Point _parentLocation; // used to snap resize ops to the grid
+    private Size _parentGridSize; // used to snap resize ops to the grid
     private Point _lastMouseAbs; // last absolute mouse position
-    private Point _lastSnapOffset; //the last snapoffset we used.
-    private bool _didSnap; //did we actually snap.
-    private Control _primaryControl; //the primary control the status bar will queue off of
+    private Point _lastSnapOffset; // the last snapoffset we used.
+    private bool _didSnap; // did we actually snap.
+    private Control _primaryControl; // the primary control the status bar will queue off of
 
-    private Cursor _cursor = Cursors.Default; //used to set the correct cursor during resizing
+    private Cursor _cursor = Cursors.Default; // used to set the correct cursor during resizing
     private readonly StatusCommandUI _statusCommandUI; // used to update the StatusBar Information.
 
     private Region _lastResizeRegion;
@@ -143,7 +142,7 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        //validate our dimensions
+        // validate our dimensions
         rect.Width = Math.Max(rect.Width, _parentGridSize.Width);
         rect.Height = Math.Max(rect.Height, _parentGridSize.Height);
 
@@ -156,7 +155,7 @@ internal class ResizeBehavior : Behavior
     private SnapLine[] GenerateSnapLines(SelectionRules rules, Point loc)
     {
         List<SnapLine> lines = new(2);
-        //the four margins and edges of our control
+        // the four margins and edges of our control
         if ((rules & SelectionRules.BottomSizeable) != 0)
         {
             lines.Add(new SnapLine(SnapLineType.Bottom, loc.Y - 1));
@@ -191,7 +190,7 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        return lines.ToArray();
+        return [.. lines];
     }
 
     /// <summary>
@@ -200,19 +199,19 @@ internal class ResizeBehavior : Behavior
     private void InitiateResize()
     {
         bool useSnapLines = BehaviorService.UseSnapLines;
-        List<IComponent> components = new();
-        //check to see if the current designer participate with SnapLines cache the control bounds
+        List<IComponent> components = [];
+        // check to see if the current designer participate with SnapLines cache the control bounds
         for (int i = 0; i < _resizeComponents.Length; i++)
         {
-            _resizeComponents[i].resizeBounds = ((Control)(_resizeComponents[i].resizeControl)).Bounds;
+            _resizeComponents[i].resizeBounds = _resizeComponents[i].resizeControl.Bounds;
             if (useSnapLines)
             {
-                components.Add((Control)_resizeComponents[i].resizeControl);
+                components.Add(_resizeComponents[i].resizeControl);
             }
 
             if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost designerHost)
             {
-                if (designerHost.GetDesigner(_resizeComponents[i].resizeControl as Component) is ControlDesigner designer)
+                if (designerHost.GetDesigner(_resizeComponents[i].resizeControl) is ControlDesigner designer)
                 {
                     _resizeComponents[i].resizeRules = designer.SelectionRules;
                 }
@@ -224,9 +223,9 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        //disable all glyphs in all adorners
+        // disable all glyphs in all adorners
         BehaviorService.EnableAllAdorners(false);
-        //build up our resize transaction
+        // build up our resize transaction
         IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         if (host is not null)
         {
@@ -252,12 +251,12 @@ internal class ResizeBehavior : Behavior
         _initialResize = true;
         if (useSnapLines)
         {
-            //instantiate our class to manage snap/margin lines...
+            // instantiate our class to manage snap/margin lines...
             _dragManager = new DragAssistanceManager(_serviceProvider, components, true);
         }
         else if (_resizeComponents.Length > 0)
         {
-            //try to get the parents grid and snap settings
+            // try to get the parents grid and snap settings
             if (_resizeComponents[0].resizeControl is Control control && control.Parent is not null)
             {
                 PropertyDescriptor snapProp = TypeDescriptor.GetProperties(control.Parent)["SnapToGrid"];
@@ -266,7 +265,7 @@ internal class ResizeBehavior : Behavior
                     PropertyDescriptor gridProp = TypeDescriptor.GetProperties(control.Parent)["GridSize"];
                     if (gridProp is not null)
                     {
-                        //cache of the gridsize and the location of the parent on the adornerwindow
+                        // cache of the gridsize and the location of the parent on the adornerwindow
                         _parentGridSize = (Size)gridProp.GetValue(control.Parent);
                         _parentLocation = _behaviorService.ControlToAdornerWindow(control);
                         _parentLocation.X -= control.Location.X;
@@ -284,14 +283,14 @@ internal class ResizeBehavior : Behavior
     /// </summary>
     public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
     {
-        //we only care about the right mouse button for resizing
+        // we only care about the right mouse button for resizing
         if (button != MouseButtons.Left)
         {
-            //pass any other mouse click along - unless we've already started our resize in which case we'll ignore it
+            // pass any other mouse click along - unless we've already started our resize in which case we'll ignore it
             return _pushedBehavior;
         }
 
-        //start with no selection rules and try to obtain this info from the glyph
+        // start with no selection rules and try to obtain this info from the glyph
         _targetResizeRules = SelectionRules.None;
         if (g is SelectionGlyphBase sgb)
         {
@@ -312,26 +311,26 @@ internal class ResizeBehavior : Behavior
 
         _initialPoint = mouseLoc;
         _lastMouseLoc = mouseLoc;
-        //build up a list of our selected controls
+        // build up a list of our selected controls
         _primaryControl = selSvc.PrimarySelection as Control;
 
         // Since we don't know exactly how many valid objects we are going to have we use this temp
-        ArrayList components = new ArrayList();
-        foreach (object o in selSvc.GetSelectedComponents())
+        List<Control> components = [];
+        foreach (object component in selSvc.GetSelectedComponents())
         {
-            if (o is Control)
+            if (component is Control control)
             {
-                //don't drag locked controls
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(o)["Locked"];
+                // don't drag locked controls
+                PropertyDescriptor prop = TypeDescriptor.GetProperties(control)["Locked"];
                 if (prop is not null)
                 {
-                    if ((bool)prop.GetValue(o))
+                    if ((bool)prop.GetValue(control))
                     {
                         continue;
                     }
                 }
 
-                components.Add(o);
+                components.Add(control);
             }
         }
 
@@ -346,7 +345,7 @@ internal class ResizeBehavior : Behavior
             _resizeComponents[i].resizeControl = components[i];
         }
 
-        //push this resizebehavior
+        // push this resizebehavior
         _pushedBehavior = true;
         BehaviorService.PushCaptureBehavior(this);
         return false;
@@ -367,28 +366,26 @@ internal class ResizeBehavior : Behavior
                 if (_dragging)
                 {
                     _dragging = false;
-                    //make sure we get rid of the selection rectangle
+                    // make sure we get rid of the selection rectangle
                     for (int i = 0; !_captureLost && i < _resizeComponents.Length; i++)
                     {
-                        Control control = _resizeComponents[i].resizeControl as Control;
+                        Control control = _resizeComponents[i].resizeControl;
                         Rectangle borderRect = BehaviorService.ControlRectInAdornerWindow(control);
                         if (!borderRect.IsEmpty)
                         {
-                            using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
+                            using Graphics graphics = BehaviorService.AdornerWindowGraphics;
+                            graphics.SetClip(borderRect);
+                            using (Region newRegion = new(borderRect))
                             {
-                                graphics.SetClip(borderRect);
-                                using (Region newRegion = new Region(borderRect))
-                                {
-                                    newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
-                                    BehaviorService.Invalidate(newRegion);
-                                }
-
-                                graphics.ResetClip();
+                                newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
+                                BehaviorService.Invalidate(newRegion);
                             }
+
+                            graphics.ResetClip();
                         }
                     }
 
-                    //re-enable all glyphs in all adorners
+                    // re-enable all glyphs in all adorners
                     BehaviorService.EnableAllAdorners(true);
                 }
 
@@ -396,7 +393,7 @@ internal class ResizeBehavior : Behavior
 
                 if (_lastResizeRegion is not null)
                 {
-                    BehaviorService.Invalidate(_lastResizeRegion); //might be the same, might not.
+                    BehaviorService.Invalidate(_lastResizeRegion); // might be the same, might not.
                     _lastResizeRegion.Dispose();
                     _lastResizeRegion = null;
                 }
@@ -422,7 +419,7 @@ internal class ResizeBehavior : Behavior
         if (propIntegralHeight is not null)
         {
             object value = propIntegralHeight.GetValue(control);
-            if (value is bool && (bool)value)
+            if (value is bool boolValue && boolValue)
             {
                 PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
                 if (propItemHeight is not null)
@@ -440,7 +437,7 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        //if the control does not have the IntegralHeight property, then the pixels moved are fine
+        // if the control does not have the IntegralHeight property, then the pixels moved are fine
         return pixelsMoved;
     }
 
@@ -457,7 +454,7 @@ internal class ResizeBehavior : Behavior
         bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
         if (altKeyPressed && _dragManager is not null)
         {
-            //erase any snaplines (if we had any)
+            // erase any snaplines (if we had any)
             _dragManager.EraseSnapLines();
         }
 
@@ -469,7 +466,7 @@ internal class ResizeBehavior : Behavior
         // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
         if (_lastMouseAbs != Point.Empty)
         {
-            var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
+            Point mouseLocAbs = new(mouseLoc.X, mouseLoc.Y);
             PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref mouseLocAbs);
             if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
             {
@@ -531,7 +528,7 @@ internal class ResizeBehavior : Behavior
             }
         }
 
-        Control targetControl = _resizeComponents[0].resizeControl as Control;
+        Control targetControl = _resizeComponents[0].resizeControl;
         _lastMouseLoc = mouseLoc;
         _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
         PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref _lastMouseAbs);
@@ -541,7 +538,7 @@ internal class ResizeBehavior : Behavior
         {
             bool shouldSnap = true;
             bool shouldSnapHorizontally = true;
-            //if the targetcontrol is at min-size then we do not want to offer up snaplines
+            // if the targetcontrol is at min-size then we do not want to offer up snaplines
             if ((((_targetResizeRules & SelectionRules.BottomSizeable) != 0) || ((_targetResizeRules & SelectionRules.TopSizeable) != 0)) &&
                 (targetControl.Height == minHeight))
             {
@@ -553,12 +550,12 @@ internal class ResizeBehavior : Behavior
                 shouldSnap = false;
             }
 
-            //if the targetControl has IntegralHeight turned on, then don't snap if the control can be resized vertically
+            // if the targetControl has IntegralHeight turned on, then don't snap if the control can be resized vertically
             PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(targetControl)["IntegralHeight"];
             if (propIntegralHeight is not null)
             {
                 object value = propIntegralHeight.GetValue(targetControl);
-                if (value is bool && (bool)value)
+                if (value is bool boolValue && boolValue)
                 {
                     shouldSnapHorizontally = false;
                 }
@@ -566,7 +563,7 @@ internal class ResizeBehavior : Behavior
 
             if (!altKeyPressed && shouldSnap)
             {
-                //here, ask the snapline engine to suggest an offset during our resize
+                // here, ask the snapline engine to suggest an offset during our resize
                 // Remembering the last snapoffset allows us to correctly erase snaplines, if the user subsequently holds down the Alt-Key. Remember that we don't physically move the mouse, we move the control. So if we didn't remember the last snapoffset and the user then hit the Alt-Key, we would actually redraw the control at the actual mouse location, which would make the control "jump" which is not what the user would expect. Why does the control "jump"? Because when a control is snapped, we have offset the control relative to where the mouse is, but we have not update the physical mouse position.
                 // When the user hits the Alt-Key they expect the control to be where it was (whether snapped or not). we can't rely on lastSnapOffset to check whether we snapped. We used to check if it was empty, but it can be empty and we still snapped (say the control was snapped, as you continue to move the mouse, it will stay snapped for a while. During that while the snapoffset will got from x to -x (or vice versa) and a one point hit 0.
                 // Since we have to calculate the new size/location differently based on whether we snapped or not, we have to know for sure if we snapped. We do different math because of bug 264996:
@@ -576,7 +573,7 @@ internal class ResizeBehavior : Behavior
             }
             else
             {
-                _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*///);
+                _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*/// );
             }
 
             // If there's a line to snap to, the offset will come back non-zero. In that case we should adjust the mouse position with the offset such that the size calculation below takes that offset into account. If there's no line, then the offset is 0, and there's no harm in adding the offset.
@@ -585,7 +582,7 @@ internal class ResizeBehavior : Behavior
         }
 
         // IF WE ARE SNAPPING TO A CONTROL, then we also need to adjust for the offset between the initialPoint (where the MouseDown happened) and the edge of the control otherwise we would be those pixels off when resizing the control. Remember that snaplines are based on the targetControl, so we need to use the targetControl to figure out the offset.
-        Rectangle controlBounds = new Rectangle(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
+        Rectangle controlBounds = new(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
                                                   _resizeComponents[0].resizeBounds.Width, _resizeComponents[0].resizeBounds.Height);
         if ((_didSnap) && (targetControl.Parent is not null))
         {
@@ -602,7 +599,7 @@ internal class ResizeBehavior : Behavior
         Color backColor = targetControl.Parent is not null ? targetControl.Parent.BackColor : Color.Empty;
         for (int i = 0; i < _resizeComponents.Length; i++)
         {
-            Control control = _resizeComponents[i].resizeControl as Control;
+            Control control = _resizeComponents[i].resizeControl;
             Rectangle bounds = control.Bounds;
             Rectangle oldBounds = bounds;
             // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
@@ -660,7 +657,7 @@ internal class ResizeBehavior : Behavior
                          ((bounds.Height == minHeight) && (oldBounds.Height != minHeight)))
                     {
                         specified |= BoundsSpecified.Y;
-                        //if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
+                        // if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
                         bounds.Y = Math.Min(baseBounds.Bottom - minHeight, baseBounds.Y - yOffset);
                     }
                 }
@@ -694,7 +691,7 @@ internal class ResizeBehavior : Behavior
                          ((bounds.Width == minWidth) && (oldBounds.Width != minWidth)))
                     {
                         specified |= BoundsSpecified.X;
-                        //if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
+                        // if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
                         bounds.X = Math.Min(baseBounds.Right - minWidth, baseBounds.X - xOffset);
                     }
                 }
@@ -735,7 +732,7 @@ internal class ResizeBehavior : Behavior
                 if (_dragging)
                 {
                     control.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
-                    //Get the new resize border
+                    // Get the new resize border
                     newBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                     if (control.Equals(targetControl))
                     {
@@ -743,7 +740,7 @@ internal class ResizeBehavior : Behavior
                         targetBorderRect = newBorderRect;
                     }
 
-                    //Check that the control really did resize itself. Some controls (like ListBox, MonthCalendar) might adjust to a slightly different size than the one we pass in SetBounds. If if didn't size, then there's no need to invalidate anything
+                    // Check that the control really did resize itself. Some controls (like ListBox, MonthCalendar) might adjust to a slightly different size than the one we pass in SetBounds. If if didn't size, then there's no need to invalidate anything
                     if (control.Bounds == oldBounds)
                     {
                         needToUpdate = false;
@@ -765,7 +762,7 @@ internal class ResizeBehavior : Behavior
             {
                 // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
                 PInvoke.SendMessage(control, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
-                //update the control
+                // update the control
                 if (needToUpdate)
                 {
                     Control parent = control.Parent;
@@ -781,43 +778,39 @@ internal class ResizeBehavior : Behavior
                     }
                 }
 
-                //render the resize border
+                // render the resize border
                 if (!newBorderRect.IsEmpty)
                 {
-                    using (Region newRegion = new Region(newBorderRect))
+                    using Region newRegion = new(newBorderRect);
+                    newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
+                    // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
+                    if (needToUpdate)
                     {
-                        newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
-                        //No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
-                        if (needToUpdate)
-                        {
-                            using (Region oldRegion = new Region(oldBorderRect))
-                            {
-                                oldRegion.Exclude(Rectangle.Inflate(oldBorderRect, -BorderSize, -BorderSize));
-                                BehaviorService.Invalidate(oldRegion);
-                            }
-                        }
+                        using Region oldRegion = new(oldBorderRect);
+                        oldRegion.Exclude(Rectangle.Inflate(oldBorderRect, -BorderSize, -BorderSize));
+                        BehaviorService.Invalidate(oldRegion);
+                    }
 
-                        //draw the new border captureLost could be true if a popup came up and caused a lose focus
-                        if (!_captureLost)
+                    // draw the new border captureLost could be true if a popup came up and caused a lose focus
+                    if (!_captureLost)
+                    {
+                        using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
                         {
-                            using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
+                            if (_lastResizeRegion is not null)
                             {
-                                if (_lastResizeRegion is not null)
+                                if (!_lastResizeRegion.Equals(newRegion, graphics))
                                 {
-                                    if (!_lastResizeRegion.Equals(newRegion, graphics))
-                                    {
-                                        _lastResizeRegion.Exclude(newRegion); //we don't want to invalidate this region.
-                                        BehaviorService.Invalidate(_lastResizeRegion); //might be the same, might not.
-                                        _lastResizeRegion.Dispose();
-                                        _lastResizeRegion = null;
-                                    }
+                                    _lastResizeRegion.Exclude(newRegion); // we don't want to invalidate this region.
+                                    BehaviorService.Invalidate(_lastResizeRegion); // might be the same, might not.
+                                    _lastResizeRegion.Dispose();
+                                    _lastResizeRegion = null;
                                 }
-
-                                DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                             }
 
-                            _lastResizeRegion ??= newRegion.Clone(); //we will need to dispose it later.
+                            DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                         }
+
+                        _lastResizeRegion ??= newRegion.Clone(); // we will need to dispose it later.
                     }
                 }
             }
@@ -858,24 +851,24 @@ internal class ResizeBehavior : Behavior
                     PropertyDescriptor propLeft = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Left"];
                     for (int i = 0; i < _resizeComponents.Length; i++)
                     {
-                        if (propWidth is not null && ((Control)_resizeComponents[i].resizeControl).Width != _resizeComponents[i].resizeBounds.Width)
+                        if (propWidth is not null && _resizeComponents[i].resizeControl.Width != _resizeComponents[i].resizeBounds.Width)
                         {
-                            propWidth.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Width);
+                            propWidth.SetValue(_resizeComponents[i].resizeControl, _resizeComponents[i].resizeControl.Width);
                         }
 
-                        if (propHeight is not null && ((Control)_resizeComponents[i].resizeControl).Height != _resizeComponents[i].resizeBounds.Height)
+                        if (propHeight is not null && _resizeComponents[i].resizeControl.Height != _resizeComponents[i].resizeBounds.Height)
                         {
-                            propHeight.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Height);
+                            propHeight.SetValue(_resizeComponents[i].resizeControl, _resizeComponents[i].resizeControl.Height);
                         }
 
-                        if (propTop is not null && ((Control)_resizeComponents[i].resizeControl).Top != _resizeComponents[i].resizeBounds.Y)
+                        if (propTop is not null && _resizeComponents[i].resizeControl.Top != _resizeComponents[i].resizeBounds.Y)
                         {
-                            propTop.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Top);
+                            propTop.SetValue(_resizeComponents[i].resizeControl, _resizeComponents[i].resizeControl.Top);
                         }
 
-                        if (propLeft is not null && ((Control)_resizeComponents[i].resizeControl).Left != _resizeComponents[i].resizeBounds.X)
+                        if (propLeft is not null && _resizeComponents[i].resizeControl.Left != _resizeComponents[i].resizeBounds.X)
                         {
-                            propLeft.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Left);
+                            propLeft.SetValue(_resizeComponents[i].resizeControl, _resizeComponents[i].resizeControl.Left);
                         }
 
                         if (_resizeComponents[i].resizeControl == _primaryControl && _statusCommandUI is not null)

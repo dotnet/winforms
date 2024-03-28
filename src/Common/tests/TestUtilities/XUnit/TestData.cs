@@ -34,8 +34,8 @@ public static class TestData
     private static class FloatingPointData<T>
         where T : struct, IBinaryFloatingPointIeee754<T>, IMinMaxValue<T>
     {
-        public static ImmutableArray<T> Data { get; } = ImmutableArray.Create(new T[]
-        {
+        public static ImmutableArray<T> Data { get; } =
+        [
             T.MinValue,
             T.MaxValue,
             T.One,
@@ -46,7 +46,8 @@ public static class TestData
             T.NegativeInfinity,
             T.Epsilon,
             T.Epsilon * T.NegativeOne
-        });
+,
+        ];
     }
 
     private static class IntegerData<T>
@@ -54,13 +55,13 @@ public static class TestData
     {
         public static ImmutableArray<T> Data { get; }
             = ImmutableArray.Create(T.MinValue == T.Zero
-                ? new T[]
-                    {
+                ?
+                    [
                         T.MinValue,
                         T.MaxValue,
                         T.One,
                         T.MaxValue / (T.One + T.One)
-                    }
+                    ]
                 : new T[]
                     {
                         T.MinValue,
@@ -75,12 +76,9 @@ public static class TestData
     private static class PositiveIntegerData<T>
         where T : struct, IBinaryInteger<T>, IMinMaxValue<T>
     {
-        public static ImmutableArray<T> Data { get; } = ImmutableArray.Create(new T[]
-        {
-            T.Zero,
-            T.MaxValue,
-            T.One,
-            T.MaxValue / (T.One + T.One)
-        });
+        public static ImmutableArray<T> Data { get; } =
+        [
+            T.Zero, T.MaxValue, T.One, T.MaxValue / (T.One + T.One)
+        ];
     }
 }

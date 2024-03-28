@@ -1,16 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using Moq;
 using Microsoft.Office;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests.Interop_Mso;
 
 public unsafe class IMsoComponentManagerTests
 {
-    private IMsoComponentManager CreateComponentManager()
-        => (IMsoComponentManager)Activator.CreateInstance(
+    private IMsoComponentManager.Interface CreateComponentManager()
+        => (IMsoComponentManager.Interface)Activator.CreateInstance(
             typeof(Application).Assembly.GetType("System.Windows.Forms.Application+ComponentManager")!,
             nonPublic: true)!;
 
@@ -39,12 +39,13 @@ public unsafe class IMsoComponentManagerTests
     public void FRegisterComponent_HandlesNull()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
         MSOCRINFO info = default;
         UIntPtr id = default;
 
-        Assert.False(manager.FRegisterComponent(mock.Object, &info, null));
-        Assert.False(manager.FRegisterComponent(mock.Object, null, &id));
+        Assert.False(manager.FRegisterComponent(component, &info, null));
+        Assert.False(manager.FRegisterComponent(component, null, &id));
         Assert.Equal(UIntPtr.Zero, id);
     }
 
@@ -52,11 +53,12 @@ public unsafe class IMsoComponentManagerTests
     public void FRegisterComponent_RejectsUnsized()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
         MSOCRINFO info = default;
         UIntPtr id = default;
 
-        Assert.False(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.False(manager.FRegisterComponent(component, &info, &id));
         Assert.Equal(UIntPtr.Zero, id);
     }
 
@@ -64,15 +66,17 @@ public unsafe class IMsoComponentManagerTests
     public void FRegisterComponent_Cookies()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
 
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
         Assert.NotEqual(UIntPtr.Zero, id);
 
         UIntPtr newId = default;
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &newId));
+        Assert.True(manager.FRegisterComponent(component, &info, &newId));
         Assert.NotEqual(UIntPtr.Zero, newId);
 
         Assert.NotEqual(id, newId);
@@ -82,12 +86,14 @@ public unsafe class IMsoComponentManagerTests
     public void FRevokeComponent()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
 
         Assert.False(manager.FRevokeComponent(UIntPtr.Zero));
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
         Assert.True(manager.FRevokeComponent(id));
         Assert.False(manager.FRevokeComponent(id));
     }
@@ -96,11 +102,13 @@ public unsafe class IMsoComponentManagerTests
     public void FUpdateComponentRegistration_HandlesNull()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
 
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
         Assert.False(manager.FUpdateComponentRegistration(id, null));
     }
 
@@ -108,12 +116,14 @@ public unsafe class IMsoComponentManagerTests
     public void FUpdateComponentRegistration()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
 
         Assert.False(manager.FUpdateComponentRegistration(id, &info));
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
         Assert.True(manager.FUpdateComponentRegistration(id, &info));
     }
 
@@ -137,11 +147,13 @@ public unsafe class IMsoComponentManagerTests
     {
         var manager = CreateComponentManager();
 
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
 
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
 
         Assert.True(manager.FSetTrackingComponent(id, true));
 
@@ -166,12 +178,14 @@ public unsafe class IMsoComponentManagerTests
     public void OnComponentEnterState_Notification()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(new MockWrapper(mock.Object)));
+
         mock.Setup(m => m.OnEnterState(msocstate.Modal, true));
 
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
 
         // No call on "Others"
         manager.OnComponentEnterState(default, msocstate.Modal, msoccontext.Others, 0, null, 0);
@@ -195,12 +209,14 @@ public unsafe class IMsoComponentManagerTests
     public void FOnComponentExitState_Notification()
     {
         var manager = CreateComponentManager();
-        var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock = new(MockBehavior.Strict);
+        using var component = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock.Object));
+
         mock.Setup(m => m.OnEnterState(msocstate.Modal, false));
 
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
-        Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+        Assert.True(manager.FRegisterComponent(component, &info, &id));
 
         // No call on "Others"
         manager.FOnComponentExitState(default, msocstate.Modal, msoccontext.Others, 0, null);
@@ -266,7 +282,7 @@ public unsafe class IMsoComponentManagerTests
 
         // Should null out obj pointer
         void* obj = (void*)0xDEADBEEF;
-        Assert.False(manager.FGetParentComponentManager(&obj));
+        Assert.False(manager.FGetParentComponentManager((IMsoComponentManager**)&obj));
         Assert.True(obj is null);
     }
 
@@ -276,8 +292,11 @@ public unsafe class IMsoComponentManagerTests
         var manager = CreateComponentManager();
         Assert.False(manager.FGetActiveComponent(msogac.Active, null, null, 0));
 
-        var mock1 = new Mock<IMsoComponent>(MockBehavior.Strict);
-        var mock2 = new Mock<IMsoComponent>(MockBehavior.Strict);
+        Mock<IMsoComponent.Interface> mock1 = new(MockBehavior.Strict);
+        using var component1 = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock1.Object));
+
+        Mock<IMsoComponent.Interface> mock2 = new(MockBehavior.Strict);
+        using var component2 = ComHelpers.GetComScope<IMsoComponent>(new MockWrapper(mock2.Object));
 
         MSOCRINFO info = new MSOCRINFO
         {
@@ -286,10 +305,10 @@ public unsafe class IMsoComponentManagerTests
         };
 
         UIntPtr firstId = default;
-        Assert.True(manager.FRegisterComponent(mock1.Object, &info, &firstId));
+        Assert.True(manager.FRegisterComponent(component1, &info, &firstId));
         info.uIdleTimeInterval = 2;
         UIntPtr secondId = default;
-        Assert.True(manager.FRegisterComponent(mock2.Object, &info, &secondId));
+        Assert.True(manager.FRegisterComponent(component2, &info, &secondId));
 
         Assert.False(manager.FGetActiveComponent(msogac.Active, null, null, 0));
 
@@ -312,17 +331,51 @@ public unsafe class IMsoComponentManagerTests
 
         // Now check that we can get the object out
         mock2.Setup(m => m.FQueryTerminate(true)).Returns(true);
-        void* pUnk = default;
-        Assert.True(manager.FGetActiveComponent(msogac.Tracking, &pUnk, &info, 0));
-        Assert.True(pUnk != null);
-        try
-        {
-            var component = (IMsoComponent)Marshal.GetObjectForIUnknown((IntPtr)pUnk);
-            Assert.True(component.FQueryTerminate(true));
-        }
-        finally
-        {
-            Marshal.Release((IntPtr)pUnk);
-        }
+        using ComScope<IMsoComponent> component = new(null);
+        Assert.True(manager.FGetActiveComponent(msogac.Tracking, component, &info, 0));
+        Assert.False(component.IsNull);
+        Assert.True(component.Value->FQueryTerminate(true));
+    }
+
+    private class MockWrapper : IMsoComponent.Interface, IManagedWrapper<IMsoComponent>
+    {
+        private readonly IMsoComponent.Interface _mock;
+        public MockWrapper(IMsoComponent.Interface mock) => _mock = mock;
+
+        BOOL IMsoComponent.Interface.FDebugMessage(nint hInst, uint msg, WPARAM wParam, LPARAM lParam)
+            => _mock.FDebugMessage(hInst, msg, wParam, lParam);
+
+        BOOL IMsoComponent.Interface.FPreTranslateMessage(MSG* msg)
+            => _mock.FPreTranslateMessage(msg);
+
+        void IMsoComponent.Interface.OnEnterState(msocstate uStateID, BOOL fEnter)
+            => _mock.OnEnterState(uStateID, fEnter);
+
+        void IMsoComponent.Interface.OnAppActivate(BOOL fActive, uint dwOtherThreadID)
+            => _mock.OnAppActivate(fActive, dwOtherThreadID);
+
+        void IMsoComponent.Interface.OnLoseActivation() => _mock.OnLoseActivation();
+
+        void IMsoComponent.Interface.OnActivationChange(
+            IMsoComponent* pic,
+            BOOL fSameComponent,
+            MSOCRINFO* pcrinfo,
+            BOOL fHostIsActivating,
+            nint pchostinfo,
+            uint dwReserved) => _mock.OnActivationChange(pic, fSameComponent, pcrinfo, fHostIsActivating, pchostinfo, dwReserved);
+
+        BOOL IMsoComponent.Interface.FDoIdle(msoidlef grfidlef) => _mock.FDoIdle(grfidlef);
+
+        BOOL IMsoComponent.Interface.FContinueMessageLoop(
+            msoloop uReason,
+            void* pvLoopData,
+            MSG* pMsgPeeked) => _mock.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked);
+
+        BOOL IMsoComponent.Interface.FQueryTerminate(BOOL fPromptUser) => _mock.FQueryTerminate(fPromptUser);
+
+        void IMsoComponent.Interface.Terminate() => _mock.Terminate();
+
+        HWND IMsoComponent.Interface.HwndGetWindow(msocWindow uWhich, uint dwReserved)
+            => _mock.HwndGetWindow(uWhich, dwReserved);
     }
 }

@@ -21,7 +21,7 @@ public class TreeViewHitTestInfoTests
     [MemberData(nameof(Ctor_TreeNode_TreeViewHitTestLocations_TestData))]
     public void TreeViewHitTestInfo_Ctor_TreeNode_TreeViewHitTestLocations(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
     {
-        var hitTestInfo = new TreeViewHitTestInfo(hitNode, hitLocation);
+        TreeViewHitTestInfo hitTestInfo = new(hitNode, hitLocation);
         Assert.Same(hitNode, hitTestInfo.Node);
         Assert.Equal(hitLocation, hitTestInfo.Location);
     }

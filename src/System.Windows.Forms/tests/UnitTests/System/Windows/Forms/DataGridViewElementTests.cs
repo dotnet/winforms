@@ -12,7 +12,7 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_Ctor_Default()
     {
-        var element = new DataGridViewElement();
+        DataGridViewElement element = new();
         Assert.Null(element.DataGridView);
         Assert.Equal(DataGridViewElementStates.Visible, element.State);
     }
@@ -20,7 +20,7 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_OnDataGridViewChanged_Invoke_Nop()
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.OnDataGridViewChanged();
     }
 
@@ -44,20 +44,20 @@ public class DataGridViewElementTests
     [MemberData(nameof(DataGridViewCellEventArgs_TestData))]
     public void DataGridViewElement_RaiseCellClick_Invoke_Nop(DataGridViewCellEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseCellClick(eventArgs);
     }
 
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellClick_InvokeWithDataGridView_Success()
     {
-        var eventArgs = new DataGridViewCellEventArgs(0, 0);
-        using var control = new DataGridView
+        DataGridViewCellEventArgs eventArgs = new(0, 0);
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;
@@ -82,12 +82,12 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellClick_NullE_ThrowsNullReferenceException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
         Assert.Throws<NullReferenceException>(() => element.RaiseCellClick(null));
     }
@@ -96,20 +96,20 @@ public class DataGridViewElementTests
     [MemberData(nameof(DataGridViewCellEventArgs_TestData))]
     public void DataGridViewElement_RaiseCellContentClick_Invoke_Nop(DataGridViewCellEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseCellContentClick(eventArgs);
     }
 
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellContentClick_InvokeWithDataGridView_Success()
     {
-        var eventArgs = new DataGridViewCellEventArgs(0, 0);
-        using var control = new DataGridView
+        DataGridViewCellEventArgs eventArgs = new(0, 0);
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;
@@ -134,12 +134,12 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellContentClick_NullE_ThrowsNullReferenceException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
         Assert.Throws<NullReferenceException>(() => element.RaiseCellContentClick(null));
     }
@@ -148,20 +148,20 @@ public class DataGridViewElementTests
     [MemberData(nameof(DataGridViewCellEventArgs_TestData))]
     public void DataGridViewElement_RaiseCellContentDoubleClick_Invoke_Nop(DataGridViewCellEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseCellContentDoubleClick(eventArgs);
     }
 
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellContentDoubleClick_InvokeWithDataGridView_Success()
     {
-        var eventArgs = new DataGridViewCellEventArgs(0, 0);
-        using var control = new DataGridView
+        DataGridViewCellEventArgs eventArgs = new(0, 0);
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;
@@ -186,12 +186,12 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellContentDoubleClick_NullE_ThrowsNullReferenceException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
         Assert.Throws<NullReferenceException>(() => element.RaiseCellContentDoubleClick(null));
     }
@@ -200,20 +200,20 @@ public class DataGridViewElementTests
     [MemberData(nameof(DataGridViewCellEventArgs_TestData))]
     public void DataGridViewElement_RaiseCellValueChanged_Invoke_Nop(DataGridViewCellEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseCellValueChanged(eventArgs);
     }
 
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellValueChanged_InvokeWithDataGridView_Success()
     {
-        var eventArgs = new DataGridViewCellEventArgs(0, 0);
-        using var control = new DataGridView
+        DataGridViewCellEventArgs eventArgs = new(0, 0);
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;
@@ -238,12 +238,12 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseCellValueChanged_NullE_ThrowsNullReferenceException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
         Assert.Throws<NullReferenceException>(() => element.RaiseCellValueChanged(null));
     }
@@ -251,22 +251,22 @@ public class DataGridViewElementTests
     public static IEnumerable<object[]> DataGridViewDataErrorEventArgs_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new DataGridViewDataErrorEventArgs(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting) };
+        yield return new object[] { new DataGridViewDataErrorEventArgs(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting) };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(DataGridViewDataErrorEventArgs_TestData))]
     public void DataGridViewElement_RaiseDataError_Invoke_Nop(DataGridViewDataErrorEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseDataError(eventArgs);
     }
 
     [WinFormsFact]
     public void DataGridViewElement_RaiseDataError_InvokeWithDataGridView_Success()
     {
-        var eventArgs = new DataGridViewDataErrorEventArgs(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        DataGridViewDataErrorEventArgs eventArgs = new(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -279,13 +279,13 @@ public class DataGridViewElementTests
         mockSite
             .Setup(s => s.Name)
             .Returns((string)null);
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1,
             Site = mockSite.Object
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;
@@ -310,12 +310,12 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseDataError_NullE_ThrowsNullReferenceException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
         Assert.Throws<NullReferenceException>(() => element.RaiseDataError(null));
     }
@@ -324,7 +324,7 @@ public class DataGridViewElementTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void DataGridViewElement_RaiseMouseWheel_Invoke_Nop(MouseEventArgs eventArgs)
     {
-        var element = new SubDataGridViewElement();
+        SubDataGridViewElement element = new();
         element.RaiseMouseWheel(eventArgs);
     }
 
@@ -332,12 +332,12 @@ public class DataGridViewElementTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void DataGridViewElement_RaiseMouseWheel_InvokeWithDataGridView_Success(MouseEventArgs eventArgs)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1,
             ColumnCount = 1
         };
-        var element = new SubDataGridViewCell();
+        SubDataGridViewCell element = new();
         control.Rows[0].Cells[0] = element;
 
         int callCount = 0;

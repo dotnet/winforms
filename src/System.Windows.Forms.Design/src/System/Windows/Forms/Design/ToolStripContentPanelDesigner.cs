@@ -11,13 +11,13 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
 {
     private BaseContextMenuStrip? _contextMenu;
 
-    private ContextMenuStrip DesignerContextMenu
+    private ContextMenuStrip? DesignerContextMenu
     {
         get
         {
-            if (_contextMenu is null)
+            if (_contextMenu is null && Component.Site is { } site)
             {
-                _contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
+                _contextMenu = new BaseContextMenuStrip(site);
 
                 // If multiple Items Selected don't show the custom properties...
                 _contextMenu.GroupOrdering.Clear();
@@ -58,7 +58,7 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
         ToolStripContentPanel? panel = Component as ToolStripContentPanel;
         if (panel is not null && panel.Parent is ToolStripContainer)
         {
-            DesignerContextMenu.Show(x, y);
+            DesignerContextMenu?.Show(x, y);
         }
         else
         {

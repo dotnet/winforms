@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
 public partial class ComponentEditorForm
 {
-    //  This should be moved into a shared location
+    // This should be moved into a shared location
     //  Its a duplication of what exists in the StyleBuilder.
     internal sealed class PageSelector : TreeView
     {
@@ -58,16 +57,16 @@ public partial class ComponentEditorForm
             short* patternBits = stackalloc short[]
             {
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555)
+                unchecked(0x5555)
             };
 
-            HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
+            HBITMAP hbitmapTemp = PInvokeCore.CreateBitmap(8, 8, 1, 1, patternBits);
             Debug.Assert(
                 !hbitmapTemp.IsNull,
                 "could not create dither bitmap. Page selector UI will not be correct");
@@ -80,7 +79,7 @@ public partial class ComponentEditorForm
                     !_hbrushDither.IsNull,
                     "Unable to created dithered brush. Page selector UI will not be correct");
 
-                PInvoke.DeleteObject(hbitmapTemp);
+                PInvokeCore.DeleteObject(hbitmapTemp);
             }
         }
 
@@ -100,7 +99,7 @@ public partial class ComponentEditorForm
 
             // Select the font of the dialog, so we don't get the underlined font
             // when the item is being tracked
-            using PInvoke.SelectObjectScope fontSelection = new(
+            using SelectObjectScope fontSelection = new(
                 dc,
                 (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 
@@ -149,7 +148,7 @@ public partial class ComponentEditorForm
                     dc,
                     PADDING_HORZ,
                     rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                    IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
             }
 
             // Draw the hot-tracking border if needed
@@ -208,7 +207,7 @@ public partial class ComponentEditorForm
                     break;
                 case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                     {
-                        TreeNode itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
+                        TreeNode? itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
                         if (itemNode is not null)
                         {
                             int state = STATE_NORMAL;
@@ -253,7 +252,7 @@ public partial class ComponentEditorForm
 
             if (!RecreatingHandle && !_hbrushDither.IsNull)
             {
-                PInvoke.DeleteObject(_hbrushDither);
+                PInvokeCore.DeleteObject(_hbrushDither);
                 _hbrushDither = default;
             }
         }
@@ -278,7 +277,7 @@ public partial class ComponentEditorForm
             if (m.MsgInternal == MessageId.WM_REFLECT_NOTIFY)
             {
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
+                if (nmhdr->code == PInvoke.NM_CUSTOMDRAW)
                 {
                     OnCustomDraw(ref m);
                     return;

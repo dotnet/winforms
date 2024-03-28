@@ -12,7 +12,7 @@ public class GroupLinkClickEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int groupIndex)
     {
-        var e = new ListViewGroupEventArgs(groupIndex);
+        ListViewGroupEventArgs e = new(groupIndex);
         Assert.Equal(groupIndex, e.GroupIndex);
     }
 }

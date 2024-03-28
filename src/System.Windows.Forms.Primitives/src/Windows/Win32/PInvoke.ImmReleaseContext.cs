@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="ImmReleaseContext(HWND, HIMC)"/>
     public static BOOL ImmReleaseContext<T>(T hWnd, HIMC hIMC) where T : IHandle<HWND>
     {
         BOOL result = ImmReleaseContext(hWnd.Handle, hIMC);

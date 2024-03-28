@@ -17,7 +17,7 @@ public class DataGridViewRowDividerDoubleClickEventArgsTests
     [MemberData(nameof(Ctor_Int_HandledMouseEventArgs_TestData))]
     public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_Int_HandledMouseEventArgs(int rowIndex, HandledMouseEventArgs mouseE)
     {
-        var e = new DataGridViewRowDividerDoubleClickEventArgs(rowIndex, mouseE);
+        DataGridViewRowDividerDoubleClickEventArgs e = new(rowIndex, mouseE);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Equal(mouseE.Button, e.Button);
         Assert.Equal(mouseE.Clicks, e.Clicks);

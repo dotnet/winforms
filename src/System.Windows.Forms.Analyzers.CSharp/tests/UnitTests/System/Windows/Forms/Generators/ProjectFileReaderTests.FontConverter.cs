@@ -13,8 +13,8 @@ public partial class ProjectFileReaderTests
 {
     public class FontConverterTest
     {
-        private static readonly string[] s_locales = new[]
-        {
+        private static readonly string[] s_locales =
+        [
             "ar-SA",
             "en-US",
             "es-ES",
@@ -24,13 +24,13 @@ public partial class ProjectFileReaderTests
             "ru-RU",
             "tr-TR",
             "zh-CN"
-        };
+        ];
 
         public static IEnumerable<object[]> TestConvertFormData()
         {
             foreach (string cultureName in s_locales)
             {
-                CultureInfo culture = new CultureInfo(cultureName);
+                CultureInfo culture = new(cultureName);
 
                 yield return new object[] { culture, $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
                 yield return new object[] { culture, $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point, (int)FontStyle.Regular };

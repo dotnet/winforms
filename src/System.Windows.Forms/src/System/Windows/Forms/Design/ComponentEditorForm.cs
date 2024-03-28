@@ -102,7 +102,7 @@ public partial class ComponentEditorForm : Form
         _cancelButton.Text = SR.CloseCaption;
         _dirty = false;
 
-        if (lastApply == false)
+        if (!lastApply)
         {
             for (int n = 0; n < _pageSites.Length; n++)
             {
@@ -166,7 +166,7 @@ public partial class ComponentEditorForm : Form
     [MemberNotNull(nameof(_selector))]
     private void OnConfigureUI()
     {
-        Font? uiFont = Control.DefaultFont;
+        Font? uiFont = DefaultFont;
         if (_component.Site is not null)
         {
             IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));
@@ -200,17 +200,17 @@ public partial class ComponentEditorForm : Form
 
         int selectorWidth = MIN_SELECTOR_WIDTH;
 
-        if (_pageSites is not null)
+        if (_pageSites is not null && _pageSites.Length != 0)
         {
+            using Graphics graphics = CreateGraphicsInternal();
+
             // Add the nodes corresponding to the pages
             for (int n = 0; n < _pageSites.Length; n++)
             {
                 ComponentEditorPage page = _pageSites[n].GetPageControl();
 
                 string title = page.Title;
-                Graphics graphics = CreateGraphicsInternal();
                 int titleWidth = (int)graphics.MeasureString(title, Font).Width;
-                graphics.Dispose();
                 _selectorImageList.Images.Add(page.Icon.ToBitmap());
 
                 _selector.Nodes.Add(new TreeNode(title, n, n));
@@ -236,7 +236,7 @@ public partial class ComponentEditorForm : Form
 
         Text = caption;
 
-        Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
+        Rectangle pageHostBounds = new(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
                                                  _maxSize.Width, _maxSize.Height);
         _pageHost.Bounds = pageHostBounds;
         grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
@@ -244,7 +244,7 @@ public partial class ComponentEditorForm : Form
 
         if (_pageSites is not null)
         {
-            Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
+            Rectangle pageBounds = new(0, 0, pageHostBounds.Width, pageHostBounds.Height);
             for (int n = 0; n < _pageSites.Length; n++)
             {
                 ComponentEditorPage page = _pageSites[n].GetPageControl();
@@ -254,7 +254,7 @@ public partial class ComponentEditorForm : Form
 
         int xFrame = SystemInformation.FixedFrameBorderSize.Width;
         Rectangle bounds = pageHostBounds;
-        Size size = new Size(bounds.Width + 3 * (BUTTON_PAD + xFrame) + selectorWidth,
+        Size size = new(bounds.Width + 3 * (BUTTON_PAD + xFrame) + selectorWidth,
                                bounds.Height + STRIP_HEIGHT + 4 * BUTTON_PAD + BUTTON_HEIGHT +
                                2 * xFrame + SystemInformation.CaptionHeight);
         Size = size;
@@ -295,8 +295,8 @@ public partial class ComponentEditorForm : Form
         AcceptButton = _okButton;
 
         Controls.Clear();
-        Controls.AddRange(new Control[]
-        {
+        Controls.AddRange(
+        [
             _selector,
             grayStrip,
             _pageHost,
@@ -304,12 +304,13 @@ public partial class ComponentEditorForm : Form
             _cancelButton,
             _applyButton,
             _helpButton
-        });
+        ]);
 
-        // continuing with the old autoscale base size stuff, it works,
-        // and is currently set to a non-standard height
+        // Continuing with the old autoscale base size stuff, it works, and is currently set to a non-standard height.
         AutoScaleBaseSize = new Size(5, 14);
+#pragma warning disable CS0618 // Type or member is obsolete
         ApplyAutoScaling();
+#pragma warning restore CS0618
     }
 
     protected override void OnActivated(EventArgs e)

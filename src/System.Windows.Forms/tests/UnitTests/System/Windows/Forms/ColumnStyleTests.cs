@@ -8,7 +8,7 @@ public class ColumnStyleTests
     [WinFormsFact]
     public void ColumnStyle_Ctor_Default()
     {
-        var style = new ColumnStyle();
+        ColumnStyle style = new();
         Assert.Equal(SizeType.AutoSize, style.SizeType);
         Assert.Equal(0, style.Width);
     }
@@ -18,7 +18,7 @@ public class ColumnStyleTests
     [InvalidEnumData<SizeType>]
     public void ColumnStyle_Ctor_SizeType(SizeType sizeType)
     {
-        var style = new ColumnStyle(sizeType);
+        ColumnStyle style = new(sizeType);
         Assert.Equal(sizeType, style.SizeType);
         Assert.Equal(0, style.Width);
     }
@@ -27,11 +27,11 @@ public class ColumnStyleTests
     [InlineData(SizeType.AutoSize, 0)]
     [InlineData(SizeType.Absolute, 1)]
     [InlineData(SizeType.Percent, 2)]
-    [InlineData((SizeType)(SizeType.AutoSize - 1), 3)]
-    [InlineData((SizeType)(SizeType.Percent + 1), 4)]
+    [InlineData((SizeType.AutoSize - 1), 3)]
+    [InlineData((SizeType.Percent + 1), 4)]
     public void ColumnStyle_Ctor_SizeType_Float(SizeType sizeType, float width)
     {
-        var style = new ColumnStyle(sizeType, width);
+        ColumnStyle style = new(sizeType, width);
         Assert.Equal(sizeType, style.SizeType);
         Assert.Equal(width, style.Width);
     }
@@ -48,7 +48,7 @@ public class ColumnStyleTests
     [InlineData(float.MaxValue)]
     public void ColumnStyle_Width_Set_GetReturnsExpected(float value)
     {
-        var style = new ColumnStyle
+        ColumnStyle style = new()
         {
             Width = value
         };
@@ -65,8 +65,8 @@ public class ColumnStyleTests
     [InlineData(float.MaxValue, 1)]
     public void ColumnStyle_Width_SetWithOwner_GetReturnsExpected(float value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -95,8 +95,8 @@ public class ColumnStyleTests
     [InlineData(float.MaxValue, 1)]
     public void ColumnStyle_Width_SetWithOwnerWithHandle_GetReturnsExpected(float value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -135,7 +135,7 @@ public class ColumnStyleTests
     [WinFormsFact]
     public void ColumnStyle_Width_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var style = new ColumnStyle();
+        ColumnStyle style = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => style.Width = -1);
     }
 }

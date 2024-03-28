@@ -7,13 +7,13 @@ namespace System.Windows.Forms.Tests;
 public class ScrollEventArgsTests
 {
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2)]
+    [InlineData((ScrollEventType.EndScroll + 1), -2)]
     [InlineData(ScrollEventType.LargeIncrement, -1)]
     [InlineData(ScrollEventType.EndScroll, 0)]
     [InlineData(ScrollEventType.LargeIncrement, 1)]
     public void Ctor_ScrollEventType_Int(ScrollEventType type, int newValue)
     {
-        var e = new ScrollEventArgs(type, newValue);
+        ScrollEventArgs e = new(type, newValue);
         Assert.Equal(type, e.Type);
         Assert.Equal(newValue, e.NewValue);
         Assert.Equal(-1, e.OldValue);
@@ -21,13 +21,13 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, -2)]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, -2)]
     [InlineData(ScrollEventType.LargeIncrement, -1, -1)]
     [InlineData(ScrollEventType.EndScroll, 0, 0)]
     [InlineData(ScrollEventType.LargeIncrement, 1, 2)]
     public void Ctor_ScrollEventType_Int_Int(ScrollEventType type, int oldValue, int newValue)
     {
-        var e = new ScrollEventArgs(type, oldValue, newValue);
+        ScrollEventArgs e = new(type, oldValue, newValue);
         Assert.Equal(type, e.Type);
         Assert.Equal(oldValue, e.OldValue);
         Assert.Equal(newValue, e.NewValue);
@@ -35,13 +35,13 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, (ScrollOrientation)(ScrollOrientation.HorizontalScroll - 1))]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, (ScrollOrientation.HorizontalScroll - 1))]
     [InlineData(ScrollEventType.LargeIncrement, -1, ScrollOrientation.HorizontalScroll)]
     [InlineData(ScrollEventType.EndScroll, 0, ScrollOrientation.VerticalScroll)]
     [InlineData(ScrollEventType.LargeIncrement, 1, ScrollOrientation.VerticalScroll)]
     public void Ctor_ScrollEventType_Int_ScrollOrientation(ScrollEventType type, int newValue, ScrollOrientation scroll)
     {
-        var e = new ScrollEventArgs(type, newValue, scroll);
+        ScrollEventArgs e = new(type, newValue, scroll);
         Assert.Equal(type, e.Type);
         Assert.Equal(-1, e.OldValue);
         Assert.Equal(newValue, e.NewValue);
@@ -49,13 +49,13 @@ public class ScrollEventArgsTests
     }
 
     [Theory]
-    [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2, -2, (ScrollOrientation)(ScrollOrientation.HorizontalScroll - 1))]
+    [InlineData((ScrollEventType.EndScroll + 1), -2, -2, (ScrollOrientation.HorizontalScroll - 1))]
     [InlineData(ScrollEventType.LargeIncrement, -1, -1, ScrollOrientation.HorizontalScroll)]
     [InlineData(ScrollEventType.EndScroll, 0, 0, ScrollOrientation.VerticalScroll)]
     [InlineData(ScrollEventType.LargeIncrement, 1, 2, ScrollOrientation.VerticalScroll)]
     public void Ctor_ScrollEventType_Int_Int_ScrollOrientation(ScrollEventType type, int oldValue, int newValue, ScrollOrientation scroll)
     {
-        var e = new ScrollEventArgs(type, oldValue, newValue, scroll);
+        ScrollEventArgs e = new(type, oldValue, newValue, scroll);
         Assert.Equal(type, e.Type);
         Assert.Equal(oldValue, e.OldValue);
         Assert.Equal(newValue, e.NewValue);
@@ -69,7 +69,7 @@ public class ScrollEventArgsTests
     [InlineData(1)]
     public void NewValue_Set_GetReturnsExpected(int value)
     {
-        var e = new ScrollEventArgs(ScrollEventType.LargeIncrement, 2)
+        ScrollEventArgs e = new(ScrollEventType.LargeIncrement, 2)
         {
             NewValue = value
         };

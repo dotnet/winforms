@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -10,66 +9,59 @@ namespace System.Windows.Forms.Design;
 
 internal class DataGridViewColumnCollectionDialog : Form
 {
-    private Label? _selectedColumnsLabel;
+    private Label _selectedColumnsLabel;
 
-    private ListBox? _selectedColumns;
-    private Button? _moveUp;
-    private Button? _moveDown;
-    private Button? _deleteButton;
-    private Button? _addButton;
+    private ListBox _selectedColumns;
+    private Button _moveUp;
+    private Button _moveDown;
+    private Button _deleteButton;
+    private Button _addButton;
 
-    private Label? _propertyGridLabel;
+    private Label _propertyGridLabel;
 
-    private PropertyGrid? _propertyGrid1;
-    private TableLayoutPanel? _okCancelTableLayoutPanel;
+    private PropertyGrid _propertyGrid1;
+    private TableLayoutPanel _okCancelTableLayoutPanel;
 
-    private Button? _okButton;
+    private Button _okButton;
 
-    private Button? _cancelButton;
+    private Button _cancelButton;
 
     private DataGridView? _liveDataGridView;
 
     private IComponentChangeService? _compChangeService;
 
-    private DataGridView _dataGridViewPrivateCopy;
-    private DataGridViewColumnCollection _columnsPrivateCopy;
-    private Hashtable? _columnsNames;
+    private readonly DataGridView _dataGridViewPrivateCopy;
+    private readonly DataGridViewColumnCollection _columnsPrivateCopy;
+    private readonly Dictionary<DataGridViewColumn, string?> _columnsNames = [];
     private DataGridViewAddColumnDialog? _addColumnDialog;
 
-    private const int _OWNERDRAWHORIZONTALBUFFER = 3;
-    private const int _OWNERDRAWVERTICALBUFFER = 4;
-    private const int _OWNERDRAWITEMIMAGEBUFFER = 2;
+    private const int OWNERDRAWHORIZONTALBUFFER = 3;
+    private const int OWNERDRAWVERTICALBUFFER = 4;
+    private const int OWNERDRAWITEMIMAGEBUFFER = 2;
 
     // static because we can only have one instance of the DataGridViewColumnCollectionDialog running at a time
-    private static Bitmap? _selectedColumnsItemBitmap;
-    private static Type _iTypeResolutionServiceType = typeof(ITypeResolutionService);
-    private static Type _iComponentChangeServiceType = typeof(IComponentChangeService);
-    private static Type _iHelpServiceType = typeof(IHelpService);
-    private static Type _iUIServiceType = typeof(IUIService);
-    private static Type _toolboxBitmapAttributeType = typeof(ToolboxBitmapAttribute);
+    private static Bitmap? s_selectedColumnsItemBitmap;
 
     private bool _columnCollectionChanging;
 
     private bool _formIsDirty;
     private TableLayoutPanel? _overarchingTableLayoutPanel;
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
-    private Hashtable? _userAddedColumns;
+    private readonly HashSet<DataGridViewColumn> _userAddedColumns = [];
 
-    private IServiceProvider _serviceProvider;
-
-    internal DataGridViewColumnCollectionDialog(IServiceProvider provider)
+    internal DataGridViewColumnCollectionDialog()
     {
-        _serviceProvider = provider;
-
-        //
         // Required for Windows Form Designer support
-        //
         InitializeComponent();
 
-        if (DpiHelper.IsScalingRequired && _moveUp is not null && _moveDown is not null)
+        if (_moveUp.Image is Bitmap moveUp)
         {
-            _moveUp.Image = DpiHelper.ScaleButtonImageLogicalToDevice(_moveUp.Image);
-            _moveDown.Image = DpiHelper.ScaleButtonImageLogicalToDevice(_moveDown.Image);
+            _moveUp.Image = ScaleHelper.ScaleToDpi(moveUp, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
+        }
+
+        if (_moveDown.Image is Bitmap moveDown)
+        {
+            _moveDown.Image = ScaleHelper.ScaleToDpi(moveDown, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
         }
 
         _dataGridViewPrivateCopy = new DataGridView();
@@ -81,13 +73,15 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         get
         {
-            if (_selectedColumnsItemBitmap is null)
+            if (s_selectedColumnsItemBitmap is null)
             {
-                _selectedColumnsItemBitmap = new Bitmap(BitmapSelector.GetResourceStream(typeof(DataGridViewColumnCollectionDialog), "DataGridViewColumnsDialog.selectedColumns.bmp"));
-                _selectedColumnsItemBitmap.MakeTransparent(Color.Red);
+                s_selectedColumnsItemBitmap = new Bitmap(
+                    BitmapSelector.GetResourceStream(typeof(DataGridViewColumnCollectionDialog), "DataGridViewColumnsDialog.selectedColumns.bmp")
+                    ?? throw new InvalidOperationException());
+                s_selectedColumnsItemBitmap.MakeTransparent(Color.Red);
             }
 
-            return _selectedColumnsItemBitmap;
+            return s_selectedColumnsItemBitmap;
         }
     }
 
@@ -100,31 +94,30 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         PopulateSelectedColumns();
 
-        if (e.Action == CollectionChangeAction.Add && _selectedColumns is not null)
+        if (e.Action == CollectionChangeAction.Add)
         {
-            _selectedColumns.SelectedIndex = _columnsPrivateCopy.IndexOf(e.Element as DataGridViewColumn);
-            ListBoxItem? lbi = _selectedColumns.SelectedItem as ListBoxItem;
-            _userAddedColumns![lbi!.DataGridViewColumn] = true;
-            _columnsNames![lbi.DataGridViewColumn] = lbi.DataGridViewColumn.Name;
+            _selectedColumns.SelectedIndex = _columnsPrivateCopy.IndexOf((DataGridViewColumn)e.Element!);
+            ListBoxItem lbi = (ListBoxItem)_selectedColumns.SelectedItem!;
+            _userAddedColumns.Add(lbi.DataGridViewColumn);
+            _columnsNames[lbi.DataGridViewColumn] = lbi.DataGridViewColumn.Name;
         }
 
         _formIsDirty = true;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void ColumnTypeChanged(ListBoxItem item, Type newType)
     {
         DataGridViewColumn currentColumn = item.DataGridViewColumn;
         Debug.Assert(typeof(DataGridViewColumn).IsAssignableFrom(newType), "we should only have types that can be assigned to a DataGridViewColumn");
-        Debug.Assert(_selectedColumns?.SelectedItem == item, "we must have lost track of what item is in the property grid");
+        Debug.Assert(_selectedColumns.SelectedItem == item, "we must have lost track of what item is in the property grid");
 
-        DataGridViewColumn? newColumn = System.Activator.CreateInstance(newType) as DataGridViewColumn;
+        DataGridViewColumn newColumn = (DataGridViewColumn)Activator.CreateInstance(newType)!;
 
-        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService(_iTypeResolutionServiceType) as ITypeResolutionService;
+        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService<ITypeResolutionService>();
         ComponentDesigner newColumnDesigner = DataGridViewAddColumnDialog.GetComponentDesignerForType(tr, newType)!;
 
-        CopyDataGridViewColumnProperties(currentColumn /*srcColumn*/, newColumn! /*destColumn*/);
-        CopyDataGridViewColumnState(currentColumn /*srcColumn*/, newColumn! /*destColumn*/);
+        CopyDataGridViewColumnProperties(srcColumn: currentColumn, destColumn: newColumn);
+        CopyDataGridViewColumnState(srcColumn: currentColumn, destColumn: newColumn);
 
         _columnCollectionChanging = true;
         int selectedIndex = _selectedColumns.SelectedIndex;
@@ -138,19 +131,9 @@ internal class DataGridViewColumnCollectionDialog : Form
             // scrub the TypeDescriptor associations
             ListBoxItem listBoxItem = (ListBoxItem)_selectedColumns.SelectedItem;
 
-            bool? userAddedColumn = (bool)_userAddedColumns![listBoxItem.DataGridViewColumn]!;
+            _columnsNames.Remove(listBoxItem.DataGridViewColumn, out string? columnSiteName);
 
-            string columnSiteName = string.Empty;
-            if (_columnsNames!.Contains(listBoxItem.DataGridViewColumn))
-            {
-                columnSiteName = (string)_columnsNames[listBoxItem.DataGridViewColumn]!;
-                _columnsNames.Remove(listBoxItem.DataGridViewColumn);
-            }
-
-            if (_userAddedColumns.Contains(listBoxItem.DataGridViewColumn))
-            {
-                _userAddedColumns.Remove(listBoxItem.DataGridViewColumn);
-            }
+            bool userAddedColumn = _userAddedColumns.Remove(listBoxItem.DataGridViewColumn);
 
             if (listBoxItem.DataGridViewColumnDesigner is not null)
             {
@@ -162,7 +145,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
             _columnsPrivateCopy.RemoveAt(selectedIndex);
             // wipe out the display index
-            newColumn!.DisplayIndex = -1;
+            newColumn.DisplayIndex = -1;
             _columnsPrivateCopy.Insert(selectedIndex, newColumn);
 
             if (!string.IsNullOrEmpty(columnSiteName))
@@ -170,13 +153,16 @@ internal class DataGridViewColumnCollectionDialog : Form
                 _columnsNames[newColumn] = columnSiteName;
             }
 
-            _userAddedColumns[newColumn] = userAddedColumn;
+            if (userAddedColumn)
+            {
+                _userAddedColumns.Add(newColumn);
+            }
 
             // properties like DataGridViewColumn::Frozen are dependent on the DisplayIndex
             FixColumnCollectionDisplayIndices();
 
             _selectedColumns.SelectedIndex = selectedIndex;
-            _propertyGrid1!.SelectedObject = _selectedColumns.SelectedItem;
+            _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
         }
         finally
         {
@@ -184,7 +170,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void CommitChanges()
     {
         if (!_formIsDirty)
@@ -194,9 +179,9 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         try
         {
-            IComponentChangeService? changeService = _liveDataGridView?.Site?.GetService(_iComponentChangeServiceType) as IComponentChangeService;
-            PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView!)["Columns"];
-            IContainer? currentContainer = _liveDataGridView?.Site is not null ? _liveDataGridView.Site.Container : null;
+            IComponentChangeService? changeService = _liveDataGridView!.Site?.GetService<IComponentChangeService>();
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView)["Columns"];
+            IContainer? currentContainer = _liveDataGridView.Site?.Container;
 
             // Here is the order in which we should do the ComponentChanging/ComponentChanged
             // Container.RemoveComponent, Container.AddComponent
@@ -210,7 +195,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             // 7. DataGridView.Columns.Add( new DataGridViewColumns)
             // 8. OnComponentChanged DataGridView.Columns
 
-            DataGridViewColumn[] oldColumns = new DataGridViewColumn[_liveDataGridView!.Columns.Count];
+            DataGridViewColumn[] oldColumns = new DataGridViewColumn[_liveDataGridView.Columns.Count];
             _liveDataGridView.Columns.CopyTo(oldColumns, 0);
 
             // 1. OnComponentChanging DataGridView.Columns
@@ -233,25 +218,22 @@ internal class DataGridViewColumnCollectionDialog : Form
 
             DataGridViewColumn[] newColumns = new DataGridViewColumn[_columnsPrivateCopy.Count];
             bool[] userAddedColumnsInfo = new bool[_columnsPrivateCopy.Count];
-            string[] compNames = new string[_columnsPrivateCopy.Count];
-            for (int i = 0; i < _columnsPrivateCopy!.Count; i++)
+            string?[] compNames = new string?[_columnsPrivateCopy.Count];
+            for (int i = 0; i < _columnsPrivateCopy.Count; i++)
             {
                 DataGridViewColumn newColumn = (DataGridViewColumn)_columnsPrivateCopy[i].Clone();
                 // at design time we need to do a shallow copy for ContextMenuStrip property
                 newColumn.ContextMenuStrip = _columnsPrivateCopy[i].ContextMenuStrip;
 
                 newColumns[i] = newColumn;
-                object? boolObject = _userAddedColumns![_columnsPrivateCopy[i]];
-                if (boolObject is not null && boolObject is bool boolValue)
+                if (_userAddedColumns.Contains(_columnsPrivateCopy[i]))
                 {
-                    userAddedColumnsInfo[i] = boolValue;
+                    userAddedColumnsInfo[i] = true;
                 }
 
-                if (_columnsNames is not null && _columnsPrivateCopy is not null)
+                if (_columnsNames.TryGetValue(_columnsPrivateCopy[i], out string? compName))
                 {
-#pragma warning disable CS8601 // Possible null reference assignment.
-                    compNames[i] = _columnsNames[_columnsPrivateCopy[i]] as string;
-#pragma warning restore CS8601 // Possible null reference assignment.
+                    compNames[i] = compName;
                 }
             }
 
@@ -260,9 +242,10 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
                 for (int i = 0; i < newColumns.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(compNames[i]) && ValidateName(currentContainer, compNames[i], newColumns[i]))
+                    string? compName = compNames[i];
+                    if (!string.IsNullOrEmpty(compName) && ValidateName(currentContainer, compName, newColumns[i]))
                     {
-                        currentContainer.Add(newColumns[i], compNames[i]);
+                        currentContainer.Add(newColumns[i], compName);
                     }
                     else
                     {
@@ -294,7 +277,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
         catch (InvalidOperationException ex)
         {
-            IUIService? uiService = _liveDataGridView?.Site?.GetService(typeof(IUIService)) as IUIService;
+            IUIService? uiService = _liveDataGridView?.Site?.GetService<IUIService>();
             DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
             DialogResult = DialogResult.Cancel;
         }
@@ -302,7 +285,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void componentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        if (e.Component is ListBoxItem && _selectedColumns!.Items.Contains(e.Component))
+        if (e.Component is ListBoxItem && _selectedColumns.Items.Contains(e.Component))
         {
             _formIsDirty = true;
         }
@@ -339,7 +322,6 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     // We don't have any control over the srcColumn constructor.
     // So we do a catch all.
-    [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
     private static void CopyDefaultCellStyle(DataGridViewColumn srcColumn, DataGridViewColumn destColumn)
     {
         // Here is what we want to do ( see vsw 352177 for more details ):
@@ -364,7 +346,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             return;
         }
 
-        //      2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
+        // 2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
         //      then we copy all the public properties.
         DataGridViewColumn? defaultSrcColumn = null;
         try
@@ -381,7 +363,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             defaultSrcColumn = null;
         }
 
-        //      2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
+        // 2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
         if (defaultSrcColumn is null || defaultSrcColumn.DefaultCellStyle.Alignment != srcColumn.DefaultCellStyle.Alignment)
         {
             destColumn.DefaultCellStyle.Alignment = srcColumn.DefaultCellStyle.Alignment;
@@ -431,8 +413,8 @@ internal class DataGridViewColumnCollectionDialog : Form
         // has the same type in destColumn and in srcColumn.
         if (!srcColumn.DefaultCellStyle.IsNullValueDefault)
         {
-            object srcNullValue = srcColumn.DefaultCellStyle.NullValue;
-            object destNullValue = destColumn.DefaultCellStyle.NullValue;
+            object? srcNullValue = srcColumn.DefaultCellStyle.NullValue;
+            object? destNullValue = destColumn.DefaultCellStyle.NullValue;
 
             if (srcNullValue is not null && destNullValue is not null && srcNullValue.GetType() == destNullValue.GetType())
             {
@@ -470,9 +452,22 @@ internal class DataGridViewColumnCollectionDialog : Form
     ///  Required method for Designer support - do not modify
     ///  the contents of this method with the code editor.
     /// </summary>
+    [MemberNotNull(nameof(_addButton))]
+    [MemberNotNull(nameof(_deleteButton))]
+    [MemberNotNull(nameof(_moveDown))]
+    [MemberNotNull(nameof(_moveUp))]
+    [MemberNotNull(nameof(_selectedColumns))]
+    [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
+    [MemberNotNull(nameof(_addRemoveTableLayoutPanel))]
+    [MemberNotNull(nameof(_selectedColumnsLabel))]
+    [MemberNotNull(nameof(_propertyGridLabel))]
+    [MemberNotNull(nameof(_propertyGrid1))]
+    [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
+    [MemberNotNull(nameof(_cancelButton))]
+    [MemberNotNull(nameof(_okButton))]
     private void InitializeComponent()
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewColumnCollectionDialog));
+        ComponentResourceManager resources = new(typeof(DataGridViewColumnCollectionDialog));
         _addButton = new Button();
         _deleteButton = new Button();
         _moveDown = new Button();
@@ -482,7 +477,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _addRemoveTableLayoutPanel = new TableLayoutPanel();
         _selectedColumnsLabel = new Label();
         _propertyGridLabel = new Label();
-        _propertyGrid1 = new VsPropertyGrid(_serviceProvider);
+        _propertyGrid1 = new VsPropertyGrid();
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _cancelButton = new Button();
         _okButton = new Button();
@@ -642,12 +637,11 @@ internal class DataGridViewColumnCollectionDialog : Form
     }
     #endregion
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private static bool IsColumnAddedByUser(DataGridViewColumn col)
     {
         PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
         object? val = propertyDescriptor?.GetValue(col);
-        if (propertyDescriptor is not null && val is not null)
+        if (val is not null)
         {
             return (bool)val;
         }
@@ -664,21 +658,21 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void moveDown_Click(object? sender, EventArgs e)
     {
-        int selectedIndex = _selectedColumns!.SelectedIndex;
+        int selectedIndex = _selectedColumns.SelectedIndex;
         Debug.Assert(selectedIndex > -1 && selectedIndex < _selectedColumns.Items.Count - 1);
 
         _columnCollectionChanging = true;
         try
         {
-            ListBoxItem? item = _selectedColumns.SelectedItem as ListBoxItem;
+            ListBoxItem? item = (ListBoxItem)_selectedColumns.SelectedItem!;
             _selectedColumns.Items.RemoveAt(selectedIndex);
-            _selectedColumns.Items.Insert(selectedIndex + 1, item!);
+            _selectedColumns.Items.Insert(selectedIndex + 1, item);
 
             // now do the same thing to the column collection
             _columnsPrivateCopy.RemoveAt(selectedIndex);
 
             // if the column we moved was frozen, make sure the column below is frozen too
-            if (item!.DataGridViewColumn.Frozen)
+            if (item.DataGridViewColumn.Frozen)
             {
                 _columnsPrivateCopy[selectedIndex].Frozen = true;
 #if DEBUG
@@ -704,13 +698,13 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         _formIsDirty = true;
         _selectedColumns.SelectedIndex = selectedIndex + 1;
-        _moveUp!.Enabled = _selectedColumns.SelectedIndex > 0;
-        _moveDown!.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
+        _moveUp.Enabled = _selectedColumns.SelectedIndex > 0;
+        _moveDown.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
     }
 
     private void moveUp_Click(object? sender, EventArgs e)
     {
-        int selectedIndex = _selectedColumns!.SelectedIndex;
+        int selectedIndex = _selectedColumns.SelectedIndex;
         Debug.Assert(selectedIndex > 0);
 
         _columnCollectionChanging = true;
@@ -748,8 +742,8 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         _formIsDirty = true;
         _selectedColumns.SelectedIndex = selectedIndex - 1;
-        _moveUp!.Enabled = _selectedColumns.SelectedIndex > 0;
-        _moveDown!.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
+        _moveUp.Enabled = _selectedColumns.SelectedIndex > 0;
+        _moveDown.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
 
         // vsw 495403: keep the selected item visible.
         // For some reason, we only have to do this when we move a column up.
@@ -760,10 +754,10 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
     }
 
-    private void DataGridViewColumnCollectionDialog_Closed(object? sender, System.EventArgs e)
+    private void DataGridViewColumnCollectionDialog_Closed(object? sender, EventArgs e)
     {
         // scrub the TypeDescriptor association between DataGridViewColumns and their designers
-        for (int i = 0; i < _selectedColumns!.Items.Count; i++)
+        for (int i = 0; i < _selectedColumns.Items.Count; i++)
         {
             ListBoxItem? lbi = _selectedColumns.Items[i] as ListBoxItem;
             if (lbi?.DataGridViewColumnDesigner is not null)
@@ -772,8 +766,8 @@ internal class DataGridViewColumnCollectionDialog : Form
             }
         }
 
-        _columnsNames = null;
-        _userAddedColumns = null;
+        _columnsNames.Clear();
+        _userAddedColumns.Clear();
     }
 
     private void DataGridViewColumnCollectionDialog_HelpButtonClicked(object? sender, CancelEventArgs e)
@@ -790,33 +784,31 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void DataGridViewColumnCollectionDialog_HelpRequestHandled()
     {
-        IHelpService? helpService = _liveDataGridView?.Site?.GetService(_iHelpServiceType) as IHelpService;
+        IHelpService? helpService = _liveDataGridView?.Site?.GetService<IHelpService>();
         helpService?.ShowHelpFromKeyword("vs.DataGridViewColumnCollectionDialog");
     }
 
     private void DataGridViewColumnCollectionDialog_Load(object? sender, EventArgs e)
     {
-        // get the Dialog Font
-        //
-        Font uiFont = Control.DefaultFont;
-        IUIService? uiService = _liveDataGridView?.Site?.GetService(_iUIServiceType) as IUIService;
+        // Get the Dialog Font
+        IUIService? uiService = _liveDataGridView?.Site?.GetService<IUIService>();
         object? font = uiService?.Styles["DialogFont"];
-        if (uiService is not null && font is Font fontValue)
+        if (font is not Font uiFont)
         {
-            uiFont = fontValue;
+            uiFont = DefaultFont;
         }
 
         Font = uiFont;
 
         // keep the selected index to 0 or -1 if there are no selected columns
-        _selectedColumns!.SelectedIndex = Math.Min(0, _selectedColumns.Items.Count - 1);
+        _selectedColumns.SelectedIndex = Math.Min(0, _selectedColumns.Items.Count - 1);
 
-        _moveUp!.Enabled = _selectedColumns.SelectedIndex > 0;
-        _moveDown!.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
-        _deleteButton!.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
-        _propertyGrid1!.SelectedObject = _selectedColumns.SelectedItem;
+        _moveUp.Enabled = _selectedColumns.SelectedIndex > 0;
+        _moveDown.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
+        _deleteButton.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
+        _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
 
-        _selectedColumns.ItemHeight = Font.Height + _OWNERDRAWVERTICALBUFFER;
+        _selectedColumns.ItemHeight = Font.Height + OWNERDRAWVERTICALBUFFER;
 
         ActiveControl = _selectedColumns;
 
@@ -829,69 +821,69 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void deleteButton_Click(object? sender, EventArgs e)
     {
-        Debug.Assert(_selectedColumns!.SelectedIndex != -1);
+        Debug.Assert(_selectedColumns.SelectedIndex != -1);
         int selectedIndex = _selectedColumns.SelectedIndex;
 
-        _columnsNames?.Remove(_columnsPrivateCopy[selectedIndex]);
-        _userAddedColumns?.Remove(_columnsPrivateCopy[selectedIndex]);
+        _columnsNames.Remove(_columnsPrivateCopy[selectedIndex]);
+        _userAddedColumns.Remove(_columnsPrivateCopy[selectedIndex]);
 
         _columnsPrivateCopy.RemoveAt(selectedIndex);
 
         // try to keep the same selected index
         _selectedColumns.SelectedIndex = Math.Min(_selectedColumns.Items.Count - 1, selectedIndex);
 
-        _moveUp!.Enabled = _selectedColumns.SelectedIndex > 0;
-        _moveDown!.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
-        _deleteButton!.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
-        _propertyGrid1!.SelectedObject = _selectedColumns.SelectedItem;
+        _moveUp.Enabled = _selectedColumns.SelectedIndex > 0;
+        _moveDown.Enabled = _selectedColumns.SelectedIndex < _selectedColumns.Items.Count - 1;
+        _deleteButton.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
+        _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
     }
 
     private void addButton_Click(object? sender, EventArgs e)
     {
-        int insertIndex = _selectedColumns!.SelectedIndex == -1 ? _selectedColumns.Items.Count : _selectedColumns.SelectedIndex + 1;
+        int insertIndex = _selectedColumns.SelectedIndex == -1 ? _selectedColumns.Items.Count : _selectedColumns.SelectedIndex + 1;
 
         if (_addColumnDialog is null)
         {
             // child modal dialog -launching in System Aware mode
-            _addColumnDialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewAddColumnDialog(_columnsPrivateCopy, _liveDataGridView!));
+            _addColumnDialog = ScaleHelper.InvokeInSystemAwareContext(() => new DataGridViewAddColumnDialog(_columnsPrivateCopy, _liveDataGridView!));
             _addColumnDialog.StartPosition = FormStartPosition.CenterParent;
         }
 
-        _addColumnDialog.Start(insertIndex, false /*persistChangesToDesigner*/);
+        _addColumnDialog.Start(insertIndex, persistChangesToDesigner: false);
 
         _addColumnDialog.ShowDialog(this);
     }
 
     private void PopulateSelectedColumns()
     {
-        int selectedIndex = _selectedColumns!.SelectedIndex;
+        int selectedIndex = _selectedColumns.SelectedIndex;
 
         // scrub the TypeDescriptor association between DataGridViewColumns and their designers
-        for (int i = 0; i < _selectedColumns?.Items.Count; i++)
+        for (int i = 0; i < _selectedColumns.Items.Count; i++)
         {
-            ListBoxItem? lbi = _selectedColumns?.Items[i] as ListBoxItem;
+            ListBoxItem? lbi = _selectedColumns.Items[i] as ListBoxItem;
             if (lbi?.DataGridViewColumnDesigner is not null)
             {
                 TypeDescriptor.RemoveAssociation(lbi.DataGridViewColumn, lbi.DataGridViewColumnDesigner);
             }
         }
 
-        _selectedColumns?.Items.Clear();
-        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService(_iTypeResolutionServiceType) as ITypeResolutionService;
+        _selectedColumns.Items.Clear();
+        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService<ITypeResolutionService>();
 
         for (int i = 0; i < _columnsPrivateCopy.Count; i++)
         {
             ComponentDesigner columnDesigner = DataGridViewAddColumnDialog.GetComponentDesignerForType(tr, _columnsPrivateCopy[i].GetType())!;
-            _selectedColumns?.Items.Add(new ListBoxItem(_columnsPrivateCopy[i], this, columnDesigner));
+            _selectedColumns.Items.Add(new ListBoxItem(_columnsPrivateCopy[i], this, columnDesigner));
         }
 
-        _selectedColumns!.SelectedIndex = Math.Min(selectedIndex, _selectedColumns.Items.Count - 1);
+        _selectedColumns.SelectedIndex = Math.Min(selectedIndex, _selectedColumns.Items.Count - 1);
 
         SetSelectedColumnsHorizontalExtent();
 
         if (_selectedColumns.Items.Count == 0)
         {
-            _propertyGridLabel!.Text = string.Format(SR.DataGridViewProperties);
+            _propertyGridLabel.Text = string.Format(SR.DataGridViewProperties);
         }
     }
 
@@ -907,9 +899,9 @@ internal class DataGridViewColumnCollectionDialog : Form
         if (e.ChangedItem!.PropertyDescriptor!.Name.Equals("HeaderText"))
         {
             // invalidate the selected index only
-            int selectedIndex = _selectedColumns!.SelectedIndex;
+            int selectedIndex = _selectedColumns.SelectedIndex;
             Debug.Assert(selectedIndex != -1, "we forgot to take away the selected object from the property grid");
-            Rectangle bounds = new Rectangle(0, selectedIndex * _selectedColumns.ItemHeight, _selectedColumns.Width, _selectedColumns.ItemHeight);
+            Rectangle bounds = new(0, selectedIndex * _selectedColumns.ItemHeight, _selectedColumns.Width, _selectedColumns.ItemHeight);
             _columnCollectionChanging = true;
             try
             {
@@ -928,23 +920,23 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
         else if (e.ChangedItem.PropertyDescriptor.Name.Equals("DataPropertyName"))
         {
-            ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
+            ListBoxItem? listBoxItem = _selectedColumns.SelectedItem as ListBoxItem;
             DataGridViewColumn? column = listBoxItem?.DataGridViewColumn;
 
             if (string.IsNullOrEmpty(column?.DataPropertyName))
             {
-                _propertyGridLabel!.Text = (SR.DataGridViewUnboundColumnProperties);
+                _propertyGridLabel.Text = (SR.DataGridViewUnboundColumnProperties);
             }
             else
             {
-                _propertyGridLabel!.Text = (SR.DataGridViewBoundColumnProperties);
+                _propertyGridLabel.Text = (SR.DataGridViewBoundColumnProperties);
             }
         }
         else if (e.ChangedItem.PropertyDescriptor.Name.Equals("Name"))
         {
-            ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
+            ListBoxItem? listBoxItem = _selectedColumns.SelectedItem as ListBoxItem;
             DataGridViewColumn? col = listBoxItem?.DataGridViewColumn;
-            if (_columnsNames is not null && col is not null)
+            if (col is not null)
             {
                 _columnsNames[col] = col.Name;
             }
@@ -958,12 +950,12 @@ internal class DataGridViewColumnCollectionDialog : Form
             return;
         }
 
-        ListBoxItem? listBoxItem = _selectedColumns?.Items[e.Index] as ListBoxItem;
+        ListBoxItem? listBoxItem = _selectedColumns.Items[e.Index] as ListBoxItem;
 
 #if DGV_DITHERING
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
             {
-                ImageAttributes attributes = new ImageAttributes();
+                ImageAttributes attributes = new();
 
                 colorMap[0].OldColor = Color.White;
                 colorMap[0].NewColor = e.BackColor;
@@ -973,7 +965,7 @@ internal class DataGridViewColumnCollectionDialog : Form
                 //
                 attributes.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
 
-                Rectangle imgRectangle = new Rectangle(e.Bounds.X + OWNERDRAWITEMIMAGEBUFFER, e.Bounds.Y + OWNERDRAWITEMIMAGEBUFFER, listBoxItem.ToolboxBitmap.Width, listBoxItem.ToolboxBitmap.Height);
+                Rectangle imgRectangle = new(e.Bounds.X + OWNERDRAWITEMIMAGEBUFFER, e.Bounds.Y + OWNERDRAWITEMIMAGEBUFFER, listBoxItem.ToolboxBitmap.Width, listBoxItem.ToolboxBitmap.Height);
                 e.Graphics.DrawImage(listBoxItem.ToolboxBitmap,
                                      imgRectangle,
                                      0,
@@ -988,20 +980,20 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
 #endif // DGV_DITHERING
         e.Graphics.DrawImage(listBoxItem!.ToolboxBitmap!,
-                             e.Bounds.X + _OWNERDRAWITEMIMAGEBUFFER,
-                             e.Bounds.Y + _OWNERDRAWITEMIMAGEBUFFER,
-                             listBoxItem!.ToolboxBitmap!.Width,
+                             e.Bounds.X + OWNERDRAWITEMIMAGEBUFFER,
+                             e.Bounds.Y + OWNERDRAWITEMIMAGEBUFFER,
+                             listBoxItem.ToolboxBitmap!.Width,
                              listBoxItem.ToolboxBitmap.Height);
 
         Rectangle bounds = e.Bounds;
-        bounds.Width -= listBoxItem.ToolboxBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.X += listBoxItem.ToolboxBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.Y += _OWNERDRAWITEMIMAGEBUFFER;
-        bounds.Height -= 2 * _OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Width -= listBoxItem.ToolboxBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER;
+        bounds.X += listBoxItem.ToolboxBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Y += OWNERDRAWITEMIMAGEBUFFER;
+        bounds.Height -= 2 * OWNERDRAWITEMIMAGEBUFFER;
 
         Brush selectedBrush = new SolidBrush(e.BackColor);
         Brush foreBrush = new SolidBrush(e.ForeColor);
-        Brush backBrush = new SolidBrush(_selectedColumns!.BackColor);
+        Brush backBrush = new SolidBrush(_selectedColumns.BackColor);
 
         string columnName = ((ListBoxItem)_selectedColumns.Items[e.Index]).ToString();
 
@@ -1010,7 +1002,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             // first get the text rectangle
             int textWidth = Size.Ceiling(e.Graphics.MeasureString(columnName, e.Font!, new SizeF(bounds.Width, bounds.Height))).Width;
             // DANIELHE: the spec calls for + 7 but I think that + 3 does the trick better
-            Rectangle focusRectangle = new Rectangle(bounds.X, e.Bounds.Y + 1, textWidth + _OWNERDRAWHORIZONTALBUFFER, e.Bounds.Height - 2);
+            Rectangle focusRectangle = new(bounds.X, e.Bounds.Y + 1, textWidth + OWNERDRAWHORIZONTALBUFFER, e.Bounds.Height - 2);
 
             e.Graphics.FillRectangle(selectedBrush, focusRectangle);
             focusRectangle.Inflate(-1, -1);
@@ -1043,14 +1035,14 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         if ((e.Modifiers) == 0 && e.KeyCode == Keys.F4)
         {
-            _propertyGrid1?.Focus();
+            _propertyGrid1.Focus();
             e.Handled = true;
         }
     }
 
     private void selectedColumns_KeyPress(object? sender, KeyPressEventArgs e)
     {
-        Keys modifierKeys = Control.ModifierKeys;
+        Keys modifierKeys = ModifierKeys;
 
         // vsw 479960.
         // Don't let Ctrl-* propagate to the selected columns list box.
@@ -1067,38 +1059,34 @@ internal class DataGridViewColumnCollectionDialog : Form
             return;
         }
 
-        _propertyGrid1!.SelectedObject = _selectedColumns!.SelectedItem;
+        _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
 
         // enable/disable up/down/delete buttons
-        _moveDown!.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != _selectedColumns.Items.Count - 1;
-        _moveUp!.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex > 0;
-        _deleteButton!.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
+        _moveDown.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != _selectedColumns.Items.Count - 1;
+        _moveUp.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex > 0;
+        _deleteButton.Enabled = _selectedColumns.Items.Count > 0 && _selectedColumns.SelectedIndex != -1;
 
         if (_selectedColumns.SelectedItem is not null)
         {
             DataGridViewColumn column = ((ListBoxItem)_selectedColumns.SelectedItem).DataGridViewColumn;
             if (string.IsNullOrEmpty(column.DataPropertyName))
             {
-                _propertyGridLabel!.Text = (SR.DataGridViewUnboundColumnProperties);
+                _propertyGridLabel.Text = (SR.DataGridViewUnboundColumnProperties);
             }
             else
             {
-                _propertyGridLabel!.Text = (SR.DataGridViewBoundColumnProperties);
+                _propertyGridLabel.Text = (SR.DataGridViewBoundColumnProperties);
             }
         }
         else
         {
-            _propertyGridLabel!.Text = (SR.DataGridViewProperties);
+            _propertyGridLabel.Text = (SR.DataGridViewProperties);
         }
     }
 
     internal void SetLiveDataGridView(DataGridView dataGridView)
     {
-        IComponentChangeService? newComponentChangeService = null;
-        if (dataGridView.Site is not null)
-        {
-            newComponentChangeService = dataGridView.Site.GetService(_iComponentChangeServiceType) as IComponentChangeService;
-        }
+        IComponentChangeService? newComponentChangeService = dataGridView.Site?.GetService<IComponentChangeService>();
 
         if (newComponentChangeService != _compChangeService)
         {
@@ -1115,10 +1103,12 @@ internal class DataGridViewColumnCollectionDialog : Form
         _dataGridViewPrivateCopy.AutoSizeColumnsMode = dataGridView.AutoSizeColumnsMode;
         _dataGridViewPrivateCopy.DataSource = dataGridView.DataSource;
         _dataGridViewPrivateCopy.DataMember = dataGridView.DataMember;
-        _columnsNames = new Hashtable(_columnsPrivateCopy.Count);
+        _columnsNames.Clear();
+        _columnsNames.EnsureCapacity(_columnsPrivateCopy.Count);
         _columnsPrivateCopy.Clear();
 
-        _userAddedColumns = new Hashtable(_liveDataGridView.Columns.Count);
+        _userAddedColumns.Clear();
+        _userAddedColumns.EnsureCapacity(_liveDataGridView.Columns.Count);
 
         // Set ColumnCollectionChanging to true so:
         // 1. the column collection changed event handler does not execute PopulateSelectedColumns over and over again.
@@ -1143,7 +1133,10 @@ internal class DataGridViewColumnCollectionDialog : Form
                     _columnsNames[col] = liveCol.Site.Name;
                 }
 
-                _userAddedColumns[col] = IsColumnAddedByUser(_liveDataGridView.Columns[i]);
+                if (IsColumnAddedByUser(liveCol))
+                {
+                    _userAddedColumns.Add(col);
+                }
             }
         }
         finally
@@ -1153,21 +1146,21 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         PopulateSelectedColumns();
 
-        _propertyGrid1!.Site = new DataGridViewComponentPropertyGridSite(_liveDataGridView.Site, _liveDataGridView);
+        _propertyGrid1.Site = new DataGridViewComponentPropertyGridSite(_liveDataGridView.Site, _liveDataGridView);
 
-        _propertyGrid1.SelectedObject = _selectedColumns!.SelectedItem;
+        _propertyGrid1.SelectedObject = _selectedColumns.SelectedItem;
     }
 
     private void SetSelectedColumnsHorizontalExtent()
     {
         int maxItemWidth = 0;
-        for (int i = 0; i < _selectedColumns!.Items.Count; i++)
+        for (int i = 0; i < _selectedColumns.Items.Count; i++)
         {
             int itemWidth = TextRenderer.MeasureText(_selectedColumns.Items[i].ToString(), _selectedColumns.Font).Width;
             maxItemWidth = Math.Max(maxItemWidth, itemWidth);
         }
 
-        _selectedColumns.HorizontalExtent = SelectedColumnsItemBitmap.Width + 2 * _OWNERDRAWITEMIMAGEBUFFER + maxItemWidth + _OWNERDRAWHORIZONTALBUFFER;
+        _selectedColumns.HorizontalExtent = SelectedColumnsItemBitmap.Width + 2 * OWNERDRAWITEMIMAGEBUFFER + maxItemWidth + OWNERDRAWHORIZONTALBUFFER;
     }
 
     private void UnhookComponentChangedEventHandler(IComponentChangeService componentChangeService)
@@ -1188,13 +1181,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         for (int i = 0; i < components.Count; i++)
         {
-            IComponent? comp = components[i];
-            if (comp is null || comp.Site is null)
-            {
-                continue;
-            }
-
-            ISite s = comp.Site;
+            ISite? s = components[i]?.Site;
 
             if (s is not null && s.Name is not null && string.Equals(s.Name, siteName, StringComparison.OrdinalIgnoreCase) && s.Component != component)
             {
@@ -1229,12 +1216,9 @@ internal class DataGridViewColumnCollectionDialog : Form
                 TypeDescriptor.CreateAssociation(DataGridViewColumn, DataGridViewColumnDesigner);
             }
 
-#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            ToolboxBitmapAttribute? attr = TypeDescriptor.GetAttributes(column!)[_toolboxBitmapAttributeType!] as ToolboxBitmapAttribute;
-#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            if (attr is not null)
+            if (TypeDescriptorHelper.TryGetAttribute(column, out ToolboxBitmapAttribute? attr))
             {
-                ToolboxBitmap = attr.GetImage(column, false /*large*/);
+                ToolboxBitmap = attr.GetImage(column, large: false);
             }
             else
             {
@@ -1260,20 +1244,24 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         string? ICustomTypeDescriptor.GetComponentName() => TypeDescriptor.GetComponentName(DataGridViewColumn);
 
+        [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
         TypeConverter ICustomTypeDescriptor.GetConverter() => TypeDescriptor.GetConverter(DataGridViewColumn);
 
         EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(DataGridViewColumn);
 
         PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(DataGridViewColumn);
 
+        [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
         object? ICustomTypeDescriptor.GetEditor(Type type) => TypeDescriptor.GetEditor(DataGridViewColumn, type);
 
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(DataGridViewColumn);
 
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs) => TypeDescriptor.GetEvents(DataGridViewColumn, attrs!);
 
+        [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => ((ICustomTypeDescriptor)this).GetProperties(null);
 
+        [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attrs)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(DataGridViewColumn);
@@ -1287,7 +1275,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
                 // We should look into speeding this up w/ our own DataGridViewColumnTypes...
                 //
-                Hashtable hash = new Hashtable();
+                Dictionary<string, PropertyDescriptor> hash = [];
                 for (int i = 0; i < props.Count; i++)
                 {
                     hash.Add(props[i].Name, props[i]);
@@ -1306,18 +1294,14 @@ internal class DataGridViewColumnCollectionDialog : Form
                 props.CopyTo(propArray, 0);
             }
 
-            propArray[propArray.Length - 1] = new ColumnTypePropertyDescriptor();
+            propArray[^1] = new ColumnTypePropertyDescriptor();
 
             return new PropertyDescriptorCollection(propArray);
         }
 
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
         {
-            if (pd is null)
-            {
-                return DataGridViewColumn;
-            }
-            else if (pd is ColumnTypePropertyDescriptor)
+            if (pd is ColumnTypePropertyDescriptor)
             {
                 return this;
             }
@@ -1330,7 +1314,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         ISite? IComponent.Site
         {
             get => Owner._liveDataGridView?.Site;
-
             set { }
         }
 
@@ -1340,10 +1323,6 @@ internal class DataGridViewColumnCollectionDialog : Form
             remove { }
         }
 
-        [
-            SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")      // The ListBoxItem does not own the ToolBoxBitmap
-                                                                                               // so it can't dispose it.
-        ]
         void IDisposable.Dispose()
         {
         }
@@ -1359,38 +1338,20 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             get
             {
-                EditorAttribute editorAttr = new EditorAttribute("Design.DataGridViewColumnTypeEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor));
-                DescriptionAttribute descriptionAttr = new DescriptionAttribute(SR.DataGridViewColumnTypePropertyDescription);
+                EditorAttribute editorAttr = new($"System.Windows.Forms.Design.DataGridViewColumnTypeEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor));
+                DescriptionAttribute descriptionAttr = new(SR.DataGridViewColumnTypePropertyDescription);
                 CategoryAttribute categoryAttr = CategoryAttribute.Design;
                 // add the description attribute and the categories attribute
-                Attribute[] attrs = new Attribute[] { editorAttr, descriptionAttr, categoryAttr };
+                Attribute[] attrs = [editorAttr, descriptionAttr, categoryAttr];
                 return new AttributeCollection(attrs);
             }
         }
 
-        public override Type ComponentType
-        {
-            get
-            {
-                return typeof(ListBoxItem);
-            }
-        }
+        public override Type ComponentType => typeof(ListBoxItem);
 
-        public override bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool IsReadOnly => false;
 
-        public override Type PropertyType
-        {
-            get
-            {
-                return typeof(Type);
-            }
-        }
+        public override Type PropertyType => typeof(Type);
 
         public override bool CanResetValue(object component)
         {

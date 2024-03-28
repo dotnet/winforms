@@ -10,10 +10,10 @@ public class GiveFeedbackEventArgsTests
 {
     [Theory]
     [InlineData(DragDropEffects.None, true)]
-    [InlineData((DragDropEffects)(DragDropEffects.None - 1), false)]
+    [InlineData((DragDropEffects.None - 1), false)]
     public void Ctor_DragDropEffects_Bool(DragDropEffects effect, bool useDefaultCursors)
     {
-        var e = new GiveFeedbackEventArgs(effect, useDefaultCursors);
+        GiveFeedbackEventArgs e = new(effect, useDefaultCursors);
         Assert.Equal(effect, e.Effect);
         Assert.Equal(useDefaultCursors, e.UseDefaultCursors);
     }
@@ -22,7 +22,7 @@ public class GiveFeedbackEventArgsTests
     [MemberData(nameof(CursorOffset_TestData))]
     public void CursorOffset_Set_GetReturnsExpected(Point value)
     {
-        var e = new GiveFeedbackEventArgs(DragDropEffects.None, false, new Bitmap(1, 1), new Point(0, 0), false)
+        GiveFeedbackEventArgs e = new(DragDropEffects.None, false, new Bitmap(1, 1), new Point(0, 0), false)
         {
             CursorOffset = value
         };
@@ -39,7 +39,7 @@ public class GiveFeedbackEventArgsTests
     [MemberData(nameof(DragImage_TestData))]
     public void DragImage_Set_GetReturnsExpected(Bitmap value)
     {
-        var e = new GiveFeedbackEventArgs(DragDropEffects.None, false, new Bitmap(2, 2), new Point(0, 0), false)
+        GiveFeedbackEventArgs e = new(DragDropEffects.None, false, new Bitmap(2, 2), new Point(0, 0), false)
         {
             DragImage = value
         };
@@ -57,7 +57,7 @@ public class GiveFeedbackEventArgsTests
     [InlineData(false)]
     public void UseDefaultCursors_Set_GetReturnsExpected(bool value)
     {
-        var e = new GiveFeedbackEventArgs(DragDropEffects.None, false)
+        GiveFeedbackEventArgs e = new(DragDropEffects.None, false)
         {
             UseDefaultCursors = value
         };
@@ -69,7 +69,7 @@ public class GiveFeedbackEventArgsTests
     [InlineData(false)]
     public void UseDefaultDragImage_Set_GetReturnsExpected(bool value)
     {
-        var e = new GiveFeedbackEventArgs(DragDropEffects.None, false, new Bitmap(1, 1), new Point(0, 0), false)
+        GiveFeedbackEventArgs e = new(DragDropEffects.None, false, new Bitmap(1, 1), new Point(0, 0), false)
         {
             UseDefaultDragImage = value
         };

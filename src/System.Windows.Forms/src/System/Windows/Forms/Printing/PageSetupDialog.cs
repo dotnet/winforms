@@ -4,8 +4,6 @@
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Globalization;
-using System.Runtime.InteropServices;
-using static Interop;
 using Windows.Win32.UI.Controls.Dialogs;
 
 namespace System.Windows.Forms;
@@ -85,8 +83,8 @@ public sealed class PageSetupDialog : CommonDialog
     }
 
     /// <summary>
-    ///  This allows the user to override the current behavior where the Metric is converted to ThousandOfInch even for METRIC MEASUREMENTSYSTEM
-    ///  which returns a HUNDREDSOFMILLIMETER value.
+    ///  This allows the user to override the current behavior where the Metric is converted to ThousandOfInch even
+    ///  for METRIC MEASUREMENTSYSTEM which returns a HUNDREDSOFMILLIMETER value.
     /// </summary>
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PSDenableMetricDescr))]
@@ -125,9 +123,7 @@ public sealed class PageSetupDialog : CommonDialog
     }
 
     /// <summary>
-    ///  Gets
-    ///  or sets the printer
-    ///  settings the dialog box will modify if the user clicks the Printer button.
+    ///  Gets or sets the printer settings the dialog box will modify if the user clicks the Printer button.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
@@ -224,27 +220,22 @@ public sealed class PageSetupDialog : CommonDialog
         ShowNetwork = true;
     }
 
-    private void ResetMinMargins()
-    {
-        MinMargins = null;
-    }
+    // The next two methods are for designer support.
+
+    private void ResetMinMargins() => MinMargins = null;
 
     /// <summary>
-    ///  Indicates whether the <see cref="MinMargins"/>
-    ///  property should be
-    ///  persisted.
+    ///  Indicates whether the <see cref="MinMargins"/> property should be persisted.
     /// </summary>
-    private bool ShouldSerializeMinMargins()
-    {
-        return _minMargins is not null
+    private bool ShouldSerializeMinMargins() =>
+        _minMargins is not null
             && (_minMargins.Left != 0
             || _minMargins.Right != 0
             || _minMargins.Top != 0
             || _minMargins.Bottom != 0);
-    }
 
     private static void UpdateSettings(
-        Comdlg32.PAGESETUPDLGW data,
+        PAGESETUPDLGW data,
         PageSettings pageSettings,
         PrinterSettings? printerSettings)
     {
@@ -255,7 +246,7 @@ public sealed class PageSetupDialog : CommonDialog
             printerSettings.SetHdevnames(data.hDevNames);
         }
 
-        Margins newMargins = new Margins
+        Margins newMargins = new()
         {
             Left = data.rtMargin.left,
             Top = data.rtMargin.top,
@@ -264,28 +255,25 @@ public sealed class PageSetupDialog : CommonDialog
         };
 
         PrinterUnit fromUnit = ((data.Flags & PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS) != 0)
-                               ? PrinterUnit.HundredthsOfAMillimeter
-                               : PrinterUnit.ThousandthsOfAnInch;
+            ? PrinterUnit.HundredthsOfAMillimeter
+            : PrinterUnit.ThousandthsOfAnInch;
 
         pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
     }
 
     protected override unsafe bool RunDialog(IntPtr hwndOwner)
     {
-        WNDPROC hookProc = HookProcInternal;
-        void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
-
         if (_pageSettings is null)
         {
             throw new ArgumentException(SR.PSDcantShowWithoutPage);
         }
 
-        Comdlg32.PAGESETUPDLGW data = new()
+        PAGESETUPDLGW dialogSettings = new()
         {
-            lStructSize = (uint)sizeof(Comdlg32.PAGESETUPDLGW),
+            lStructSize = (uint)sizeof(PAGESETUPDLGW),
             Flags = GetFlags(),
-            hwndOwner = hwndOwner,
-            lpfnPageSetupHook = hookProcPtr
+            hwndOwner = (HWND)hwndOwner,
+            lpfnPageSetupHook = HookProcFunctionPointer
         };
 
         PrinterUnit toUnit = PrinterUnit.ThousandthsOfAnInch;
@@ -314,49 +302,48 @@ public sealed class PageSetupDialog : CommonDialog
         if (MinMargins is not null)
         {
             Margins margins = PrinterUnitConvert.Convert(MinMargins, PrinterUnit.Display, toUnit);
-            data.rtMinMargin.left = margins.Left;
-            data.rtMinMargin.top = margins.Top;
-            data.rtMinMargin.right = margins.Right;
-            data.rtMinMargin.bottom = margins.Bottom;
+            dialogSettings.rtMinMargin.left = margins.Left;
+            dialogSettings.rtMinMargin.top = margins.Top;
+            dialogSettings.rtMinMargin.right = margins.Right;
+            dialogSettings.rtMinMargin.bottom = margins.Bottom;
         }
 
         if (_pageSettings.Margins is not null)
         {
             Margins margins = PrinterUnitConvert.Convert(_pageSettings.Margins, PrinterUnit.Display, toUnit);
-            data.rtMargin.left = margins.Left;
-            data.rtMargin.top = margins.Top;
-            data.rtMargin.right = margins.Right;
-            data.rtMargin.bottom = margins.Bottom;
+            dialogSettings.rtMargin.left = margins.Left;
+            dialogSettings.rtMargin.top = margins.Top;
+            dialogSettings.rtMargin.right = margins.Right;
+            dialogSettings.rtMargin.bottom = margins.Bottom;
         }
 
         // Ensure that the margins are >= minMargins.
         // This is a requirement of the PAGESETUPDLG structure.
-        data.rtMargin.left = Math.Max(data.rtMargin.left, data.rtMinMargin.left);
-        data.rtMargin.top = Math.Max(data.rtMargin.top, data.rtMinMargin.top);
-        data.rtMargin.right = Math.Max(data.rtMargin.right, data.rtMinMargin.right);
-        data.rtMargin.bottom = Math.Max(data.rtMargin.bottom, data.rtMinMargin.bottom);
+        dialogSettings.rtMargin.left = Math.Max(dialogSettings.rtMargin.left, dialogSettings.rtMinMargin.left);
+        dialogSettings.rtMargin.top = Math.Max(dialogSettings.rtMargin.top, dialogSettings.rtMinMargin.top);
+        dialogSettings.rtMargin.right = Math.Max(dialogSettings.rtMargin.right, dialogSettings.rtMinMargin.right);
+        dialogSettings.rtMargin.bottom = Math.Max(dialogSettings.rtMargin.bottom, dialogSettings.rtMinMargin.bottom);
 
         PrinterSettings printer = _printerSettings ?? _pageSettings.PrinterSettings;
 
-        data.hDevMode = printer.GetHdevmode(_pageSettings);
-        data.hDevNames = printer.GetHdevnames();
+        dialogSettings.hDevMode = (HGLOBAL)printer.GetHdevmode(_pageSettings);
+        dialogSettings.hDevNames = (HGLOBAL)printer.GetHdevnames();
 
         try
         {
-            if (!Comdlg32.PageSetupDlgW(ref data))
+            if (!PInvoke.PageSetupDlg(&dialogSettings))
             {
                 return false;
             }
 
             // PrinterSettings, not printer
-            UpdateSettings(data, _pageSettings, _printerSettings);
+            UpdateSettings(dialogSettings, _pageSettings, _printerSettings);
             return true;
         }
         finally
         {
-            PInvoke.GlobalFree((HGLOBAL)data.hDevMode);
-            PInvoke.GlobalFree((HGLOBAL)data.hDevNames);
-            GC.KeepAlive(hookProc);
+            PInvokeCore.GlobalFree(dialogSettings.hDevMode);
+            PInvokeCore.GlobalFree(dialogSettings.hDevNames);
         }
     }
 }

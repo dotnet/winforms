@@ -11,16 +11,16 @@ public class FeatureSupportTests
 {
     public static IEnumerable<object[]> IsPresent_DefaultMinimumVersion_TestData()
     {
-        yield return new object[] { null, new object(), false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), true };
+        yield return new object[] { null, new(), false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), true };
     }
 
     [Theory]
     [MemberData(nameof(IsPresent_DefaultMinimumVersion_TestData))]
     public void FeatureSupport_IsPresent_InvokeDefaultMinimVersion_ReturnsExpected(Version versionPresent, object feature, bool expected)
     {
-        var featureSupport = new Mock<FeatureSupport>(MockBehavior.Strict);
+        Mock<FeatureSupport> featureSupport = new(MockBehavior.Strict);
         featureSupport
             .Setup(s => s.IsPresent(feature))
             .CallBase();
@@ -35,22 +35,22 @@ public class FeatureSupportTests
 
     public static IEnumerable<object[]> IsPresent_CustomMinimumVersion_TestData()
     {
-        yield return new object[] { null, new object(), new Version(1, 2, 3, 4), false };
-        yield return new object[] { null, new object(), null, false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), new Version(0, 0, 0, 0), true };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), new Version(1, 2, 3, 4), false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), null, true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(1, 2, 3, 4), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(1, 2, 3, 4), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(2, 3, 4, 5), false };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), null, true };
+        yield return new object[] { null, new(), new Version(1, 2, 3, 4), false };
+        yield return new object[] { null, new(), null, false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), new Version(0, 0, 0, 0), true };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), new Version(1, 2, 3, 4), false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), null, true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(1, 2, 3, 4), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(1, 2, 3, 4), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(2, 3, 4, 5), false };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), null, true };
     }
 
     [Theory]
     [MemberData(nameof(IsPresent_CustomMinimumVersion_TestData))]
     public void FeatureSupport_IsPresent_InvokeCustomMinimumVersion_ReturnsExpected(Version versionPresent, object feature, Version minimumVersion, bool expected)
     {
-        var featureSupport = new Mock<FeatureSupport>(MockBehavior.Strict);
+        Mock<FeatureSupport> featureSupport = new(MockBehavior.Strict);
         featureSupport
             .Setup(s => s.IsPresent(feature, minimumVersion))
             .CallBase();
@@ -187,10 +187,12 @@ public class FeatureSupportTests
         public static object s_zeroVersionField = new();
         public static object s_nonZeroVersionField = new();
 
-#pragma warning disable CA1823 // Unused field
+#pragma warning disable CA1823  // Unused field
+#pragma warning disable IDE0052 // Remove unread private members
         private readonly object _privateField = new();
         private static readonly object s_privateField = new();
-#pragma warning restore CA1823 // Unused field
+#pragma warning restore CA1823
+#pragma warning restore IDE0052
     }
 
     private class NonIFeatureSupportClass

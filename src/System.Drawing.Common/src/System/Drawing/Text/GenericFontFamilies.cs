@@ -4,22 +4,22 @@
 namespace System.Drawing.Text;
 
 /// <summary>
-/// Specifies a generic <see cref='System.Drawing.FontFamily'/>.
+/// Specifies a generic <see cref='FontFamily'/>.
 /// </summary>
 public enum GenericFontFamilies
 {
     /// <summary>
-    /// A generic Serif <see cref='System.Drawing.FontFamily'/>.
+    /// A generic Serif <see cref='FontFamily'/>.
     /// </summary>
     Serif,
 
     /// <summary>
-    /// A generic SansSerif <see cref='System.Drawing.FontFamily'/>.
+    /// A generic SansSerif <see cref='FontFamily'/>.
     /// </summary>
     SansSerif,
 
     /// <summary>
-    /// A generic Monospace <see cref='System.Drawing.FontFamily'/>.
+    /// A generic Monospace <see cref='FontFamily'/>.
     /// </summary>
     Monospace
 }

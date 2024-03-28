@@ -141,16 +141,20 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         if (_state[s_stateLoaded])
         {
-            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderAlreadyLoaded);
-            ex.HelpLink = SR.BasicDesignerLoaderAlreadyLoaded;
+            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderAlreadyLoaded)
+            {
+                HelpLink = SR.BasicDesignerLoaderAlreadyLoaded
+            };
 
             throw ex;
         }
 
         if (_host is not null && _host != host)
         {
-            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost);
-            ex.HelpLink = SR.BasicDesignerLoaderDifferentHost;
+            Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost)
+            {
+                HelpLink = SR.BasicDesignerLoaderDifferentHost
+            };
 
             throw ex;
         }
@@ -173,7 +177,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             else
             {
                 IServiceContainer sc = GetRequiredService<IServiceContainer>();
-                sc.AddService(typeof(IDesignerSerializationManager), _serializationManager);
+                sc.AddService<IDesignerSerializationManager>(_serializationManager);
             }
 
             Initialize();
@@ -212,7 +216,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
                 e = e.InnerException!;
             }
 
-            localErrorList = new() { e };
+            localErrorList = [e];
             successful = false;
         }
 
@@ -257,7 +261,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         if (_host is not null)
         {
-            _host.RemoveService(typeof(IDesignerLoaderService));
+            _host.RemoveService<IDesignerLoaderService>();
             _host.Activated -= new EventHandler(OnDesignerActivate);
             _host.Deactivated -= new EventHandler(OnDesignerDeactivate);
             _host = null;
@@ -378,7 +382,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  remove any custom services you add here by overriding
     ///  Dispose.
     /// </summary>
-    protected virtual void Initialize() => LoaderHost.AddService(typeof(IDesignerLoaderService), this);
+    protected virtual void Initialize() => LoaderHost.AddService<IDesignerLoaderService>(this);
 
     /// <summary>
     ///  This method an be overridden to provide some intelligent
@@ -618,9 +622,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     protected virtual void OnEndLoad(bool successful, ICollection? errors)
     {
-        //we don't want successful to be true here if there were load errors.
-        //this may allow a situation where we have a dirtied WSOD and might allow
-        //a user to save a partially loaded designer docdata.
+        // we don't want successful to be true here if there were load errors.
+        // this may allow a situation where we have a dirtied WSOD and might allow
+        // a user to save a partially loaded designer docdata.
         successful = successful && (errors is null || errors.Count == 0)
                                 && (_serializationManager!.Errors is null
                                 || _serializationManager.Errors.Count == 0);
@@ -727,7 +731,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         _state[s_stateReloadAtIdle] = false;
 
-        //check to see if we are actually the active document.
+        // check to see if we are actually the active document.
         DesignSurfaceManager? mgr = GetService<DesignSurfaceManager>();
         DesignSurface? thisSurface = GetService<DesignSurface>();
         Debug.Assert(mgr is not null && thisSurface is not null);
@@ -736,9 +740,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         {
             if (!ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
             {
-                //somehow, we got deactivated and weren't told.
+                // somehow, we got deactivated and weren't told.
                 _state[s_stateActiveDocument] = false;
-                _state[s_stateDeferredReload] = true; //reload on activate
+                _state[s_stateDeferredReload] = true; // reload on activate
                 return;
             }
         }

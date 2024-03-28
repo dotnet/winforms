@@ -38,8 +38,8 @@ public class BinaryFormattedObjectTests
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.ObjectId.Should().Be(1);
         systemClass.Name.Should().Be("System.Collections.Hashtable");
-        systemClass.MemberNames.Should().BeEquivalentTo(new[]
-        {
+        systemClass.MemberNames.Should().BeEquivalentTo(
+        [
             "LoadFactor",
             "Version",
             "Comparer",
@@ -47,7 +47,7 @@ public class BinaryFormattedObjectTests
             "HashSize",
             "Keys",
             "Values"
-        });
+        ]);
 
         systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {
@@ -169,7 +169,7 @@ public class BinaryFormattedObjectTests
             new MemberReference(3)
         });
 
-        ArrayRecord array = (ArrayRecord)format[(MemberReference)systemClass.MemberValues[5]];
+        ArrayRecord<object> array = (ArrayRecord<object>)format[(MemberReference)systemClass.MemberValues[5]];
 
         array.ArrayInfo.ObjectId.Should().Be(2);
         array.ArrayInfo.Length.Should().Be(3);
@@ -177,7 +177,7 @@ public class BinaryFormattedObjectTests
         value.ObjectId.Should().Be(4);
         value.Value.Should().BeOneOf("Yowza", "Youza", "Meeza");
 
-        array = (ArrayRecord)format[(MemberReference)systemClass["Values"]];
+        array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(3);
         array.ArrayObjects[0].Should().BeOfType<ObjectNull>();
@@ -229,7 +229,7 @@ public class BinaryFormattedObjectTests
         ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(NestedSerializableObject).FullName);
-        @class.MemberNames.Should().BeEquivalentTo(new[] { "_object", "_meaning" });
+        @class.MemberNames.Should().BeEquivalentTo(["_object", "_meaning"]);
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {
@@ -264,7 +264,7 @@ public class BinaryFormattedObjectTests
         ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(TwoIntSerializableObject).FullName);
-        @class.MemberNames.Should().BeEquivalentTo(new[] { "_value", "_meaning" });
+        @class.MemberNames.Should().BeEquivalentTo(["_value", "_meaning"]);
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
         {
@@ -296,7 +296,7 @@ public class BinaryFormattedObjectTests
     {
         BinaryFormattedObject format = new int[] { 10, 9, 8, 7 }.SerializeAndParse();
 
-        ArraySinglePrimitive array = (ArraySinglePrimitive)format[1];
+        ArraySinglePrimitive<int> array = (ArraySinglePrimitive<int>)format[1];
         array.ArrayInfo.Length.Should().Be(4);
         array.PrimitiveType.Should().Be(PrimitiveType.Int32);
         array.ArrayObjects.Should().BeEquivalentTo(new object[] { 10, 9, 8, 7 });

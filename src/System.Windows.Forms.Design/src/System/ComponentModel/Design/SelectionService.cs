@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design;
 internal sealed class SelectionService : ISelectionService, IDisposable
 {
     // These are the selection types we use for context help.
-    private static readonly string[] s_selectionKeywords = new string[] { "None", "Single", "Multiple" };
+    private static readonly string[] s_selectionKeywords = ["None", "Single", "Multiple"];
 
     // State flags for the selection service
     private static readonly int s_stateTransaction = BitVector32.CreateMask(); // Designer is in a transaction
@@ -58,7 +58,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
 
         if (_selection is null)
         {
-            _selection = new();
+            _selection = [];
             // Now is the opportune time to hook up all of our events
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
@@ -225,7 +225,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
             }
         }
 
-        _contextAttributes = new();
+        _contextAttributes = [];
 
         for (int i = 0; i < _selection.Count; i++)
         {
@@ -339,7 +339,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
     {
         // Must clone here. Otherwise the values collection is a live collection and will change when the
         // selection changes. GetSelectedComponents should be a snapshot.
-        return _selection?.ToArray() ?? Array.Empty<IComponent>();
+        return _selection?.ToArray() ?? [];
     }
 
     /// <summary>
@@ -399,9 +399,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         {
             if (primaryIndex != 0)
             {
-                IComponent tmp = _selection[0];
-                _selection[0] = _selection[primaryIndex];
-                _selection[primaryIndex] = tmp;
+                (_selection[primaryIndex], _selection[0]) = (_selection[0], _selection[primaryIndex]);
                 fChanged = true;
             }
         }
@@ -464,7 +462,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         // Notify that our selection has changed
         if (fChanged)
         {
-            //Set the SelectionInformation
+            // Set the SelectionInformation
             if (_selection?.Count > 0)
             {
                 _statusCommandUI.SetStatusInformation(_selection[0] as Component);

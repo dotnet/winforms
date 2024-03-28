@@ -25,12 +25,8 @@ public partial class CollectionEditor
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2Pixels);
-                    s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Pixels);
-                }
-
+                s_offset2X = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
+                s_offset2Y = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
                 s_isScalingInitialized = true;
             }
         }
@@ -73,7 +69,7 @@ public partial class CollectionEditor
 
         protected override bool IsInputKey(Keys keyData)
         {
-            if (keyData.Equals(Keys.Down) && _showSplit)
+            if (keyData is Keys.Down && _showSplit)
             {
                 return true;
             }
@@ -89,7 +85,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Default;
             }
@@ -97,7 +93,7 @@ public partial class CollectionEditor
 
         protected override void OnKeyDown(KeyEventArgs kevent)
         {
-            if (kevent.KeyCode.Equals(Keys.Down) && _showSplit)
+            if (kevent.KeyCode is Keys.Down && _showSplit)
             {
                 ShowContextMenuStrip();
             }
@@ -117,7 +113,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Normal;
             }
@@ -149,7 +145,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Hot;
             }
@@ -163,16 +159,9 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
-                if (Focused)
-                {
-                    State = PushButtonState.Default;
-                }
-                else
-                {
-                    State = PushButtonState.Normal;
-                }
+                State = Focused ? PushButtonState.Default : PushButtonState.Normal;
             }
         }
 
@@ -184,12 +173,12 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (ContextMenuStrip is null || !ContextMenuStrip.Visible)
+            if (ContextMenuStrip is not { Visible: true })
             {
                 SetButtonDrawState();
                 if (Parent is not null && Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))
                 {
-                    OnClick(new EventArgs());
+                    OnClick(EventArgs.Empty);
                 }
             }
         }
@@ -204,7 +193,7 @@ public partial class CollectionEditor
             }
 
             Graphics g = pevent.Graphics;
-            Rectangle bounds = new Rectangle(0, 0, Width, Height);
+            Rectangle bounds = new(0, 0, Width, Height);
             TextFormatFlags formatFlags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
 
             ButtonRenderer.DrawButton(g, bounds, State);
@@ -252,19 +241,18 @@ public partial class CollectionEditor
 
         private static void PaintArrow(IDeviceContext deviceContext, Rectangle dropDownRect)
         {
-            Point middle = new Point(
+            Point middle = new(
                 Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2),
                 Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
 
             // If the width is odd - favor pushing it over one pixel right.
             middle.X += (dropDownRect.Width % 2);
 
-            Point[] arrow = new Point[]
-            {
-                new Point(middle.X - s_offset2X, middle.Y - 1),
-                new Point(middle.X + s_offset2X + 1, middle.Y - 1),
-                new Point(middle.X, middle.Y + s_offset2Y)
-            };
+            Point[] arrow = [
+                new(middle.X - s_offset2X, middle.Y - 1),
+                new(middle.X + s_offset2X + 1, middle.Y - 1),
+                new(middle.X, middle.Y + s_offset2Y)
+            ];
 
             deviceContext.TryGetGraphics(create: true)?.FillPolygon(SystemBrushes.ControlText, arrow);
         }

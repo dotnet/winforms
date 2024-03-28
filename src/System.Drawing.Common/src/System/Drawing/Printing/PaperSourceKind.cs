@@ -1,79 +1,77 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Standard paper sources.
+///  Standard paper sources.
 /// </summary>
 public enum PaperSourceKind
 {
-    // Please keep these in SafeNativeMethods.cs order
+    /// <summary>
+    ///  The upper bin of a printer (or, if the printer only has one bin, the only bin).
+    /// </summary>
+    Upper = (int)PInvoke.DMBIN_UPPER,
 
     /// <summary>
-    /// The upper bin of a printer (or, if the printer only has one bin, the only bin).
+    ///  The lower bin of a printer.
     /// </summary>
-    Upper = SafeNativeMethods.DMBIN_UPPER,
+    Lower = (int)PInvoke.DMBIN_LOWER,
 
     /// <summary>
-    /// The lower bin of a printer.
+    ///  The middle bin of a printer.
     /// </summary>
-    Lower = SafeNativeMethods.DMBIN_LOWER,
+    Middle = (int)PInvoke.DMBIN_MIDDLE,
 
     /// <summary>
-    /// The middle bin of a printer.
+    ///  Manually-fed paper.
     /// </summary>
-    Middle = SafeNativeMethods.DMBIN_MIDDLE,
+    Manual = (int)PInvoke.DMBIN_MANUAL,
 
     /// <summary>
-    /// Manually-fed paper.
+    ///  An envelope.
     /// </summary>
-    Manual = SafeNativeMethods.DMBIN_MANUAL,
+    Envelope = (int)PInvoke.DMBIN_ENVELOPE,
 
     /// <summary>
-    /// An envelope.
+    ///  A manually-fed envelope.
     /// </summary>
-    Envelope = SafeNativeMethods.DMBIN_ENVELOPE,
+    ManualFeed = (int)PInvoke.DMBIN_ENVMANUAL,
 
     /// <summary>
-    /// A manually-fed envelope.
+    ///  Automatic-fed paper.
     /// </summary>
-    ManualFeed = SafeNativeMethods.DMBIN_ENVMANUAL,
+    AutomaticFeed = (int)PInvoke.DMBIN_AUTO,
 
     /// <summary>
-    /// Automatic-fed paper.
+    ///  A tractor feed.
     /// </summary>
-    AutomaticFeed = SafeNativeMethods.DMBIN_AUTO,
+    TractorFeed = (int)PInvoke.DMBIN_TRACTOR,
 
     /// <summary>
-    /// A tractor feed.
+    ///  Small-format paper.
     /// </summary>
-    TractorFeed = SafeNativeMethods.DMBIN_TRACTOR,
+    SmallFormat = (int)PInvoke.DMBIN_SMALLFMT,
 
     /// <summary>
-    /// Small-format paper.
+    ///  Large-format paper.
     /// </summary>
-    SmallFormat = SafeNativeMethods.DMBIN_SMALLFMT,
+    LargeFormat = (int)PInvoke.DMBIN_LARGEFMT,
 
     /// <summary>
-    /// Large-format paper.
+    ///  A large-capacity bin printer.
     /// </summary>
-    LargeFormat = SafeNativeMethods.DMBIN_LARGEFMT,
+    LargeCapacity = (int)PInvoke.DMBIN_LARGECAPACITY,
 
     /// <summary>
-    /// A large-capacity bin printer.
+    ///  A paper cassette.
     /// </summary>
-    LargeCapacity = SafeNativeMethods.DMBIN_LARGECAPACITY,
+    Cassette = (int)PInvoke.DMBIN_CASSETTE,
+
+    FormSource = (int)PInvoke.DMBIN_FORMSOURCE,
 
     /// <summary>
-    /// A paper cassette.
+    ///  A printer-specific paper source.
     /// </summary>
-    Cassette = SafeNativeMethods.DMBIN_CASSETTE,
-
-    FormSource = SafeNativeMethods.DMBIN_FORMSOURCE,
-
-    /// <summary>
-    /// A printer-specific paper source.
-    /// </summary>
-    Custom = SafeNativeMethods.DMBIN_USER + 1,
+    Custom = (int)PInvoke.DMBIN_USER + 1,
 }

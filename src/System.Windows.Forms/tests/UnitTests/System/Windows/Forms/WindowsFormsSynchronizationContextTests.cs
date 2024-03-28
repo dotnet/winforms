@@ -10,7 +10,7 @@ public partial class WindowsFormsSynchronizationContextTests
     [WinFormsFact]
     public void WindowsFormsSynchronizationContext_CreateCopy_Invoke_Success()
     {
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         WindowsFormsSynchronizationContext copy = Assert.IsType<WindowsFormsSynchronizationContext>(context.CreateCopy());
         Assert.NotSame(context, copy);
 
@@ -34,7 +34,7 @@ public partial class WindowsFormsSynchronizationContextTests
     [ActiveIssue("https://github.com/dotnet/winforms/issues/3297")]
     public void WindowsFormsSynchronizationContext_Dispose_MultipleTimes_Success()
     {
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         int callCount = 0;
         SendOrPostCallback callback = (state) => callCount++;
         context.Dispose();
@@ -50,7 +50,7 @@ public partial class WindowsFormsSynchronizationContextTests
     public static IEnumerable<object[]> Send_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -63,7 +63,7 @@ public partial class WindowsFormsSynchronizationContextTests
             Assert.Same(state, actualState);
             callCount++;
         };
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         context.Send(callback, state);
         Assert.Equal(1, callCount);
 
@@ -78,7 +78,7 @@ public partial class WindowsFormsSynchronizationContextTests
         int callCount = 0;
         SendOrPostCallback callback = (actualState) => callCount++;
         WindowsFormsSynchronizationContext context = null;
-        Thread thread = new Thread(() =>
+        Thread thread = new(() =>
         {
             context = new WindowsFormsSynchronizationContext();
         });
@@ -95,7 +95,7 @@ public partial class WindowsFormsSynchronizationContextTests
     {
         int callCount = 0;
         SendOrPostCallback callback = (actualState) => callCount++;
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         context.Dispose();
 
         context.Send(callback, state);
@@ -109,7 +109,7 @@ public partial class WindowsFormsSynchronizationContextTests
     public static IEnumerable<object[]> Post_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -122,7 +122,7 @@ public partial class WindowsFormsSynchronizationContextTests
             Assert.Same(state, actualState);
             callCount++;
         };
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         context.Post(callback, state);
         Assert.Equal(0, callCount);
 
@@ -138,7 +138,7 @@ public partial class WindowsFormsSynchronizationContextTests
     {
         int callCount = 0;
         SendOrPostCallback callback = (actualState) => callCount++;
-        var context = new WindowsFormsSynchronizationContext();
+        WindowsFormsSynchronizationContext context = new();
         context.Dispose();
 
         context.Post(callback, state);
@@ -147,5 +147,19 @@ public partial class WindowsFormsSynchronizationContextTests
         // Call again.
         context.Post(callback, state);
         Assert.Equal(0, callCount);
+    }
+
+    [WinFormsFact]
+    public void WindowsFormsSynchronizationContext_Send_NoDynamicInvoke()
+    {
+        string stackTrace = null;
+        WindowsFormsSynchronizationContext context = new();
+        context.Send(_ => { stackTrace = Environment.StackTrace; }, null);
+
+        Assert.NotNull(stackTrace);
+
+        // check that the WindowsFormsSynchronizationContext.Send does not involve DynamicInvoke, for performance reasons.
+        // see https://github.com/dotnet/winforms/issues/9965
+        Assert.DoesNotContain("System.Delegate.DynamicInvokeImpl", stackTrace);
     }
 }

@@ -31,7 +31,7 @@ public class ArrayEditorTests
         Assert.Null(editor.Context);
         Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
         Assert.False(editor.IsDropDownResizable);
-        Assert.Equal(new Type[] { expectedItemType }, editor.NewItemTypes);
+        Assert.Equal([expectedItemType], editor.NewItemTypes);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class ArrayEditorTests
         Assert.Null(editor.Context);
         Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
         Assert.False(editor.IsDropDownResizable);
-        Assert.Equal(new Type[] { null }, editor.NewItemTypes);
+        Assert.Equal([null], editor.NewItemTypes);
     }
 
     public static IEnumerable<object[]> CanRemoveInstance_TestData()
@@ -88,7 +88,7 @@ public class ArrayEditorTests
         Assert.True(editor.CanSelectMultipleInstances());
     }
 
-    public static IEnumerable<Object[]> GetDisplayText_TestData()
+    public static IEnumerable<object[]> GetDisplayText_TestData()
     {
         yield return new object[] { null, null, string.Empty };
         yield return new object[] { null, string.Empty, "String" };
@@ -142,7 +142,7 @@ public class ArrayEditorTests
     public static IEnumerable<object[]> GetItems_TestData()
     {
         yield return new object[] { null, Array.Empty<object>() };
-        yield return new object[] { new object(), Array.Empty<object>() };
+        yield return new object[] { new(), Array.Empty<object>() };
         yield return new object[] { new int[] { 1, 2, 3 }, new object[] { 1, 2, 3, } };
         yield return new object[] { new ArrayList { 1, 2, 3 }, Array.Empty<object>() };
     }
@@ -245,6 +245,7 @@ public class ArrayEditorTests
         public int Item { get; set; }
     }
 
+#pragma warning disable IDE0051 // Remove unused private members
     private class ClassWithPrivateItem
     {
         private int Item { get; set; }
@@ -291,7 +292,7 @@ public class ArrayEditorTests
         public override string ToString() => null;
     }
 
-    [DefaultProperty(nameof(ClassWithStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithStringDefaultProperty
     {
         public string DefaultProperty { get; set; }
@@ -299,7 +300,7 @@ public class ArrayEditorTests
         public override string ToString() => nameof(ClassWithStringDefaultProperty);
     }
 
-    [DefaultProperty(nameof(ClassWithNonStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithNonStringDefaultProperty
     {
         public int DefaultProperty { get; set; }
@@ -314,4 +315,7 @@ public class ArrayEditorTests
 
         public override string ToString() => nameof(ClassWithNoSuchDefaultProperty);
     }
+
+#pragma warning restore IDE0051 // Remove unused private members
+
 }

@@ -337,7 +337,7 @@ internal partial class PropertyStore
             // do a binary search on them.
             int max = length - 1;
             int min = 0;
-            int idx = 0;
+            int idx;
 
             do
             {
@@ -854,7 +854,7 @@ internal partial class PropertyStore
     {
         int max = length - 1;
         int min = 0;
-        int idx = 0;
+        int idx;
 
         do
         {

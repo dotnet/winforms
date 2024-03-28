@@ -15,7 +15,7 @@ public class ControlEventArgsTests
     [MemberData(nameof(Ctor_Control_TestData))]
     public void Ctor_Control(Control control)
     {
-        var e = new ControlEventArgs(control);
+        ControlEventArgs e = new(control);
         Assert.Equal(control, e.Control);
     }
 }

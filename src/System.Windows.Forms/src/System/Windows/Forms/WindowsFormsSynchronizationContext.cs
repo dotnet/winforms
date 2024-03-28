@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
 {
     private Control? _controlToSendTo;
-    private WeakReference? _destinationThread;
+    private WeakReference<Thread>? _destinationThread;
 
     // ThreadStatics won't get initialized per thread: easiest to just invert the value.
     [ThreadStatic]
@@ -27,7 +27,7 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
     {
         // Store the current thread to ensure it stays alive during an invoke.
         DestinationThread = Thread.CurrentThread;
-        _controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
+        _controlToSendTo = Application.ThreadContext.FromCurrent().MarshallingControl;
         Debug.Assert(_controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
     }
 
@@ -43,20 +43,19 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
     // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
     private Thread? DestinationThread
     {
-        get
-        {
-            if ((_destinationThread is not null) && _destinationThread.IsAlive)
-            {
-                return _destinationThread.Target as Thread;
-            }
-
-            return null;
-        }
+        get => _destinationThread?.TryGetTarget(out Thread? target) == true ? target : null;
         set
         {
             if (value is not null)
             {
-                _destinationThread = new WeakReference(value);
+                if (_destinationThread is null)
+                {
+                    _destinationThread = new(value);
+                }
+                else
+                {
+                    _destinationThread.SetTarget(value);
+                }
             }
         }
     }
@@ -84,11 +83,11 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
             throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
         }
 
-        _controlToSendTo?.Invoke(d, new object?[] { state });
+        _controlToSendTo?.Invoke(d, [state]);
     }
 
     public override void Post(SendOrPostCallback d, object? state)
-        => _controlToSendTo?.BeginInvoke(d, new object?[] { state });
+        => _controlToSendTo?.BeginInvoke(d, [state]);
 
     public override SynchronizationContext CreateCopy()
         => new WindowsFormsSynchronizationContext(_controlToSendTo, DestinationThread);

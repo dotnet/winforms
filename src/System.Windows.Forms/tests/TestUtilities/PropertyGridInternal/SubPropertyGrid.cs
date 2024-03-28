@@ -4,6 +4,7 @@
 #nullable enable
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
@@ -13,11 +14,12 @@ namespace System.Windows.Forms.PropertyGridInternal.TestUtilities;
 
 public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 {
-    private static readonly MessageId WM_DELAYEDEXECUTION = PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
+    private static MessageId WM_DELAYEDEXECUTION { get; } = PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
 
     internal PropertyGridView GridView => this.TestAccessor().Dynamic._gridView;
 
-    internal GridEntry SelectedEntry
+    [DisallowNull]
+    internal GridEntry? SelectedEntry
     {
         get => GridView.SelectedGridEntry;
         set => SelectedGridItem = value;
@@ -27,10 +29,12 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
     {
         get
         {
-            string categoryName = SelectedObject.GetType().GetProperty(propertyName)!
+            string categoryName = SelectedObject!.GetType().GetProperty(propertyName)!
                 .GetCustomAttribute<CategoryAttribute>()!.Category;
-            return GetCurrentEntries().Single(entry => entry.PropertyName == categoryName)
-                .Children.Single(entry => entry.PropertyName == propertyName);
+            return GetCurrentEntries()!
+                .Single(entry => entry.PropertyName == categoryName)
+                .Children
+                .Single(entry => entry.PropertyName == propertyName);
         }
     }
 
@@ -77,7 +81,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 
     protected override void Dispose(bool disposing)
     {
-        object selectedObject = SelectedObject;
+        object? selectedObject = SelectedObject;
 
         base.Dispose(disposing);
 

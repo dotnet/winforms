@@ -33,9 +33,9 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             // deserialize the results.log into a TestResult instance
             var logDir = Path.GetDirectoryName(path);
             var logPath = Path.Combine(logDir, "results.log");
-            using (var reader = new StreamReader(logPath))
+            using (StreamReader reader = new(logPath))
             {
-                var serializer = new XmlSerializer(typeof(TestResult));
+                XmlSerializer serializer = new(typeof(TestResult));
                 if (!(serializer.Deserialize(reader) is TestResult testResult))
                     throw new InvalidOperationException("Maui results log can't be parsed into a TestResult, file is probably malformed");
 

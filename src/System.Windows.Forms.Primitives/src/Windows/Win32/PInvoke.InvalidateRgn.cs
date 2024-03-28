@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="InvalidateRgn(HWND, HRGN, BOOL)"/>
     public static BOOL InvalidateRgn<T>(T hWnd, HRGN hrgn, BOOL erase)
         where T : IHandle<HWND>
     {

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -16,13 +15,13 @@ public sealed partial class BehaviorService
     {
         private readonly BehaviorService _behaviorService;
         private static MouseHook? s_mouseHook;
-        private static readonly List<AdornerWindow> s_adornerWindowList = new();
+        private static readonly List<AdornerWindow> s_adornerWindowList = [];
 
         /// <summary>
         ///  Constructor that parents itself to the Designer Frame and hooks all
         ///  necessary events.
         /// </summary>
-        internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
+        internal AdornerWindow(BehaviorService behaviorService, DesignerFrame designerFrame)
         {
             _behaviorService = behaviorService;
             DesignerFrame = designerFrame;
@@ -89,13 +88,13 @@ public sealed partial class BehaviorService
             base.Dispose(disposing);
         }
 
-        internal Control DesignerFrame { get; private set; }
+        internal DesignerFrame DesignerFrame { get; private set; }
 
         /// <summary>
         ///  Returns the display rectangle for the adorner window
         /// </summary>
         internal Rectangle DesignerFrameDisplayRectangle
-            => DesignerFrameValid ? ((DesignerFrame)DesignerFrame).DisplayRectangle : Rectangle.Empty;
+            => DesignerFrameValid ? DesignerFrame.DisplayRectangle : Rectangle.Empty;
 
         /// <summary>
         ///  Returns true if the DesignerFrame is created and not being disposed.
@@ -130,7 +129,7 @@ public sealed partial class BehaviorService
             if (DesignerFrameValid)
             {
                 // Translate for non-zero scroll positions
-                Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
+                Point scrollPosition = DesignerFrame.AutoScrollPosition;
                 region.Translate(scrollPosition.X, scrollPosition.Y);
 
                 DesignerFrame.Invalidate(region, true);
@@ -147,7 +146,7 @@ public sealed partial class BehaviorService
             if (DesignerFrameValid)
             {
                 // Translate for non-zero scroll positions
-                Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
+                Point scrollPosition = DesignerFrame.AutoScrollPosition;
                 rectangle.Offset(scrollPosition.X, scrollPosition.Y);
 
                 DesignerFrame.Invalidate(rectangle, true);
@@ -277,7 +276,7 @@ public sealed partial class BehaviorService
         /// </summary>
         protected override unsafe void WndProc(ref Message m)
         {
-            //special test hooks
+            // special test hooks
             if (m.Msg == (int)WM_GETALLSNAPLINES)
             {
                 _behaviorService.TestHook_GetAllSnapLines(ref m);
@@ -292,7 +291,7 @@ public sealed partial class BehaviorService
                 case PInvoke.WM_PAINT:
                     {
                         // Stash off the region we have to update.
-                        using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
+                        using RegionScope hrgn = new(0, 0, 0, 0);
                         PInvoke.GetUpdateRgn(m.HWND, hrgn, true);
 
                         // The region we have to update in terms of the smallest rectangle that completely encloses
@@ -301,7 +300,7 @@ public sealed partial class BehaviorService
                         PInvoke.GetUpdateRect(m.HWND, &clip, true);
                         Rectangle paintRect = clip;
 
-                        using Region region = hrgn.CreateGdiPlusRegion();
+                        using Region region = hrgn.ToRegion();
 
                         // Call the base class to do its painting.
                         DefWndProc(ref m);
@@ -343,7 +342,7 @@ public sealed partial class BehaviorService
         /// </summary>
         private bool WndProcProxy(ref Message m, int x, int y)
         {
-            Point mouseLoc = new Point(x, y);
+            Point mouseLoc = new(x, y);
             _behaviorService.PropagateHitTest(mouseLoc);
             switch (m.MsgInternal)
             {

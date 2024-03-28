@@ -41,8 +41,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         // Disable animations for maximum test performance
         bool disabled = false;
-        Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
-        Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
+        Assert.True(PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+        Assert.True(PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
         ITest GetTest()
         {
@@ -107,7 +107,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     public virtual void Dispose()
     {
-        Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+        Assert.True(PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
         DataCollectionService.CurrentTest = null;
     }
 
@@ -227,10 +227,12 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         await RunFormAsync(
             () =>
             {
-                var form = new Form();
-                form.TopMost = true;
+                Form form = new()
+                {
+                    TopMost = true
+                };
 
-                var control = new T();
+                T control = new();
                 form.Controls.Add(control);
 
                 return (form, control);
@@ -273,15 +275,19 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         await RunFormAsync(
             () =>
             {
-                var form = new Form();
-                form.TopMost = true;
+                Form form = new()
+                {
+                    TopMost = true
+                };
 
                 var control1 = new T1();
                 var control2 = new T2();
 
-                var tableLayout = new TableLayoutPanel();
-                tableLayout.ColumnCount = 2;
-                tableLayout.RowCount = 1;
+                TableLayoutPanel tableLayout = new()
+                {
+                    ColumnCount = 2,
+                    RowCount = 1
+                };
                 tableLayout.Controls.Add(control1, 0, 0);
                 tableLayout.Controls.Add(control2, 1, 0);
                 form.Controls.Add(tableLayout);
@@ -293,10 +299,12 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected async Task RunFormAsync<T>(Func<(Form dialog, T control)> createDialog, Func<Form, T, Task> testDriverAsync)
     {
+        using var screenRecordService = new ScreenRecordService();
+
         Form? dialog = null;
         T? control = default;
 
-        TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<VoidResult> gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
         JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
         {
             await gate.Task;
@@ -320,6 +328,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         await JoinableTaskFactory.SwitchToMainThreadAsync();
         (dialog, control) = createDialog();
+        screenRecordService.RegisterEvents(dialog);
 
         Assert.NotNull(dialog);
         Assert.NotNull(control);
@@ -333,9 +342,11 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     protected async Task RunFormWithoutControlAsync<TForm>(Func<TForm> createForm, Func<TForm, Task> testDriverAsync)
         where TForm : Form
     {
+        using var screenRecordService = new ScreenRecordService();
+
         TForm? dialog = null;
 
-        TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<VoidResult> gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
         JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
         {
             await gate.Task;
@@ -359,6 +370,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         await JoinableTaskFactory.SwitchToMainThreadAsync();
         dialog = createForm();
+        screenRecordService.RegisterEvents(dialog);
 
         Assert.NotNull(dialog);
 

@@ -14,8 +14,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     [InlineData(false, false)]
     public void TreeNodeIKeyboardToolTip_InvokeAllowsToolTip_ReturnsExpected(bool insideTreeView, bool showNodeToolTips)
     {
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        TreeNode treeNode = new TreeNode();
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        TreeNode treeNode = new();
         if (insideTreeView)
         {
             treeView.Nodes.Add(treeNode);
@@ -34,8 +34,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool showNodeToolTips,
         bool expectedResult)
     {
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        TreeNode treeNode = new TreeNode();
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        TreeNode treeNode = new();
 
         if (insideTreeView)
         {
@@ -55,8 +55,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool showNodeToolTips,
         bool expectedResult)
     {
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        TreeNode treeNode = new TreeNode();
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        TreeNode treeNode = new();
 
         if (insideTreeView)
         {
@@ -76,9 +76,9 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool showNodeToolTips,
         string toolTipText)
     {
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        using var toolTip = new ToolTip();
-        TreeNode treeNode = new TreeNode() { ToolTipText = toolTipText };
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        using ToolTip toolTip = new();
+        TreeNode treeNode = new() { ToolTipText = toolTipText };
 
         if (insideTreeView)
         {
@@ -97,8 +97,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool insideTreeView,
         bool showNodeToolTips)
     {
-        TreeNode treeNode = new TreeNode();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
+        TreeNode treeNode = new();
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
         Rectangle expectedBounds = Rectangle.Empty;
 
         if (insideTreeView)
@@ -116,8 +116,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_FirstTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode firstTreeNode = treeView.Nodes[0];
 
         IList<Rectangle> neighboringRectangles = ((IKeyboardToolTip)firstTreeNode).GetNeighboringToolsRectangles();
@@ -132,8 +132,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_MiddleTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode middleTreeNode = treeView.Nodes[1];
 
         IList<Rectangle> neighboringRectangles = ((IKeyboardToolTip)middleTreeNode).GetNeighboringToolsRectangles();
@@ -149,8 +149,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_LastTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode lastTreeNode = treeView.Nodes[0];
 
         IList<Rectangle> neighboringRectangles = ((IKeyboardToolTip)lastTreeNode).GetNeighboringToolsRectangles();
@@ -165,8 +165,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_FirstSubTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode rootNode = treeView.Nodes[0];
         rootNode.Expand();
         TreeNode firstSubNode = rootNode.Nodes[0];
@@ -184,8 +184,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_MiddleSubTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode rootNode = treeView.Nodes[0];
         rootNode.Expand();
         TreeNode middleSubNode = rootNode.Nodes[1];
@@ -203,8 +203,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_LastSubTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode rootNode = treeView.Nodes[0];
         rootNode.Expand();
         TreeNode lastSubNode = rootNode.Nodes[2];
@@ -222,8 +222,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_SubSubTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode rootNode = treeView.Nodes[0];
         rootNode.Expand();
         TreeNode lastSubNode = rootNode.Nodes[2];
@@ -243,8 +243,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpandedNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode firstNode = treeView.Nodes[0];
         firstNode.Expand();
         TreeNode middleNode = treeView.Nodes[1];
@@ -262,8 +262,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpandedSubNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode firstNode = treeView.Nodes[0];
         firstNode.Expand();
         TreeNode subNode = firstNode.Nodes[2];
@@ -283,8 +283,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ExpandedSubTreeNode_ReturnsExpected(bool showNodeToolTips)
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        treeView.Nodes.AddRange(treeNodesList.ToArray());
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        treeView.Nodes.AddRange([.. treeNodesList]);
         TreeNode rootNode = treeView.Nodes[0];
         rootNode.Expand();
         TreeNode lastSubNode = rootNode.Nodes[2];
@@ -312,8 +312,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     [InlineData(false)]
     public void TreeNodeIKeyboardToolTip_InvokeGetOwnerWindow_ReturnsExpected(bool insideTreeView)
     {
-        TreeNode treeNode = new TreeNode();
-        using var treeView = new TreeView();
+        TreeNode treeNode = new();
+        using TreeView treeView = new();
         IWin32Window expectedOwner = null;
 
         if (insideTreeView)
@@ -335,8 +335,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         RightToLeft rightToLeft,
         bool expected)
     {
-        TreeNode treeNode = new TreeNode();
-        using var treeView = new TreeView() { RightToLeft = rightToLeft };
+        TreeNode treeNode = new();
+        using TreeView treeView = new() { RightToLeft = rightToLeft };
         IWin32Window expectedOwner = null;
 
         if (insideTreeView)
@@ -361,8 +361,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         Point initialPosition = Cursor.Position;
         try
         {
-            TreeNode treeNode = new TreeNode();
-            using var treeView = new TreeView() { Size = new Size(50, 50) };
+            TreeNode treeNode = new();
+            using TreeView treeView = new() { Size = new Size(50, 50) };
             treeView.CreateControl();
 
             if (insideTreeView)
@@ -396,8 +396,8 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool showNodeToolTips,
         bool expectedResult)
     {
-        using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
-        TreeNode treeNode = new TreeNode();
+        using TreeView treeView = new() { ShowNodeToolTips = showNodeToolTips };
+        TreeNode treeNode = new();
 
         if (insideTreeView)
         {
@@ -409,20 +409,20 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
 
     private List<TreeNode> GetHierarchyNodes()
     {
-        List<TreeNode> treeNodesList = new List<TreeNode>();
+        List<TreeNode> treeNodesList = [];
 
-        TreeNode rootNode1 = new TreeNode();
-        TreeNode rootNode2 = new TreeNode();
-        TreeNode rootNode3 = new TreeNode();
+        TreeNode rootNode1 = new();
+        TreeNode rootNode2 = new();
+        TreeNode rootNode3 = new();
 
-        TreeNode subNode1 = new TreeNode();
-        TreeNode subNode2 = new TreeNode();
-        TreeNode subNode3 = new TreeNode();
+        TreeNode subNode1 = new();
+        TreeNode subNode2 = new();
+        TreeNode subNode3 = new();
 
-        TreeNode subSubNode = new TreeNode();
+        TreeNode subSubNode = new();
 
         subNode3.Nodes.Add(subSubNode);
-        rootNode1.Nodes.AddRange(new TreeNode[] { subNode1, subNode2, subNode3 });
+        rootNode1.Nodes.AddRange([subNode1, subNode2, subNode3]);
         treeNodesList.AddRange(new TreeNode[] { rootNode1, rootNode2, rootNode3 });
         return treeNodesList;
     }

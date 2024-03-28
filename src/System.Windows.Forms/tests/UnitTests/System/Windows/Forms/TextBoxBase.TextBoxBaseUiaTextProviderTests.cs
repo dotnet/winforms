@@ -3,12 +3,13 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TextBoxBase;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
-public class TextBoxBase_TextBoxBaseUiaTextProviderTests
+public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
 {
     [WinFormsFact]
     public void TextBoxBaseUiaTextProvider_ctor_DoesntCreateControlHandle()
@@ -16,7 +17,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         Assert.False(textBoxBase.IsHandleCreated);
 
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -30,7 +31,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_IsMultiline_IsCorrect()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         textBoxBase.Multiline = false;
         Assert.False(provider.IsMultiline);
@@ -47,7 +48,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_IsReadOnly_IsCorrect(bool readOnly)
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         textBoxBase.ReadOnly = readOnly;
         Assert.Equal(readOnly, provider.IsReadOnly);
@@ -59,7 +60,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.True(provider.IsScrollable);
         Assert.True(textBoxBase.IsHandleCreated);
     }
@@ -68,7 +69,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_IsScrollable_False_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.False(provider.IsScrollable);
         Assert.False(textBoxBase.IsHandleCreated);
     }
@@ -77,7 +78,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseTextProvider_GetWindowStyle_ReturnsNoneForNotInitializedControl()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
         Assert.False(textBoxBase.IsHandleCreated);
     }
@@ -91,7 +92,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.CreateControl();
         textBoxBase.RightToLeft = rightToLeft;
 
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.Equal(expectedResult, provider.IsReadingRTL);
         Assert.True(textBoxBase.IsHandleCreated);
     }
@@ -103,7 +104,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.RightToLeft = rightToLeft;
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.False(provider.IsReadingRTL);
         Assert.False(textBoxBase.IsHandleCreated);
     }
@@ -112,8 +113,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_DocumentRange_IsNotNull()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        Assert.NotNull(provider.DocumentRange);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
+        using ComScope<ITextRangeProvider> documentRange = new(provider.DocumentRange);
+        Assert.False(documentRange.IsNull);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -121,9 +123,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_SupportedTextSelection_IsNotNull()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
-        Assert.Equal(UiaCore.SupportedTextSelection.Single, uiaTextRange);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
+        SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
+        Assert.Equal(SupportedTextSelection.SupportedTextSelection_Single, uiaTextRange);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -132,9 +134,11 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
-        Assert.NotNull(uiaTextRange);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
+        using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
+        Assert.False(uiaTextRange.IsNull);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -142,9 +146,11 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_GetCaretRange_IsNull_IfHandleIsNotCreated()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
-        Assert.Null(uiaTextRange);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
+        using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
+        Assert.True(uiaTextRange.IsNull);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -158,7 +164,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase { Size = new Size(width, height) };
         textBoxBase.CreateControl();
         Assert.True(textBoxBase.IsHandleCreated);
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Assert.Equal(1, provider.LinesPerPage);
 
@@ -170,7 +176,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_LinesPerPage_ReturnsMinusOne_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Assert.Equal(-1, provider.LinesPerPage);
         Assert.False(textBoxBase.IsHandleCreated);
@@ -185,7 +191,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.CreateControl();
         Assert.True(textBoxBase.IsHandleCreated);
 
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Assert.Equal(0, provider.FirstVisibleLine);
 
@@ -201,7 +207,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_FirstVisibleLine_Get_ReturnsMinusOne_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         int line = provider.FirstVisibleLine;
         Assert.Equal(-1, line);
@@ -219,7 +225,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.Equal(1, provider.LinesCount);
 
         textBoxBase.Multiline = true;
@@ -245,7 +251,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_LineCount_Get_ReturnsMinusOne_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.Equal(-1, provider.LinesCount);
 
         textBoxBase.Multiline = true;
@@ -270,10 +276,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBase_GetLineFromCharIndex_TestData))]
     public void TextBoxBaseUiaTextProvider_GetLineFromCharIndex_ReturnsCorrectValue(Size size, bool multiline, int charIndex, int expectedLine)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Multiline = multiline };
+        using SubTextBoxBase textBoxBase = new() { Size = size, Multiline = multiline };
         textBoxBase.CreateControl();
         textBoxBase.Text = "Some test text for testing GetLineFromCharIndex method";
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         int actualLine = provider.GetLineFromCharIndex(charIndex);
         Assert.Equal(expectedLine, actualLine);
         Assert.True(textBoxBase.IsHandleCreated);
@@ -284,13 +290,13 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBase_GetLineFromCharIndex_TestData))]
     public void TextBoxBaseUiaTextProvider_GetLineFromCharIndex_ReturnsMinusOne_WithoutHandle(Size size, bool multiline, int charIndex, int expectedLine)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Size = size,
             Multiline = multiline,
             Text = "Some test text for testing GetLineFromCharIndex method"
         };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         int actualLine = provider.GetLineFromCharIndex(charIndex);
 
@@ -312,14 +318,14 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetLineIndex_TestData))]
     public void TextBoxBaseUiaTextProvider_GetLineIndex_ReturnsCorrectValue(Size size, bool multiline, int lineIndex, int expectedIndex)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Size = size,
             Multiline = multiline,
             Text = "Some test text for testing GetLineIndex method"
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         int actualIndex = provider.GetLineIndex(lineIndex);
 
@@ -332,13 +338,13 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetLineIndex_TestData))]
     public void TextBoxBaseUiaTextProvider_GetLineIndex_ReturnsMinusOne_WithoutHandle(Size size, bool multiline, int lineIndex, int expectedIndex)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Size = size,
             Multiline = multiline,
             Text = "Some test text for testing GetLineIndex method"
         };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         int actualIndex = provider.GetLineIndex(lineIndex);
 
@@ -354,9 +360,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             textBoxBase.CreateControl();
-            TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+            TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-            LOGFONTW expected = LOGFONTW.FromFont(textBoxBase.Font);
+            LOGFONTW expected = textBoxBase.Font.ToLogicalFont();
             LOGFONTW actual = provider.Logfont;
             Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);
@@ -368,7 +374,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_GetLogfont_ReturnsEmpty_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         LOGFONTW expected = default;
         LOGFONTW actual = provider.Logfont;
@@ -391,9 +397,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetPositionFromChar_TestData))]
     public void TextBoxBaseUiaTextProvider_GetPositionFromChar_ReturnsCorrectValue(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Text = text, Multiline = multiline };
+        using SubTextBoxBase textBoxBase = new() { Size = size, Text = text, Multiline = multiline };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Point actualPoint = provider.GetPositionFromChar(charIndex);
 
@@ -407,8 +413,8 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetPositionFromChar_TestData))]
     public void TextBoxBaseUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHandle(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Text = text, Multiline = multiline };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        using SubTextBoxBase textBoxBase = new() { Size = size, Text = text, Multiline = multiline };
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Point actualPoint = provider.GetPositionFromChar(charIndex);
         Assert.Equal(Point.Empty, actualPoint);
         Assert.False(textBoxBase.IsHandleCreated);
@@ -437,9 +443,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue_TestData))]
     public void TextBoxBaseUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Text = text, Multiline = multiline };
+        using SubTextBoxBase textBoxBase = new() { Size = size, Text = text, Multiline = multiline };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Point actualPoint = provider.GetPositionFromCharForUpperRightCorner(charIndex, textBoxBase.Text);
         Assert.True(actualPoint.X >= expectedPoint.X - 1 || actualPoint.X <= expectedPoint.X + 1);
         Assert.True(actualPoint.Y >= expectedPoint.Y - 1 || actualPoint.Y <= expectedPoint.Y + 1);
@@ -451,8 +457,8 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue_TestData))]
     public void TextBoxBaseUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsMinusOne_WithoutHandle(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Text = text, Multiline = multiline };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        using SubTextBoxBase textBoxBase = new() { Size = size, Text = text, Multiline = multiline };
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Point actualPoint = provider.GetPositionFromCharForUpperRightCorner(charIndex, textBoxBase.Text);
         Assert.Equal(Point.Empty, actualPoint);
         Assert.False(textBoxBase.IsHandleCreated);
@@ -482,9 +488,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetFormattingRectangle_TestData))]
     public void TextBoxBaseUiaTextProvider_GetFormattingRectangle_ReturnsCorrectValue(bool multiline, Size size, Rectangle expectedRectangle)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Multiline = multiline };
+        using SubTextBoxBase textBoxBase = new() { Size = size, Multiline = multiline };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Rectangle providerRectangle = provider.BoundingRectangle;
 
@@ -497,12 +503,12 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetFormattingRectangle_TestData))]
     public void TextBoxBaseUiaTextProvider_GetFormattingRectangle_ReturnsEmpty_WithoutHandle(bool multiline, Size size, Rectangle expectedRectangle)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Multiline = multiline };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        using SubTextBoxBase textBoxBase = new() { Size = size, Multiline = multiline };
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Rectangle providerRectangle = provider.BoundingRectangle;
 
-        Assert.Equal(Drawing.Rectangle.Empty, providerRectangle);
+        Assert.Equal(Rectangle.Empty, providerRectangle);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 #pragma warning restore xUnit1026
@@ -515,7 +521,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.Text = text;
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         textBoxBase.CreateControl();
         string expected = textBoxBase.Text;
         string actual = provider.Text.Trim('\0');
@@ -531,7 +537,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.Text = text;
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         string expected = string.Empty;
         string actual = provider.Text.Trim('\0');
         Assert.Equal(expected, actual);
@@ -550,7 +556,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             Text = text
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Assert.Equal(textBoxBase.Text.Length, provider.TextLength);
         Assert.True(textBoxBase.IsHandleCreated);
@@ -561,7 +567,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         WINDOW_EX_STYLE actual = provider.WindowExStyle;
         Assert.Equal(WINDOW_EX_STYLE.WS_EX_CLIENTEDGE, actual);
         Assert.True(textBoxBase.IsHandleCreated);
@@ -571,7 +577,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_WindowExStyle_ReturnsLeft_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         WINDOW_EX_STYLE actual = provider.WindowExStyle;
         Assert.Equal(WINDOW_EX_STYLE.WS_EX_LEFT, actual);
         Assert.False(textBoxBase.IsHandleCreated);
@@ -582,7 +588,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         WINDOW_STYLE actual = provider.WindowStyle;
         Assert.False(((int)actual & PInvoke.ES_RIGHT) != 0);
         Assert.True(((int)actual & PInvoke.ES_AUTOVSCROLL) != 0);
@@ -594,7 +600,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_EditStyle_ReturnsLeft_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         WINDOW_STYLE actual = provider.WindowStyle;
         Assert.Equal(PInvoke.ES_LEFT, (int)actual);
         Assert.False(textBoxBase.IsHandleCreated);
@@ -613,14 +619,14 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBase_GetVisibleRangePoints_ForSinglelineTextBox_TestData))]
     public void TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForSinglelineTextBox_ReturnsCorrectValue(Size size, int expectedStart, int expectedEnd)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Multiline = false,
             Text = "Some test text for testing",
             Size = size
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         provider.GetVisibleRangePoints(out int providerVisibleStart, out int providerVisibleEnd);
 
@@ -661,7 +667,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_ReturnsCorrectValue(
         Size size, int expectedStart, int expectedEnd)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Multiline = true,
             Text = "Some test text for testing",
@@ -669,7 +675,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             WordWrap = true
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         provider.GetVisibleRangePoints(out int providerVisibleStart, out int providerVisibleEnd);
 
@@ -688,9 +694,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_TestData))]
     public void TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ReturnsZeros_WithoutHandle(Size size, int expectedStart, int expectedEnd)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size };
+        using SubTextBoxBase textBoxBase = new() { Size = size };
         textBoxBase.Text = "Some test text for testing";
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         provider.GetVisibleRangePoints(out int providerVisibleStart, out int providerVisibleEnd);
 
@@ -710,15 +716,17 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetVisibleRanges_TestData))]
     public void TextBoxBaseUiaTextProvider_GetVisibleRanges_ReturnsCorrectValue(Size size)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Text = "Some test text for testing",
             Size = size
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-        Assert.NotNull(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> scope = new(null);
+        Assert.True(provider.GetVisibleRanges(scope).Succeeded);
+        Assert.False(scope.IsEmpty);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -726,14 +734,16 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     [MemberData(nameof(TextBoxBaseUiaTextProvider_GetVisibleRanges_TestData))]
     public void TextBoxBaseUiaTextProvider_GetVisibleRanges_ReturnsNull_WithoutHandle(Size size)
     {
-        using SubTextBoxBase textBoxBase = new SubTextBoxBase()
+        using SubTextBoxBase textBoxBase = new()
         {
             Text = "Some test text for testing",
             Size = size
         };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-        Assert.Null(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> scope = new(null);
+        Assert.True(provider.GetVisibleRanges(scope).Succeeded);
+        Assert.True(scope.IsEmpty);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -741,12 +751,13 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_RangeFromAnnotation_DoesntThrowAnException()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         // RangeFromAnnotation doesn't throw an exception
-        UiaCore.ITextRangeProvider range = provider.RangeFromAnnotation(textBoxBase.AccessibilityObject);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromAnnotation(ComHelpers.GetComPointer<IRawElementProviderSimple>(textBoxBase.AccessibilityObject), range).Succeeded);
         // RangeFromAnnotation implementation can be changed so this test can be changed too
-        Assert.NotNull(range);
+        Assert.False(range.IsNull);
     }
 
     [WinFormsFact]
@@ -755,12 +766,13 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using (new NoAssertContext())
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
-            TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+            TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
             // RangeFromChild doesn't throw an exception
-            UiaCore.ITextRangeProvider range = provider.RangeFromChild(textBoxBase.AccessibilityObject);
+            using ComScope<ITextRangeProvider> range = new(null);
+            Assert.True(provider.RangeFromChild(ComHelpers.GetComPointer<IRawElementProviderSimple>(textBoxBase.AccessibilityObject), range).Succeeded);
             // RangeFromChild implementation can be changed so this test can be changed too
-            Assert.Null(range);
+            Assert.True(range.IsNull);
         }
     }
 
@@ -776,10 +788,11 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
-        Assert.NotNull(textRangeProvider);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
+        Assert.False(range.IsNull);
 
         Assert.True(textBoxBase.IsHandleCreated);
     }
@@ -789,10 +802,11 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_RangeFromPoint_ReturnsNull_WithoutHandle(Point point)
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
-        Assert.Null(textRangeProvider);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
+        Assert.True(range.IsNull);
 
         Assert.False(textBoxBase.IsHandleCreated);
     }
@@ -805,12 +819,14 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
         textBoxBase.Text = "Some test text for testing";
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         provider.SetSelection(start, end);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        Assert.NotNull(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        Assert.False(selection.IsEmpty);
 
-        UiaTextRange textRange = selection[0] as UiaTextRange;
+        using ComScope<ITextRangeProvider> range = new(selection[0]);
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
         Assert.NotNull(textRange);
 
         Assert.Equal(start, textRange.Start);
@@ -826,11 +842,12 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.Text = "Some test text for testing";
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         provider.SetSelection(start, end);
         Assert.False(textBoxBase.IsHandleCreated);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        Assert.Null(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        Assert.True(selection.IsEmpty);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -844,12 +861,14 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             textBoxBase.CreateControl();
             textBoxBase.Text = "Some test text for testing";
-            TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+            TextBoxBaseUiaTextProvider provider = new(textBoxBase);
             provider.SetSelection(start, end);
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-            Assert.NotNull(selection);
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
+            Assert.False(selection.IsEmpty);
 
-            UiaTextRange textRange = selection[0] as UiaTextRange;
+            using ComScope<ITextRangeProvider> range = new(selection[0]);
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
             Assert.NotNull(textRange);
 
             Assert.Equal(0, textRange.Start);
@@ -871,7 +890,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             Size = new Size(50, 100)
         };
         textBoxBase.CreateControl();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
         Assert.True(provider.LineScroll(0, expectedLine));
         Assert.Equal(expectedLine, provider.FirstVisibleLine);
@@ -888,7 +907,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             Multiline = true,
             Size = new Size(50, 100)
         };
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         textBoxBase.Text = "Some long long test text for testing GetFirstVisibleLine method";
 
         Assert.False(provider.LineScroll(0, expectedLine));
@@ -902,7 +921,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         Assert.NotEqual(IntPtr.Zero, textBoxBase.Handle);
 
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         LOGFONTW logFont = provider.Logfont;
         string actual = logFont.FaceName.ToString();
         Assert.Equal("Segoe UI", actual);
@@ -913,7 +932,7 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     public void TextBoxBaseUiaTextProvider_GetLogfont_ReturnEmpty_WithoutHandle()
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
-        TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
+        TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.False(textBoxBase.IsHandleCreated);
 
         Assert.Equal(new LOGFONTW(), provider.Logfont);

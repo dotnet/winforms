@@ -4,7 +4,6 @@
 using System.Drawing;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.UITests;
 

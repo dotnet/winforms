@@ -14,8 +14,8 @@ public partial class CommonControl1 : Form
 
     private void MainForm_Load(object sender, EventArgs e)
     {
-        ImageList imageListSmall = new ImageList();
-        ImageList imageListLarge = new ImageList();
+        ImageList imageListSmall = new();
+        ImageList imageListLarge = new();
         listView1.LargeImageList = imageListLarge;
         listView1.SmallImageList = imageListSmall;
     }
@@ -44,7 +44,7 @@ public partial class CommonControl1 : Form
     {
         listView1.ShowGroups = true;
         listView1.Groups[0].Items.Add(listView1.Items[0]);
-        listView1.Groups[1].Items.AddRange(new ListViewItem[] { listView1.Items[1], listView1.Items[2] });
+        listView1.Groups[1].Items.AddRange(listView1.Items[1], listView1.Items[2]);
     }
 
     private void button7_Click(object sender, EventArgs e)

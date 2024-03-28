@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  The raw "preview" part of print previewing, without any dialogs or buttons.
-///  Most PrintPreviewControl's are found on PrintPreviewDialog's,
-///  but they don't have to be.
+///  The raw "preview" part of print previewing, without any dialogs or buttons.  Most <see cref="PrintPreviewControl"/>
+///  objects are found on <see cref="PrintPreviewDialog"/> objects, but they don't have to be.
 /// </summary>
 [DefaultProperty(nameof(Document))]
 [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
@@ -19,7 +19,11 @@ public partial class PrintPreviewControl : Control
 {
     private const int ScrollSmallChange = 5;
     private const double DefaultZoom = .3;
-    private const int Border = 10; // spacing per page, in mm
+
+    // Spacing per page, in mm
+    private const int Border = 10;
+
+    private static readonly object s_startPageChangedEvent = new();
 
     private PrintDocument? _document;
     private PreviewPageInfo[]? _pageInfo; // null if needs refreshing
@@ -32,13 +36,15 @@ public partial class PrintPreviewControl : Control
 
     private readonly int _focusHOffset = SystemInformation.HorizontalFocusThickness;
     private readonly int _focusVOffset = SystemInformation.VerticalFocusThickness;
-    private HScrollBar _hScrollBar = new HorizontalScrollBar();
-    private VScrollBar _vScrollBar = new VerticalScrollBar();
+    private readonly HorizontalScrollBar _hScrollBar;
+    private readonly VerticalScrollBar _vScrollBar;
     private bool _scrollLayoutPending;
 
     // The following are all computed by ComputeLayout
     private bool _layoutOk;
-    private Size _imageSize = Size.Empty; // 100ths of inch, not pixels
+
+    // 100ths of an inch, not pixels
+    private Size _imageSize = Size.Empty;
     private Point _screenDPI = Point.Empty;
     private double _zoom = DefaultZoom;
     private bool _pageInfoCalcPending;
@@ -56,26 +62,37 @@ public partial class PrintPreviewControl : Control
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         TabStop = false;
 
-        _hScrollBar.AccessibleName = SR.HScrollBarDefaultAccessibleName;
-        _hScrollBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-        _hScrollBar.Left = _focusHOffset;
-        _hScrollBar.SmallChange = ScrollSmallChange;
-        _hScrollBar.RightToLeft = RightToLeft.No;
-        _hScrollBar.Visible = false;
+        _hScrollBar = new()
+        {
+            AccessibleName = SR.HScrollBarDefaultAccessibleName,
+            Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+            Left = _focusHOffset,
+            SmallChange = ScrollSmallChange,
+            RightToLeft = RightToLeft.No,
+            Visible = false,
+            TabStop = false
+        };
+
         _hScrollBar.ValueChanged += scrollBar_ValueChanged;
-        _hScrollBar.TabStop = false;
         Controls.Add(_hScrollBar);
 
-        _vScrollBar.AccessibleName = SR.VScrollBarDefaultAccessibleName;
-        _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
-        _vScrollBar.SmallChange = ScrollSmallChange;
-        _vScrollBar.Top = _focusVOffset;
-        _vScrollBar.Visible = false;
+        _vScrollBar = new()
+        {
+            AccessibleName = SR.VScrollBarDefaultAccessibleName,
+            Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom,
+            SmallChange = ScrollSmallChange,
+            Top = _focusVOffset,
+            Visible = false,
+            TabStop = false
+        };
+
         _vScrollBar.ValueChanged += scrollBar_ValueChanged;
-        _vScrollBar.TabStop = false;
         Controls.Add(_vScrollBar);
     }
 
+    /// <summary>
+    ///  Gets or sets a value indicating whether printing uses the anti-aliasing features of the operating system.
+    /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))]
@@ -85,15 +102,15 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
-    ///  Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
-    ///  will automatically adjust Zoom to make everything visible.
+    ///  Gets or sets a value indicating whether resizing the control or changing the number of pages shown
+    ///  automatically adjusts the <see cref="Zoom"/> property.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
     [SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))]
     public bool AutoZoom
     {
-        get { return _autoZoom; }
+        get => _autoZoom;
         set
         {
             if (_autoZoom != value)
@@ -112,7 +129,7 @@ public partial class PrintPreviewControl : Control
     [DefaultValue(DefaultZoom)]
     public double Zoom
     {
-        get { return _zoom; }
+        get => _zoom;
         set
         {
             if (value <= 0)
@@ -134,7 +151,7 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
     public PrintDocument? Document
     {
-        get { return _document; }
+        get => _document;
         set
         {
             _document = value;
@@ -143,21 +160,17 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
-    ///  Gets or sets the number of pages
-    ///  displayed vertically down the screen.
+    ///  Gets or sets the number of pages displayed vertically down the screen.
     /// </summary>
     [DefaultValue(1)]
     [SRDescription(nameof(SR.PrintPreviewRowsDescr))]
     [SRCategory(nameof(SR.CatBehavior))]
     public int Rows
     {
-        get { return _rows; }
+        get => _rows;
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _rows = value;
             InvalidateLayout();
@@ -165,21 +178,17 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
-    ///  Gets or sets the number of pages
-    ///  displayed horizontally across the screen.
+    ///  Gets or sets the number of pages displayed horizontally across the screen.
     /// </summary>
     [DefaultValue(1)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.PrintPreviewColumnsDescr))]
     public int Columns
     {
-        get { return _columns; }
+        get => _columns;
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _columns = value;
             InvalidateLayout();
@@ -208,10 +217,7 @@ public partial class PrintPreviewControl : Control
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             int oldValue = StartPage;
             _startPage = value;
@@ -223,28 +229,24 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private static readonly object EVENT_STARTPAGECHANGED = new();
-
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
     public event EventHandler? StartPageChanged
     {
-        add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
+        add => Events.AddHandler(s_startPageChangedEvent, value);
+        remove => Events.RemoveHandler(s_startPageChangedEvent, value);
     }
 
     protected virtual void OnStartPageChanged(EventArgs e)
     {
-        if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
+        if (Events[s_startPageChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
     }
 
     /// <summary>
-    ///  This is used for international applications where the language
-    ///  is written from RightToLeft. When this property is true,
-    ///  control placement and text will be from right to left.
+    ///  Gets or sets a value indicating whether control's elements are aligned to support locales using right-to-left fonts.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
@@ -280,55 +282,28 @@ public partial class PrintPreviewControl : Control
     }
 
     [DefaultValue(false)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     public new bool TabStop
     {
         get => base.TabStop;
         set => base.TabStop = value;
     }
 
-    /// <summary>
-    ///  Resets the back color to the defaults for the PrintPreviewControl.
-    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void ResetBackColor()
-    {
-        BackColor = SystemColors.AppWorkspace;
-    }
+    public override void ResetBackColor() => BackColor = SystemColors.AppWorkspace;
 
-    /// <summary>
-    ///  Indicates whether the <see cref="Control.BackColor"/> property should be persisted.
-    /// </summary>
-    internal override bool ShouldSerializeBackColor()
-    {
-        return !BackColor.Equals(SystemColors.AppWorkspace);
-    }
+    internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
 
-    /// <summary>
-    ///  Resets the back color to the defaults for the PrintPreviewControl.
-    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void ResetForeColor()
-    {
-        ForeColor = Color.White;
-    }
+    public override void ResetForeColor() => ForeColor = Color.White;
 
-    /// <summary>
-    ///  Indicates whether the <see cref="Control.ForeColor"/> property should be persisted.
-    /// </summary>
-    internal override bool ShouldSerializeForeColor()
-    {
-        return !ForeColor.Equals(Color.White);
-    }
+    internal override bool ShouldSerializeForeColor() => !ForeColor.Equals(Color.White);
 
     internal override bool SupportsUiaProviders => true;
 
     protected override AccessibleObject CreateAccessibilityInstance()
         => new PrintPreviewControlAccessibleObject(this);
 
-    /// <summary>
-    ///  Invalidate the layout, if necessary.
-    /// </summary>
     protected override void OnResize(EventArgs eventargs)
     {
         if (!IsHandleCreated)
@@ -353,32 +328,24 @@ public partial class PrintPreviewControl : Control
     protected override void OnGotFocus(EventArgs e)
     {
         Invalidate();
-
         base.OnGotFocus(e);
     }
 
     protected override void OnLostFocus(EventArgs e)
     {
         Invalidate();
-
         base.OnLostFocus(e);
     }
 
-    protected override void OnPaintBackground(PaintEventArgs e)
-    {
-        PaintTransparentBackground(e, ClientRectangle);
-    }
+    protected override void OnPaintBackground(PaintEventArgs e) => PaintTransparentBackground(e, ClientRectangle);
 
-    /// <summary>
-    ///  Paints the control.
-    /// </summary>
     protected override void OnPaint(PaintEventArgs pevent)
     {
         bool isHighContrast = SystemInformation.HighContrast;
         Color backColor = GetBackColor(isHighContrast);
         using var backBrush = backColor.GetCachedSolidBrushScope();
 
-        PaintResizeBox(pevent, isHighContrast);
+        PaintResizeBox(pevent);
         PaintFocus(pevent, isHighContrast);
 
         if (_pageInfo is null || _pageInfo.Length == 0)
@@ -389,7 +356,7 @@ public partial class PrintPreviewControl : Control
 
             if (_pageInfo is not null || _exceptionPrinting)
             {
-                DrawMessage(pevent.Graphics, rect, _exceptionPrinting, isHighContrast);
+                DrawMessage(pevent.Graphics, rect, _exceptionPrinting);
             }
             else
             {
@@ -419,7 +386,7 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))]
     private Size VirtualSize
     {
-        get { return _virtualSize; }
+        get => _virtualSize;
         set
         {
             SetVirtualSizeNoInvalidate(value);
@@ -436,7 +403,7 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))]
     private Point Position
     {
-        get { return _position; }
+        get => _position;
         set
         {
             SetPositionNoInvalidate(value);
@@ -492,11 +459,9 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private Rectangle FocusRectangle
-        => new(0, 0, Width - 1, Height - 1);
+    private Rectangle FocusRectangle => new(0, 0, Width - 1, Height - 1);
 
-    private Rectangle ResizeBoxRectangle
-        => new(_vScrollBar.Left, _hScrollBar.Top, _vScrollBar.Width, _hScrollBar.Height);
+    private Rectangle ResizeBoxRectangle => new(_vScrollBar.Left, _hScrollBar.Top, _vScrollBar.Width, _hScrollBar.Height);
 
     // This function computes everything in terms of physical size (millimeters), not pixels
     private void ComputeLayout()
@@ -510,8 +475,8 @@ public partial class PrintPreviewControl : Control
 
         using GetDcScope hdc = new(HWND);
         _screenDPI = new Point(
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
+            PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+            PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
         Size pageSize = _pageInfo[StartPage].PhysicalSize;
         Size controlPhysicalSize = PixelsToPhysical(Size, _screenDPI);
@@ -536,7 +501,7 @@ public partial class PrintPreviewControl : Control
 
         if (_document is null)
         {
-            _pageInfo = Array.Empty<PreviewPageInfo>();
+            _pageInfo = [];
         }
         else
         {
@@ -545,8 +510,10 @@ public partial class PrintPreviewControl : Control
             {
                 UseAntiAlias = UseAntiAlias
             };
-            _document.PrintController = new PrintControllerWithStatusDialog(previewController,
-                                                                           SR.PrintControllerWithStatusDialog_DialogTitlePreview);
+
+            _document.PrintController = new PrintControllerWithStatusDialog(
+                previewController,
+                SR.PrintControllerWithStatusDialog_DialogTitlePreview);
 
             _document.Print();
             _pageInfo = previewController.GetPreviewPageInfo();
@@ -623,7 +590,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting, bool isHighContrast)
+    private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
         using var brush = ForeColor.GetCachedSolidBrushScope();
 
@@ -633,9 +600,7 @@ public partial class PrintPreviewControl : Control
             LineAlignment = StringAlignment.Center
         };
 
-        string message = isExceptionPrinting
-            ? SR.PrintPreviewExceptionPrinting
-            : SR.PrintPreviewNoPages;
+        string message = isExceptionPrinting ? SR.PrintPreviewExceptionPrinting : SR.PrintPreviewNoPages;
 
         g.DrawString(message, Font, brush, rect, format);
     }
@@ -651,7 +616,7 @@ public partial class PrintPreviewControl : Control
         Size controlPhysicalSize = PixelsToPhysical(rect.Size, _screenDPI);
 
         // center pages on screen if small enough
-        Point offset = new Point(
+        Point offset = new(
             Math.Max(0, (rect.Width - _virtualSize.Width) / 2),
             Math.Max(0, (rect.Height - _virtualSize.Height) / 2));
         offset.X -= Position.X;
@@ -731,7 +696,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private void PaintResizeBox(PaintEventArgs e, bool isHighContrast)
+    private void PaintResizeBox(PaintEventArgs e)
     {
         if (!_hScrollBar.Visible || !_vScrollBar.Visible)
         {
@@ -775,43 +740,25 @@ public partial class PrintPreviewControl : Control
         return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
     }
 
-    private static int PixelsToPhysical(int pixels, int dpi)
-            => (int)(pixels * 100.0 / dpi);
+    private static int PixelsToPhysical(int pixels, int dpi) => (int)(pixels * 100.0 / dpi);
 
-    private static Size PixelsToPhysical(Size pixels, Point dpi)
-        => new (PixelsToPhysical(pixels.Width, dpi.X),
-                PixelsToPhysical(pixels.Height, dpi.Y));
+    private static Size PixelsToPhysical(Size pixels, Point dpi) =>
+        new(PixelsToPhysical(pixels.Width, dpi.X), PixelsToPhysical(pixels.Height, dpi.Y));
 
-    private static int PhysicalToPixels(int physicalSize, int dpi)
-        => (int)(physicalSize * dpi / 100.0);
+    private static int PhysicalToPixels(int physicalSize, int dpi) =>
+        (int)(physicalSize * dpi / 100.0);
 
-    private static Size PhysicalToPixels(Size physical, Point dpi)
-        => new (PhysicalToPixels(physical.Width, dpi.X),
-                PhysicalToPixels(physical.Height, dpi.Y));
+    private static Size PhysicalToPixels(Size physical, Point dpi) =>
+        new(PhysicalToPixels(physical.Width, dpi.X), PhysicalToPixels(physical.Height, dpi.Y));
 
     private void SetPositionNoInvalidate(Point value)
     {
         _scrollLayoutPending = true;
 
-        _hScrollBar.Value = Clamp(value.X, _hScrollBar.Minimum, _hScrollBar.Maximum);
-        _vScrollBar.Value = Clamp(value.Y, _vScrollBar.Minimum, _vScrollBar.Maximum);
+        _hScrollBar.Value = Math.Clamp(value.X, _hScrollBar.Minimum, _hScrollBar.Maximum);
+        _vScrollBar.Value = Math.Clamp(value.Y, _vScrollBar.Minimum, _vScrollBar.Maximum);
 
         _scrollLayoutPending = false;
-
-        static int Clamp(int value, int min, int max)
-        {
-            if (value < min)
-            {
-                return min;
-            }
-
-            if (max < value)
-            {
-                return max;
-            }
-
-            return value;
-        }
     }
 
     internal void SetVirtualSizeNoInvalidate(Size value)
@@ -889,11 +836,11 @@ public partial class PrintPreviewControl : Control
         ResumeLayout(true);
         _scrollLayoutPending = false;
 
-        if (scrollBarsVisibilityChanged &&
-            IsAccessibilityObjectCreated &&
-            AccessibilityObject is PrintPreviewControlAccessibleObject ao)
+        if (scrollBarsVisibilityChanged
+            && IsAccessibilityObjectCreated
+            && AccessibilityObject is PrintPreviewControlAccessibleObject ao)
         {
-            ao.RaiseStructureChangedEvent(Interop.UiaCore.StructureChangeType.ChildrenInvalidated, Array.Empty<int>());
+            ao.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildrenInvalidated, []);
         }
 
         (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)
@@ -916,14 +863,14 @@ public partial class PrintPreviewControl : Control
 
         void AdjustScroll(ScrollBar scrollBar, int virtualDimension, int displayDimension, int offset)
         {
-            var oldLargeChange = scrollBar.LargeChange;
+            int oldLargeChange = scrollBar.LargeChange;
 
             scrollBar.Maximum = virtualDimension;
             scrollBar.LargeChange = displayDimension - offset;
 
             if (scrollBar.Value > 0)
             {
-                var diff = scrollBar.LargeChange - oldLargeChange;
+                int diff = scrollBar.LargeChange - oldLargeChange;
 
                 if (scrollBar.Value >= diff)
                 {

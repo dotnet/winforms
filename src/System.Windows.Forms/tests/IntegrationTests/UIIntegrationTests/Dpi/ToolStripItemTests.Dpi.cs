@@ -15,8 +15,8 @@ public class ToolStripItemDpiTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(2 * DpiHelper.LogicalDpi)]
-    [InlineData(3.5 * DpiHelper.LogicalDpi)]
+    [InlineData(2 * ScaleHelper.OneHundredPercentLogicalDpi)]
+    [InlineData(3.5 * ScaleHelper.OneHundredPercentLogicalDpi)]
     public void ToolStripItems_FontScaling(int newDpi)
     {
         // Run tests only on Windows 10 versions that support thread dpi awareness.
@@ -27,7 +27,7 @@ public class ToolStripItemDpiTests : ControlTestBase
 
         // Set thread awareness context to PermonitorV2(PMv2).
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             int clientWidth = 800;
@@ -47,7 +47,7 @@ public class ToolStripItemDpiTests : ControlTestBase
             form.Show();
 
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
-            var factor = (float)newDpi / form.DeviceDpi;
+            float factor = (float)newDpi / form.DeviceDpi;
 
             Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size, precision: 1);
             form.Close();

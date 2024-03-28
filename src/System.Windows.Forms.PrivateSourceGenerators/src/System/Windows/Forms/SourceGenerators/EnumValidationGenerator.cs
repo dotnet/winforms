@@ -84,7 +84,7 @@ namespace SourceGenerated
             {
                 if (enumsToValidate.Any())
                 {
-                    var sb = new StringBuilder();
+                    StringBuilder sb = new();
                     GenerateValidator(context, sb, enumsToValidate);
                     context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -128,7 +128,7 @@ namespace SourceGenerated
         sb.AppendLine($"{indent}int intValue = (int)enumToValidate;");
         if (info.IsFlags)
         {
-            GenerateFlagsValidationMethodBody(context, sb, info, indent);
+            GenerateFlagsValidationMethodBody(sb, info, indent);
         }
         else
         {
@@ -138,7 +138,7 @@ namespace SourceGenerated
         sb.AppendLine($"{indent}ReportEnumValidationError(parameterName, intValue, typeof({info.EnumType}));");
     }
 
-    private static void GenerateFlagsValidationMethodBody(SourceProductionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
+    private static void GenerateFlagsValidationMethodBody(StringBuilder sb, EnumValidationInfo info, string indent)
     {
         int total = 0;
         foreach (int value in info.Values)
@@ -204,7 +204,7 @@ namespace SourceGenerated
 
         INamedTypeSymbol? flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
-        var foundTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        HashSet<ITypeSymbol> foundTypes = new(SymbolEqualityComparer.Default);
 
         foreach (SyntaxNode argument in argumentsToValidate)
         {
@@ -223,7 +223,7 @@ namespace SourceGenerated
 
             foundTypes.Add(enumType);
 
-            var isFlags = enumType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, flagsAttributeType));
+            bool isFlags = enumType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, flagsAttributeType));
 
             var info = EnumValidationInfo.FromEnumType(enumType, isFlags);
 

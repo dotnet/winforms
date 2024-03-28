@@ -10,7 +10,7 @@ public class DataGridViewRowCancelEventArgsTests
     {
         yield return new object[] { null };
 
-        var dataGridViewRow = new DataGridViewRow();
+        DataGridViewRow dataGridViewRow = new();
         yield return new object[] { dataGridViewRow };
     }
 
@@ -18,7 +18,7 @@ public class DataGridViewRowCancelEventArgsTests
     [MemberData(nameof(Ctor_DataGridViewRow_TestData))]
     public void Ctor_DataGridViewRow(DataGridViewRow dataGridViewRow)
     {
-        var e = new DataGridViewRowCancelEventArgs(dataGridViewRow);
+        DataGridViewRowCancelEventArgs e = new(dataGridViewRow);
         Assert.Equal(dataGridViewRow, e.Row);
         Assert.False(e.Cancel);
     }

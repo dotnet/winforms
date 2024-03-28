@@ -262,11 +262,6 @@
         <target state="translated">Для запрашиваемого действия поддерживаются только одномерные массивы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Требуется неотрицательное число.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Тип целевого массива несовместим с типом элементов в коллекции.</target>
@@ -415,6 +410,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">Привязка Navigator</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Операции привязки не поддерживаются, когда для приложений включена обрезка.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -4140,8 +4140,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">Возникает, когда DataGridView сравнивает значения двух ячеек при выполнении сортировки.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">Происходит при завершении операции сортировки элементом управления DataGridView.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -5211,6 +5211,11 @@ Do you want to replace it?</source>
         <target state="translated">Строка, отображаемая над иерархическим представлением структуры дерева в данном диалоговом окне. Эта строка служит для задания инструкций для пользователя.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="translated">Определяет, можно ли в диалоговом окне выбрать несколько папок.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>
@@ -5224,6 +5229,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">Путь к папке, которая первой выбрана в данном диалоговом окне, или к последней папке, выбранной пользователем.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="translated">Получает пути ко всем выбранным папкам в диалоговом окне.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -5855,11 +5865,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Действие, выполняющееся для данного элемента управления, вызвано из неверного потока. Для выполнения данного действия перейдите в правильный поток с помощью Control.Invoke или Control.BeginInvoke.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть больше {2} и меньше {3}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Недопустимый формат файла.</target>
@@ -5878,26 +5883,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">Недопустимый тип HDC: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть меньше {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть меньше или равно {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть больше {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть больше или равно {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">
@@ -7410,11 +7395,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Показывает величину уменьшения или увеличения при каждом щелчке мышью.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">Значение параметра должно быть больше или равно 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Указывает максимальное значение для числового поля со стрелками 'вверх/вниз'.</target>
@@ -8268,11 +8248,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Текст</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Индекс вкладки недействителен.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
@@ -10243,6 +10218,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemRightToLeftDescr">
         <source>Indicates whether the item should draw right-to-left for RTL languages.</source>
         <target state="translated">Определяет, будет ли элемент отображаться справа налево для RTL-языков (с направлением письма справа налево).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="translated">Возникает при смене значения свойства Selected.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

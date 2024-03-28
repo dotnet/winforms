@@ -19,7 +19,7 @@ internal class ToolStripActionList : DesignerActionList
     {
         _toolStrip = (ToolStrip)designer.Component;
 
-        _changeParentVerb = new ChangeToolStripParentVerb(SR.ToolStripDesignerEmbedVerb, designer);
+        _changeParentVerb = new ChangeToolStripParentVerb(designer);
         if (_toolStrip is not StatusStrip)
         {
             _standardItemsVerb = new StandardMenuStripVerb(designer);
@@ -43,34 +43,20 @@ internal class ToolStripActionList : DesignerActionList
         }
     }
 
-    private bool IsReadOnly
-    {
-        get
-        {
-            // Make sure the component is not being inherited -- we can't delete these!
-            if (!TypeDescriptorHelper.TryGetAttribute(_toolStrip, out InheritanceAttribute? ia) || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
-            {
-                return true;
-            }
+    private bool IsReadOnly =>
+        // Make sure the component is not being inherited -- we can't delete these!
+        !TypeDescriptorHelper.TryGetAttribute(_toolStrip, out InheritanceAttribute? ia)
+        || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly;
 
-            return false;
-        }
-    }
-
-    //helper function to get the property on the actual Control
+    // helper function to get the property on the actual Control
     private object? GetProperty(string propertyName)
     {
         PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
         Debug.Assert(getProperty is not null, "Could not find given property in control.");
-        if (getProperty is not null)
-        {
-            return getProperty.GetValue(_toolStrip);
-        }
-
-        return null;
+        return getProperty?.GetValue(_toolStrip);
     }
 
-    //helper function to change the property on the actual Control
+    // helper function to change the property on the actual Control
     private void ChangeProperty(string propertyName, object value)
     {
         PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
@@ -131,10 +117,9 @@ internal class ToolStripActionList : DesignerActionList
 
     private void InvokeEmbedVerb()
     {
-        // Hide the Panel...
+        // Hide the Panel.
         DesignerActionUIService? actionUIService = (DesignerActionUIService?)_toolStrip.Site?.GetService(typeof(DesignerActionUIService));
         actionUIService?.HideUI(_toolStrip);
-
         _changeParentVerb.ChangeParent();
     }
 
@@ -148,7 +133,7 @@ internal class ToolStripActionList : DesignerActionList
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        DesignerActionItemCollection items = [];
         if (!IsReadOnly)
         {
             items.Add(new DesignerActionMethodItem(this, "InvokeEmbedVerb", SR.ToolStripDesignerEmbedVerb, "", SR.ToolStripDesignerEmbedVerbDesc, true));
@@ -156,7 +141,7 @@ internal class ToolStripActionList : DesignerActionList
 
         if (CanAddItems)
         {
-            if (!(_toolStrip is StatusStrip))
+            if (_toolStrip is not StatusStrip)
             {
                 items.Add(new DesignerActionMethodItem(this, "InvokeInsertStandardItemsVerb", SR.ToolStripDesignerStandardItemsVerb, "", SR.ToolStripDesignerStandardItemsVerbDesc, true));
             }
@@ -164,12 +149,12 @@ internal class ToolStripActionList : DesignerActionList
             items.Add(new DesignerActionPropertyItem("RenderMode", SR.ToolStripActionList_RenderMode, SR.ToolStripActionList_Layout, SR.ToolStripActionList_RenderModeDesc));
         }
 
-        if (!(_toolStrip.Parent is ToolStripPanel))
+        if (_toolStrip.Parent is not ToolStripPanel)
         {
             items.Add(new DesignerActionPropertyItem("Dock", SR.ToolStripActionList_Dock, SR.ToolStripActionList_Layout, SR.ToolStripActionList_DockDesc));
         }
 
-        if (!(_toolStrip is StatusStrip))
+        if (_toolStrip is not StatusStrip)
         {
             items.Add(new DesignerActionPropertyItem("GripStyle", SR.ToolStripActionList_GripStyle, SR.ToolStripActionList_Layout, SR.ToolStripActionList_GripStyleDesc));
         }

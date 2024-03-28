@@ -31,6 +31,13 @@ public partial class Dialogs : Form
 
         _btnOpen.Click += (s, e) =>
         {
+            if (propertyGrid1.SelectedObject is OpenFileDialog openFileDialog)
+            {
+                openFileDialog.ShowDialog(this);
+                MessageBox.Show(string.Join(',', openFileDialog.FileNames), "File Names");
+                return;
+            }
+
             if (propertyGrid1.SelectedObject is CommonDialog dialog)
             {
                 dialog.ShowDialog(this);
@@ -76,11 +83,8 @@ public partial class Dialogs : Form
         DisposeIfNeeded();
         propertyGrid1.SelectedObject = null;
 
-        Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog");
-        if (typeCustomColorDialog is null)
-        {
-            throw new Exception("Unable to locate 'CustomColorDialog' type.");
-        }
+        Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog")
+            ?? throw new InvalidOperationException("Unable to locate 'CustomColorDialog' type.");
 
         using ColorDialog dialog = (ColorDialog)Activator.CreateInstance(typeCustomColorDialog)!;
         dialog.ShowDialog(this);
@@ -115,7 +119,7 @@ public partial class Dialogs : Form
         DisposeIfNeeded();
         propertyGrid1.SelectedObject = null;
 
-        using ThreadExceptionDialog dialog = new(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated."));
+        using ThreadExceptionDialog dialog = new(new InvalidOperationException("Really long exception description string, because we want to see if it properly wraps around or is truncated."));
         dialog.ShowDialog(this);
     }
 

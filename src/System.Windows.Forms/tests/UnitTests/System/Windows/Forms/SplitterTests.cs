@@ -14,7 +14,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_Ctor_Default()
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -106,7 +106,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -129,7 +129,7 @@ public class SplitterTests
     [InlineData(BorderStyle.FixedSingle, 0x56800000, 0)]
     public void Splitter_CreateParams_GetBorderStyle_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             BorderStyle = borderStyle
         };
@@ -154,7 +154,7 @@ public class SplitterTests
     [BoolData]
     public void Splitter_AllowDrop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             AllowDrop = value
         };
@@ -177,7 +177,7 @@ public class SplitterTests
     [InvalidEnumData<AnchorStyles>]
     public void Splitter_Anchor_Set_GetReturnsExpected(AnchorStyles value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -199,7 +199,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void Splitter_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             BackgroundImage = value
         };
@@ -215,7 +215,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -226,7 +226,7 @@ public class SplitterTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -237,7 +237,7 @@ public class SplitterTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -258,7 +258,7 @@ public class SplitterTests
     [EnumData<ImageLayout>]
     public void Splitter_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             BackgroundImageLayout = value
         };
@@ -276,7 +276,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -313,7 +313,7 @@ public class SplitterTests
     [EnumData<BorderStyle>]
     public void Splitter_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new Splitter()
+        using Splitter control = new()
         {
             BorderStyle = value
         };
@@ -334,7 +334,7 @@ public class SplitterTests
     [InlineData(BorderStyle.None, 0)]
     public void Splitter_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -365,7 +365,7 @@ public class SplitterTests
     [InvalidEnumData<BorderStyle>]
     public void Splitter_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -381,7 +381,7 @@ public class SplitterTests
     [MemberData(nameof(DefaultCursor_TestData))]
     public void Splitter_DefaultCursor_GetWithDockStyle_ReturnsExpected(DockStyle dock, Cursor expected)
     {
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             Dock = dock
         };
@@ -396,7 +396,7 @@ public class SplitterTests
     [InlineData(DockStyle.Bottom)]
     public void Splitter_Dock_Set_GetReturnsExpected(DockStyle value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -425,7 +425,7 @@ public class SplitterTests
     [InlineData(DockStyle.Bottom, 50, 1)]
     public void Splitter_Dock_SetCustomWidthHeight_GetReturnsExpected(DockStyle value, int expectedHeight, int expectedLayoutCallCount)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Width = 50,
             Height = 40
@@ -458,7 +458,7 @@ public class SplitterTests
     [InlineData(DockStyle.Bottom)]
     public void Splitter_Dock_SetWithOldValue_GetReturnsExpected(DockStyle value)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Dock = DockStyle.Top
         };
@@ -490,7 +490,7 @@ public class SplitterTests
     [InlineData(DockStyle.Bottom, 50, 0)]
     public void Splitter_Dock_SetWithOldValueCustomWidthHeight_GetReturnsExpected(DockStyle value, int expectedWidth, int expectedLayoutCallCount)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Dock = DockStyle.Top,
             Width = 50,
@@ -529,8 +529,8 @@ public class SplitterTests
     [MemberData(nameof(Dock_SetWithParent_TestData))]
     public void Splitter_Dock_SetWithParent_GetReturnsExpected(DockStyle value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Splitter();
-        using var control = new Splitter
+        using Splitter parent = new();
+        using Splitter control = new()
         {
             Parent = parent
         };
@@ -597,8 +597,8 @@ public class SplitterTests
     [MemberData(nameof(Splitter_Dock_SetWithOldValueWithParent_TestData))]
     public void Splitter_Dock_SetWithOldValueWithParent_GetReturnsExpected(DockStyle oldValue, DockStyle value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Splitter();
-        using var control = new Splitter
+        using Splitter parent = new();
+        using Splitter control = new()
         {
             Dock = oldValue,
             Parent = parent
@@ -646,7 +646,7 @@ public class SplitterTests
     [InlineData(DockStyle.Bottom)]
     public void Splitter_Dock_SetWithHandle_GetReturnsExpected(DockStyle value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -684,7 +684,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_Dock_SetWithHandler_CallsDockChanged()
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Dock = DockStyle.Bottom
         };
@@ -725,7 +725,7 @@ public class SplitterTests
     [InlineData(DockStyle.Fill)]
     public void Splitter_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.Throws<ArgumentException>(() => control.Dock = value);
     }
 
@@ -733,7 +733,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void Splitter_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             Font = value
         };
@@ -751,7 +751,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -762,7 +762,7 @@ public class SplitterTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -794,7 +794,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void Splitter_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             ForeColor = value
         };
@@ -818,7 +818,7 @@ public class SplitterTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void Splitter_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -846,7 +846,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -900,7 +900,7 @@ public class SplitterTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void Splitter_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             ImeMode = value
         };
@@ -917,7 +917,7 @@ public class SplitterTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void Splitter_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -945,7 +945,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_ImeMode_SetWithHandler_CallsImeModeChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -981,7 +981,7 @@ public class SplitterTests
     [InvalidEnumData<ImeMode>]
     public void Splitter_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
     }
 
@@ -992,7 +992,7 @@ public class SplitterTests
     [InlineData(50, 50)]
     public void Splitter_MinExtra_Set_GetReturnsExpected(int value, int expected)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             MinExtra = value
         };
@@ -1012,7 +1012,7 @@ public class SplitterTests
     [InlineData(50, 50)]
     public void Splitter_MinExtra_SetWithHandle_GetReturnsExpected(int value, int expected)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1044,7 +1044,7 @@ public class SplitterTests
     [InlineData(50, 50)]
     public void Splitter_MinSize_Set_GetReturnsExpected(int value, int expected)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             MinSize = value
         };
@@ -1064,7 +1064,7 @@ public class SplitterTests
     [InlineData(50, 50)]
     public void Splitter_MinSize_SetWithHandle_GetReturnsExpected(int value, int expected)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1116,7 +1116,7 @@ public class SplitterTests
     [MemberData(nameof(SplitPosition_Set_TestData))]
     public void Splitter_SplitPosition_Set_GetReturnsExpected(DockStyle dock, int value)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Dock = dock
         };
@@ -1137,12 +1137,12 @@ public class SplitterTests
     [MemberData(nameof(SplitPosition_Set_TestData))]
     public void Splitter_SplitPosition_SetWithParent_GetReturnsExpected(DockStyle dock, int value)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Parent = parent,
             Dock = dock
@@ -1192,18 +1192,18 @@ public class SplitterTests
     [MemberData(nameof(SplitPosition_SetWithParentNoChild_TestData))]
     public void Splitter_SplitPosition_SetWithParentNoChild_GetReturnsExpected(DockStyle childDock, DockStyle dock, int value)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var child = new Control
+        using Control child = new()
         {
             Parent = parent,
             Dock = childDock,
             Bounds = new Rectangle(10, 10, 50, 50)
         };
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Parent = parent,
             Dock = dock,
@@ -1237,17 +1237,17 @@ public class SplitterTests
     [InlineData(110, 72)]
     public void Splitter_SplitPosition_SetWithParentLeftChild_GetReturnsExpected(int value, int expected)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var child = new Control
+        using Control child = new()
         {
             Parent = parent,
             Bounds = new Rectangle(0, 0, 0, 100)
         };
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Parent = parent,
             Dock = DockStyle.Left,
@@ -1275,7 +1275,7 @@ public class SplitterTests
     [MemberData(nameof(SplitPosition_Set_TestData))]
     public void Splitter_SplitPosition_SetWithHandle_GetReturnsExpected(DockStyle dock, int value)
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Dock = dock
         };
@@ -1309,12 +1309,12 @@ public class SplitterTests
     [MemberData(nameof(SplitPosition_Set_TestData))]
     public void Splitter_SplitPosition_SetWithParentHandle_GetReturnsExpected(DockStyle dock, int value)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Parent = parent,
             Dock = dock
@@ -1356,17 +1356,17 @@ public class SplitterTests
     [InlineData(110, 72)]
     public void Splitter_SplitPosition_SetWithParentLeftChildWithHandle_GetReturnsExpected(int value, int expected)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var child = new Control
+        using Control child = new()
         {
             Parent = parent,
             Bounds = new Rectangle(0, 0, 0, 100)
         };
-        using var control = new Splitter
+        using Splitter control = new()
         {
             Parent = parent,
             Dock = DockStyle.Left,
@@ -1406,7 +1406,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_SplitPosition_SetWithHandler_DoesNotCallsSplitterMoved()
     {
-        using var control = new Splitter
+        using Splitter control = new()
         {
             SplitPosition = 0
         };
@@ -1455,7 +1455,7 @@ public class SplitterTests
     [BoolData]
     public void Splitter_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new Splitter()
+        using Splitter control = new()
         {
             TabStop = value
         };
@@ -1477,7 +1477,7 @@ public class SplitterTests
     [BoolData]
     public void Splitter_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1513,7 +1513,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new Splitter()
+        using Splitter control = new()
         {
             TabStop = true
         };
@@ -1552,7 +1552,7 @@ public class SplitterTests
     [NormalizedStringData]
     public void Splitter_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new Splitter()
+        using Splitter control = new()
         {
             Text = value
         };
@@ -1569,7 +1569,7 @@ public class SplitterTests
     [NormalizedStringData]
     public void Splitter_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1597,7 +1597,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1632,7 +1632,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1659,7 +1659,7 @@ public class SplitterTests
     [InlineData((ControlStyles)(-1), false)]
     public void Splitter_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1669,7 +1669,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1677,7 +1677,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1701,7 +1701,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1727,7 +1727,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1754,7 +1754,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1780,7 +1780,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1826,7 +1826,7 @@ public class SplitterTests
     [MemberData(nameof(KeyEventArgs_TestData))]
     public void Splitter_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -1858,7 +1858,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void Splitter_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -1890,7 +1890,7 @@ public class SplitterTests
     [MemberData(nameof(KeyEventArgs_TestData))]
     public void Splitter_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -1922,7 +1922,7 @@ public class SplitterTests
     [NewAndDefaultData<EventArgs>]
     public void Splitter_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -1962,7 +1962,7 @@ public class SplitterTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void Splitter_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -2004,17 +2004,17 @@ public class SplitterTests
     [MemberData(nameof(OnMouseDown_WithTarget_TestData))]
     public void Splitter_OnMouseDown_InvokeWithTarget_CallsMouseDown(MouseEventArgs eventArgs, bool expectedIsHandleCreated)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var child = new Control
+        using Control child = new()
         {
             Parent = parent,
             Bounds = new Rectangle(0, 0, 0, 100)
         };
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             Parent = parent,
             Dock = DockStyle.Left,
@@ -2058,7 +2058,7 @@ public class SplitterTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void Splitter_OnMouseDown_InvokeWithHandle_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2105,17 +2105,17 @@ public class SplitterTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void Splitter_OnMouseDown_InvokeWithTargetWithHandle_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Width = 100,
             Height = 100
         };
-        using var child = new Control
+        using Control child = new()
         {
             Parent = parent,
             Bounds = new Rectangle(0, 0, 0, 100)
         };
-        using var control = new SubSplitter
+        using SubSplitter control = new()
         {
             Parent = parent,
             Dock = DockStyle.Left,
@@ -2171,7 +2171,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Splitter_OnMouseDown_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseDown(null));
     }
 
@@ -2179,7 +2179,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Splitter_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -2211,7 +2211,7 @@ public class SplitterTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Splitter_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int splitterMovingCallCount = 0;
         control.SplitterMoving += (sender, e) => splitterMovingCallCount++;
         int splitterMovedCallCount = 0;
@@ -2249,7 +2249,7 @@ public class SplitterTests
     [MemberData(nameof(SplitterEventArgs_TestData))]
     public void Splitter_OnSplitterMoved_Invoke_CallsSplitterMoved(SplitterEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int callCount = 0;
         SplitterEventHandler handler = (sender, e) =>
         {
@@ -2273,7 +2273,7 @@ public class SplitterTests
     [MemberData(nameof(SplitterEventArgs_TestData))]
     public void Splitter_OnSplitterMoving_Invoke_CallsSplitterMoving(SplitterEventArgs eventArgs)
     {
-        using var control = new SubSplitter();
+        using SubSplitter control = new();
         int callCount = 0;
         SplitterEventHandler handler = (sender, e) =>
         {
@@ -2296,7 +2296,7 @@ public class SplitterTests
     [WinFormsFact]
     public void Control_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new Splitter();
+        using Splitter control = new();
         Assert.Equal("System.Windows.Forms.Splitter, MinExtra: 25, MinSize: 25", control.ToString());
     }
 

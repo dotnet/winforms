@@ -17,7 +17,7 @@ public static class CodeDomHelpers
                 Assert.Equal(GetConstructionString(expected[i]), GetConstructionString(actual[i]));
             }
         }
-        catch (Xunit.Sdk.AssertActualExpectedException)
+        catch (Xunit.Sdk.XunitException)
         {
             Console.WriteLine($"Expected: {expected.Count} elements");
             for (int i = 0; i < expected.Count; i++)

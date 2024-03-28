@@ -11,10 +11,10 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
-using Microsoft.Win32;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
+using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
 
@@ -47,72 +47,6 @@ public unsafe partial class Control :
     IKeyboardToolTip,
     IHandle<HWND>
 {
-#if DEBUG
-    internal static readonly TraceSwitch s_paletteTracing = new(
-        "PaletteTracing",
-        "Debug Palette code");
-    internal static readonly TraceSwitch s_controlKeyboardRouting = new(
-        "ControlKeyboardRouting",
-        "Debug Keyboard routing for controls");
-    private protected static readonly TraceSwitch s_focusTracing = new(
-        "FocusTracing",
-        "Debug focus/active control/enter/leave");
-
-    private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new(
-        "AssertOnControlCreate",
-        "Assert when anything directly deriving from control is created.");
-    private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new(
-        "TraceCanProcessMnemonic",
-        "Trace mnemonic processing calls to assure right child-parent call ordering.");
-
-    private protected void TraceCanProcessMnemonic()
-    {
-        if (s_traceMnemonicProcessing.Enabled)
-        {
-            string str;
-            try
-            {
-                str = $"{GetType().Name}<{Text}>";
-                int maxFrameCount = new StackTrace().FrameCount;
-                if (maxFrameCount > 5)
-                {
-                    maxFrameCount = 5;
-                }
-
-                int frameIndex = 1;
-                while (frameIndex < maxFrameCount)
-                {
-                    StackFrame sf = new StackFrame(frameIndex);
-                    if (frameIndex == 2 && sf.GetMethod()!.Name.Equals("CanProcessMnemonic"))
-                    {
-                        // log immediate call if in a virtual/recursive call.
-                        break;
-                    }
-
-                    str += new StackTrace(sf).ToString().TrimEnd();
-                    frameIndex++;
-                }
-
-                if (frameIndex > 2)
-                {
-                    // new CanProcessMnemonic virtual/recursive call stack.
-                    str = "\r\n" + str;
-                }
-            }
-            catch (Exception ex)
-            {
-                str = ex.ToString();
-            }
-
-            Debug.WriteLine(str);
-        }
-    }
-#else
-    internal static readonly TraceSwitch? s_paletteTracing;
-    internal static readonly TraceSwitch? s_controlKeyboardRouting;
-    private protected readonly TraceSwitch? s_focusTracing;
-#endif
-
 #if DEBUG
     private static readonly BooleanSwitch s_bufferPinkRect = new(
         "BufferPinkRect",
@@ -199,14 +133,11 @@ public unsafe partial class Control :
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
 
-#pragma warning disable IDE1006 // Naming Styles
     [ThreadStatic]
     private static bool t_inCrossThreadSafeCall;
 
     [ThreadStatic]
     internal static HelpInfo? t_currentHelpInfo;
-
-#pragma warning restore IDE1006
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
@@ -231,7 +162,7 @@ public unsafe partial class Control :
     private static readonly int s_controlsCollectionProperty = PropertyStore.CreateKey();
     private static readonly int s_backColorProperty = PropertyStore.CreateKey();
     private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
-    internal static readonly int s_fontProperty = PropertyStore.CreateKey();
+    private static readonly int s_fontProperty = PropertyStore.CreateKey();
 
     private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
     private static readonly int s_fontHandleWrapperProperty = PropertyStore.CreateKey();
@@ -265,7 +196,7 @@ public unsafe partial class Control :
     private static readonly int s_lastCanEnableImeProperty = PropertyStore.CreateKey();
 
     private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
-    private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
+    private static readonly int s_cacheTextFieldProperty = PropertyStore.CreateKey();
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
@@ -338,24 +269,6 @@ public unsafe partial class Control :
 
     internal byte LayoutSuspendCount { get; private set; }
 
-#if DEBUG
-    internal void AssertLayoutSuspendCount(int value)
-    {
-        Debug.Assert(value == LayoutSuspendCount, "Suspend/Resume layout mismatch!");
-    }
-
-    /*
-    example usage
-
-#if DEBUG
-            int dbgLayoutCheck = LayoutSuspendCount;
-#endif
-#if DEBUG
-            AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
-    */
-#endif
-
     /// <summary>
     ///  Initializes a new instance of the <see cref="Control"/> class.
     /// </summary>
@@ -365,17 +278,10 @@ public unsafe partial class Control :
 
     internal Control(bool autoInstallSyncContext) : base()
     {
-#if DEBUG
-        if (s_assertOnControlCreateSwitch.Enabled)
-        {
-            Debug.Assert(GetType().BaseType != typeof(Control), $"Direct derivative of Control Created: {GetType().FullName}");
-            Debug.Assert(GetType() != typeof(Control), "Control Created!");
-        }
-#endif
         Properties = new PropertyStore();
 
         // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
-        _deviceDpi = _oldDeviceDpi = DpiHelper.DeviceDpi;
+        _deviceDpi = _oldDeviceDpi = ScaleHelper.InitialSystemDpi;
         _window = new ControlNativeWindow(this);
         RequiredScalingEnabled = true;
         RequiredScaling = BoundsSpecified.All;
@@ -383,17 +289,25 @@ public unsafe partial class Control :
 
         _state = States.Visible | States.Enabled | States.TabStop | States.CausesValidation;
         _extendedState = ExtendedStates.InterestedInUserPreferenceChanged;
-        SetStyle(ControlStyles.AllPaintingInWmPaint |
-                 ControlStyles.UserPaint |
-                 ControlStyles.StandardClick |
-                 ControlStyles.StandardDoubleClick |
-                 ControlStyles.UseTextForAccessibility |
-                 ControlStyles.Selectable, true);
+
+        SetStyle(
+            ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.UserPaint
+                | ControlStyles.StandardClick
+                | ControlStyles.StandardDoubleClick
+                | ControlStyles.UseTextForAccessibility
+                | ControlStyles.Selectable,
+            true);
 
         // We baked the "default default" margin and min size into CommonProperties
         // so that in the common case the PropertyStore would be empty.  If, however,
         // someone overrides these Default* methods, we need to write the default
         // value into the PropertyStore in the ctor.
+
+        // Changing the order of property accesses here can break existing code as these are all virtual properties.
+        // Try to keep observable state for Control unchanged in this constructor to avoid nasty subtle bugs.
+
+        InitializeConstantsForInitialDpi(_deviceDpi);
 
         if (DefaultMargin != CommonProperties.DefaultMargin)
         {
@@ -625,7 +539,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are -1 to 0x40
+            // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
             Properties.SetInteger(s_accessibleRoleProperty, (int)value);
         }
@@ -842,12 +756,14 @@ public unsafe partial class Control :
     ///  This is an ambient property.
     /// </summary>
     /// <remarks>
-    ///  Data context is a concept that allows elements to inherit information from their parent elements
-    ///  about the data source that is used for binding. It's the duty of deriving controls which inherit from
-    ///  this class to handle the provided data source accordingly. For example, UserControls, which use
-    ///  <see cref="BindingSource"/> components for data binding scenarios could either handle the
-    ///  <see cref="DataContextChanged"/> event or override <see cref="OnDataContextChanged(EventArgs)"/> to provide
-    ///  the relevant data from the data context to a BindingSource component's <see cref="BindingSource.DataSource"/>.
+    ///  <para>
+    ///   Data context is a concept that allows elements to inherit information from their parent elements
+    ///   about the data source that is used for binding. It's the duty of deriving controls which inherit from
+    ///   this class to handle the provided data source accordingly. For example, UserControls, which use
+    ///   <see cref="BindingSource"/> components for data binding scenarios could either handle the
+    ///   <see cref="DataContextChanged"/> event or override <see cref="OnDataContextChanged(EventArgs)"/> to provide
+    ///   the relevant data from the data context to a BindingSource component's <see cref="BindingSource.DataSource"/>.
+    ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatData))]
     [Browsable(false)]
@@ -889,7 +805,7 @@ public unsafe partial class Control :
     ///  will always return a non-null value.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BACKCOLOR)]
+    [DispId(PInvokeCore.DISPID_BACKCOLOR)]
     [SRDescription(nameof(SR.ControlBackColorDescr))]
     public virtual Color BackColor
     {
@@ -971,17 +887,16 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlBackgroundImageDescr))]
     public virtual Image? BackgroundImage
     {
-        get
-        {
-            return (Image?)Properties.GetObject(s_backgroundImageProperty);
-        }
+        get => (Image?)Properties.GetObject(s_backgroundImageProperty);
         set
         {
-            if (BackgroundImage != value)
+            if (BackgroundImage == value)
             {
-                Properties.SetObject(s_backgroundImageProperty, value);
-                OnBackgroundImageChanged(EventArgs.Empty);
+                return;
             }
+
+            Properties.SetObject(s_backgroundImageProperty, value);
+            OnBackgroundImageChanged(EventArgs.Empty);
         }
     }
 
@@ -1007,26 +922,28 @@ public unsafe partial class Control :
                 : ImageLayout.Tile;
         set
         {
-            if (BackgroundImageLayout != value)
+            if (BackgroundImageLayout == value)
             {
-                // Valid values are 0x0 to 0x4
-                SourceGenerated.EnumValidator.Validate(value);
-
-                // Check if the value is either center, stretch or zoom;
-                if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
-                {
-                    SetStyle(ControlStyles.ResizeRedraw, true);
-
-                    // Only for images that support transparency.
-                    if (ControlPaint.IsImageTransparent(BackgroundImage))
-                    {
-                        DoubleBuffered = true;
-                    }
-                }
-
-                Properties.SetObject(s_backgroundImageLayoutProperty, value);
-                OnBackgroundImageLayoutChanged(EventArgs.Empty);
+                return;
             }
+
+            // Valid values are 0x0 to 0x4
+            SourceGenerated.EnumValidator.Validate(value);
+
+            // Check if the value is either center, stretch or zoom;
+            if (value is ImageLayout.Center or ImageLayout.Zoom or ImageLayout.Stretch)
+            {
+                SetStyle(ControlStyles.ResizeRedraw, true);
+
+                // Only for images that support transparency.
+                if (ControlPaint.IsImageTransparent(BackgroundImage))
+                {
+                    DoubleBuffered = true;
+                }
+            }
+
+            Properties.SetObject(s_backgroundImageLayoutProperty, value);
+            OnBackgroundImageLayoutChanged(EventArgs.Empty);
         }
     }
 
@@ -1112,6 +1029,7 @@ public unsafe partial class Control :
     public virtual BindingContext? BindingContext
     {
         get => BindingContextInternal;
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => BindingContextInternal = value;
     }
 
@@ -1178,7 +1096,7 @@ public unsafe partial class Control :
     ///  hosted as an ActiveX control, this property will return false if the ActiveX
     ///  control has its events frozen.
     /// </summary>
-    protected override bool CanRaiseEvents => !IsActiveX ? true : !ActiveXEventsFrozen;
+    protected override bool CanRaiseEvents => !IsActiveX || !ActiveXEventsFrozen;
 
     /// <summary>
     ///  Indicates whether the control can be selected. This property
@@ -1245,37 +1163,37 @@ public unsafe partial class Control :
         remove => Events.RemoveHandler(s_causesValidationEvent, value);
     }
 
-    ///  This is for perf. Turn this property on to temporarily enable text caching.  This is good for
-    ///  operations such as layout or painting where we don't expect the text to change (we will update the
-    ///  cache if it does) but prevents us from sending a ton of messages turing layout.  See the PaintWithErrorHandling
+    /// <summary>
+    ///  This is for perf. Turn this property on to temporarily enable text caching. This is good for operations such
+    ///  as layout or painting where we don't expect the text to change (we will update the cache if it does). It
+    ///  prevents us from sending a ton of messages during layout. See the <see cref="PaintWithErrorHandling(PaintEventArgs, short)"/>
     ///  function.
-    ///
+    /// </summary>
     internal bool CacheTextInternal
     {
         get
         {
-            // check if we're caching text.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool _);
+            // Check if we're caching text.
+            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
         }
         set
         {
-            // Ff this control always caches text or the handle hasn't been created,
-            // just bail.
+            // If this control always caches text or the handle hasn't been created, just bail.
             if (GetStyle(ControlStyles.CacheText) || !IsHandleCreated)
             {
                 return;
             }
 
-            // otherwise, get the state and update the cache if necessary.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool found);
+            // Otherwise, get the state and update the cache if necessary.
+            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             if (value)
             {
                 if (cacheTextCounter == 0)
                 {
-                    Properties.SetObject(s_acheTextFieldProperty, _text);
+                    Properties.SetObject(s_cacheTextFieldProperty, _text);
                     _text ??= WindowText;
                 }
 
@@ -1286,7 +1204,7 @@ public unsafe partial class Control :
                 cacheTextCounter--;
                 if (cacheTextCounter == 0)
                 {
-                    _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out found);
+                    _text = (string?)Properties.GetObject(s_cacheTextFieldProperty, out _);
                 }
             }
 
@@ -1394,7 +1312,7 @@ public unsafe partial class Control :
 
             if (oldValue != value)
             {
-                EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
+                EventHandler disposedHandler = new(DetachContextMenuStrip);
 
                 if (oldValue is not null)
                 {
@@ -1827,7 +1745,7 @@ public unsafe partial class Control :
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int DeviceDpi
         // deviceDpi may change in WmDpiChangedBeforeParent in PmV2 scenarios, so we can't cache statically.
-        => DpiHelper.IsPerMonitorV2Awareness ? _deviceDpi : DpiHelper.DeviceDpi;
+        => ScaleHelper.IsThreadPerMonitorV2Aware ? _deviceDpi : ScaleHelper.InitialSystemDpi;
 
     // The color to use when drawing disabled text.  Normally we use BackColor,
     // but that obviously won't work if we're transparent.
@@ -1924,22 +1842,9 @@ public unsafe partial class Control :
         {
             if (value != Dock)
             {
-#if DEBUG
-                int dbgLayoutCheck = LayoutSuspendCount;
-#endif
-                SuspendLayout();
-                try
-                {
-                    DefaultLayout.SetDock(this, value);
-                    OnDockChanged(EventArgs.Empty);
-                }
-                finally
-                {
-                    ResumeLayout();
-                }
-#if DEBUG
-                AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
+                using SuspendLayoutScope scope = new(this);
+                DefaultLayout.SetDock(this, value);
+                OnDockChanged(EventArgs.Empty);
             }
         }
     }
@@ -1983,7 +1888,7 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
-    [DispId(PInvoke.DISPID_ENABLED)]
+    [DispId(PInvokeCore.DISPID_ENABLED)]
     [SRDescription(nameof(SR.ControlEnabledDescr))]
     public bool Enabled
     {
@@ -2047,80 +1952,70 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
-    [DispId(PInvoke.DISPID_FONT)]
+    [DispId(PInvokeCore.DISPID_FONT)]
     [AmbientValue(null)]
     [SRDescription(nameof(SR.ControlFontDescr))]
     [AllowNull]
     public virtual Font Font
     {
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
-        get
-        {
-            return GetCurrentFontAndDpi(out _);
-        }
+        get => GetCurrentFontAndDpi(out _);
 
         [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
         set
         {
-            var local = (Font?)Properties.GetObject(s_fontProperty);
-            bool localChanged;
-            if (value is null)
+            if (Equals((Font?)Properties.GetObject(s_fontProperty), value))
             {
-                localChanged = local is not null;
-            }
-            else
-            {
-                localChanged = local is null ? true : !value.Equals(local);
+                // Explicitly set font for this control is unchanged, do nothing.
+                return;
             }
 
-            if (localChanged)
+            Font currentFont = Font;
+            Properties.SetObject(s_fontProperty, value);
+
+            // Clear the current cached HFONT, if any.
+            DisposeFontHandle();
+
+            // If the value being assigned is the same as the current effective font, we do not need to raise the
+            // FontChanged event. Just make sure the WM_SETFONT message is sent.
+            if (currentFont.Equals(value))
             {
-                // If the value being assigned is the same as the current default font, we do not need to raise FontChangedEvent.
-                Font currentDefaultFont = Font;
-                Properties.SetObject(s_fontProperty, value);
-
-                if (!currentDefaultFont.Equals(value))
+                if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
                 {
-                    // Cleanup any local fonts and handle wrappers...
-                    DisposeFontHandle();
-
-                    if (DpiHelper.IsPerMonitorV2Awareness)
-                    {
-                        // Reset the ScaledControlFont value when the font is being set explicitly, in order to keep it
-                        // in sync when the application is moved between monitors with different Dpi settings.
-                        ScaledControlFont = null;
-                        ClearDpiFonts();
-                    }
-
-                    if (Properties.ContainsInteger(s_fontHeightProperty))
-                    {
-                        Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
-                    }
-
-                    // Font is an ambient property.  We need to layout our parent because Font may
-                    // change our size.  We need to layout ourselves because our children may change
-                    // size by inheriting the new value.
-                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                    {
-                        OnFontChanged(EventArgs.Empty);
-                    }
+                    SetWindowFont();
                 }
-                else
-                {
-                    if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
-                    {
-                        DisposeFontHandle();
-                        SetWindowFont();
-                    }
-                }
+
+                return;
+            }
+
+            if (ScaleHelper.IsThreadPerMonitorV2Aware)
+            {
+                // Reset the ScaledControlFont value when the font is being set explicitly, in order to keep it
+                // in sync when the application is moved between monitors with different Dpi settings.
+                ScaledControlFont = null;
+                ClearDpiFonts();
+            }
+
+            if (Properties.ContainsInteger(s_fontHeightProperty))
+            {
+                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+            }
+
+            // Font is an ambient property.  We need to layout our parent because Font may
+            // change our size.  We need to layout ourselves because our children may change
+            // size by inheriting the new value.
+            using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+            {
+                OnFontChanged(EventArgs.Empty);
             }
         }
     }
 
     internal Font GetScaledFont(Font font, int newDpi, int oldDpi)
     {
-        Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
-            $"Fonts need to be cached only for PerMonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
+        Debug.Assert(
+            DpiAwarenessContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
+            $"Fonts need to be cached only for PerMonitorV2 mode applications : {ScaleHelper.IsThreadPerMonitorV2Aware} : {DpiAwarenessContext}");
 
         _dpiFonts ??= new Dictionary<int, Font>
         {
@@ -2167,11 +2062,10 @@ public unsafe partial class Control :
     {
         get
         {
-            // if application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
+            // If application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
             if (ScaledControlFont is not null)
             {
                 _scaledFontWrapper ??= new FontHandleWrapper(ScaledControlFont);
-
                 return _scaledFontWrapper.Handle;
             }
 
@@ -2234,17 +2128,15 @@ public unsafe partial class Control :
             {
                 return fontHeight;
             }
-            else
+
+            if (TryGetExplicitlySetFont(out Font? font))
             {
-                if (TryGetExplicitlySetFont(out Font? font))
-                {
-                    fontHeight = font.Height;
-                    Properties.SetInteger(s_fontHeightProperty, fontHeight);
-                    return fontHeight;
-                }
+                fontHeight = font.Height;
+                Properties.SetInteger(s_fontHeightProperty, fontHeight);
+                return fontHeight;
             }
 
-            //ask the parent if it has the font height
+            // Ask the parent if it has the font height.
             int localFontHeight = -1;
 
             if (ParentInternal is not null && ParentInternal.CanAccessProperties)
@@ -2252,7 +2144,7 @@ public unsafe partial class Control :
                 localFontHeight = ParentInternal.FontHeight;
             }
 
-            //if we still have a bad value, then get the actual font height
+            // If we still have a bad value, then get the actual font height.
             if (localFontHeight == -1)
             {
                 localFontHeight = Font.Height;
@@ -2261,17 +2153,14 @@ public unsafe partial class Control :
 
             return localFontHeight;
         }
-        set
-        {
-            Properties.SetInteger(s_fontHeightProperty, value);
-        }
+        set => Properties.SetInteger(s_fontHeightProperty, value);
     }
 
     /// <summary>
     ///  The foreground color of the control.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_FORECOLOR)]
+    [DispId(PInvokeCore.DISPID_FORECOLOR)]
     [SRDescription(nameof(SR.ControlForeColorDescr))]
     public virtual Color ForeColor
     {
@@ -2417,7 +2306,7 @@ public unsafe partial class Control :
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [DispId(PInvoke.DISPID_HWND)]
+    [DispId(PInvokeCore.DISPID_HWND)]
     [SRDescription(nameof(SR.ControlHandleDescr))]
     public IntPtr Handle
     {
@@ -2656,7 +2545,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool IsAncestorSiteInDesignMode =>
-        GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
+        GetSitedParentSite(this) is ISite parentSite && parentSite.DesignMode;
 
     private static ISite? GetSitedParentSite(Control control)
     {
@@ -2758,7 +2647,7 @@ public unsafe partial class Control :
     [Localizable(true)]
     public Padding Margin
     {
-        get { return CommonProperties.GetMargin(this); }
+        get => CommonProperties.GetMargin(this);
         set
         {
             // This should be done here rather than in the property store as
@@ -3083,7 +2972,7 @@ public unsafe partial class Control :
 
         // If we're an ActiveX control, clone the region so it can potentially be modified
         using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-        using PInvoke.RegionScope regionHandle = new(regionCopy ?? region, Handle);
+        using RegionScope regionHandle = new(regionCopy ?? region, HWND);
 
         if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
         {
@@ -3219,7 +3108,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are 0x0 to 0x2.
+            // valid values are 0x0 to 0x2.
             SourceGenerated.EnumValidator.Validate(value);
 
             RightToLeft oldValue = RightToLeft;
@@ -3390,10 +3279,7 @@ public unsafe partial class Control :
         get => _tabIndex == -1 ? 0 : _tabIndex;
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(TabIndex), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (_tabIndex != value)
             {
@@ -3417,7 +3303,7 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     [SRDescription(nameof(SR.ControlTabStopDescr))]
     public bool TabStop
     {
@@ -3476,7 +3362,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
     [Bindable(true)]
-    [DispId(PInvoke.DISPID_TEXT)]
+    [DispId(PInvokeCore.DISPID_TEXT)]
     [SRDescription(nameof(SR.ControlTextDescr))]
     [AllowNull]
     public virtual string Text
@@ -3501,12 +3387,11 @@ public unsafe partial class Control :
 
             if (IsMnemonicsListenerAxSourced)
             {
-                for (Control? ctl = this; ctl is not null; ctl = ctl.ParentInternal)
+                for (Control? control = this; control is not null; control = control.ParentInternal)
                 {
-                    ActiveXImpl? activeXImpl = (ActiveXImpl?)ctl.Properties.GetObject(s_activeXImplProperty);
-                    if (activeXImpl is not null)
+                    if (control.IsActiveX && control.Properties.GetObject(s_activeXImplProperty) is ActiveXImpl activeX)
                     {
-                        activeXImpl.UpdateAccelTable();
+                        activeX.UpdateAccelTable();
                         break;
                     }
                 }
@@ -3633,7 +3518,7 @@ public unsafe partial class Control :
                 else
                 {
                     // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                    uint actionMask = (uint)PInvoke.UISF_HIDEACCEL << 16;
+                    uint actionMask = PInvoke.UISF_HIDEACCEL << 16;
                     _uiCuesState |= UICuesStates.KeyboardHidden;
 
                     // The side effect of this initial state is that adding new controls may clear the accelerator
@@ -3641,7 +3526,7 @@ public unsafe partial class Control :
                     PInvoke.SendMessage(
                         TopMostParent,
                         PInvoke.WM_CHANGEUISTATE,
-                        (WPARAM)(actionMask | (uint)PInvoke.UIS_SET));
+                        (WPARAM)(actionMask | PInvoke.UIS_SET));
                 }
             }
 
@@ -3733,12 +3618,21 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-    ///  This property overwrites the UseCompatibleTextRenderingDefault switch when set programmatically.
-    ///  Exposed publicly only by controls that support GDI text rendering (Label, LinkLabel and some others).
-    ///  Observe that this property is NOT virtual (to allow for caching the property value - see LinkLabel)
-    ///  and should be used by controls that support it only (see SupportsUseCompatibleTextRendering).
     /// </summary>
-    internal bool UseCompatibleTextRenderingInt
+    /// <remarks>
+    ///  <para>
+    ///   This property overrides <see cref="UseCompatibleTextRenderingDefault"/>.
+    ///  </para>
+    ///  <para>
+    ///   Exposed publicly only by controls that support GDI text rendering (<see cref="Label"/>, <see cref="LinkLabel"/>
+    ///   and some others).
+    ///  </para>
+    ///  <para>
+    ///   Observe that this property is NOT virtual (to allow for caching the property value - see <see cref="LinkLabel"/>)
+    ///   and should be used by controls that support it only (see <see cref="SupportsUseCompatibleTextRendering"/>).
+    ///  </para>
+    /// </remarks>
+    internal bool UseCompatibleTextRenderingInternal
     {
         get
         {
@@ -3755,9 +3649,10 @@ public unsafe partial class Control :
         }
         set
         {
-            if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInt != value)
+            if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInternal != value)
             {
                 Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
+
                 // Update the preferred size cache since we will be rendering text using a different engine.
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
                 Invalidate();
@@ -3767,9 +3662,13 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Determines whether the control supports rendering text using GDI+ and GDI.
-    ///  This is provided for container controls (PropertyGrid) to iterate through its children to set
-    ///  UseCompatibleTextRendering to the same value if the child control supports it.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is provided for container controls (PropertyGrid) to iterate through its children to set
+    ///   <see cref="UseCompatibleTextRenderingInternal"/> to the same value if the child control supports it.
+    ///  </para>
+    /// </remarks>
     internal virtual bool SupportsUseCompatibleTextRendering => false;
 
     private ControlVersionInfo VersionInfo
@@ -3803,7 +3702,7 @@ public unsafe partial class Control :
             }
 
             // We are only visible if our parent is visible
-            return ParentInternal is null ? true : ParentInternal.Visible;
+            return ParentInternal is null || ParentInternal.Visible;
         }
         set => SetVisibleCore(value);
     }
@@ -3834,22 +3733,23 @@ public unsafe partial class Control :
 
         HANDLE threadHandle = ctx.Handle;
         bool processed = false;
+
         // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
         uint exitCode = 0;
         bool returnValue = false;
         while (!processed)
         {
-            //Get the thread's exit code, if we found the thread as expected
+            // Get the thread's exit code, if we found the thread as expected
             if (threadHandle != 0)
             {
                 returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
             }
 
-            //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
-            //if we don't know, we shouldn't throw.
-            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE) ||
-                (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
-                AppDomain.CurrentDomain.IsFinalizingForUnload())
+            // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
+            // if we don't know, we shouldn't throw.
+            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
+                || (!returnValue && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
+                || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
                 {
@@ -4490,7 +4390,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && AccessibleObject.CanNotifyClients)
+        if (IsHandleCreated && !LocalAppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
@@ -4684,9 +4584,6 @@ public unsafe partial class Control :
     /// </summary>
     internal virtual bool CanProcessMnemonic()
     {
-#if DEBUG
-        TraceCanProcessMnemonic();
-#endif
         if (!Enabled || !Visible)
         {
             return false;
@@ -4774,7 +4671,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Verifies if a control is a child of this control.
     /// </summary>
-    public bool Contains(Control? ctl)
+    public bool Contains([NotNullWhen(true)] Control? ctl)
     {
         while (ctl is not null)
         {
@@ -4839,7 +4736,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void CreateHandle()
     {
-        IntPtr userCookie = IntPtr.Zero;
         ObjectDisposedException.ThrowIf(GetState(States.Disposed), this);
 
         if (GetState(States.CreatingHandle))
@@ -5041,7 +4937,7 @@ public unsafe partial class Control :
         if (((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_window, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE))
             .HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
         {
-            PInvoke.DefMDIChildProc(InternalHandle, (uint)PInvoke.WM_CLOSE, default, default);
+            PInvoke.DefMDIChildProc(InternalHandle, PInvoke.WM_CLOSE, default, default);
         }
         else
         {
@@ -5064,7 +4960,7 @@ public unsafe partial class Control :
                 HBRUSH p = (HBRUSH)backBrush;
                 if (!p.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvokeCore.DeleteObject(p);
                 }
 
                 Properties.SetObject(s_backBrushProperty, value: null);
@@ -5203,34 +5099,16 @@ public unsafe partial class Control :
         Point cursorOffset,
         bool useDefaultDragImage)
     {
-        ComTypes.IDataObject dataObject;
-
-        if (data is ComTypes.IDataObject comDataObject)
-        {
-            dataObject = comDataObject;
-        }
-        else
-        {
-            DataObject iwdata;
-            if (data is IDataObject dataAsDataObject)
-            {
-                iwdata = new DataObject(dataAsDataObject);
-            }
-            else
-            {
-                iwdata = new DataObject();
-                iwdata.SetData(data);
-            }
-
-            dataObject = iwdata;
-        }
+        ComTypes.IDataObject dataObject = CreateRuntimeDataObjectForDrag(data);
 
         DROPEFFECT finalEffect;
 
         try
         {
-            IDropSource.Interface dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            if (Ole32.DoDragDrop(dataObject, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            using var dropSource = ComHelpers.GetComScope<IDropSource>(
+                new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage));
+            using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+            if (PInvoke.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }
@@ -5246,6 +5124,13 @@ public unsafe partial class Control :
         return (DragDropEffects)finalEffect;
     }
 
+    /// <summary>
+    ///  Creates <see cref="DataObject"/> for drag operation.
+    ///  The incoming <paramref name="data"/> will always be wrapped.
+    /// </summary>
+    private static DataObject CreateRuntimeDataObjectForDrag(object data) =>
+        data is DataObject dataObject ? dataObject : new DataObject(data);
+
     public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
     {
         ArgumentNullException.ThrowIfNull(bitmap);
@@ -5253,7 +5138,7 @@ public unsafe partial class Control :
         if (targetBounds.Width <= 0 || targetBounds.Height <= 0
             || targetBounds.X < 0 || targetBounds.Y < 0)
         {
-            throw new ArgumentException(nameof(targetBounds));
+            throw new ArgumentException(message: null, nameof(targetBounds));
         }
 
         if (!IsHandleCreated)
@@ -5264,7 +5149,7 @@ public unsafe partial class Control :
         int width = Math.Min(Width, targetBounds.Width);
         int height = Math.Min(Height, targetBounds.Height);
 
-        using Bitmap image = new Bitmap(width, height, bitmap.PixelFormat);
+        using Bitmap image = new(width, height, bitmap.PixelFormat);
         using Graphics g = Graphics.FromImage(image);
         using DeviceContextHdcScope hDc = new(g, applyGraphicsState: false);
 
@@ -5278,7 +5163,7 @@ public unsafe partial class Control :
         // Now BLT the result to the destination bitmap.
         using Graphics destGraphics = Graphics.FromImage(bitmap);
         using DeviceContextHdcScope desthDC = new(destGraphics, applyGraphicsState: false);
-        PInvoke.BitBlt(
+        PInvokeCore.BitBlt(
             desthDC,
             targetBounds.X,
             targetBounds.Y,
@@ -5361,18 +5246,17 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Retrieves the form that this control is on. The control's parent may not be
-    ///  the same as the form.
+    ///  Retrieves the form that this control is on. The control's parent may not be the same as the form.
     /// </summary>
     public Form? FindForm()
     {
-        Control? cur = this;
-        while (cur is not null && cur is not Form)
+        Control? current = this;
+        while (current is not null and not Form)
         {
-            cur = cur.ParentInternal;
+            current = current.ParentInternal;
         }
 
-        return (Form?)cur;
+        return (Form?)current;
     }
 
     /// <summary>
@@ -5410,10 +5294,7 @@ public unsafe partial class Control :
         }
     }
 
-    protected bool GetTopLevel()
-    {
-        return (_state & States.TopLevel) != 0;
-    }
+    protected bool GetTopLevel() => (_state & States.TopLevel) != 0;
 
     /// <summary>
     ///  Used by AxHost to fire the CreateHandle event.
@@ -5449,8 +5330,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public bool Focus()
     {
-        s_focusTracing.TraceVerbose($"Control::Focus - {Name}");
-
         // Call the internal method (which form overrides)
         return FocusInternal();
     }
@@ -5462,7 +5341,6 @@ public unsafe partial class Control :
     /// </summary>
     private protected virtual bool FocusInternal()
     {
-        s_focusTracing.TraceVerbose($"Control::FocusInternal - {Name}");
         if (CanFocus)
         {
             PInvoke.SetFocus(this);
@@ -5556,7 +5434,7 @@ public unsafe partial class Control :
         if (MaximumSize != Size.Empty || MinimumSize != Size.Empty)
         {
             Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(MaximumSize);
-            Rectangle newBounds = new Rectangle(suggestedX, suggestedY, 0, 0)
+            Rectangle newBounds = new(suggestedX, suggestedY, 0, 0)
             {
                 // Clip the size to maximum and inflate it to minimum as necessary.
                 Size = LayoutUtils.IntersectSizes(new Size(proposedWidth, proposedHeight), maximumSize)
@@ -5577,7 +5455,7 @@ public unsafe partial class Control :
         int value = (int)skipValue;
 
         // Since this is a flags enumeration the only way to validate skipValue is by checking if its within the range.
-        if (value < 0 || value > 7)
+        if (value is < 0 or > 7)
         {
             throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
         }
@@ -5588,27 +5466,18 @@ public unsafe partial class Control :
         return (control == this) ? null : control;
     }
 
-    private protected virtual string? GetCaptionForTool(ToolTip toolTip)
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-
-        return host is null
-            ? toolTip.GetCaptionForTool(this)
-            : host.GetCaptionForTool(toolTip);
-    }
+    private protected virtual string? GetCaptionForTool(ToolTip toolTip) =>
+        ToolStripControlHost is IKeyboardToolTip host
+            ? host.GetCaptionForTool(toolTip)
+            : toolTip.GetCaptionForTool(this);
 
     /// <summary>
-    ///  Retrieves the child control that is located at the specified client
-    ///  coordinates.
+    ///  Retrieves the child control that is located at the specified client coordinates.
     /// </summary>
-    public Control? GetChildAtPoint(Point pt)
-    {
-        return GetChildAtPoint(pt, GetChildAtPointSkip.None);
-    }
+    public Control? GetChildAtPoint(Point pt) => GetChildAtPoint(pt, GetChildAtPointSkip.None);
 
     /// <summary>
-    ///  Returns the closest ContainerControl in the control's chain of parent controls
-    ///  and forms.
+    ///  Returns the closest ContainerControl in the control's chain of parent controls and forms.
     /// </summary>
     public IContainerControl? GetContainerControl()
     {
@@ -5772,7 +5641,7 @@ public unsafe partial class Control :
     /// </summary>
     private int[] GetChildWindowsInTabOrder()
     {
-        List<ControlTabOrderHolder> holders = new List<ControlTabOrderHolder>();
+        List<ControlTabOrderHolder> holders = [];
 
         for (HWND hWndChild = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
             !hWndChild.IsNull;
@@ -5860,12 +5729,11 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    /// Gets the control <see cref="Font"/>. If the font is inherited, traverse through the parent hierarchy and retreives the font.
+    ///  Gets the control <see cref="Font"/>. If the font is inherited, traverse through the parent hierarchy and
+    ///  retrieve the font.
     /// </summary>
     /// <param name="fontDpi">Dpi of the control for which <see cref="Font"/> is evaluated.</param>
-    /// <returns>
-    /// <para>The control's <see cref="Font"/></para>
-    /// </returns>
+    /// <returns>The control's <see cref="Font"/></returns>
     internal Font GetCurrentFontAndDpi(out int fontDpi)
     {
         fontDpi = _deviceDpi;
@@ -5896,13 +5764,7 @@ public unsafe partial class Control :
             }
         }
 
-        AmbientProperties? ambient = AmbientPropertiesService;
-        if (ambient is not null && ambient.Font is not null)
-        {
-            return ambient.Font;
-        }
-
-        return DefaultFont;
+        return AmbientPropertiesService?.Font ?? DefaultFont;
     }
 
     private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
@@ -5920,7 +5782,7 @@ public unsafe partial class Control :
 
         if (forward)
         {
-            ControlCollection? controls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controls = (ControlCollection?)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
             if (controls is not null && controls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
             {
@@ -5996,33 +5858,23 @@ public unsafe partial class Control :
         {
             if (ctl != this)
             {
-                int targetIndex = ctl!._tabIndex;
+                int targetIndex = ctl._tabIndex;
                 bool hitCtl = false;
                 Control? found = null;
-                Control? parent = ctl._parent;
+                Control? parent = ctl._parent ?? throw new InvalidOperationException(
+                    string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Parent), ctl));
 
-                if (parent is null)
-                {
-                    throw new InvalidOperationException(
-                        string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Parent), ctl));
-                }
-
-                ControlCollection? siblings = GetControlCollection(parent);
-
-                if (siblings is null)
-                {
-                    throw new InvalidOperationException(
-                        string.Format(SR.ControlsPropertyNotSetInGetNextControl,
-                            nameof(Controls), parent));
-                }
+                ControlCollection? siblings = GetControlCollection(parent) ?? throw new InvalidOperationException(
+                    string.Format(SR.ControlsPropertyNotSetInGetNextControl, nameof(Controls), parent));
 
                 int siblingCount = siblings.Count;
 
                 if (siblingCount == 0)
                 {
-                    throw new InvalidOperationException(
-                        string.Format(SR.ControlsCollectionShouldNotBeEmptyInGetNextControl,
-                            nameof(Control.Controls), parent));
+                    throw new InvalidOperationException(string.Format(
+                        SR.ControlsCollectionShouldNotBeEmptyInGetNextControl,
+                        nameof(Controls),
+                        parent));
                 }
 
                 // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
@@ -6133,7 +5985,7 @@ public unsafe partial class Control :
             }
             else
             {
-                throw new Win32Exception(ERROR.INVALID_HANDLE);
+                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_HANDLE);
             }
         }
     }
@@ -6213,7 +6065,7 @@ public unsafe partial class Control :
             return BackColorBrush;
         }
 
-        return (HBRUSH)PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
+        return (HBRUSH)PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
     }
 
     /// <summary>
@@ -6242,7 +6094,7 @@ public unsafe partial class Control :
         else if (IsHandleCreated)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            using PInvoke.RegionScope regionHandle = new(region, graphics);
+            using RegionScope regionHandle = new(region, graphics);
 
             if (invalidateChildren)
             {
@@ -6504,11 +6356,15 @@ public unsafe partial class Control :
         {
             action();
         }
-        else if (tme._method is WaitCallback)
+        else if (tme._method is WaitCallback waitCallback)
         {
-            Debug.Assert(tme._args!.Length == 1,
-                         "Arguments are wrong for WaitCallback");
-            ((WaitCallback)tme._method)(tme._args[0]);
+            Debug.Assert(tme._args!.Length == 1, "Arguments are wrong for WaitCallback");
+            waitCallback(tme._args[0]);
+        }
+        else if (tme._method is SendOrPostCallback sendOrPostCallback)
+        {
+            Debug.Assert(tme._args!.Length == 1, "Arguments are wrong for SendOrPostCallback");
+            sendOrPostCallback(tme._args[0]);
         }
         else
         {
@@ -6568,8 +6424,9 @@ public unsafe partial class Control :
                     // This code matches the behavior above.  Basically, if we're debugging, don't
                     // do this because the exception would have been handled above.  If we're
                     // not debugging, raise the exception here.
-                    if (!NativeWindow.WndProcShouldBeDebuggable &&
-                        current._exception is not null && !current._synchronous)
+                    if (!NativeWindow.WndProcShouldBeDebuggable
+                        && current._exception is not null
+                        && !current._synchronous)
                     {
                         Application.OnThreadException(current._exception);
                     }
@@ -6642,7 +6499,7 @@ public unsafe partial class Control :
     /// </summary>
     public static bool IsKeyLocked(Keys keyVal)
     {
-        if (keyVal == Keys.Insert || keyVal == Keys.NumLock || keyVal == Keys.CapsLock || keyVal == Keys.Scroll)
+        if (keyVal is Keys.Insert or Keys.NumLock or Keys.CapsLock or Keys.Scroll)
         {
             int result = PInvoke.GetKeyState((int)keyVal);
 
@@ -6653,7 +6510,7 @@ public unsafe partial class Control :
             // and off when the key is untoggled.
 
             // Toggle keys (only low bit is of interest).
-            if (keyVal == Keys.Insert || keyVal == Keys.CapsLock)
+            if (keyVal is Keys.Insert or Keys.CapsLock)
             {
                 return (result & 0x1) != 0x0;
             }
@@ -6670,18 +6527,18 @@ public unsafe partial class Control :
     ///  Determines if <paramref name="charCode"/> is an input character that the control wants.
     /// </summary>
     /// <remarks>
-    ///  This method is called during window message pre-processing to determine whether the given input
-    ///  character should be pre-processed or sent directly to the control. The pre-processing of a character
-    ///  includes checking whether the character is a mnemonic of another control.
-    ///  (<see cref="PreProcessControlMessage(ref Message)"/>)
+    ///  <para>
+    ///   This method is called during window message pre-processing to determine whether the given input
+    ///   character should be pre-processed or sent directly to the control. The pre-processing of a character
+    ///   includes checking whether the character is a mnemonic of another control.
+    ///   (<see cref="PreProcessControlMessage(ref Message)"/>)
+    ///  </para>
     /// </remarks>
     /// <returns>
     ///  'true' if the <paramref name="charCode"/> should be sent directly to the control.
     /// </returns>
     protected virtual bool IsInputChar(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsInputChar 0x{((int)charCode):X}");
-
         int mask;
         if (charCode == (char)(int)Keys.Tab)
         {
@@ -6710,8 +6567,6 @@ public unsafe partial class Control :
     /// </returns>
     protected virtual bool IsInputKey(Keys keyData)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsInputKey {keyData}");
-
         if ((keyData & Keys.Alt) == Keys.Alt)
         {
             return false;
@@ -6742,12 +6597,9 @@ public unsafe partial class Control :
     /// </summary>
     public static bool IsMnemonic(char charCode, string? text)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsMnemonic({charCode}, {(text is not null ? text : "null")})");
-
         // Special case handling:
         if (charCode == '&')
         {
-            s_controlKeyboardRouting.TraceVerbose("   ...returning false");
             return false;
         }
 
@@ -6769,18 +6621,14 @@ public unsafe partial class Control :
                 }
 
                 char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                s_controlKeyboardRouting.TraceVerbose($"   ...& found... char={c1}");
+
                 if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                 {
-                    s_controlKeyboardRouting.TraceVerbose("   ...returning true");
                     return true;
                 }
             }
-
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose && pos == 0, "   ...no & found");
         }
 
-        s_controlKeyboardRouting.TraceVerbose("   ...returning false");
         return false;
     }
 
@@ -6796,31 +6644,11 @@ public unsafe partial class Control :
         return parentControl is ContainerControl;
     }
 
-    private void ListenToUserPreferenceChanged(bool listen)
-    {
-        if (GetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged))
-        {
-            if (!listen)
-            {
-                SetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged, false);
-                SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
-            }
-        }
-        else if (listen)
-        {
-            SetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged, true);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
-        }
-    }
-
     /// <summary>
-    ///  Transforms an integer coordinate from logical to device units
-    ///  by scaling it for the current Dpi and rounding down to the nearest integer value.
+    ///  Transforms an integer coordinate from logical to device units by scaling it for the current DPI
+    ///  and rounding down to the nearest integer value.
     /// </summary>
-    public int LogicalToDeviceUnits(int value)
-    {
-        return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
-    }
+    public int LogicalToDeviceUnits(int value) => ScaleHelper.ScaleToDpi(value, DeviceDpi);
 
     /// <summary>
     ///  Transforms size from logical to device units by scaling it for the current
@@ -6828,10 +6656,7 @@ public unsafe partial class Control :
     /// </summary>
     /// <param name="value"> size to be scaled</param>
     /// <returns> scaled size</returns>
-    public Size LogicalToDeviceUnits(Size value)
-    {
-        return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
-    }
+    public Size LogicalToDeviceUnits(Size value) => ScaleHelper.ScaleToDpi(value, DeviceDpi);
 
     /// <summary>
     ///  Create a new bitmap scaled for the device units. When displayed on the device,
@@ -6841,7 +6666,12 @@ public unsafe partial class Control :
     /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
     public void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap)
     {
-        DpiHelper.ScaleBitmapLogicalToDevice(ref logicalBitmap, DeviceDpi);
+        if (logicalBitmap is null)
+        {
+            return;
+        }
+
+        logicalBitmap = ScaleHelper.ScaleToDpi(logicalBitmap, DeviceDpi, disposeBitmap: true);
     }
 
     private protected void AdjustWindowRectExForControlDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle)
@@ -6851,7 +6681,7 @@ public unsafe partial class Control :
 
     private static void AdjustWindowRectExForDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle, int dpi)
     {
-        if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater())
+        if ((ScaleHelper.IsThreadPerMonitorV2Aware || ScaleHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater())
         {
             PInvoke.AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, (uint)dpi);
         }
@@ -6896,7 +6726,7 @@ public unsafe partial class Control :
             executionContext = ExecutionContext.Capture();
         }
 
-        ThreadMethodEntry tme = new ThreadMethodEntry(
+        ThreadMethodEntry tme = new(
             caller,
             this,
             method,
@@ -6932,7 +6762,9 @@ public unsafe partial class Control :
         {
             if (!tme.IsCompleted)
             {
-                WaitForWaitHandle(tme.AsyncWaitHandle);
+                // In synchronous call we not need waitHandle after wait.
+                using WaitHandle waitHandle = tme.AsyncWaitHandle;
+                WaitForWaitHandle(waitHandle);
             }
 
             if (tme._exception is not null)
@@ -6970,7 +6802,7 @@ public unsafe partial class Control :
         }
 
         // Copy the name into the given IntPtr
-        char[] nullChar = new char[] { (char)0 };
+        char[] nullChar = [(char)0];
         byte[] nullBytes;
         byte[] bytes;
 
@@ -6981,20 +6813,6 @@ public unsafe partial class Control :
         Marshal.Copy(nullBytes, 0, m.LParamInternal + (nint)bytes.Length, nullBytes.Length);
 
         m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
-    }
-
-    // Used by form to notify the control that it has been "entered"
-    internal void NotifyEnter()
-    {
-        s_focusTracing.TraceVerbose($"Control::NotifyEnter() - {Name}");
-        OnEnter(EventArgs.Empty);
-    }
-
-    // Used by form to notify the control that it has been "left"
-    internal void NotifyLeave()
-    {
-        s_focusTracing.TraceVerbose($"Control::NotifyLeave() - {Name}");
-        OnLeave(EventArgs.Empty);
     }
 
     /// <summary>
@@ -7011,7 +6829,7 @@ public unsafe partial class Control :
     // Used by form to notify the control that it is validating.
     private bool NotifyValidating()
     {
-        CancelEventArgs ev = new CancelEventArgs();
+        CancelEventArgs ev = new();
         OnValidating(ev);
         return ev.Cancel;
     }
@@ -7055,7 +6873,7 @@ public unsafe partial class Control :
                 HBRUSH p = (HBRUSH)backBrush;
                 if (!p.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvokeCore.DeleteObject(p);
                 }
             }
 
@@ -7131,6 +6949,11 @@ public unsafe partial class Control :
     {
         if (Properties.ContainsObjectThatIsNotNull(s_bindingsProperty))
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             UpdateBindings();
         }
 
@@ -7597,7 +7420,7 @@ public unsafe partial class Control :
             {
                 uint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
 
-                using DeviceContextHdcScope hdc = new DeviceContextHdcScope(e);
+                using DeviceContextHdcScope hdc = new(e);
                 Message m = Message.Create(HWND, PInvoke.WM_PRINTCLIENT, (WPARAM)hdc, (LPARAM)flags);
                 DefWndProc(ref m);
             }
@@ -7780,46 +7603,9 @@ public unsafe partial class Control :
                 SetWindowFont();
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-            {
-                int old = _deviceDpi;
-                Font localFont = GetCurrentFontAndDpi(out int fontDpi);
-                _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
-                if (old != _deviceDpi)
-                {
-                    if (fontDpi != _deviceDpi)
-                    {
-                        // Controls are by default font scaled.
-                        // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-                        Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
-                        ScaledControlFont = fontForDpi;
+            HandleHighDpi();
 
-                        // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
-                        // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
-                        // 'OnFontChanged' event explicitly. ex: winforms designer natively hosted in VS.
-                        if (IsFontSet())
-                        {
-                            SetScaledFont(fontForDpi);
-                        }
-                    }
-
-                    RescaleConstantsForDpi(old, _deviceDpi);
-
-                    // If control is top-level window ( for ex: Top level Form) and control's StartPosition is not WindowsDefaultLocation,
-                    // resizing the control would need Location of the control to be recalculated.
-                    // ex: Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen, would need recalculation for Location
-                    // property to place on center to parent/screen.
-                    if (this is Form form && form.TopLevel)
-                    {
-                        // Form gets location information form CreateParams but these were calculated before handle created for the Form.
-                        // In case of launching the Form on secondary monitor, DPI is evaluated only after handle is created for the Form and the
-                        // Form resized according to the new DPI.Hence, Form location need to be recalculated with new bounds information.
-                        form.AdjustFormPosition();
-                    }
-                }
-            }
-
-            // Restore dragdrop status. Ole Initialize happens when the ThreadContext in Application is created.
+            // Restore drag drop status. Ole Initialize happens when the ThreadContext in Application is created.
             SetAcceptDrops(AllowDrop);
 
             Region? region = Region;
@@ -7859,12 +7645,6 @@ public unsafe partial class Control :
                 SetExtendedState(ExtendedStates.HaveInvoked, true);
                 SetExtendedState(ExtendedStates.SetScrollPosition, false);
             }
-
-            // Listen to UserPreferenceChanged if the control is top level and interested in the notification.
-            if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged))
-            {
-                ListenToUserPreferenceChanged(GetTopLevel());
-            }
         }
 
         ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
@@ -7877,6 +7657,51 @@ public unsafe partial class Control :
             {
                 PInvoke.PostMessage(this, s_threadCallbackMessage);
                 SetState(States.ThreadMarshalPending, false);
+            }
+        }
+
+        void HandleHighDpi()
+        {
+            if (!DpiAwarenessContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            {
+                return;
+            }
+
+            int old = _deviceDpi;
+            Font localFont = GetCurrentFontAndDpi(out int fontDpi);
+            _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
+            if (old == _deviceDpi)
+            {
+                return;
+            }
+
+            if (fontDpi != _deviceDpi)
+            {
+                // Controls are by default font scaled.
+                // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
+                Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
+                ScaledControlFont = fontForDpi;
+
+                // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
+                // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
+                // 'OnFontChanged' event explicitly. ex: Windows Forms designer natively hosted in VS.
+                if (IsFontSet())
+                {
+                    SetScaledFont(fontForDpi);
+                }
+            }
+
+            RescaleConstantsForDpi(old, _deviceDpi);
+
+            // If the control is top-level window and its StartPosition is not WindowsDefaultLocation, Location needs
+            // recalculated. For example, a Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen,
+            // would need recalculated to place it correctly.
+            if (this is Form form && form.TopLevel)
+            {
+                // Form gets location information from CreateParams but the values are calculated before the handle creation.
+                // When launching the Form on a secondary monitor, DPI is evaluated only after handle is created. for the Form and the
+                // Form resized according to the new DPI.Hence, Form location need to be recalculated with new bounds information.
+                form.AdjustFormPosition();
             }
         }
     }
@@ -7955,12 +7780,10 @@ public unsafe partial class Control :
                     HBRUSH p = (HBRUSH)backBrush;
                     if (!p.IsNull)
                     {
-                        PInvoke.DeleteObject(p);
+                        PInvokeCore.DeleteObject(p);
                     }
                 }
             }
-
-            ListenToUserPreferenceChanged(listen: false);
         }
 
         // this code is important -- it is critical that we stash away
@@ -8053,7 +7876,7 @@ public unsafe partial class Control :
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual void OnEnter(EventArgs e)
+    protected internal virtual void OnEnter(EventArgs e)
     {
         ((EventHandler?)Events[s_enterEvent])?.Invoke(this, e);
     }
@@ -8166,8 +7989,8 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnKeyUp(KeyEventArgs e)
     {
-        if (OsVersion.IsWindows11_OrGreater() &&
-            (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
+        if (OsVersion.IsWindows11_OrGreater()
+            && (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
         {
             KeyboardToolTipStateMachine.HidePersistentTooltip();
         }
@@ -8221,7 +8044,7 @@ public unsafe partial class Control :
     ///  Raises the <see cref="Leave"/> event.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual void OnLeave(EventArgs e)
+    protected internal virtual void OnLeave(EventArgs e)
     {
         ((EventHandler?)Events[s_leaveEvent])?.Invoke(this, e);
     }
@@ -8413,7 +8236,7 @@ public unsafe partial class Control :
     protected virtual void OnPaintBackground(PaintEventArgs pevent)
     {
         // We need the true client rectangle as clip rectangle causes problems on "Windows Classic" theme.
-        PInvoke.GetClientRect(new HandleRef<HWND>(_window, InternalHandle), out RECT rect);
+        PInvokeCore.GetClientRect(new HandleRef<HWND>(_window, InternalHandle), out RECT rect);
         PaintBackground(pevent, rect);
     }
 
@@ -8562,10 +8385,25 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
-    ///  This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
-    ///  The derived class can choose to not call the base class implementation.
+    ///  This is called in the <see cref="Control"/> constructor before calculating the initial <see cref="Size"/>.
+    ///  This gives a chance to initialize fields that will be used in calls to sizing related virtuals such as
+    ///  <see cref="DefaultSize"/>, etc. The real size cannot be calculated until the handle is created as Windows
+    ///  can have their own DPI setting. When the handle is created, <see cref="RescaleConstantsForDpi(int, int)"/>
+    ///  is called.
     /// </summary>
+    private protected virtual void InitializeConstantsForInitialDpi(int initialDpi) { }
+
+    /// <summary>
+    ///  Invoked when the control handle is created and right before the top level parent control receives a
+    ///  WM_DPICHANGED message.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
+    ///  </para>
+    /// </remarks>
+    /// <param name="deviceDpiOld">The DPI value prior to the change.</param>
+    /// <param name="deviceDpiNew">The DPI value after the change.</param>
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
@@ -8574,21 +8412,15 @@ public unsafe partial class Control :
 
     // This is basically OnPaintBackground, put in a separate method for ButtonBase,
     // which does all painting under OnPaint, and tries very hard to avoid double-painting the border pixels.
-    internal void PaintBackground(PaintEventArgs e, Rectangle rectangle)
-    {
+    internal void PaintBackground(PaintEventArgs e, Rectangle rectangle) =>
         PaintBackground(e, rectangle, BackColor, Point.Empty);
-    }
 
-    internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor)
-    {
-        PaintBackground(e, rectangle, backColor, Point.Empty);
-    }
-
-    internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor, Point scrollOffset)
+    internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor, Point scrollOffset = default)
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        if (RenderColorTransparent(backColor))
+        bool renderColorTransparent = RenderColorTransparent(backColor);
+        if (renderColorTransparent)
         {
             PaintTransparentBackground(e, rectangle);
         }
@@ -8601,12 +8433,10 @@ public unsafe partial class Control :
 
         if (BackgroundImage is not null && !DisplayInformation.HighContrast && !formRTL)
         {
-            if (BackgroundImageLayout == ImageLayout.Tile)
+            bool imageIsTransparent = ControlPaint.IsImageTransparent(BackgroundImage);
+            if (!renderColorTransparent && BackgroundImageLayout == ImageLayout.Tile && imageIsTransparent)
             {
-                if (ControlPaint.IsImageTransparent(BackgroundImage))
-                {
-                    PaintTransparentBackground(e, rectangle);
-                }
+                PaintTransparentBackground(e, rectangle);
             }
 
             Point scrollLocation = scrollOffset;
@@ -8615,7 +8445,7 @@ public unsafe partial class Control :
                 scrollLocation = scrollControl.AutoScrollPosition;
             }
 
-            if (ControlPaint.IsImageTransparent(BackgroundImage))
+            if (imageIsTransparent)
             {
                 PaintBackColor(e, rectangle, backColor);
             }
@@ -8650,7 +8480,7 @@ public unsafe partial class Control :
         if (!color.HasTransparency())
         {
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
+            using CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
             hdc.FillRectangle(rectangle, hbrush);
         }
         else if (!color.IsFullyTransparent())
@@ -8665,7 +8495,7 @@ public unsafe partial class Control :
     private void PaintException(PaintEventArgs e)
     {
         // As this is unusual we won't cache the pen.
-        using Pen pen = new Pen(Color.Red, width: 2);
+        using Pen pen = new(Color.Red, width: 2);
         Rectangle clientRectangle = ClientRectangle;
         Rectangle rectangle = clientRectangle;
         rectangle.X++;
@@ -8682,23 +8512,20 @@ public unsafe partial class Control :
                             clientRectangle.Right, clientRectangle.Top);
     }
 
-    internal void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle)
-    {
-        PaintTransparentBackground(e, rectangle, null);
-    }
-
     /// <summary>
     ///  Trick our parent into painting our background for us, or paint some default color if that doesn't work.
     /// </summary>
     /// <remarks>
-    ///  This method is the hardest part of implementing transparent controls; call this in
-    ///  <see cref="OnPaintBackground(PaintEventArgs)"/>.
+    ///  <para>
+    ///   This method is the hardest part of implementing transparent controls; call this in
+    ///   <see cref="OnPaintBackground(PaintEventArgs)"/>.
+    ///  </para>
     /// </remarks>
     /// <param name="rectangle">The area to redraw.</param>
     /// <param name="transparentRegion">
     ///  Region of the rectangle to be transparent, or null for the entire control.
     /// </param>
-    internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region? transparentRegion)
+    internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region? transparentRegion = null)
     {
         Control? parent = ParentInternal;
 
@@ -8707,7 +8534,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using PInvoke.CreateBrushScope hbrush = new(SystemColors.Control);
+            using CreateBrushScope hbrush = new(SystemColors.Control);
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }
@@ -8738,25 +8565,25 @@ public unsafe partial class Control :
         }
 
         // Move the rendering area and setup it's size (we want to translate it to the parent's origin).
-        Rectangle shift = new Rectangle(-Left, -Top, parent.Width, parent.Height);
+        Rectangle shift = new(-Left, -Top, parent.Width, parent.Height);
 
         // Moving the clipping rectangle to the parent coordinate system.
-        Rectangle newClipRect = new Rectangle(
+        Rectangle newClipRect = new(
             rectangle.Left + Left,
             rectangle.Top + Top,
             rectangle.Width,
             rectangle.Height);
 
         using DeviceContextHdcScope hdc = new(e);
-        using PInvoke.SaveDcScope savedc = new(hdc);
+        using SaveDcScope savedc = new(hdc);
 
-        PInvoke.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
+        PInvokeCore.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
 
-        using PaintEventArgs newArgs = new PaintEventArgs(hdc, newClipRect);
+        using PaintEventArgs newArgs = new(hdc, newClipRect);
 
         if (transparentRegion is not null)
         {
-            using GraphicsStateScope saveState = new GraphicsStateScope(newArgs.Graphics);
+            using GraphicsStateScope saveState = new(newArgs.Graphics);
 
             // Is this clipping something we can apply directly to the HDC?
             newArgs.Graphics.Clip = transparentRegion;
@@ -8771,9 +8598,6 @@ public unsafe partial class Control :
         }
     }
 
-    // Exceptions during painting are nasty, because paint events happen so often.
-    // So if user painting code has an issue, we make sure never to call it again,
-    // so as not to spam the end-user with exception dialogs.
     private void PaintWithErrorHandling(PaintEventArgs e, short layer)
     {
         try
@@ -8785,39 +8609,39 @@ public unsafe partial class Control :
                 {
                     PaintException(e);
                 }
+
+                return;
             }
-            else
+
+            try
             {
-                bool exceptionThrown = true;
-                try
+                switch (layer)
                 {
-                    switch (layer)
-                    {
-                        case PaintLayerForeground:
-                            OnPaint(e);
-                            break;
-                        case PaintLayerBackground:
-                            if (!GetStyle(ControlStyles.Opaque))
-                            {
-                                OnPaintBackground(e);
-                            }
+                    case PaintLayerForeground:
+                        OnPaint(e);
+                        break;
+                    case PaintLayerBackground:
+                        if (!GetStyle(ControlStyles.Opaque))
+                        {
+                            OnPaintBackground(e);
+                        }
 
-                            break;
-                        default:
-                            Debug.Fail($"Unknown PaintLayer {layer}");
-                            break;
-                    }
+                        break;
+                    default:
+                        Debug.Fail($"Unknown PaintLayer {layer}");
+                        break;
+                }
+            }
+            catch
+            {
+                // Exceptions during painting are nasty, because paint events happen so often.
+                // So if user painting code has an issue, we make sure never to call it again,
+                // so as not to spam the end-user with exception dialogs.
 
-                    exceptionThrown = false;
-                }
-                finally
-                {
-                    if (exceptionThrown)
-                    {
-                        SetState(States.ExceptionWhilePainting, true);
-                        Invalidate();
-                    }
-                }
+                SetState(States.ExceptionWhilePainting, true);
+                Invalidate();
+
+                throw;
             }
         }
         finally
@@ -8990,18 +8814,18 @@ public unsafe partial class Control :
         foreach (Control c in Controls)
         {
             // First, if the control is a container, recurse into its descendants.
-            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren &&
-                c.ShouldPerformContainerValidation() &&
-                c.PerformContainerValidation(validationConstraints))
+            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren
+                && c.ShouldPerformContainerValidation()
+                && c.PerformContainerValidation(validationConstraints))
             {
                 failed = true;
             }
 
             // Next, use input flags to decide whether to validate the control itself
-            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable)) ||
-                ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled) ||
-                ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible) ||
-                ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
+            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable))
+                || ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled)
+                || ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible)
+                || ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
             {
                 continue;
             }
@@ -9017,7 +8841,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the screen point p in client coords.
+    ///  Computes the location of the screen point p in client coordinates.
     /// </summary>
     public Point PointToClient(Point p)
     {
@@ -9026,7 +8850,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the client point p in screen coords.
+    ///  Computes the location of the client point p in screen coordinates.
     /// </summary>
     public Point PointToScreen(Point p)
     {
@@ -9149,24 +8973,20 @@ public unsafe partial class Control :
         target.SetExtendedState(ExtendedStates.InputChar, false);
         target.SetExtendedState(ExtendedStates.UiCues, true);
 
-        s_controlKeyboardRouting.TraceVerbose($"Control.PreProcessControlMessageInternal {message}");
-
         try
         {
             Keys keyData = (Keys)(nint)message.WParamInternal | ModifierKeys;
 
             // Allow control to preview key down message.
-            if (message.Msg == (int)PInvoke.WM_KEYDOWN || message.Msg == (int)PInvoke.WM_SYSKEYDOWN)
+            if (message.Msg is ((int)PInvoke.WM_KEYDOWN) or ((int)PInvoke.WM_SYSKEYDOWN))
             {
                 target.ProcessUICues(ref message);
 
-                PreviewKeyDownEventArgs args = new PreviewKeyDownEventArgs(keyData);
+                PreviewKeyDownEventArgs args = new(keyData);
                 target.OnPreviewKeyDown(args);
 
                 if (args.IsInputKey)
                 {
-                    s_controlKeyboardRouting.TraceVerbose("PreviewKeyDown indicated this is an input key.");
-
                     // Control wants this message - indicate it should be dispatched.
                     return PreProcessControlState.MessageNeeded;
                 }
@@ -9182,7 +9002,6 @@ public unsafe partial class Control :
                     // or if it is safe to call - we only want it to be called once.
                     if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                     {
-                        s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                         state = PreProcessControlState.MessageNeeded;
                     }
                 }
@@ -9192,7 +9011,6 @@ public unsafe partial class Control :
                     // or if it is safe to call - we only want it to be called once.
                     if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)(nint)message.WParamInternal))
                     {
-                        s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                         state = PreProcessControlState.MessageNeeded;
                     }
                 }
@@ -9211,51 +9029,42 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a command key. This method is called during message
-    ///  pre-processing to handle command keys. Command keys are keys that always
-    ///  take precedence over regular input keys. Examples of command keys
-    ///  include accelerators and menu shortcuts. The method must return true to
-    ///  indicate that it has processed the command key, or false to indicate
-    ///  that the key is not a command key.
-    ///  processCmdKey() first checks if the control has a context menu, and if
-    ///  so calls the menu's processCmdKey() to check for menu shortcuts. If the
-    ///  command key isn't a menu shortcut, and if the control has a parent, the
-    ///  key is passed to the parent's processCmdKey() method. The net effect is
-    ///  that command keys are "bubbled" up the control hierarchy.
-    ///  When overriding processCmdKey(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed by
-    ///  the control, the result of "base.processCmdKey()" should be returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a command key.
     /// </summary>
-    protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessCmdKey {msg}");
-
-        if (_parent is not null)
-        {
-            return _parent.ProcessCmdKey(ref msg, keyData);
-        }
-
-        return false;
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message pre-processing to handle command keys. Command keys are keys that always
+    ///   take precedence over regular input keys. Examples of command keys include accelerators and menu shortcuts. The
+    ///   method must return <see langword="true"/> to indicate that it has  processed the command key, or
+    ///   <see langword="false"/> to indicate that the key is not a command key.
+    ///  </para>
+    ///  <para>
+    ///   If the control has a parent, the key is passed to the parent's <see cref="ProcessCmdKey(ref Message, Keys)"/>
+    ///   method. The net effect is that command keys are "bubbled" up the control hierarchy. In addition to the key the
+    ///   user pressed, the key data also indicates which, if any, modifier keys were pressed at the same time as the
+    ///   key. Modifier keys include the SHIFT, CTRL, and ALT keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) =>
+        _parent?.ProcessCmdKey(ref msg, keyData) ?? false;
 
     private unsafe void PrintToMetaFile(HDC hDC, IntPtr lParam)
     {
-        Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
+        Debug.Assert((OBJ_TYPE)PInvokeCore.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
             "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
         Debug.Assert((lParam & (long)PInvoke.PRF_CHILDREN) != 0,
             "PrintToMetaFile() called without PRF_CHILDREN.");
 
         // Strip the PRF_CHILDREN flag.  We will manually walk our children and print them.
-        lParam = (IntPtr)(lParam & (long)~PInvoke.PRF_CHILDREN);
+        lParam = (nint)(lParam & (long)~PInvoke.PRF_CHILDREN);
 
         // We're the root control, so we need to set up our clipping region.  Retrieve the
         // x-coordinates and y-coordinates of the viewport origin for the specified device context.
         Point viewportOrg = default;
-        bool success = PInvoke.GetViewportOrgEx(hDC, &viewportOrg);
+        bool success = PInvokeCore.GetViewportOrgEx(hDC, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-        using PInvoke.RegionScope hClippingRegion = new(
+        using RegionScope hClippingRegion = new(
             viewportOrg.X,
             viewportOrg.Y,
             viewportOrg.X + Width,
@@ -9264,9 +9073,9 @@ public unsafe partial class Control :
         Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
         // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-        RegionType selectResult = (RegionType)PInvoke.SelectClipRgn(hDC, hClippingRegion);
+        GDI_REGION_TYPE selectResult = PInvokeCore.SelectClipRgn(hDC, hClippingRegion);
         Debug.Assert(
-            selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
+            selectResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
             "SIMPLEREGION or NULLLREGION expected.");
 
         PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
@@ -9279,7 +9088,7 @@ public unsafe partial class Control :
         using DCMapping mapping = new(hDC, bounds);
 
         // Print the non-client area.
-        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)(lParam & (long)~PInvoke.PRF_CLIENT));
+        PrintToMetaFile_SendPrintMessage(hDC, (nint)(lParam & (long)~PInvoke.PRF_CLIENT));
 
         // Figure out mapping for the client area.
         bool success = PInvoke.GetWindowRect(this, out var windowRect);
@@ -9291,7 +9100,7 @@ public unsafe partial class Control :
         using DCMapping clientMapping = new(hDC, clientBounds);
 
         // Print the client area.
-        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)(lParam & (long)~PInvoke.PRF_NONCLIENT));
+        PrintToMetaFile_SendPrintMessage(hDC, (nint)(lParam & (long)~PInvoke.PRF_NONCLIENT));
 
         // Paint children in reverse Z-Order.
         int count = Controls.Count;
@@ -9326,69 +9135,53 @@ public unsafe partial class Control :
             // System controls must be painted into a temporary bitmap
             // which is then copied into the metafile.  (Old GDI line drawing
             // is 1px thin, which causes borders to disappear, etc.)
-            using MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size);
+            using MetafileDCWrapper dcWrapper = new(hDC, Size);
             PInvoke.SendMessage(this, PInvoke.WM_PRINT, (WPARAM)dcWrapper.HDC, (LPARAM)lParam);
         }
     }
 
     /// <summary>
-    ///  Processes a dialog character. This method is called during message
-    ///  pre-processing to handle dialog characters, such as control mnemonics.
-    ///  This method is called only if the isInputChar() method indicates that
-    ///  the control isn't interested in the character.
-    ///  processDialogChar() simply sends the character to the parent's
-    ///  processDialogChar() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog characters.
-    ///  When overriding processDialogChar(), a control should return true to
-    ///  indicate that it has processed the character. For characters that aren't
-    ///  processed by the control, the result of "base.processDialogChar()"
-    ///  should be returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a dialog character.
     /// </summary>
-    protected virtual bool ProcessDialogChar(char charCode)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogChar [{charCode}]");
-        return _parent is null ? false : _parent.ProcessDialogChar(charCode);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message preprocessing to handle dialog characters, such as control mnemonics.
+    ///   This method is called only if the <see cref="IsInputChar(char)"/> method indicates that the control is not
+    ///   processing the character. The <see cref="ProcessDialogChar(char)"/> method simply sends the character to the
+    ///   parent's <see cref="ProcessDialogChar(char)"/> method, or returns <see langword="false"/> if the control has no
+    ///   parent. The <see cref="Form"/> class overrides this method to perform actual processing of dialog characters.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessDialogChar(char charCode) => _parent?.ProcessDialogChar(charCode) ?? false;
 
     /// <summary>
-    ///  Processes a dialog key. This method is called during message
-    ///  pre-processing to handle dialog characters, such as TAB, RETURN, ESCAPE,
-    ///  and arrow keys. This method is called only if the isInputKey() method
-    ///  indicates that the control isn't interested in the key.
-    ///  processDialogKey() simply sends the character to the parent's
-    ///  processDialogKey() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog keys.
-    ///  When overriding processDialogKey(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processDialogKey(...)" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a dialog key.
     /// </summary>
-    protected virtual bool ProcessDialogKey(Keys keyData)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogKey {keyData}");
-        return _parent is null ? false : _parent.ProcessDialogKey(keyData);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message preprocessing to handle dialog characters, such as TAB, RETURN, ESC, and
+    ///   arrow keys. This method is called only if the <see cref="IsInputKey(Keys)"/> method indicates that the control
+    ///   is not processing the key. The <see cref="ProcessDialogKey(Keys)"/> simply sends the character to the parent's
+    ///   <see cref="ProcessDialogKey(Keys)"/> method, or returns <see langword="false"/> if the control has no parent.
+    ///   The <see cref="Form"/> class overrides this method to perform actual processing of dialog keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessDialogKey(Keys keyData) => _parent?.ProcessDialogKey(keyData) ?? false;
 
     /// <summary>
-    ///  Processes a key message. This method is called when a control receives a
-    ///  keyboard message. The method is responsible for generating the appropriate
-    ///  key events for the message by calling OnKeyPress(), onKeyDown(), or
-    ///  onKeyUp(). The m parameter contains the window message that must
-    ///  be processed. Possible values for the m.msg field are WM_CHAR,
-    ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, WM_SYSKEYUP, and WM_IMECHAR.
-    ///  When overriding processKeyEventArgs(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processKeyEventArgs()" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a key message and generates the appropriate control events.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is called when a control receives a keyboard message. The method is responsible for generating the
+    ///   appropriate key events for the message by calling the <see cref="OnKeyPress(KeyPressEventArgs)"/>,
+    ///   <see cref="OnKeyDown(KeyEventArgs)"/>, or <see cref="OnKeyUp(KeyEventArgs)"/>. The <paramref name="m"/>
+    ///   parameter contains the window message that must be processed. Possible values for the <see cref="Message.Msg"/>
+    ///   property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, WM_SYSKEYUP, and WM_IME_CHAR.
+    ///  </para>
+    /// </remarks>
     protected virtual bool ProcessKeyEventArgs(ref Message m)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyEventArgs {m}");
         KeyEventArgs? ke = null;
         KeyPressEventArgs? kpe = null;
         WPARAM newWParam = 0;
@@ -9400,10 +9193,6 @@ public unsafe partial class Control :
             if (charsToIgnore > 0)
             {
                 charsToIgnore--;
-                Debug.WriteLineIf(
-                    CompModSwitches.ImeMode.Level >= TraceLevel.Info,
-                    $"charsToIgnore decreased, new val = {charsToIgnore}, this={this}");
-
                 ImeWmCharsToIgnore = charsToIgnore;
                 return false;
             }
@@ -9451,13 +9240,11 @@ public unsafe partial class Control :
 
         if (kpe is not null)
         {
-            s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {kpe.Handled}");
             m.WParamInternal = newWParam;
             return kpe.Handled;
         }
         else
         {
-            s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {ke!.Handled}");
             if (ke!.SuppressKeyPress)
             {
                 RemovePendingMessages(PInvoke.WM_CHAR, PInvoke.WM_CHAR);
@@ -9470,23 +9257,20 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a key message. This method is called when a control receives a
-    ///  keyboard message. The method first checks if the control has a parent,
-    ///  and if so calls the parent's processKeyPreview() method. If the parent's
-    ///  processKeyPreview() method doesn't consume the message then
-    ///  processKeyEventArgs() is called to generate the appropriate keyboard events.
-    ///  The m parameter contains the window message that must be
-    ///  processed. Possible values for the m.msg field are WM_CHAR,
-    ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
-    ///  When overriding processKeyMessage(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processKeyMessage()" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a key message.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is called when a control receives a keyboard message. The method first determines whether the
+    ///   control has a parent; if so, it calls the parent's <see cref="ProcessKeyPreview(ref Message)"/> method. If the
+    ///   parent's <see cref="ProcessKeyPreview(ref Message)"/> method does not process the message then the
+    ///   <see cref="ProcessKeyEventArgs(ref Message)"/> is called to generate the appropriate keyboard events. The
+    ///   <paramref name="m"/> parameter contains the window message that must be processed. Possible values for the
+    ///   <see cref="Message.Msg"/> property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
+    ///  </para>
+    /// </remarks>
     protected internal virtual bool ProcessKeyMessage(ref Message m)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyMessage {m}");
         if (_parent is not null && _parent.ProcessKeyPreview(ref m))
         {
             return true;
@@ -9496,57 +9280,36 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Previews a keyboard message. This method is called by a child control
-    ///  when the child control receives a keyboard message. The child control
-    ///  calls this method before generating any keyboard events for the message.
-    ///  If this method returns true, the child control considers the message
-    ///  consumed and does not generate any keyboard events. The m
-    ///  parameter contains the window message to preview. Possible values for
-    ///  the m.msg field are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP,
-    ///  and WM_SYSKEYUP.
-    ///  processKeyPreview() simply sends the character to the parent's
-    ///  processKeyPreview() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog keys.
-    ///  When overriding processKeyPreview(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.ProcessKeyPreview(...)" should be
-    ///  returned.
+    ///  Previews a keyboard message.
     /// </summary>
-    protected virtual bool ProcessKeyPreview(ref Message m)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyPreview {m}");
-        return _parent is not null && _parent.ProcessKeyPreview(ref m);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called by a child control when the child control receives a keyboard message. The child control
+    ///   calls this method before generating any keyboard events for the message. If this method returns <see langword="true"/>,
+    ///   the child control considers the message processed and does not generate any keyboard events. The
+    ///   <paramref name="m"/> parameter contains the window message to preview. Possible values for the
+    ///   <see cref="Message.Msg"/> property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP. The
+    ///   <see cref="ProcessKeyPreview(ref Message)"/> method simply sends the character to the parent's
+    ///   <see cref="ProcessKeyPreview(ref Message)"/> method, or returns <see langword="false"/> if the control has no
+    ///   parent. The <see cref="Form"/> class overrides this method to perform actual processing of dialog keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessKeyPreview(ref Message m) => _parent?.ProcessKeyPreview(ref m) ?? false;
 
     /// <summary>
-    ///  <para>
-    ///   Processes a mnemonic character. This method is called to give a control
-    ///   the opportunity to process a mnemonic character. The method should check
-    ///   if the control is in a state to process mnemonics and if the given
-    ///   character represents a mnemonic. If so, the method should perform the
-    ///   action associated with the mnemonic and return <see langword="true"/>.
-    ///   If not, the method should return <see langword="false"/>.
-    ///  </para>
-    ///  <para>
-    ///   Implementations of this method often use the isMnemonic() method to
-    ///   check if the given character matches a mnemonic in the control's text,
-    ///   for example:
-    ///  </para>
-    ///  <code>
-    ///   if (CanSelect() &amp;&amp; IsMnemonic(charCode, GetText())
-    ///   {
-    ///       // Perform action associated with mnemonic...
-    ///   }
-    ///  </code>
+    ///  Processes a mnemonic character.
     /// </summary>
-    protected internal virtual bool ProcessMnemonic(char charCode)
-    {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessMnemonic [0x{((int)charCode):X}]");
-#endif
-        return false;
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called to give a control the opportunity to process a mnemonic character. The method should
+    ///   check if the control is in a state to process mnemonics and if the given  character represents a mnemonic. If
+    ///   so, the method should perform the action associated with the mnemonic and return <see langword="true"/>.
+    ///   If not, the method should return <see langword="false"/>. Implementations of this method often use the
+    ///   <see cref="IsMnemonic(char, string?)"/> method to determine whether the given character matches a mnemonic
+    ///   in the control's text.
+    ///  </para>
+    /// </remarks>
+    protected internal virtual bool ProcessMnemonic(char charCode) => false;
 
     /// <summary>
     ///  Preprocess keys which affect focus indicators and keyboard cues.
@@ -9555,7 +9318,7 @@ public unsafe partial class Control :
     {
         Keys keyCode = (Keys)(nint)msg.WParamInternal & Keys.KeyCode;
 
-        if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab)
+        if (keyCode is not Keys.F10 and not Keys.Menu and not Keys.Tab)
         {
             return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
         }
@@ -9579,7 +9342,7 @@ public unsafe partial class Control :
         // the opposite of what we want to do.  So if we want to show accelerators,
         // we OR in UISF_HIDEACCEL, then call UIS_CLEAR to clear the "hidden" state.
 
-        if (keyCode == Keys.F10 || keyCode == Keys.Menu)
+        if (keyCode is Keys.F10 or Keys.Menu)
         {
             if ((current & PInvoke.UISF_HIDEACCEL) != 0)
             {
@@ -9767,7 +9530,7 @@ public unsafe partial class Control :
                 // SetParent back after the parent's handle has been recreated.
                 // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
-                //fish out control collection w/o demand creating one.
+                // fish out control collection w/o demand creating one.
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is not null && controlsCollection.Count > 0)
                 {
@@ -9881,7 +9644,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the screen rectangle r in client coords.
+    ///  Computes the location of the screen rectangle r in client coordinates.
     /// </summary>
     public Rectangle RectangleToClient(Rectangle r)
     {
@@ -9891,7 +9654,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the client rectangle r in screen coords.
+    ///  Computes the location of the client rectangle r in screen coordinates.
     /// </summary>
     public Rectangle RectangleToScreen(Rectangle r)
     {
@@ -9944,12 +9707,12 @@ public unsafe partial class Control :
             // you should notify UI Automation by calling the UiaReturnRawElementProvider
             // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
             // UI Automation that it can safely remove all map entries that refer to the specified window.
-            UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
+            PInvoke.UiaReturnRawElementProvider(handle, 0, 0, (IRawElementProviderSimple*)null);
         }
 
         if (OsVersion.IsWindows8OrGreater() && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
-            UiaCore.UiaDisconnectProvider(accessibleObject);
+            PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
         }
 
         Properties.SetObject(s_accessibilityProperty, null);
@@ -9991,10 +9754,7 @@ public unsafe partial class Control :
     ///  Resumes normal layout logic. This will force a layout immediately
     ///  if there are any pending layout requests.
     /// </summary>
-    public void ResumeLayout()
-    {
-        ResumeLayout(true);
-    }
+    public void ResumeLayout() => ResumeLayout(performLayout: true);
 
     /// <summary>
     ///  Resumes normal layout logic. If performLayout is set to true then
@@ -10002,9 +9762,6 @@ public unsafe partial class Control :
     /// </summary>
     public void ResumeLayout(bool performLayout)
     {
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
-
         bool performedLayout = false;
         if (LayoutSuspendCount > 0)
         {
@@ -10022,9 +9779,7 @@ public unsafe partial class Control :
             }
 
             LayoutSuspendCount--;
-            if (LayoutSuspendCount == 0
-                && GetState(States.LayoutDeferred)
-                && performLayout)
+            if (LayoutSuspendCount == 0 && GetState(States.LayoutDeferred) && performLayout)
             {
                 PerformLayout();
                 performedLayout = true;
@@ -10036,23 +9791,19 @@ public unsafe partial class Control :
             SetExtendedState(ExtendedStates.ClearLayoutArgs, true);
         }
 
-        /*
+        // We've had this since Everett, but it seems wrong, redundant and a performance hit. The
+        // correct layout calls are already made when bounds or parenting changes, which is all
+        // we care about. We may want to call this at layout suspend count == 0, but certainly
+        // not for all resumes. I  tried removing it, and doing it only when suspendCount == 0,
+        // but we break things at every step.
 
-        We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
-        correct layout calls are already made when bounds or parenting changes, which is all
-        we care about. We may want to call this at layout suspend count == 0, but certainly
-        not for all resumes.  I  tried removing it, and doing it only when suspendCount == 0,
-        but we break things at every step.
-
-        */
         if (!performLayout)
         {
             CommonProperties.xClearPreferredSizeCache(this);
             ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
-            // PERFNOTE: This is more efficient than using Foreach.  Foreach
-            // forces the creation of an array subset enum each time we
-            // enumerate
+            // PERFNOTE: This is more efficient than using Foreach. Foreach forces the creation of an array subset
+            // enum each time we enumerate.
             if (controlsCollection is not null)
             {
                 for (int i = 0; i < controlsCollection.Count; i++)
@@ -10084,11 +9835,8 @@ public unsafe partial class Control :
 
             if (accept)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {Handle}");
-
                 // Register
                 HRESULT hr = PInvoke.RegisterDragDrop(this, new DropTarget(this));
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -10096,11 +9844,8 @@ public unsafe partial class Control :
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
-
                 // Revoke
                 HRESULT hr = PInvoke.RevokeDragDrop(this);
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_NOTREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -10132,21 +9877,8 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void Scale(float dx, float dy)
     {
-#if DEBUG
-        int dbgLayoutCheck = LayoutSuspendCount;
-#endif
-        SuspendLayout();
-        try
-        {
-            ScaleCore(dx, dy);
-        }
-        finally
-        {
-            ResumeLayout();
-#if DEBUG
-            AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
-        }
+        using SuspendLayoutScope scope = new(this);
+        ScaleCore(dx, dy);
     }
 
     /// <summary>
@@ -10155,12 +9887,12 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void Scale(SizeF factor)
     {
-        // manually call ScaleControl recursively instead of the internal scale method
+        // Manually call ScaleControl recursively instead of the internal scale method
         // when someone calls this method, they really do want to do some sort of
         // zooming feature, as opposed to AutoScale.
-        using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
+        using (new LayoutTransaction(this, this, PropertyNames.Bounds, resumeLayout: false))
         {
-            ScaleControl(factor, factor, this);
+            ScaleControl(factor, factor);
             if (ScaleChildren)
             {
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
@@ -10201,7 +9933,7 @@ public unsafe partial class Control :
         // positions of all controls.  Therefore, we should resume(false).
         using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
         {
-            ScaleControl(includedFactor, excludedFactor, requestingControl);
+            ScaleControl(includedFactor, excludedFactor);
 
             // Certain controls like 'PropertyGrid' does special scaling. Differing scaling to their own methods.
             if (!_doNotScaleChildren)
@@ -10253,24 +9985,15 @@ public unsafe partial class Control :
                     // Update window font before scaling, as controls often use font metrics during scaling.
                     if (causedByFontChanged)
                     {
-                        control.UpdateWindowFontIfNeeded();
+                        if (ScaleHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && !IsFontSet())
+                        {
+                            SetWindowFont();
+                        }
                     }
 
                     control.Scale(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
                 }
             }
-        }
-    }
-
-    /// <summary>
-    ///  Calls SetWindowFont if DpiHelper.IsPerMonitorV2Awareness is true,
-    ///  control uses default or inherited font and is not user-painted.
-    /// </summary>
-    internal void UpdateWindowFontIfNeeded()
-    {
-        if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && !IsFontSet())
-        {
-            SetWindowFont();
         }
     }
 
@@ -10291,7 +10014,7 @@ public unsafe partial class Control :
     ///  The requestingControl property indicates which control has requested
     ///  the scaling function.
     /// </summary>
-    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
+    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor)
     {
         try
         {
@@ -10309,8 +10032,6 @@ public unsafe partial class Control :
             {
                 excludedSpecified |= (~RequiredScaling & BoundsSpecified.All);
             }
-
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Scaling {this} Included: {includedFactor}, Excluded: {excludedFactor}");
 
             if (includedSpecified != BoundsSpecified.None)
             {
@@ -10428,7 +10149,7 @@ public unsafe partial class Control :
         Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
         scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
-        if (DpiHelper.IsScalingRequirementMet
+        if (ScaleHelper.IsScalingRequirementMet
             && ParentInternal is { } parent
             && (parent.LayoutEngine == DefaultLayout.Instance))
         {
@@ -10449,49 +10170,38 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected virtual void ScaleCore(float dx, float dy)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
-#if DEBUG
-        int dbgLayoutCheck = LayoutSuspendCount;
-#endif
-        SuspendLayout();
-        try
+        using SuspendLayoutScope scope = new(this);
+
+        int sx = (int)Math.Round(_x * dx);
+        int sy = (int)Math.Round(_y * dy);
+
+        int sw = _width;
+        if ((_controlStyle & ControlStyles.FixedWidth) != ControlStyles.FixedWidth)
         {
-            int sx = (int)Math.Round(_x * dx);
-            int sy = (int)Math.Round(_y * dy);
-
-            int sw = _width;
-            if ((_controlStyle & ControlStyles.FixedWidth) != ControlStyles.FixedWidth)
-            {
-                sw = (int)(Math.Round((_x + _width) * dx)) - sx;
-            }
-
-            int sh = _height;
-            if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight)
-            {
-                sh = (int)(Math.Round((_y + _height) * dy)) - sy;
-            }
-
-            SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
-
-            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
-
-            if (controlsCollection is not null)
-            {
-                // PERFNOTE: This is more efficient than using Foreach.  Foreach
-                // forces the creation of an array subset enum each time we
-                // enumerate
-                for (int i = 0; i < controlsCollection.Count; i++)
-                {
-                    controlsCollection[i].Scale(dx, dy);
-                }
-            }
+            sw = (int)(Math.Round((_x + _width) * dx)) - sx;
         }
-        finally
+
+        int sh = _height;
+        if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight)
         {
-            ResumeLayout();
-#if DEBUG
-            AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
+            sh = (int)(Math.Round((_y + _height) * dy)) - sy;
+        }
+
+        SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
+
+        ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
+
+        if (controlsCollection is not null)
+        {
+            // PERFNOTE: This is more efficient than using Foreach.  Foreach
+            // forces the creation of an array subset enum each time we
+            // enumerate
+            for (int i = 0; i < controlsCollection.Count; i++)
+            {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
+                controlsCollection[i].Scale(dx, dy);
+#pragma warning restore CS0618
+            }
         }
     }
 
@@ -10552,8 +10262,7 @@ public unsafe partial class Control :
 
     private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
     {
-        if (!Contains(ctl) ||
-            (!nested && ctl?._parent != this))
+        if (!Contains(ctl) || (!nested && ctl._parent != this))
         {
             ctl = null;
         }
@@ -10572,7 +10281,7 @@ public unsafe partial class Control :
 
                 if (alreadyWrapped)
                 {
-                    return null; //prevent infinite wrapping.
+                    return null; // prevent infinite wrapping.
                 }
 
                 alreadyWrapped = true;
@@ -10593,6 +10302,7 @@ public unsafe partial class Control :
             }
         }
         while (ctl != start);
+
         return null;
     }
 
@@ -10602,8 +10312,7 @@ public unsafe partial class Control :
     /// </summary>
     private void SelectNextIfFocused()
     {
-        //           We want to move focus away from hidden controls, so this
-        //           function was added.
+        // We want to move focus away from hidden controls, so this function was added.
         if (ContainsFocus && ParentInternal is not null)
         {
             IContainerControl? c = ParentInternal.GetContainerControl();
@@ -10639,8 +10348,7 @@ public unsafe partial class Control :
     /// </summary>
     public void SetBounds(int x, int y, int width, int height)
     {
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -10688,8 +10396,7 @@ public unsafe partial class Control :
             height = _height;
         }
 
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -10724,63 +10431,60 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        Debug.WriteLineIf(CompModSwitches.SetBounds.TraceInfo,
-            $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified})");
         // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
         // end up in WmWindowPositionChanged which may cause the parent to layout.  We need to
         // suspend/resume to defer the parent from laying out until after InitLayout has been called
         // to update the layout engine's state with the new control bounds.
-#if DEBUG
-        int suspendCount = -44371;      // Arbitrary negative prime to surface bugs.
-        suspendCount = ParentInternal is not null ? ParentInternal.LayoutSuspendCount : suspendCount;
-#endif
-        ParentInternal?.SuspendLayout();
+
+        if (_x == x && _y == y && _width == width && _height == height)
+        {
+            return;
+        }
+
+        using SuspendLayoutScope scope = new(ParentInternal);
 
         try
         {
-            if (_x != x || _y != y || _width != width || _height != height)
+            CommonProperties.UpdateSpecifiedBounds(this, x, y, width, height, specified);
+
+            // Provide control with an opportunity to apply self imposed constraints on its size.
+            Rectangle adjustedBounds = ApplyBoundsConstraints(x, y, width, height);
+            width = adjustedBounds.Width;
+            height = adjustedBounds.Height;
+            x = adjustedBounds.X;
+            y = adjustedBounds.Y;
+
+            if (!IsHandleCreated)
             {
-                CommonProperties.UpdateSpecifiedBounds(this, x, y, width, height, specified);
-
-                // Provide control with an opportunity to apply self imposed constraints on its size.
-                Rectangle adjustedBounds = ApplyBoundsConstraints(x, y, width, height);
-                width = adjustedBounds.Width;
-                height = adjustedBounds.Height;
-                x = adjustedBounds.X;
-                y = adjustedBounds.Y;
-
-                if (!IsHandleCreated)
+                // Handle is not created, just record our new position and we're done.
+                UpdateBounds(x, y, width, height);
+            }
+            else
+            {
+                if (!GetState(States.SizeLockedByOS))
                 {
-                    // Handle is not created, just record our new position and we're done.
-                    UpdateBounds(x, y, width, height);
-                }
-                else
-                {
-                    if (!GetState(States.SizeLockedByOS))
+                    SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE;
+
+                    if (_x == x && _y == y)
                     {
-                        SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE;
-
-                        if (_x == x && _y == y)
-                        {
-                            flags |= SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
-                        }
-
-                        if (_width == width && _height == height)
-                        {
-                            flags |= SET_WINDOW_POS_FLAGS.SWP_NOSIZE;
-                        }
-
-                        // Give a chance for derived controls to do what they want, just before we resize.
-                        OnBoundsUpdate(x, y, width, height);
-
-                        PInvoke.SetWindowPos(this, HWND.Null, x, y, width, height, flags);
-
-                        // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
-                        // synchonously so we effectively end up in UpdateBounds immediately following
-                        // SetWindowPos.
-                        //
-                        // UpdateBounds(x, y, width, height);
+                        flags |= SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
                     }
+
+                    if (_width == width && _height == height)
+                    {
+                        flags |= SET_WINDOW_POS_FLAGS.SWP_NOSIZE;
+                    }
+
+                    // Give a chance for derived controls to do what they want, just before we resize.
+                    OnBoundsUpdate(x, y, width, height);
+
+                    PInvoke.SetWindowPos(this, HWND.Null, x, y, width, height, flags);
+
+                    // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
+                    // synchronously so we effectively end up in UpdateBounds immediately following
+                    // SetWindowPos.
+                    //
+                    // UpdateBounds(x, y, width, height);
                 }
             }
         }
@@ -10802,10 +10506,6 @@ public unsafe partial class Control :
                 // LayoutEngine which manages your layout, so we call into the parent's
                 // LayoutEngine.
                 ParentInternal.LayoutEngine.InitLayout(this, specified);
-                ParentInternal.ResumeLayout(/* performLayout = */ true);
-#if DEBUG
-                Debug.Assert(ParentInternal.LayoutSuspendCount == suspendCount, "Suspend/Resume layout mismatch!");
-#endif
             }
         }
     }
@@ -10965,12 +10665,6 @@ public unsafe partial class Control :
             }
 
             SetState(States.TopLevel, value);
-            // make sure the handle is created before hooking, otherwise a toplevel control that never
-            // creates its handle will leak.
-            if (IsHandleCreated && GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged))
-            {
-                ListenToUserPreferenceChanged(value);
-            }
 
             UpdateStyles();
             SetParentHandle(default);
@@ -11284,10 +10978,7 @@ public unsafe partial class Control :
         return align;
     }
 
-    private void SetWindowFont()
-    {
-        PInvoke.SendMessage(this, PInvoke.WM_SETFONT, (WPARAM)FontHandle, (LPARAM)(BOOL)false);
-    }
+    private void SetWindowFont() => PInvoke.SendMessage(this, PInvoke.WM_SETFONT, (WPARAM)FontHandle, (LPARAM)(BOOL)false);
 
     private void SetWindowStyle(int flag, bool value)
     {
@@ -11360,22 +11051,19 @@ public unsafe partial class Control :
         }
 
         Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::SuspendLayout(newCount = {LayoutSuspendCount})");
     }
 
     /// <summary>
-    /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+    ///  Retrieve Font from property bag. This is the Font that was explicitly set on control by the application.
     /// </summary>
-    internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? localFont)
+    private protected bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? font)
     {
-        localFont = (Font?)Properties.GetObject(s_fontProperty);
-
-        return localFont is not null;
+        font = (Font?)Properties.GetObject(s_fontProperty);
+        return font is not null;
     }
 
     /// <summary>
-    /// Sets the scaled font value with the option to control whether <see cref="OnFontChanged(EventArgs)"/> event is raised.
+    ///  Sets the scaled font value with the option to control whether <see cref="OnFontChanged(EventArgs)"/> event is raised.
     /// </summary>
     /// <param name="scaledFont">The scaled <see cref="Font"/> value to be set.</param>
     /// <param name="raiseOnFontChangedEvent">Indicates whether to raise <see cref="OnFontChanged(EventArgs)"/> event.</param>
@@ -11437,7 +11125,7 @@ public unsafe partial class Control :
 
         if (IsHandleCreated)
         {
-            PInvoke.GetClientRect(this, out rect);
+            PInvokeCore.GetClientRect(this, out rect);
             clientWidth = rect.right;
             clientHeight = rect.bottom;
             PInvoke.GetWindowRect(this, out rect);
@@ -11478,18 +11166,8 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight)
     {
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"{Name}::UpdateBounds(");
-            Debug.Indent();
-            Debug.WriteLine($"oldBounds={{x={_x} y={_y} width={_width} height={_height} clientWidth={_clientWidth} clientHeight={_clientHeight}}}");
-        }
-#endif // DEBUG
-
         bool newLocation = _x != x || _y != y;
-        bool newSize = Width != width || Height != height ||
-                       _clientWidth != clientWidth || _clientHeight != clientHeight;
+        bool newSize = Width != width || Height != height || _clientWidth != clientWidth || _clientHeight != clientHeight;
 
         _x = x;
         _y = y;
@@ -11500,51 +11178,18 @@ public unsafe partial class Control :
 
         if (newLocation)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnLocationChanged(EventArgs.Empty);
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnLocationChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
 
         if (newSize)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnSizeChanged(EventArgs.Empty);
             OnClientSizeChanged(EventArgs.Empty);
 
             // Clear PreferredSize cache for this control
             CommonProperties.xClearPreferredSizeCache(this);
             LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
-
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnSizeChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
-
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"newBounds={{x={x} y={y} width={width} height={height} clientWidth={clientWidth} clientHeight={clientHeight}}}");
-            Debug.Unindent();
-        }
-#endif
     }
 
     /// <summary>
@@ -11737,16 +11382,6 @@ public unsafe partial class Control :
         Invalidate(true);
     }
 
-    private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
-    {
-        if (pref.Category == UserPreferenceCategory.Color)
-        {
-            s_defaultFont = null;
-            Application.ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
-            OnSystemColorsChanged(EventArgs.Empty);
-        }
-    }
-
     // Give a chance for derived controls to do what they want, just before we resize.
     internal virtual void OnBoundsUpdate(int x, int y, int width, int height)
     {
@@ -11905,7 +11540,7 @@ public unsafe partial class Control :
         {
             // When possible, it's best to do all painting directly from WM_PAINT.
             // OptimizedDoubleBuffer is the "same" as turning on AllPaintingInWMPaint
-            if (!(GetStyle(ControlStyles.AllPaintingInWmPaint)))
+            if (!GetStyle(ControlStyles.AllPaintingInWmPaint))
             {
                 HDC dc = (HDC)(nint)m.WParamInternal;
                 if (dc.IsNull)
@@ -11915,8 +11550,8 @@ public unsafe partial class Control :
                     return;
                 }
 
-                PInvoke.GetClientRect(this, out RECT rc);
-                using PaintEventArgs pevent = new PaintEventArgs(dc, rc);
+                PInvokeCore.GetClientRect(this, out RECT rc);
+                using PaintEventArgs pevent = new(dc, rc);
                 PaintWithErrorHandling(pevent, PaintLayerBackground);
             }
 
@@ -11963,13 +11598,11 @@ public unsafe partial class Control :
     /// </summary>
     private unsafe void WmGetObject(ref Message m)
     {
-        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
-
         if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders)
         {
             // If the requested object identifier is UiaRootObjectId,
             // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-            m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
+            m.ResultInternal = PInvoke.UiaReturnRawElementProvider(
                 this,
                 m.WParamInternal,
                 m.LParamInternal,
@@ -11993,7 +11626,6 @@ public unsafe partial class Control :
         {
             // Obtain the Lresult.
             m.ResultInternal = accessibleObject.GetLRESULT(m.WParamInternal);
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
         }
         catch (Exception e)
         {
@@ -12120,7 +11752,6 @@ public unsafe partial class Control :
     /// </summary>
     private void WmKillFocus(ref Message m)
     {
-        s_focusTracing.TraceVerbose($"Control::WmKillFocus - {Name}");
         WmImeKillFocus();
         DefWndProc(ref m);
         InvokeLostFocus(this, EventArgs.Empty);
@@ -12131,19 +11762,18 @@ public unsafe partial class Control :
     /// </summary>
     private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
     {
-        // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then
-        // we need to see if something happens during processing of
-        // user code that changed the state of the buttons (i.e. bringing up
-        // a dialog) to keep the control in a consistent state...
+        // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then we need to see if something happens
+        // during processing of user code that changed the state of the buttons (i.e. bringing up a dialog) to keep
+        // the control in a consistent state.
         MouseButtons realState = MouseButtons;
         SetState(States.MousePressed, true);
 
-        // If the UserMouse style is set, the control does its own processing
-        // of mouse messages
+        // If the UserMouse style is set, the control does its own processing of mouse messages.
         if (!GetStyle(ControlStyles.UserMouse))
         {
             DefWndProc(ref m);
-            // we might had re-entered the message loop and processed a WM_CLOSE message
+
+            // We might have re-entered the message loop and processed a WM_CLOSE message.
             if (IsDisposed)
             {
                 return;
@@ -12238,8 +11868,8 @@ public unsafe partial class Control :
         // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
         // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
         // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
-        var container = this as ContainerControl;
-        var isLocalFontSet = IsFontSet();
+        ContainerControl? container = this as ContainerControl;
+        bool isLocalFontSet = IsFontSet();
 
         ScaledControlFont = GetScaledFont(localFont, _deviceDpi, fontDpi);
 
@@ -12400,16 +12030,16 @@ public unsafe partial class Control :
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
         if (!ReflectMessage(nmhdr->hwndFrom, ref m))
         {
-            switch ((ComCtl32.TTN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case ComCtl32.TTN.SHOW:
+                case PInvoke.TTN_SHOW:
                     m.ResultInternal = PInvoke.SendMessage(
                         nmhdr->hwndFrom,
                         MessageId.WM_REFLECT | m.MsgInternal,
                         m.WParamInternal,
                         m.LParamInternal);
                     return;
-                case ComCtl32.TTN.POP:
+                case PInvoke.TTN_POP:
                     PInvoke.SendMessage(
                         nmhdr->hwndFrom,
                         MessageId.WM_REFLECT | m.MsgInternal,
@@ -12485,7 +12115,7 @@ public unsafe partial class Control :
         HDC dc = (HDC)(nint)m.WParamInternal;
 
         bool usingBeginPaint = dc.IsNull;
-        using var paintScope = usingBeginPaint ? new PInvoke.BeginPaintScope(HWND) : default;
+        using var paintScope = usingBeginPaint ? new BeginPaintScope(HWND) : default;
 
         if (usingBeginPaint)
         {
@@ -12508,7 +12138,7 @@ public unsafe partial class Control :
         PaintEventArgs? pevent = null;
 
         using var paletteScope = doubleBuffered || usingBeginPaint
-            ? PInvoke.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+            ? SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
             : default;
 
         bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
@@ -12606,12 +12236,10 @@ public unsafe partial class Control :
 
     private void WmQueryNewPalette(ref Message m)
     {
-        s_paletteTracing.TraceVerbose($"{Handle}: WM_QUERYNEWPALETTE");
-
         using GetDcScope dc = new(HWND);
 
-        // We don't want to unset the palette in this case so we don't do this in a using
-        var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
+        // We don't want to unset the palette in this case so we don't do this in a using.
+        var paletteScope = SelectPaletteScope.HalftonePalette(
             dc,
             forceBackground: true,
             realizePalette: true);
@@ -12701,7 +12329,6 @@ public unsafe partial class Control :
     /// </summary>
     private void WmSetFocus(ref Message m)
     {
-        s_focusTracing.TraceVerbose($"Control::WmSetFocus - {Name}");
         WmImeSetFocus();
 
         if (!HostedInWin32DialogManager)
@@ -12741,57 +12368,57 @@ public unsafe partial class Control :
 
         DefWndProc(ref m);
 
-        if ((_state & States.Recreate) == 0)
+        if (_state.HasFlag(States.Recreate))
         {
-            bool visible = m.WParamInternal != 0u;
-            bool oldVisibleProperty = Visible;
+            return;
+        }
 
-            if (visible)
+        bool visible = m.WParamInternal != 0u;
+        bool oldVisibleProperty = Visible;
+
+        if (visible)
+        {
+            bool oldVisibleBit = GetState(States.Visible);
+            SetState(States.Visible, true);
+            bool executedOk = false;
+            try
             {
-                bool oldVisibleBit = GetState(States.Visible);
-                SetState(States.Visible, true);
-                bool executedOk = false;
-                try
-                {
-                    CreateControl();
-                    executedOk = true;
-                }
-
-                finally
-                {
-                    if (!executedOk)
-                    {
-                        // We do it this way instead of a try/catch because catching and rethrowing
-                        // an exception loses call stack information
-                        SetState(States.Visible, oldVisibleBit);
-                    }
-                }
-            }
-            else
-            {
-                // not visible
-                // If Windows tells us it's visible, that's pretty unambiguous.
-                // But if it tells us it's not visible, there's more than one explanation --
-                // maybe the container control became invisible.  So we look at the parent
-                // and take a guess at the reason.
-
-                // We do not want to update state if we are on the parking window.
-                bool parentVisible = GetTopLevel();
-                if (ParentInternal is not null)
-                {
-                    parentVisible = ParentInternal.Visible;
-                }
-
-                if (parentVisible)
-                {
-                    SetState(States.Visible, false);
-                }
+                CreateControl();
+                executedOk = true;
             }
 
-            if (!GetState(States.ParentRecreating) && (oldVisibleProperty != visible))
+            finally
             {
-                OnVisibleChanged(EventArgs.Empty);
+                if (!executedOk)
+                {
+                    // We do it this way instead of a try/catch because catching and rethrowing
+                    // an exception loses call stack information
+                    SetState(States.Visible, oldVisibleBit);
+                }
             }
+        }
+        else
+        {
+            // Not visible. If Windows tells us it's visible, that's pretty unambiguous. But if it tells us it's
+            // not visible, there's more than one explanation -- maybe the container control became invisible. So
+            // we look at the parent and take a guess at the reason.
+
+            // We do not want to update state if we are on the parking window.
+            bool parentVisible = GetTopLevel();
+            if (ParentInternal is not null)
+            {
+                parentVisible = ParentInternal.Visible;
+            }
+
+            if (parentVisible)
+            {
+                SetState(States.Visible, false);
+            }
+        }
+
+        if (!GetState(States.ParentRecreating) && (oldVisibleProperty != visible))
+        {
+            OnVisibleChanged(EventArgs.Empty);
         }
     }
 
@@ -12911,10 +12538,23 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Base wndProc. All messages are sent to wndProc after getting filtered
-    ///  through the preProcessMessage function. Inheriting controls should
-    ///  call base.wndProc for any messages that they don't handle.
+    ///  Processes Windows messages.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   All messages are sent to the <see cref="WndProc(ref Message)"/> method after getting filtered through the
+    ///   <see cref="PreProcessMessage(ref Message)"/> method.
+    ///  </para>
+    ///  <para>
+    ///   The <see cref="WndProc(ref Message)"/> method corresponds exactly to the Windows <c>WindowProc</c>
+    ///   function. For more information about processing Windows messages see the
+    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function</see>.
+    ///  </para>
+    /// </remarks>
+    /// <notesToInheritors>
+    ///  Inheriting controls should call the base class's <see cref="WndProc(ref Message)"/> method to process any
+    ///  messages that they do not handle.
+    /// </notesToInheritors>
     protected virtual void WndProc(ref Message m)
     {
         // Inlined code from GetStyle(...) to ensure no perf hit for a method call.
@@ -12995,17 +12635,10 @@ public unsafe partial class Control :
                 break;
 
             case PInvoke.WM_SYSCOMMAND:
-                if ((m.WParamInternal & 0xFFF0) == PInvoke.SC_KEYMENU)
+                if ((m.WParamInternal & 0xFFF0) == PInvoke.SC_KEYMENU && ToolStripManager.ProcessMenuKey(ref m))
                 {
-                    s_controlKeyboardRouting.TraceVerbose($"Control.WndProc processing {m}");
-
-                    if (ToolStripManager.ProcessMenuKey(ref m))
-                    {
-                        s_controlKeyboardRouting.TraceVerbose(
-                            $"Control.WndProc ToolStripManager.ProcessMenuKey returned true{m}");
-                        m.ResultInternal = (LRESULT)0;
-                        return;
-                    }
+                    m.ResultInternal = (LRESULT)0;
+                    return;
                 }
 
                 DefWndProc(ref m);
@@ -13242,6 +12875,41 @@ public unsafe partial class Control :
                 WmParentNotify(ref m);
                 break;
 
+            case PInvoke.WM_SETTINGCHANGE:
+                if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
+                {
+                    SYSTEM_PARAMETERS_INFO_ACTION action = (SYSTEM_PARAMETERS_INFO_ACTION)(uint)m.WParamInternal;
+
+                    // Left here for debugging purposes.
+                    string? text = m.LParamInternal == 0 ? null : new((char*)m.LParamInternal);
+
+                    if (action is SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETNONCLIENTMETRICS && m.LParamInternal == 0)
+                    {
+                        // Text scaling needs refreshed. This can happen when changing Accessibility->Text Size.
+                        //
+                        // SPI_SETNONCLIENTMETRICS is sent multiple times, once with no LParam, then twice with
+                        // "WindowMetrics". Common controls listen to both SPI_SETNONCLIENTMETRICS and
+                        // SPI_SETICONTITLELOGFONT. Waiting for SPI_SETICONTITLELOGFONT has some sort of timing issue
+                        // where layout doesn't always update correctly.
+                        //
+                        // Historically we reset the font on WM_SYSCOLORCHANGE, which does come through before any
+                        // of the WM_SETTINGCHANGE messages. SPI_SETNONCLIENTMETRICS seems more correct.
+
+                        s_defaultFont = null;
+                        Application.ScaleDefaultFont();
+                    }
+                }
+
+                break;
+
+            case PInvoke.WM_SYSCOLORCHANGE:
+                if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
+                {
+                    OnSystemColorsChanged(EventArgs.Empty);
+                }
+
+                break;
+
             case PInvoke.WM_EXITMENULOOP:
             case PInvoke.WM_INITMENUPOPUP:
             case PInvoke.WM_MENUSELECT:
@@ -13406,46 +13074,25 @@ public unsafe partial class Control :
     ///
     ///  Explicit support of DropTarget
     ///
-    void IDropTarget.OnDragEnter(DragEventArgs drgEvent)
-    {
-        OnDragEnter(drgEvent);
-    }
+    void IDropTarget.OnDragEnter(DragEventArgs drgEvent) => OnDragEnter(drgEvent);
 
-    void IDropTarget.OnDragOver(DragEventArgs drgEvent)
-    {
-        OnDragOver(drgEvent);
-    }
+    void IDropTarget.OnDragOver(DragEventArgs drgEvent) => OnDragOver(drgEvent);
 
-    void IDropTarget.OnDragLeave(EventArgs e)
-    {
-        OnDragLeave(e);
-    }
+    void IDropTarget.OnDragLeave(EventArgs e) => OnDragLeave(e);
 
-    void IDropTarget.OnDragDrop(DragEventArgs drgEvent)
-    {
-        OnDragDrop(drgEvent);
-    }
+    void IDropTarget.OnDragDrop(DragEventArgs drgEvent) => OnDragDrop(drgEvent);
 
     ///
     ///  Explicit support of DropSource
     ///
-    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)
-    {
-        OnGiveFeedback(giveFeedbackEventArgs);
-    }
+    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs) => OnGiveFeedback(giveFeedbackEventArgs);
 
-    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs)
-    {
-        OnQueryContinueDrag(queryContinueDragEventArgs);
-    }
+    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) => OnQueryContinueDrag(queryContinueDragEventArgs);
 
     #region IKeyboardToolTip implementation
 
-    bool IKeyboardToolTip.CanShowToolTipsNow()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return IsHandleCreated && Visible && (host is null || host.CanShowToolTipsNow());
-    }
+    bool IKeyboardToolTip.CanShowToolTipsNow() =>
+        IsHandleCreated && Visible && (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.CanShowToolTipsNow());
 
     Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => GetToolNativeScreenRectangle();
 
@@ -13453,17 +13100,11 @@ public unsafe partial class Control :
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => IsHoveredWithMouse();
 
-    bool IKeyboardToolTip.HasRtlModeEnabled()
-    {
-        Control? topLevelControl = TopLevelControlInternal;
-        return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
-    }
+    bool IKeyboardToolTip.HasRtlModeEnabled() =>
+        TopLevelControlInternal is { } topLevelControl && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
 
-    bool IKeyboardToolTip.AllowsToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.AllowsToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.AllowsToolTip()) && AllowsKeyboardToolTip();
 
     IWin32Window IKeyboardToolTip.GetOwnerWindow() => this;
 
@@ -13473,21 +13114,12 @@ public unsafe partial class Control :
 
     string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
-    bool IKeyboardToolTip.ShowsOwnToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.ShowsOwnToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
 
-    bool IKeyboardToolTip.IsBeingTabbedTo()
-    {
-        return AreCommonNavigationalKeysDown();
-    }
+    bool IKeyboardToolTip.IsBeingTabbedTo() => AreCommonNavigationalKeysDown();
 
-    bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
-    {
-        return AllowsChildrenToShowToolTips();
-    }
+    bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => AllowsChildrenToShowToolTips();
 
     #endregion
 
@@ -13499,7 +13131,7 @@ public unsafe partial class Control :
             return Array.Empty<Rectangle>();
         }
 
-        List<Rectangle> neighboringControlsRectangles = new List<Rectangle>(4);
+        List<Rectangle> neighboringControlsRectangles = new(4);
 
         // Next and previous control which are accessible with Tab and Shift+Tab
         AddIfCreated(controlParent.GetNextSelectableControl(this, true, true, true, false));
@@ -13569,22 +13201,21 @@ public unsafe partial class Control :
         }
     }
 
-    internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal virtual ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
         => new(this, flags, caption);
 
-    private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
-        = new(null);
+    private readonly WeakReference<ToolStripControlHost?> _toolStripControlHostReference = new(null);
 
     internal ToolStripControlHost? ToolStripControlHost
     {
         get
         {
-            toolStripControlHostReference.TryGetTarget(out ToolStripControlHost? value);
+            _toolStripControlHostReference.TryGetTarget(out ToolStripControlHost? value);
             return value;
         }
         set
         {
-            toolStripControlHostReference.SetTarget(value);
+            _toolStripControlHostReference.SetTarget(value);
         }
     }
 

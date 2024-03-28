@@ -17,7 +17,7 @@ internal class ImageListActionList : DesignerActionList
         _designer = designer;
     }
 
-    public void ChooseImages() => EditorServiceContext.EditValue(_designer, Component, "Images");
+    public void ChooseImages() => EditorServiceContext.EditValue(_designer, Component!, "Images");
 
     public ColorDepth ColorDepth
     {
@@ -45,12 +45,12 @@ internal class ImageListActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection
-        {
+        DesignerActionItemCollection items =
+        [
             new DesignerActionPropertyItem(nameof(ImageSize), SR.ImageListActionList_ImageSizeDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ImageSizeDescription),
             new DesignerActionPropertyItem(nameof(ColorDepth), SR.ImageListActionList_ColorDepthDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ColorDepthDescription),
             new DesignerActionMethodItem(this, nameof(ChooseImages), SR.ImageListActionList_ChooseImagesDisplayName, SR.LinksCategoryName, SR.ImageListActionList_ChooseImagesDescription, true)
-        };
+        ];
         return items;
     }
 }

@@ -9,15 +9,15 @@ public class DataGridViewDataErrorEventArgsTests
     public static IEnumerable<object[]> Ctor_Exception_Int_Int_DataGridViewDataErrorContexts_TestData()
     {
         yield return new object[] { null, -1, -1, (DataGridViewDataErrorContexts)3 };
-        yield return new object[] { new Exception(), 0, 0, DataGridViewDataErrorContexts.Formatting };
-        yield return new object[] { new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting };
+        yield return new object[] { new InvalidOperationException(), 0, 0, DataGridViewDataErrorContexts.Formatting };
+        yield return new object[] { new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Exception_Int_Int_DataGridViewDataErrorContexts_TestData))]
     public void Ctor_Exception_Int_Int_DataGridViewDataErrorContexts(Exception exception, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context)
     {
-        var e = new DataGridViewDataErrorEventArgs(exception, columnIndex, rowIndex, context);
+        DataGridViewDataErrorEventArgs e = new(exception, columnIndex, rowIndex, context);
         Assert.Equal(exception, e.Exception);
         Assert.Equal(columnIndex, e.ColumnIndex);
         Assert.Equal(rowIndex, e.RowIndex);
@@ -43,21 +43,21 @@ public class DataGridViewDataErrorEventArgsTests
     [InlineData(false)]
     public void ThrowException_SetFalseWithException_GetReturnsExpected(bool value)
     {
-        var e = new DataGridViewDataErrorEventArgs(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = value };
+        DataGridViewDataErrorEventArgs e = new(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = value };
         Assert.Equal(value, e.ThrowException);
     }
 
     [Fact]
     public void ThrowException_SetFalseWithoutException_GetReturnsExpected()
     {
-        var e = new DataGridViewDataErrorEventArgs(null, 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = false };
+        DataGridViewDataErrorEventArgs e = new(null, 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = false };
         Assert.False(e.ThrowException);
     }
 
     [Fact]
     public void ThrowException_SetTrueWithoutException_ThrowsArgumentException()
     {
-        var e = new DataGridViewDataErrorEventArgs(null, 1, 2, DataGridViewDataErrorContexts.Formatting);
+        DataGridViewDataErrorEventArgs e = new(null, 1, 2, DataGridViewDataErrorContexts.Formatting);
         Assert.Throws<ArgumentException>(() => e.ThrowException = true);
     }
 }

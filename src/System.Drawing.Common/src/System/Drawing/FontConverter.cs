@@ -91,7 +91,7 @@ public class FontConverter : TypeConverter
                 {
                     argCount = 6;
                 }
-                else if (font.GdiCharSet != SafeNativeMethods.DEFAULT_CHARSET)
+                else if (font.GdiCharSet != (byte)FONT_CHARSET.DEFAULT_CHARSET)
                 {
                     argCount = 5;
                 }
@@ -148,7 +148,7 @@ public class FontConverter : TypeConverter
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        if (!(value is string font))
+        if (value is not string font)
         {
             return base.ConvertFrom(context, culture, value);
         }
@@ -181,7 +181,7 @@ public class FontConverter : TypeConverter
         }
 
         // Some parameters are provided in addition to name.
-        fontName = font.Substring(0, nameIndex);
+        fontName = font[..nameIndex];
 
         if (nameIndex < font.Length - 1)
         {
@@ -192,7 +192,7 @@ public class FontConverter : TypeConverter
             if (styleIndex != -1)
             {
                 // style found.
-                style = font.Substring(styleIndex);
+                style = font[styleIndex..];
 
                 // Get the mid-substring containing the size information.
                 sizeStr = font.Substring(nameIndex + 1, styleIndex - nameIndex - 1);
@@ -200,17 +200,17 @@ public class FontConverter : TypeConverter
             else
             {
                 // no style.
-                sizeStr = font.Substring(nameIndex + 1);
+                sizeStr = font[(nameIndex + 1)..];
             }
 
             // Parse size.
-            (string? size, string? unit) unitTokens = ParseSizeTokens(sizeStr, separator);
+            (string? size, string? unit) = ParseSizeTokens(sizeStr, separator);
 
-            if (unitTokens.size != null)
+            if (size is not null)
             {
                 try
                 {
-                    fontSize = (float)GetFloatConverter().ConvertFromString(context, culture, unitTokens.size)!;
+                    fontSize = (float)GetFloatConverter().ConvertFromString(context, culture, size)!;
                 }
                 catch
                 {
@@ -219,16 +219,16 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            if (unitTokens.unit != null)
+            if (unit is not null)
             {
                 // ParseGraphicsUnits throws an ArgumentException if format is invalid.
-                units = ParseGraphicsUnits(unitTokens.unit);
+                units = ParseGraphicsUnits(unit);
             }
 
-            if (style != null)
+            if (style is not null)
             {
                 // Parse FontStyle
-                style = style.Substring(6); // style string always starts with style=
+                style = style[6..]; // style string always starts with style=
                 string[] styleTokens = style.Split(separator);
 
                 for (int tokenCount = 0; tokenCount < styleTokens.Length; tokenCount++)
@@ -277,18 +277,18 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            char[] trimChars = new char[] { separator, ' ' };
+            char[] trimChars = [separator, ' '];
 
             if (splitPoint > 0)
             {
-                size = text.Substring(0, splitPoint);
+                size = text[..splitPoint];
                 // Trimming spaces between size and units.
                 size = size.Trim(trimChars);
             }
 
             if (splitPoint < length)
             {
-                units = text.Substring(splitPoint);
+                units = text[splitPoint..];
                 units = units.TrimEnd(trimChars);
             }
         }
@@ -322,46 +322,46 @@ public class FontConverter : TypeConverter
         FontFamily? fontFamily = null;
         GraphicsUnit unit = GraphicsUnit.Point;
 
-        if ((value = propertyValues["GdiCharSet"]) != null)
+        if ((value = propertyValues["GdiCharSet"]) is not null)
             charSet = (byte)value;
 
-        if ((value = propertyValues["Size"]) != null)
+        if ((value = propertyValues["Size"]) is not null)
             size = (float)value;
 
-        if ((value = propertyValues["Unit"]) != null)
+        if ((value = propertyValues["Unit"]) is not null)
             unit = (GraphicsUnit)value;
 
-        if ((value = propertyValues["Name"]) != null)
+        if ((value = propertyValues["Name"]) is not null)
             name = (string)value;
 
-        if ((value = propertyValues["GdiVerticalFont"]) != null)
+        if ((value = propertyValues["GdiVerticalFont"]) is not null)
             vertical = (bool)value;
 
-        if ((value = propertyValues["Bold"]) != null)
+        if ((value = propertyValues["Bold"]) is not null)
         {
             if ((bool)value)
                 style |= FontStyle.Bold;
         }
 
-        if ((value = propertyValues["Italic"]) != null)
+        if ((value = propertyValues["Italic"]) is not null)
         {
             if ((bool)value)
                 style |= FontStyle.Italic;
         }
 
-        if ((value = propertyValues["Strikeout"]) != null)
+        if ((value = propertyValues["Strikeout"]) is not null)
         {
             if ((bool)value)
                 style |= FontStyle.Strikeout;
         }
 
-        if ((value = propertyValues["Underline"]) != null)
+        if ((value = propertyValues["Underline"]) is not null)
         {
             if ((bool)value)
                 style |= FontStyle.Underline;
         }
 
-        if (name == null)
+        if (name is null)
         {
             fontFamily = new FontFamily("Tahoma");
         }
@@ -379,7 +379,7 @@ public class FontConverter : TypeConverter
             }
 
             // font family not found in installed fonts
-            if (fontFamily == null)
+            if (fontFamily is null)
             {
                 collection = new PrivateFontCollection();
                 FontFamily[] privateFontList = collection.Families;
@@ -412,7 +412,7 @@ public class FontConverter : TypeConverter
             return base.GetProperties(context, value, attributes);
 
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
-        return props.Sort(new string[] { nameof(Font.Name), nameof(Font.Size), nameof(Font.Unit) });
+        return props.Sort([nameof(Font.Name), nameof(Font.Size), nameof(Font.Unit)]);
     }
 
     public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
@@ -430,15 +430,11 @@ public class FontConverter : TypeConverter
         {
         }
 
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        {
-            return sourceType == typeof(string) ? true : base.CanConvertFrom(context, sourceType);
-        }
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
+            sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
-        {
-            return value is string strValue ? MatchFontName(strValue, context) : base.ConvertFrom(context, culture, value);
-        }
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value) =>
+            value is string strValue ? MatchFontName(strValue, context) : base.ConvertFrom(context, culture, value);
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
@@ -447,9 +443,10 @@ public class FontConverter : TypeConverter
             {
                 values[i] = _fonts[i].Name;
             }
+
             Array.Sort(values, Comparer.Default);
 
-            return new TypeConverter.StandardValuesCollection(values);
+            return new StandardValuesCollection(values);
         }
 
         // We allow other values other than those in the font list.
@@ -466,15 +463,16 @@ public class FontConverter : TypeConverter
             // setting fontName as nullable since IEnumerable.Current returned nullable in 3.0
             foreach (string? fontName in GetStandardValues(context))
             {
-                Debug.Assert(fontName != null);
+                Debug.Assert(fontName is not null);
                 if (fontName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
                     // For an exact match, return immediately
                     return fontName;
                 }
+
                 if (fontName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (bestMatch == null || fontName.Length <= bestMatch.Length)
+                    if (bestMatch is null || fontName.Length <= bestMatch.Length)
                     {
                         bestMatch = fontName;
                     }
@@ -493,14 +491,15 @@ public class FontConverter : TypeConverter
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             // display graphic unit is not supported.
-            if (Values == null)
+            if (Values is null)
             {
                 base.GetStandardValues(context); // sets "values"
-                Debug.Assert(Values != null);
-                ArrayList filteredValues = new ArrayList(Values);
+                Debug.Assert(Values is not null);
+                ArrayList filteredValues = new(Values);
                 filteredValues.Remove(GraphicsUnit.Display);
                 Values = new StandardValuesCollection(filteredValues);
             }
+
             return Values;
         }
     }

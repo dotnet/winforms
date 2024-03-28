@@ -8,7 +8,7 @@ public enum ImageSelectType
     None = 0,
     Size = 1,
     Dpi = 2,
-    //      TM_ENUM(0, IST, NONE)
+    // TM_ENUM(0, IST, NONE)
     //      TM_ENUM(1, IST, SIZE)
     //      TM_ENUM(2, IST, DPI)
 }

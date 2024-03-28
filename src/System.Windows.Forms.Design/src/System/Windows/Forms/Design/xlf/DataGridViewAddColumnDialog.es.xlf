@@ -54,7 +54,7 @@
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">&amp;Columna sin enlazar</target>
+        <target state="translated">C&amp;olumna sin enlazar</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">

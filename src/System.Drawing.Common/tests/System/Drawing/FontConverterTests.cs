@@ -13,7 +13,7 @@ public class FontNameConverterTest
     [Fact]
     public void TestConvertFrom()
     {
-        FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
+        FontNameConverter converter = new();
         // returns "Times" under Linux and "Times New Roman" under Windows
         if (PlatformDetection.IsWindows)
         {
@@ -23,6 +23,7 @@ public class FontNameConverterTest
         {
             Assert.Equal("Times", converter.ConvertFrom("Times") as string);
         }
+
         Assert.True(converter.GetStandardValuesSupported(), "standard values supported");
         Assert.False(converter.GetStandardValuesExclusive(), "standard values exclusive");
     }
@@ -30,7 +31,7 @@ public class FontNameConverterTest
     [Fact]
     public void ExTestConvertFrom_ThrowsNotSupportedException()
     {
-        FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
+        FontNameConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(null));
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(1));
     }
@@ -38,13 +39,13 @@ public class FontNameConverterTest
 
 public class FontConverterTest
 {
-    public static char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
+    public static char Separator { get; } = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
 
     [Theory]
     [MemberData(nameof(TestConvertFormData))]
     public void TestConvertFrom(string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = (Font)converter.ConvertFrom(input);
 
         // Unix fonts
@@ -58,7 +59,7 @@ public class FontConverterTest
     [MemberData(nameof(ArgumentExceptionFontConverterData))]
     public void InvalidInputThrowsArgumentException(string input, string paramName, string netfxParamName)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         AssertExtensions.Throws<ArgumentException>(paramName, netfxParamName, () => converter.ConvertFrom(input));
     }
 
@@ -66,14 +67,14 @@ public class FontConverterTest
     [MemberData(nameof(InvalidEnumArgumentExceptionFontConverterData))]
     public void InvalidInputThrowsInvalidEnumArgumentException(string input, string paramName)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Assert.Throws<InvalidEnumArgumentException>(paramName, () => converter.ConvertFrom(input));
     }
 
     [Fact]
     public void EmptyStringInput()
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = (Font)converter.ConvertFrom(string.Empty);
         Assert.Null(font);
     }
@@ -82,8 +83,8 @@ public class FontConverterTest
     public void GetFontPropsSorted()
     {
         // The order provided since .NET Framework
-        string[] expectedPropNames = new[]
-        {
+        string[] expectedPropNames =
+        [
             nameof(Font.Name),
             nameof(Font.Size),
             nameof(Font.Unit),
@@ -93,9 +94,9 @@ public class FontConverterTest
             nameof(Font.Italic),
             nameof(Font.Strikeout),
             nameof(Font.Underline),
-        };
+        ];
 
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = new($"Courier New", 8.25f, FontStyle.Regular, GraphicsUnit.Point);
 
         PropertyDescriptorCollection props = converter.GetProperties(font);
@@ -151,34 +152,34 @@ public class FontConverterTest
             new TheoryData<string, string, float, GraphicsUnit, FontStyle>()
             {
                 { $"Courier New", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Courier New{s_separator} 11", "Courier New", 11f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator} 11px", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} 11 px", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
-                { $"Courier New{s_separator} style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular | FontStyle.Italic },
-                { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
-                { $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
+                { $"Courier New{Separator} 11", "Courier New", 11f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator} 11px", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} 11 px", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} 11 px{Separator} style=Regular", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular },
+                { $"Courier New{Separator} style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold },
+                { $"Courier New{Separator} 11 px{Separator} style=Bold{Separator} Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic },
+                { $"Courier New{Separator} 11 px{Separator} style=Regular, Italic", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Regular | FontStyle.Italic },
+                { $"Courier New{Separator} 11 px{Separator} style=Bold{Separator} Italic{Separator} Strikeout", "Courier New", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
+                { $"Arial{Separator} 11 px{Separator} style=Bold, Italic, Strikeout", "Arial", 11f, GraphicsUnit.Pixel, FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout },
                 { $"11px", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
                 { $"Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"arIAL{s_separator} 10{s_separator} style=bold", "Arial", 10f, GraphicsUnit.Point, FontStyle.Bold },
-                { $"Arial{s_separator} 10{s_separator}", "Arial", 10f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator}", "Arial", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
-                { $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, GraphicsUnit.Point, FontStyle.Underline | FontStyle.Strikeout },
-                { $"Courier New{s_separator} Style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold }, // FullFramework style keyword is case sensitive.
-                { $"11px{s_separator} Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Bold}
+                { $"arIAL{Separator} 10{Separator} style=bold", "Arial", 10f, GraphicsUnit.Point, FontStyle.Bold },
+                { $"Arial{Separator} 10{Separator}", "Arial", 10f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator}", "Arial", 8.25f, GraphicsUnit.Point, FontStyle.Regular },
+                { $"Arial{Separator} 10{Separator} style=12", "Arial", 10f, GraphicsUnit.Point, FontStyle.Underline | FontStyle.Strikeout },
+                { $"Courier New{Separator} Style=Bold", "Courier New", 8.25f, GraphicsUnit.Point, FontStyle.Bold }, // FullFramework style keyword is case sensitive.
+                { $"11px{Separator} Style=Bold", "Microsoft Sans Serif", 8.25f, GraphicsUnit.Point, FontStyle.Bold}
             };
 
         // FullFramework disregards all arguments if the font name is an empty string.
         // Empty string is not an installed font on Windows 7, windows 8 and some versions of windows 10.
         if (EmptyFontPresent)
         {
-            data.Add($"{s_separator} 10{s_separator} style=bold", "", 10f, GraphicsUnit.Point, FontStyle.Bold);
+            data.Add($"{Separator} 10{Separator} style=bold", "", 10f, GraphicsUnit.Point, FontStyle.Bold);
         }
         else
         {
-            data.Add($"{s_separator} 10{s_separator} style=bold", "Microsoft Sans Serif", 10f, GraphicsUnit.Point, FontStyle.Bold);
+            data.Add($"{Separator} 10{Separator} style=bold", "Microsoft Sans Serif", 10f, GraphicsUnit.Point, FontStyle.Bold);
         }
 
         return data;
@@ -188,31 +189,29 @@ public class FontConverterTest
     {
         get
         {
-            using (var installedFonts = new InstalledFontCollection())
-            {
-                return installedFonts.Families.Select(t => t.Name).Contains(string.Empty);
-            }
+            using InstalledFontCollection installedFonts = new();
+            return installedFonts.Families.Select(t => t.Name).Contains(string.Empty);
         }
     }
 
     public static TheoryData<string, string, string> ArgumentExceptionFontConverterData() => new()
     {
-        { $"Courier New{s_separator} 11 px{s_separator} type=Bold{s_separator} Italic", "units", null },
-        { $"Courier New{s_separator} {s_separator} Style=Bold", "value", null },
-        { $"Courier New{s_separator} 11{s_separator} Style=", "value", null },
-        { $"Courier New{s_separator} 11{s_separator} Style=RandomEnum", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=bold{s_separator}", "value", null },
-        { $"Arial{s_separator} 10{s_separator} style=null", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=abc#", null, null },
-        { $"Arial{s_separator} 10{s_separator} style=##", null, null },
-        { $"Arial{s_separator} 10display{s_separator} style=bold", null, null },
-        { $"Arial{s_separator} 10style{s_separator} style=bold", "units", null },
+        { $"Courier New{Separator} 11 px{Separator} type=Bold{Separator} Italic", "units", null },
+        { $"Courier New{Separator} {Separator} Style=Bold", "value", null },
+        { $"Courier New{Separator} 11{Separator} Style=", "value", null },
+        { $"Courier New{Separator} 11{Separator} Style=RandomEnum", null, null },
+        { $"Arial{Separator} 10{Separator} style=bold{Separator}", "value", null },
+        { $"Arial{Separator} 10{Separator} style=null", null, null },
+        { $"Arial{Separator} 10{Separator} style=abc#", null, null },
+        { $"Arial{Separator} 10{Separator} style=##", null, null },
+        { $"Arial{Separator} 10display{Separator} style=bold", null, null },
+        { $"Arial{Separator} 10style{Separator} style=bold", "units", null },
     };
 
     public static TheoryData<string, string> InvalidEnumArgumentExceptionFontConverterData() => new()
     {
-        { $"Arial{s_separator} 10{s_separator} style=56", "style" },
-        { $"Arial{s_separator} 10{s_separator} style=-1", "style" },
+        { $"Arial{Separator} 10{Separator} style=56", "style" },
+        { $"Arial{Separator} 10{Separator} style=-1", "style" },
     };
 }
 
@@ -221,13 +220,13 @@ public class FontUnitConverterTest
     [Fact]
     public void GetStandardValuesTest()
     {
-        FontUnitConverter converter = new FontUnitConverter();
+        FontUnitConverter converter = new();
         var values = converter.GetStandardValues();
         Assert.Equal(6, values.Count); // The six supported values of Graphics unit: World, Pixel, Point, Inch, Document, Millimeter.
 
-        foreach (var item in values)
+        foreach (GraphicsUnit item in values)
         {
-            Assert.NotEqual(GraphicsUnit.Display, (GraphicsUnit)item);
+            Assert.NotEqual(GraphicsUnit.Display, item);
         }
     }
 
@@ -241,7 +240,7 @@ public class FontUnitConverterTest
     [InlineData("World", GraphicsUnit.World)]
     public void CanConvertFrom(string input, GraphicsUnit expected)
     {
-        FontUnitConverter converter = new FontUnitConverter();
+        FontUnitConverter converter = new();
         GraphicsUnit value = (GraphicsUnit)converter.ConvertFrom(input);
         Assert.Equal(expected, value);
     }

@@ -8,7 +8,7 @@ public class DesignerActionListsChangedEventArgsTests
     public static IEnumerable<object[]> Ctor_Object_DesignerActionListsChangedType_DesignerActionListCollection_TestData()
     {
         yield return new object[] { null, DesignerActionListsChangedType.ActionListsAdded - 1, null };
-        yield return new object[] { new object(), DesignerActionListsChangedType.ActionListsAdded, new DesignerActionListCollection() };
+        yield return new object[] { new(), DesignerActionListsChangedType.ActionListsAdded, new DesignerActionListCollection() };
     }
 
     [Theory]

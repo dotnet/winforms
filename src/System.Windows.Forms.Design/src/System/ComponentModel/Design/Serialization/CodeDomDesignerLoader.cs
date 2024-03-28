@@ -28,7 +28,6 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, INameCreationService, IDesignerSerializationService
 {
-    private static readonly TraceSwitch s_traceCDLoader = new("CodeDomDesignerLoader", "Trace CodeDomDesignerLoader");
     private static readonly int s_stateCodeDomDirty = BitVector32.CreateMask();                                 // True if the code dom tree is dirty, meaning it must be integrated back with the code file.
     private static readonly int s_stateCodeParserChecked = BitVector32.CreateMask(s_stateCodeDomDirty);         // True if we have searched for a parser.
     private static readonly int s_stateOwnTypeResolution = BitVector32.CreateMask(s_stateCodeParserChecked);    // True if we have added our own type resolution service
@@ -71,7 +70,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (_documentType is not null)
         {
-            LoaderHost.RemoveService(typeof(CodeTypeDeclaration));
+            LoaderHost.RemoveService<CodeTypeDeclaration>();
             _documentType = null;
             _documentNamespace = null;
             _documentCompileUnit = null;
@@ -97,13 +96,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (TryGetService(out IDesignerHost? host))
         {
-            host.RemoveService(typeof(INameCreationService));
-            host.RemoveService(typeof(IDesignerSerializationService));
-            host.RemoveService(typeof(ComponentSerializationService));
+            host.RemoveService<INameCreationService>();
+            host.RemoveService<IDesignerSerializationService>();
+            host.RemoveService<ComponentSerializationService>();
 
             if (_state[s_stateOwnTypeResolution])
             {
-                host.RemoveService(typeof(ITypeResolutionService));
+                host.RemoveService<ITypeResolutionService>();
                 _state[s_stateOwnTypeResolution] = false;
             }
         }
@@ -125,13 +124,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     internal static void DumpTypeDeclaration(CodeTypeDeclaration? typeDeclaration)
     {
-        if (typeDeclaration is null || !s_traceCDLoader.TraceVerbose)
+        if (typeDeclaration is null)
         {
             return;
         }
 
         ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-        using var sw = new StringWriter(CultureInfo.InvariantCulture);
+        using StringWriter sw = new(CultureInfo.InvariantCulture);
 
         try
         {
@@ -143,7 +142,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
 
         // spit this line by line so it respects the indent.
-        StringReader sr = new StringReader(sw.ToString());
+        StringReader sr = new(sw.ToString());
 
         for (string? line = sr.ReadLine(); line is not null; line = sr.ReadLine())
         {
@@ -198,8 +197,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
             if (_documentCompileUnit is null)
             {
-                Exception ex = new NotSupportedException(SR.CodeDomDesignerLoaderNoLanguageSupport);
-                ex.HelpLink = SR.CodeDomDesignerLoaderNoLanguageSupport;
+                Exception ex = new NotSupportedException(SR.CodeDomDesignerLoaderNoLanguageSupport)
+                {
+                    HelpLink = SR.CodeDomDesignerLoaderNoLanguageSupport
+                };
 
                 throw ex;
             }
@@ -236,7 +237,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
                         if (t is null)
                         {
-                            failures ??= new();
+                            failures ??= [];
                             failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDeclaration.Name, typeReference.BaseType));
                         }
                         else if (!t.IsInterface)
@@ -285,8 +286,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                             }
                         }
 
-                        //add a check for root designer -- this allows an extra level of checking so we can skip classes
-                        //that cannot be designed.
+                        // add a check for root designer -- this allows an extra level of checking so we can skip classes
+                        // that cannot be designed.
                         if (_rootSerializer is null && HasRootDesignerAttribute(baseType))
                         {
                             _typeSerializer = manager.GetSerializer<TypeCodeDomSerializer>(baseType);
@@ -303,7 +304,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                         // If we didn't find a serializer for this type, report it.
                         if (_rootSerializer is null && _typeSerializer is null)
                         {
-                            failures ??= new();
+                            failures ??= [];
 
                             if (foundAttribute)
                             {
@@ -346,16 +347,20 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
                 if (failures is not null)
                 {
-                    StringBuilder builder = new StringBuilder(Environment.NewLine);
+                    StringBuilder builder = new(Environment.NewLine);
                     builder.AppendJoin(Environment.NewLine, failures);
 
-                    ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder));
-                    ex.HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer;
+                    ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder))
+                    {
+                        HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer
+                    };
                 }
                 else
                 {
-                    ex = new InvalidOperationException(SR.CodeDomDesignerLoaderNoRootSerializer);
-                    ex.HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer;
+                    ex = new InvalidOperationException(SR.CodeDomDesignerLoaderNoRootSerializer)
+                    {
+                        HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer
+                    };
                 }
 
                 throw ex;
@@ -364,7 +369,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             {
                 // We are successful.  At this point, we want to provide some of these
                 // code dom elements as services for outside parties to use.
-                LoaderHost.AddService(typeof(CodeTypeDeclaration), _documentType);
+                LoaderHost.AddService(_documentType);
             }
         }
     }
@@ -461,7 +466,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // Now start looking through the new declaration and process it.
         // We are index driven, so if we need to add new values we put
         // them into an array list, and post process them.
-        List<CodeTypeMember> newElements = new();
+        List<CodeTypeMember> newElements = [];
 
         foreach (CodeTypeMember member in newDecl.Members)
         {
@@ -577,11 +582,11 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         base.Initialize();
 
-        ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
+        ServiceCreatorCallback callback = new(OnCreateService);
 
-        LoaderHost.AddService(typeof(ComponentSerializationService), callback);
-        LoaderHost.AddService(typeof(INameCreationService), this);
-        LoaderHost.AddService(typeof(IDesignerSerializationService), this);
+        LoaderHost.AddService<ComponentSerializationService>(callback);
+        LoaderHost.AddService<INameCreationService>(this);
+        LoaderHost.AddService<IDesignerSerializationService>(this);
 
         // The code dom designer loader requires a working ITypeResolutionService to
         // function.  See if someone added one already, and if not, provide
@@ -595,17 +600,17 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 throw new InvalidOperationException(SR.CodeDomDesignerLoaderNoTypeResolution);
             }
 
-            LoaderHost.AddService(typeof(ITypeResolutionService), typeResolutionService);
+            LoaderHost.AddService(typeResolutionService);
             _state[s_stateOwnTypeResolution] = true;
         }
 
         if (TryGetService(out _extenderProviderService))
         {
-            _extenderProviders = new IExtenderProvider[]
-            {
+            _extenderProviders =
+            [
                 new ModifiersExtenderProvider(),
                 new ModifiersInheritedExtenderProvider()
-            };
+            ];
 
             foreach (IExtenderProvider p in _extenderProviders)
             {
@@ -801,37 +806,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         {
             typeDeclaration = _typeSerializer.Serialize(manager, LoaderHost.RootComponent, LoaderHost.Container.Components);
         }
-#if DEBUG
-        if (s_traceCDLoader.TraceVerbose)
-        {
-            Debug.WriteLine("****************** Pre-integrated tree **********************");
-            DumpTypeDeclaration(typeDeclaration);
-            EnsureDocument(manager);
-            Debug.WriteLine("****************** Live tree **********************");
-            DumpTypeDeclaration(_documentType);
-        }
-#endif
 
         // Now we must integrate the code DOM tree from the serializer with
         // our own tree.  If changes were made to the tree this will
         // return true.
         if (typeDeclaration is not null && IntegrateSerializedTree(manager, typeDeclaration))
         {
-#if DEBUG
-            if (s_traceCDLoader.TraceVerbose)
-            {
-                Debug.WriteLine("****************** Integrated tree **********************");
-                DumpTypeDeclaration(_documentType);
-            }
-#endif
-            // EndTimingMark("Serialize tree");
-            // StartTimingMark();
             Write(_documentCompileUnit);
-            // EndTimingMark("Generate unit total");
-        }
-        else
-        {
-            Debug.WriteLineIf(s_traceCDLoader.TraceVerbose, "No need to integrate tree; no changes detected");
         }
     }
 
@@ -987,8 +968,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (serializationData is not SerializationStore data)
         {
-            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderBadSerializationObject);
-            ex.HelpLink = SR.CodeDomDesignerLoaderBadSerializationObject;
+            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderBadSerializationObject)
+            {
+                HelpLink = SR.CodeDomDesignerLoaderBadSerializationObject
+            };
 
             throw ex;
         }
@@ -1044,7 +1027,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 }
                 else
                 {
-                    baseName.AsSpan(i).Replace(span.Slice(i), '`', '_');
+                    baseName.AsSpan(i).Replace(span[i..], '`', '_');
                     break;
                 }
             }
@@ -1199,8 +1182,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (name.Length == 0)
         {
-            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderInvalidBlankIdentifier);
-            ex.HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier;
+            Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderInvalidBlankIdentifier)
+            {
+                HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier
+            };
 
             throw ex;
         }
@@ -1230,8 +1215,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             catch
             {
                 // we have to change the exception back to the original name
-                Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderInvalidIdentifier, name));
-                ex.HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier;
+                Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderInvalidIdentifier, name))
+                {
+                    HelpLink = SR.CodeDomDesignerLoaderInvalidIdentifier
+                };
 
                 throw ex;
             }
@@ -1271,8 +1258,10 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (dup)
         {
-            Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderDupComponentName, name));
-            ex.HelpLink = SR.CodeDomDesignerLoaderDupComponentName;
+            Exception ex = new ArgumentException(string.Format(SR.CodeDomDesignerLoaderDupComponentName, name))
+            {
+                HelpLink = SR.CodeDomDesignerLoaderDupComponentName
+            };
 
             throw ex;
         }

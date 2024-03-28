@@ -61,7 +61,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         NumberFormatInfo? formatInfo = (NumberFormatInfo?)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
         _decimalSep = formatInfo is not null ? formatInfo.NumberDecimalSeparator : ".";
 
-        _tabProperties = new();
+        _tabProperties = [];
 
         // Set up a NULL brush so we never try to invalidate the control.  This is
         // more efficient for what we're doing
@@ -76,38 +76,38 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
         hs?.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
 
-        _commands = new MenuCommand[]
-        {
-            new MenuCommand(new EventHandler(OnKeyCancel),
-                            MenuCommands.KeyCancel),
+        _commands =
+        [
+            new(new EventHandler(OnKeyCancel),
+                MenuCommands.KeyCancel),
 
-            new MenuCommand(new EventHandler(OnKeyDefault),
-                            MenuCommands.KeyDefaultAction),
+            new(new EventHandler(OnKeyDefault),
+                MenuCommands.KeyDefaultAction),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeyMoveUp),
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeyMoveUp),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeyMoveDown),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeyMoveDown),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeyMoveLeft),
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeyMoveLeft),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeyMoveRight),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeyMoveRight),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeySelectNext),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeySelectNext),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeySelectPrevious),
-        };
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeySelectPrevious),
+        ];
 
-        _newCommands = new MenuCommand[]
-        {
-            new MenuCommand(new EventHandler(OnKeyDefault),
-                            MenuCommands.KeyTabOrderSelect),
-        };
+        _newCommands =
+        [
+            new(new EventHandler(OnKeyDefault),
+                MenuCommands.KeyTabOrderSelect),
+        ];
 
         IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
         if (mcs is not null)
@@ -215,7 +215,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
                     Color backColor = hoverParent.BackColor;
                     Region clip = graphics.Clip;
                     graphics.ExcludeClip(ctlInner);
-                    using (SolidBrush brush = new SolidBrush(backColor))
+                    using (SolidBrush brush = new(backColor))
                     {
                         graphics.FillRectangle(brush, ctlOuter);
                     }
@@ -654,13 +654,13 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
         if (_tabControls is null)
         {
-            _tabControls = new();
+            _tabControls = [];
             GetTabbing((Control)_host.RootComponent, _tabControls);
             _tabGlyphs = new Rectangle[_tabControls.Count];
         }
 
-        _tabComplete ??= new();
-        _tabNext ??= new();
+        _tabComplete ??= [];
+        _tabNext ??= [];
 
         if (_region is null)
         {

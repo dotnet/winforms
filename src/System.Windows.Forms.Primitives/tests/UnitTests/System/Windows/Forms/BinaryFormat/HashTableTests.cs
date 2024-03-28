@@ -115,14 +115,17 @@ public class HashtableTests
         BinaryFormatWriter.WritePrimitiveHashtable(stream, hashtable);
         stream.Position = 0;
 
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
-        Hashtable deserialized = (Hashtable)formatter.Deserialize(stream);
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+
+        // cs/dangerous-binary-deserialization
+        Hashtable deserialized = (Hashtable)formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
 
         deserialized.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }
@@ -145,7 +148,7 @@ public class HashtableTests
         format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
 
         deserialized!.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }
@@ -162,7 +165,7 @@ public class HashtableTests
         BinaryFormattedObject format = new(stream);
         format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
         deserialized!.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }

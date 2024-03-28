@@ -160,7 +160,7 @@ public class ByteViewerTests
     public void ByteViewer_GetBytes_Invoke_ReturnsExpected()
     {
         using ByteViewer control = new();
-        Assert.Null(control.GetBytes());
+        Assert.Empty(control.GetBytes());
         Assert.False(control.IsHandleCreated);
     }
 
@@ -587,20 +587,11 @@ public class ByteViewerTests
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
-    [WinFormsTheory]
-    [InlineData(null)]
-    [InlineData("*")] // Invalid path
-    public void ByteViewer_SaveToFile_InvokeNoBytes_Nop(string path)
-    {
-        using ByteViewer control = new();
-        control.SaveToFile(path);
-    }
-
     [WinFormsFact]
     public void ByteViewer_SaveToFile_InvokeWithBytes_Success()
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
         string path = "ByteViewerContent";
         try
         {
@@ -635,8 +626,8 @@ public class ByteViewerTests
     {
         yield return new object[] { null, null };
         yield return new object[] { null, new EventArgs() };
-        yield return new object[] { new object(), null };
-        yield return new object[] { new object(), new EventArgs() };
+        yield return new object[] { new(), null };
+        yield return new object[] { new(), new EventArgs() };
     }
 
     [WinFormsTheory]
@@ -707,7 +698,7 @@ public class ByteViewerTests
     public void ByteViewer_SetBytes_InvokeWithBytes_GetReturnExpected(byte[] bytes)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1 });
+        control.SetBytes([1]);
 
         control.SetBytes(bytes);
         Assert.Same(bytes, control.GetBytes());
@@ -729,6 +720,8 @@ public class ByteViewerTests
     [WinFormsTheory]
     [InlineData(DisplayMode.Auto)]
     [InlineData(DisplayMode.Hexdump)]
+    [InlineData(DisplayMode.Ansi)]
+    [InlineData(DisplayMode.Unicode)]
     public void ByteViewer_SetDisplayMode_InvokeNoBytes_GetReturnsExpected(DisplayMode value)
     {
         using ByteViewer control = new();
@@ -747,7 +740,7 @@ public class ByteViewerTests
     public void ByteViewer_SetDisplayMode_InvokeWithBytes_GetReturnsExpected(DisplayMode value)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
 
         control.SetDisplayMode(value);
         Assert.Equal(value, control.GetDisplayMode());
@@ -767,7 +760,7 @@ public class ByteViewerTests
     public void ByteViewer_SetDisplayMode_InvokeWithBytesWithHandle_GetReturnsExpected(DisplayMode value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -815,7 +808,7 @@ public class ByteViewerTests
         Assert.False(control.IsHandleCreated);
 
         // Set different.
-        control.SetBytes(new byte[] { (byte)'1', (byte)'2', (byte)'3' });
+        control.SetBytes([(byte)'1', (byte)'2', (byte)'3']);
         Assert.Equal("123", textBox.Text);
         Assert.True(textBox.Visible);
         Assert.False(scrollBar.Visible);
@@ -845,26 +838,10 @@ public class ByteViewerTests
         Assert.False(control.IsHandleCreated);
 
         // Set different.
-        control.SetBytes(new byte[] { (byte)'1', 0, (byte)'2', 0, (byte)'3', 0 });
+        control.SetBytes([(byte)'1', 0, (byte)'2', 0, (byte)'3', 0]);
         Assert.Equal("123", textBox.Text);
         Assert.True(textBox.Visible);
         Assert.False(scrollBar.Visible);
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsTheory]
-    [InlineData(DisplayMode.Ansi)]
-    [InlineData(DisplayMode.Unicode)]
-    public void ByteViewer_SetDisplayMode_InvokeNoBytes_ThrowsNullReferenceException(DisplayMode value)
-    {
-        using ByteViewer control = new();
-        Assert.Throws<NullReferenceException>(() => control.SetDisplayMode(value));
-        Assert.Equal(value, control.GetDisplayMode());
-        Assert.False(control.IsHandleCreated);
-
-        // Set same.
-        Assert.Throws<NullReferenceException>(() => control.SetDisplayMode(value));
-        Assert.Equal(value, control.GetDisplayMode());
         Assert.False(control.IsHandleCreated);
     }
 
@@ -880,20 +857,20 @@ public class ByteViewerTests
     public void ByteViewer_SetFile_InvokeNoBytes_Success()
     {
         using ByteViewer control = new();
-        using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
+        using TempFile file = TempFile.Create([1, 2, 3]);
         control.SetFile(file.Path);
-        Assert.Equal(new byte[] { 1, 2, 3, 0 }, control.GetBytes());
+        Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
 
     [WinFormsFact]
     public void ByteViewer_SetFile_InvokeWithBytes_Success()
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 4, 5, 6 });
+        control.SetBytes([4, 5, 6]);
 
-        using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
+        using TempFile file = TempFile.Create([1, 2, 3]);
         control.SetFile(file.Path);
-        Assert.Equal(new byte[] { 1, 2, 3, 0 }, control.GetBytes());
+        Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
 
     [WinFormsFact]

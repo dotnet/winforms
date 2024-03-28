@@ -17,12 +17,12 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <summary>
         ///  The test runner
         /// </summary>
-        private static readonly MauiTestRunner s_testRunner = new MauiTestRunner();
+        private static readonly MauiTestRunner s_testRunner = new();
 
         /// <summary>
         ///  The test results, indexed by project name
         /// </summary>
-        private static readonly Dictionary<string, TestResult> s_testResults = new Dictionary<string, TestResult>();
+        private static readonly Dictionary<string, TestResult> s_testResults = new();
 
         /// <summary>
         ///  Get the scenarios that will run for a specified maui project
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// <returns>The scenarios that ran</returns>
         public static IEnumerable<string> GetScenarios(string projectName)
         {
-            var scenarios = new List<string>();
+            List<string> scenarios = new();
 
             // get the path to the maui test executable
             var exePath = TestHelpers.GetExePath(projectName);

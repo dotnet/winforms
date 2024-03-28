@@ -12,7 +12,7 @@ public class ListViewItemTests
     [Fact]
     public void ListViewItem_Ctor_Default()
     {
-        var item = new ListViewItem();
+        ListViewItem item = new();
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -51,7 +51,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_StringArray_String_Color_Color_Font_ListViewGroup(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group, string expectedImageKey, Color expectedForeColor, Color expectedBackColor, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font, group);
+        ListViewItem item = new(subItems, imageKey, foreColor, backColor, font, group);
         Assert.Equal(expectedBackColor, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -89,7 +89,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_Int_Color_Color_Font_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font_ListViewGroup(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex, foreColor, backColor, font, group);
+        ListViewItem item = new(subItems, imageIndex, foreColor, backColor, font, group);
         Assert.Equal(expectedBackColor, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -127,7 +127,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_TestData))]
     public void ListViewItem_Ctor_StringArray_String_Color_Color_Font(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, string expectedImageKey, Color expectedForeColor, Color expectedBackColor, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font);
+        ListViewItem item = new(subItems, imageKey, foreColor, backColor, font);
         Assert.Equal(expectedBackColor, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -165,7 +165,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_Int_Color_Color_Font_TestData))]
     public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex, foreColor, backColor, font);
+        ListViewItem item = new(subItems, imageIndex, foreColor, backColor, font);
         Assert.Equal(expectedBackColor, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -194,15 +194,15 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_ListViewGroup_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), null, null, string.Empty, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, null, string.Empty, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", new ListViewGroup(), "imageKey", "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, string.Empty, null, string.Empty, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, "imageKey", new ListViewGroup(), "imageKey", "text" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_ListViewSubItemArray_String_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_ListViewSubItemArray_String_ListViewGroup(ListViewItem.ListViewSubItem[] subItems, string imageKey, ListViewGroup group, string expectedImageKey, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey, group);
+        ListViewItem item = new(subItems, imageKey, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -231,15 +231,15 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_Int_ListViewGroup_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), 0, null, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, 1, null, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, -1, new ListViewGroup(), "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, 1, null, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, -1, new ListViewGroup(), "text" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_ListViewSubItemArray_Int_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_ListViewSubItemArray_Int_ListViewGroup(ListViewItem.ListViewSubItem[] subItems, int imageIndex, ListViewGroup group, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex, group);
+        ListViewItem item = new(subItems, imageIndex, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -277,7 +277,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_String_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_StringArray_String_ListViewGroup(string[] subItems, string imageKey, ListViewGroup group, string expectedImageKey, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey, group);
+        ListViewItem item = new(subItems, imageKey, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -315,7 +315,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_Int_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_StringArray_Int_ListViewGroup(string[] subItems, int imageIndex, ListViewGroup group, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex, group);
+        ListViewItem item = new(subItems, imageIndex, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -352,7 +352,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_String_String_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_String_String_ListViewGroup(string text, string imageKey, ListViewGroup group, string expectedText, string expectedImageKey)
     {
-        var item = new ListViewItem(text, imageKey, group);
+        ListViewItem item = new(text, imageKey, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -390,7 +390,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_String_Int_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_String_Int_ListViewGroup(string text, int imageIndex, ListViewGroup group, string expectedText)
     {
-        var item = new ListViewItem(text, imageIndex, group);
+        ListViewItem item = new(text, imageIndex, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -420,15 +420,15 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), null, string.Empty, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, string.Empty, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", "imageKey", "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, string.Empty, string.Empty, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, "imageKey", "imageKey", "text" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_ListViewSubItemArray_String_TestData))]
     public void ListViewItem_Ctor_ListViewSubItemArray_String(ListViewItem.ListViewSubItem[] subItems, string imageKey, string expectedImageKey, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey);
+        ListViewItem item = new(subItems, imageKey);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -457,15 +457,15 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_Int_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), 0, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, 1, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, -1, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, 1, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, -1, "text" };
     }
 
     [Theory]
     [MemberData(nameof(Ctor_ListViewSubItemArray_Int_TestData))]
     public void ListViewItem_Ctor_ListViewSubItemArray_Int(ListViewItem.ListViewSubItem[] subItems, int imageIndex, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex);
+        ListViewItem item = new(subItems, imageIndex);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -503,7 +503,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_StringArray_ListViewGroup(string[] subItems, ListViewGroup group, string expectedText)
     {
-        var item = new ListViewItem(subItems, group);
+        ListViewItem item = new(subItems, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -541,7 +541,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_String_TestData))]
     public void ListViewItem_Ctor_StringArray_String(string[] subItems, string imageKey, string expectedImageKey, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageKey);
+        ListViewItem item = new(subItems, imageKey);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -579,7 +579,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_Int_TestData))]
     public void ListViewItem_Ctor_StringArray_Int(string[] subItems, int imageIndex, string expectedText)
     {
-        var item = new ListViewItem(subItems, imageIndex);
+        ListViewItem item = new(subItems, imageIndex);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -616,7 +616,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_String_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_String_ListViewGroup(string text, ListViewGroup group, string expectedText)
     {
-        var item = new ListViewItem(text, group);
+        ListViewItem item = new(text, group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -654,7 +654,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_String_String_TestData))]
     public void ListViewItem_Ctor_String_String(string text, string imageKey, string expectedText, string expectedImageKey)
     {
-        var item = new ListViewItem(text, imageKey);
+        ListViewItem item = new(text, imageKey);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -692,7 +692,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_String_Int_TestData))]
     public void ListViewItem_Ctor_String_Int(string text, int imageIndex, string expectedText)
     {
-        var item = new ListViewItem(text, imageIndex);
+        ListViewItem item = new(text, imageIndex);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -729,7 +729,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_ListViewGroup_TestData))]
     public void ListViewItem_Ctor_ListViewGroup(ListViewGroup group)
     {
-        var item = new ListViewItem(group);
+        ListViewItem item = new(group);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -768,7 +768,7 @@ public class ListViewItemTests
     [MemberData(nameof(Ctor_StringArray_TestData))]
     public void ListViewItem_Ctor_StringArray(string[] subItems, string expectedText)
     {
-        var item = new ListViewItem(subItems);
+        ListViewItem item = new(subItems);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -798,7 +798,7 @@ public class ListViewItemTests
     [NormalizedStringData]
     public void ListViewItem_Ctor_String(string text, string expectedText)
     {
-        var item = new ListViewItem(text);
+        ListViewItem item = new(text);
         Assert.Equal(SystemColors.Window, item.BackColor);
         Assert.Equal(Rectangle.Empty, item.Bounds);
         Assert.False(item.Checked);
@@ -872,7 +872,7 @@ public class ListViewItemTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void ListViewItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        var item = new ListViewItem
+        ListViewItem item = new()
         {
             BackColor = value
         };
@@ -979,7 +979,7 @@ public class ListViewItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ListViewItem_Font_Set_GetReturnsExpected(Font value)
     {
-        var item = new ListViewItem
+        ListViewItem item = new()
         {
             Font = value
         };
@@ -1023,7 +1023,7 @@ public class ListViewItemTests
     [Fact]
     public void ListViewItem_EnsureVisible_NoListView_Nop()
     {
-        var item = new ListViewItem();
+        ListViewItem item = new();
         item.EnsureVisible();
     }
 
@@ -1041,7 +1041,7 @@ public class ListViewItemTests
     [Fact]
     public void ListViewItem_Remove_NoListView_Nop()
     {
-        var item = new ListViewItem();
+        ListViewItem item = new();
         item.Remove();
     }
 

@@ -31,7 +31,7 @@ public class ObjectSelectorEditorTests
     {
         yield return new object[] { null };
         yield return new object[] { "value" };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -104,7 +104,7 @@ public class ObjectSelectorEditorTests
     [Fact]
     public void ObjectSelectorEditor_Selector()
     {
-        ObjectSelectorEditor.Selector underTest = new ObjectSelectorEditor.Selector(new SubObjectSelectorEditor());
+        ObjectSelectorEditor.Selector underTest = new(new SubObjectSelectorEditor());
 
         Assert.NotNull(underTest);
         underTest.AddNode("node", "value", null);

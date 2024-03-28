@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 
@@ -26,8 +25,7 @@ public partial class ControlDesigner
 
         public override string? Description => _control.AccessibilityObject.Description;
 
-        private IDesignerHost DesignerHost
-            => _host ??= (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
+        private IDesignerHost DesignerHost => _host ??= _designer.GetRequiredService<IDesignerHost>();
 
         public override string DefaultAction => string.Empty;
 
@@ -37,15 +35,14 @@ public partial class ControlDesigner
 
         public override AccessibleRole Role => _control.AccessibilityObject.Role;
 
-        private ISelectionService SelectionService
-            => _selectionService ??= _designer.GetService<ISelectionService>();
+        private ISelectionService? SelectionService => _selectionService ??= _designer.GetService<ISelectionService>();
 
         public override AccessibleStates State
         {
             get
             {
                 AccessibleStates state = _control.AccessibilityObject.State;
-                ISelectionService s = SelectionService;
+                ISelectionService? s = SelectionService;
                 if (s is not null)
                 {
                     if (s.GetComponentSelected(_control))
@@ -67,10 +64,6 @@ public partial class ControlDesigner
 
         public override AccessibleObject? GetChild(int index)
         {
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"ControlDesignerAccessibleObject.GetChild({index})");
-
             if (_control.AccessibilityObject.GetChild(index) is Control.ControlAccessibleObject childAccObj)
             {
                 AccessibleObject? cao = GetDesignerAccessibleObject(childAccObj);
@@ -87,7 +80,7 @@ public partial class ControlDesigner
 
         private AccessibleObject? GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
         {
-            if (cao is null || cao.Owner is not { } owner)
+            if (cao.Owner is not { } owner)
             {
                 return null;
             }

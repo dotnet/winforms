@@ -134,7 +134,7 @@ public partial class ComboBoxesWithScrollBars : Form
         }
 
         e.DrawBackground();
-        using SolidBrush brush = new SolidBrush(e.ForeColor);
+        using SolidBrush brush = new(e.ForeColor);
         e.Graphics.DrawString(
             control.Items[e.Index].ToString(),
             e.Font,

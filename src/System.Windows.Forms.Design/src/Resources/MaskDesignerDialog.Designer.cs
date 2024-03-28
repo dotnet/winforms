@@ -39,7 +39,7 @@ internal class MaskDesignerDialog {
     internal static global::System.Resources.ResourceManager ResourceManager {
         get {
             if (object.ReferenceEquals(resourceMan, null)) {
-                global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Windows.Forms.Design.Resources.MaskDesignerDialog", typeof(MaskDesignerDialog).Assembly);
+                global::System.Resources.ResourceManager temp = new("System.Windows.Forms.Design.Resources.MaskDesignerDialog", typeof(MaskDesignerDialog).Assembly);
                 resourceMan = temp;
             }
             return resourceMan;

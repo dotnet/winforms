@@ -1,7 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-
 namespace System.Drawing;
 
 public static class Brushes
@@ -312,12 +310,13 @@ public static class Brushes
 
     private static Brush GetBrush(object key, Color color)
     {
-        Brush? brush = (Brush?)Gdip.ThreadData[key];
-        if (brush == null)
+        if (Gdip.ThreadData.TryGetValue(key, out object? objectBrush) && objectBrush is Brush brush)
         {
-            brush = new SolidBrush(color);
-            Gdip.ThreadData[key] = brush;
+            return brush;
         }
-        return brush;
+
+        Brush newBrush = new SolidBrush(color);
+        Gdip.ThreadData[key] = newBrush;
+        return newBrush;
     }
 }

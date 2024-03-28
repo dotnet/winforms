@@ -14,18 +14,16 @@ public class ResXResourceSetTests
     [InlineData("TestResources.resx", "SomeDataTest2", "Some text for Data 2 node")]
     [InlineData("TestResources.resx", "text.ansi", "Text")]
     [InlineData("TestResources.resx", "text.utf8", "Привет")]
-    private void ResXResourceSet_TestFile(string resxFileName, string resourceName, string expected)
+    public void ResXResourceSet_TestFile(string resxFileName, string resourceName, string expected)
     {
         Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-        using (ResXResourceSet resxSet = new ResXResourceSet(resxFileName))
-        {
-            Assert.NotNull(resxSet);
+        using ResXResourceSet resxSet = new(resxFileName);
+        Assert.NotNull(resxSet);
 
-            string strResXValue = resxSet.GetString(resourceName);
+        string strResXValue = resxSet.GetString(resourceName);
 
-            Assert.Equal(expected, strResXValue);
-        }
+        Assert.Equal(expected, strResXValue);
     }
 
     [Theory]
@@ -36,20 +34,16 @@ public class ResXResourceSetTests
     [InlineData("TestResources.resx", "SomeDataTest2", "Some text for Data 2 node")]
     [InlineData("TestResources.resx", "text.ansi", "Text")]
     [InlineData("TestResources.resx", "text.utf8", "Привет")]
-    private void ResXResourceSet_TestStream(string resxFileName, string resourceName, string expected)
+    public void ResXResourceSet_TestStream(string resxFileName, string resourceName, string expected)
     {
         Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-        using (FileStream fs = new FileStream(resxFileName, FileMode.Open))
-        {
-            using (ResXResourceSet resxSet = new ResXResourceSet(fs))
-            {
-                Assert.NotNull(resxSet);
+        using FileStream fs = new(resxFileName, FileMode.Open);
+        using ResXResourceSet resxSet = new(fs);
+        Assert.NotNull(resxSet);
 
-                string strResXValue = resxSet.GetString(resourceName);
+        string strResXValue = resxSet.GetString(resourceName);
 
-                Assert.Equal(expected, strResXValue);
-            }
-        }
+        Assert.Equal(expected, strResXValue);
     }
 }

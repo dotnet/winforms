@@ -12,7 +12,7 @@ public class BindingsCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        var collection = new SubBindingsCollection();
+        SubBindingsCollection collection = new();
         Assert.Equal(0, collection.Count);
         Assert.Empty(collection.List);
         Assert.False(collection.ShouldSerializeMyAll());
@@ -21,8 +21,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_Invoke_Success()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         Assert.Equal(1, collection.Count);
@@ -33,8 +33,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_InvokeWithCollectionChanging_CallsHandler()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -80,15 +80,15 @@ public class BindingsCollectionTests
     [Fact]
     public void Add_NullDataBinding_ThrowsArgumentNullException()
     {
-        var collection = new BindingsCollection();
+        BindingsCollection collection = [];
         Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Add(null));
     }
 
     [Fact]
     public void AddCore_Invoke_Success()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
         collection.AddCore(binding);
 
         Assert.Equal(1, collection.Count);
@@ -99,8 +99,8 @@ public class BindingsCollectionTests
     [Fact]
     public void AddCore_InvokeWithCollectionChanging_DoesNotCallHandler()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -146,15 +146,15 @@ public class BindingsCollectionTests
     [Fact]
     public void AddCore_NullDataBinding_ThrowsArgumentNullException()
     {
-        var collection = new SubBindingsCollection();
+        SubBindingsCollection collection = new();
         Assert.Throws<ArgumentNullException>("dataBinding", () => collection.AddCore(null));
     }
 
     [Fact]
     public void Clear_Invoke_Success()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.Clear();
@@ -168,8 +168,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Clear_InvokeWithCollectionChanging_CallsHandler()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -217,8 +217,8 @@ public class BindingsCollectionTests
     [Fact]
     public void ClearCore_Invoke_Success()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.ClearCore();
@@ -228,8 +228,8 @@ public class BindingsCollectionTests
     [Fact]
     public void ClearCore_InvokeWithCollectionChanging_DoesNotCallHandler()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -277,8 +277,8 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveAt_Invoke_Success()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.RemoveAt(0);
@@ -288,8 +288,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_Invoke_Success()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.Remove(binding);
@@ -299,8 +299,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_InvokeWithCollectionChanging_CallsHandler()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -355,8 +355,8 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_NullDataBinding_Nop()
     {
-        var collection = new BindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.Remove(null);
@@ -366,9 +366,9 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_NoSuchDataBinding_Nop()
     {
-        var collection = new BindingsCollection();
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        BindingsCollection collection = [];
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection.Add(binding1);
 
         collection.Remove(binding2);
@@ -378,10 +378,10 @@ public class BindingsCollectionTests
     [Fact]
     public void Remove_DataBindingFromOtherCollection_Nop()
     {
-        var collection1 = new BindingsCollection();
-        var collection2 = new BindingsCollection();
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        BindingsCollection collection1 = [];
+        BindingsCollection collection2 = [];
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection1.Add(binding1);
         collection2.Add(binding2);
 
@@ -393,8 +393,8 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveCore_Invoke_Success()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.RemoveCore(binding);
@@ -404,8 +404,8 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveCore_InvokeWithCollectionChanging_DoesNotCallHandler()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
 
         int changingCallCount = 0;
         int changedCallCount = 0;
@@ -460,8 +460,8 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveCore_NullDataBinding_Nop()
     {
-        var collection = new SubBindingsCollection();
-        var binding = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         collection.RemoveCore(null);
@@ -471,9 +471,9 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveCore_NoSuchDataBinding_Nop()
     {
-        var collection = new SubBindingsCollection();
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        SubBindingsCollection collection = new();
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection.Add(binding1);
 
         collection.RemoveCore(binding2);
@@ -483,10 +483,10 @@ public class BindingsCollectionTests
     [Fact]
     public void RemoveCore_DataBindingFromOtherCollection_Nop()
     {
-        var collection1 = new SubBindingsCollection();
-        var collection2 = new SubBindingsCollection();
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        SubBindingsCollection collection1 = new();
+        SubBindingsCollection collection2 = new();
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection1.Add(binding1);
         collection2.Add(binding2);
 
@@ -498,8 +498,8 @@ public class BindingsCollectionTests
     [Fact]
     public void OnCollectionChanging_Invoke_CallsHandler()
     {
-        var collection = new SubBindingsCollection();
-        var eventArgs = new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null);
+        SubBindingsCollection collection = new();
+        CollectionChangeEventArgs eventArgs = new(CollectionChangeAction.Refresh, null);
         int callCount = 0;
         CollectionChangeEventHandler handler = (sender, e) =>
         {
@@ -522,8 +522,8 @@ public class BindingsCollectionTests
     [Fact]
     public void OnCollectionChanged_Invoke_CallsHandler()
     {
-        var collection = new SubBindingsCollection();
-        var eventArgs = new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null);
+        SubBindingsCollection collection = new();
+        CollectionChangeEventArgs eventArgs = new(CollectionChangeAction.Refresh, null);
         int callCount = 0;
         CollectionChangeEventHandler handler = (sender, e) =>
         {

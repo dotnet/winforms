@@ -17,16 +17,18 @@ internal class ListControlUnboundActionList : DesignerActionList
 
     public void InvokeItemsDialog()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Items");
+        EditorServiceContext.EditValue(_designer, Component!, "Items");
     }
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection returnItems = new DesignerActionItemCollection();
-        returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-            SR.ListControlUnboundActionListEditItemsDisplayName,
-            SR.ItemsCategoryName,
-            SR.ListControlUnboundActionListEditItemsDescription, true));
+        DesignerActionItemCollection returnItems =
+        [
+            new DesignerActionMethodItem(this, "InvokeItemsDialog",
+                SR.ListControlUnboundActionListEditItemsDisplayName,
+                SR.ItemsCategoryName,
+                SR.ListControlUnboundActionListEditItemsDescription, true),
+        ];
         return returnItems;
     }
 }

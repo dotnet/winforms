@@ -10,15 +10,15 @@ public class CollectionHelperTests
     [Fact]
     public void HashtableCopyTo_throws_when_target_is_null()
     {
-        Dictionary<string, string> source = new();
+        Dictionary<string, string> source = [];
         Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target: null, index: 0));
     }
 
     [Fact]
     public void HashtableCopyTo_throws_when_target_rank_greather_than_one()
     {
-        Dictionary<string, string> source = new();
-        var target = new object[3, 3];
+        Dictionary<string, string> source = [];
+        object[,] target = new object[3, 3];
 
         Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 0));
     }
@@ -26,8 +26,8 @@ public class CollectionHelperTests
     [Fact]
     public void HashtableCopyTo_throws_when_index_less_than_zero()
     {
-        Dictionary<string, string> source = new();
-        var target = new object[3];
+        Dictionary<string, string> source = [];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: -2));
     }
@@ -35,8 +35,8 @@ public class CollectionHelperTests
     [Fact]
     public void HashtableCopyTo_throws_when_index_greather_than_target_length()
     {
-        Dictionary<string, string> source = new();
-        var target = new object[3];
+        Dictionary<string, string> source = [];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: 5));
     }
@@ -44,8 +44,8 @@ public class CollectionHelperTests
     [Fact]
     public void HashtableCopyTo_throws_when_target_lowerbound_is_non_zero()
     {
-        Dictionary<string, string> source = new();
-        var target = Array.CreateInstance(typeof(double), new int[] { 3 }, new int[] { 2 });
+        Dictionary<string, string> source = [];
+        var target = Array.CreateInstance(typeof(double), [3], [2]);
 
         Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 0));
     }
@@ -58,7 +58,7 @@ public class CollectionHelperTests
             { "key-one", "value-one" },
             { "key-two", "value-two" },
         };
-        var target = new object[3];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 2));
     }
@@ -117,7 +117,7 @@ public class CollectionHelperTests
             { "key-one", "value-one" },
             { "key-two", "value-two" },
         };
-        var target = new object[2];
+        object[] target = new object[2];
 
         source.HashtableCopyTo(target, index: 0);
 

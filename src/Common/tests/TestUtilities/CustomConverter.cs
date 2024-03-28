@@ -42,7 +42,7 @@ public static class CustomConverter
 
     public class CustomTypeDescriptionProvider : TypeDescriptionProvider
     {
-        private TypeConverter _converter;
+        private readonly TypeConverter _converter;
 
         public CustomTypeDescriptionProvider(TypeDescriptionProvider parent, TypeConverter converter) : base(parent)
             => _converter = converter;
@@ -51,9 +51,9 @@ public static class CustomConverter
             [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
             object? instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance), _converter);
 
-        private class TypeConverterProvider : CustomTypeDescriptor
+        private sealed class TypeConverterProvider : CustomTypeDescriptor
         {
-            private TypeConverter _converter;
+            private readonly TypeConverter _converter;
 
             public TypeConverterProvider(ICustomTypeDescriptor? parent, TypeConverter converter) : base(parent)
                 => _converter = converter;

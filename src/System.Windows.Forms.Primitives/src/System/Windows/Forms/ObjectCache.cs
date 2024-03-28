@@ -59,10 +59,7 @@ internal abstract class ObjectCache<T> : IDisposable where T : class
     protected abstract bool Accept(T item);
     protected abstract T Create();
 
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-    }
+    public void Dispose() => Dispose(disposing: true);
 
     protected virtual void Dispose(bool disposing)
     {

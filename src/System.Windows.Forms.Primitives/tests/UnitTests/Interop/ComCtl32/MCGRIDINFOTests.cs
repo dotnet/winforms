@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop.ComCtl32;
+using Windows.Win32.UI.Controls;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
@@ -38,7 +38,7 @@ public class MCGRIDINFOTests
             return;
         }
 
-        MCGRIDINFO sut = new MCGRIDINFO();
+        MCGRIDINFO sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.cbSize - addr);          // 4, UINT
@@ -107,7 +107,7 @@ public class MCGRIDINFOTests
             return;
         }
 
-        MCGRIDINFO sut = new MCGRIDINFO();
+        MCGRIDINFO sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.cbSize - addr);          // 4, UINT

@@ -88,32 +88,32 @@ public class InteractionTests
     [Fact]
     public void Shell()
     {
-        int processId = Interaction.Shell(_exePath);
+        int processId = Interaction.Shell(s_exePath);
         Process process = Process.GetProcessById(processId);
         process.Kill();
         process.WaitForExit();
     }
 
     [Fact]
-    public void Shell_NullReferenceException()
+    public void Shell_ArgumentNullException()
     {
         // Exception.ToString() called to verify message is constructed successfully.
-        _ = Assert.Throws<NullReferenceException>(() => Interaction.Shell(null)).ToString();
+        _ = Assert.Throws<ArgumentNullException>(() => Interaction.Shell(null)).ToString();
     }
 
     [Fact]
     public void Shell_FileNotFoundException()
     {
-        var path = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        string path = Path.Combine(Path.GetTempPath(), GetUniqueName());
         // Exception.ToString() called to verify message is constructed successfully.
         _ = Assert.Throws<FileNotFoundException>(() => Interaction.Shell(path)).ToString();
     }
 
-    private static readonly string _exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
+    private static readonly string s_exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
 
     private static Process StartTestProcess(string arguments)
     {
-        ProcessStartInfo startInfo = new() { FileName = _exePath, Arguments = arguments };
+        ProcessStartInfo startInfo = new() { FileName = s_exePath, Arguments = arguments };
         return TestHelpers.StartProcess(startInfo);
     }
 

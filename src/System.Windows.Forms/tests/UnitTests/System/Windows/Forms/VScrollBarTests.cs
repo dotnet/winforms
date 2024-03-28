@@ -12,7 +12,7 @@ public class VScrollBarTests
     [WinFormsFact]
     public void VScrollBar_Ctor_Default()
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -119,7 +119,7 @@ public class VScrollBarTests
     [WinFormsFact]
     public void VScrollBar_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("ScrollBar", createParams.ClassName);
@@ -141,7 +141,7 @@ public class VScrollBarTests
     [InvalidEnumData<RightToLeft>]
     public void VScrollBar_RightToLeft_Set_GetReturnsNo(RightToLeft value)
     {
-        using var control = new SubVScrollBar
+        using SubVScrollBar control = new()
         {
             RightToLeft = value
         };
@@ -155,7 +155,7 @@ public class VScrollBarTests
     [WinFormsFact]
     public void VScrollBar_RightToLeft_SetWithHandler_DoesNotCallRightToLeftChanged()
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -190,7 +190,7 @@ public class VScrollBarTests
     [WinFormsFact]
     public void VScrollBar_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -217,7 +217,7 @@ public class VScrollBarTests
     [InlineData((ControlStyles)(-1), false)]
     public void VScrollBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -227,7 +227,7 @@ public class VScrollBarTests
     [WinFormsFact]
     public void VScrollBar_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubVScrollBar();
+        using SubVScrollBar control = new();
         Assert.False(control.GetTopLevel());
     }
 

@@ -22,9 +22,9 @@ public class DataGridViewEditingControlShowingEventArgsTests
     [Fact]
     public void Ctor_Control_DataGridViewCellStyle()
     {
-        using var button = new Button();
-        var cellStyle = new DataGridViewCellStyle();
-        var e = new DataGridViewEditingControlShowingEventArgs(button, cellStyle);
+        using Button button = new();
+        DataGridViewCellStyle cellStyle = new();
+        DataGridViewEditingControlShowingEventArgs e = new(button, cellStyle);
         Assert.Equal(button, e.Control);
         Assert.Equal(cellStyle, e.CellStyle);
     }
@@ -32,8 +32,8 @@ public class DataGridViewEditingControlShowingEventArgsTests
     [Fact]
     public void CellStyle_SetNull_ThrowsArgumentNullException()
     {
-        using var button = new Button();
-        var e = new DataGridViewEditingControlShowingEventArgs(button, new DataGridViewCellStyle());
+        using Button button = new();
+        DataGridViewEditingControlShowingEventArgs e = new(button, new DataGridViewCellStyle());
         Assert.Throws<ArgumentNullException>("value", () => e.CellStyle = null);
     }
 }

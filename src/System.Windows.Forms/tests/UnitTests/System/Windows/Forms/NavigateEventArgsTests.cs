@@ -11,7 +11,7 @@ public class NavigateEventArgsTests
     [InlineData(false)]
     public void Ctor_Bool(bool isForward)
     {
-        var e = new NavigateEventArgs(isForward);
+        NavigateEventArgs e = new(isForward);
         Assert.Equal(isForward, e.Forward);
     }
 }

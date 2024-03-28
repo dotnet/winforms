@@ -65,6 +65,7 @@ partial class ListBoxes
         this.listBox1.Name = "listBox1";
         this.listBox1.Size = new System.Drawing.Size(200, 150);
         this.listBox1.DrawMode = System.Windows.Forms.DrawMode.Normal;
+        this.listBox1.SelectionMode = SelectionMode.MultiSimple;
         // 
         // textBox1
         //

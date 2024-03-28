@@ -1,23 +1,25 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Specifies available options for color-adjusting. GDI+ can adjust color data only, grayscale data only, or both.
+///  Specifies available options for color-adjusting. GDI+ can adjust color data only, grayscale data only, or both.
 /// </summary>
 public enum ColorMatrixFlag
 {
     /// <summary>
-    /// Both colors and grayscale are color-adjusted.
+    ///  Both colors and grayscale are color-adjusted.
     /// </summary>
-    Default = 0,
+    Default = ColorMatrixFlags.ColorMatrixFlagsDefault,
+
     /// <summary>
-    /// Grascale values are not color-adjusted.
+    ///  Grayscale values are not color-adjusted.
     /// </summary>
-    SkipGrays = 1,
+    SkipGrays = ColorMatrixFlags.ColorMatrixFlagsSkipGrays,
+
     /// <summary>
-    /// Only grascale values are color-adjusted.
+    ///  Only grayscale values are color-adjusted.
     /// </summary>
-    AltGrays = 2
+    AltGrays = ColorMatrixFlags.ColorMatrixFlagsAltGray
 }

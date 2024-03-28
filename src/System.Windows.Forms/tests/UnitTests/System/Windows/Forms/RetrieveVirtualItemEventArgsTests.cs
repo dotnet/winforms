@@ -12,7 +12,7 @@ public class RetrieveVirtualItemEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int itemIndex)
     {
-        var e = new RetrieveVirtualItemEventArgs(itemIndex);
+        RetrieveVirtualItemEventArgs e = new(itemIndex);
         Assert.Equal(itemIndex, e.ItemIndex);
         Assert.Null(e.Item);
     }
@@ -27,7 +27,7 @@ public class RetrieveVirtualItemEventArgsTests
     [MemberData(nameof(Item_TestData))]
     public void Item_Set_GetReturnsExpected(ListViewItem value)
     {
-        var e = new RetrieveVirtualItemEventArgs(1)
+        RetrieveVirtualItemEventArgs e = new(1)
         {
             Item = value
         };

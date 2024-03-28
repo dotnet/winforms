@@ -2,14 +2,9 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pt-BR" original="../SR.resx">
     <body>
-      <trans-unit id="COM2UnhandledVT">
-        <source>Unhandled VT: {0}.</source>
-        <target state="translated">VT não tratado: {0}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
-        <target state="new">Unable to retrieve the root folder.</target>
+        <target state="translated">Não é possível recuperar a pasta raiz.</target>
         <note />
       </trans-unit>
       <trans-unit id="General_MissingService">
@@ -20,6 +15,11 @@
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Uma ou mais entradas não são válidas no parâmetro IDictionary. Verifique se todos os valores correspondem às propriedades do objeto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="translated">O recurso "{1}" não pode ser encontrado na classe "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

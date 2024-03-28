@@ -28,10 +28,10 @@ partial class CommonControl1
     /// </summary>
     private void InitializeComponent()
     {
-        System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("1");
-        System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("2");
-        System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("3");
-        System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("4");
+        System.Windows.Forms.ListViewItem listViewItem1 = new("1");
+        System.Windows.Forms.ListViewItem listViewItem2 = new("2");
+        System.Windows.Forms.ListViewItem listViewItem3 = new("3");
+        System.Windows.Forms.ListViewItem listViewItem4 = new("4");
         this.groupBox1 = new System.Windows.Forms.GroupBox();
         this.button12 = new System.Windows.Forms.Button();
         this.button1 = new System.Windows.Forms.Button();

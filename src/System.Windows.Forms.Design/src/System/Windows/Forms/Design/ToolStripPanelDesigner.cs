@@ -18,7 +18,6 @@ namespace System.Windows.Forms.Design;
 internal class ToolStripPanelDesigner : ScrollableControlDesigner
 {
     private static Padding s_defaultPadding = new(0);
-    private ToolStripPanel? _panel;
     private IComponentChangeService? _componentChangeService;
     private IDesignerHost? _designerHost;
 
@@ -26,7 +25,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     private ToolStripPanelSelectionGlyph? _containerSelectorGlyph;
     private ToolStripPanelSelectionBehavior? _behavior;
 
-    //Designer context Menu for this designer
+    // Designer context Menu for this designer
     private BaseContextMenuStrip? _contextMenu;
 
     // The SelectionService..
@@ -48,7 +47,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
                           ControlPaint.Light(Control.BackColor) :
                           ControlPaint.Dark(Control.BackColor);
 
-            Pen pen = new Pen(penColor)
+            Pen pen = new(penColor)
             {
                 DashStyle = DashStyle.Dash
             };
@@ -58,40 +57,47 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     }
 
     // Custom ContextMenu.
-    private ContextMenuStrip DesignerContextMenu
+    private ContextMenuStrip? DesignerContextMenu
     {
         get
         {
             if (_contextMenu is null)
             {
-                _contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
-                // If multiple Items Selected don't show the custom properties...
-                _contextMenu.GroupOrdering.Clear();
-                _contextMenu.GroupOrdering.AddRange([StandardGroups.Code,
-                    StandardGroups.Verbs,
-                    StandardGroups.Custom,
-                    StandardGroups.Selection,
-                    StandardGroups.Edit,
-                    StandardGroups.Properties
-                ]);
-                _contextMenu.Text = "CustomContextMenu";
+                ISite? site = Component.Site;
+
+                if (site is not null)
+                {
+                    _contextMenu = new BaseContextMenuStrip(site);
+                    // If multiple Items Selected don't show the custom properties...
+                    _contextMenu.GroupOrdering.Clear();
+                    _contextMenu.GroupOrdering.AddRange([StandardGroups.Code,
+                        StandardGroups.Verbs,
+                        StandardGroups.Custom,
+                        StandardGroups.Selection,
+                        StandardGroups.Edit,
+                        StandardGroups.Properties
+                    ]);
+                    _contextMenu.Text = "CustomContextMenu";
+                }
             }
 
             return _contextMenu;
         }
     }
 
+    public override ToolStripPanel Control => (ToolStripPanel)Component;
+
     // ToolStripPanels if Inherited ACT as Readonly.
     protected override InheritanceAttribute InheritanceAttribute
     {
-        get => _panel is not null && _panel.Parent is ToolStripContainer && (base.InheritanceAttribute == InheritanceAttribute.Inherited)
+        get => Control.Parent is ToolStripContainer && (base.InheritanceAttribute == InheritanceAttribute.Inherited)
                ? InheritanceAttribute.InheritedReadOnly
                : base.InheritanceAttribute;
     }
 
     private Padding Padding
     {
-        get => (Padding)ShadowProperties[nameof(Padding)];
+        get => (Padding)ShadowProperties[nameof(Padding)]!;
         set
         {
             ShadowProperties[nameof(Padding)] = value;
@@ -109,7 +115,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules
-         => _panel?.Parent is ToolStripContainer
+         => Control.Parent is ToolStripContainer
             ? SelectionRules.Locked
             : base.SelectionRules;
 
@@ -124,11 +130,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private bool Visible
     {
-        get => (bool)ShadowProperties[nameof(Visible)];
+        get => (bool)ShadowProperties[nameof(Visible)]!;
         set
         {
             ShadowProperties[nameof(Visible)] = value;
-            _panel!.Visible = value;
+            Control.Visible = value;
         }
     }
 
@@ -144,7 +150,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     ///  This designer can be parented to only ToolStripContainer.
     /// </summary>
     public override bool CanBeParentedTo(IDesigner parentDesigner)
-        => _panel is not null && _panel.Parent is not ToolStripContainer;
+        => Control.Parent is not ToolStripContainer;
 
     /// <summary>
     ///  Update the glyph whenever component is changed.
@@ -163,13 +169,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (!typeof(ToolStrip).IsAssignableFrom(toolType))
         {
-            //ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
-            if (_panel?.Parent is ToolStripContainer parent
-                && parent.ContentPanel is { } contentPanel
+            if (Control.Parent is ToolStripContainer { ContentPanel: { } contentPanel }
                 && _designerHost?.GetDesigner(contentPanel) is PanelDesigner designer)
             {
                 InvokeCreateTool(designer, tool);
@@ -217,14 +221,17 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
                 _componentChangeService.ComponentChanged -= OnComponentChanged;
             }
 
-            _panel!.ControlAdded -= OnControlAdded;
-            _panel.ControlRemoved -= OnControlRemoved;
+            if (HasComponent)
+            {
+                Control.ControlAdded -= OnControlAdded;
+                Control.ControlRemoved -= OnControlRemoved;
+            }
         }
     }
 
     /// <summary>
     ///  This draws a nice border around our RaftingContainer.  We need
-    ///  this because the _panel can have no border and you can't
+    ///  this because the Control can have no border and you can't
     ///  tell where it is.
     /// </summary>
     private void DrawBorder(Graphics graphics)
@@ -247,14 +254,14 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (_containerSelectorGlyph is null && Component.Site is not null)
         {
-            //get the adorner window-relative coordinates for the container control
-            _behavior = new ToolStripPanelSelectionBehavior(_panel!, Component.Site);
-            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel!, Component.Site, _behavior);
+            // get the adorner window-relative coordinates for the container control
+            _behavior = new ToolStripPanelSelectionBehavior(Control, Component.Site);
+            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, Control, Component.Site, _behavior);
         }
 
-        if (_containerSelectorGlyph is not null && _panel?.Dock == DockStyle.Top)
+        if (_containerSelectorGlyph is not null && Control.Dock == DockStyle.Top)
         {
-            _panel.Padding = new Padding(0, 0, 25, 25);
+            Control.Padding = new Padding(0, 0, 25, 25);
             _containerSelectorGlyph.IsExpanded = true;
         }
     }
@@ -275,21 +282,16 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     internal Glyph? GetGlyph()
     {
-        if (_panel is null)
-        {
-            return null;
-        }
-
         // Add own Glyphs.
         if (_containerSelectorGlyph is null && Component.Site is not null)
         {
-            //get the adorner window-relative coordinates for the container control
-            _behavior = new ToolStripPanelSelectionBehavior(_panel, Component.Site);
-            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel, Component.Site, _behavior);
+            // get the adorner window-relative coordinates for the container control
+            _behavior = new ToolStripPanelSelectionBehavior(Control, Component.Site);
+            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, Control, Component.Site, _behavior);
         }
 
         // Show the Glyph only if Panel is Visible.
-        return _panel.Visible ? _containerSelectorGlyph : null;
+        return Control.Visible ? _containerSelectorGlyph : null;
     }
 
     /// <summary>
@@ -304,11 +306,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
         if (typeof(ToolStrip).IsAssignableFrom(toolType))
         {
-            return _panel;
+            return Control;
         }
 
-        ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
-        return parent is not null ? parent.ContentPanel : (Control?)null;
+        ToolStripContainer? parent = Control.Parent as ToolStripContainer;
+        return parent?.ContentPanel;
     }
 
     /// <summary>
@@ -316,21 +318,14 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     public override void Initialize(IComponent component)
     {
-        if (component is null)
-        {
-            return;
-        }
-
-        _panel = component as ToolStripPanel;
-
         base.Initialize(component);
 
-        Padding = _panel!.Padding;
-        _designerHost = component?.Site?.GetService<IDesignerHost>();
+        Padding = Control.Padding;
+        _designerHost = component.Site?.GetService<IDesignerHost>();
 
         if (_selectionService is null)
         {
-            _selectionService = GetService<ISelectionService>();
+            _selectionService = GetRequiredService<ISelectionService>();
             _selectionService.SelectionChanging += OnSelectionChanging;
             _selectionService.SelectionChanged += OnSelectionChanged;
         }
@@ -346,8 +341,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
 
         // Hook up the ControlAdded Event
-        _panel.ControlAdded += new ControlEventHandler(OnControlAdded);
-        _panel.ControlRemoved += new ControlEventHandler(OnControlRemoved);
+        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
+        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
     }
 
     /// <summary>
@@ -368,13 +363,13 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private void OnControlAdded(object? sender, ControlEventArgs e)
     {
-        if (e.Control is not ToolStrip || _panel is null)
+        if (e.Control is not ToolStrip)
         {
             return;
         }
 
         // Change the padding which might have been set by the Behavior if the _panel is Expanded.
-        _panel.Padding = new Padding(0);
+        Control.Padding = new Padding(0);
 
         if (_containerSelectorGlyph is not null)
         {
@@ -393,7 +388,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private void OnControlRemoved(object? sender, ControlEventArgs e)
     {
-        if (_panel is not null && _panel.Controls.Count == 0)
+        if (Control.Controls.Count == 0)
         {
             if (_containerSelectorGlyph is not null)
             {
@@ -408,7 +403,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (_designerHost is not null && !_designerHost.Loading)
         {
-            SelectionManager selectionManager = GetService<SelectionManager>();
+            SelectionManager? selectionManager = GetService<SelectionManager>();
             selectionManager?.Refresh();
         }
     }
@@ -418,9 +413,9 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     protected override void OnContextMenu(int x, int y)
     {
-        if (_panel is not null && _panel.Parent is ToolStripContainer)
+        if (Control.Parent is ToolStripContainer)
         {
-            DesignerContextMenu.Show(x, y);
+            DesignerContextMenu?.Show(x, y);
         }
         else
         {
@@ -436,8 +431,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
 
         // Remove our DesignerShortCutHandler
-        IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-        if (menuCommandService is not null)
+        if (TryGetService(out IMenuCommandService? menuCommandService))
         {
             menuCommandService.RemoveCommand(_designerShortCutCommand);
             if (_oldShortCutCommand is not null)
@@ -451,11 +445,10 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
     private void OnSelectionChanged(object? sender, EventArgs e)
     {
-        if (_selectionService?.PrimarySelection == _panel)
+        if (_selectionService?.PrimarySelection == Control)
         {
             _designerShortCutCommand = new MenuCommand(OnKeyShowDesignerActions, MenuCommands.KeyInvokeSmartTag);
-            IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (menuCommandService is not null)
+            if (TryGetService(out IMenuCommandService? menuCommandService))
             {
                 _oldShortCutCommand = menuCommandService.FindCommand(MenuCommands.KeyInvokeSmartTag);
                 if (_oldShortCutCommand is not null)
@@ -477,10 +470,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             && !ToolStripDesignerUtils.DisplayInformation.HighContrast
             && !ToolStripDesignerUtils.DisplayInformation.LowResolution)
         {
-            using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.White)))
-            {
-                paintEvent.Graphics.FillRectangle(brush, _panel!.ClientRectangle);
-            }
+            using Brush brush = new SolidBrush(Color.FromArgb(50, Color.White));
+            paintEvent.Graphics.FillRectangle(brush, Control.ClientRectangle);
         }
 
         DrawBorder(paintEvent.Graphics);
@@ -489,9 +480,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     protected override void PreFilterEvents(IDictionary events)
     {
         base.PreFilterEvents(events);
-        EventDescriptor? eventDescriptor;
 
-        if (_panel?.Parent is ToolStripContainer)
+        if (Control.Parent is ToolStripContainer)
         {
             string[] noBrowseEvents =
             [
@@ -526,7 +516,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             for (int i = 0; i < noBrowseEvents.Length; i++)
             {
-                eventDescriptor = (EventDescriptor?)events[noBrowseEvents[i]];
+                EventDescriptor? eventDescriptor = (EventDescriptor?)events[noBrowseEvents[i]];
                 if (eventDescriptor is not null)
                 {
                     events[noBrowseEvents[i]] = TypeDescriptor.CreateEvent(eventDescriptor.ComponentType, eventDescriptor, BrowsableAttribute.No);
@@ -541,9 +531,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     protected override void PreFilterProperties(IDictionary properties)
     {
         base.PreFilterProperties(properties);
-        PropertyDescriptor? propertyDescriptor;
 
-        if (_panel?.Parent is ToolStripContainer)
+        if (Control.Parent is ToolStripContainer)
         {
             properties.Remove("Modifiers");
             properties.Remove("Locked");
@@ -568,7 +557,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             for (int i = 0; i < noBrowseProps.Length; i++)
             {
-                propertyDescriptor = (PropertyDescriptor?)properties[noBrowseProps[i]];
+                PropertyDescriptor? propertyDescriptor = (PropertyDescriptor?)properties[noBrowseProps[i]];
                 if (propertyDescriptor is not null)
                 {
                     properties[noBrowseProps[i]] = TypeDescriptor.CreateProperty(propertyDescriptor.ComponentType, propertyDescriptor, BrowsableAttribute.No, DesignerSerializationVisibilityAttribute.Hidden);
@@ -580,7 +569,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            propertyDescriptor = (PropertyDescriptor?)properties[shadowProps[i]];
+            PropertyDescriptor? propertyDescriptor = (PropertyDescriptor?)properties[shadowProps[i]];
             if (propertyDescriptor is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripPanelDesigner), propertyDescriptor, empty);
@@ -593,7 +582,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private bool ShouldSerializePadding()
     {
-        Padding padding = (Padding)ShadowProperties[nameof(Padding)];
+        Padding padding = (Padding)ShadowProperties[nameof(Padding)]!;
         return !padding.Equals(s_defaultPadding);
     }
 

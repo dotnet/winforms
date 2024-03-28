@@ -18,11 +18,11 @@ public class DataGridViewCellPaintingEventArgsTests
     [MemberData(nameof(Ctor_Rectangle_Rectangle_Int_Int_DataGridViewElementStates_Object_Object_String_DataGridViewCellStyle_DataGridViewAdvancedBorderStyle_DataGridViewPaintParts_TestData))]
     public void DataGridViewCellPaintingEventArgs_Ctor_Rectangle_Rectangle_Int_Int_DataGridViewElementStates_Object_Object_String_DataGridViewCellStyle_DataGridViewAdvancedBorderStyle_DataGridViewPaintParts(Rectangle clipBounds, Rectangle cellBounds, int rowIndex, int columnIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
 
-        var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, clipBounds, cellBounds, rowIndex, columnIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, clipBounds, cellBounds, rowIndex, columnIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(clipBounds, e.ClipBounds);
         Assert.Equal(cellBounds, e.CellBounds);
@@ -41,41 +41,35 @@ public class DataGridViewCellPaintingEventArgsTests
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_Ctor_NullDataGridView_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            Assert.Throws<ArgumentNullException>("dataGridView", () => new DataGridViewCellPaintingEventArgs(null, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        Assert.Throws<ArgumentNullException>("dataGridView", () => new DataGridViewCellPaintingEventArgs(null, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All));
     }
 
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_Ctor_NullGraphics_ThrowsArgumentNullException()
     {
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         Assert.Throws<ArgumentNullException>("graphics", () => new DataGridViewCellPaintingEventArgs(dataGridView, null, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All));
     }
 
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_Ctor_NullCellStyle_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            Assert.Throws<ArgumentNullException>("cellStyle", () => new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, null, null, DataGridViewPaintParts.All));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        Assert.Throws<ArgumentNullException>("cellStyle", () => new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, null, null, DataGridViewPaintParts.All));
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewCellPaintingEventArgs_Ctor_InvalidPaintParts_ThrowsArgumentException(DataGridViewPaintParts paintParts)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            Assert.Throws<ArgumentException>("paintParts", () => new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, paintParts));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        Assert.Throws<ArgumentException>("paintParts", () => new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, -2, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, paintParts));
     }
 
     [WinFormsTheory]
@@ -83,27 +77,23 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(-1, -1)]
     public void DataGridViewCellPaintingEventArgs_Paint_ValidRowAndColumnIndex_Success(int rowIndex, int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
-            e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
+        e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None);
     }
 
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_Paint_NullAdvancedBorderStyle_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
     }
 
     [WinFormsTheory]
@@ -111,14 +101,12 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_Paint_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
     }
 
     [WinFormsTheory]
@@ -126,14 +114,12 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_Paint_InvalidColumnIndex_ThrowsInvalidOperationException(int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.Paint(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
     }
 
     [WinFormsTheory]
@@ -141,27 +127,23 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(-1, -1)]
     public void DataGridViewCellPaintingEventArgs_PaintBackground_ValidRowAndColumnIndex_Success(int rowIndex, int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
-            e.PaintBackground(new Rectangle(1, 2, 3, 4), true);
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
+        e.PaintBackground(new Rectangle(1, 2, 3, 4), true);
     }
 
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_PaintBackground_NullAdvancedBorderStyle_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
     }
 
     [WinFormsTheory]
@@ -169,14 +151,12 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_PaintBackground_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
     }
 
     [WinFormsTheory]
@@ -184,14 +164,12 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_PaintBackground_InvalidColumnIndex_ThrowsInvalidOperationException(int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.PaintBackground(new Rectangle(1, 2, 3, 4), true));
     }
 
     [WinFormsTheory]
@@ -199,27 +177,23 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(-1, -1)]
     public void DataGridViewCellPaintingEventArgs_PaintContent_ValidRowAndColumnIndex_Success(int rowIndex, int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
-            e.PaintContent(new Rectangle(1, 2, 3, 4));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle(), DataGridViewPaintParts.All);
+        e.PaintContent(new Rectangle(1, 2, 3, 4));
     }
 
     [WinFormsFact]
     public void DataGridViewCellPaintingEventArgs_PaintContent_NullAdvancedBorderStyle_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.PaintContent(new Rectangle(1, 2, 3, 4)));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => e.PaintContent(new Rectangle(1, 2, 3, 4)));
     }
 
     [WinFormsTheory]
@@ -227,14 +201,12 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_PaintContent_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.PaintContent(new Rectangle(1, 2, 3, 4)));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, 0, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.PaintContent(new Rectangle(1, 2, 3, 4)));
     }
 
     [WinFormsTheory]
@@ -242,13 +214,11 @@ public class DataGridViewCellPaintingEventArgsTests
     [InlineData(1)]
     public void DataGridViewCellPaintingEventArgs_PaintContent_InvalidColumnIndex_ThrowsInvalidOperationException(int columnIndex)
     {
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            using var dataGridView = new DataGridView();
-            dataGridView.Columns.Add("name", "text");
-            var e = new DataGridViewCellPaintingEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
-            Assert.Throws<InvalidOperationException>(() => e.PaintContent(new Rectangle(1, 2, 3, 4)));
-        }
+        using Bitmap image = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add("name", "text");
+        DataGridViewCellPaintingEventArgs e = new(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, columnIndex, DataGridViewElementStates.Displayed, null, null, null, new DataGridViewCellStyle(), null, DataGridViewPaintParts.All);
+        Assert.Throws<InvalidOperationException>(() => e.PaintContent(new Rectangle(1, 2, 3, 4)));
     }
 }

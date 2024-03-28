@@ -7,16 +7,11 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class DesignerActionPanelHeaderItem : DesignerActionItem
     {
-        private readonly string _subtitle;
-
-        public DesignerActionPanelHeaderItem(string title, string subtitle) : base(title, null, null)
+        public DesignerActionPanelHeaderItem(string title, string? subtitle) : base(title, null, null)
         {
-            _subtitle = subtitle;
+            Subtitle = subtitle;
         }
 
-        public string Subtitle
-        {
-            get => _subtitle;
-        }
+        public string? Subtitle { get; }
     }
 }

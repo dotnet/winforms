@@ -8,8 +8,8 @@ namespace Accessibility_Core_App;
 
 public partial class DataBindingExample : Form
 {
-    private readonly List<Student> _studentA = new();
-    private readonly List<Student> _studentB = new();
+    private readonly List<Student> _studentA = [];
+    private readonly List<Student> _studentB = [];
 
     public DataBindingExample()
     {
@@ -39,14 +39,14 @@ public partial class DataBindingExample : Form
         // Binding Data For DataGridView control by using DadSource property
         dataGridView1.DataSource = new List<Student>
         {
-            new Student(1, "StudentA", "Female", 12121, "1001", "Basketball", false, 10, 11),
-            new Student(2, "StudentB", "Male", 12122, "1002", "Basketball", true, 10, 11),
-            new Student(3, "StudentC", "Female", 12123, "1003", "Football", false, 10, 11),
-            new Student(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),
+            new(1, "StudentA", "Female", 12121, "1001", "Basketball", false, 10, 11),
+            new(2, "StudentB", "Male", 12122, "1002", "Basketball", true, 10, 11),
+            new(3, "StudentC", "Female", 12123, "1003", "Football", false, 10, 11),
+            new(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),
         };
 
         // Binding Data For TextBox/Label/DomainUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
-        Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
+        Student stu = new(1, "Number", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
         textBox1.DataBindings.Add("Text", stu, "StudentNumber");
         domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");
         numericUpDown1.DataBindings.Add("Text", stu, "Count");
@@ -73,8 +73,10 @@ public partial class DataBindingExample : Form
         {
             for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
             {
-                TreeNode node = new TreeNode();
-                node.Text = dataSet.Tables[0].Rows[i]["StuName"].ToString();
+                TreeNode node = new()
+                {
+                    Text = dataSet.Tables[0].Rows[i]["StuName"].ToString()
+                };
                 treeView1.Nodes.Add(node);
             }
         }
@@ -97,7 +99,7 @@ public partial class DataBindingExample : Form
         for (int i = 0; i < row_Count; i++)
         {
             string itemName = dataSet.Tables[0].Rows[i][0].ToString();
-            ListViewItem item = new ListViewItem(itemName, i);
+            ListViewItem item = new(itemName, i);
             listView1.Items.Add(item);
 
             for (int j = 1; j < col_Count; j++)
@@ -110,8 +112,8 @@ public partial class DataBindingExample : Form
     // Create DataSet
     public DataSet CreateDataSet()
     {
-        DataSet stuDS = new DataSet();
-        DataTable stuTable = new DataTable("Students");
+        DataSet stuDS = new();
+        DataTable stuTable = new("Students");
 
         stuTable.Columns.Add("StuName", typeof(string));
         stuTable.Columns.Add("StuSex", typeof(string));

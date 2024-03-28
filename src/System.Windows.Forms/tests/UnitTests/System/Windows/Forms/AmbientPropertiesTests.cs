@@ -12,7 +12,7 @@ public class AmbientPropertiesTests
     [Fact]
     public void Ctor_Default()
     {
-        var property = new AmbientProperties();
+        AmbientProperties property = new();
         Assert.Equal(Color.Empty, property.BackColor);
         Assert.Null(property.Cursor);
         Assert.Null(property.Font);
@@ -23,7 +23,7 @@ public class AmbientPropertiesTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void BackColor_Set_GetReturnsExpected(Color value)
     {
-        var property = new AmbientProperties
+        AmbientProperties property = new()
         {
             BackColor = value
         };
@@ -38,7 +38,7 @@ public class AmbientPropertiesTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void Cursor_Set_GetReturnsExpected(Cursor value)
     {
-        var property = new AmbientProperties
+        AmbientProperties property = new()
         {
             Cursor = value
         };
@@ -53,7 +53,7 @@ public class AmbientPropertiesTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void Font_Set_GetReturnsExpected(Font value)
     {
-        var property = new AmbientProperties
+        AmbientProperties property = new()
         {
             Font = value
         };
@@ -68,7 +68,7 @@ public class AmbientPropertiesTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
     public void ForeColor_Set_GetReturnsExpected(Color value)
     {
-        var property = new AmbientProperties
+        AmbientProperties property = new()
         {
             ForeColor = value
         };

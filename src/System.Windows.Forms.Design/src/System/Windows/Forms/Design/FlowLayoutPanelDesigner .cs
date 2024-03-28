@@ -12,7 +12,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the <see cref="System.Windows.Forms.FlowLayoutPanel"/>
+///  This class handles all design time behavior for the <see cref="Forms.FlowLayoutPanel"/>
 ///  control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
 ///  draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
 ///  some cached state to see if we believe that it needs to be inserted at a particular index. If
@@ -33,14 +33,14 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Store the maximum height/width of each row/column.
     /// </summary>
-    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = new();
+    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = [];
 
-    private const int s_invalidIndex = -1;
+    private const int InvalidIndex = -1;
 
     /// <summary>
     ///  The index which we will re-insert a newly added child.
     /// </summary>
-    private int _insertionIndex = s_invalidIndex;
+    private int _insertionIndex = InvalidIndex;
 
     /// <summary>
     ///  Tracks the top or left last rendered I-bar location.
@@ -75,14 +75,14 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // If the FLP is InheritedReadOnly, so should be all of the children.
         if (IsInheritedReadOnly)
         {
-            foreach (var child in Control.Controls)
+            foreach (object child in Control.Controls)
             {
                 TypeDescriptor.AddAttributes(child, InheritanceAttribute.InheritedReadOnly);
             }
         }
     }
 
-    private FlowLayoutPanel FlowLayoutPanel => (FlowLayoutPanel)Control;
+    private FlowLayoutPanel FlowLayoutPanel => Control;
 
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -92,7 +92,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
         if (flowDirection is not null)
         {
-            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, Array.Empty<Attribute>());
+            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, []);
         }
     }
 
@@ -116,15 +116,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Returns true if flow direction is right-to-left or left-to-right
     /// </summary>
-    private bool HorizontalFlow
-    {
-        get
-        {
-            var direction = FlowLayoutPanel.FlowDirection;
-            return direction == FlowDirection.RightToLeft
-                || direction == FlowDirection.LeftToRight;
-        }
-    }
+    private bool HorizontalFlow =>
+        FlowLayoutPanel.FlowDirection is FlowDirection.RightToLeft or FlowDirection.LeftToRight;
 
     /// <summary>
     ///  Get and cache the selection service
@@ -136,12 +129,12 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         return !IsRtl
             ? direction
             : direction switch
-        {
-            FlowDirection.LeftToRight => FlowDirection.RightToLeft,
-            FlowDirection.RightToLeft => FlowDirection.LeftToRight,
-            FlowDirection.TopDown or FlowDirection.BottomUp => direction,
-            _ => direction,
-        };
+            {
+                FlowDirection.LeftToRight => FlowDirection.RightToLeft,
+                FlowDirection.RightToLeft => FlowDirection.LeftToRight,
+                FlowDirection.TopDown or FlowDirection.BottomUp => direction,
+                _ => direction,
+            };
     }
 
     private bool IsRtl => Control.RightToLeft == RightToLeft.Yes;
@@ -177,7 +170,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         var children = Control.Controls;
         if (children.Count == 0)
         {
-            _childInfo = Array.Empty<ChildInfo>();
+            _childInfo = [];
             return;
         }
 
@@ -185,7 +178,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         _childInfo = new ChildInfo[children.Count];
 
         FlowDirection flowDirection = RTLTranslateFlowDirection(FlowLayoutPanel.FlowDirection);
-        var horizontalFlow = HorizontalFlow;
+        bool horizontalFlow = HorizontalFlow;
 
         int currentMinTopLeft = int.MaxValue;
         int currentMaxBottomRight = -1;
@@ -317,7 +310,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         }
 
         // Pass2 - adjust all controls to max width/height according to their row/column.
-        var controlIndex = 0;
+        int controlIndex = 0;
         foreach (var size in _commonSizes)
         {
             while (controlIndex < size.LastIndex)
@@ -344,7 +337,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         if (_dragControls.Count == 1)
         {
-            var name = TypeDescriptor.GetComponentName(_dragControls[0]);
+            string name = TypeDescriptor.GetComponentName(_dragControls[0]);
             if (string.IsNullOrEmpty(name))
             {
                 name = _dragControls[0].GetType().Name;
@@ -354,6 +347,45 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         }
 
         return string.Format(performCopy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, _dragControls.Count);
+    }
+
+    /// <summary>
+    ///  Simply returns the designer's control as a FlowLayoutPanel
+    /// </summary>
+    private new FlowLayoutPanel Control => base.Control as FlowLayoutPanel;
+
+    // per VSWhidbey #424850 adding this to this class...
+    protected override InheritanceAttribute InheritanceAttribute
+    {
+        get
+        {
+            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited)
+                || (base.InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            {
+                return InheritanceAttribute.InheritedReadOnly;
+            }
+
+            return base.InheritanceAttribute;
+        }
+    }
+
+    /// <summary>
+    ///  Shadows the FlowDirection property.  We do this so that we can update the areas
+    ///  covered by glyphs correctly. VSWhidbey# 232910.
+    /// </summary>
+    private FlowDirection FlowDirection
+    {
+        get => Control.FlowDirection;
+        set
+        {
+            if (value != Control.FlowDirection)
+            {
+                // Since we don't know which control is going to go where,
+                // we just invalidate the area corresponding to the ClientRectangle in the adornerWindow
+                BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
+                Control.FlowDirection = value;
+            }
+        }
     }
 
     private void DrawIBarBeforeRectangle(Rectangle bounds)
@@ -395,7 +427,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     private void EraseIBar()
-        => ReDrawIBar(Point.Empty, Point.Empty);
+       => ReDrawIBar(Point.Empty, Point.Empty);
 
     /// <summary>
     ///  Given two points, we'll draw an I-Bar. Note that we only erase at our
@@ -423,7 +455,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // Only invalidate if there's something to invalidate.
         if (point1 != _oldPoint1 && point2 != _oldPoint2 && _oldPoint1 != Point.Empty)
         {
-            var invalidRect = new Rectangle(
+            Rectangle invalidRect = new(
                 _oldPoint1.X,
                 _oldPoint1.Y,
                 _oldPoint2.X - _oldPoint1.X + 1,
@@ -529,146 +561,148 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
     private void ReorderControls(DragEventArgs de)
     {
-        var performCopy = de.Effect == DragDropEffects.Copy;
+        bool performCopy = de.Effect == DragDropEffects.Copy;
 
         // create our transaction
         DesignerTransaction designerTransaction = TryGetService(out IDesignerHost host)
             ? host.CreateTransaction(GetTransactionDescription(performCopy))
             : null;
 
-        // In order to be able to set the index correctly, we need to create a backwards move.
-        // We do this by first finding the control foo that corresponds to _insertionIndex.
-        // We then remove all the drag controls from the FLP.
-        // Then we get the new childIndex for the control foo.
-        // Finally we loop:
-        //      add the ith drag control
-        //      set its child index to (index of control foo) - 1
-        // On each iteration, the child index of control foo will change.
-        //
-        // This ensures that we can move both contiguous and non-contiguous selections.
-
-        // Special case when the element we are inserting before is a part of the dragControls.
-        while (_insertionIndex < _childInfo.Length - 1 && _childInfo[_insertionIndex].InSelectionCollection)
+        try
         {
-            // Find the next control that is not a part of the selection.
-            ++_insertionIndex;
-        }
+            // In order to be able to set the index correctly, we need to create a backwards move.
+            // We do this by first finding the control foo that corresponds to _insertionIndex.
+            // We then remove all the drag controls from the FLP.
+            // Then we get the new childIndex for the control foo.
+            // Finally we loop:
+            //      add the ith drag control
+            //      set its child index to (index of control foo) - 1
+            // On each iteration, the child index of control foo will change.
+            //
+            // This ensures that we can move both contiguous and non-contiguous selections.
 
-        PropertyDescriptor controlsProperty = TypeDescriptor.GetProperties(Component)["Controls"];
-        if (controlsProperty is not null)
-        {
-            RaiseComponentChanging(controlsProperty);
-        }
-
-        Control control = null;
-        var children = Control.Controls;
-        if (_insertionIndex != _childInfo.Length)
-        {
-            control = children[_insertionIndex];
-        }
-        else
-        {
-            // We are inserting past the last control.
-            _insertionIndex = s_invalidIndex;
-        }
-
-        // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
-        //List<Control> originalControls = new();
-        ArrayList originalControls = new();
-
-        // Remove the controls in the drag collection - don't need to do this if we are copying.
-        if (!performCopy)
-        {
-            foreach (var dragControl in _dragControls)
+            // Special case when the element we are inserting before is a part of the dragControls.
+            while (_insertionIndex < _childInfo.Length - 1 && _childInfo[_insertionIndex].InSelectionCollection)
             {
-                children.Remove(dragControl);
+                // Find the next control that is not a part of the selection.
+                ++_insertionIndex;
             }
 
-            // Get the new index -- if we are performing a copy, then the index is the same.
-            if (control is not null)
+            PropertyDescriptor controlsProperty = TypeDescriptor.GetProperties(Component)["Controls"];
+            if (controlsProperty is not null)
             {
-                _insertionIndex = children.GetChildIndex(control, throwException: false);
-            }
-        }
-        else
-        {
-            // We are doing a copy, so let's copy the controls.
-            //List<IComponent> tempList = new();
-            ArrayList tempList = new ArrayList();
-            tempList.AddRange(_dragControls);
-
-            DesignerUtils.CopyDragObjects(tempList, Component.Site);
-
-            if (tempList is null)
-            {
-                return;
+                RaiseComponentChanging(controlsProperty);
             }
 
-            // And stick the copied controls back into the dragControls array.
-            for (var j = 0; j < tempList.Count; j++)
+            Control control = null;
+            var children = Control.Controls;
+            if (_insertionIndex != _childInfo.Length)
             {
-                // Save off the old controls first.
-                originalControls.Add(_dragControls[j]);
+                control = children[_insertionIndex];
+            }
+            else
+            {
+                // We are inserting past the last control.
+                _insertionIndex = InvalidIndex;
+            }
 
-                // Remember to set the new primary control.
-                if (_primaryDragControl.Equals(_dragControls[j]))
+            // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
+            List<Control> originalControls = [];
+
+            // Remove the controls in the drag collection - don't need to do this if we are copying.
+            if (!performCopy)
+            {
+                foreach (var dragControl in _dragControls)
                 {
-                    _primaryDragControl = tempList[j] as Control;
+                    children.Remove(dragControl);
                 }
 
-                _dragControls[j] = tempList[j] as Control;
+                // Get the new index -- if we are performing a copy, then the index is the same.
+                if (control is not null)
+                {
+                    _insertionIndex = children.GetChildIndex(control, throwException: false);
+                }
             }
-        }
-
-        if (_insertionIndex == s_invalidIndex)
-        {
-            // Either _insertionIndex was _childInfo.Length (inserting past the end) or
-            // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
-            // a part of the dragCollection. In either case, the new index is equal to the count
-            // of existing controls in the ControlCollection. Helps to draw this out.
-            _insertionIndex = children.Count;
-        }
-
-        children.Add(_primaryDragControl);
-        children.SetChildIndex(_primaryDragControl, _insertionIndex);
-        ++_insertionIndex;
-
-        //Set the Selection ..
-        SelectionService.SetSelectedComponents(new IComponent[] { _primaryDragControl }, SelectionTypes.Primary | SelectionTypes.Replace);
-
-        // Note _dragControls are in opposite order than what FLP uses,
-        // so add from the end.
-        for (var i = _dragControls.Count - 1; i >= 0; i--)
-        {
-            if (_primaryDragControl.Equals(_dragControls[i]))
+            else
             {
-                continue;
+                // We are doing a copy, so let's copy the controls.
+                List<IComponent> tempList = DesignerUtils.CopyDragObjects(_dragControls, Component.Site);
+
+                if (tempList is null)
+                {
+                    return;
+                }
+
+                // And stick the copied controls back into the dragControls array.
+                for (int j = 0; j < tempList.Count; j++)
+                {
+                    // Save off the old controls first.
+                    originalControls.Add(_dragControls[j]);
+
+                    // Remember to set the new primary control.
+                    if (_primaryDragControl.Equals(_dragControls[j]))
+                    {
+                        _primaryDragControl = (Control)tempList[j];
+                    }
+
+                    _dragControls[j] = (Control)tempList[j];
+                }
             }
 
-            children.Add(_dragControls[i]);
-            children.SetChildIndex(_dragControls[i], _insertionIndex);
+            if (_insertionIndex == InvalidIndex)
+            {
+                // Either _insertionIndex was _childInfo.Length (inserting past the end) or
+                // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
+                // a part of the dragCollection. In either case, the new index is equal to the count
+                // of existing controls in the ControlCollection. Helps to draw this out.
+                _insertionIndex = children.Count;
+            }
+
+            children.Add(_primaryDragControl);
+            children.SetChildIndex(_primaryDragControl, _insertionIndex);
             ++_insertionIndex;
 
-            SelectionService.SetSelectedComponents(new IComponent[] { _dragControls[i] }, SelectionTypes.Add);
-        }
+            // Set the Selection ..
+            SelectionService.SetSelectedComponents(new IComponent[] { _primaryDragControl }, SelectionTypes.Primary | SelectionTypes.Replace);
 
-        if (controlsProperty is not null)
-        {
-            RaiseComponentChanging(controlsProperty);
-        }
-
-        // If we did a Copy, then restore the old controls to make sure we set state correctly.
-        if (originalControls is not null)
-        {
-            for (var i = 0; i < originalControls.Count; i++)
+            // Note _dragControls are in opposite order than what FLP uses,
+            // so add from the end.
+            for (int i = _dragControls.Count - 1; i >= 0; i--)
             {
-                _dragControls[i] = (Control)originalControls[i];
+                if (_primaryDragControl.Equals(_dragControls[i]))
+                {
+                    continue;
+                }
+
+                children.Add(_dragControls[i]);
+                children.SetChildIndex(_dragControls[i], _insertionIndex);
+                ++_insertionIndex;
+
+                SelectionService.SetSelectedComponents(new IComponent[] { _dragControls[i] }, SelectionTypes.Add);
             }
+
+            if (controlsProperty is not null)
+            {
+                RaiseComponentChanging(controlsProperty);
+            }
+
+            // If we did a Copy, then restore the old controls to make sure we set state correctly.
+            if (originalControls is not null)
+            {
+                for (int i = 0; i < originalControls.Count; i++)
+                {
+                    _dragControls[i] = originalControls[i];
+                }
+            }
+
+            base.OnDragComplete(de);
+
+            designerTransaction?.Commit();
         }
-
-        base.OnDragComplete(de);
-
-        designerTransaction.Commit();
+        catch
+        {
+            designerTransaction?.Cancel();
+        }
     }
 
     /// <summary>
@@ -681,7 +715,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         try
         {
-            if (_insertionIndex == s_invalidIndex)
+            if (_insertionIndex == InvalidIndex)
             {
                 return;
             }
@@ -704,7 +738,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         finally
         {
             Control.ControlAdded -= OnChildControlAdded;
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
     }
 
@@ -716,15 +750,14 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragEnter(de);
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _lastMouseLocation = Point.Empty;
         _primaryDragControl = null;
 
         // Get the sorted drag controls. We use these for an internal drag.
         if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            var primaryIndex = -1;
-            _dragControls = data.GetSortedDragControls(ref primaryIndex).OfType<Control>().ToList();
+            _dragControls = data.GetSortedDragControls(out int primaryIndex).OfType<Control>().ToList();
             _primaryDragControl = _dragControls[primaryIndex];
         }
 
@@ -736,7 +769,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         EraseIBar();
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _primaryDragControl = null;
         _dragControls?.Clear();
 
@@ -754,7 +787,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragOver(de);
 
-        var mouseLocation = new Point(de.X, de.Y);
+        Point mouseLocation = new(de.X, de.Y);
 
         if (mouseLocation.Equals(_lastMouseLocation)
             || _childInfo is null
@@ -773,7 +806,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             controlOffset.X += Control.Width;
         }
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
 
         // Brute force hit testing to first determine if we're over one
         // of our margin bounds.
@@ -812,7 +845,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         {
             // Here, we're in a dead area - see what row / column we're in for a
             // best-guess at the insertion index.
-            var offset = HorizontalFlow ? controlOffset.Y : controlOffset.X;
+            int offset = HorizontalFlow ? controlOffset.Y : controlOffset.X;
             foreach (var size in _commonSizes)
             {
                 bool match;
@@ -846,10 +879,11 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             }
         }
 
-        if (_insertionIndex == s_invalidIndex)
+        if (_insertionIndex == InvalidIndex)
         {
             // Here, we're at the 'end' of the FlowLayoutPanel - not over
             // any controls and not in a row/column.
+            _insertionIndex = FlowLayoutPanel.Controls.Count;
             EraseIBar();
         }
     }
@@ -870,7 +904,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             // Manipulating our controls. We do it ourselves, so that we can set the indices right.
             ReorderControls(de);
 
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
         else
         {

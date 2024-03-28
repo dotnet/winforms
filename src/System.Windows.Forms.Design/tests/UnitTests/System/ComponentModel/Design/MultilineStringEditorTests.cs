@@ -21,7 +21,7 @@ public class MultilineStringEditorTests
     {
         yield return new object[] { null };
         yield return new object[] { "value" };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Windows.Forms;
 
 namespace System.Drawing.Design;
@@ -27,8 +25,8 @@ public partial class ColorEditor
         private static int s_marginX = MarginWidth;
         private static int s_marginY = MarginWidth;
 
-        private static readonly int[] s_staticCells = new int[]
-        {
+        private static readonly int[] s_staticCells =
+        [
             0x00ffffff, 0x00c0c0ff, 0x00c0e0ff, 0x00c0ffff,
             0x00c0ffc0, 0x00ffffc0, 0x00ffc0c0, 0x00ffc0ff,
 
@@ -46,25 +44,22 @@ public partial class ColorEditor
 
             0x00000000, 0x00000040, 0x00404080, 0x00004040,
             0x00004000, 0x00404000, 0x00400000, 0x00400040
-        };
+        ];
 
         private readonly Color[] _staticColors;
         private Color _selectedColor;
         private Point _focus;
-        private EventHandler _onPicked;
+        protected EventHandler? _onPicked;
         private readonly ColorUI _colorUI;
 
         public ColorPalette(ColorUI colorUI, Color[] customColors)
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_cellSizeX = DpiHelper.LogicalToDeviceUnitsX(CellSize);
-                    s_cellSizeY = DpiHelper.LogicalToDeviceUnitsY(CellSize);
-                    s_marginX = DpiHelper.LogicalToDeviceUnitsX(MarginWidth);
-                    s_marginY = DpiHelper.LogicalToDeviceUnitsY(MarginWidth);
-                }
+                s_cellSizeX = ScaleHelper.ScaleToInitialSystemDpi(CellSize);
+                s_cellSizeY = ScaleHelper.ScaleToInitialSystemDpi(CellSize);
+                s_marginX = ScaleHelper.ScaleToInitialSystemDpi(MarginWidth);
+                s_marginY = ScaleHelper.ScaleToInitialSystemDpi(MarginWidth);
 
                 s_isScalingInitialized = true;
             }
@@ -116,12 +111,12 @@ public partial class ColorEditor
 
         protected override AccessibleObject CreateAccessibilityInstance() => new ColorPaletteAccessibleObject(this);
 
-        protected EventHandler Get_onPicked()
+        protected EventHandler? Get_onPicked()
         {
             return _onPicked;
         }
 
-        protected void OnPicked(EventArgs e, EventHandler _onPicked) => _onPicked?.Invoke(this, e);
+        protected void OnPicked(EventArgs e, EventHandler? onPicked) => onPicked?.Invoke(this, e);
 
         private static void FillRectWithCellBounds(int across, int down, ref Rectangle rect)
         {
@@ -241,8 +236,8 @@ public partial class ColorEditor
         protected virtual void LaunchDialog(int customIndex)
         {
             Invalidate();
-            _colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
-            CustomColorDialog dialog = new CustomColorDialog();
+            _colorUI.EditorService!.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
+            CustomColorDialog dialog = new();
 
             HWND hwndFocus = PInvoke.GetFocus();
             try
@@ -250,7 +245,6 @@ public partial class ColorEditor
                 DialogResult result = dialog.ShowDialog();
                 if (result != DialogResult.Cancel)
                 {
-                    Color color = dialog.Color;
                     CustomColors[customIndex] = dialog.Color;
                     SelectedColor = CustomColors[customIndex];
                     OnPicked(EventArgs.Empty, Get_onPicked());
@@ -288,16 +282,16 @@ public partial class ColorEditor
                     InvalidateFocus();
                     break;
                 case Keys.Left:
-                    SetFocus(new Point(_focus.X - 1, _focus.Y));
+                    SetFocus(_focus with { X = _focus.X - 1 });
                     break;
                 case Keys.Right:
-                    SetFocus(new Point(_focus.X + 1, _focus.Y));
+                    SetFocus(_focus with { X = _focus.X + 1 });
                     break;
                 case Keys.Up:
-                    SetFocus(new Point(_focus.X, _focus.Y - 1));
+                    SetFocus(_focus with { Y = _focus.Y - 1 });
                     break;
                 case Keys.Down:
-                    SetFocus(new Point(_focus.X, _focus.Y + 1));
+                    SetFocus(_focus with { Y = _focus.Y + 1 });
                     break;
             }
         }
@@ -353,7 +347,7 @@ public partial class ColorEditor
             else if (me.Button == MouseButtons.Right)
             {
                 int cell = GetCellFromLocationMouse(me.X, me.Y);
-                if (cell != -1 && cell >= (TotalCells - CellsCustom) && cell < TotalCells)
+                if (cell is >= TotalCells - CellsCustom and < TotalCells)
                 {
                     LaunchDialog(cell - TotalCells + CellsCustom);
                 }
@@ -429,7 +423,7 @@ public partial class ColorEditor
             {
                 // No ctrl, alt, shift.
                 int cell = Get1DFrom2D(_focus.X, _focus.Y);
-                if (cell >= (TotalCells - CellsCustom) && cell < TotalCells)
+                if (cell is >= TotalCells - CellsCustom and < TotalCells)
                 {
                     LaunchDialog(cell - TotalCells + CellsCustom);
                     return true;

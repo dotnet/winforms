@@ -10,14 +10,14 @@ public class TaskDialogSamples : Form
 {
     public TaskDialogSamples()
     {
-        this.Text = "Task Dialog Demos";
+        Text = "Task Dialog Demos";
 
         AutoSize = true;
         AutoSizeMode = AutoSizeMode.GrowAndShrink;
         MinimizeBox = false;
         MaximizeBox = false;
 
-        var flowLayout = new FlowLayoutPanel
+        FlowLayoutPanel flowLayout = new()
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -28,7 +28,7 @@ public class TaskDialogSamples : Form
 
         void AddButtonForAction(string name, Action action)
         {
-            var button = new Button
+            Button button = new()
             {
                 Text = name,
                 AutoSize = true,
@@ -88,7 +88,7 @@ public class TaskDialogSamples : Form
         }
 
         // Show a task dialog (enhanced).
-        var page = new TaskDialogPage()
+        TaskDialogPage page = new()
         {
             Heading = "Are you sure you want to stop?",
             Text = "Stopping the operation might leave your database in a corrupted state.",
@@ -125,10 +125,10 @@ public class TaskDialogSamples : Form
     {
         // Create the page which we want to show in the dialog.
         TaskDialogButton btnCancel = TaskDialogButton.Cancel;
-        TaskDialogButton btnSave = new TaskDialogButton("&Save");
-        TaskDialogButton btnDontSave = new TaskDialogButton("Do&n't save");
+        TaskDialogButton btnSave = new("&Save");
+        TaskDialogButton btnDontSave = new("Do&n't save");
 
-        var page = new TaskDialogPage()
+        TaskDialogPage page = new()
         {
             Caption = "My Application",
             Heading = "Do you want to save changes to Untitled?",
@@ -153,7 +153,7 @@ public class TaskDialogSamples : Form
 
     private void ShowMinesweeperDifficultySelectionTaskDialog()
     {
-        var page = new TaskDialogPage()
+        TaskDialogPage page = new()
         {
             Caption = "Minesweeper",
             Heading = "What level of difficulty do you want to play?",
@@ -194,16 +194,16 @@ public class TaskDialogSamples : Form
     {
         int remainingTenthSeconds = 50;
 
-        var reconnectButton = new TaskDialogButton("&Reconnect now");
+        TaskDialogButton reconnectButton = new("&Reconnect now");
         var cancelButton = TaskDialogButton.Cancel;
 
-        var page = new TaskDialogPage()
+        TaskDialogPage page = new()
         {
             Heading = "Connection lost; reconnecting...",
             Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...",
             // Display the form's icon in the task dialog.
             // Note however that the task dialog will not scale the icon.
-            Icon = new TaskDialogIcon(this.Icon),
+            Icon = new TaskDialogIcon(Icon),
             ProgressBar = new TaskDialogProgressBar()
             {
                 State = TaskDialogProgressBarState.Paused
@@ -216,36 +216,35 @@ public class TaskDialogSamples : Form
         };
 
         // Create a WinForms timer that raises the Tick event every tenth second.
-        using (var timer = new Timer()
+        using Timer timer = new()
         {
             Enabled = true,
             Interval = 100
-        })
-        {
-            timer.Tick += (s, e) =>
-            {
-                remainingTenthSeconds--;
-                if (remainingTenthSeconds > 0)
-                {
-                    // Update the remaining time and progress bar.
-                    page.Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...";
-                    page.ProgressBar.Value = 100 - remainingTenthSeconds * 2;
-                }
-                else
-                {
-                    // Stop the timer and click the "Reconnect" button - this will
-                    // close the dialog.
-                    timer.Enabled = false;
-                    reconnectButton.PerformClick();
-                }
-            };
+        };
 
-            TaskDialogButton result = TaskDialog.ShowDialog(this, page);
-            if (result == reconnectButton)
-                Console.WriteLine("Reconnecting.");
+        timer.Tick += (s, e) =>
+        {
+            remainingTenthSeconds--;
+            if (remainingTenthSeconds > 0)
+            {
+                // Update the remaining time and progress bar.
+                page.Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...";
+                page.ProgressBar.Value = 100 - remainingTenthSeconds * 2;
+            }
             else
-                Console.WriteLine("Not reconnecting.");
-        }
+            {
+                // Stop the timer and click the "Reconnect" button - this will
+                // close the dialog.
+                timer.Enabled = false;
+                reconnectButton.PerformClick();
+            }
+        };
+
+        TaskDialogButton result = TaskDialog.ShowDialog(this, page);
+        if (result == reconnectButton)
+            Console.WriteLine("Reconnecting.");
+        else
+            Console.WriteLine("Not reconnecting.");
     }
 
     private void ShowMultiPageTaskDialog()
@@ -256,7 +255,7 @@ public class TaskDialogSamples : Form
         initialButtonYes.Enabled = false;
         initialButtonYes.AllowCloseDialog = false;
 
-        var initialPage = new TaskDialogPage()
+        TaskDialogPage initialPage = new()
         {
             Caption = "My Application",
             Heading = "Clean up database?",
@@ -285,7 +284,7 @@ public class TaskDialogSamples : Form
         var inProgressCloseButton = TaskDialogButton.Close;
         inProgressCloseButton.Enabled = false;
 
-        var inProgressPage = new TaskDialogPage()
+        TaskDialogPage inProgressPage = new()
         {
             Caption = "My Application",
             Heading = "Operation in progress...",
@@ -318,7 +317,7 @@ public class TaskDialogSamples : Form
         invisibleCancelButton.AllowCloseDialog = false;
         inProgressPage.Buttons.Add(invisibleCancelButton);
 
-        var finishedPage = new TaskDialogPage()
+        TaskDialogPage finishedPage = new()
         {
             Caption = "My Application",
             Heading = "Success!",
@@ -414,7 +413,7 @@ public class TaskDialogSamples : Form
 
     private void ShowElevatedProcessTaskDialog()
     {
-        var page = new TaskDialogPage()
+        TaskDialogPage page = new()
         {
             Heading = "Settings saved - Service Restart required",
             Text = "The service needs to be restarted to apply the changes.",
@@ -425,7 +424,7 @@ public class TaskDialogSamples : Form
             }
         };
 
-        var restartNowButton = new TaskDialogCommandLinkButton("&Restart now");
+        TaskDialogCommandLinkButton restartNowButton = new("&Restart now");
         page.Buttons.Add(restartNowButton);
 
         restartNowButton.ShowShieldIcon = true;
@@ -435,7 +434,7 @@ public class TaskDialogSamples : Form
             restartNowButton.Enabled = false;
 
             // Try to start an elevated cmd.exe.
-            var psi = new ProcessStartInfo("cmd.exe", "/k echo Hi, this is an elevated command prompt.")
+            ProcessStartInfo psi = new("cmd.exe", "/k echo Hi, this is an elevated command prompt.")
             {
                 UseShellExecute = true,
                 Verb = "runas"
@@ -460,7 +459,7 @@ public class TaskDialogSamples : Form
 
     private void ShowEventsDemoTaskDialog()
     {
-        var page1 = new TaskDialogPage()
+        TaskDialogPage page1 = new()
         {
             Caption = Text,
             Heading = "Event Demo",
@@ -480,9 +479,9 @@ public class TaskDialogSamples : Form
 
         var buttonOK = TaskDialogButton.OK;
         var buttonHelp = TaskDialogButton.Help;
-        var buttonCancelClose = new TaskDialogCommandLinkButton("C&ancel Close", allowCloseDialog: false);
-        var buttonShowInnerDialog = new TaskDialogCommandLinkButton("&Show (modeless) Inner Dialog", "(and don't cancel the Close)");
-        var buttonNavigate = new TaskDialogCommandLinkButton("&Navigate", allowCloseDialog: false);
+        TaskDialogCommandLinkButton buttonCancelClose = new("C&ancel Close", allowCloseDialog: false);
+        TaskDialogCommandLinkButton buttonShowInnerDialog = new("&Show (modeless) Inner Dialog", "(and don't cancel the Close)");
+        TaskDialogCommandLinkButton buttonNavigate = new("&Navigate", allowCloseDialog: false);
 
         page1.Buttons.Add(buttonOK);
         page1.Buttons.Add(buttonHelp);
@@ -513,7 +512,7 @@ public class TaskDialogSamples : Form
             Console.WriteLine($"Button '{s}' Click");
 
             // Navigate to a new page.
-            var page2 = new TaskDialogPage()
+            TaskDialogPage page2 = new()
             {
                 Heading = "AfterNavigation.",
                 Buttons =
@@ -542,7 +541,7 @@ public class TaskDialogSamples : Form
 
     private void ShowHyperlinksDemoTaskDialog()
     {
-        var page = new TaskDialogPage
+        TaskDialogPage page = new()
         {
             Caption = Text,
             Text = """<a href="Href 1">Link with accelerator &1</a> Text with literal '&&' <a href="Href 2">Link with accelerator &2</a>""",

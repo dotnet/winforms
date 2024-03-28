@@ -8,10 +8,10 @@ public class ToolStripDropDownClosingEventArgsTests
 {
     [Theory]
     [InlineData(ToolStripDropDownCloseReason.AppClicked)]
-    [InlineData((ToolStripDropDownCloseReason)(ToolStripDropDownCloseReason.AppFocusChange - 1))]
+    [InlineData((ToolStripDropDownCloseReason.AppFocusChange - 1))]
     public void Ctor_CloseReason(ToolStripDropDownCloseReason closeReason)
     {
-        var e = new ToolStripDropDownClosingEventArgs(closeReason);
+        ToolStripDropDownClosingEventArgs e = new(closeReason);
         Assert.Equal(closeReason, e.CloseReason);
         Assert.False(e.Cancel);
     }

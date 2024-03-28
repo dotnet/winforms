@@ -238,8 +238,8 @@ public partial class ResXResourceReader : IResourceReader
 
         Debug.Assert(_resData is null && _resMetadata is null);
 
-        _resData = new();
-        _resMetadata = new();
+        _resData = [];
+        _resMetadata = [];
 
         XmlTextReader? contentReader = null;
 
@@ -378,14 +378,14 @@ public partial class ResXResourceReader : IResourceReader
             {
                 Point pt = GetPosition(reader);
                 string newMessage = string.Format(SR.SerializationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, se.Message);
-                XmlException xml = new XmlException(newMessage, se, pt.Y, pt.X);
+                XmlException xml = new(newMessage, se, pt.Y, pt.X);
                 throw new SerializationException(newMessage, xml);
             }
             catch (TargetInvocationException tie)
             {
                 Point pt = GetPosition(reader);
                 string newMessage = string.Format(SR.InvocationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, tie.InnerException?.Message);
-                XmlException xml = new XmlException(newMessage, tie.InnerException, pt.Y, pt.X);
+                XmlException xml = new(newMessage, tie.InnerException, pt.Y, pt.X);
                 throw new TargetInvocationException(newMessage, xml);
             }
             catch (XmlException e)
@@ -401,7 +401,7 @@ public partial class ResXResourceReader : IResourceReader
                 else
                 {
                     Point pt = GetPosition(reader);
-                    XmlException xmlEx = new XmlException(e.Message, e, pt.Y, pt.X);
+                    XmlException xmlEx = new(e.Message, e, pt.Y, pt.X);
                     throw new ArgumentException(string.Format(SR.InvalidResXFile, xmlEx.Message), xmlEx);
                 }
             }
@@ -422,22 +422,13 @@ public partial class ResXResourceReader : IResourceReader
             Type readerType = typeof(ResXResourceReader);
             Type writerType = typeof(ResXResourceWriter);
 
-            string? readerTypeName = _resHeaderReaderType;
-            string? writerTypeName = _resHeaderWriterType;
-            if (readerTypeName is not null && readerTypeName.IndexOf(',') != -1)
-            {
-                readerTypeName = readerTypeName.Split(',')[0].Trim();
-            }
+            string? readerTypeName = GetPrefix(_resHeaderReaderType);
+            string? writerTypeName = GetPrefix(_resHeaderWriterType);
 
-            if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
-            {
-                writerTypeName = writerTypeName.Split(',')[0].Trim();
-            }
-
-            if (readerTypeName is not null &&
-                writerTypeName is not null &&
-                readerTypeName.Equals(readerType.FullName) &&
-                writerTypeName.Equals(writerType.FullName))
+            if (readerTypeName is not null
+                && writerTypeName is not null
+                && readerTypeName.Equals(readerType.FullName)
+                && writerTypeName.Equals(writerType.FullName))
             {
                 validFile = true;
             }
@@ -449,9 +440,25 @@ public partial class ResXResourceReader : IResourceReader
             _resMetadata = null;
             throw new ArgumentException(SR.InvalidResXFileReaderWriterTypes);
         }
+
+        static string? GetPrefix(string? typeName)
+        {
+            if (typeName is null)
+            {
+                return null;
+            }
+
+            int index = typeName.IndexOf(',');
+            if (index != -1)
+            {
+                return typeName.AsSpan(0, index).Trim().ToString();
+            }
+
+            return typeName;
+        }
     }
 
-    private void ParseResHeaderNode(XmlReader reader)
+    private void ParseResHeaderNode(XmlTextReader reader)
     {
         string? name = reader[ResXResourceWriter.NameStr];
         if (name is null)
@@ -506,7 +513,7 @@ public partial class ResXResourceReader : IResourceReader
         string? typeName = reader[ResXResourceWriter.NameStr];
 
         // Let this throw out the way it historically did (argument null)
-        AssemblyName assemblyName = new AssemblyName(typeName!);
+        AssemblyName assemblyName = new(typeName!);
 
         if (string.IsNullOrEmpty(alias))
         {
@@ -603,7 +610,7 @@ public partial class ResXResourceReader : IResourceReader
             throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
         }
 
-        ResXDataNode dataNode = new ResXDataNode(nodeInfo, BasePath);
+        ResXDataNode dataNode = new(nodeInfo, BasePath);
 
         if (UseResXDataNodes)
         {

@@ -3,9 +3,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
+using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -16,7 +15,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Ctor_Default()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -118,7 +117,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("SysTabControl32", createParams.ClassName);
@@ -140,7 +139,7 @@ public class TabControlTests
     [InlineData(false, 0x56010800)]
     public void TabControl_CreateParams_GetMultiline_ReturnsExpected(bool multiline, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             Multiline = multiline
         };
@@ -164,7 +163,7 @@ public class TabControlTests
     [InlineData(TabDrawMode.OwnerDrawFixed, 0x56012800)]
     public void TabControl_CreateParams_GetDrawMode_ReturnsExpected(TabDrawMode drawMode, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             DrawMode = drawMode
         };
@@ -190,7 +189,7 @@ public class TabControlTests
     [InlineData(false, false, 0x56010800)]
     public void TabControl_CreateParams_GetShowToolTips_ReturnsExpected(bool ShowToolTips, bool designMode, int expectedStyle)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(designMode);
@@ -200,7 +199,7 @@ public class TabControlTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             ShowToolTips = ShowToolTips,
             Site = mockSite.Object
@@ -227,7 +226,7 @@ public class TabControlTests
     [InlineData(TabAlignment.Top, 0x56010800)]
     public void TabControl_CreateParams_GetAlignment_ReturnsExpected(TabAlignment alignment, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             Alignment = alignment
         };
@@ -251,7 +250,7 @@ public class TabControlTests
     [InlineData(false, 0x56010800)]
     public void TabControl_CreateParams_GetHotTrack_ReturnsExpected(bool hotTrack, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             HotTrack = hotTrack
         };
@@ -285,7 +284,7 @@ public class TabControlTests
     [InlineData(TabAppearance.FlatButtons, TabAlignment.Top, 0x56010908)]
     public void TabControl_CreateParams_GetAppearance_ReturnsExpected(TabAppearance appearance, TabAlignment alignment, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             Appearance = appearance,
             Alignment = alignment
@@ -311,7 +310,7 @@ public class TabControlTests
     [InlineData(TabSizeMode.Normal, 0x56010800)]
     public void TabControl_CreateParams_GetSizeMode_ReturnsExpected(TabSizeMode sizeMode, int expectedStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             SizeMode = sizeMode
         };
@@ -339,7 +338,7 @@ public class TabControlTests
     [InlineData(RightToLeft.Yes, false, 0x56010800, 0x7000)]
     public void TabControl_CreateParams_GetRightToLeft_ReturnsExpected(RightToLeft rightToLeft, bool rightToLeftLayout, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             RightToLeft = rightToLeft,
             RightToLeftLayout = rightToLeftLayout
@@ -376,7 +375,7 @@ public class TabControlTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void TabControl_Alignment_Set_GetReturnsExpected(bool multiline, TabAlignment value, bool expectedMultiline)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Multiline = multiline,
             Alignment = value
@@ -409,7 +408,7 @@ public class TabControlTests
     [MemberData(nameof(Alignment_SetWithHandle_TestData))]
     public void TabControl_Alignment_SetWithHandle_GetReturnsExpected(bool multiline, TabAlignment value, bool expectedMultiline, int expectedCreatedCallCount)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Multiline = multiline
         };
@@ -443,7 +442,7 @@ public class TabControlTests
     [InvalidEnumData<TabAlignment>]
     public void TabControl_Alignment_SetInvalidValue_ThrowsInvalidEnumArgumentException(TabAlignment value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Alignment = value);
     }
 
@@ -453,7 +452,7 @@ public class TabControlTests
     [InlineData(TabAlignment.Right)]
     public void TabControl_Appearance_GetFlatButtonsWithAlignment_ReturnsExpected(TabAlignment alignment)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Appearance = TabAppearance.FlatButtons,
             Alignment = alignment
@@ -472,7 +471,7 @@ public class TabControlTests
     [EnumData<TabAppearance>]
     public void TabControl_Appearance_Set_GetReturnsExpected(TabAppearance value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Appearance = value
         };
@@ -491,7 +490,7 @@ public class TabControlTests
     [InlineData(TabAppearance.FlatButtons, 1)]
     public void TabControl_Appearance_SetWithHandle_GetReturnsExpected(TabAppearance value, int expectedCreatedCallCount)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -520,7 +519,7 @@ public class TabControlTests
     [InvalidEnumData<TabAppearance>]
     public void TabControl_Appearance_SetInvalidValue_ThrowsInvalidEnumArgumentException(TabAppearance value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Appearance = value);
     }
 
@@ -535,7 +534,7 @@ public class TabControlTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void TabControl_BackColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             BackColor = value
         };
@@ -552,7 +551,7 @@ public class TabControlTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void TabControl_BackColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -580,7 +579,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_BackColor_SetWithHandler_DoesNotCallBackColorChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -617,7 +616,7 @@ public class TabControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void TabControl_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             BackgroundImage = value
         };
@@ -633,7 +632,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -645,7 +644,7 @@ public class TabControlTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -656,7 +655,7 @@ public class TabControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -677,7 +676,7 @@ public class TabControlTests
     [EnumData<ImageLayout>]
     public void TabControl_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             BackgroundImageLayout = value
         };
@@ -695,7 +694,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -732,14 +731,14 @@ public class TabControlTests
     [InvalidEnumData<ImageLayout>]
     public void TabControl_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
     [WinFormsFact]
     public void TabControl_DisplayRectangle_Get_ReturnsExpectedAndCreatesHandle()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Rectangle displayRectangle = control.DisplayRectangle;
         Assert.True(displayRectangle.X >= 0);
         Assert.True(displayRectangle.Y >= 0);
@@ -752,7 +751,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DisplayRectangle_GetWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -776,7 +775,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DisplayRectangle_GetDisposed_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Dispose();
 
@@ -793,7 +792,7 @@ public class TabControlTests
     [BoolData]
     public void TabControl_DoubleBuffered_Get_ReturnsExpected(bool value)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
         Assert.Equal(value, control.DoubleBuffered);
     }
@@ -802,7 +801,7 @@ public class TabControlTests
     [BoolData]
     public void TabControl_DoubleBuffered_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             DoubleBuffered = value
         };
@@ -827,7 +826,7 @@ public class TabControlTests
     [BoolData]
     public void TabControl_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -867,7 +866,7 @@ public class TabControlTests
     [EnumData<TabDrawMode>]
     public void TabControl_DrawMode_Set_GetReturnsExpected(TabDrawMode value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             DrawMode = value
         };
@@ -885,7 +884,7 @@ public class TabControlTests
     [InlineData(TabDrawMode.OwnerDrawFixed, 1)]
     public void TabControl_DrawMode_SetWithHandle_GetReturnsExpected(TabDrawMode value, int expectedCreatedCallCount)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -914,7 +913,7 @@ public class TabControlTests
     [InvalidEnumData<TabDrawMode>]
     public void TabControl_DrawMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(TabDrawMode value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.DrawMode = value);
     }
 
@@ -922,7 +921,7 @@ public class TabControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void TabControl_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             ForeColor = value
         };
@@ -946,7 +945,7 @@ public class TabControlTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void TabControl_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -974,7 +973,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -1010,7 +1009,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Handle_GetNoImageList_Success()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
@@ -1018,19 +1017,19 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Handle_GetWithImageList_Success()
     {
-        using var imageList = new ImageList();
-        using var control = new TabControl
+        using ImageList imageList = new();
+        using TabControl control = new()
         {
             ImageList = imageList
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
     public void TabControl_Handle_GetItemsEmpty_Success()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
     }
@@ -1042,14 +1041,14 @@ public class TabControlTests
     [InlineData("&Text", "&&Text")]
     public unsafe void TabControl_Handle_GetItems_Success(string text, string expectedText)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new()
         {
             Text = text,
             ImageIndex = 1
         };
-        using var page3 = new NullTextTabPage();
+        using NullTextTabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.TabPages.Add(page3);
@@ -1057,7 +1056,7 @@ public class TabControlTests
         Assert.Equal(3, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -1066,7 +1065,7 @@ public class TabControlTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1074,7 +1073,7 @@ public class TabControlTests
         // Get item 1.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Equal(expectedText, new string(item.pszText));
         Assert.Equal(1, item.iImage);
@@ -1082,7 +1081,7 @@ public class TabControlTests
         // Get item 2.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1092,7 +1091,7 @@ public class TabControlTests
     [BoolData]
     public void TabControl_HotTrack_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             HotTrack = value
         };
@@ -1115,7 +1114,7 @@ public class TabControlTests
     [InlineData(false, 0)]
     public void TabControl_HotTrack_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1158,7 +1157,7 @@ public class TabControlTests
     [MemberData(nameof(ImageList_Set_TestData))]
     public void TabControl_ImageList_Set_GetReturnsExpected(ImageList value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             ImageList = value
         };
@@ -1175,8 +1174,8 @@ public class TabControlTests
     [MemberData(nameof(ImageList_Set_TestData))]
     public void TabControl_ImageList_SetWithNonNullOldValue_GetReturnsExpected(ImageList value)
     {
-        using var oldValue = new ImageList();
-        using var control = new TabControl
+        using ImageList oldValue = new();
+        using TabControl control = new()
         {
             ImageList = oldValue
         };
@@ -1195,7 +1194,7 @@ public class TabControlTests
     [MemberData(nameof(ImageList_Set_TestData))]
     public void TabControl_ImageList_SetWithHandle_GetReturnsExpected(ImageList value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1224,8 +1223,8 @@ public class TabControlTests
     [MemberData(nameof(ImageList_Set_TestData))]
     public void TabControl_ImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(ImageList value)
     {
-        using var oldValue = new ImageList();
-        using var control = new TabControl
+        using ImageList oldValue = new();
+        using TabControl control = new()
         {
             ImageList = oldValue
         };
@@ -1256,16 +1255,16 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_SetWithTabPages_Success()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
-        using var imageList = new ImageList();
-        using var image1 = new Bitmap(10, 10);
-        using var image2 = new Bitmap(10, 10);
-        using var image3 = new Bitmap(10, 10);
+        using ImageList imageList = new();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        using Bitmap image3 = new(10, 10);
         imageList.Images.Add(image1);
         imageList.Images.Add(image2);
         imageList.Images.Add(image3);
@@ -1282,8 +1281,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_Set_CreatesImageHandle()
     {
-        using var control = new TabControl();
-        using var imageList = new ImageList();
+        using TabControl control = new();
+        using ImageList imageList = new();
         control.ImageList = imageList;
         Assert.True(imageList.HandleCreated);
         Assert.False(control.IsHandleCreated);
@@ -1292,14 +1291,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_SetGetImageListWithHandle_Success()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         // Set non-null.
-        using var imageList = new ImageList();
+        using ImageList imageList = new();
         control.ImageList = imageList;
         Assert.True(imageList.HandleCreated);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
 
         // Set null.
         control.ImageList = null;
@@ -1309,9 +1308,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_Dispose_DetachesFromTabControl()
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var control = new TabControl
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using TabControl control = new()
         {
             ImageList = imageList1
         };
@@ -1331,9 +1330,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_DisposeWithHandle_DetachesFromTabControl()
     {
-        using var imageList1 = new ImageList();
-        using var imageList2 = new ImageList();
-        using var control = new TabControl();
+        using ImageList imageList1 = new();
+        using ImageList imageList2 = new();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1369,11 +1368,11 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_RecreateHandle_Nop()
     {
-        using var imageList1 = new ImageList();
+        using ImageList imageList1 = new();
         int recreateCallCount1 = 0;
         imageList1.RecreateHandle += (sender, e) => recreateCallCount1++;
-        using var imageList2 = new ImageList();
-        using var control = new TabControl
+        using ImageList imageList2 = new();
+        using TabControl control = new()
         {
             ImageList = imageList1
         };
@@ -1396,11 +1395,11 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ImageList_RecreateHandleWithHandle_Success()
     {
-        using var imageList1 = new ImageList();
+        using ImageList imageList1 = new();
         int recreateCallCount1 = 0;
         imageList1.RecreateHandle += (sender, e) => recreateCallCount1++;
-        using var imageList2 = new ImageList();
-        using var control = new TabControl();
+        using ImageList imageList2 = new();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1420,7 +1419,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(1, 2);
         Assert.Equal(1, recreateCallCount1);
         Assert.Same(imageList1, control.ImageList);
-        Assert.Equal((nint)imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1431,7 +1430,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(2, 3);
         Assert.Equal(2, recreateCallCount1);
         Assert.Same(imageList2, control.ImageList);
-        Assert.Equal((nint)imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1441,7 +1440,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ItemSize_GetEmptyWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Size size = control.ItemSize;
         Assert.Equal(0, size.Width);
@@ -1452,9 +1451,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ItemSize_GetNotEmptyWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1477,7 +1476,7 @@ public class TabControlTests
     [MemberData(nameof(ItemSize_Set_TestData))]
     public void TabControl_ItemSize_Set_GetReturnsExpected(Size value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             ItemSize = value
         };
@@ -1501,7 +1500,7 @@ public class TabControlTests
     [MemberData(nameof(ItemSize_SetWithHandle_TestData))]
     public void TabControl_ItemSize_SetWithHandle_GetReturnsExpected(Size value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1529,7 +1528,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SetEmptyWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             ItemSize = new Size(16, 16)
         };
@@ -1556,7 +1555,7 @@ public class TabControlTests
     public void TabControl_ItemSize_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.ItemSize)];
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ItemSize = new Size(1, 0);
@@ -1580,7 +1579,7 @@ public class TabControlTests
     public void TabControl_ItemSize_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.ItemSize)];
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ItemSize = new Size(1, 0);
@@ -1603,14 +1602,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ItemSize_SetNegativeWidth_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemSize = new Size(-1, 1));
     }
 
     [WinFormsFact]
     public void TabControl_ItemSize_SetNegativeHeight_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemSize = new Size(1, -1));
     }
 
@@ -1630,7 +1629,7 @@ public class TabControlTests
     [MemberData(nameof(Multiline_Set_TestData))]
     public void TabControl_Multiline_Set_GetReturnsExpected(TabAlignment alignment, bool value, TabAlignment expectedAlignment1, TabAlignment expectedAlignment2)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             Alignment = alignment,
             Multiline = value
@@ -1668,7 +1667,7 @@ public class TabControlTests
     [MemberData(nameof(Multiline_SetWithHandle_TestData))]
     public void TabControl_Multiline_SetWithHandle_GetReturnsExpected(TabAlignment alignment, bool value, TabAlignment expectedAlignment1, int expectedCreatedCallCount, TabAlignment expectedAlignment2)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             Alignment = alignment
         };
@@ -1719,7 +1718,7 @@ public class TabControlTests
     [MemberData(nameof(Padding_Set_TestData))]
     public void TabControl_Padding_Set_GetReturnsExpected(Point value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Padding = value
         };
@@ -1736,7 +1735,7 @@ public class TabControlTests
     [MemberData(nameof(Padding_Set_TestData))]
     public void TabControl_Padding_SetWithHandle_GetReturnsExpected(Point value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1765,7 +1764,7 @@ public class TabControlTests
     public void TabControl_Padding_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.Padding)];
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.False(property.CanResetValue(control));
 
         control.Padding = new Point(1, 0);
@@ -1789,7 +1788,7 @@ public class TabControlTests
     public void TabControl_Padding_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.Padding)];
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.Padding = new Point(1, 0);
@@ -1812,14 +1811,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Padding_SetNegativeX_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Padding = new Point(-1, 1));
     }
 
     [WinFormsFact]
     public void TabControl_Padding_SetNegativeY_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Padding = new Point(1, -1));
     }
 
@@ -1832,7 +1831,7 @@ public class TabControlTests
     [InlineData(RightToLeft.Inherit, false, 0)]
     public void TabControl_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1872,7 +1871,7 @@ public class TabControlTests
     [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
     public void TabControl_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1922,7 +1921,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             RightToLeftLayout = true
         };
@@ -1960,7 +1959,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -1988,7 +1987,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RowCount_Get_ReturnsExpectedAndCreatesHandle()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Equal(0, control.RowCount);
         Assert.True(control.IsHandleCreated);
     }
@@ -1996,7 +1995,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RowCount_GetWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(0, control.RowCount);
         Assert.True(control.IsHandleCreated);
@@ -2005,7 +2004,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_GetWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(-1, control.SelectedIndex);
     }
@@ -2013,9 +2012,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_GetWithPagesWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2029,7 +2028,7 @@ public class TabControlTests
     [InlineData(2)]
     public void TabControl_SelectedIndex_Set_GetReturnsExpected(int value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             SelectedIndex = value
         };
@@ -2048,9 +2047,9 @@ public class TabControlTests
     [InlineData(1)]
     public void TabControl_SelectedIndex_SetWithPages_GetReturnsExpected(int value)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -2081,7 +2080,7 @@ public class TabControlTests
     [InlineData(2)]
     public void TabControl_SelectedIndex_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2115,9 +2114,9 @@ public class TabControlTests
     [InlineData(2, 0, new bool[] { true, false })]
     public void TabControl_SelectedIndex_SetWithPagesWithHandle_GetReturnsExpected(int value, int expected, bool[] expectedVisible)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2151,7 +2150,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_SetWithHandler_CallsSelectedIndexChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int deselectingCallCount = 0;
         int deselectedCallCount = 0;
         int selectingCallCount = 0;
@@ -2213,7 +2212,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_SetWithHandleWithHandler_CallsSelectedIndexChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int deselectingCallCount = 0;
         int deselectedCallCount = 0;
@@ -2326,7 +2325,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_SetWithHandleWithHandlerCancelDeselecting_DoesNotCallSelectedIndexChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int deselectingCallCount = 0;
         int deselectedCallCount = 0;
@@ -2404,7 +2403,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_SetWithHandleWithHandlerCancelSelecting_DoesNotCallSelectedIndexChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int deselectingCallCount = 0;
         int deselectedCallCount = 0;
@@ -2504,14 +2503,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectedIndex = -2);
     }
 
     [WinFormsFact]
     public void TabControl_SelectedTab_GetWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Null(control.SelectedTab);
     }
@@ -2519,9 +2518,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedTab_GetWithPagesWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2536,7 +2535,7 @@ public class TabControlTests
     [InlineData(2)]
     public void TabControl_SelectedTab_GetWithInvalidIndexNotGotPages_ReturnsNull(int value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             SelectedIndex = value
         };
@@ -2556,7 +2555,7 @@ public class TabControlTests
     [MemberData(nameof(SelectedTab_Set_TestData))]
     public void TabControl_SelectedTab_SetWithoutPages_GetReturnsExpected(TabPage value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             SelectedTab = value
         };
@@ -2574,10 +2573,10 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedTab_SetWithPages_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var page3 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using TabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -2636,7 +2635,7 @@ public class TabControlTests
     [MemberData(nameof(SelectedTab_Set_TestData))]
     public void TabControl_SelectedTab_SetWithoutPagesWithHandle_GetReturnsExpected(TabPage value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2666,10 +2665,10 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectedTab_SetWithPagesWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var page3 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using TabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2794,7 +2793,7 @@ public class TabControlTests
     [EnumData<TabSizeMode>]
     public void TabControl_SizeMode_Set_GetReturnsExpected(TabSizeMode value)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             SizeMode = value
         };
@@ -2813,7 +2812,7 @@ public class TabControlTests
     [InlineData(TabSizeMode.Fixed, 1)]
     public void TabControl_SizeMode_SetWithHandle_GetReturnsExpected(TabSizeMode value, int expectedCreatedCallCount)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2842,7 +2841,7 @@ public class TabControlTests
     [InvalidEnumData<TabSizeMode>]
     public void TabControl_SizeMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(TabSizeMode value)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.SizeMode = value);
     }
 
@@ -2850,7 +2849,7 @@ public class TabControlTests
     [BoolData]
     public void TabControl_ShowToolTips_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             ShowToolTips = value
         };
@@ -2873,7 +2872,7 @@ public class TabControlTests
     [InlineData(false, 0)]
     public void TabControl_ShowToolTips_SetWithHandle_GetReturnsExpected(bool value, int expectedCreatedCallCount)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2910,7 +2909,7 @@ public class TabControlTests
     [NormalizedStringData]
     public void TabControl_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new TabControl
+        using TabControl control = new()
         {
             Text = value
         };
@@ -2927,7 +2926,7 @@ public class TabControlTests
     [NormalizedStringData]
     public void TabControl_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2955,7 +2954,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -2991,7 +2990,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_CreateControlsInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Control.ControlCollection controls = Assert.IsType<TabControl.ControlCollection>(control.CreateControlsInstance());
         Assert.Empty(controls);
         Assert.Same(control, controls.Owner);
@@ -3002,7 +3001,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_CreateHandle_Invoke_Success()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         control.CreateHandle();
         Assert.False(control.Created);
         Assert.True(control.IsHandleCreated);
@@ -3012,9 +3011,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeTabPageWithoutHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -3063,9 +3062,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeTabPageWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3171,18 +3170,18 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvalidTabPageNameWithoutPages_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page = new TabPage();
+        using TabControl control = new();
+        using TabPage page = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.DeselectTab(page));
     }
 
     [WinFormsFact]
     public void TabControl_DeselectTab_InvalidTabPageNameWithPages_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var page3 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using TabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.DeselectTab(page3));
@@ -3191,12 +3190,12 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeStringWithoutHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage
+        using TabControl control = new();
+        using TabPage page1 = new()
         {
             Name = "Name1"
         };
-        using var page2 = new TabPage
+        using TabPage page2 = new()
         {
             Name = "Name2"
         };
@@ -3248,12 +3247,12 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeStringWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage
+        using TabControl control = new();
+        using TabPage page1 = new()
         {
             Name = "Name1"
         };
-        using var page2 = new TabPage
+        using TabPage page2 = new()
         {
             Name = "Name2"
         };
@@ -3362,7 +3361,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_NullTabPageName_ThrowsArgumentNullException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentNullException>("tabPageName", () => control.DeselectTab((string)null));
     }
 
@@ -3371,7 +3370,7 @@ public class TabControlTests
     [InlineData("NoSuchName")]
     public void TabControl_DeselectTab_InvalidTabPageNameWithoutPages_ThrowsArgumentNullException(string tabPageName)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentNullException>("tabPage", () => control.DeselectTab(tabPageName));
     }
 
@@ -3380,9 +3379,9 @@ public class TabControlTests
     [InlineData("NoSuchName")]
     public void TabControl_DeselectTab_InvalidTabPageNameWithPages_ThrowsArgumentNullException(string tabPageName)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentNullException>("tabPage", () => control.DeselectTab(tabPageName));
@@ -3391,9 +3390,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeIntWithoutHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -3442,9 +3441,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_DeselectTab_InvokeIntWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3553,7 +3552,7 @@ public class TabControlTests
     [InlineData(1)]
     public void TabControl_DeselectTab_InvalidIndexWithoutPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.DeselectTab(index));
     }
 
@@ -3563,9 +3562,9 @@ public class TabControlTests
     [InlineData(3)]
     public void TabControl_DeselectTab_InvalidIndexWithPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.DeselectTab(index));
@@ -3574,8 +3573,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Dispose_InvokeWithImageList_DetachesImageList()
     {
-        using var control = new TabControl();
-        using var imageList = new ImageList();
+        using TabControl control = new();
+        using ImageList imageList = new();
         control.ImageList = imageList;
         control.Dispose();
         Assert.Same(imageList, control.ImageList);
@@ -3587,8 +3586,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Dispose_InvokeDisposingWithImageList_DetachesImageList()
     {
-        using var control = new SubTabControl();
-        using var imageList = new ImageList();
+        using SubTabControl control = new();
+        using ImageList imageList = new();
         control.ImageList = imageList;
         control.Dispose(true);
         Assert.Same(imageList, control.ImageList);
@@ -3600,8 +3599,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Dispose_InvokeNotDisposingWithImageList_DoesNotDetachImageList()
     {
-        using var control = new SubTabControl();
-        using var imageList = new ImageList();
+        using SubTabControl control = new();
+        using ImageList imageList = new();
         control.ImageList = imageList;
         control.Dispose(false);
         Assert.Same(imageList, control.ImageList);
@@ -3615,9 +3614,9 @@ public class TabControlTests
     [InlineData(1)]
     public void TabControl_GetControl_Invoke_ReturnsExpected(int index)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Same(control.TabPages[index], control.GetControl(index));
@@ -3630,7 +3629,7 @@ public class TabControlTests
     [InlineData(1)]
     public void TabControl_GetControl_InvokeWithoutPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetControl(index));
     }
 
@@ -3640,9 +3639,9 @@ public class TabControlTests
     [InlineData(3)]
     public void TabControl_GetControl_InvokeInvalidIndexWithPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetControl(index));
@@ -3651,9 +3650,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -3676,9 +3675,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3718,11 +3717,11 @@ public class TabControlTests
     [MemberData(nameof(GetTabRect_InvokeCustomGetItemRect_TestData))]
     public void TabControl_GetTabRect_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
     {
-        using var control = new CustomGetItemRectTabControl
+        using CustomGetItemRectTabControl control = new()
         {
             GetItemRectResult = (RECT)getItemRectResult
         };
-        using var page = new TabPage();
+        using TabPage page = new();
         control.TabPages.Add(page);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -3739,7 +3738,7 @@ public class TabControlTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -3750,8 +3749,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvokeInvalidGetItemRect_ReturnsExpected()
     {
-        using var control = new InvalidGetItemRectTabControl();
-        using var page = new TabPage();
+        using InvalidGetItemRectTabControl control = new();
+        using TabPage page = new();
         control.TabPages.Add(page);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -3780,7 +3779,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(1));
@@ -3789,8 +3788,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
         control.TabPages.Add(page1);
 
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(-1));
@@ -3801,7 +3800,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(-1));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(0));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetTabRect(1));
@@ -3810,8 +3809,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTabRect_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
         control.TabPages.Add(page1);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -3823,14 +3822,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
     [WinFormsFact]
     public void TabControl_GetItems_InvokeWithoutPages_ReturnsExpected()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         object[] result = Assert.IsType<TabPage[]>(control.GetItems());
         Assert.Empty(result);
         Assert.Same(result, control.GetItems());
@@ -3839,13 +3838,13 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetItems_InvokeWithPages_ReturnsExpected()
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new SubTabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using SubTabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         object[] result = Assert.IsType<TabPage[]>(control.GetItems());
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems());
     }
 
@@ -3854,7 +3853,7 @@ public class TabControlTests
     [InlineData(typeof(TabPage))]
     public void TabControl_GetItems_InvokeTypeWithoutPages_ReturnsExpected(Type baseType)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         object[] result = control.GetItems(baseType);
         Assert.Empty(result);
         Assert.IsType(baseType.MakeArrayType(), result);
@@ -3867,32 +3866,32 @@ public class TabControlTests
     [InlineData(typeof(object))]
     public void TabControl_GetItems_InvokeTypeBaseTypeWithPages_ReturnsExpected(Type baseType)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new SubTabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using SubTabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         object[] result = control.GetItems(baseType);
         Assert.IsType(baseType.MakeArrayType(), result);
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems(baseType));
     }
 
     [WinFormsFact]
     public void TabControl_GetItems_InvokeTypeSubTypeWithPages_ReturnsExpected()
     {
-        using var control = new SubTabControl();
-        using var page = new SubTabPage();
+        using SubTabControl control = new();
+        using SubTabPage page = new();
         control.TabPages.Add(page);
         object[] result = Assert.IsType<SubTabPage[]>(control.GetItems(typeof(SubTabPage)));
-        Assert.Equal(new object[] { page }, result);
+        Assert.Equal([page], result);
         Assert.NotSame(result, control.GetItems(typeof(SubTabPage)));
     }
 
     [WinFormsFact]
     public void TabControl_GetItems_InvokeNullBaseType_ThrowsArgumentNullException()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Throws<ArgumentNullException>("elementType", () => control.GetItems(null));
     }
 
@@ -3900,16 +3899,16 @@ public class TabControlTests
     [InlineData(typeof(int))]
     public void TabControl_GetItems_InvokeInvalidTypeWithoutPages_ThrowsInvalidCastException(Type baseType)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Throws<InvalidCastException>(() => control.GetItems(baseType));
     }
 
     [WinFormsFact]
     public void TabControl_GetItems_InvokeInvalidTypeWithPages_ThrowsInvalidCastException()
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new SubTabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using SubTabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<InvalidCastException>(() => control.GetItems(typeof(int)));
@@ -3918,9 +3917,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetItems_InvokeInvalidInheritedTypeWithPages_ThrowsArrayTypeMismatchException()
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new SubTabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using SubTabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArrayTypeMismatchException>(() => control.GetItems(typeof(SubTabPage)));
@@ -3949,7 +3948,7 @@ public class TabControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void TabControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -3959,15 +3958,15 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.False(control.GetTopLevel());
     }
 
     [WinFormsFact]
     public void TabControl_GetToolTipText_Invoke_ReturnsExpected()
     {
-        using var control = new SubTabControl();
-        using var item = new TabPage
+        using SubTabControl control = new();
+        using TabPage item = new()
         {
             ToolTipText = "text"
         };
@@ -3977,14 +3976,14 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_GetToolTipText_NullItem_ThrowsArgumentNullException()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Throws<ArgumentNullException>("item", () => control.GetToolTipText(null));
     }
 
     [WinFormsFact]
     public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsArgumentException()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Throws<ArgumentException>("item", () => control.GetToolTipText(new object()));
     }
 
@@ -4082,7 +4081,7 @@ public class TabControlTests
     [InlineData(Keys.Control | Keys.Right, false)]
     public void TabControl_IsInputKey_InvokeWithoutHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.Equal(expected, control.IsInputKey(keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -4099,7 +4098,7 @@ public class TabControlTests
     [InlineData(Keys.Control | Keys.Right, true)]
     public void TabControl_IsInputKey_InvokeWithHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.IsInputKey(keyData));
         Assert.True(control.IsHandleCreated);
@@ -4115,7 +4114,7 @@ public class TabControlTests
     [MemberData(nameof(TabControlEventArgs_TestData))]
     public void TabControl_OnDeselected_Invoke_CallsDeselected(TabControlEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         void handler(object sender, TabControlEventArgs e)
         {
@@ -4139,9 +4138,9 @@ public class TabControlTests
     [MemberData(nameof(TabControlEventArgs_TestData))]
     public void TabControl_OnDeselected_InvokeWithSelectedTab_CallsDeselected(TabControlEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.SelectedIndex = 0;
@@ -4194,7 +4193,7 @@ public class TabControlTests
     [MemberData(nameof(TabControlCancelEventArgs_TestData))]
     public void TabControl_OnDeselecting_Invoke_CallsDeselecting(TabControlCancelEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         void handler(object sender, TabControlCancelEventArgs e)
         {
@@ -4218,7 +4217,7 @@ public class TabControlTests
     {
         yield return new object[] { null };
 
-        var bitmap = new Bitmap(10, 10);
+        Bitmap bitmap = new(10, 10);
         Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, DrawItemState.Checked) };
     }
@@ -4227,7 +4226,7 @@ public class TabControlTests
     [MemberData(nameof(DrawItemEventArgs_TestData))]
     public void TabControl_OnDrawItem_Invoke_CallsDrawItem(DrawItemEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         void handler(object sender, DrawItemEventArgs e)
         {
@@ -4251,7 +4250,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4275,9 +4274,9 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnEnter_InvokeWithSelectedTab_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.SelectedTab = page2;
@@ -4320,7 +4319,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4346,7 +4345,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -4373,7 +4372,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4399,7 +4398,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -4426,7 +4425,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4450,9 +4449,9 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnLeave_InvokeWithSelectedTab_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.SelectedTab = page2;
@@ -4505,7 +4504,7 @@ public class TabControlTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
     public void TabControl_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -4544,7 +4543,7 @@ public class TabControlTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
     public void TabControl_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -4585,7 +4584,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
     {
-        using var control = new SubTabControl
+        using SubTabControl control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -4613,9 +4612,9 @@ public class TabControlTests
     [MemberData(nameof(TabControlEventArgs_TestData))]
     public void TabControl_OnSelected_InvokeWithSelectedTab_CallsSelected(TabControlEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.SelectedIndex = 0;
@@ -4662,7 +4661,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnSelectedIndexChanged_Invoke_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -4688,9 +4687,9 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnSelectedIndexChanged_InvokeWithPages_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         int callCount = 0;
@@ -4722,7 +4721,7 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnSelectedIndexChanged_InvokeWithHandle_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4769,9 +4768,9 @@ public class TabControlTests
     [NewAndDefaultData<EventArgs>]
     public void TabControl_OnSelectedIndexChanged_InvokeWithHandleWithPages_CallsSelectedIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4816,7 +4815,7 @@ public class TabControlTests
     [MemberData(nameof(TabControlCancelEventArgs_TestData))]
     public void TabControl_OnSelecting_Invoke_CallsSelecting(TabControlCancelEventArgs eventArgs)
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int callCount = 0;
         void handler(object sender, TabControlCancelEventArgs e)
         {
@@ -4839,7 +4838,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RecreateHandle_InvokeWithoutHandle_Nop()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         control.RecreateHandle();
         Assert.False(control.IsHandleCreated);
 
@@ -4851,7 +4850,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RecreateHandle_InvokeEmptyWithHandle_Success()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         IntPtr handle1 = control.Handle;
         Assert.NotEqual(IntPtr.Zero, handle1);
         Assert.Empty(control.Controls);
@@ -4879,9 +4878,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RecreateHandle_InvokeNotEmptyWithHandle_Success()
     {
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var control = new SubTabControl();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using SubTabControl control = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -4916,14 +4915,14 @@ public class TabControlTests
     [InlineData("&Text", "&&Text")]
     public unsafe void TabControl_RecreateHandle_GetItemsWithHandle_Success(string text, string expectedText)
     {
-        using var control = new SubTabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage
+        using SubTabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new()
         {
             Text = text,
             ImageIndex = 1
         };
-        using var page3 = new NullTextTabPage();
+        using NullTextTabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         control.TabPages.Add(page3);
@@ -4932,7 +4931,7 @@ public class TabControlTests
         Assert.Equal(3, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -4941,7 +4940,7 @@ public class TabControlTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -4949,7 +4948,7 @@ public class TabControlTests
         // Get item 1.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Equal(expectedText, new string(item.pszText));
         Assert.Equal(1, item.iImage);
@@ -4957,7 +4956,7 @@ public class TabControlTests
         // Get item 2.
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -4966,7 +4965,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RemoveAll_InvokeEmpty_Success()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
         int layoutCallCount = 0;
         void layoutHandler(object sender, LayoutEventArgs e) => layoutCallCount++;
         control.Layout += layoutHandler;
@@ -4999,10 +4998,10 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RemoveAll_InvokeNotEmpty_Success()
     {
-        using var control = new SubTabControl();
-        using var child1 = new TabPage();
-        using var child2 = new TabPage();
-        using var child3 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage child1 = new();
+        using TabPage child2 = new();
+        using TabPage child3 = new();
         control.TabPages.Add(child1);
         control.TabPages.Add(child2);
         control.TabPages.Add(child3);
@@ -5057,7 +5056,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RemoveAll_InvokeEmptyWithHandle_Success()
     {
-        using var control = new SubTabControl();
+        using SubTabControl control = new();
 
         int controlRemovedCallCount = 0;
         control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
@@ -5104,10 +5103,10 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RemoveAll_InvokeNotEmptyWithHandle_Success()
     {
-        using var control = new SubTabControl();
-        using var child1 = new TabPage();
-        using var child2 = new TabPage();
-        using var child3 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage child1 = new();
+        using TabPage child2 = new();
+        using TabPage child3 = new();
         control.TabPages.Add(child1);
         control.TabPages.Add(child2);
         control.TabPages.Add(child3);
@@ -5176,10 +5175,10 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_RemoveAll_GetItemsWithHandle_Success()
     {
-        using var control = new SubTabControl();
-        using var child1 = new TabPage();
-        using var child2 = new TabPage();
-        using var child3 = new TabPage();
+        using SubTabControl control = new();
+        using TabPage child1 = new();
+        using TabPage child2 = new();
+        using TabPage child3 = new();
         control.TabPages.Add(child1);
         control.TabPages.Add(child2);
         control.TabPages.Add(child3);
@@ -5192,9 +5191,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeTabPageWithPages_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -5232,9 +5231,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeTabPageWithPagesWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5320,25 +5319,25 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_NullTabPage_ThrowsArgumentNullException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentNullException>("tabPage", () => control.SelectTab((TabPage)null));
     }
 
     [WinFormsFact]
     public void TabControl_SelectTab_NoSuchTabPageWithoutPages_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page = new TabPage();
+        using TabControl control = new();
+        using TabPage page = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.SelectTab(page));
     }
 
     [WinFormsFact]
     public void TabControl_SelectTab_NoSuchTabPageWithPages_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var page3 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using TabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.SelectTab(page3));
@@ -5347,12 +5346,12 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeStringWithPages_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage
+        using TabControl control = new();
+        using TabPage page1 = new()
         {
             Name = "Name1"
         };
-        using var page2 = new TabPage
+        using TabPage page2 = new()
         {
             Name = "Name2"
         };
@@ -5393,12 +5392,12 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeStringWithPagesWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage
+        using TabControl control = new();
+        using TabPage page1 = new()
         {
             Name = "Name1"
         };
-        using var page2 = new TabPage
+        using TabPage page2 = new()
         {
             Name = "Name2"
         };
@@ -5487,7 +5486,7 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_NullTabPageName_ThrowsArgumentNullException()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentNullException>("tabPageName", () => control.SelectTab((string)null));
     }
 
@@ -5496,7 +5495,7 @@ public class TabControlTests
     [InlineData("NoSuchName")]
     public void TabControl_SelectTab_NoSuchTabPageNameWithoutPages_ThrowsArgumentOutOfRangeException(string tabPageName)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentNullException>("tabPage", () => control.SelectTab(tabPageName));
     }
 
@@ -5505,10 +5504,10 @@ public class TabControlTests
     [InlineData("NoSuchName")]
     public void TabControl_SelectTab_NoSuchTabPageNameWithPages_ThrowsArgumentOutOfRangeException(string tabPageName)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
-        using var page3 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
+        using TabPage page3 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentNullException>("tabPage", () => control.SelectTab(tabPageName));
@@ -5517,9 +5516,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeIntWithPages_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
 
@@ -5557,9 +5556,9 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_SelectTab_InvokeIntWithPagesWithHandle_GetReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5648,7 +5647,7 @@ public class TabControlTests
     [InlineData(1)]
     public void TabControl_SelectTab_InvalidIndexWithoutPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.SelectTab(index));
     }
 
@@ -5658,9 +5657,9 @@ public class TabControlTests
     [InlineData(3)]
     public void TabControl_SelectTab_InvalidIndexWithPages_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage();
-        using var page2 = new TabPage();
+        using TabControl control = new();
+        using TabPage page1 = new();
+        using TabPage page2 = new();
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => control.SelectTab(index));
@@ -5669,16 +5668,16 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_ToString_InvokeEmpty_ReturnsExpected()
     {
-        using var control = new TabControl();
+        using TabControl control = new();
         Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 0", control.ToString());
     }
 
     [WinFormsFact]
     public void TabControl_ToString_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new TabControl();
-        using var page1 = new TabPage("text1");
-        using var page2 = new TabPage("text2");
+        using TabControl control = new();
+        using TabPage page1 = new("text1");
+        using TabPage page2 = new("text2");
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 2, TabPages[0]: TabPage: {text1}", control.ToString());
@@ -5687,8 +5686,8 @@ public class TabControlTests
     [WinFormsFact]
     public void TabControl_Invokes_SetToolTip_IfExternalToolTipIsSet()
     {
-        using TabControl control = new TabControl() { ShowToolTips = true };
-        using ToolTip toolTip = new ToolTip();
+        using TabControl control = new() { ShowToolTips = true };
+        using ToolTip toolTip = new();
         control.CreateControl();
 
         dynamic tabControl = control.TestAccessor().Dynamic;

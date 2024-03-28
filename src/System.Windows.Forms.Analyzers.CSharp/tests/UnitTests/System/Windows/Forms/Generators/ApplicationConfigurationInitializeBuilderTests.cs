@@ -12,8 +12,8 @@ namespace System.Windows.Forms.Generators.Tests;
 [UsesVerify]
 public partial class ApplicationConfigurationInitializeBuilderTests
 {
-    private static readonly string[] s_locales = new[]
-    {
+    private static readonly string[] s_locales =
+    [
         "ar-SA",
         "en-US",
         "es-ES",
@@ -23,7 +23,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         "ru-RU",
         "tr-TR",
         "zh-CN"
-    };
+    ];
 
     [Theory]
     [InlineData(null, "default_top_level")]
@@ -31,7 +31,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData(" ", "default_top_level")]
     [InlineData("\t", "default_top_level")]
     [InlineData("MyProject", "default_boilerplate")]
-    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string ns, string expectedFileName)
+    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
         string expected = File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{expectedFileName}.cs");
 
@@ -50,7 +50,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     {
         foreach (string cultureName in s_locales)
         {
-            CultureInfo culture = new CultureInfo(cultureName);
+            CultureInfo culture = new(cultureName);
 
             // EnableVisualStyles: false, true
             yield return new object[]

@@ -9,7 +9,7 @@ public class DockingAttributeTests
     [Fact]
     public void DockingAttribute_Ctor_Default()
     {
-        var attribute = new DockingAttribute();
+        DockingAttribute attribute = new();
         Assert.Equal(DockingBehavior.Never, attribute.DockingBehavior);
         Assert.True(attribute.IsDefaultAttribute());
     }
@@ -19,7 +19,7 @@ public class DockingAttributeTests
     [InvalidEnumData<DockingBehavior>]
     public void DockingAttribute_Ctor_DockingBehavior(DockingBehavior dockingBehavior)
     {
-        var attribute = new DockingAttribute(dockingBehavior);
+        DockingAttribute attribute = new(dockingBehavior);
         Assert.Equal(dockingBehavior, attribute.DockingBehavior);
         Assert.Equal(dockingBehavior == DockingBehavior.Never, attribute.IsDefaultAttribute());
     }
@@ -35,12 +35,12 @@ public class DockingAttributeTests
 
     public static IEnumerable<object[]> Equals_TestData()
     {
-        var attribute = new DockingAttribute(DockingBehavior.Ask);
+        DockingAttribute attribute = new(DockingBehavior.Ask);
         yield return new object[] { attribute, attribute, true };
         yield return new object[] { attribute, new DockingAttribute(DockingBehavior.Ask), true };
         yield return new object[] { attribute, new DockingAttribute(DockingBehavior.Never), false };
 
-        yield return new object[] { attribute, new object(), false };
+        yield return new object[] { attribute, new(), false };
         yield return new object[] { attribute, null, false };
     }
 

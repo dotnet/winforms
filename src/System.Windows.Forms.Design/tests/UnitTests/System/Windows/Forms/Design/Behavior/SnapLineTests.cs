@@ -5,8 +5,8 @@ namespace System.Windows.Forms.Design.Behavior.Tests;
 
 public class SnapLineTests
 {
-    private static string[] s_Margins = new[] { SnapLine.MarginLeft, SnapLine.MarginTop, SnapLine.MarginRight, SnapLine.MarginBottom };
-    private static string[] s_Paddings = new[] { SnapLine.PaddingLeft, SnapLine.PaddingTop, SnapLine.PaddingRight, SnapLine.PaddingBottom };
+    private static readonly string[] s_margins = [SnapLine.MarginLeft, SnapLine.MarginTop, SnapLine.MarginRight, SnapLine.MarginBottom];
+    private static readonly string[] s_paddings = [SnapLine.PaddingLeft, SnapLine.PaddingTop, SnapLine.PaddingRight, SnapLine.PaddingBottom];
 
     private const int DefaultOffset = 123;
     private const string DefaultFilter = "filter";
@@ -88,7 +88,7 @@ public class SnapLineTests
 
     public static IEnumerable<object[]> SnapLineType_Set_TestData()
     {
-        foreach (var type in Enum.GetValues(typeof(SnapLineType)))
+        foreach (object type in Enum.GetValues(typeof(SnapLineType)))
         {
             yield return new[] { type };
         }
@@ -157,12 +157,12 @@ public class SnapLineTests
             yield return new object[] { snapLine1Filter, snapLine2PaddingFilter, true };
 
             // unhappy paths
-            foreach (var margin in s_Margins.Except(new[] { snapLine2MarginFilter }))
+            foreach (string margin in s_margins.Except(new[] { snapLine2MarginFilter }))
             {
                 yield return new object[] { snapLine1Filter, margin, false };
             }
 
-            foreach (var margin in s_Paddings.Except(new[] { snapLine2PaddingFilter }))
+            foreach (string margin in s_paddings.Except(new[] { snapLine2PaddingFilter }))
             {
                 yield return new object[] { snapLine1Filter, margin, false };
             }
@@ -192,7 +192,7 @@ public class SnapLineTests
             yield return new object[] { snapLine1Filter, snapLine2Filter, true };
 
             // unhappy paths
-            foreach (var margin in s_Margins.Except(new[] { snapLine2Filter }))
+            foreach (string margin in s_margins.Except(new[] { snapLine2Filter }))
             {
                 yield return new object[] { snapLine1Filter, margin, false };
             }

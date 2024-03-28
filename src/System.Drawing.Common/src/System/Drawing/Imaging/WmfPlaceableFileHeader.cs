@@ -1,91 +1,81 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-#if NET7_0_OR_GREATER
-using System.Runtime.InteropServices.Marshalling;
-#endif
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Defines an Placeable Metafile.
+///  Defines an Placeable Metafile.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public sealed class WmfPlaceableFileHeader
 {
-    private int _key = unchecked((int)0x9aC6CDD7);
-    private short _hmf;
-    private short _bboxLeft;
-    private short _bboxTop;
-    private short _bboxRight;
-    private short _bboxBottom;
-    private short _inch;
-    private int _reserved;
-    private short _checksum;
+    internal GdiPlus.WmfPlaceableFileHeader _header;
+
+    public WmfPlaceableFileHeader() => _header.Key = 0x9aC6CDD7;
 
     /// <summary>
-    /// Indicates the presence of a placeable metafile header.
+    ///  Indicates the presence of a placeable metafile header.
     /// </summary>
     public int Key
     {
-        get { return _key; }
-        set { _key = value; }
+        get => (int)_header.Key;
+        set => _header.Key = (uint)value;
     }
 
     /// <summary>
-    /// Stores the handle of the metafile in memory.
+    ///  Stores the handle of the metafile in memory.
     /// </summary>
     public short Hmf
     {
-        get { return _hmf; }
-        set { _hmf = value; }
+        get => _header.Hmf;
+        set => _header.Hmf = value;
     }
 
     /// <summary>
-    /// The x-coordinate of the upper-left corner of the bounding rectangle of the metafile image on the output device.
+    ///  The x-coordinate of the upper-left corner of the bounding rectangle of the metafile image on the output device.
     /// </summary>
     public short BboxLeft
     {
-        get { return _bboxLeft; }
-        set { _bboxLeft = value; }
+        get => _header.BoundingBox.Left;
+        set => _header.BoundingBox.Left = value;
     }
 
     /// <summary>
-    /// The y-coordinate of the upper-left corner of the bounding rectangle of the metafile image on the output device.
+    ///  The y-coordinate of the upper-left corner of the bounding rectangle of the metafile image on the output device.
     /// </summary>
     public short BboxTop
     {
-        get { return _bboxTop; }
-        set { _bboxTop = value; }
+        get => _header.BoundingBox.Top;
+        set => _header.BoundingBox.Top = value;
     }
 
     /// <summary>
-    /// The x-coordinate of the lower-right corner of the bounding rectangle of the metafile image on the output device.
+    ///  The x-coordinate of the lower-right corner of the bounding rectangle of the metafile image on the output device.
     /// </summary>
     public short BboxRight
     {
-        get { return _bboxRight; }
-        set { _bboxRight = value; }
+        get => _header.BoundingBox.Right;
+        set => _header.BoundingBox.Right = value;
     }
 
     /// <summary>
-    /// The y-coordinate of the lower-right corner of the bounding rectangle of the metafile image on the output device.
+    ///  The y-coordinate of the lower-right corner of the bounding rectangle of the metafile image on the output device.
     /// </summary>
     public short BboxBottom
     {
-        get { return _bboxBottom; }
-        set { _bboxBottom = value; }
+        get => _header.BoundingBox.Bottom;
+        set => _header.BoundingBox.Bottom = value;
     }
 
     /// <summary>
-    /// Indicates the number of twips per inch.
+    ///  Indicates the number of twips per inch.
     /// </summary>
     public short Inch
     {
-        get { return _inch; }
-        set { _inch = value; }
+        get => _header.Inch;
+        set => _header.Inch = value;
     }
 
     /// <summary>
@@ -93,29 +83,16 @@ public sealed class WmfPlaceableFileHeader
     /// </summary>
     public int Reserved
     {
-        get { return _reserved; }
-        set { _reserved = value; }
+        get => (int)_header.Reserved;
+        set => _header.Reserved = (uint)value;
     }
 
     /// <summary>
-    /// Indicates the checksum value for the previous ten WORDs in the header.
+    ///  Indicates the checksum value for the previous ten WORDs in the header.
     /// </summary>
     public short Checksum
     {
-        get { return _checksum; }
-        set { _checksum = value; }
+        get => _header.Checksum;
+        set => _header.Checksum = value;
     }
-
-    internal ref int GetPinnableReference() => ref _key;
-
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(WmfPlaceableFileHeader), MarshalMode.ManagedToUnmanagedIn, typeof(PinningMarshaller))]
-    internal static unsafe class PinningMarshaller
-    {
-        public static ref int GetPinnableReference(WmfPlaceableFileHeader managed) => ref (managed is null ? ref Unsafe.NullRef<int>() : ref managed.GetPinnableReference());
-
-        // All usages in our currently supported scenarios will always go through GetPinnableReference
-        public static int* ConvertToUnmanaged(WmfPlaceableFileHeader _) => throw new UnreachableException();
-    }
-#endif
 }

@@ -10,7 +10,7 @@ public class NetworkAvailableEventArgsTests
     [InlineData(false)]
     public void Ctor_Bool(bool networkAvailable)
     {
-        var args = new NetworkAvailableEventArgs(networkAvailable);
+        NetworkAvailableEventArgs args = new(networkAvailable);
         Assert.Equal(networkAvailable, args.IsNetworkAvailable);
     }
 }

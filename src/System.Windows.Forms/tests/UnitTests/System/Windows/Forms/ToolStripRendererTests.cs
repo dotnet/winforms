@@ -11,7 +11,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_CreateDisabledImage_Invoke_Success()
     {
-        using var image = new Bitmap(10, 11);
+        using Bitmap image = new(10, 11);
         Image result = Assert.IsType<Bitmap>(ToolStripRenderer.CreateDisabledImage(image));
         Assert.NotSame(result, image);
         Assert.Equal(new Size(10, 11), result.Size);
@@ -41,11 +41,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripArrowRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawArrow_Invoke_CallsRenderArrow(ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var eventArgs = new ToolStripArrowRenderEventArgs(graphics, toolStripItem, arrowRectangle, arrowColor, arrowDirection);
+        ToolStripArrowRenderEventArgs eventArgs = new(graphics, toolStripItem, arrowRectangle, arrowColor, arrowDirection);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripArrowRenderEventHandler handler = (sender, e) =>
         {
@@ -68,7 +68,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_DrawArrow_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.DrawArrow(null));
     }
 
@@ -76,7 +76,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripItemRenderEventArgs(graphics, new SubToolStripItem()) };
     }
@@ -85,7 +85,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawButtonBackground_Invoke_CallsRenderButtonBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -109,7 +109,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawDropDownButtonBackground_Invoke_CallsRenderDropDownButtonBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -133,7 +133,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripGripRenderEventArgs(graphics, new ToolStrip()) };
     }
@@ -142,7 +142,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripGripRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawGrip_Invoke_CallsRenderGrip(ToolStripGripRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripGripRenderEventHandler handler = (sender, e) =>
         {
@@ -166,7 +166,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawItemBackground_Invoke_CallsRenderItemBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -188,7 +188,7 @@ public class ToolStripRendererTests
 
     public static IEnumerable<object[]> ToolStripItemImageRenderEventArgs_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { graphics, new SubToolStripItem(), new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
         yield return new object[] { graphics, new SubToolStripItem { Enabled = false }, new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
@@ -203,9 +203,9 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawItemCheck_Invoke_CallsRenderItemCheck(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
     {
-        var eventArgs = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+        ToolStripItemImageRenderEventArgs eventArgs = new(graphics, item, image, imageRectangle);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemImageRenderEventHandler handler = (sender, e) =>
         {
@@ -228,7 +228,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_DrawItemCheck_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemCheck(null));
     }
 
@@ -236,9 +236,9 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawItemImage_Invoke_CallsRenderItemImage(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
     {
-        var eventArgs = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+        ToolStripItemImageRenderEventArgs eventArgs = new(graphics, item, image, imageRectangle);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemImageRenderEventHandler handler = (sender, e) =>
         {
@@ -261,7 +261,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_DrawItemImage_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemImage(null));
     }
 
@@ -269,7 +269,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawImageMargin_Invoke_CallsRenderImageMargin(ToolStripRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripRenderEventHandler handler = (sender, e) =>
         {
@@ -309,11 +309,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemTextRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawItemText_Invoke_CallsRenderItemText(ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var eventArgs = new ToolStripItemTextRenderEventArgs(graphics, item, text, textRectangle, textColor, textFont, format);
+        ToolStripItemTextRenderEventArgs eventArgs = new(graphics, item, text, textRectangle, textColor, textFont, format);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemTextRenderEventHandler handler = (sender, e) =>
         {
@@ -336,7 +336,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_DrawItemText_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemText(null));
     }
 
@@ -344,7 +344,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawLabelBackground_Invoke_CallsRenderLabelBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -368,7 +368,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawMenuItemBackground_Invoke_CallsRenderMenuItemBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -392,7 +392,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawOverflowButtonBackground_Invoke_CallsRenderOverflowButtonBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -416,7 +416,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), true) };
         yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), false) };
@@ -426,7 +426,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripSeparatorRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawSeparator_Invoke_CallsRenderSeparator(ToolStripSeparatorRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripSeparatorRenderEventHandler handler = (sender, e) =>
         {
@@ -450,7 +450,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawSplitButton_Invoke_CallsRenderSplitButtonBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -482,11 +482,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(StatusStripSizingGrip_TestData))]
     public void ToolStripRenderer_DrawStatusStripSizingGrip_Invoke_CallsRenderStatusStripSizingGrip(ToolStrip toolStrip)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var eventArgs = new ToolStripRenderEventArgs(graphics, toolStrip);
+        ToolStripRenderEventArgs eventArgs = new(graphics, toolStrip);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripRenderEventHandler handler = (sender, e) =>
         {
@@ -509,7 +509,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void DrawStatusStripSizingGrip_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.DrawStatusStripSizingGrip(null));
     }
 
@@ -517,7 +517,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripRenderEventArgs(graphics, new ToolStrip()) };
         yield return new object[] { new ToolStripRenderEventArgs(graphics, new StatusStrip()) };
@@ -527,7 +527,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawToolStripBackground_Invoke_CallsRenderToolStripBackground(ToolStripRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripRenderEventHandler handler = (sender, e) =>
         {
@@ -551,7 +551,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawToolStripBorder_Invoke_CallsRenderToolStripBorder(ToolStripRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripRenderEventHandler handler = (sender, e) =>
         {
@@ -575,7 +575,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripContentPanelRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawToolStripContentPanelBackground_Invoke_CallsRenderToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripContentPanelRenderEventHandler handler = (sender, e) =>
         {
@@ -599,7 +599,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripPanelRenderEventArgs(graphics, new ToolStripPanel()) };
     }
@@ -608,7 +608,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripPanelRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawToolStripPanelBackground_Invoke_CallsRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripPanelRenderEventHandler handler = (sender, e) =>
         {
@@ -632,7 +632,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_DrawToolStripStatusLabelBackground_Invoke_CallsRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         ToolStripItemRenderEventHandler handler = (sender, e) =>
         {
@@ -656,7 +656,7 @@ public class ToolStripRendererTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, new ToolStripContentPanel()) };
     }
@@ -671,7 +671,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(Initialize_TestData))]
     public void ToolStripRenderer_Initialize_Invoke_Nop(ToolStrip toolStrip)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         renderer.Initialize(toolStrip);
     }
 
@@ -685,7 +685,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(InitializeContentPanel_TestData))]
     public void ToolStripRenderer_InitializeContentPanel_Invoke_Nop(ToolStripContentPanel contentPanel)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         renderer.InitializeContentPanel(contentPanel);
     }
 
@@ -699,7 +699,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(InitializeItem_TestData))]
     public void ToolStripRenderer_InitializeItem_Invoke_Nop(ToolStripItem item)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         renderer.InitializeItem(item);
     }
 
@@ -713,7 +713,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(InitializePanel_TestData))]
     public void ToolStripRenderer_InitializePanel_Invoke_Nop(ToolStripPanel toolStripPanel)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         renderer.InitializePanel(toolStripPanel);
     }
 
@@ -721,11 +721,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripArrowRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderArrow_Invoke_Nop(ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new ToolStripArrowRenderEventArgs(graphics, toolStripItem, arrowRectangle, arrowColor, arrowDirection);
+        ToolStripArrowRenderEventArgs e = new(graphics, toolStripItem, arrowRectangle, arrowColor, arrowDirection);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderArrow += (sender, e) => callCount++;
         renderer.OnRenderArrow(e);
@@ -735,7 +735,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_OnRenderArrow_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderArrow(null));
     }
 
@@ -743,7 +743,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderButtonBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderButtonBackground += (sender, e) => callCount++;
         renderer.OnRenderButtonBackground(e);
@@ -754,7 +754,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderDropDownButtonBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderDropDownButtonBackground += (sender, e) => callCount++;
         renderer.OnRenderDropDownButtonBackground(e);
@@ -765,7 +765,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripGripRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderGrip_Invoke_Nop(ToolStripGripRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderGrip += (sender, e) => callCount++;
         renderer.OnRenderGrip(e);
@@ -776,7 +776,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderImageMargin_Invoke_Nop(ToolStripRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderImageMargin += (sender, e) => callCount++;
         renderer.OnRenderImageMargin(e);
@@ -787,7 +787,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderItemBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderItemBackground += (sender, e) => callCount++;
         renderer.OnRenderItemBackground(e);
@@ -798,9 +798,9 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderItemCheck_Invoke_Nop(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
     {
-        var e = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+        ToolStripItemImageRenderEventArgs e = new(graphics, item, image, imageRectangle);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderItemCheck += (sender, e) => callCount++;
         renderer.OnRenderItemCheck(e);
@@ -810,7 +810,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_OnRenderItemCheck_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemCheck(null));
     }
 
@@ -818,9 +818,9 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemImageRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderItemImage_Invoke_Nop(Graphics graphics, ToolStripItem item, Image image, Rectangle imageRectangle)
     {
-        var e = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+        ToolStripItemImageRenderEventArgs e = new(graphics, item, image, imageRectangle);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderItemImage += (sender, e) => callCount++;
         renderer.OnRenderItemImage(e);
@@ -830,7 +830,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_OnRenderItemImage_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemImage(null));
     }
 
@@ -838,11 +838,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemTextRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderItemText_Invoke_Nop(ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new ToolStripItemTextRenderEventArgs(graphics, item, text, textRectangle, textColor, textFont, format);
+        ToolStripItemTextRenderEventArgs e = new(graphics, item, text, textRectangle, textColor, textFont, format);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderItemText += (sender, e) => callCount++;
         renderer.OnRenderItemText(e);
@@ -852,7 +852,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_OnRenderItemText_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemText(null));
     }
 
@@ -860,7 +860,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderLabelBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderLabelBackground += (sender, e) => callCount++;
         renderer.OnRenderLabelBackground(e);
@@ -871,7 +871,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderMenuItemBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderMenuItemBackground += (sender, e) => callCount++;
         renderer.OnRenderMenuItemBackground(e);
@@ -882,7 +882,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderOverflowButtonBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderOverflowButtonBackground += (sender, e) => callCount++;
         renderer.OnRenderOverflowButtonBackground(e);
@@ -893,7 +893,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripSeparatorRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderSeparator_Invoke_Nop(ToolStripSeparatorRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderSeparator += (sender, e) => callCount++;
         renderer.OnRenderSeparator(e);
@@ -904,7 +904,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderSplitButtonBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderSplitButtonBackground += (sender, e) => callCount++;
         renderer.OnRenderSplitButtonBackground(e);
@@ -915,11 +915,11 @@ public class ToolStripRendererTests
     [MemberData(nameof(StatusStripSizingGrip_TestData))]
     public void ToolStripRenderer_OnRenderStatusStripSizingGrip_Invoke_Nop(ToolStrip toolStrip)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new ToolStripRenderEventArgs(graphics, toolStrip);
+        ToolStripRenderEventArgs e = new(graphics, toolStrip);
 
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderStatusStripSizingGrip += (sender, e) => callCount++;
         renderer.OnRenderStatusStripSizingGrip(e);
@@ -929,7 +929,7 @@ public class ToolStripRendererTests
     [WinFormsFact]
     public void ToolStripRenderer_OnRenderStatusStripSizingGrip_NullE_ThrowsArgumentNullException()
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderStatusStripSizingGrip(null));
     }
 
@@ -937,7 +937,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderToolStripBackground_Invoke_Nop(ToolStripRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderToolStripBackground += (sender, e) => callCount++;
         renderer.OnRenderToolStripBackground(e);
@@ -948,7 +948,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderToolStripBorder_Invoke_Nop(ToolStripRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderToolStripBorder += (sender, e) => callCount++;
         renderer.OnRenderToolStripBorder(e);
@@ -959,7 +959,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripContentPanelRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderToolStripContentPanelBackground_Invoke_Nop(ToolStripContentPanelRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderToolStripContentPanelBackground += (sender, e) => callCount++;
         renderer.OnRenderToolStripContentPanelBackground(e);
@@ -970,7 +970,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripPanelRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderToolStripPanelBackground_Invoke_Nop(ToolStripPanelRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderToolStripPanelBackground += (sender, e) => callCount++;
         renderer.OnRenderToolStripPanelBackground(e);
@@ -981,7 +981,7 @@ public class ToolStripRendererTests
     [MemberData(nameof(ToolStripItemRenderEventArgs_TestData))]
     public void ToolStripRenderer_OnRenderToolStripStatusLabelBackground_Invoke_Nop(ToolStripItemRenderEventArgs e)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int callCount = 0;
         renderer.RenderToolStripStatusLabelBackground += (sender, e) => callCount++;
         renderer.OnRenderToolStripStatusLabelBackground(e);
@@ -1004,6 +1004,10 @@ public class ToolStripRendererTests
     [InlineData(96)]
     public void ToolStripRenderer_ScaleArrowOffsetsIfNeeded_InvokeInt_Success(int dpi)
     {
+        // As it is not normal to scale to less than 96 we now assert.
+        // (Windows UI doesn't let you scale to less than 100%, you have to mess with the registry)
+        using NoAssertContext context = dpi < 96 ? new() : default;
+
         SubToolStripRenderer.ScaleArrowOffsetsIfNeeded(dpi);
 
         // Call again.

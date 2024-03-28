@@ -8,10 +8,10 @@ public class FormClosingEventArgsTests
 {
     [Theory]
     [InlineData(CloseReason.None, true)]
-    [InlineData((CloseReason)(CloseReason.None - 1), false)]
+    [InlineData((CloseReason.None - 1), false)]
     public void Ctor_CloseReason_Bool(CloseReason closeReason, bool cancel)
     {
-        var e = new FormClosingEventArgs(closeReason, cancel);
+        FormClosingEventArgs e = new(closeReason, cancel);
         Assert.Equal(closeReason, e.CloseReason);
         Assert.Equal(cancel, e.Cancel);
     }

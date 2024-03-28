@@ -4,9 +4,9 @@ using System.Collections;
 
 namespace DesignSurfaceExt;
 
-internal class DesignerSerializationServiceImpl : IDesignerSerializationService
+internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationService
 {
-    private IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public DesignerSerializationServiceImpl(IServiceProvider serviceProvider)
     {

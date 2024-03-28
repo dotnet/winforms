@@ -98,7 +98,9 @@ public sealed class NoAssertContext : IDisposable
         }
     }
 
+#pragma warning disable CA1821 // Remove empty Finalizers
     ~NoAssertContext()
+#pragma warning restore CA1821
     {
         // We need this class to be used in a using to effectively rationalize about a test.
         throw new InvalidOperationException($"Did not dispose {nameof(NoAssertContext)}");
@@ -111,7 +113,7 @@ public sealed class NoAssertContext : IDisposable
         {
         }
 
-        private TraceListener? DefaultListener
+        private static TraceListener? DefaultListener
         {
             get
             {

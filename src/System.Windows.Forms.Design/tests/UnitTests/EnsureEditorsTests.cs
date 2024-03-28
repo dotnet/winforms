@@ -18,9 +18,9 @@ public class EnsureEditorsTests
     {
         // The list of editors which either didn't exist in .NET Framework
         Type[] nonTypeForwardedEditors =
-        {
+        [
             typeof(InitialDirectoryEditor),     // introduced in .NET 6.0, https://github.com/dotnet/winforms/pull/4645
-        };
+        ];
 
         SystemDesignMetadataReader metadataReader = new();
         IReadOnlyList<string> forwardedTypes = metadataReader.GetExportedTypeNames();
@@ -57,25 +57,25 @@ public class EnsureEditorsTests
     [InlineData(typeof(DateTime), typeof(DateTimeEditor))]
     // With Editor Attribute
     [InlineData(typeof(Cursor), typeof(CursorEditor))]
-    //[InlineData(typeof(GridColumnStylesCollection), typeof(DataGridColumnCollectionEditor))]
-    //[InlineData(typeof(DataGridView), typeof(DataGridViewComponentEditor))]
-    //[InlineData(typeof(DataGridViewCellStyle), typeof(DataGridViewCellStyleEditor))]
+    // [InlineData(typeof(GridColumnStylesCollection), typeof(DataGridColumnCollectionEditor))]
+    // [InlineData(typeof(DataGridView), typeof(DataGridViewComponentEditor))]
+    // [InlineData(typeof(DataGridViewCellStyle), typeof(DataGridViewCellStyleEditor))]
     [InlineData(typeof(ImageList.ImageCollection), typeof(ImageCollectionEditor))]
     [InlineData(typeof(Keys), typeof(ShortcutKeysEditor))]
-    //[InlineData(typeof(TableLayoutStyleCollection), typeof(StyleCollectionEditor))]
-    //[InlineData(typeof(ToolStripItemCollection), typeof(ToolStripCollectionEditor))]
+    // [InlineData(typeof(TableLayoutStyleCollection), typeof(StyleCollectionEditor))]
+    // [InlineData(typeof(ToolStripItemCollection), typeof(ToolStripCollectionEditor))]
     [InlineData(typeof(ToolStripStatusLabelBorderSides), typeof(BorderSidesEditor))]
-    //[InlineData(typeof(TreeNodeCollection), typeof(TreeNodeCollectionEditor))]
+    // [InlineData(typeof(TreeNodeCollection), typeof(TreeNodeCollectionEditor))]
     public void EnsureUITypeEditorForType(Type type, Type expectedEditorType)
     {
-        var editor = TypeDescriptor.GetEditor(type, typeof(UITypeEditor));
+        object editor = TypeDescriptor.GetEditor(type, typeof(UITypeEditor));
 
         Assert.NotNull(editor);
         Assert.Equal(expectedEditorType, editor.GetType());
     }
 
     [WinFormsTheory]
-    //[InlineData(typeof(BindingSource), "DataMember", typeof(DataMemberListEditor))]
+    // [InlineData(typeof(BindingSource), "DataMember", typeof(DataMemberListEditor))]
     [InlineData(typeof(ButtonBase), "ImageIndex", typeof(ImageIndexEditor))]
     [InlineData(typeof(ButtonBase), "ImageKey", typeof(ImageIndexEditor))]
     [InlineData(typeof(ButtonBase), "Text", typeof(MultilineStringEditor))]
@@ -84,18 +84,18 @@ public class EnsureEditorsTests
     [InlineData(typeof(ColumnHeader), "ImageKey", typeof(ImageIndexEditor))]
     [InlineData(typeof(ComboBox), "AutoCompleteCustomSource", typeof(ListControlStringCollectionEditor))]
     [InlineData(typeof(ComboBox), "Items", typeof(ListControlStringCollectionEditor))]
-    //[InlineData(typeof(DataGridView), "Columns", typeof(DataGridViewColumnCollectionEditor))]
-    //[InlineData(typeof(DataGridView), "DataMember", typeof(DataMemberListEditor))]
+    // [InlineData(typeof(DataGridView), "Columns", typeof(DataGridViewColumnCollectionEditor))]
+    // [InlineData(typeof(DataGridView), "DataMember", typeof(DataMemberListEditor))]
     [InlineData(typeof(DataGridViewCellStyle), "Format", typeof(FormatStringEditor))]
-    //[InlineData(typeof(DataGridViewColumn), "DataPropertyName", typeof(DataGridViewColumnDataPropertyNameEditor))]
-    //[InlineData(typeof(DataGridViewComboBoxColumn), "DisplayMember", typeof(DataMemberFieldEditor))]
+    // [InlineData(typeof(DataGridViewColumn), "DataPropertyName", typeof(DataGridViewColumnDataPropertyNameEditor))]
+    // [InlineData(typeof(DataGridViewComboBoxColumn), "DisplayMember", typeof(DataMemberFieldEditor))]
     [InlineData(typeof(DataGridViewComboBoxColumn), "Items", typeof(StringCollectionEditor))]
-    //[InlineData(typeof(DataGridViewComboBoxColumn), "ValueMember", typeof(DataMemberFieldEditor))]
+    // [InlineData(typeof(DataGridViewComboBoxColumn), "ValueMember", typeof(DataMemberFieldEditor))]
     [InlineData(typeof(DateTimePicker), "MaxDate", typeof(DateTimeEditor))]
     [InlineData(typeof(DateTimePicker), "MinDate", typeof(DateTimeEditor))]
     [InlineData(typeof(DateTimePicker), "Value", typeof(DateTimeEditor))]
     [InlineData(typeof(DomainUpDown), "Items", typeof(StringCollectionEditor))]
-    //[InlineData(typeof(ErrorProvider), "DataMember", typeof(DataMemberListEditor))]
+    // [InlineData(typeof(ErrorProvider), "DataMember", typeof(DataMemberListEditor))]
     [InlineData(typeof(FolderBrowserDialog), "SelectedPath", typeof(SelectedPathEditor))]
     [InlineData(typeof(HelpProvider), "HelpNamespace", typeof(HelpNamespaceEditor))]
     [InlineData(typeof(Label), "ImageIndex", typeof(ImageIndexEditor))]
@@ -103,10 +103,10 @@ public class EnsureEditorsTests
     [InlineData(typeof(Label), "Text", typeof(MultilineStringEditor))]
     [InlineData(typeof(LinkLabel), "LinkArea", typeof(LinkAreaEditor))]
     [InlineData(typeof(ListBox), "Items", typeof(ListControlStringCollectionEditor))]
-    //[InlineData(typeof(ListControl), "DisplayMember", typeof(DataMemberFieldEditor))]
+    // [InlineData(typeof(ListControl), "DisplayMember", typeof(DataMemberFieldEditor))]
     [InlineData(typeof(ListControl), "FormatString", typeof(FormatStringEditor))]
-    //[InlineData(typeof(ListControl), "ValueMember", typeof(DataMemberFieldEditor))]
-    //[InlineData(typeof(ListView), "Columns", typeof(ColumnHeaderCollectionEditor))]
+    // [InlineData(typeof(ListControl), "ValueMember", typeof(DataMemberFieldEditor))]
+    // [InlineData(typeof(ListView), "Columns", typeof(ColumnHeaderCollectionEditor))]
     [InlineData(typeof(ListView), "Groups", typeof(ListViewGroupCollectionEditor))]
     [InlineData(typeof(ListView), "Items", typeof(ListViewItemCollectionEditor))]
     [InlineData(typeof(ListViewItem), "ImageIndex", typeof(ImageIndexEditor))]
@@ -130,8 +130,8 @@ public class EnsureEditorsTests
     [InlineData(typeof(TextBoxBase), "Text", typeof(MultilineStringEditor))]
     [InlineData(typeof(ToolStripComboBox), "AutoCompleteCustomSource", typeof(ListControlStringCollectionEditor))]
     [InlineData(typeof(ToolStripComboBox), "Items", typeof(ListControlStringCollectionEditor))]
-    //[InlineData(typeof(ToolStripItem), "ImageIndex", typeof(ToolStripImageIndexEditor))]
-    //[InlineData(typeof(ToolStripItem), "ImageKey", typeof(ToolStripImageIndexEditor))]
+    // [InlineData(typeof(ToolStripItem), "ImageIndex", typeof(ToolStripImageIndexEditor))]
+    // [InlineData(typeof(ToolStripItem), "ImageKey", typeof(ToolStripImageIndexEditor))]
     [InlineData(typeof(ToolStripItem), "ToolTipText", typeof(MultilineStringEditor))]
     [InlineData(typeof(ToolStripTextBox), "AutoCompleteCustomSource", typeof(ListControlStringCollectionEditor))]
     [InlineData(typeof(ToolStripTextBox), "Lines", typeof(StringArrayEditor))]
@@ -153,7 +153,7 @@ public class EnsureEditorsTests
         PropertyDescriptor propertyDescriptor = properties.Find(propertyName, true);
         Assert.NotNull(propertyDescriptor);
 
-        var editor = propertyDescriptor.GetEditor(typeof(UITypeEditor));
+        object editor = propertyDescriptor.GetEditor(typeof(UITypeEditor));
         Assert.NotNull(editor);
         Assert.Equal(expectedEditorType, editor.GetType());
     }
@@ -171,6 +171,6 @@ public class EnsureEditorsTests
         IEnumerable<EditorAttribute> attributes = method.GetCustomAttributes(typeof(EditorAttribute), false).Cast<EditorAttribute>();
         Assert.NotNull(attributes);
         Assert.NotEmpty(attributes);
-        Assert.Contains(attributes, editor => editor.EditorTypeName.StartsWith(expectedEditorType.FullName + ", "));
+        Assert.Contains(attributes, editor => editor.EditorTypeName.StartsWith($"{expectedEditorType.FullName}, ", StringComparison.Ordinal));
     }
 }

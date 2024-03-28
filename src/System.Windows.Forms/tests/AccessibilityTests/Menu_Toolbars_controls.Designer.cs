@@ -32,7 +32,7 @@ protected override void Dispose(bool disposing)
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu_Toolbars_controls));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(Menu_Toolbars_controls));
         menuStrip1 = new MenuStrip();
         contextMenuStrip1 = new ContextMenuStrip(components);
         menuStripToolStripMenuItem = new ToolStripMenuItem();

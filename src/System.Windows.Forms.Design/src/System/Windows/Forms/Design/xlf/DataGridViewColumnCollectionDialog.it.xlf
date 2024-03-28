@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Edit Columns</source>
-        <target state="translated">Modifica le colonne</target>
+        <target state="translated">Modifica colonne</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="deleteButton.Text">
         <source>&amp;Remove</source>
-        <target state="new">&amp;Remove</target>
+        <target state="translated">&amp;Rimuovi</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDown.AccessibleName">
@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="propertyGridLabel.Text">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">&amp;Proprietà</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedColumnsLabel.Text">

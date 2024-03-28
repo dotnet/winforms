@@ -65,7 +65,7 @@ internal interface ISelectionUIService
     /// <summary>
     ///  Gets a value indicating whether the specified component is the currently selected container.
     /// </summary>
-    bool GetContainerSelected(object component);
+    bool GetContainerSelected([NotNullWhen(true)] object? component);
 
     /// <summary>
     ///  Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
@@ -95,5 +95,5 @@ internal interface ISelectionUIService
     /// <summary>
     ///  This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and updates the selection handles for any that have changed.
     /// </summary>
-    void SyncComponent(object component);
+    void SyncComponent(object? component);
 }

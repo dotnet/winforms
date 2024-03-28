@@ -4,21 +4,21 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using Moq;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
-using static Interop.UiaCore;
+using Moq;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class ButtonTests
+public class ButtonTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void Button_Ctor_Default()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -123,7 +123,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Button", createParams.ClassName);
@@ -145,7 +145,7 @@ public class ButtonTests
     [InlineData(false, 0x56010000)]
     public void Button_CreateParams_GetUserPaint_ReturnsExpected(bool userPaint, int expectedStyle)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
 
         CreateParams createParams = control.CreateParams;
@@ -175,7 +175,7 @@ public class ButtonTests
     [InlineData(FlatStyle.System, false, 0x56012F00)]
     public void Button_CreateParams_GetIsDefault_ReturnsExpected(FlatStyle flatStyle, bool isDefault, int expectedStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             IsDefault = isDefault
@@ -244,7 +244,7 @@ public class ButtonTests
     [MemberData(nameof(CreateParams_GetIsDefault_TestData))]
     public void Button_CreateParams_GetTextAlign_ReturnsExpected(FlatStyle flatStyle, RightToLeft rightToLeft, ContentAlignment textAlign, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             RightToLeft = rightToLeft,
@@ -271,7 +271,7 @@ public class ButtonTests
     [EnumData<AutoSizeMode>]
     public void Button_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -294,8 +294,8 @@ public class ButtonTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Button_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubButton
+        using Control parent = new();
+        using SubButton control = new()
         {
             Parent = parent
         };
@@ -342,8 +342,8 @@ public class ButtonTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Button_AutoSizeMode_SetWithCustomLayoutEngineParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubButton
+        using CustomLayoutEngineControl parent = new();
+        using SubButton control = new()
         {
             Parent = parent
         };
@@ -410,7 +410,7 @@ public class ButtonTests
     [EnumData<AutoSizeMode>]
     public void Button_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -442,8 +442,8 @@ public class ButtonTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Button_AutoSizeMode_SetWithParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubButton
+        using Control parent = new();
+        using SubButton control = new()
         {
             Parent = parent
         };
@@ -515,8 +515,8 @@ public class ButtonTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Button_AutoSizeMode_SetWithCustomLayoutEngineParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubButton
+        using CustomLayoutEngineControl parent = new();
+        using SubButton control = new()
         {
             Parent = parent
         };
@@ -587,7 +587,7 @@ public class ButtonTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
     public void Button_AutoSize_SetCachedPreferredSize_DoesNotInvalidate()
     {
-        using var control = new Button
+        using Button control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = AutoSizeMode.GrowOnly,
@@ -605,7 +605,7 @@ public class ButtonTests
     [InvalidEnumData<AutoSizeMode>]
     public void Button_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
     {
-        using var control = new Button();
+        using Button control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoSizeMode = value);
     }
 
@@ -613,7 +613,7 @@ public class ButtonTests
     [EnumData<DialogResult>]
     public void Button_DialogResult_Set_GetReturnsExpected(DialogResult value)
     {
-        using var control = new Button
+        using Button control = new()
         {
             DialogResult = value
         };
@@ -630,7 +630,7 @@ public class ButtonTests
     [EnumData<DialogResult>]
     public void Button_DialogResult_SetWithHandle_GetReturnsExpected(DialogResult value)
     {
-        using var control = new Button();
+        using Button control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -659,7 +659,7 @@ public class ButtonTests
     [InvalidEnumData<DialogResult>]
     public void Button_DialogResult_SetInvalidValue_ThrowsInvalidEnumArgumentException(DialogResult value)
     {
-        using var control = new Button();
+        using Button control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.DialogResult = value);
     }
 
@@ -667,7 +667,7 @@ public class ButtonTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void Button_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Font = value
         };
@@ -686,8 +686,8 @@ public class ButtonTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
     public void Button_Font_SetCachedPreferredSize_Invalidates()
     {
-        using var font = new Font("Arial", 100f);
-        using var control = new Button
+        using Font font = new("Arial", 100f);
+        using Button control = new()
         {
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             FlatStyle = FlatStyle.System,
@@ -705,7 +705,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new Button();
+        using Button control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -716,7 +716,7 @@ public class ButtonTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -758,7 +758,7 @@ public class ButtonTests
     [MemberData(nameof(Text_Set_TestData))]
     public void Button_Text_Set_GetReturnsExpected(bool autoSize, string value, string expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             AutoSize = autoSize
         };
@@ -788,8 +788,8 @@ public class ButtonTests
     [MemberData(nameof(Text_SetWithParent_TestData))]
     public void Button_Text_SetWithParent_GetReturnsExpected(bool autoSize, string value, string expected, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new Button
+        using Control parent = new();
+        using Button control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -844,7 +844,7 @@ public class ButtonTests
     [MemberData(nameof(Text_SetWithHandle_TestData))]
     public void Button_Text_SetWithHandle_GetReturnsExpected(bool autoSize, string value, string expected, int expectedInvalidatedCallCount)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             AutoSize = autoSize
         };
@@ -883,8 +883,8 @@ public class ButtonTests
     [MemberData(nameof(Text_SetWithParentWithHandle_TestData))]
     public void Button_Text_SetWithParentWithHandle_GetReturnsExpected(bool autoSize, string value, string expected, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new Button
+        using Control parent = new();
+        using Button control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -942,7 +942,7 @@ public class ButtonTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
     public void Button_Text_SetCachedPreferredSize_Invalidates()
     {
-        using var control = new Button
+        using Button control = new()
         {
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             FlatStyle = FlatStyle.System,
@@ -960,7 +960,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -996,7 +996,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_Invoke_ReturnsExpected_IfHandleIsNotCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1016,7 +1016,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_Invoke_ReturnsExpected_IfHandleIsCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1044,7 +1044,7 @@ public class ButtonTests
     [InlineData(false, FlatStyle.System, AccessibleStates.None, AccessibleRole.None)]
     public void Button_CreateAccessibilityInstance_InvokeMouseDown_ReturnsExpected(bool createControl, FlatStyle flatStyle, AccessibleStates expectedState, AccessibleRole expectedRole)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1071,7 +1071,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected_IfHandleIsCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             AccessibleRole = AccessibleRole.HelpBalloon
@@ -1093,7 +1093,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected_IfHandleIsNotCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             AccessibleRole = AccessibleRole.HelpBalloon
@@ -1114,7 +1114,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick_IfHandleIsCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1137,7 +1137,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick_IfHandleIsNotCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1158,7 +1158,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1196,7 +1196,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_System_TestData))]
     public void Button_GetPreferredSize_InvokeSystem_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = autoSizeMode
@@ -1245,7 +1245,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_SystemWithPadding_TestData))]
     public void Button_GetPreferredSize_InvokeSystemWithPadding_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = autoSizeMode,
@@ -1295,7 +1295,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_SystemWithPaddingSmallSize_TestData))]
     public void Button_GetPreferredSize_InvokeSystemWithPaddingSmallSize_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = autoSizeMode,
@@ -1328,7 +1328,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
     public void Button_GetPreferredSize_InvokeSystemGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = AutoSizeMode.GrowOnly,
@@ -1352,7 +1352,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
     public void Button_GetPreferredSize_InvokeSystemGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.System,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -1434,7 +1434,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_Flat_TestData))]
     public void Button_GetPreferredSize_InvokeFlat_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             AutoSizeMode = autoSizeMode
@@ -1512,7 +1512,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithPadding_TestData))]
     public void Button_GetPreferredSize_InvokeFlatWithPadding_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             AutoSizeMode = autoSizeMode,
@@ -1591,7 +1591,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithPaddingSmallSize_TestData))]
     public void Button_GetPreferredSize_InvokeFlatWithPaddingSmallSize_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle,
             AutoSizeMode = autoSizeMode,
@@ -1624,7 +1624,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeFlatGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Flat,
             AutoSizeMode = AutoSizeMode.GrowOnly,
@@ -1648,7 +1648,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeFlatGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Flat,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -1672,7 +1672,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokePopupGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Popup,
             AutoSizeMode = AutoSizeMode.GrowOnly,
@@ -1696,7 +1696,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokePopupGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Popup,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -1720,7 +1720,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeStandardGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Standard,
             AutoSizeMode = AutoSizeMode.GrowOnly,
@@ -1744,7 +1744,7 @@ public class ButtonTests
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeStandardGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = FlatStyle.Standard,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -1786,7 +1786,7 @@ public class ButtonTests
     [InlineData((ControlStyles)(-1), false)]
     public void Button_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1796,7 +1796,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1813,7 +1813,7 @@ public class ButtonTests
     [MemberData(nameof(NotifyDefault_TestData))]
     public void Button_NotifyDefault_Invoke_GetReturnsExpected(FlatStyle flatStyle, bool value)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1850,7 +1850,7 @@ public class ButtonTests
     [MemberData(nameof(NotifyDefault_WithHandle_TestData))]
     public void Button_NotifyDefault_InvokeWithHandle_GetReturnsExpected(FlatStyle flatStyle, bool value, int expectedInvalidatedCallCount1, int expectedStyleChangeCallCount1, int expectedInvalidatedCallCount2, int expectedStyleChangeCallCount2)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -1892,7 +1892,7 @@ public class ButtonTests
     [InlineData(-1, -2)]
     public void Button_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         Assert.False(control.IsHandleCreated);
 
@@ -1905,7 +1905,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1931,12 +1931,12 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnClick_InvokeWithForm_CallsClick(EventArgs eventArgs)
     {
-        using var form = new Form();
-        using var parent = new Control
+        using Form form = new();
+        using Control parent = new()
         {
             Parent = form
         };
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Parent = parent,
             DialogResult = DialogResult.Yes
@@ -1974,7 +1974,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnClick_InvokeWithHandle_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2013,12 +2013,12 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnClick_InvokeWithFormWithHandle_CallsClick(EventArgs eventArgs)
     {
-        using var form = new Form();
-        using var parent = new Control
+        using Form form = new();
+        using Control parent = new()
         {
             Parent = form
         };
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Parent = parent,
             DialogResult = DialogResult.Yes
@@ -2067,7 +2067,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2091,7 +2091,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2117,7 +2117,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2143,7 +2143,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -2170,7 +2170,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2196,7 +2196,7 @@ public class ButtonTests
     [NewAndDefaultData<EventArgs>]
     public void Button_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -2223,7 +2223,7 @@ public class ButtonTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Button_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2263,7 +2263,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void Button_OnMouseDown_Invoke_CallsMouseDown(bool enabled, MouseEventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled
         };
@@ -2308,7 +2308,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseDown_WithHandle_TestData))]
     public void Button_OnMouseDown_InvokeWithHandle_CallsMouseDown(bool enabled, MouseEventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled
         };
@@ -2349,7 +2349,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_OnMouseDown_NullE_ReturnsExpected()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseDown(null));
     }
 
@@ -2372,7 +2372,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseEnter_TestData))]
     public void Button_OnMouseEnter_Invoke_CallsMouseEnter(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2403,7 +2403,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseEnter_TestData))]
     public void Button_OnMouseEnter_InvokeDesignMode_CallsMouseEnter(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -2416,7 +2416,7 @@ public class ButtonTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2448,7 +2448,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseEnter_TestData))]
     public void Button_OnMouseEnter_InvokeWithHandle_CallsMouseEnter(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2492,7 +2492,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseEnter_TestData))]
     public void Button_OnMouseEnter_InvokeDesignModeWithHandle_CallsMouseEnter(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -2505,7 +2505,7 @@ public class ButtonTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2565,7 +2565,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseLeave_TestData))]
     public void Button_OnMouseLeave_Invoke_CallsMouseLeave(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2596,7 +2596,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseLeave_TestData))]
     public void Button_OnMouseLeave_InvokeWithHandle_CallsMouseLeave(bool enabled, bool autoEllipsis, string text, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Enabled = enabled,
             AutoEllipsis = autoEllipsis,
@@ -2655,7 +2655,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseUp_TestData))]
     public void Button_OnMouseUp_Invoke_CallsMouseUp(FlatStyle flatStyle, MouseEventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2707,7 +2707,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseUp_MouseDown_TestData))]
     public void Button_OnMouseUp_InvokeMouseDown_CallsMouseUp(FlatStyle flatStyle, MouseEventArgs eventArgs, bool expectedIsHandleCreated)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2745,7 +2745,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseUp_TestData))]
     public void Button_OnMouseUp_InvokeWithHandle_CallsMouseUp(FlatStyle flatStyle, MouseEventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2811,7 +2811,7 @@ public class ButtonTests
     [MemberData(nameof(OnMouseUp_WithHandle_TestData))]
     public void Button_OnMouseUp_InvokeMouseDownWithHandle_CallsMouseUp(FlatStyle flatStyle, MouseEventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2861,7 +2861,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_OnMouseUp_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseUp(null));
     }
 
@@ -2878,7 +2878,7 @@ public class ButtonTests
     [MemberData(nameof(OnTextChanged_TestData))]
     public void Button_OnTextChanged_Invoke_CallsTextChanged(bool autoSize, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             AutoSize = autoSize
         };
@@ -2919,8 +2919,8 @@ public class ButtonTests
     [MemberData(nameof(OnTextChanged_WithParent_TestData))]
     public void Button_OnTextChanged_InvokeWithParent_CallsTextChanged(bool autoSize, EventArgs eventArgs, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubButton
+        using Control parent = new();
+        using SubButton control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -2975,7 +2975,7 @@ public class ButtonTests
     [MemberData(nameof(OnTextChanged_TestData))]
     public void Button_OnTextChanged_InvokeWithHandle_CallsTextChanged(bool autoSize, EventArgs eventArgs)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             AutoSize = autoSize
         };
@@ -3021,8 +3021,8 @@ public class ButtonTests
     [MemberData(nameof(OnTextChanged_WithParent_TestData))]
     public void Button_OnTextChanged_InvokeWithParentWithHandle_CallsTextChanged(bool autoSize, EventArgs eventArgs, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubButton
+        using Control parent = new();
+        using SubButton control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -3090,7 +3090,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_PerformClick_Invoke_CallsClick()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3115,12 +3115,12 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_PerformClick_InvokeWithForm_CallsClick()
     {
-        using var form = new Form();
-        using var parent = new Control
+        using Form form = new();
+        using Control parent = new()
         {
             Parent = form
         };
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Parent = parent,
             DialogResult = DialogResult.Yes
@@ -3155,7 +3155,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_PerformClick_InvokeWithHandle_CallsClick()
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3193,12 +3193,12 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_PerformClick_InvokeWithFormWithHandle_CallsClick()
     {
-        using var form = new Form();
-        using var parent = new Control
+        using Form form = new();
+        using Control parent = new()
         {
             Parent = form
         };
-        using var control = new SubButton
+        using SubButton control = new()
         {
             Parent = parent,
             DialogResult = DialogResult.Yes
@@ -3260,7 +3260,7 @@ public class ButtonTests
     [InlineData(false, "text", 'a', 0)]
     public void Button_ProcessMnemonic_Invoke_ReturnsExpected(bool useMnemonic, string text, char charCode, int expectedClickCallCount)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             UseMnemonic = useMnemonic,
             Text = text
@@ -3295,7 +3295,7 @@ public class ButtonTests
     [InlineData(false, "text", 'a')]
     public void Button_ProcessMnemonic_InvokeCantProcessMnemonic_ReturnsFalse(bool useMnemonic, string text, char charCode)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             UseMnemonic = useMnemonic,
             Text = text,
@@ -3311,14 +3311,14 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new Button();
+        using Button control = new();
         Assert.Equal("System.Windows.Forms.Button, Text: ", control.ToString());
     }
 
     [WinFormsFact]
     public void Button_RaiseAutomationEvent_Invoke_Success_IfControlIsCreated()
     {
-        using var button = new TestButton();
+        using TestButton button = new();
         Assert.False(button.IsHandleCreated);
         button.CreateControl();
         var accessibleObject = (SubButtonAccessibleObject)button.AccessibilityObject;
@@ -3335,7 +3335,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_RaiseAutomationEvent_IsNotInvoked_IfControlIsNotCreated()
     {
-        using var button = new TestButton();
+        using TestButton button = new();
         var accessibleObject = (SubButtonAccessibleObject)button.AccessibilityObject;
         Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
         Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
@@ -3350,7 +3350,7 @@ public class ButtonTests
     [WinFormsFact]
     public void Button_ToString_InvokeShortText_ReturnsExpected()
     {
-        using var control = new Button
+        using Button control = new()
         {
             Text = "Text"
         };
@@ -3374,17 +3374,17 @@ public class ButtonTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubButton();
+            using SubButton control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -3413,23 +3413,23 @@ public class ButtonTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubButton();
+            using SubButton control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            using var image = new Bitmap(10, 10);
+            using Bitmap image = new(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             IntPtr hdc = graphics.GetHdc();
             try
             {
-                var m = new Message
+                Message m = new()
                 {
                     Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -3447,7 +3447,7 @@ public class ButtonTests
     [MemberData(nameof(WndProc_EraseBkgnd_TestData))]
     public void Button_WndProc_InvokeEraseBkgndWithHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
@@ -3461,10 +3461,10 @@ public class ButtonTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3479,7 +3479,7 @@ public class ButtonTests
     [MemberData(nameof(WndProc_EraseBkgnd_TestData))]
     public void Button_WndProc_InvokeEraseBkgndWithHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque)
     {
-        using var control = new SubButton();
+        using SubButton control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
@@ -3493,16 +3493,16 @@ public class ButtonTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -3522,7 +3522,7 @@ public class ButtonTests
     [EnumData<FlatStyle>]
     public void Button_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -3541,10 +3541,10 @@ public class ButtonTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3576,6 +3576,17 @@ public class ButtonTests
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
+    }
+
+    [WinFormsFact]
+    public void ButtonBase_Click_RaisesEvent()
+    {
+        using var button = (SubButton)CreateButton();
+        bool clickEventRaised = false;
+        button.Click += (sender, e) => clickEventRaised = true;
+        button.PerformClick();
+
+        clickEventRaised.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -3615,7 +3626,7 @@ public class ButtonTests
     [MemberData(nameof(WndProc_ReflectCommandWithoutHandle_TestData))]
     public void Button_WndProc_InvokeReflectCommandWithHandle_Success(FlatStyle flatStyle, IntPtr wParam, IntPtr expectedResult, int expectedCallCount)
     {
-        using var control = new SubButton
+        using SubButton control = new()
         {
             FlatStyle = flatStyle
         };
@@ -3634,11 +3645,11 @@ public class ButtonTests
             callCount++;
         };
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -3648,6 +3659,20 @@ public class ButtonTests
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
     }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Button_Flat_ValidBorder(int borderSize) => base.ButtonBase_FlatStyle_ValidFlatButtonBorder(borderSize);
+
+    [WinFormsTheory]
+    [InlineData(255, 0, 0)]
+    [InlineData(0, 255, 0)]
+    [InlineData(0, 0, 255)]
+    public void Button_Flat_ProperColor(int red, int green, int blue) => base.ButtonBase_FlatStyle_ProperFlatButtonColor(red, green, blue);
+
+    protected override ButtonBase CreateButton() => new SubButton();
 
     private class SubButton : Button
     {
@@ -3768,7 +3793,7 @@ public class ButtonTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
-        internal override bool RaiseAutomationEvent(UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             if (Owner.IsHandleCreated)
             {
@@ -3778,7 +3803,7 @@ public class ButtonTests
             return base.RaiseAutomationEvent(eventId);
         }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             if (Owner.IsHandleCreated)
             {

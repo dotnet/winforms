@@ -32,7 +32,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// <summary>
     ///  The <see cref="IDesignerHost"/> that owns this designer.
     /// </summary>
-    private IDesignerHost _designerHost => (IDesignerHost)GetService(typeof(IDesignerHost));
+    private IDesignerHost _designerHost => GetRequiredService<IDesignerHost>();
 
     /// <summary>
     ///  Shadow the <see cref="ToolStripContainer.TopToolStripPanelVisible"/> property at design-time
@@ -40,7 +40,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool TopToolStripPanelVisible
     {
-        get => (bool)ShadowProperties[nameof(TopToolStripPanelVisible)];
+        get => (bool)ShadowProperties[nameof(TopToolStripPanelVisible)]!; // This is first set in the Initialize method
         set
         {
             ShadowProperties[nameof(TopToolStripPanelVisible)] = value;
@@ -54,7 +54,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool LeftToolStripPanelVisible
     {
-        get => (bool)ShadowProperties[nameof(LeftToolStripPanelVisible)];
+        get => (bool)ShadowProperties[nameof(LeftToolStripPanelVisible)]!; // This is first set in the Initialize method
         set
         {
             ShadowProperties[nameof(LeftToolStripPanelVisible)] = value;
@@ -68,7 +68,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool RightToolStripPanelVisible
     {
-        get => (bool)ShadowProperties[nameof(RightToolStripPanelVisible)];
+        get => (bool)ShadowProperties[nameof(RightToolStripPanelVisible)]!; // This is first set in the Initialize method
         set
         {
             ShadowProperties[nameof(RightToolStripPanelVisible)] = value;
@@ -82,7 +82,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool BottomToolStripPanelVisible
     {
-        get => (bool)ShadowProperties[nameof(BottomToolStripPanelVisible)];
+        get => (bool)ShadowProperties[nameof(BottomToolStripPanelVisible)]!; // This is first set in the Initialize method
         set
         {
             ShadowProperties[nameof(BottomToolStripPanelVisible)] = value;
@@ -94,10 +94,10 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            DesignerActionListCollection actions = new DesignerActionListCollection();
+            DesignerActionListCollection actions = [];
 
             // Here is our action list we'll use
-            ToolStripContainerActionList actionList = new ToolStripContainerActionList(_toolStripContainer!)
+            ToolStripContainerActionList actionList = new(_toolStripContainer!)
             {
                 AutoShow = true
             };
@@ -117,7 +117,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     public override IList SnapLines
         // We don't want padding SnapLines, so call directly to the internal method.
-        => SnapLinesInternal();
+        => EdgeAndMarginSnapLines().Unwrap();
 
     /// <summary>
     ///  Returns the internal control designer with the specified index in the ControlDesigner.
@@ -147,7 +147,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            ArrayList components = new ArrayList();
+            ArrayList components = [];
             foreach (Control parent in _toolStripContainer!.Controls)
             {
                 foreach (Control control in parent.Controls)
@@ -167,7 +167,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (typeof(StatusStrip).IsAssignableFrom(toolType))
         {
@@ -196,15 +196,9 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         }
     }
 
-    private ToolStripPanelDesigner? GetDesigner(ToolStripPanel panel)
-        => _designerHost.GetDesigner(panel) is ToolStripPanelDesigner toolStripPanelDesigner
-           ? toolStripPanelDesigner
-           : null;
+    private ToolStripPanelDesigner? GetDesigner(ToolStripPanel panel) => _designerHost.GetDesigner(panel) as ToolStripPanelDesigner;
 
-    private PanelDesigner? GetDesigner(ToolStripContentPanel panel)
-        => _designerHost.GetDesigner(panel) is PanelDesigner panelDesigner
-           ? panelDesigner
-           : null;
+    private PanelDesigner? GetDesigner(ToolStripContentPanel panel) => _designerHost.GetDesigner(panel) as PanelDesigner;
 
     private static ToolStripContainer? ContainerParent(Control control)
     {
@@ -213,31 +207,27 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             return null;
         }
 
-        ToolStripContainer? parent = null;
         while (control.Parent is not null)
         {
-            if (control.Parent is ToolStripContainer)
+            if (control.Parent is ToolStripContainer parent)
             {
-                parent = control.Parent as ToolStripContainer;
-                break;
+                return parent;
             }
 
             control = control.Parent;
         }
 
-        return parent;
+        return null;
     }
 
     protected override ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
     {
-        SelectionManager selectionManager = GetService<SelectionManager>();
-
-        if (selectionManager is null)
+        if (!TryGetService(out SelectionManager? selectionManager))
         {
             return base.GetControlGlyph(selectionType);
         }
 
-        //Create BodyGlyphs for all _panels
+        // Create BodyGlyphs for all _panels
         for (int i = 0; i <= 4; i++)
         {
             Control currentPanel = _panels![i];
@@ -247,8 +237,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
             if (panelDesigner is not null)
             {
-                //create our glyph, and set its cursor appropriately
-                ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
+                // create our glyph, and set its cursor appropriately
+                ControlBodyGlyph bodyGlyph = new(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
                 selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
 
                 bool addGlyphs = true;
@@ -257,15 +247,17 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
                 {
                     foreach (object comp in selComponents)
                     {
-                        ToolStripContainer container = ContainerParent((Control)comp)!;
-                        addGlyphs = container == _toolStripContainer;
+                        if (comp is Control control)
+                        {
+                            ToolStripContainer? container = ContainerParent(control);
+                            addGlyphs = container == _toolStripContainer;
+                        }
                     }
                 }
 
                 if (addGlyphs)
                 {
-                    ToolStripPanelDesigner? designer = panelDesigner as ToolStripPanelDesigner;
-                    if (designer is not null)
+                    if (panelDesigner is ToolStripPanelDesigner designer)
                     {
                         AddPanelSelectionGlyph(designer, selectionManager);
                     }
@@ -286,8 +278,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
         if (component is ToolStripItem item)
         {
-            Control parent = item.GetCurrentParent()!;
-            parent ??= item.Owner!;
+            Control? parent = item.GetCurrentParent();
+            parent ??= item.Owner;
 
             return parent;
         }
@@ -319,8 +311,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         bool result = false;
 
-        ToolStripDropDownItem? item = component as ToolStripDropDownItem;
-        if (item is not null)
+        if (component is ToolStripDropDownItem item)
         {
             result = CheckDropDownBounds(item, childGlyph, glyphs);
         }
@@ -380,10 +371,10 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         _panels = [_contentToolStripPanel, _leftToolStripPanel, _rightToolStripPanel, _topToolStripPanel, _bottomToolStripPanel];
 
         // Add custom bitmaps for the child toolStripPanels.
-        ToolboxBitmapAttribute bottomToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_BottomToolStripPanel");
-        ToolboxBitmapAttribute rightToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_RightToolStripPanel");
-        ToolboxBitmapAttribute topToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_TopToolStripPanel");
-        ToolboxBitmapAttribute leftToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_LeftToolStripPanel");
+        ToolboxBitmapAttribute bottomToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_BottomToolStripPanel");
+        ToolboxBitmapAttribute rightToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_RightToolStripPanel");
+        ToolboxBitmapAttribute topToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_TopToolStripPanel");
+        ToolboxBitmapAttribute leftToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_LeftToolStripPanel");
 
         TypeDescriptor.AddAttributes(_bottomToolStripPanel, bottomToolboxBitmapAttribute, new DescriptionAttribute("bottom"));
         TypeDescriptor.AddAttributes(_rightToolStripPanel, rightToolboxBitmapAttribute, new DescriptionAttribute("right"));
@@ -396,7 +387,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         EnableDesignMode(_rightToolStripPanel, RightToolStripPanelName);
         EnableDesignMode(_contentToolStripPanel, ContentToolStripPanelName);
 
-        _selectionService ??= (ISelectionService)GetService(typeof(ISelectionService));
+        _selectionService ??= GetService<ISelectionService>();
 
         if (_topToolStripPanel is not null)
         {
@@ -410,8 +401,6 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         RightToolStripPanelVisible = _toolStripContainer.RightToolStripPanelVisible;
         BottomToolStripPanelVisible = _toolStripContainer.BottomToolStripPanelVisible;
     }
-
-    public override void InitializeNewComponent(IDictionary defaultValues) => base.InitializeNewComponent(defaultValues);
 
     protected override void OnPaintAdornments(PaintEventArgs pe)
     {
@@ -441,8 +430,6 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
-        PropertyDescriptor? propertyDescriptor;
-
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
@@ -458,7 +445,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            propertyDescriptor = (PropertyDescriptor?)properties[shadowProps[i]];
+            PropertyDescriptor? propertyDescriptor = (PropertyDescriptor?)properties[shadowProps[i]];
             if (propertyDescriptor is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripContainerDesigner), propertyDescriptor, empty);

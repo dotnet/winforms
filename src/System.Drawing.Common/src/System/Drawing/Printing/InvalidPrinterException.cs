@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Security;
@@ -6,20 +6,16 @@ using System.Security;
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Represents the exception that is thrown when trying to access a printer using invalid printer settings.
+///  Represents the exception that is thrown when trying to access a printer using invalid printer settings.
 /// </summary>
 [Serializable]
 public partial class InvalidPrinterException : SystemException
 {
-    private readonly PrinterSettings? _settings;
-
     /// <summary>
-    /// Initializes a new instance of the <see cref='InvalidPrinterException'/> class.
+    ///  Initializes a new instance of the <see cref='InvalidPrinterException'/> class.
     /// </summary>
-    public InvalidPrinterException(PrinterSettings settings)
-    : base(GenerateMessage(settings))
+    public InvalidPrinterException(PrinterSettings settings) : base(GenerateMessage(settings))
     {
-        _settings = settings;
     }
 
     private static string GenerateMessage(PrinterSettings settings)

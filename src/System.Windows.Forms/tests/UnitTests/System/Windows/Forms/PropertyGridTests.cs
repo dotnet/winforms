@@ -11,6 +11,7 @@ using System.Windows.Forms.TestUtilities;
 using System.Runtime.CompilerServices;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.Tests;
 
@@ -19,7 +20,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Ctor_Default()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -173,7 +174,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -195,7 +196,7 @@ public partial class PropertyGridTests
     [InlineData(false, 1, 4)]
     public void PropertyGrid_AutoScroll_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -231,7 +232,7 @@ public partial class PropertyGridTests
     [InlineData(false, 1, 4)]
     public void PropertyGrid_AutoScroll_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -282,7 +283,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             BackColor = value
         };
@@ -307,7 +308,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(BackColor_SetWithHandle_TestData))]
     public void PropertyGrid_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -337,7 +338,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -375,7 +376,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_BackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.BackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.BackColor = Color.Red;
@@ -391,7 +392,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_BackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.BackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.BackColor = Color.Red;
@@ -407,7 +408,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void PropertyGrid_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             BackgroundImage = value
         };
@@ -423,7 +424,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -436,7 +437,7 @@ public partial class PropertyGridTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -447,7 +448,7 @@ public partial class PropertyGridTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -468,7 +469,7 @@ public partial class PropertyGridTests
     [EnumData<ImageLayout>]
     public void PropertyGrid_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             BackgroundImageLayout = value
         };
@@ -484,7 +485,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -522,24 +523,24 @@ public partial class PropertyGridTests
     [InvalidEnumData<ImageLayout>]
     public void PropertyGrid_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
     public static IEnumerable<object[]> BrowsableAttributes_Set_TestData()
     {
-        yield return new object[] { null, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { AttributeCollection.Empty, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
+        yield return new object[] { null, new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { AttributeCollection.Empty, new AttributeCollection([BrowsableAttribute.Yes]) };
         yield return new object[] { new AttributeCollection(), new AttributeCollection() };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]) };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(BrowsableAttributes_Set_TestData))]
     public void PropertyGrid_BrowsableAttributes_Set_GetReturnsExpected(AttributeCollection value, AttributeCollection expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             BrowsableAttributes = value
         };
@@ -560,7 +561,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(BrowsableAttributes_Set_TestData))]
     public void PropertyGrid_BrowsableAttributes_SetEmptySelectedObjects_GetReturnsExpected(AttributeCollection value, AttributeCollection expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             SelectedObjects = Array.Empty<object>(),
             BrowsableAttributes = value
@@ -582,9 +583,9 @@ public partial class PropertyGridTests
     [MemberData(nameof(BrowsableAttributes_Set_TestData))]
     public void PropertyGrid_BrowsableAttributes_SetCustomSelectedObjects_GetReturnsExpected(AttributeCollection value, AttributeCollection expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 },
+            SelectedObjects = [1],
             BrowsableAttributes = value
         };
         Assert.Equal(expected, control.BrowsableAttributes);
@@ -604,7 +605,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(BrowsableAttributes_Set_TestData))]
     public void PropertyGrid_BrowsableAttributes_SetWithHandle_GetReturnsExpected(AttributeCollection value, AttributeCollection expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -637,7 +638,7 @@ public partial class PropertyGridTests
     [BoolData]
     public void PropertyGrid_CanShowVisualStyleGlyphs_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubPropertyGrid
+        using SubPropertyGrid control = new()
         {
             CanShowVisualStyleGlyphs = value
         };
@@ -659,7 +660,7 @@ public partial class PropertyGridTests
     [BoolData]
     public void PropertyGrid_CanShowVisualStyleGlyphs_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -703,7 +704,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CategoryForeColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CategoryForeColor = value
         };
@@ -720,7 +721,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CategoryForeColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -749,7 +750,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CategoryForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CategoryForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CategoryForeColor = Color.Red;
@@ -765,7 +766,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CategoryForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CategoryForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CategoryForeColor = Color.Red;
@@ -781,7 +782,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CategorySplitterColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CategorySplitterColor = value
         };
@@ -798,7 +799,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CategorySplitterColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -827,7 +828,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CategorySplitterColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CategorySplitterColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CategorySplitterColor = Color.Red;
@@ -843,7 +844,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CategorySplitterColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CategorySplitterColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CategorySplitterColor = Color.Red;
@@ -866,7 +867,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsActiveLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsActiveLinkColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsActiveLinkColor = value
         };
@@ -883,7 +884,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsActiveLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsActiveLinkColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -912,7 +913,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsActiveLinkColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsActiveLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsActiveLinkColor = Color.Black;
@@ -928,7 +929,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsActiveLinkColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsActiveLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsActiveLinkColor = Color.Black;
@@ -944,7 +945,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_CommandsBackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsBackColor = value
         };
@@ -961,7 +962,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_CommandsBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -990,7 +991,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsBackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsBackColor = Color.Red;
@@ -1006,7 +1007,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsBackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsBackColor = Color.Red;
@@ -1021,7 +1022,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_BackColor_SetTransparent_ThrowsArgmentException()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.Throws<ArgumentException>(() => control.CommandsBackColor = Color.FromArgb(254, 1, 2, 3));
     }
 
@@ -1029,7 +1030,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CommandsBorderColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsBorderColor = value
         };
@@ -1046,7 +1047,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_CommandsBorderColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1075,7 +1076,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsBorderColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsBorderColor = Color.Red;
@@ -1091,7 +1092,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsBorderColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsBorderColor = Color.Red;
@@ -1114,7 +1115,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsDisabledLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsDisabledLinkColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsDisabledLinkColor = value
         };
@@ -1131,7 +1132,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsDisabledLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsDisabledLinkColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1160,7 +1161,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsDisabledLinkColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsDisabledLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsDisabledLinkColor = Color.Red;
@@ -1176,7 +1177,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsDisabledLinkColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsDisabledLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsDisabledLinkColor = Color.Red;
@@ -1192,7 +1193,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void PropertyGrid_CommandsForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsForeColor = value
         };
@@ -1209,7 +1210,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void PropertyGrid_CommandsForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1238,7 +1239,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsForeColor = Color.Red;
@@ -1254,7 +1255,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsForeColor = Color.Red;
@@ -1277,7 +1278,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsLinkColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             CommandsLinkColor = value
         };
@@ -1294,7 +1295,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CommandsLinkColor_Set_TestData))]
     public void PropertyGrid_CommandsLinkColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1323,7 +1324,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsLinkColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.CommandsLinkColor = Color.Red;
@@ -1339,7 +1340,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CommandsLinkColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.CommandsLinkColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.CommandsLinkColor = Color.Red;
@@ -1358,7 +1359,7 @@ public partial class PropertyGridTests
     [InlineData(false, false)]
     public void PropertyGrid_CommandsVisibleIfAvailable_Set_GetReturnsExpected(bool visible, bool value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -1393,7 +1394,7 @@ public partial class PropertyGridTests
     [InlineData(false, false, 0)]
     public void PropertyGrid_CommandsVisibleIfAvailable_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -1441,7 +1442,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_DisabledItemForeColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             DisabledItemForeColor = value
         };
@@ -1458,7 +1459,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_DisabledItemForeColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1487,7 +1488,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_DisabledItemForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.DisabledItemForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.DisabledItemForeColor = Color.Red;
@@ -1503,7 +1504,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_DisabledItemForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.DisabledItemForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.DisabledItemForeColor = Color.Red;
@@ -1519,7 +1520,7 @@ public partial class PropertyGridTests
     [BoolData]
     public void PropertyGrid_DrawFlatToolbar_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubPropertyGrid
+        using SubPropertyGrid control = new()
         {
             DrawFlatToolbar = value
         };
@@ -1540,7 +1541,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_DrawFlatToolbar_SetWithCommandColors_GetReturnsExpected()
     {
-        using var control = new SubPropertyGrid
+        using SubPropertyGrid control = new()
         {
             CommandsBackColor = Color.FromArgb(255, 0, 0, 1),
             CommandsForeColor = Color.FromArgb(255, 0, 0, 2),
@@ -1574,7 +1575,7 @@ public partial class PropertyGridTests
     [BoolData]
     public void PropertyGrid_DrawFlatToolbar_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1611,7 +1612,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void PropertyGrid_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             ForeColor = value
         };
@@ -1635,7 +1636,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void PropertyGrid_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1663,7 +1664,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -1686,7 +1687,7 @@ public partial class PropertyGridTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(PropertyGrid.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.
@@ -1700,7 +1701,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ForeColor = Color.Red;
@@ -1716,7 +1717,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ForeColor = Color.Red;
@@ -1732,7 +1733,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_HelpBackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             HelpBackColor = value
         };
@@ -1749,7 +1750,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_HelpBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1778,7 +1779,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpBackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.HelpBackColor = Color.Red;
@@ -1794,7 +1795,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpBackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.HelpBackColor = Color.Red;
@@ -1809,7 +1810,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_HelpBackColor_SetTransparent_ThrowsArgmentException()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.Throws<ArgumentException>(() => control.HelpBackColor = Color.FromArgb(254, 1, 2, 3));
     }
 
@@ -1817,7 +1818,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_HelpBorderColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             HelpBorderColor = value
         };
@@ -1834,7 +1835,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_HelpBorderColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1863,7 +1864,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpBorderColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.HelpBorderColor = Color.Red;
@@ -1879,7 +1880,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpBorderColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.HelpBorderColor = Color.Red;
@@ -1895,7 +1896,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void PropertyGrid_HelpForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             HelpForeColor = value
         };
@@ -1912,7 +1913,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void PropertyGrid_HelpForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1941,7 +1942,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.HelpForeColor = Color.Red;
@@ -1957,7 +1958,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_HelpForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.HelpForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.HelpForeColor = Color.Red;
@@ -1976,7 +1977,7 @@ public partial class PropertyGridTests
     [InlineData(false, false, 0, 0, 1)]
     public void PropertyGrid_HelpVisible_Set_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -2017,7 +2018,7 @@ public partial class PropertyGridTests
         int expectedLayoutCallCount2,
         int expectedLayoutCallCount3)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -2068,7 +2069,7 @@ public partial class PropertyGridTests
     [InlineData(false, false)]
     public void PropertyGrid_LargeButtons_Set_GetReturnsExpected(bool visible, bool value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -2103,7 +2104,7 @@ public partial class PropertyGridTests
     [InlineData(false, false, 0, 0, 0, 1)]
     public void PropertyGrid_LargeButtons_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedInvalidatedCallCount1, int expectedLayoutCallCount2, int expectedInvalidatedCallCount2)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -2151,7 +2152,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_LineColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             LineColor = value
         };
@@ -2168,7 +2169,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_LineColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2197,7 +2198,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_LineColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.LineColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.LineColor = Color.Red;
@@ -2213,7 +2214,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_LineColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.LineColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.LineColor = Color.Red;
@@ -2229,7 +2230,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void PropertyGrid_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Padding = value
         };
@@ -2246,7 +2247,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void PropertyGrid_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2274,7 +2275,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -2287,7 +2288,7 @@ public partial class PropertyGridTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -2298,7 +2299,7 @@ public partial class PropertyGridTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -2314,7 +2315,7 @@ public partial class PropertyGridTests
     [EnumData<PropertySort>]
     public void PropertyGrid_PropertySort_Set_GetReturnsExpected(PropertySort value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             PropertySort = value
         };
@@ -2332,7 +2333,7 @@ public partial class PropertyGridTests
     [EnumData<PropertySort>]
     public void PropertyGrid_PropertySort_SetWithHandle_GetReturnsExpected(PropertySort value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2358,17 +2359,39 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
+    public void PropertyGrid_PropertyTabCollection_AddAndRemoveTabType_Success()
+    {
+        using PropertyGrid grid = new();
+        Assert.Equal(1, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab));
+        Assert.Equal(2, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.RemoveTabType(typeof(TestPropertyTab));
+        Assert.Equal(1, grid.PropertyTabs.Count);
+    }
+
+    private class TestPropertyTab : PropertyTab
+    {
+        public override string TabName => "TestTabName";
+
+        public override Bitmap Bitmap => new(10, 10);
+
+        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) => throw new NotImplementedException();
+    }
+
+    [WinFormsFact]
     public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentNullException()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.Throws<ArgumentNullException>("items", () => control.SelectedGridItem = null);
     }
 
     [WinFormsFact]
     public void PropertyGrid_SelectedGridItem_SetNotGridEntry_ThrowsInvalidCastException()
     {
-        using var control = new PropertyGrid();
-        var mockGridItem = new Mock<GridItem>(MockBehavior.Strict);
+        using PropertyGrid control = new();
+        Mock<GridItem> mockGridItem = new(MockBehavior.Strict);
         Assert.Throws<InvalidCastException>(() => control.SelectedGridItem = mockGridItem.Object);
     }
 
@@ -2376,7 +2399,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_SelectedItemWithFocusBackColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             SelectedItemWithFocusBackColor = value
         };
@@ -2393,7 +2416,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_SelectedItemWithFocusBackColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2422,7 +2445,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedItemWithFocusBackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.SelectedItemWithFocusBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.SelectedItemWithFocusBackColor = Color.Red;
@@ -2438,7 +2461,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedItemWithFocusBackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.SelectedItemWithFocusBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.SelectedItemWithFocusBackColor = Color.Red;
@@ -2454,7 +2477,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_SelectedItemWithFocusForeColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             SelectedItemWithFocusForeColor = value
         };
@@ -2471,7 +2494,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_SelectedItemWithFocusForeColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2500,7 +2523,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedItemWithFocusForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.SelectedItemWithFocusForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.SelectedItemWithFocusForeColor = Color.Red;
@@ -2516,7 +2539,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedItemWithFocusForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.SelectedItemWithFocusForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.SelectedItemWithFocusForeColor = Color.Red;
@@ -2538,7 +2561,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(SelectedObject_Set_TestData))]
     public void PropertyGrid_SelectedObject_Set_GetReturnsExpected(object value, object expected, object[] expectedSelectedObjects)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             SelectedObject = value
         };
@@ -2557,7 +2580,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(SelectedObject_Set_TestData))]
     public void PropertyGrid_SelectedObject_SetWithHandle_GetReturnsExpected(object value, object expected, object[] expectedSelectedObjects)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2599,7 +2622,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(SelectedObjects_Set_TestData))]
     public void PropertyGrid_SelectedObjects_Set_GetReturnsExpected(object[] value, object[] expected, object expectedSelectedObject)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             SelectedObjects = value
         };
@@ -2622,9 +2645,9 @@ public partial class PropertyGridTests
     [MemberData(nameof(SelectedObjects_Set_TestData))]
     public void PropertyGrid_SelectedObjects_SetWithCustomOldValue_GetReturnsExpected(object[] value, object[] expected, object expectedSelectedObject)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 }
+            SelectedObjects = [1]
         };
 
         control.SelectedObjects = value;
@@ -2647,7 +2670,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(SelectedObjects_Set_TestData))]
     public void PropertyGrid_SelectedObjects_SetWithHandle_GetReturnsExpected(object[] value, object[] expected, object expectedSelectedObject)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2681,15 +2704,15 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_SelectedObjects_SetNullInValue_ThrowsArgumentException()
     {
-        using var control = new SubPropertyGrid();
-        Assert.Throws<ArgumentException>(() => control.SelectedObjects = new object[] { null });
+        using SubPropertyGrid control = new();
+        Assert.Throws<ArgumentException>(() => control.SelectedObjects = [null]);
     }
 
     private ISite CreateISiteObject()
     {
-        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
-        var mockPropertyValueUIService = new Mock<IPropertyValueUIService>(MockBehavior.Strict);
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        Mock<IPropertyValueUIService> mockPropertyValueUIService = new(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
            .Setup(h => h.Container)
            .Returns((IContainer)null);
@@ -2699,7 +2722,7 @@ public partial class PropertyGridTests
         mockDesignerHost
             .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
             .Returns(mockPropertyValueUIService.Object);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2744,7 +2767,7 @@ public partial class PropertyGridTests
         var previousActiveDesigner = propertyGrid.ActiveDesigner;
         propertyGridTestAccessor.SaveSelectedTabIndex();
 
-        //Set other Site
+        // Set other Site
         propertyGrid.Site = CreateISiteObject();
         Assert.NotNull(propertyGrid.ActiveDesigner);
         Assert.NotEqual(previousActiveDesigner, propertyGrid.ActiveDesigner);
@@ -2763,7 +2786,7 @@ public partial class PropertyGridTests
     {
         yield return new object[] { null };
 
-        var mockNullSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockNullSite = new(MockBehavior.Strict);
         mockNullSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2776,7 +2799,7 @@ public partial class PropertyGridTests
         yield return new object[] { mockNullSite.Object };
 
 #if false
-        var mockInvalidSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockInvalidSite = new(MockBehavior.Strict);
         mockInvalidSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2789,7 +2812,7 @@ public partial class PropertyGridTests
         yield return new object[] { mockInvalidSite.Object };
 #endif
 
-        var mockNullDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockNullDesignerHost = new(MockBehavior.Strict);
         mockNullDesignerHost
             .Setup(h => h.Container)
             .Returns((IContainer)null);
@@ -2799,7 +2822,7 @@ public partial class PropertyGridTests
         mockNullDesignerHost
             .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
             .Returns(null);
-        var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite1 = new(MockBehavior.Strict);
         mockSite1
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2811,9 +2834,9 @@ public partial class PropertyGridTests
             .Returns(mockNullDesignerHost.Object);
         yield return new object[] { mockSite1.Object };
 
-        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
-        var mockPropertyValueUIService = new Mock<IPropertyValueUIService>(MockBehavior.Strict);
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        Mock<IPropertyValueUIService> mockPropertyValueUIService = new(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns((IContainer)null);
@@ -2823,7 +2846,7 @@ public partial class PropertyGridTests
         mockDesignerHost
             .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
             .Returns(mockPropertyValueUIService.Object);
-        var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite2 = new(MockBehavior.Strict);
         mockSite2
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2840,7 +2863,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(Site_Set_TestData))]
     public void PropertyGrid_Site_Set_GetReturnsExpected(ISite value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Site = value
         };
@@ -2857,7 +2880,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(Site_Set_TestData))]
     public void PropertyGrid_Site_SetWithHandle_GetReturnsExpected(ISite value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2885,7 +2908,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Site_SetInvalidDesignerHost_DoesNotThrowInvalidCastException()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2895,7 +2918,7 @@ public partial class PropertyGridTests
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(new object());
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         control.Site = mockSite.Object;
         Assert.Same(mockSite.Object, control.Site);
         Assert.False(control.IsHandleCreated);
@@ -2909,7 +2932,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Site_SetInvalidDesignerHostComponentChangeService_DoesNotThrowInvalidCastException()
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns((IContainer)null);
@@ -2919,7 +2942,7 @@ public partial class PropertyGridTests
         mockDesignerHost
             .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
             .Returns(null);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2929,7 +2952,7 @@ public partial class PropertyGridTests
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         control.Site = mockSite.Object;
         Assert.Same(mockSite.Object, control.Site);
         Assert.False(control.IsHandleCreated);
@@ -2943,7 +2966,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Site_SetInvalidDesignerHostPropertyValueUIService_DoesNotThrowInvalidCastException()
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns((IContainer)null);
@@ -2953,7 +2976,7 @@ public partial class PropertyGridTests
         mockDesignerHost
             .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
             .Returns(new object());
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2963,7 +2986,7 @@ public partial class PropertyGridTests
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         control.Site = mockSite.Object;
         Assert.Same(mockSite.Object, control.Site);
         Assert.False(control.IsHandleCreated);
@@ -2978,7 +3001,7 @@ public partial class PropertyGridTests
     [NormalizedStringData]
     public void PropertyGrid_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Text = value
         };
@@ -2995,7 +3018,7 @@ public partial class PropertyGridTests
     [NormalizedStringData]
     public void PropertyGrid_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3023,7 +3046,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -3064,7 +3087,7 @@ public partial class PropertyGridTests
     [InlineData(false, false, 0, 0, 1)]
     public void PropertyGrid_ToolbarVisible_Set_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -3103,7 +3126,7 @@ public partial class PropertyGridTests
     [InlineData(false, false, 0, 1, 0, 2, 1, 3)]
     public void PropertyGrid_ToolbarVisible_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedInvalidatedCallCount1, int expectedLayoutCallCount2, int expectedInvalidatedCallCount2, int expectedLayoutCallCount3, int expectedInvalidatedCallCount3)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             Visible = visible
         };
@@ -3154,8 +3177,8 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_ToolStripRenderer_Set_GetReturnsExpected()
     {
-        var value = new SubToolStripRenderer();
-        using var control = new SubPropertyGrid
+        SubToolStripRenderer value = new();
+        using SubPropertyGrid control = new()
         {
             ToolStripRenderer = value
         };
@@ -3179,7 +3202,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_ViewBackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             ViewBackColor = value
         };
@@ -3197,7 +3220,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void PropertyGrid_ViewBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3226,7 +3249,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewBackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ViewBackColor = Color.Red;
@@ -3242,7 +3265,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewBackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewBackColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ViewBackColor = Color.Red;
@@ -3257,7 +3280,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_ViewBackColor_SetTransparent_ThrowsArgmentException()
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.Throws<ArgumentException>(() => control.ViewBackColor = Color.FromArgb(254, 1, 2, 3));
     }
 
@@ -3265,7 +3288,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_ViewBorderColor_Set_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             ViewBorderColor = value
         };
@@ -3282,7 +3305,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(CategoryForeColor_Set_TestData))]
     public void PropertyGrid_ViewBorderColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3311,7 +3334,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewBorderColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ViewBorderColor = Color.Red;
@@ -3327,7 +3350,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewBorderColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewBorderColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ViewBorderColor = Color.Red;
@@ -3350,7 +3373,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(ViewForeColor_Set_TestData))]
     public void PropertyGrid_ViewForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid
+        using PropertyGrid control = new()
         {
             ViewForeColor = value
         };
@@ -3367,7 +3390,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(ViewForeColor_Set_TestData))]
     public void PropertyGrid_ViewForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3396,7 +3419,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ViewForeColor = Color.Red;
@@ -3412,7 +3435,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ViewForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[nameof(PropertyGrid.ViewForeColor)];
-        using var control = new PropertyGrid();
+        using PropertyGrid control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ViewForeColor = Color.Red;
@@ -3427,7 +3450,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -3442,7 +3465,7 @@ public partial class PropertyGridTests
     [InlineData((-1), false)]
     public void PropertyGrid_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -3469,7 +3492,7 @@ public partial class PropertyGridTests
     [InlineData((ControlStyles)(-1), false)]
     public void PropertyGrid_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -3479,7 +3502,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -3487,7 +3510,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -3514,7 +3537,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
 
@@ -3542,7 +3565,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -3568,7 +3591,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
 
@@ -3596,7 +3619,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void PropertyGrid_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, KeyEventArgs e)
@@ -3623,7 +3646,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void PropertyGrid_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, KeyPressEventArgs e)
@@ -3650,7 +3673,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void PropertyGrid_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, KeyEventArgs e)
@@ -3690,7 +3713,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void PropertyGrid_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs, bool expectedIsHandleCreated)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, MouseEventArgs e)
@@ -3716,7 +3739,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnMouseDown_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseDown(null));
     }
 
@@ -3724,7 +3747,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -3751,7 +3774,7 @@ public partial class PropertyGridTests
     [NewAndDefaultData<EventArgs>]
     public void PropertyGrid_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, EventArgs e)
@@ -3791,7 +3814,7 @@ public partial class PropertyGridTests
     [MemberData(nameof(OnMouseMove_TestData))]
     public void PropertyGrid_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
         void handler(object sender, MouseEventArgs e)
         {
@@ -3816,7 +3839,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnMouseMove_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseMove(null));
     }
 
@@ -3824,7 +3847,7 @@ public partial class PropertyGridTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void PropertyGrid_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
     {
-        using var control = new SubPropertyGrid();
+        using SubPropertyGrid control = new();
         int callCount = 0;
 
         void handler(object sender, MouseEventArgs e)
@@ -3850,7 +3873,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_Buttons_AccessibleRole_IsRadiButton()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
@@ -3862,7 +3885,7 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_SystemColorsChanged_DoesNotLeakImageList()
     {
-        using SubPropertyGrid propertyGrid = new SubPropertyGrid();
+        using SubPropertyGrid propertyGrid = new();
 
         ImageList normalButtons = propertyGrid.TestAccessor().Dynamic._normalButtonImages;
 
@@ -3936,21 +3959,37 @@ public partial class PropertyGridTests
         propertyGrid.Enabled = true;
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_NotifyParentChange()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/10427
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.Site = new MySite();
+        MyClass myClass = new();
+        propertyGrid.SelectedObject = myClass;
+        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        GridEntry entry = propertyGridView.SelectedGridEntry;
+        var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
+
+        descriptor.SetPropertyTextValue("123");
+        Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
 
     private class SubPropertyGrid : PropertyGrid
     {
-        public new const int ScrollStateAutoScrolling = PropertyGrid.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = PropertyGrid.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = PropertyGrid.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = PropertyGrid.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = PropertyGrid.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 
@@ -4063,5 +4102,55 @@ public partial class PropertyGridTests
         public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class MyClass
+    {
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public virtual MyExpandableClass ParentGridEntry { get; set; } = new() { };
+
+        public class MyExpandableClass
+        {
+            [NotifyParentProperty(true)]
+            [TypeConverter(typeof(StringConverter))]
+            public string NestedGridEntry { get; set; }
+        }
+    }
+
+    private class MySite : ISite
+    {
+        private readonly IComponentChangeService _componentChangeService = new ComponentChangeService();
+        public IComponent Component => null;
+        public IContainer Container => null;
+        public bool DesignMode => false;
+        public string Name { get; set; }
+
+        public object GetService(Type serviceType)
+            => serviceType == typeof(IComponentChangeService) ? _componentChangeService : null;
+
+        public class ComponentChangeService : IComponentChangeService
+        {
+#pragma warning disable CS0067 // Required by Interface
+            public event ComponentEventHandler ComponentAdded;
+            public event ComponentEventHandler ComponentAdding;
+            public event ComponentChangedEventHandler ComponentChanged;
+            public event ComponentChangingEventHandler ComponentChanging;
+            public event ComponentEventHandler ComponentRemoved;
+            public event ComponentEventHandler ComponentRemoving;
+            public event ComponentRenameEventHandler ComponentRename;
+#pragma warning restore
+
+            public void OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
+            {
+            }
+
+            public void OnComponentChanging(object component, MemberDescriptor member)
+            {
+                if (member is null)
+                    return;
+                Reflection.MemberInfo[] properties = component.GetType().GetMembers();
+                Assert.False(properties.All(p => p.Name != member.Name), "Property not found!");
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="CloseHandle(HANDLE)"/>
     public static BOOL CloseHandle<T>(T handle) where T : IHandle<HANDLE>
     {
         BOOL result = CloseHandle(handle.Handle);

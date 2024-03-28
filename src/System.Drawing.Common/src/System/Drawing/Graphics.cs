@@ -4,43 +4,24 @@
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Internal;
-using System.Drawing.Text;
-using System.Globalization;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+#endif
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-#if NET7_0_OR_GREATER
-using System.Runtime.InteropServices.Marshalling;
-#endif
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-using static Interop;
-
 
 namespace System.Drawing;
 
 /// <summary>
-/// Encapsulates a GDI+ drawing surface.
+///  Encapsulates a GDI+ drawing surface.
 /// </summary>
-public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
+public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, IDeviceContext, IGraphics
 {
-#if FINALIZATION_WATCH
-    static readonly TraceSwitch GraphicsFinalization = new TraceSwitch("GraphicsFinalization", "Tracks the creation and destruction of finalization");
-    internal static string GetAllocationStack() {
-        if (GraphicsFinalization.TraceVerbose) {
-            return Environment.StackTrace;
-        }
-        else {
-            return "Enabled 'GraphicsFinalization' switch to see stack of allocation";
-        }
-    }
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
-
     /// <summary>
-    /// The context state previous to the current Graphics context (the head of the stack).
-    /// We don't keep a GraphicsContext for the current context since it is available at any time from GDI+ and
-    /// we don't want to keep track of changes in it.
+    ///  The context state previous to the current Graphics context (the head of the stack).
+    ///  We don't keep a GraphicsContext for the current context since it is available at any time from GDI+ and
+    ///  we don't want to keep track of changes in it.
     /// </summary>
     private GraphicsContext? _previousContext;
 
@@ -51,48 +32,18 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     private object? _printingHelper;
 
     // GDI+'s preferred HPALETTE.
-    private static IntPtr s_halftonePalette;
+    private static HPALETTE s_halftonePalette;
 
     // pointer back to the Image backing a specific graphic object
     private Image? _backingImage;
 
     /// <summary>
-    /// Handle to native DC - obtained from the GDI+ graphics object. We need to cache it to implement
-    /// IDeviceContext interface.
+    ///  Handle to native DC - obtained from the GDI+ graphics object. We need to cache it to implement
+    ///  IDeviceContext interface.
     /// </summary>
-    private IntPtr _nativeHdc;
+    private HDC _nativeHdc;
 
     public delegate bool DrawImageAbort(IntPtr callbackdata);
-
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(DrawImageAbort), MarshalMode.ManagedToUnmanagedIn, typeof(KeepAliveMarshaller))]
-    internal static class DrawImageAbortMarshaller
-    {
-        internal unsafe struct KeepAliveMarshaller
-        {
-            private delegate BOOL DrawImageAbortNative(IntPtr callbackdata);
-            private DrawImageAbortNative? _managed;
-            private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
-            public void FromManaged(DrawImageAbort? managed)
-            {
-                _managed = managed is null ? null : data => managed(data) ? BOOL.TRUE : BOOL.FALSE;
-                _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
-            }
-
-            public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
-            {
-                return _nativeFunction;
-            }
-
-            public void OnInvoked()
-            {
-                GC.KeepAlive(_managed);
-            }
-
-            public void Free() { }
-        }
-    }
-#endif
 
     /// <summary>
     /// Callback for EnumerateMetafile methods.
@@ -111,55 +62,19 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         IntPtr data,
         PlayRecordCallback? callbackData);
 
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(EnumerateMetafileProc), MarshalMode.ManagedToUnmanagedIn, typeof(KeepAliveMarshaller))]
-    internal static class EnumerateMetafileProcMarshaller
-    {
-        internal unsafe struct KeepAliveMarshaller
-        {
-            private delegate BOOL EnumerateMetafileProcNative(
-                EmfPlusRecordType recordType,
-                int flags,
-                int dataSize,
-                IntPtr data,
-                IntPtr callbackData);
-            private EnumerateMetafileProcNative? _managed;
-            private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
-            public void FromManaged(EnumerateMetafileProc? managed)
-            {
-                _managed = managed is null ? null : (recordType, flags, dataSize, data, callbackData) =>
-                    managed(recordType, flags, dataSize, data, callbackData == IntPtr.Zero ? null : Marshal.GetDelegateForFunctionPointer<PlayRecordCallback>(callbackData)) ? BOOL.TRUE : BOOL.FALSE;
-                _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
-            }
-
-            public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
-            {
-                return _nativeFunction;
-            }
-
-            public void OnInvoked()
-            {
-                GC.KeepAlive(_managed);
-            }
-
-            public void Free() {}
-        }
-    }
-#endif
-
     /// <summary>
-    /// Constructor to initialize this object from a native GDI+ Graphics pointer.
+    ///  Constructor to initialize this object from a native GDI+ Graphics pointer.
     /// </summary>
-    private Graphics(IntPtr gdipNativeGraphics)
+    private Graphics(GpGraphics* gdipNativeGraphics)
     {
-        if (gdipNativeGraphics == IntPtr.Zero)
+        if (gdipNativeGraphics is null)
             throw new ArgumentNullException(nameof(gdipNativeGraphics));
 
         NativeGraphics = gdipNativeGraphics;
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref='Graphics'/> class from the specified handle to a device context.
+    ///  Creates a new instance of the <see cref='Graphics'/> class from the specified handle to a device context.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdc(IntPtr hdc)
@@ -173,22 +88,24 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdcInternal(IntPtr hdc)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateFromHDC(hdc, out IntPtr nativeGraphics));
+        GpGraphics* nativeGraphics;
+        Gdip.CheckStatus(PInvoke.GdipCreateFromHDC((HDC)hdc, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
     /// <summary>
-    /// Creates a new instance of the Graphics class from the specified handle to a device context and handle to a device.
+    ///  Creates a new instance of the Graphics class from the specified handle to a device context and handle to a device.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdc(IntPtr hdc, IntPtr hdevice)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateFromHDC2(hdc, hdevice, out IntPtr nativeGraphics));
+        GpGraphics* nativeGraphics;
+        Gdip.CheckStatus(PInvoke.GdipCreateFromHDC2((HDC)hdc, (HANDLE)hdevice, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref='Graphics'/> class from a window handle.
+    ///  Creates a new instance of the <see cref='Graphics'/> class from a window handle.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHwnd(IntPtr hwnd) => FromHwndInternal(hwnd);
@@ -196,12 +113,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHwndInternal(IntPtr hwnd)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateFromHWND(hwnd, out IntPtr nativeGraphics));
+        GpGraphics* nativeGraphics;
+        Gdip.CheckStatus(PInvokeCore.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
     /// <summary>
-    /// Creates an instance of the <see cref='Graphics'/> class from an existing <see cref='Image'/>.
+    ///  Creates an instance of the <see cref='Graphics'/> class from an existing <see cref='Image'/>.
     /// </summary>
     public static Graphics FromImage(Image image)
     {
@@ -210,9 +128,9 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if ((image.PixelFormat & PixelFormat.Indexed) != 0)
             throw new ArgumentException(SR.GdiplusCannotCreateGraphicsFromIndexedPixelFormat, nameof(image));
 
-        Gdip.CheckStatus(Gdip.GdipGetImageGraphicsContext(
-            new HandleRef(image, image._nativeImage),
-            out IntPtr nativeGraphics));
+        GpGraphics* nativeGraphics;
+        Gdip.CheckStatus(PInvoke.GdipGetImageGraphicsContext(image.Pointer(), &nativeGraphics));
+        GC.KeepAlive(image);
 
         return new Graphics(nativeGraphics) { _backingImage = image };
     }
@@ -220,96 +138,77 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void ReleaseHdcInternal(IntPtr hdc)
     {
-        Gdip.CheckStatus(!Gdip.Initialized ? Gdip.Ok :
-            Gdip.GdipReleaseDC(new HandleRef(this, NativeGraphics), hdc));
-        _nativeHdc = IntPtr.Zero;
+        CheckStatus(!Gdip.Initialized ? Status.Ok : PInvoke.GdipReleaseDC(NativeGraphics, (HDC)hdc));
+        _nativeHdc = HDC.Null;
     }
 
     /// <summary>
-    /// Deletes this <see cref='Graphics'/>, and frees the memory allocated for it.
+    ///  Deletes this <see cref='Graphics'/>, and frees the memory allocated for it.
     /// </summary>
     public void Dispose()
     {
-        Dispose(true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && NativeGraphics != IntPtr.Zero, $"""
-            System.Drawing.Graphics: ***************************************************
-            System.Drawing.Graphics: Object Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-        while (_previousContext != null)
+        if (disposing)
         {
-            // Dispose entire stack.
-            GraphicsContext? context = _previousContext.Previous;
-            _previousContext.Dispose();
-            _previousContext = context;
+            while (_previousContext is not null)
+            {
+                // Dispose entire stack.
+                GraphicsContext? context = _previousContext.Previous;
+                _previousContext.Dispose();
+                _previousContext = context;
+            }
+
+            if (PrintingHelper is HdcHandle printerDC)
+            {
+                printerDC.Dispose();
+                _printingHelper = null;
+            }
         }
 
-        if (NativeGraphics != IntPtr.Zero)
+        if (!_nativeHdc.IsNull)
         {
-            try
-            {
-                if (_nativeHdc != IntPtr.Zero) // avoid a handle leak.
-                {
-                    ReleaseHdc();
-                }
+            ReleaseHdc();
+        }
 
-                if (PrintingHelper is DeviceContext printerDC)
-                {
-                    printerDC.Dispose();
-                    _printingHelper = null;
-                }
-
-#if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
-#endif
-                Gdip.GdipDeleteGraphics(new HandleRef(this, NativeGraphics));
-
-#if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                NativeGraphics = IntPtr.Zero;
-            }
+        if (NativeGraphics is not null)
+        {
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeCore.GdipDeleteGraphics(NativeGraphics);
+            NativeGraphics = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 
-    ~Graphics() => Dispose(false);
+    ~Graphics() => Dispose(disposing: false);
 
     /// <summary>
-    /// Handle to native GDI+ graphics object. This object is created on demand.
+    ///  Handle to native GDI+ graphics object. This object is created on demand.
     /// </summary>
-    internal IntPtr NativeGraphics { get; private set; }
+    internal GpGraphics* NativeGraphics { get; private set; }
+
+    GpGraphics* IPointer<GpGraphics>.Pointer => NativeGraphics;
 
     public Region Clip
     {
         get
         {
-            var region = new Region();
-            int status = Gdip.GdipGetClip(new HandleRef(this, NativeGraphics), new HandleRef(region, region.NativeRegion));
-            Gdip.CheckStatus(status);
-
+            Region region = new();
+            CheckStatus(PInvoke.GdipGetClip(NativeGraphics, region.NativeRegion));
             return region;
         }
-        set => SetClip(value, CombineMode.Replace);
+        set => SetClip(value, Drawing2D.CombineMode.Replace);
     }
 
     public RectangleF ClipBounds
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetClipBounds(new HandleRef(this, NativeGraphics), out RectangleF rect));
+            RectF rect;
+            CheckStatus(PInvoke.GdipGetClipBounds(NativeGraphics, &rect));
             return rect;
         }
     }
@@ -317,35 +216,37 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <summary>
     /// Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
     /// </summary>
-    public CompositingMode CompositingMode
+    public Drawing2D.CompositingMode CompositingMode
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetCompositingMode(new HandleRef(this, NativeGraphics), out CompositingMode mode));
-            return mode;
+            GdiPlus.CompositingMode mode;
+            CheckStatus(PInvoke.GdipGetCompositingMode(NativeGraphics, &mode));
+            return (Drawing2D.CompositingMode)mode;
         }
         set
         {
-            if (value < CompositingMode.SourceOver || value > CompositingMode.SourceCopy)
-                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CompositingMode));
+            if (value is < Drawing2D.CompositingMode.SourceOver or > Drawing2D.CompositingMode.SourceCopy)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.CompositingMode));
 
-            Gdip.CheckStatus(Gdip.GdipSetCompositingMode(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetCompositingMode(NativeGraphics, (GdiPlus.CompositingMode)value));
         }
     }
 
-    public CompositingQuality CompositingQuality
+    public Drawing2D.CompositingQuality CompositingQuality
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetCompositingQuality(new HandleRef(this, NativeGraphics), out CompositingQuality cq));
-            return cq;
+            GdiPlus.CompositingQuality quality;
+            CheckStatus(PInvoke.GdipGetCompositingQuality(NativeGraphics, &quality));
+            return (Drawing2D.CompositingQuality)quality;
         }
         set
         {
-            if (value < CompositingQuality.Invalid || value > CompositingQuality.AssumeLinear)
-                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CompositingQuality));
+            if (value is < Drawing2D.CompositingQuality.Invalid or > Drawing2D.CompositingQuality.AssumeLinear)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.CompositingQuality));
 
-            Gdip.CheckStatus(Gdip.GdipSetCompositingQuality(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetCompositingQuality(NativeGraphics, (GdiPlus.CompositingQuality)value));
         }
     }
 
@@ -353,7 +254,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetDpiX(new HandleRef(this, NativeGraphics), out float dpi));
+            float dpi;
+            CheckStatus(PInvoke.GdipGetDpiX(NativeGraphics, &dpi));
             return dpi;
         }
     }
@@ -362,7 +264,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetDpiY(new HandleRef(this, NativeGraphics), out float dpi));
+            float dpi;
+            CheckStatus(PInvoke.GdipGetDpiY(NativeGraphics, &dpi));
             return dpi;
         }
     }
@@ -370,36 +273,20 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <summary>
     /// Gets or sets the interpolation mode associated with this Graphics.
     /// </summary>
-    public InterpolationMode InterpolationMode
+    public Drawing2D.InterpolationMode InterpolationMode
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetInterpolationMode(new HandleRef(this, NativeGraphics), out InterpolationMode mode));
-            return mode;
+            GdiPlus.InterpolationMode mode;
+            CheckStatus(PInvoke.GdipGetInterpolationMode(NativeGraphics, &mode));
+            return (Drawing2D.InterpolationMode)mode;
         }
         set
         {
-            if (value < InterpolationMode.Invalid || value > InterpolationMode.HighQualityBicubic)
-                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(InterpolationMode));
+            if (value is < Drawing2D.InterpolationMode.Invalid or > Drawing2D.InterpolationMode.HighQualityBicubic)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.InterpolationMode));
 
-            // GDI+ interprets the value of InterpolationMode and sets a value accordingly.
-            // Libgdiplus does not, so do this manually here.
-            switch (value)
-            {
-                case InterpolationMode.Default:
-                case InterpolationMode.Low:
-                    value = InterpolationMode.Bilinear;
-                    break;
-                case InterpolationMode.High:
-                    value = InterpolationMode.HighQualityBicubic;
-                    break;
-                case InterpolationMode.Invalid:
-                    throw new ArgumentException(SR.GdiplusInvalidParameter);
-                default:
-                    break;
-            }
-
-            Gdip.CheckStatus(Gdip.GdipSetInterpolationMode(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetInterpolationMode(NativeGraphics, (GdiPlus.InterpolationMode)value));
         }
     }
 
@@ -407,7 +294,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipIsClipEmpty(new HandleRef(this, NativeGraphics), out bool isEmpty));
+            BOOL isEmpty;
+            CheckStatus(PInvoke.GdipIsClipEmpty(NativeGraphics, &isEmpty));
             return isEmpty;
         }
     }
@@ -416,7 +304,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipIsVisibleClipEmpty(new HandleRef(this, NativeGraphics), out bool isEmpty));
+            BOOL isEmpty;
+            CheckStatus(PInvoke.GdipIsVisibleClipEmpty(NativeGraphics, &isEmpty));
             return isEmpty;
         }
     }
@@ -425,37 +314,27 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetPageScale(new HandleRef(this, NativeGraphics), out float scale));
+            float scale;
+            CheckStatus(PInvoke.GdipGetPageScale(NativeGraphics, &scale));
             return scale;
         }
-        set
-        {
-            // Libgdiplus doesn't perform argument validation, so do this here for compatibility.
-            if (value <= 0 || value > 1000000032)
-                throw new ArgumentException(SR.GdiplusInvalidParameter);
-
-            Gdip.CheckStatus(Gdip.GdipSetPageScale(new HandleRef(this, NativeGraphics), value));
-        }
+        set => CheckStatus(PInvoke.GdipSetPageScale(NativeGraphics, value));
     }
 
     public GraphicsUnit PageUnit
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetPageUnit(new HandleRef(this, NativeGraphics), out GraphicsUnit unit));
-            return unit;
+            Unit unit;
+            CheckStatus(PInvoke.GdipGetPageUnit(NativeGraphics, &unit));
+            return (GraphicsUnit)unit;
         }
         set
         {
-            if (value < GraphicsUnit.World || value > GraphicsUnit.Millimeter)
+            if (value is < GraphicsUnit.World or > GraphicsUnit.Millimeter)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(GraphicsUnit));
 
-            // GDI+ doesn't allow GraphicsUnit.World as a valid value for PageUnit.
-            // Libgdiplus doesn't perform argument validation, so do this here.
-            if (value == GraphicsUnit.World)
-                throw new ArgumentException(SR.GdiplusInvalidParameter);
-
-            Gdip.CheckStatus(Gdip.GdipSetPageUnit(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetPageUnit(NativeGraphics, (Unit)value));
         }
     }
 
@@ -463,20 +342,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetPixelOffsetMode(new HandleRef(this, NativeGraphics), out PixelOffsetMode mode));
-            return mode;
+            GdiPlus.PixelOffsetMode mode;
+            CheckStatus(PInvoke.GdipGetPixelOffsetMode(NativeGraphics, &mode));
+            return (PixelOffsetMode)mode;
         }
         set
         {
-            if (value < PixelOffsetMode.Invalid || value > PixelOffsetMode.Half)
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PixelOffsetMode));
+            if (value is < PixelOffsetMode.Invalid or > PixelOffsetMode.Half)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PixelOffsetMode));
 
-            // GDI+ doesn't allow PixelOffsetMode.Invalid as a valid value for PixelOffsetMode.
-            // Libgdiplus doesn't perform argument validation, so do this here.
-            if (value == PixelOffsetMode.Invalid)
-                throw new ArgumentException(SR.GdiplusInvalidParameter);
-
-            Gdip.CheckStatus(Gdip.GdipSetPixelOffsetMode(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetPixelOffsetMode(NativeGraphics, (GdiPlus.PixelOffsetMode)value));
         }
     }
 
@@ -484,45 +359,27 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetRenderingOrigin(new HandleRef(this, NativeGraphics), out int x, out int y));
+            int x, y;
+            CheckStatus(PInvoke.GdipGetRenderingOrigin(NativeGraphics, &x, &y));
             return new Point(x, y);
         }
-        set
-        {
-            Gdip.CheckStatus(Gdip.GdipSetRenderingOrigin(new HandleRef(this, NativeGraphics), value.X, value.Y));
-        }
+        set => CheckStatus(PInvoke.GdipSetRenderingOrigin(NativeGraphics, value.X, value.Y));
     }
 
-    public SmoothingMode SmoothingMode
+    public Drawing2D.SmoothingMode SmoothingMode
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetSmoothingMode(new HandleRef(this, NativeGraphics), out SmoothingMode mode));
-            return mode;
+            GdiPlus.SmoothingMode mode;
+            CheckStatus(PInvoke.GdipGetSmoothingMode(NativeGraphics, &mode));
+            return (Drawing2D.SmoothingMode)mode;
         }
         set
         {
-            if (value < SmoothingMode.Invalid || value > SmoothingMode.AntiAlias)
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(SmoothingMode));
+            if (value is < Drawing2D.SmoothingMode.Invalid or > Drawing2D.SmoothingMode.AntiAlias)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.SmoothingMode));
 
-            // GDI+ interprets the value of SmoothingMode and sets a value accordingly.
-            // Libgdiplus does not, so do this manually here.
-            switch (value)
-            {
-                case SmoothingMode.Default:
-                case SmoothingMode.HighSpeed:
-                    value = SmoothingMode.None;
-                    break;
-                case SmoothingMode.HighQuality:
-                    value = SmoothingMode.AntiAlias;
-                    break;
-                case SmoothingMode.Invalid:
-                    throw new ArgumentException(SR.GdiplusInvalidParameter);
-                default:
-                    break;
-            }
-
-            Gdip.CheckStatus(Gdip.GdipSetSmoothingMode(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetSmoothingMode(NativeGraphics, (GdiPlus.SmoothingMode)value));
         }
     }
 
@@ -530,108 +387,109 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetTextContrast(new HandleRef(this, NativeGraphics), out int textContrast));
-            return textContrast;
+            uint textContrast;
+            CheckStatus(PInvoke.GdipGetTextContrast(NativeGraphics, &textContrast));
+            return (int)textContrast;
         }
-        set
-        {
-            Gdip.CheckStatus(Gdip.GdipSetTextContrast(new HandleRef(this, NativeGraphics), value));
-        }
+        set => CheckStatus(PInvoke.GdipSetTextContrast(NativeGraphics, (uint)value));
     }
 
     /// <summary>
-    /// Gets or sets the rendering mode for text associated with this <see cref='Graphics'/>.
+    ///  Gets or sets the rendering mode for text associated with this <see cref='Graphics'/>.
     /// </summary>
     public TextRenderingHint TextRenderingHint
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetTextRenderingHint(new HandleRef(this, NativeGraphics), out TextRenderingHint hint));
-            return hint;
+            GdiPlus.TextRenderingHint hint;
+            CheckStatus(PInvoke.GdipGetTextRenderingHint(NativeGraphics, &hint));
+            return (TextRenderingHint)hint;
         }
         set
         {
-            if (value < TextRenderingHint.SystemDefault || value > TextRenderingHint.ClearTypeGridFit)
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(TextRenderingHint));
+            if (value is < TextRenderingHint.SystemDefault or > TextRenderingHint.ClearTypeGridFit)
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextRenderingHint));
 
-            Gdip.CheckStatus(Gdip.GdipSetTextRenderingHint(new HandleRef(this, NativeGraphics), value));
+            CheckStatus(PInvoke.GdipSetTextRenderingHint(NativeGraphics, (GdiPlus.TextRenderingHint)value));
         }
     }
 
     /// <summary>
-    /// Gets or sets the world transform for this <see cref='Graphics'/>.
+    ///  Gets or sets the world transform for this <see cref='Graphics'/>.
     /// </summary>
     public Matrix Transform
     {
         get
         {
-            var matrix = new Matrix();
-            Gdip.CheckStatus(Gdip.GdipGetWorldTransform(
-                new HandleRef(this, NativeGraphics), new HandleRef(matrix, matrix.NativeMatrix)));
-
+            Matrix matrix = new();
+            CheckStatus(PInvoke.GdipGetWorldTransform(NativeGraphics, matrix.NativeMatrix));
             return matrix;
         }
         set
         {
-            Gdip.CheckStatus(Gdip.GdipSetWorldTransform(
-                new HandleRef(this, NativeGraphics), new HandleRef(value, value.NativeMatrix)));
+            CheckStatus(PInvoke.GdipSetWorldTransform(NativeGraphics, value.NativeMatrix));
+            GC.KeepAlive(value);
         }
     }
 
     /// <summary>
-    /// Gets or sets the world transform elements for this <see cref="Graphics"/>.
+    ///  Gets or sets the world transform elements for this <see cref="Graphics"/>.
     /// </summary>
     /// <remarks>
-    /// This is a more performant alternative to <see cref="Transform"/> that does not need disposal.
+    ///  <para>
+    ///   This is a more performant alternative to <see cref="Transform"/> that does not need disposal.
+    ///  </para>
     /// </remarks>
-    public unsafe Matrix3x2 TransformElements
+    public Matrix3x2 TransformElements
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipCreateMatrix(out IntPtr nativeMatrix));
+            GdiPlus.Matrix* nativeMatrix;
+            CheckStatus(PInvoke.GdipCreateMatrix(&nativeMatrix));
 
             try
             {
-                Gdip.CheckStatus(Gdip.GdipGetWorldTransform(
-                    new HandleRef(this, NativeGraphics), new HandleRef(null, nativeMatrix)));
+                CheckStatus(PInvoke.GdipGetWorldTransform(NativeGraphics, nativeMatrix));
 
                 Matrix3x2 matrix = default;
-                Gdip.CheckStatus(Gdip.GdipGetMatrixElements(new HandleRef(null, nativeMatrix), (float*)&matrix));
+                CheckStatus(PInvoke.GdipGetMatrixElements(nativeMatrix, (float*)&matrix));
                 return matrix;
             }
             finally
             {
-                if (nativeMatrix != IntPtr.Zero)
+                if (nativeMatrix is not null)
                 {
-                    Gdip.GdipDeleteMatrix(new HandleRef(null, nativeMatrix));
+                    PInvoke.GdipDeleteMatrix(nativeMatrix);
                 }
             }
         }
         set
         {
-            IntPtr nativeMatrix = Matrix.CreateNativeHandle(value);
+            GdiPlus.Matrix* nativeMatrix = Matrix.CreateNativeHandle(value);
 
             try
             {
-                Gdip.CheckStatus(Gdip.GdipSetWorldTransform(
-                    new HandleRef(this, NativeGraphics), new HandleRef(null, nativeMatrix)));
+                CheckStatus(PInvoke.GdipSetWorldTransform(NativeGraphics, nativeMatrix));
             }
             finally
             {
-                if (nativeMatrix != IntPtr.Zero)
+                if (nativeMatrix is not null)
                 {
-                    Gdip.GdipDeleteMatrix(new HandleRef(null, nativeMatrix));
+                    PInvoke.GdipDeleteMatrix(nativeMatrix);
                 }
             }
         }
     }
 
+    HDC IHdcContext.GetHdc() => (HDC)GetHdc();
+
     public IntPtr GetHdc()
     {
-        IntPtr hdc;
-        Gdip.CheckStatus(Gdip.GdipGetDC(new HandleRef(this, NativeGraphics), out hdc));
+        HDC hdc;
+        CheckStatus(PInvoke.GdipGetDC(NativeGraphics, &hdc));
 
-        _nativeHdc = hdc; // need to cache the hdc to be able to release with a call to IDeviceContext.ReleaseHdc().
+        // Need to cache the hdc to be able to release with a call to IDeviceContext.ReleaseHdc().
+        _nativeHdc = hdc;
         return _nativeHdc;
     }
 
@@ -641,1007 +499,1064 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     public void ReleaseHdc() => ReleaseHdcInternal(_nativeHdc);
 
     /// <summary>
-    /// Forces immediate execution of all operations currently on the stack.
+    ///  Forces immediate execution of all operations currently on the stack.
     /// </summary>
-    public void Flush() => Flush(FlushIntention.Flush);
+    public void Flush() => Flush(Drawing2D.FlushIntention.Flush);
 
     /// <summary>
-    /// Forces execution of all operations currently on the stack.
+    ///  Forces execution of all operations currently on the stack.
     /// </summary>
-    public void Flush(FlushIntention intention)
-    {
-        Gdip.CheckStatus(Gdip.GdipFlush(new HandleRef(this, NativeGraphics), intention));
-    }
+    public void Flush(Drawing2D.FlushIntention intention) =>
+        CheckStatus(PInvoke.GdipFlush(NativeGraphics, (GdiPlus.FlushIntention)intention));
 
-    public void SetClip(Graphics g) => SetClip(g, CombineMode.Replace);
+    public void SetClip(Graphics g) => SetClip(g, Drawing2D.CombineMode.Replace);
 
-    public void SetClip(Graphics g, CombineMode combineMode)
+    public void SetClip(Graphics g, Drawing2D.CombineMode combineMode)
     {
         ArgumentNullException.ThrowIfNull(g);
 
-        Gdip.CheckStatus(Gdip.GdipSetClipGraphics(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(g, g.NativeGraphics),
-            combineMode));
+        CheckStatus(PInvoke.GdipSetClipGraphics(NativeGraphics, g.NativeGraphics, (GdiPlus.CombineMode)combineMode));
+        GC.KeepAlive(g);
     }
 
-    public void SetClip(Rectangle rect) => SetClip(rect, CombineMode.Replace);
+    public void SetClip(Rectangle rect) => SetClip(rect, Drawing2D.CombineMode.Replace);
 
-    public void SetClip(Rectangle rect, CombineMode combineMode)
-    {
-        Gdip.CheckStatus(Gdip.GdipSetClipRectI(
-            new HandleRef(this, NativeGraphics),
-            rect.X, rect.Y, rect.Width, rect.Height,
-            combineMode));
-    }
+    public void SetClip(Rectangle rect, Drawing2D.CombineMode combineMode) => SetClip((RectangleF)rect, combineMode);
 
-    public void SetClip(RectangleF rect) => SetClip(rect, CombineMode.Replace);
+    public void SetClip(RectangleF rect) => SetClip(rect, Drawing2D.CombineMode.Replace);
 
-    public void SetClip(RectangleF rect, CombineMode combineMode)
-    {
-        Gdip.CheckStatus(Gdip.GdipSetClipRect(
-            new HandleRef(this, NativeGraphics),
-            rect.X, rect.Y, rect.Width, rect.Height,
-            combineMode));
-    }
+    public void SetClip(RectangleF rect, Drawing2D.CombineMode combineMode) =>
+        CheckStatus(PInvoke.GdipSetClipRect(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, (GdiPlus.CombineMode)combineMode));
 
-    public void SetClip(GraphicsPath path) => SetClip(path, CombineMode.Replace);
+    public void SetClip(GraphicsPath path) => SetClip(path, Drawing2D.CombineMode.Replace);
 
-    public void SetClip(GraphicsPath path, CombineMode combineMode)
+    public void SetClip(GraphicsPath path, Drawing2D.CombineMode combineMode)
     {
         ArgumentNullException.ThrowIfNull(path);
-
-        Gdip.CheckStatus(Gdip.GdipSetClipPath(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(path, path._nativePath),
-            combineMode));
+        CheckStatus(PInvoke.GdipSetClipPath(NativeGraphics, path._nativePath, (GdiPlus.CombineMode)combineMode));
+        GC.KeepAlive(path);
     }
 
-    public void SetClip(Region region, CombineMode combineMode)
+    public void SetClip(Region region, Drawing2D.CombineMode combineMode)
     {
         ArgumentNullException.ThrowIfNull(region);
-
-        Gdip.CheckStatus(Gdip.GdipSetClipRegion(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(region, region.NativeRegion),
-            combineMode));
+        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, (GdiPlus.CombineMode)combineMode));
+        GC.KeepAlive(region);
     }
 
-    public void IntersectClip(Rectangle rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipSetClipRectI(
-            new HandleRef(this, NativeGraphics),
+    public void IntersectClip(Rectangle rect) => IntersectClip((RectangleF)rect);
+
+    public void IntersectClip(RectangleF rect) =>
+        CheckStatus(PInvoke.GdipSetClipRect(
+            NativeGraphics,
             rect.X, rect.Y, rect.Width, rect.Height,
-            CombineMode.Intersect));
-    }
-
-    public void IntersectClip(RectangleF rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipSetClipRect(
-            new HandleRef(this, NativeGraphics),
-            rect.X, rect.Y, rect.Width, rect.Height,
-            CombineMode.Intersect));
-    }
+            GdiPlus.CombineMode.CombineModeIntersect));
 
     public void IntersectClip(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-
-        Gdip.CheckStatus(Gdip.GdipSetClipRegion(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(region, region.NativeRegion),
-            CombineMode.Intersect));
+        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeIntersect));
+        GC.KeepAlive(region);
     }
 
-    public void ExcludeClip(Rectangle rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipSetClipRectI(
-            new HandleRef(this, NativeGraphics),
+    public void ExcludeClip(Rectangle rect) =>
+        CheckStatus(PInvoke.GdipSetClipRect(
+            NativeGraphics,
             rect.X, rect.Y, rect.Width, rect.Height,
-            CombineMode.Exclude));
-    }
+            GdiPlus.CombineMode.CombineModeExclude));
 
     public void ExcludeClip(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-
-        Gdip.CheckStatus(Gdip.GdipSetClipRegion(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(region, region.NativeRegion),
-            CombineMode.Exclude));
+        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeExclude));
+        GC.KeepAlive(region);
     }
 
-    public void ResetClip()
-    {
-        Gdip.CheckStatus(Gdip.GdipResetClip(new HandleRef(this, NativeGraphics)));
-    }
+    public void ResetClip() => CheckStatus(PInvoke.GdipResetClip(NativeGraphics));
 
-    public void TranslateClip(float dx, float dy)
-    {
-        Gdip.CheckStatus(Gdip.GdipTranslateClip(new HandleRef(this, NativeGraphics), dx, dy));
-    }
+    public void TranslateClip(float dx, float dy) => CheckStatus(PInvoke.GdipTranslateClip(NativeGraphics, dx, dy));
 
-    public void TranslateClip(int dx, int dy)
-    {
-        Gdip.CheckStatus(Gdip.GdipTranslateClip(new HandleRef(this, NativeGraphics), dx, dy));
-    }
+    public void TranslateClip(int dx, int dy) => CheckStatus(PInvoke.GdipTranslateClip(NativeGraphics, dx, dy));
 
     public bool IsVisible(int x, int y) => IsVisible(new Point(x, y));
 
-    public bool IsVisible(Point point)
-    {
-        Gdip.CheckStatus(Gdip.GdipIsVisiblePointI(
-            new HandleRef(this, NativeGraphics),
-            point.X, point.Y,
-            out bool isVisible));
+    public bool IsVisible(Point point) => IsVisible(point.X, point.Y);
 
+    public bool IsVisible(float x, float y)
+    {
+        BOOL isVisible;
+        CheckStatus(PInvoke.GdipIsVisiblePoint(NativeGraphics, x, y, &isVisible));
         return isVisible;
     }
 
-    public bool IsVisible(float x, float y) => IsVisible(new PointF(x, y));
+    public bool IsVisible(PointF point) => IsVisible(point.X, point.Y);
 
-    public bool IsVisible(PointF point)
-    {
-        Gdip.CheckStatus(Gdip.GdipIsVisiblePoint(
-            new HandleRef(this, NativeGraphics),
-            point.X, point.Y,
-            out bool isVisible));
+    public bool IsVisible(int x, int y, int width, int height) => IsVisible((float)x, y, width, height);
 
-        return isVisible;
-    }
-
-    public bool IsVisible(int x, int y, int width, int height)
-    {
-        return IsVisible(new Rectangle(x, y, width, height));
-    }
-
-    public bool IsVisible(Rectangle rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipIsVisibleRectI(
-            new HandleRef(this, NativeGraphics),
-            rect.X, rect.Y, rect.Width, rect.Height,
-            out bool isVisible));
-
-        return isVisible;
-    }
+    public bool IsVisible(Rectangle rect) => IsVisible((float)rect.X, rect.Y, rect.Width, rect.Height);
 
     public bool IsVisible(float x, float y, float width, float height)
     {
-        return IsVisible(new RectangleF(x, y, width, height));
-    }
-
-    public bool IsVisible(RectangleF rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipIsVisibleRect(
-            new HandleRef(this, NativeGraphics),
-            rect.X, rect.Y, rect.Width, rect.Height,
-            out bool isVisible));
-
+        BOOL isVisible;
+        CheckStatus(PInvoke.GdipIsVisibleRect(NativeGraphics, x, y, width, height, &isVisible));
         return isVisible;
     }
 
-    /// <summary>
-    /// Resets the world transform to identity.
-    /// </summary>
-    public void ResetTransform()
-    {
-        Gdip.CheckStatus(Gdip.GdipResetWorldTransform(new HandleRef(this, NativeGraphics)));
-    }
+    public bool IsVisible(RectangleF rect) => IsVisible(rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Multiplies the <see cref='Matrix'/> that represents the world transform and <paramref name="matrix"/>.
+    ///  Resets the world transform to identity.
+    /// </summary>
+    public void ResetTransform() => CheckStatus(PInvoke.GdipResetWorldTransform(NativeGraphics));
+
+    /// <summary>
+    ///  Multiplies the <see cref='Matrix'/> that represents the world transform and <paramref name="matrix"/>.
     /// </summary>
     public void MultiplyTransform(Matrix matrix) => MultiplyTransform(matrix, MatrixOrder.Prepend);
 
     /// <summary>
-    /// Multiplies the <see cref='Matrix'/> that represents the world transform and <paramref name="matrix"/>.
+    ///  Multiplies the <see cref='Matrix'/> that represents the world transform and <paramref name="matrix"/>.
     /// </summary>
     public void MultiplyTransform(Matrix matrix, MatrixOrder order)
     {
         ArgumentNullException.ThrowIfNull(matrix);
-
-        // Multiplying the transform by a disposed matrix is a nop in GDI+, but throws
-        // with the libgdiplus backend. Simulate a nop for compatibility with GDI+.
-        if (matrix.NativeMatrix == IntPtr.Zero)
-            return;
-
-        Gdip.CheckStatus(Gdip.GdipMultiplyWorldTransform(
-            new HandleRef(this, NativeGraphics), new HandleRef(matrix, matrix.NativeMatrix), order));
+        CheckStatus(PInvoke.GdipMultiplyWorldTransform(NativeGraphics, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order));
+        GC.KeepAlive(matrix);
     }
 
     public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, MatrixOrder.Prepend);
 
-    public void TranslateTransform(float dx, float dy, MatrixOrder order)
-    {
-        Gdip.CheckStatus(Gdip.GdipTranslateWorldTransform(new HandleRef(this, NativeGraphics), dx, dy, order));
-    }
+    public void TranslateTransform(float dx, float dy, MatrixOrder order) =>
+        CheckStatus(PInvoke.GdipTranslateWorldTransform(NativeGraphics, dx, dy, (GdiPlus.MatrixOrder)order));
 
     public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
 
-    public void ScaleTransform(float sx, float sy, MatrixOrder order)
-    {
-        Gdip.CheckStatus(Gdip.GdipScaleWorldTransform(new HandleRef(this, NativeGraphics), sx, sy, order));
-    }
+    public void ScaleTransform(float sx, float sy, MatrixOrder order) =>
+        CheckStatus(PInvoke.GdipScaleWorldTransform(NativeGraphics, sx, sy, (GdiPlus.MatrixOrder)order));
 
     public void RotateTransform(float angle) => RotateTransform(angle, MatrixOrder.Prepend);
 
-    public void RotateTransform(float angle, MatrixOrder order)
-    {
-        Gdip.CheckStatus(Gdip.GdipRotateWorldTransform(new HandleRef(this, NativeGraphics), angle, order));
-    }
+    public void RotateTransform(float angle, MatrixOrder order) =>
+        CheckStatus(PInvoke.GdipRotateWorldTransform(NativeGraphics, angle, (GdiPlus.MatrixOrder)order));
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
-        CheckErrorStatus(Gdip.GdipDrawArc(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
+        CheckErrorStatus(PInvoke.GdipDrawArc(
+            NativeGraphics,
+            pen.NativePen,
             x, y, width, height,
             startAngle,
             sweepAngle));
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
-    public void DrawArc(Pen pen, RectangleF rect, float startAngle, float sweepAngle)
-    {
+    public void DrawArc(Pen pen, RectangleF rect, float startAngle, float sweepAngle) =>
         DrawArc(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
     /// Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawArcI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-    }
+        => DrawArc(pen, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
-    public void DrawArc(Pen pen, Rectangle rect, float startAngle, float sweepAngle)
-    {
+    public void DrawArc(Pen pen, Rectangle rect, float startAngle, float sweepAngle) =>
         DrawArc(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
-    /// Draws a cubic bezier curve defined by four ordered pairs that represent points.
+    ///  Draws a cubic Bezier curve defined by four ordered pairs that represent points.
     /// </summary>
     public void DrawBezier(Pen pen, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
-        CheckErrorStatus(Gdip.GdipDrawBezier(
-            new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
+        CheckErrorStatus(PInvoke.GdipDrawBezier(
+            NativeGraphics,
+            pen.NativePen,
             x1, y1, x2, y2, x3, y3, x4, y4));
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws a cubic bezier curve defined by four points.
+    ///  Draws a cubic Bezier curve defined by four points.
     /// </summary>
-    public void DrawBezier(Pen pen, PointF pt1, PointF pt2, PointF pt3, PointF pt4)
-    {
+    public void DrawBezier(Pen pen, PointF pt1, PointF pt2, PointF pt3, PointF pt4) =>
         DrawBezier(pen, pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
-    }
 
     /// <summary>
-    /// Draws a cubic bezier curve defined by four points.
+    ///  Draws a cubic Bezier curve defined by four points.
     /// </summary>
-    public void DrawBezier(Pen pen, Point pt1, Point pt2, Point pt3, Point pt4)
-    {
+    public void DrawBezier(Pen pen, Point pt1, Point pt2, Point pt3, Point pt4) =>
         DrawBezier(pen, pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
-    }
 
     /// <summary>
-    /// Draws the outline of a rectangle specified by <paramref name="rect"/>.
+    ///  Draws the outline of a rectangle specified by <paramref name="rect"/>.
     /// </summary>
     /// <param name="pen">A Pen that determines the color, width, and style of the rectangle.</param>
     /// <param name="rect">A Rectangle structure that represents the rectangle to draw.</param>
-    public void DrawRectangle(Pen pen, RectangleF rect)
-    {
-        DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawRectangle(Pen pen, RectangleF rect) => DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Draws the outline of a rectangle specified by <paramref name="rect"/>.
+    ///  Draws the outline of a rectangle specified by <paramref name="rect"/>.
     /// </summary>
-    public void DrawRectangle(Pen pen, Rectangle rect)
-    {
-        DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawRectangle(Pen pen, Rectangle rect) => DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="DrawRoundedRectangle(Pen, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, Rectangle rect, Size radius) =>
+        DrawRoundedRectangle(pen, (RectangleF)rect, radius);
 
     /// <summary>
-    /// Draws the outline of the specified rectangle.
+    ///  Draws the outline of the specified rounded rectangle.
+    /// </summary>
+    /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF radius)
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, radius);
+        DrawPath(pen, path);
+    }
+#endif
+
+    /// <summary>
+    ///  Draws the outline of the specified rectangle.
     /// </summary>
     public void DrawRectangle(Pen pen, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawRectangle(
-            new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-            x, y, width, height));
+        CheckErrorStatus(PInvoke.GdipDrawRectangle(NativeGraphics, pen.NativePen, x, y, width, height));
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outline of the specified rectangle.
+    ///  Draws the outline of the specified rectangle.
     /// </summary>
     public void DrawRectangle(Pen pen, int x, int y, int width, int height)
+        => DrawRectangle(pen, (float)x, y, width, height);
+
+    /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
+    public void DrawRectangles(Pen pen, params RectangleF[] rects) => DrawRectangles(pen, rects.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawRectangles(Pen pen, ReadOnlySpan<RectangleF> rects)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawRectangleI(
-            new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-            x, y, width, height));
-    }
-
-    /// <summary>
-    /// Draws the outlines of a series of rectangles.
-    /// </summary>
-    public unsafe void DrawRectangles(Pen pen, RectangleF[] rects)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(rects);
 
         fixed (RectangleF* r = rects)
         {
-            CheckErrorStatus(Gdip.GdipDrawRectangles(
-                new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-                r, rects.Length));
+            CheckErrorStatus(PInvoke.GdipDrawRectangles(NativeGraphics, pen.NativePen, (RectF*)r, rects.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outlines of a series of rectangles.
+    ///  Draws the outlines of a series of rectangles.
     /// </summary>
-    public unsafe void DrawRectangles(Pen pen, Rectangle[] rects)
+    /// <param name="pen"><see cref="Pen"/> that determines the color, width, and style of the outlines of the rectangles.</param>
+    /// <param name="rects">An array of <see cref="Rectangle"/> structures that represents the rectangles to draw.</param>
+    public void DrawRectangles(Pen pen, params Rectangle[] rects) => DrawRectangles(pen, rects.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawRectangles(Pen pen, ReadOnlySpan<Rectangle> rects)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(rects);
 
         fixed (Rectangle* r = rects)
         {
-            CheckErrorStatus(Gdip.GdipDrawRectanglesI(
-                new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-                r, rects.Length));
+            CheckErrorStatus(PInvoke.GdipDrawRectanglesI(NativeGraphics, pen.NativePen, (Rect*)r, rects.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outline of an ellipse defined by a bounding rectangle.
+    ///  Draws the outline of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void DrawEllipse(Pen pen, RectangleF rect)
-    {
-        DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawEllipse(Pen pen, RectangleF rect) => DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Draws the outline of an ellipse defined by a bounding rectangle.
+    ///  Draws the outline of an ellipse defined by a bounding rectangle.
     /// </summary>
     public void DrawEllipse(Pen pen, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawEllipse(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            x, y, width, height));
+        CheckErrorStatus(PInvoke.GdipDrawEllipse(NativeGraphics, pen.NativePen, x, y, width, height));
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outline of an ellipse specified by a bounding rectangle.
+    ///  Draws the outline of an ellipse specified by a bounding rectangle.
     /// </summary>
-    public void DrawEllipse(Pen pen, Rectangle rect)
-    {
-        DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawEllipse(Pen pen, Rectangle rect) => DrawEllipse(pen, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Draws the outline of an ellipse defined by a bounding rectangle.
+    ///  Draws the outline of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void DrawEllipse(Pen pen, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawEllipseI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            x, y, width, height));
-    }
+    public void DrawEllipse(Pen pen, int x, int y, int width, int height) => DrawEllipse(pen, (float)x, y, width, height);
 
     /// <summary>
-    /// Draws the outline of a pie section defined by an ellipse and two radial lines.
+    ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
     /// </summary>
-    public void DrawPie(Pen pen, RectangleF rect, float startAngle, float sweepAngle)
-    {
+    public void DrawPie(Pen pen, RectangleF rect, float startAngle, float sweepAngle) =>
         DrawPie(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
-    /// Draws the outline of a pie section defined by an ellipse and two radial lines.
+    ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     public void DrawPie(Pen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawPie(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
+        CheckErrorStatus(PInvoke.GdipDrawPie(NativeGraphics, pen.NativePen, x, y, width, height, startAngle, sweepAngle));
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outline of a pie section defined by an ellipse and two radial lines.
+    ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
     /// </summary>
-    public void DrawPie(Pen pen, Rectangle rect, float startAngle, float sweepAngle)
-    {
+    public void DrawPie(Pen pen, Rectangle rect, float startAngle, float sweepAngle) =>
         DrawPie(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
-    /// Draws the outline of a pie section defined by an ellipse and two radial lines.
+    ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
     /// </summary>
-    public void DrawPie(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
+    public void DrawPie(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle) =>
+        DrawPie(pen, (float)x, y, width, height, startAngle, sweepAngle);
+
+    /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
+    public void DrawPolygon(Pen pen, params PointF[] points) => DrawPolygon(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawPolygon(Pen pen, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawPieI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-    }
-
-    /// <summary>
-    /// Draws the outline of a polygon defined by an array of points.
-    /// </summary>
-    public unsafe void DrawPolygon(Pen pen, PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawPolygon(
-                new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawPolygon(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the outline of a polygon defined by an array of points.
+    ///  Draws the outline of a polygon defined by an array of points.
     /// </summary>
-    public unsafe void DrawPolygon(Pen pen, Point[] points)
+    /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
+    /// <param name="points">An array of <see cref="Point"/> structures that represent the vertices of the polygon.</param>
+    public void DrawPolygon(Pen pen, params Point[] points) => DrawPolygon(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawPolygon(Pen pen, ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawPolygonI(
-                new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawPolygonI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws the lines and curves defined by a <see cref='GraphicsPath'/>.
+    ///  Draws the lines and curves defined by a <see cref='GraphicsPath'/>.
     /// </summary>
     public void DrawPath(Pen pen, GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(pen);
         ArgumentNullException.ThrowIfNull(path);
 
-        CheckErrorStatus(Gdip.GdipDrawPath(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(pen, pen.NativePen),
-            new HandleRef(path, path._nativePath)));
+        CheckErrorStatus(PInvoke.GdipDrawPath(NativeGraphics, pen.NativePen, path._nativePath));
+
+        GC.KeepAlive(pen);
+        GC.KeepAlive(path);
     }
 
-    /// <summary>
-    /// Draws a curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawCurve(Pen pen, PointF[] points)
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, params PointF[] points) => DrawCurve(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurve(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawCurve(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawCurve(Pen pen, PointF[] points, float tension)
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, PointF[] points, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), tension);
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<PointF> points, float tension)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurve2(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawCurve2(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.PointF*)p, points.Length,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    public void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments)
-    {
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments) =>
         DrawCurve(pen, points, offset, numberOfSegments, 0.5f);
-    }
 
-    /// <summary>
-    /// Draws a curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments, float tension)
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, ReadOnlySpan<PointF> points, int offset, int numberOfSegments) =>
+        DrawCurve(pen, points, offset, numberOfSegments, 0.5f);
+#endif
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), offset, numberOfSegments, tension);
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<PointF> points, int offset, int numberOfSegments, float tension)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurve3(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawCurve3(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.PointF*)p, points.Length,
                 offset,
                 numberOfSegments,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawCurve(Pen pen, Point[] points)
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, params Point[] points) => DrawCurve(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurveI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawCurveI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawCurve(Pen pen, Point[] points, float tension)
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+    public void DrawCurve(Pen pen, Point[] points, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), tension);
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<Point> points, float tension)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurve2I(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawCurve2I(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.Point*)p, points.Length,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws a curve defined by an array of points.
+    ///  Draws a curve defined by an array of points.
     /// </summary>
-    public unsafe void DrawCurve(Pen pen, Point[] points, int offset, int numberOfSegments, float tension)
+    /// <param name="pen">The <see cref="Pen"/> to draw the curve with.</param>
+    /// <param name="points">An array of points that define the curve.</param>
+    /// <param name="offset">The index of the first point in the array to draw.</param>
+    /// <param name="numberOfSegments">The number of segments to draw.</param>
+    /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
+    public void DrawCurve(Pen pen, Point[] points, int offset, int numberOfSegments, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), offset, numberOfSegments, tension);
+
+    /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawCurve(Pen pen, ReadOnlySpan<Point> points, int offset, int numberOfSegments, float tension)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawCurve3I(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawCurve3I(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.Point*)p, points.Length,
                 offset,
                 numberOfSegments,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a closed curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawClosedCurve(Pen pen, PointF[] points)
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+    public void DrawClosedCurve(Pen pen, params PointF[] points) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawClosedCurve(Pen pen, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawClosedCurve(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawClosedCurve(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws a closed curve defined by an array of points.
+    ///  Draws a closed curve defined by an array of points.
     /// </summary>
-    public unsafe void DrawClosedCurve(Pen pen, PointF[] points, float tension, FillMode fillmode)
+    /// <param name="pen">The <see cref="Pen"/> to draw the closed curve with.</param>
+    /// <param name="points">An array of points that define the closed curve.</param>
+    /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
+    /// <param name="fillmode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the curve.</param>
+    public void DrawClosedCurve(Pen pen, PointF[] points, float tension, FillMode fillmode) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan(), tension, fillmode);
+
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawClosedCurve(Pen pen, ReadOnlySpan<PointF> points, float tension, FillMode fillmode)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawClosedCurve2(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawClosedCurve2(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.PointF*)p, points.Length,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a closed curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawClosedCurve(Pen pen, Point[] points)
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+    public void DrawClosedCurve(Pen pen, Point[] points) => DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawClosedCurve(Pen pen, ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawClosedCurveI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawClosedCurveI(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a closed curve defined by an array of points.
-    /// </summary>
-    public unsafe void DrawClosedCurve(Pen pen, Point[] points, float tension, FillMode fillmode)
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+
+    public void DrawClosedCurve(Pen pen, Point[] points, float tension, FillMode fillmode) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan(), tension, fillmode);
+
+    /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawClosedCurve(Pen pen, ReadOnlySpan<Point> points, float tension, FillMode fillmode)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawClosedCurve2I(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipDrawClosedCurve2I(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.Point*)p, points.Length,
                 tension));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Fills the entire drawing surface with the specified color.
+    ///  Fills the entire drawing surface with the specified color.
     /// </summary>
-    public void Clear(Color color)
-    {
-        Gdip.CheckStatus(Gdip.GdipGraphicsClear(new HandleRef(this, NativeGraphics), color.ToArgb()));
-    }
+    public void Clear(Color color) => CheckStatus(PInvoke.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
+        FillRoundedRectangle(brush, (RectangleF)rect, radius);
 
     /// <summary>
-    /// Fills the interior of a rectangle with a <see cref='Brush'/>.
+    ///  Fills the interior of a rounded rectangle with a <see cref='Brush'/>.
     /// </summary>
-    public void FillRectangle(Brush brush, RectangleF rect)
+    /// <param name="brush">The <see cref="Brush"/> to fill the rounded rectangle with.</param>
+    /// <param name="rect">The bounds of the rounded rectangle.</param>
+    /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
+    public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF radius)
     {
-        FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, radius);
+        FillPath(brush, path);
     }
+#endif
 
     /// <summary>
-    /// Fills the interior of a rectangle with a <see cref='Brush'/>.
+    ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
+    /// </summary>
+    public void FillRectangle(Brush brush, RectangleF rect) => FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
+
+    /// <summary>
+    ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
     /// </summary>
     public void FillRectangle(Brush brush, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(Gdip.GdipFillRectangle(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
+        CheckErrorStatus(PInvoke.GdipFillRectangle(
+            NativeGraphics,
+            brush.NativeBrush,
             x, y, width, height));
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
-    /// Fills the interior of a rectangle with a <see cref='Brush'/>.
+    ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
     /// </summary>
-    public void FillRectangle(Brush brush, Rectangle rect)
-    {
-        FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void FillRectangle(Brush brush, Rectangle rect) => FillRectangle(brush, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Fills the interior of a rectangle with a <see cref='Brush'/>.
+    ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
     /// </summary>
-    public void FillRectangle(Brush brush, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(Gdip.GdipFillRectangleI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
-            x, y, width, height));
-    }
+    public void FillRectangle(Brush brush, int x, int y, int width, int height) => FillRectangle(brush, (float)x, y, width, height);
 
     /// <summary>
-    /// Fills the interiors of a series of rectangles with a <see cref='Brush'/>.
+    ///  Fills the interiors of a series of rectangles with a <see cref='Brush'/>.
     /// </summary>
-    public unsafe void FillRectangles(Brush brush, RectangleF[] rects)
+    /// <param name="brush">The <see cref="Brush"/> to fill the rectangles with.</param>
+    /// <param name="rects">An array of rectangles to fill.</param>
+    public void FillRectangles(Brush brush, params RectangleF[] rects)
     {
-        ArgumentNullException.ThrowIfNull(brush);
         ArgumentNullException.ThrowIfNull(rects);
+        FillRectangles(brush, rects.AsSpan());
+    }
+
+    /// <inheritdoc cref="FillRectangles(Brush, RectangleF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillRectangles(Brush brush, ReadOnlySpan<RectangleF> rects)
+    {
+        ArgumentNullException.ThrowIfNull(brush);
 
         fixed (RectangleF* r = rects)
         {
-            CheckErrorStatus(Gdip.GdipFillRectangles(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                r, rects.Length));
+            CheckErrorStatus(PInvoke.GdipFillRectangles(NativeGraphics, brush.NativeBrush, (RectF*)r, rects.Length));
         }
+
+        GC.KeepAlive(brush);
     }
 
-    /// <summary>
-    /// Fills the interiors of a series of rectangles with a <see cref='Brush'/>.
-    /// </summary>
-    public unsafe void FillRectangles(Brush brush, Rectangle[] rects)
+    /// <inheritdoc cref="FillRectangles(Brush, RectangleF[])"/>
+    public void FillRectangles(Brush brush, params Rectangle[] rects) =>
+        FillRectangles(brush, rects.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="FillRectangles(Brush, RectangleF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillRectangles(Brush brush, ReadOnlySpan<Rectangle> rects)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(rects);
 
         fixed (Rectangle* r = rects)
         {
-            CheckErrorStatus(Gdip.GdipFillRectanglesI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                r, rects.Length));
+            CheckErrorStatus(PInvoke.GdipFillRectanglesI(NativeGraphics, brush.NativeBrush, (Rect*)r, rects.Length));
         }
+
+        GC.KeepAlive(brush);
     }
 
-    /// <summary>
-    /// Fills the interior of a polygon defined by an array of points.
-    /// </summary>
-    public void FillPolygon(Brush brush, PointF[] points)
-    {
-        FillPolygon(brush, points, FillMode.Alternate);
-    }
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+    public void FillPolygon(Brush brush, params PointF[] points) => FillPolygon(brush, points, FillMode.Alternate);
 
-    /// <summary>
-    /// Fills the interior of a polygon defined by an array of points.
-    /// </summary>
-    public unsafe void FillPolygon(Brush brush, PointF[] points, FillMode fillMode)
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+    public void FillPolygon(Brush brush, ReadOnlySpan<PointF> points) => FillPolygon(brush, points, FillMode.Alternate);
+#endif
+
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+    public void FillPolygon(Brush brush, PointF[] points, FillMode fillMode) =>
+        FillPolygon(brush, points.OrThrowIfNull().AsSpan(), fillMode);
+
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillPolygon(Brush brush, ReadOnlySpan<PointF> points, FillMode fillMode)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillPolygon(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length,
-                fillMode));
+            CheckErrorStatus(PInvoke.GdipFillPolygon(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.PointF*)p, points.Length,
+                (GdiPlus.FillMode)fillMode));
         }
+
+        GC.KeepAlive(brush);
     }
 
-    /// <summary>
-    /// Fills the interior of a polygon defined by an array of points.
-    /// </summary>
-    public void FillPolygon(Brush brush, Point[] points)
-    {
-        FillPolygon(brush, points, FillMode.Alternate);
-    }
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+    public void FillPolygon(Brush brush, Point[] points) => FillPolygon(brush, points, FillMode.Alternate);
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+    public void FillPolygon(Brush brush, ReadOnlySpan<Point> points) => FillPolygon(brush, points, FillMode.Alternate);
+#endif
 
     /// <summary>
-    /// Fills the interior of a polygon defined by an array of points.
+    ///  Fills the interior of a polygon defined by an array of points.
     /// </summary>
-    public unsafe void FillPolygon(Brush brush, Point[] points, FillMode fillMode)
+    /// <param name="brush">The <see cref="Brush"/> to fill the polygon with.</param>
+    /// <param name="points">An array points that represent the vertices of the polygon.</param>
+    /// <param name="fillMode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the polygon.</param>
+    public void FillPolygon(Brush brush, Point[] points, FillMode fillMode) =>
+        FillPolygon(brush, points.OrThrowIfNull().AsSpan(), fillMode);
+
+    /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillPolygon(Brush brush, ReadOnlySpan<Point> points, FillMode fillMode)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillPolygonI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length,
-                fillMode));
+            CheckErrorStatus(PInvoke.GdipFillPolygonI(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.Point*)p, points.Length,
+                (GdiPlus.FillMode)fillMode));
         }
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
-    /// Fills the interior of an ellipse defined by a bounding rectangle.
+    ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void FillEllipse(Brush brush, RectangleF rect)
-    {
-        FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void FillEllipse(Brush brush, RectangleF rect) => FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Fills the interior of an ellipse defined by a bounding rectangle.
+    ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
     public void FillEllipse(Brush brush, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(Gdip.GdipFillEllipse(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
+        CheckErrorStatus(PInvoke.GdipFillEllipse(
+            NativeGraphics,
+            brush.NativeBrush,
             x, y, width, height));
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
-    /// Fills the interior of an ellipse defined by a bounding rectangle.
+    ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void FillEllipse(Brush brush, Rectangle rect)
-    {
-        FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void FillEllipse(Brush brush, Rectangle rect) => FillEllipse(brush, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
-    /// Fills the interior of an ellipse defined by a bounding rectangle.
+    ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void FillEllipse(Brush brush, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(Gdip.GdipFillEllipseI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
-            x, y, width, height));
-    }
+    public void FillEllipse(Brush brush, int x, int y, int width, int height) => FillEllipse(brush, (float)x, y, width, height);
 
     /// <summary>
-    /// Fills the interior of a pie section defined by an ellipse and two radial lines.
+    ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
-    public void FillPie(Brush brush, Rectangle rect, float startAngle, float sweepAngle)
-    {
+    public void FillPie(Brush brush, Rectangle rect, float startAngle, float sweepAngle) =>
         FillPie(brush, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
-    /// Fills the interior of a pie section defined by an ellipse and two radial lines.
+    ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     /// <param name="brush">A Brush that determines the characteristics of the fill.</param>
     /// <param name="rect">A Rectangle structure that represents the bounding rectangle that defines the ellipse from which the pie section comes.</param>
     /// <param name="startAngle">Angle in degrees measured clockwise from the x-axis to the first side of the pie section.</param>
     /// <param name="sweepAngle">Angle in degrees measured clockwise from the <paramref name="startAngle"/> parameter to the second side of the pie section.</param>
-    public void FillPie(Brush brush, RectangleF rect, float startAngle, float sweepAngle)
-    {
+    public void FillPie(Brush brush, RectangleF rect, float startAngle, float sweepAngle) =>
         FillPie(brush, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     /// <summary>
-    /// Fills the interior of a pie section defined by an ellipse and two radial lines.
+    ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     public void FillPie(Brush brush, float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(Gdip.GdipFillPie(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
+        CheckErrorStatus(PInvoke.GdipFillPie(
+            NativeGraphics,
+            brush.NativeBrush,
             x, y, width, height,
             startAngle,
             sweepAngle));
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
-    /// Fills the interior of a pie section defined by an ellipse and two radial lines.
+    ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     public void FillPie(Brush brush, int x, int y, int width, int height, int startAngle, int sweepAngle)
+        => FillPie(brush, (float)x, y, width, height, startAngle, sweepAngle);
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, params PointF[] points) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillClosedCurve(Brush brush, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(Gdip.GdipFillPieI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-    }
-
-    /// <summary>
-    /// Fills the interior a closed curve defined by an array of points.
-    /// </summary>
-    public unsafe void FillClosedCurve(Brush brush, PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillClosedCurve(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipFillClosedCurve(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(brush);
     }
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode) =>
+        FillClosedCurve(brush, points, fillmode, 0.5f);
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, ReadOnlySpan<PointF> points, FillMode fillmode) =>
+        FillClosedCurve(brush, points, fillmode, 0.5f);
+#endif
 
     /// <summary>
-    /// Fills the interior of a closed curve defined by an array of points.
+    ///  Fills the interior of a closed curve defined by an array of points.
     /// </summary>
-    public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode)
-    {
-        FillClosedCurve(brush, points, fillmode, 0.5f);
-    }
+    /// <param name="brush">The <see cref="Brush"/> to fill the closed curve with.</param>
+    /// <param name="points">An array of points that make up the closed curve.</param>
+    /// <param name="fillmode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the closed curve.</param>
+    /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
+    public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode, float tension) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan(), fillmode, tension);
 
-    public unsafe void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode, float tension)
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillClosedCurve(Brush brush, ReadOnlySpan<PointF> points, FillMode fillmode, float tension)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillClosedCurve2(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipFillClosedCurve2(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.PointF*)p, points.Length,
                 tension,
-                fillmode));
+                (GdiPlus.FillMode)fillmode));
         }
+
+        GC.KeepAlive(brush);
     }
 
-    /// <summary>
-    /// Fills the interior a closed curve defined by an array of points.
-    /// </summary>
-    public unsafe void FillClosedCurve(Brush brush, Point[] points)
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, params Point[] points) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillClosedCurve(Brush brush, ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillClosedCurveI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipFillClosedCurveI(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(brush);
     }
 
-    public void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode)
-    {
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode) =>
         FillClosedCurve(brush, points, fillmode, 0.5f);
-    }
 
-    public unsafe void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode, float tension)
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, ReadOnlySpan<Point> points, FillMode fillmode) =>
+        FillClosedCurve(brush, points, fillmode, 0.5f);
+
+#endif
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+    public void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode, float tension) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan(), fillmode, tension);
+
+    /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void FillClosedCurve(Brush brush, ReadOnlySpan<Point> points, FillMode fillmode, float tension)
     {
         ArgumentNullException.ThrowIfNull(brush);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipFillClosedCurve2I(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(brush, brush.NativeBrush),
-                p, points.Length,
+            CheckErrorStatus(PInvoke.GdipFillClosedCurve2I(
+                NativeGraphics,
+                brush.NativeBrush,
+                (GdiPlus.Point*)p, points.Length,
                 tension,
-                fillmode));
+                (GdiPlus.FillMode)fillmode));
         }
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
@@ -1656,17 +1571,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
     /// </exception>
-    public void DrawString(string? s, Font font, Brush brush, float x, float y)
-    {
+    public void DrawString(string? s, Font font, Brush brush, float x, float y) =>
         DrawString(s, font, brush, new RectangleF(x, y, 0, 0), null);
-    }
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="DrawString(string?, Font, Brush, float, float)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y)
-    {
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y) =>
         DrawString(s, font, brush, new RectangleF(x, y, 0, 0), null);
-    }
 #endif
 
     /// <summary>
@@ -1680,17 +1591,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
     /// </exception>
-    public void DrawString(string? s, Font font, Brush brush, PointF point)
-    {
+    public void DrawString(string? s, Font font, Brush brush, PointF point) =>
         DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), null);
-    }
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="DrawString(string?, Font, Brush, PointF)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point)
-    {
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point) =>
         DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), null);
-    }
 #endif
 
     /// <summary>
@@ -1709,17 +1616,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
     /// </exception>
-    public void DrawString(string? s, Font font, Brush brush, float x, float y, StringFormat? format)
-    {
+    public void DrawString(string? s, Font font, Brush brush, float x, float y, StringFormat? format) =>
         DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
-    }
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="DrawString(string?, Font, Brush, float, float, StringFormat?)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y, StringFormat? format)
-    {
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y, StringFormat? format) =>
         DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
-    }
 #endif
 
     /// <summary>
@@ -1737,17 +1640,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
     /// </exception>
-    public void DrawString(string? s, Font font, Brush brush, PointF point, StringFormat? format)
-    {
+    public void DrawString(string? s, Font font, Brush brush, PointF point, StringFormat? format) =>
         DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
-    }
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="DrawString(string?, Font, Brush, PointF, StringFormat?)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point, StringFormat? format)
-    {
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point, StringFormat? format) =>
         DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
-    }
 #endif
 
     /// <summary>
@@ -1770,10 +1669,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     ///   a <see cref="StringFormat"/>.
     ///  </para>
     /// </remarks>
-    public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle)
-    {
+    public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle) =>
         DrawString(s, font, brush, layoutRectangle, null);
-    }
 
 #if NET8_0_OR_GREATER
     /// <remarks>
@@ -1786,10 +1683,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     ///  </para>
     /// </remarks>
     /// <inheritdoc cref="DrawString(string?, Font, Brush, RectangleF)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle)
-    {
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle) =>
         DrawString(s, font, brush, layoutRectangle, null);
-    }
 #endif
 
     /// <summary>
@@ -1814,26 +1709,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     ///   truncated at the nearest word, unless otherwise specified with the <paramref name="format"/> parameter.
     ///  </para>
     /// </remarks>
-    public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-        if (string.IsNullOrEmpty(s))
-            return;
-        ArgumentNullException.ThrowIfNull(font);
-
-        CheckErrorStatus(Gdip.GdipDrawString(
-            new HandleRef(this, NativeGraphics),
-            s,
-            s.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layoutRectangle,
-            new HandleRef(format, format?.nativeFormat ?? IntPtr.Zero),
-            new HandleRef(brush, brush.NativeBrush)));
-    }
+    public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format) =>
+        DrawStringInternal(s, font, brush, layoutRectangle, format);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="DrawString(string?, Font, Brush, RectangleF, StringFormat?)"/>
-    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format)
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format) =>
+        DrawStringInternal(s, font, brush, layoutRectangle, format);
+#endif
+
+    private void DrawStringInternal(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
@@ -1844,16 +1729,21 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
         ArgumentNullException.ThrowIfNull(font);
 
-        CheckErrorStatus(Gdip.GdipDrawString(
-            new HandleRef(this, NativeGraphics),
-            s,
-            s.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layoutRectangle,
-            new HandleRef(format, format?.nativeFormat ?? IntPtr.Zero),
-            new HandleRef(brush, brush.NativeBrush)));
+        fixed (char* c = s)
+        {
+            CheckErrorStatus(PInvoke.GdipDrawString(
+                NativeGraphics,
+                c, s.Length,
+                font.NativeFont,
+                (RectF*)&layoutRectangle,
+                format.Pointer(),
+                brush.NativeBrush));
+        }
+
+        GC.KeepAlive(font);
+        GC.KeepAlive(brush);
+        GC.KeepAlive(format);
     }
-#endif
 
     /// <param name="charactersFitted">Number of characters in the text.</param>
     /// <param name="linesFilled">Number of lines in the text.</param>
@@ -1864,34 +1754,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         SizeF layoutArea,
         StringFormat? stringFormat,
         out int charactersFitted,
-        out int linesFilled)
-    {
-        if (string.IsNullOrEmpty(text))
-        {
-            charactersFitted = 0;
-            linesFilled = 0;
-            return SizeF.Empty;
-        }
-
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
-
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
-        RectangleF boundingBox = default;
-
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out charactersFitted,
-            out linesFilled));
-
-        return boundingBox.Size;
-    }
+        out int linesFilled) =>
+        MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out charactersFitted, out linesFilled);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?, out int, out int)"/>
@@ -1899,6 +1763,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         ReadOnlySpan<char> text,
         Font font,
         SizeF layoutArea,
+        StringFormat? stringFormat,
+        out int charactersFitted,
+        out int linesFilled) =>
+        MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out charactersFitted, out linesFilled);
+#endif
+
+    public SizeF MeasureStringInternal(
+        ReadOnlySpan<char> text,
+        Font font,
+        RectangleF layoutArea,
         StringFormat? stringFormat,
         out int charactersFitted,
         out int linesFilled)
@@ -1910,78 +1784,41 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             return SizeF.Empty;
         }
 
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
+        ArgumentNullException.ThrowIfNull(font);
 
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
-        RectangleF boundingBox = default;
+        RectF boundingBox = default;
 
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out charactersFitted,
-            out linesFilled));
+        fixed (char* c = text)
+        fixed (int* fitted = &charactersFitted)
+        fixed (int* filled = &linesFilled)
+        {
+            CheckStatus(PInvoke.GdipMeasureString(
+                NativeGraphics,
+                c,
+                text.Length,
+                font.NativeFont,
+                (RectF*)&layoutArea,
+                stringFormat.Pointer(),
+                &boundingBox,
+                fitted,
+                filled));
+        }
 
-        return boundingBox.Size;
+        GC.KeepAlive(font);
+        GC.KeepAlive(stringFormat);
+
+        return new SizeF(boundingBox.Width, boundingBox.Height);
     }
-#endif
 
     /// <param name="origin"><see cref="PointF"/> structure that represents the upper-left corner of the text.</param>
     /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
     public SizeF MeasureString(string? text, Font font, PointF origin, StringFormat? stringFormat)
-    {
-        if (string.IsNullOrEmpty(text))
-            return SizeF.Empty;
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
-
-        RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
-        RectangleF boundingBox = default;
-
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out _,
-            out _));
-
-        return boundingBox.Size;
-    }
+        => MeasureStringInternal(text, font, new(origin, default), stringFormat, out _, out _);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font, PointF, StringFormat?)"/>
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font, PointF origin, StringFormat? stringFormat)
-    {
-        if (text.IsEmpty)
-            return SizeF.Empty;
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
-
-        RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
-        RectangleF boundingBox = default;
-
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out _,
-            out _));
-
-        return boundingBox.Size;
-    }
+        => MeasureStringInternal(text, font, new(origin, default), stringFormat, out _, out _);
 #endif
 
     /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
@@ -1995,55 +1832,13 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
     /// <param name="layoutArea"><see cref="SizeF"/> structure that specifies the maximum layout area for the text.</param>
     /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
-    public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat)
-    {
-        if (string.IsNullOrEmpty(text))
-            return SizeF.Empty;
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
-
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
-        RectangleF boundingBox = default;
-
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out _,
-            out _));
-
-        return boundingBox.Size;
-    }
+    public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat) =>
+        MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out _, out _);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
-    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea, StringFormat? stringFormat)
-    {
-        if (text.IsEmpty)
-            return SizeF.Empty;
-        if (font == null)
-            throw new ArgumentNullException(nameof(font));
-
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
-        RectangleF boundingBox = default;
-
-        Gdip.CheckStatus(Gdip.GdipMeasureString(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layout,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            ref boundingBox,
-            out _,
-            out _));
-
-        return boundingBox.Size;
-    }
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea, StringFormat? stringFormat) =>
+        MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out _, out _);
 #endif
 
     /// <summary>
@@ -2070,47 +1865,32 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     ///  </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="font"/> is null.</exception>
-    public SizeF MeasureString(string? text, Font font)
-    {
-        return MeasureString(text, font, new SizeF(0, 0));
-    }
+    public SizeF MeasureString(string? text, Font font) => MeasureString(text, font, new SizeF(0, 0));
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font)"/>
-    public SizeF MeasureString(ReadOnlySpan<char> text, Font font)
-    {
-        return MeasureString(text, font, new SizeF(0, 0));
-    }
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font) => MeasureString(text, font, new SizeF(0, 0));
 #endif
 
     /// <param name="width">Maximum width of the string in pixels.</param>
     /// <inheritdoc cref="MeasureString(string?, Font)"/>
-    public SizeF MeasureString(string? text, Font font, int width)
-    {
-        return MeasureString(text, font, new SizeF(width, 999999));
-    }
+    public SizeF MeasureString(string? text, Font font, int width) => MeasureString(text, font, new SizeF(width, 999999));
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
-    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width)
-    {
-        return MeasureString(text, font, new SizeF(width, 999999));
-    }
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width) =>
+        MeasureString(text, font, new SizeF(width, 999999));
 #endif
 
     /// <param name="format"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
     /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
-    public SizeF MeasureString(string? text, Font font, int width, StringFormat? format)
-    {
-        return MeasureString(text, font, new SizeF(width, 999999), format);
-    }
+    public SizeF MeasureString(string? text, Font font, int width, StringFormat? format) =>
+        MeasureString(text, font, new SizeF(width, 999999), format);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
-    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width, StringFormat? format)
-    {
-        return MeasureString(text, font, new SizeF(width, 999999), format);
-    }
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width, StringFormat? format) =>
+        MeasureString(text, font, new SizeF(width, 999999), format);
 #endif
 
     /// <summary>
@@ -2132,53 +1912,35 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     ///  </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
-    public Region[] MeasureCharacterRanges(string? text, Font font, RectangleF layoutRect, StringFormat? stringFormat)
-    {
-        if (string.IsNullOrEmpty(text))
-            return Array.Empty<Region>();
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
-
-        Gdip.CheckStatus(Gdip.GdipGetStringFormatMeasurableCharacterRangeCount(
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            out int count));
-
-        IntPtr[] gpRegions = new IntPtr[count];
-        Region[] regions = new Region[count];
-
-        for (int f = 0; f < count; f++)
-        {
-            regions[f] = new Region();
-            gpRegions[f] = regions[f].NativeRegion;
-        }
-
-        Gdip.CheckStatus(Gdip.GdipMeasureCharacterRanges(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layoutRect,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            count,
-            gpRegions));
-
-        return regions;
-    }
+    public Region[] MeasureCharacterRanges(string? text, Font font, RectangleF layoutRect, StringFormat? stringFormat) =>
+        MeasureCharacterRangesInternal(text, font, layoutRect, stringFormat);
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc cref="MeasureCharacterRanges(string?, Font, RectangleF, StringFormat?)"/>
-    public Region[] MeasureCharacterRanges(ReadOnlySpan<char> text, Font font, RectangleF layoutRect, StringFormat? stringFormat)
+    public Region[] MeasureCharacterRanges(ReadOnlySpan<char> text, Font font, RectangleF layoutRect, StringFormat? stringFormat) =>
+        MeasureCharacterRangesInternal(text, font, layoutRect, stringFormat);
+#endif
+
+    private Region[] MeasureCharacterRangesInternal(
+        ReadOnlySpan<char> text,
+        Font font,
+        RectF layoutRect,
+        StringFormat? stringFormat)
     {
         if (text.IsEmpty)
-            return Array.Empty<Region>();
-        if (font is null)
-            throw new ArgumentNullException(nameof(font));
+            return [];
 
-        Gdip.CheckStatus(Gdip.GdipGetStringFormatMeasurableCharacterRangeCount(
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            out int count));
+        ArgumentNullException.ThrowIfNull(font);
 
-        IntPtr[] gpRegions = new IntPtr[count];
+        int count;
+        CheckStatus(PInvoke.GdipGetStringFormatMeasurableCharacterRangeCount(stringFormat.Pointer(), &count));
+
+        if (count == 0)
+        {
+            return [];
+        }
+
+        GpRegion*[] gpRegions = new GpRegion*[count];
         Region[] regions = new Region[count];
 
         for (int f = 0; f < count; f++)
@@ -2187,116 +1949,64 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             gpRegions[f] = regions[f].NativeRegion;
         }
 
-        Gdip.CheckStatus(Gdip.GdipMeasureCharacterRanges(
-            new HandleRef(this, NativeGraphics),
-            text,
-            text.Length,
-            new HandleRef(font, font.NativeFont),
-            ref layoutRect,
-            new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
-            count,
-            gpRegions));
+        fixed (char* c = text)
+        fixed (GpRegion** r = gpRegions)
+        {
+            CheckStatus(PInvoke.GdipMeasureCharacterRanges(
+                NativeGraphics,
+                c,
+                text.Length,
+                font.NativeFont,
+                &layoutRect,
+                stringFormat.Pointer(),
+                count,
+                r));
+        }
+
+        GC.KeepAlive(stringFormat);
+        GC.KeepAlive(font);
 
         return regions;
     }
-#endif
-
 
     /// <summary>
-    /// Draws the specified image at the specified location.
+    ///  Draws the specified image at the specified location.
     /// </summary>
-    public void DrawImage(Image image, PointF point)
-    {
-        DrawImage(image, point.X, point.Y);
-    }
+    public void DrawImage(Image image, PointF point) => DrawImage(image, point.X, point.Y);
 
     public void DrawImage(Image image, float x, float y)
     {
         ArgumentNullException.ThrowIfNull(image);
-
-        int status = Gdip.GdipDrawImage(
-            new HandleRef(this, NativeGraphics), new HandleRef(image, image._nativeImage),
-            x, y);
-
+        Status status = PInvoke.GdipDrawImage(NativeGraphics, image.Pointer(), x, y);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
 
-    public void DrawImage(Image image, RectangleF rect)
-    {
-        DrawImage(image, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawImage(Image image, RectangleF rect) => DrawImage(image, rect.X, rect.Y, rect.Width, rect.Height);
 
     public void DrawImage(Image image, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(image);
-
-        int status = Gdip.GdipDrawImageRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            x, y,
-            width, height);
-
+        Status status = PInvoke.GdipDrawImageRect(NativeGraphics, image.Pointer(), x, y, width, height);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
 
-    public void DrawImage(Image image, Point point)
-    {
-        DrawImage(image, point.X, point.Y);
-    }
+    public void DrawImage(Image image, Point point) => DrawImage(image, (float)point.X, point.Y);
 
-    public void DrawImage(Image image, int x, int y)
-    {
-        ArgumentNullException.ThrowIfNull(image);
+    public void DrawImage(Image image, int x, int y) => DrawImage(image, (float)x, y);
 
-        int status = Gdip.GdipDrawImageI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            x, y);
+    public void DrawImage(Image image, Rectangle rect) => DrawImage(image, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+    public void DrawImage(Image image, int x, int y, int width, int height) => DrawImage(image, (float)x, y, width, height);
 
-    public void DrawImage(Image image, Rectangle rect)
-    {
-        DrawImage(image, rect.X, rect.Y, rect.Width, rect.Height);
-    }
+    public void DrawImageUnscaled(Image image, Point point) => DrawImage(image, point.X, point.Y);
 
-    public void DrawImage(Image image, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(image);
+    public void DrawImageUnscaled(Image image, int x, int y) => DrawImage(image, x, y);
 
-        int status = Gdip.GdipDrawImageRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            x, y,
-            width, height);
+    public void DrawImageUnscaled(Image image, Rectangle rect) => DrawImage(image, rect.X, rect.Y);
 
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
-
-    public void DrawImageUnscaled(Image image, Point point)
-    {
-        DrawImage(image, point.X, point.Y);
-    }
-
-    public void DrawImageUnscaled(Image image, int x, int y)
-    {
-        DrawImage(image, x, y);
-    }
-
-    public void DrawImageUnscaled(Image image, Rectangle rect)
-    {
-        DrawImage(image, rect.X, rect.Y);
-    }
-
-    public void DrawImageUnscaled(Image image, int x, int y, int width, int height)
-    {
-        DrawImage(image, x, y);
-    }
+    public void DrawImageUnscaled(Image image, int x, int y, int width, int height) => DrawImage(image, x, y);
 
     public void DrawImageUnscaledAndClipped(Image image, Rectangle rect)
     {
@@ -2310,53 +2020,46 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         DrawImage(image, rect, 0, 0, width, height, GraphicsUnit.Pixel);
     }
 
-    // Affine or perspective blt
-    //  destPoints.Length = 3: rect => parallelogram
-    // destPoints[0] <=> top-left corner of the source rectangle
-    //      destPoints[1] <=> top-right corner
-    //       destPoints[2] <=> bottom-left corner
-    //  destPoints.Length = 4: rect => quad
-    // destPoints[3] <=> bottom-right corner
-    //
-    //  @notes Perspective blt only works for bitmap images.
-
-    public unsafe void DrawImage(Image image, PointF[] destPoints)
+    public void DrawImage(Image image, PointF[] destPoints)
     {
+        // Affine or perspective blt
+        //
+        //  destPoints.Length = 3: rect => parallelogram
+        //      destPoints[0] <=> top-left corner of the source rectangle
+        //      destPoints[1] <=> top-right corner
+        //      destPoints[2] <=> bottom-left corner
+        //  destPoints.Length = 4: rect => quad
+        //      destPoints[3] <=> bottom-right corner
+        //
+        //  @notes Perspective blt only works for bitmap images.
+
         ArgumentNullException.ThrowIfNull(image);
         ArgumentNullException.ThrowIfNull(destPoints);
 
         int count = destPoints.Length;
-        if (count != 3 && count != 4)
+        if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
         fixed (PointF* p = destPoints)
         {
-            int status = Gdip.GdipDrawImagePoints(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image._nativeImage),
-                p, count);
-
+            Status status = PInvoke.GdipDrawImagePoints(NativeGraphics, image.Pointer(), (GdiPlus.PointF*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
     }
 
-    public unsafe void DrawImage(Image image, Point[] destPoints)
+    public void DrawImage(Image image, Point[] destPoints)
     {
         ArgumentNullException.ThrowIfNull(image);
         ArgumentNullException.ThrowIfNull(destPoints);
 
         int count = destPoints.Length;
-        if (count != 3 && count != 4)
+        if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
         fixed (Point* p = destPoints)
         {
-            int status = Gdip.GdipDrawImagePointsI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image._nativeImage),
-                p, count);
-
+            Status status = PInvoke.GdipDrawImagePointsI(NativeGraphics, image.Pointer(), (GdiPlus.Point*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -2366,98 +2069,69 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        int status = Gdip.GdipDrawImagePointRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
+        Status status = PInvoke.GdipDrawImagePointRect(
+            NativeGraphics,
+            image.Pointer(),
             x, y,
             srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-            (int)srcUnit);
+            (Unit)srcUnit);
 
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
 
     public void DrawImage(Image image, int x, int y, Rectangle srcRect, GraphicsUnit srcUnit)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-
-        int status = Gdip.GdipDrawImagePointRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            x, y,
-            srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-            (int)srcUnit);
-
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+        => DrawImage(image, x, y, (RectangleF)srcRect, srcUnit);
 
     public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        int status = Gdip.GdipDrawImageRectRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
+        Status status = PInvoke.GdipDrawImageRectRect(
+            NativeGraphics,
+            image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
             srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-            srcUnit,
-            NativeMethods.NullHandleRef,
-            null,
-            NativeMethods.NullHandleRef);
+            (Unit)srcUnit,
+            imageAttributes: null,
+            callback: 0,
+            callbackData: null);
 
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
 
     public void DrawImage(Image image, Rectangle destRect, Rectangle srcRect, GraphicsUnit srcUnit)
-    {
-        ArgumentNullException.ThrowIfNull(image);
+        => DrawImage(image, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, srcUnit);
 
-        int status = Gdip.GdipDrawImageRectRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            destRect.X, destRect.Y, destRect.Width, destRect.Height,
-            srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-            srcUnit,
-            NativeMethods.NullHandleRef,
-            null,
-            NativeMethods.NullHandleRef);
-
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
-
-    public unsafe void DrawImage(Image image, PointF[] destPoints, RectangleF srcRect, GraphicsUnit srcUnit)
+    public void DrawImage(Image image, PointF[] destPoints, RectangleF srcRect, GraphicsUnit srcUnit)
     {
         ArgumentNullException.ThrowIfNull(image);
         ArgumentNullException.ThrowIfNull(destPoints);
 
         int count = destPoints.Length;
-        if (count != 3 && count != 4)
+        if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
         fixed (PointF* p = destPoints)
         {
-            int status = Gdip.GdipDrawImagePointsRect(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image._nativeImage),
-                p, destPoints.Length,
+            Status status = PInvoke.GdipDrawImagePointsRect(
+                NativeGraphics,
+                image.Pointer(),
+                (GdiPlus.PointF*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-                srcUnit,
-                NativeMethods.NullHandleRef,
-                null,
-                NativeMethods.NullHandleRef);
+                (Unit)srcUnit,
+                imageAttributes: null,
+                callback: 0,
+                callbackData: null);
 
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
     }
 
-    public void DrawImage(Image image, PointF[] destPoints, RectangleF srcRect, GraphicsUnit srcUnit, ImageAttributes? imageAttr)
-    {
+    public void DrawImage(Image image, PointF[] destPoints, RectangleF srcRect, GraphicsUnit srcUnit, ImageAttributes? imageAttr) =>
         DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, null, 0);
-    }
 
     public void DrawImage(
         Image image,
@@ -2465,12 +2139,10 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         RectangleF srcRect,
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttr,
-        DrawImageAbort? callback)
-    {
+        DrawImageAbort? callback) =>
         DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, callback, 0);
-    }
 
-    public unsafe void DrawImage(
+    public void DrawImage(
         Image image,
         PointF[] destPoints,
         RectangleF srcRect,
@@ -2483,40 +2155,37 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         ArgumentNullException.ThrowIfNull(destPoints);
 
         int count = destPoints.Length;
-        if (count != 3 && count != 4)
+        if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
         fixed (PointF* p = destPoints)
         {
-            int status = Gdip.GdipDrawImagePointsRect(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image._nativeImage),
-                p, destPoints.Length,
+            Status status = PInvoke.GdipDrawImagePointsRect(
+                NativeGraphics,
+                image.Pointer(),
+                (GdiPlus.PointF*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-                srcUnit,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero),
-                callback,
-                new HandleRef(null, (IntPtr)callbackData));
+                (Unit)srcUnit,
+                imageAttr.Pointer(),
+                callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+                (void*)(nint)callbackData);
 
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(callback);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
     }
 
-    public void DrawImage(Image image, Point[] destPoints, Rectangle srcRect, GraphicsUnit srcUnit)
-    {
+    public void DrawImage(Image image, Point[] destPoints, Rectangle srcRect, GraphicsUnit srcUnit) =>
         DrawImage(image, destPoints, srcRect, srcUnit, null, null, 0);
-    }
 
     public void DrawImage(
         Image image,
         Point[] destPoints,
         Rectangle srcRect,
         GraphicsUnit srcUnit,
-        ImageAttributes? imageAttr)
-    {
-        DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, null, 0);
-    }
+        ImageAttributes? imageAttr) => DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, null, 0);
 
     public void DrawImage(
         Image image,
@@ -2524,12 +2193,9 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Rectangle srcRect,
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttr,
-        DrawImageAbort? callback)
-    {
-        DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, callback, 0);
-    }
+        DrawImageAbort? callback) => DrawImage(image, destPoints, srcRect, srcUnit, imageAttr, callback, 0);
 
-    public unsafe void DrawImage(
+    public void DrawImage(
         Image image,
         Point[] destPoints,
         Rectangle srcRect,
@@ -2542,20 +2208,23 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         ArgumentNullException.ThrowIfNull(destPoints);
 
         int count = destPoints.Length;
-        if (count != 3 && count != 4)
+        if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
         fixed (Point* p = destPoints)
         {
-            int status = Gdip.GdipDrawImagePointsRectI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image._nativeImage),
-                p, destPoints.Length,
+            Status status = PInvoke.GdipDrawImagePointsRectI(
+                NativeGraphics,
+                image.Pointer(),
+                (GdiPlus.Point*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-                srcUnit,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero),
-                callback,
-                new HandleRef(null, (IntPtr)callbackData));
+                (Unit)srcUnit,
+                imageAttr.Pointer(),
+                callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+                (void*)(nint)callbackData);
+
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(callback);
 
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
@@ -2569,10 +2238,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         float srcY,
         float srcWidth,
         float srcHeight,
-        GraphicsUnit srcUnit)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, null);
-    }
+        GraphicsUnit srcUnit) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, null);
 
     public void DrawImage(
         Image image,
@@ -2582,10 +2248,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         float srcWidth,
         float srcHeight,
         GraphicsUnit srcUnit,
-        ImageAttributes? imageAttrs)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, null);
-    }
+        ImageAttributes? imageAttrs) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, null);
 
     public void DrawImage(
         Image image,
@@ -2596,10 +2259,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         float srcHeight,
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttrs,
-        DrawImageAbort? callback)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, callback, IntPtr.Zero);
-    }
+        DrawImageAbort? callback) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, callback, IntPtr.Zero);
 
     public void DrawImage(
         Image image,
@@ -2615,16 +2275,18 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        int status = Gdip.GdipDrawImageRectRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
+        Status status = PInvoke.GdipDrawImageRectRect(
+            NativeGraphics,
+            image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
             srcX, srcY, srcWidth, srcHeight,
-            srcUnit,
-            new HandleRef(imageAttrs, imageAttrs?.nativeImageAttributes ?? IntPtr.Zero),
-            callback,
-            new HandleRef(null, callbackData));
+            (Unit)srcUnit,
+            imageAttrs.Pointer(),
+            callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+            (void*)callbackData);
 
+        GC.KeepAlive(imageAttrs);
+        GC.KeepAlive(callback);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
@@ -2636,10 +2298,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int srcY,
         int srcWidth,
         int srcHeight,
-        GraphicsUnit srcUnit)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, null);
-    }
+        GraphicsUnit srcUnit) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, null);
 
     public void DrawImage(
         Image image,
@@ -2649,10 +2308,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int srcWidth,
         int srcHeight,
         GraphicsUnit srcUnit,
-        ImageAttributes? imageAttr)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, null);
-    }
+        ImageAttributes? imageAttr) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, null);
 
     public void DrawImage(
         Image image,
@@ -2663,10 +2319,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int srcHeight,
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttr,
-        DrawImageAbort? callback)
-    {
-        DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, callback, IntPtr.Zero);
-    }
+        DrawImageAbort? callback) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, callback, IntPtr.Zero);
 
     public void DrawImage(
         Image image,
@@ -2678,184 +2331,145 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttrs,
         DrawImageAbort? callback,
-        IntPtr callbackData)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-
-        int status = Gdip.GdipDrawImageRectRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(image, image._nativeImage),
-            destRect.X, destRect.Y, destRect.Width, destRect.Height,
-            srcX, srcY, srcWidth, srcHeight,
-            srcUnit,
-            new HandleRef(imageAttrs, imageAttrs?.nativeImageAttributes ?? IntPtr.Zero),
-            callback,
-            new HandleRef(null, callbackData));
-
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+        IntPtr callbackData) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, callback, callbackData);
 
     /// <summary>
-    /// Draws a line connecting the two specified points.
+    ///  Draws a line connecting the two specified points.
     /// </summary>
-    public void DrawLine(Pen pen, PointF pt1, PointF pt2)
-    {
-        DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
-    }
+    public void DrawLine(Pen pen, PointF pt1, PointF pt2) => DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
 
-    /// <summary>
-    /// Draws a series of line segments that connect an array of points.
-    /// </summary>
-    public unsafe void DrawLines(Pen pen, PointF[] points)
+    /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
+    public void DrawLines(Pen pen, PointF[] points) => DrawLines(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawLines(Pen pen, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawLines(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawLines(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
-    }
 
-
-    /// <summary>
-    /// Draws a line connecting the two specified points.
-    /// </summary>
-    public void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawLineI(new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen), x1, y1, x2, y2));
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws a line connecting the two specified points.
+    ///  Draws a line connecting the two specified points.
     /// </summary>
-    public void DrawLine(Pen pen, Point pt1, Point pt2)
-    {
-        DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
-    }
+    public void DrawLine(Pen pen, int x1, int y1, int x2, int y2) =>
+        DrawLine(pen, (float)x1, y1, x2, y2);
 
     /// <summary>
-    /// Draws a series of line segments that connect an array of points.
+    ///  Draws a line connecting the two specified points.
     /// </summary>
-    public unsafe void DrawLines(Pen pen, Point[] points)
+    public void DrawLine(Pen pen, Point pt1, Point pt2) => DrawLine(pen, (float)pt1.X, pt1.Y, pt2.X, pt2.Y);
+
+    /// <summary>
+    ///  Draws a series of line segments that connect an array of points.
+    /// </summary>
+    /// <param name="pen">The <see cref="Pen"/> that determines the color, width, and style of the line segments.</param>
+    /// <param name="points">An array of points to connect.</param>
+    public void DrawLines(Pen pen, params Point[] points)
     {
         ArgumentNullException.ThrowIfNull(pen);
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawLinesI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p,
-                points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
+    }
+
+    /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawLines(Pen pen, ReadOnlySpan<Point> points)
+    {
+        ArgumentNullException.ThrowIfNull(pen);
+
+        fixed (Point* p = points)
+        {
+            CheckErrorStatus(PInvoke.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
+        }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size.
+    ///  CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size.
     /// </summary>
-    public void CopyFromScreen(Point upperLeftSource, Point upperLeftDestination, Size blockRegionSize)
-    {
+    public void CopyFromScreen(Point upperLeftSource, Point upperLeftDestination, Size blockRegionSize) =>
         CopyFromScreen(upperLeftSource.X, upperLeftSource.Y, upperLeftDestination.X, upperLeftDestination.Y, blockRegionSize);
-    }
 
     /// <summary>
-    /// CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size.
+    ///  CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size.
     /// </summary>
-    public void CopyFromScreen(int sourceX, int sourceY, int destinationX, int destinationY, Size blockRegionSize)
-    {
+    public void CopyFromScreen(int sourceX, int sourceY, int destinationX, int destinationY, Size blockRegionSize) =>
         CopyFromScreen(sourceX, sourceY, destinationX, destinationY, blockRegionSize, CopyPixelOperation.SourceCopy);
-    }
 
     /// <summary>
-    /// CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size
-    /// and specified raster operation.
+    ///  CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size
+    ///  and specified raster operation.
     /// </summary>
-    public void CopyFromScreen(Point upperLeftSource, Point upperLeftDestination, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
-    {
+    public void CopyFromScreen(Point upperLeftSource, Point upperLeftDestination, Size blockRegionSize, CopyPixelOperation copyPixelOperation) =>
         CopyFromScreen(upperLeftSource.X, upperLeftSource.Y, upperLeftDestination.X, upperLeftDestination.Y, blockRegionSize, copyPixelOperation);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, PointF destPoint, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, PointF destPoint, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destPoint, callback, IntPtr.Zero);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, PointF destPoint, EnumerateMetafileProc callback, IntPtr callbackData)
-    {
+    public void EnumerateMetafile(Metafile metafile, PointF destPoint, EnumerateMetafileProc callback, IntPtr callbackData) =>
         EnumerateMetafile(metafile, destPoint, callback, callbackData, null);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, Point destPoint, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, Point destPoint, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destPoint, callback, IntPtr.Zero);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, Point destPoint, EnumerateMetafileProc callback, IntPtr callbackData)
-    {
+    public void EnumerateMetafile(Metafile metafile, Point destPoint, EnumerateMetafileProc callback, IntPtr callbackData) =>
         EnumerateMetafile(metafile, destPoint, callback, callbackData, null);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, RectangleF destRect, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, RectangleF destRect, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destRect, callback, IntPtr.Zero);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, RectangleF destRect, EnumerateMetafileProc callback, IntPtr callbackData)
-    {
+    public void EnumerateMetafile(Metafile metafile, RectangleF destRect, EnumerateMetafileProc callback, IntPtr callbackData) =>
         EnumerateMetafile(metafile, destRect, callback, callbackData, null);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, Rectangle destRect, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, Rectangle destRect, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destRect, callback, IntPtr.Zero);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, Rectangle destRect, EnumerateMetafileProc callback, IntPtr callbackData)
-    {
+    public void EnumerateMetafile(Metafile metafile, Rectangle destRect, EnumerateMetafileProc callback, IntPtr callbackData) =>
         EnumerateMetafile(metafile, destRect, callback, callbackData, null);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, PointF[] destPoints, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, PointF[] destPoints, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destPoints, callback, IntPtr.Zero);
-    }
 
     public void EnumerateMetafile(
         Metafile metafile,
         PointF[] destPoints,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destPoints, callback, IntPtr.Zero, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destPoints, callback, IntPtr.Zero, null);
 
-    public void EnumerateMetafile(Metafile metafile, Point[] destPoints, EnumerateMetafileProc callback)
-    {
+    public void EnumerateMetafile(Metafile metafile, Point[] destPoints, EnumerateMetafileProc callback) =>
         EnumerateMetafile(metafile, destPoints, callback, IntPtr.Zero);
-    }
 
-    public void EnumerateMetafile(Metafile metafile, Point[] destPoints, EnumerateMetafileProc callback, IntPtr callbackData)
-    {
+    public void EnumerateMetafile(Metafile metafile, Point[] destPoints, EnumerateMetafileProc callback, IntPtr callbackData) =>
         EnumerateMetafile(metafile, destPoints, callback, callbackData, null);
-    }
 
     public void EnumerateMetafile(
         Metafile metafile,
         PointF destPoint,
         RectangleF srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2863,20 +2477,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         RectangleF srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, callbackData, null);
 
     public void EnumerateMetafile(
         Metafile metafile,
         Point destPoint,
         Rectangle srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2884,20 +2492,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Rectangle srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destPoint, srcRect, srcUnit, callback, callbackData, null);
 
     public void EnumerateMetafile(
         Metafile metafile,
         RectangleF destRect,
         RectangleF srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2905,20 +2507,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         RectangleF srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, callbackData, null);
 
     public void EnumerateMetafile(
         Metafile metafile,
         Rectangle destRect,
         Rectangle srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2926,20 +2522,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Rectangle srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destRect, srcRect, srcUnit, callback, callbackData, null);
 
     public void EnumerateMetafile(
         Metafile metafile,
         PointF[] destPoints,
         RectangleF srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2947,20 +2537,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         RectangleF srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, callbackData, null);
 
     public void EnumerateMetafile(
         Metafile metafile,
         Point[] destPoints,
         Rectangle srcRect,
         GraphicsUnit srcUnit,
-        EnumerateMetafileProc callback)
-    {
-        EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, IntPtr.Zero);
-    }
+        EnumerateMetafileProc callback) => EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, IntPtr.Zero);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -2968,104 +2552,107 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Rectangle srcRect,
         GraphicsUnit srcUnit,
         EnumerateMetafileProc callback,
-        IntPtr callbackData)
-    {
-        EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, callbackData, null);
-    }
+        IntPtr callbackData) => EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, callbackData, null);
 
-    public unsafe void TransformPoints(CoordinateSpace destSpace, CoordinateSpace srcSpace, PointF[] pts)
+    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (PointF* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipTransformPoints(
-                new HandleRef(this, NativeGraphics),
-                (int)destSpace,
-                (int)srcSpace,
-                p,
+            CheckStatus(PInvoke.GdipTransformPoints(
+                NativeGraphics,
+                (GdiPlus.CoordinateSpace)destSpace,
+                (GdiPlus.CoordinateSpace)srcSpace,
+                (GdiPlus.PointF*)p,
                 pts.Length));
         }
     }
 
-    public unsafe void TransformPoints(CoordinateSpace destSpace, CoordinateSpace srcSpace, Point[] pts)
+    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (Point* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipTransformPointsI(
-                new HandleRef(this, NativeGraphics),
-                (int)destSpace,
-                (int)srcSpace,
-                p,
+            CheckStatus(PInvoke.GdipTransformPointsI(
+                NativeGraphics,
+                (GdiPlus.CoordinateSpace)destSpace,
+                (GdiPlus.CoordinateSpace)srcSpace,
+                (GdiPlus.Point*)p,
                 pts.Length));
         }
     }
 
     /// <summary>
-    /// GDI+ will return a 'generic error' when we attempt to draw an Emf
-    /// image with width/height == 1. Here, we will hack around this by
-    /// resetting the errorstatus. Note that we don't do simple arg checking
-    /// for height || width == 1 here because transforms can be applied to
-    /// the Graphics object making it difficult to identify this scenario.
+    ///  GDI+ will return a 'generic error' when we attempt to draw an Emf
+    ///  image with width/height == 1. Here, we will hack around this by
+    ///  resetting the Status. Note that we don't do simple arg checking
+    ///  for height || width == 1 here because transforms can be applied to
+    ///  the Graphics object making it difficult to identify this scenario.
     /// </summary>
-    private static void IgnoreMetafileErrors(Image image, ref int errorStatus)
+    private static void IgnoreMetafileErrors(Image image, ref Status errorStatus)
     {
-        if (errorStatus != Gdip.Ok && image.RawFormat.Equals(ImageFormat.Emf))
-            errorStatus = Gdip.Ok;
+        if (errorStatus != Status.Ok && image.RawFormat.Equals(ImageFormat.Emf))
+            errorStatus = Status.Ok;
+
+        GC.KeepAlive(image);
     }
 
     /// <summary>
-    /// Creates a Region class only if the native region is not infinite.
+    ///  Creates a Region class only if the native region is not infinite.
     /// </summary>
     internal Region? GetRegionIfNotInfinite()
     {
-        Gdip.CheckStatus(Gdip.GdipCreateRegion(out IntPtr regionHandle));
+        GpRegion* regionHandle;
+        CheckStatus(PInvoke.GdipCreateRegion(&regionHandle));
+
         try
         {
-            Gdip.GdipGetClip(new HandleRef(this, NativeGraphics), new HandleRef(null, regionHandle));
-            Gdip.CheckStatus(Gdip.GdipIsInfiniteRegion(
-                new HandleRef(null, regionHandle),
-                new HandleRef(this, NativeGraphics),
-                out int isInfinite));
+            BOOL isInfinite;
+            PInvoke.GdipGetClip(NativeGraphics, regionHandle);
 
-            if (isInfinite != 0)
+            CheckStatus(PInvokeCore.GdipIsInfiniteRegion(
+                regionHandle,
+                NativeGraphics,
+                &isInfinite));
+
+            if (isInfinite)
             {
                 // Infinite
                 return null;
             }
 
-            Region region = new Region(regionHandle);
-            regionHandle = IntPtr.Zero;
+            Region region = new(regionHandle);
+            regionHandle = null;
             return region;
         }
         finally
         {
-            if (regionHandle != IntPtr.Zero)
+            if (regionHandle is not null)
             {
-                Gdip.GdipDeleteRegion(new HandleRef(null, regionHandle));
+                PInvoke.GdipDeleteRegion(regionHandle);
             }
         }
     }
 
     /// <summary>
-    /// Represents an object used in connection with the printing API, it is used to hold a reference to a
-    /// PrintPreviewGraphics (fake graphics) or a printer DeviceContext (and maybe more in the future).
+    ///  Represents an object used in connection with the printing API, it is used to hold a reference to a
+    ///  PrintPreviewGraphics (fake graphics) or a printer DeviceContext (and maybe more in the future).
     /// </summary>
     internal object? PrintingHelper
     {
         get => _printingHelper;
         set
         {
-            Debug.Assert(_printingHelper == null, "WARNING: Overwritting the printing helper reference!");
+            Debug.Assert(_printingHelper is null, "WARNING: Overwriting the printing helper reference!");
             _printingHelper = value;
         }
     }
 
     /// <summary>
-    /// CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size
-    /// and specified raster operation.
+    ///  CopyPixels will perform a gdi "bitblt" operation to the source from the destination with the given size
+    ///  and specified raster operation.
     /// </summary>
     public void CopyFromScreen(int sourceX, int sourceY, int destinationX, int destinationY, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
     {
@@ -3096,7 +2683,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int destWidth = blockRegionSize.Width;
         int destHeight = blockRegionSize.Height;
 
-        nint screenDC = User32.GetDC(0);
+        using var screenDC = GetDcScope.ScreenDC;
         if (screenDC == 0)
         {
             // ERROR_INVALID_HANDLE - if you pass an empty handle to BitBlt you'll get this error.
@@ -3104,11 +2691,10 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             throw new Win32Exception(6);
         }
 
-        nint targetDC = 0;
+        HDC targetDC = (HDC)GetHdc();
         try
         {
-            targetDC = GetHdc();
-            int result = Gdi32.BitBlt(
+            BOOL result = PInvokeCore.BitBlt(
                 targetDC,
                 destinationX,
                 destinationY,
@@ -3117,17 +2703,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 screenDC,
                 sourceX,
                 sourceY,
-                (Gdi32.RasterOp)copyPixelOperation);
+                (ROP_CODE)copyPixelOperation);
 
-            if (result == 0)
+            if (!result)
             {
                 throw new Win32Exception();
             }
         }
         finally
         {
-            User32.ReleaseDC(IntPtr.Zero, screenDC);
-            if (targetDC != 0)
+            if (!targetDC.IsNull)
             {
                 ReleaseHdc();
             }
@@ -3136,89 +2721,117 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
     public Color GetNearestColor(Color color)
     {
-        int nearest = color.ToArgb();
-        Gdip.CheckStatus(Gdip.GdipGetNearestColor(new HandleRef(this, NativeGraphics), ref nearest));
-        return Color.FromArgb(nearest);
+        uint nearest = (uint)color.ToArgb();
+        CheckStatus(PInvoke.GdipGetNearestColor(NativeGraphics, &nearest));
+        return Color.FromArgb((int)nearest);
     }
 
     /// <summary>
-    /// Draws a line connecting the two specified points.
+    ///  Draws a line connecting the two specified points.
     /// </summary>
     public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
     {
         ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(Gdip.GdipDrawLine(new HandleRef(this, NativeGraphics), new HandleRef(pen, pen.NativePen), x1, y1, x2, y2));
+        CheckErrorStatus(PInvoke.GdipDrawLine(NativeGraphics, pen.NativePen, x1, y1, x2, y2));
+        GC.KeepAlive(pen);
     }
 
-    /// <summary>
-    /// Draws a series of cubic Bezier curves from an array of points.
-    /// </summary>
-    public unsafe void DrawBeziers(Pen pen, PointF[] points)
+    /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
+    public void DrawBeziers(Pen pen, params PointF[] points) =>
+        DrawBeziers(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawBeziers(Pen pen, ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawBeziers(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p, points.Length));
+            CheckErrorStatus(PInvoke.GdipDrawBeziers(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Draws a series of cubic Bezier curves from an array of points.
+    ///  Draws a series of cubic Bézier curves from an array of points.
     /// </summary>
-    public unsafe void DrawBeziers(Pen pen, Point[] points)
+    /// <param name="pen">The <paramref name="pen"/> to draw the Bézier with.</param>
+    /// <param name="points">
+    ///  Points that represent the points that determine the curve. The number of points in the array
+    ///  should be a multiple of 3 plus 1, such as 4, 7, or 10.
+    /// </param>
+    public void DrawBeziers(Pen pen, params Point[] points) => DrawBeziers(pen, points.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void DrawBeziers(Pen pen, ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(Gdip.GdipDrawBeziersI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(pen, pen.NativePen),
-                p,
+            CheckErrorStatus(PInvoke.GdipDrawBeziersI(
+                NativeGraphics,
+                pen.NativePen,
+                (GdiPlus.Point*)p,
                 points.Length));
         }
+
+        GC.KeepAlive(pen);
     }
 
     /// <summary>
-    /// Fills the interior of a path.
+    ///  Fills the interior of a path.
     /// </summary>
     public void FillPath(Brush brush, GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(brush);
         ArgumentNullException.ThrowIfNull(path);
 
-        CheckErrorStatus(Gdip.GdipFillPath(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
-            new HandleRef(path, path._nativePath)));
+        CheckErrorStatus(PInvoke.GdipFillPath(
+            NativeGraphics,
+            brush.NativeBrush,
+            path._nativePath));
+
+        GC.KeepAlive(brush);
+        GC.KeepAlive(path);
     }
 
     /// <summary>
-    /// Fills the interior of a <see cref='Region'/>.
+    ///  Fills the interior of a <see cref='Region'/>.
     /// </summary>
     public void FillRegion(Brush brush, Region region)
     {
         ArgumentNullException.ThrowIfNull(brush);
         ArgumentNullException.ThrowIfNull(region);
 
-        CheckErrorStatus(Gdip.GdipFillRegion(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(brush, brush.NativeBrush),
-            new HandleRef(region, region.NativeRegion)));
+        CheckErrorStatus(PInvoke.GdipFillRegion(
+            NativeGraphics,
+            brush.NativeBrush,
+            region.NativeRegion));
+
+        GC.KeepAlive(brush);
+        GC.KeepAlive(region);
     }
 
     public void DrawIcon(Icon icon, int x, int y)
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             // We don't call the icon directly because we want to stay in GDI+ all the time
             // to avoid alpha channel interop issues between gdi and gdi+
@@ -3232,16 +2845,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     }
 
     /// <summary>
-    /// Draws this image to a graphics object. The drawing command originates on the graphics
-    /// object, but a graphics object generally has no idea how to render a given image. So,
-    /// it passes the call to the actual image. This version crops the image to the given
-    /// dimensions and allows the user to specify a rectangle within the image to draw.
+    ///  Draws this image to a graphics object. The drawing command originates on the graphics
+    ///  object, but a graphics object generally has no idea how to render a given image. So,
+    ///  it passes the call to the actual image. This version crops the image to the given
+    ///  dimensions and allows the user to specify a rectangle within the image to draw.
     /// </summary>
     public void DrawIcon(Icon icon, Rectangle targetRect)
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             // We don't call the icon directly because we want to stay in GDI+ all the time
             // to avoid alpha channel interop issues between gdi and gdi+
@@ -3255,16 +2868,16 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     }
 
     /// <summary>
-    /// Draws this image to a graphics object. The drawing command originates on the graphics
-    /// object, but a graphics object generally has no idea how to render a given image. So,
-    /// it passes the call to the actual image. This version stretches the image to the given
-    /// dimensions and allows the user to specify a rectangle within the image to draw.
+    ///  Draws this image to a graphics object. The drawing command originates on the graphics
+    ///  object, but a graphics object generally has no idea how to render a given image. So,
+    ///  it passes the call to the actual image. This version stretches the image to the given
+    ///  dimensions and allows the user to specify a rectangle within the image to draw.
     /// </summary>
     public void DrawIconUnstretched(Icon icon, Rectangle targetRect)
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             DrawImageUnscaled(icon.ToBitmap(), targetRect);
         }
@@ -3281,29 +2894,27 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         IntPtr callbackData,
         ImageAttributes? imageAttr)
     {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPoint(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destPoint,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+        using EnumerateMetafileDataAdapter adapter = new(callback);
+        PInvoke.GdipEnumerateMetafileDestPoint(
+            NativeGraphics,
+            metafile.Pointer(),
+            (GdiPlus.PointF*)&destPoint,
+            adapter.NativeCallback,
+            (void*)callbackData,
+            imageAttr.Pointer()).ThrowIfFailed();
+
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(metafile);
+        GC.KeepAlive(this);
     }
+
     public void EnumerateMetafile(
         Metafile metafile,
         Point destPoint,
         EnumerateMetafileProc callback,
         IntPtr callbackData,
         ImageAttributes? imageAttr)
-    {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPointI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destPoint,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
-    }
+        => EnumerateMetafile(metafile, (PointF)destPoint, callback, callbackData, imageAttr);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -3312,13 +2923,18 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         IntPtr callbackData,
         ImageAttributes? imageAttr)
     {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destRect,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+        using EnumerateMetafileDataAdapter adapter = new(callback);
+        PInvoke.GdipEnumerateMetafileDestRect(
+            NativeGraphics,
+            metafile.Pointer(),
+            (RectF*)&destRect,
+            adapter.NativeCallback,
+            (void*)callbackData,
+            imageAttr.Pointer()).ThrowIfFailed();
+
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(metafile);
+        GC.KeepAlive(this);
     }
 
     public void EnumerateMetafile(
@@ -3326,18 +2942,9 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Rectangle destRect,
         EnumerateMetafileProc callback,
         IntPtr callbackData,
-        ImageAttributes? imageAttr)
-    {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destRect,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
-    }
+        ImageAttributes? imageAttr) => EnumerateMetafile(metafile, (RectangleF)destRect, callback, callbackData, imageAttr);
 
-    public unsafe void EnumerateMetafile(
+    public void EnumerateMetafile(
         Metafile metafile,
         PointF[] destPoints,
         EnumerateMetafileProc callback,
@@ -3351,17 +2958,22 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
         fixed (PointF* p = destPoints)
         {
-            Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPoints(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-                p, destPoints.Length,
-                callback,
-                callbackData,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+            using EnumerateMetafileDataAdapter adapter = new(callback);
+            PInvoke.GdipEnumerateMetafileDestPoints(
+                NativeGraphics,
+                metafile.Pointer(),
+                (GdiPlus.PointF*)p, destPoints.Length,
+                adapter.NativeCallback,
+                (void*)callbackData,
+                imageAttr.Pointer()).ThrowIfFailed();
+
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(metafile);
+            GC.KeepAlive(this);
         }
     }
 
-    public unsafe void EnumerateMetafile(
+    public void EnumerateMetafile(
         Metafile metafile,
         Point[] destPoints,
         EnumerateMetafileProc callback,
@@ -3375,13 +2987,18 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
         fixed (Point* p = destPoints)
         {
-            Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPointsI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-                p, destPoints.Length,
-                callback,
-                callbackData,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+            using EnumerateMetafileDataAdapter adapter = new(callback);
+            PInvoke.GdipEnumerateMetafileDestPointsI(
+                NativeGraphics,
+                metafile.Pointer(),
+                (GdiPlus.Point*)p, destPoints.Length,
+                adapter.NativeCallback,
+                (void*)callbackData,
+                imageAttr.Pointer()).ThrowIfFailed();
+
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(metafile);
+            GC.KeepAlive(this);
         }
     }
 
@@ -3394,15 +3011,20 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         IntPtr callbackData,
         ImageAttributes? imageAttr)
     {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoint(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destPoint,
-            ref srcRect,
-            unit,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+        using EnumerateMetafileDataAdapter adapter = new(callback);
+        PInvoke.GdipEnumerateMetafileSrcRectDestPoint(
+            NativeGraphics,
+            metafile.Pointer(),
+            (GdiPlus.PointF*)&destPoint,
+            (RectF*)&srcRect,
+            (Unit)unit,
+            adapter.NativeCallback,
+            (void*)callbackData,
+            imageAttr.Pointer()).ThrowIfFailed();
+
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(metafile);
+        GC.KeepAlive(this);
     }
 
     public void EnumerateMetafile(
@@ -3412,18 +3034,14 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         GraphicsUnit unit,
         EnumerateMetafileProc callback,
         IntPtr callbackData,
-        ImageAttributes? imageAttr)
-    {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destPoint,
-            ref srcRect,
+        ImageAttributes? imageAttr) => EnumerateMetafile(
+            metafile,
+            (PointF)destPoint,
+            (RectangleF)srcRect,
             unit,
             callback,
             callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
-    }
+            imageAttr);
 
     public void EnumerateMetafile(
         Metafile metafile,
@@ -3434,15 +3052,20 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         IntPtr callbackData,
         ImageAttributes? imageAttr)
     {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRect(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destRect,
-            ref srcRect,
-            unit,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+        using EnumerateMetafileDataAdapter adapter = new(callback);
+        PInvoke.GdipEnumerateMetafileSrcRectDestRect(
+            NativeGraphics,
+            metafile.Pointer(),
+            (RectF*)&destRect,
+            (RectF*)&srcRect,
+            (Unit)unit,
+            adapter.NativeCallback,
+            (void*)callbackData,
+            imageAttr.Pointer()).ThrowIfFailed();
+
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(metafile);
+        GC.KeepAlive(this);
     }
 
     public void EnumerateMetafile(
@@ -3452,20 +3075,9 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         GraphicsUnit unit,
         EnumerateMetafileProc callback,
         IntPtr callbackData,
-        ImageAttributes? imageAttr)
-    {
-        Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRectI(
-            new HandleRef(this, NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-            ref destRect,
-            ref srcRect,
-            unit,
-            callback,
-            callbackData,
-            new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
-    }
+        ImageAttributes? imageAttr) => EnumerateMetafile(metafile, (RectangleF)destRect, srcRect, unit, callback, callbackData, imageAttr);
 
-    public unsafe void EnumerateMetafile(
+    public void EnumerateMetafile(
         Metafile metafile,
         PointF[] destPoints,
         RectangleF srcRect,
@@ -3481,19 +3093,24 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
         fixed (PointF* p = destPoints)
         {
-            Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoints(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-                p, destPoints.Length,
-                ref srcRect,
-                unit,
-                callback,
-                callbackData,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+            using EnumerateMetafileDataAdapter adapter = new(callback);
+            PInvoke.GdipEnumerateMetafileSrcRectDestPoints(
+                NativeGraphics,
+                metafile.Pointer(),
+                (GdiPlus.PointF*)p, destPoints.Length,
+                (RectF*)&srcRect,
+                (Unit)unit,
+                adapter.NativeCallback,
+                (void*)callbackData,
+                imageAttr.Pointer()).ThrowIfFailed();
+
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(metafile);
+            GC.KeepAlive(this);
         }
     }
 
-    public unsafe void EnumerateMetafile(
+    public void EnumerateMetafile(
         Metafile metafile,
         Point[] destPoints,
         Rectangle srcRect,
@@ -3509,33 +3126,36 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
         fixed (Point* p = destPoints)
         {
-            Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointsI(
-                new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
-                p, destPoints.Length,
-                ref srcRect,
-                unit,
-                callback,
-                callbackData,
-                new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
+            using EnumerateMetafileDataAdapter adapter = new(callback);
+            PInvoke.GdipEnumerateMetafileSrcRectDestPointsI(
+                NativeGraphics,
+                metafile.Pointer(),
+                (GdiPlus.Point*)p, destPoints.Length,
+                (Rect*)&srcRect,
+                (Unit)unit,
+                adapter.NativeCallback,
+                (void*)callbackData,
+                imageAttr.Pointer()).ThrowIfFailed();
+
+            GC.KeepAlive(imageAttr);
+            GC.KeepAlive(metafile);
+            GC.KeepAlive(this);
         }
     }
 
     /// <summary>
-    /// Combines current Graphics context with all previous contexts.
-    /// When BeginContainer() is called, a copy of the current context is pushed into the GDI+ context stack, it keeps track of the
-    /// absolute clipping and transform but reset the public properties so it looks like a brand new context.
-    /// When Save() is called, a copy of the current context is also pushed in the GDI+ stack but the public clipping and transform
-    /// properties are not reset (cumulative). Consecutive Save context are ignored with the exception of the top one which contains
-    /// all previous information.
-    /// The return value is an object array where the first element contains the cumulative clip region and the second the cumulative
-    /// translate transform matrix.
-    /// WARNING: This method is for internal FX support only.
+    ///  Combines current Graphics context with all previous contexts.
+    ///  When BeginContainer() is called, a copy of the current context is pushed into the GDI+ context stack, it keeps track of the
+    ///  absolute clipping and transform but reset the public properties so it looks like a brand new context.
+    ///  When Save() is called, a copy of the current context is also pushed in the GDI+ stack but the public clipping and transform
+    ///  properties are not reset (cumulative). Consecutive Save context are ignored with the exception of the top one which contains
+    ///  all previous information.
+    ///  The return value is an object array where the first element contains the cumulative clip region and the second the cumulative
+    ///  translate transform matrix.
+    ///  WARNING: This method is for internal FX support only.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-#if NETCOREAPP
     [Obsolete("Use the Graphics.GetContextInfo overloads that accept arguments for better performance and fewer allocations.", DiagnosticId = "SYSLIB0016", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
-#endif
     [SupportedOSPlatform("windows")]
     public object GetContextInfo()
     {
@@ -3597,11 +3217,12 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             {
                 context = context.Previous;
 
-                if (context == null || !context.Next!.IsCumulative)
+                if (context is null || !context.Next!.IsCumulative)
                 {
                     break;
                 }
-            } while (context.IsCumulative);
+            }
+            while (context.IsCumulative);
         }
 
         if (!totalOffset.IsEmpty())
@@ -3614,7 +3235,74 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         }
     }
 
-#if NETCOREAPP3_1_OR_GREATER
+    (HDC hdc, int saveState) IGraphicsContextInfo.GetHdc(ApplyGraphicsProperties apply, bool alwaysSaveState)
+    {
+        bool applyTransform = apply.HasFlag(ApplyGraphicsProperties.TranslateTransform);
+        bool applyClipping = apply.HasFlag(ApplyGraphicsProperties.Clipping);
+
+        int saveState = 0;
+        HDC hdc = HDC.Null;
+
+        Region? clipRegion = null;
+        PointF offset = default;
+        if (applyClipping)
+        {
+            GetContextInfo(out offset, out clipRegion);
+        }
+        else if (applyTransform)
+        {
+            GetContextInfo(out offset);
+        }
+
+        using (clipRegion)
+        {
+            applyTransform = applyTransform && !offset.IsEmpty;
+            applyClipping = clipRegion is not null;
+
+            using var graphicsRegion = applyClipping ? new RegionScope(clipRegion!, this) : default;
+            applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
+
+            hdc = (HDC)GetHdc();
+
+            if (alwaysSaveState || applyClipping || applyTransform)
+            {
+                saveState = PInvokeCore.SaveDC(hdc);
+            }
+
+            if (applyClipping)
+            {
+                // If the Graphics object was created from a native DC the actual clipping region is the intersection
+                // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
+                // Graphics.VisibleClipBounds.
+
+                GDI_REGION_TYPE type;
+
+                using RegionScope dcRegion = new(hdc);
+                if (!dcRegion.IsNull)
+                {
+                    type = PInvokeCore.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
+                    if (type == GDI_REGION_TYPE.RGN_ERROR)
+                    {
+                        throw new Win32Exception();
+                    }
+                }
+
+                type = PInvokeCore.SelectClipRgn(hdc, graphicsRegion!);
+                if (type == GDI_REGION_TYPE.RGN_ERROR)
+                {
+                    throw new Win32Exception();
+                }
+            }
+
+            if (applyTransform)
+            {
+                PInvokeCore.OffsetViewportOrgEx(hdc, (int)offset.X, (int)offset.Y, lppt: null);
+            }
+        }
+
+        return (hdc, saveState);
+    }
+
     /// <summary>
     ///  Gets the cumulative offset.
     /// </summary>
@@ -3641,7 +3329,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         Vector2 translation = cumulativeTransform.Translation;
         offset = new PointF(translation.X, translation.Y);
     }
-#endif
 
     public RectangleF VisibleClipBounds
     {
@@ -3650,38 +3337,39 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             if (PrintingHelper is PrintPreviewGraphics ppGraphics)
                 return ppGraphics.VisibleClipBounds;
 
-            Gdip.CheckStatus(Gdip.GdipGetVisibleClipBounds(new HandleRef(this, NativeGraphics), out RectangleF rect));
-
+            RectF rect;
+            CheckStatus(PInvoke.GdipGetVisibleClipBounds(NativeGraphics, &rect));
             return rect;
         }
     }
 
     /// <summary>
-    /// Saves the current context into the context stack.
+    ///  Saves the current context into the context stack.
     /// </summary>
     private void PushContext(GraphicsContext context)
     {
-        Debug.Assert(context != null && context.State != 0, "GraphicsContext object is null or not valid.");
+        Debug.Assert(context is not null && context.State != 0, "GraphicsContext object is null or not valid.");
 
-        if (_previousContext != null)
+        if (_previousContext is not null)
         {
             // Push context.
             context.Previous = _previousContext;
             _previousContext.Next = context;
         }
+
         _previousContext = context;
     }
 
     /// <summary>
-    /// Pops all contexts from the specified one included. The specified context is becoming the current context.
+    ///  Pops all contexts from the specified one included. The specified context is becoming the current context.
     /// </summary>
     private void PopContext(int currentContextState)
     {
-        Debug.Assert(_previousContext != null, "Trying to restore a context when the stack is empty");
+        Debug.Assert(_previousContext is not null, "Trying to restore a context when the stack is empty");
         GraphicsContext? context = _previousContext;
 
         // Pop all contexts up the stack.
-        while (context != null)
+        while (context is not null)
         {
             if (context.State == currentContextState)
             {
@@ -3691,103 +3379,95 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 context.Dispose();
                 return;
             }
+
             context = context.Previous;
         }
+
         Debug.Fail("Warning: context state not found!");
     }
 
     public GraphicsState Save()
     {
-        GraphicsContext context = new GraphicsContext(this);
-        int status = Gdip.GdipSaveGraphics(new HandleRef(this, NativeGraphics), out int state);
+        GraphicsContext context = new(this);
+        uint state;
+        Status status = PInvoke.GdipSaveGraphics(NativeGraphics, &state);
+        GC.KeepAlive(this);
 
-        if (status != Gdip.Ok)
+        if (status != Status.Ok)
         {
             context.Dispose();
             throw Gdip.StatusException(status);
         }
 
-        context.State = state;
+        context.State = (int)state;
         context.IsCumulative = true;
         PushContext(context);
 
-        return new GraphicsState(state);
+        return new GraphicsState((int)state);
     }
 
     public void Restore(GraphicsState gstate)
     {
-        Gdip.CheckStatus(Gdip.GdipRestoreGraphics(new HandleRef(this, NativeGraphics), gstate.nativeState));
-        PopContext(gstate.nativeState);
+        CheckStatus(PInvoke.GdipRestoreGraphics(NativeGraphics, (uint)gstate._nativeState));
+        PopContext(gstate._nativeState);
     }
 
     public GraphicsContainer BeginContainer(RectangleF dstrect, RectangleF srcrect, GraphicsUnit unit)
     {
-        GraphicsContext context = new GraphicsContext(this);
+        GraphicsContext context = new(this);
 
-        int status = Gdip.GdipBeginContainer(
-            new HandleRef(this, NativeGraphics), ref dstrect, ref srcrect, unit, out int state);
+        uint state;
+        Status status = PInvoke.GdipBeginContainer(NativeGraphics, (RectF*)&dstrect, (RectF*)&srcrect, (Unit)unit, &state);
+        GC.KeepAlive(this);
 
-        if (status != Gdip.Ok)
+        if (status != Status.Ok)
         {
             context.Dispose();
             throw Gdip.StatusException(status);
         }
 
-        context.State = state;
+        context.State = (int)state;
         PushContext(context);
 
-        return new GraphicsContainer(state);
+        return new GraphicsContainer((int)state);
     }
 
     public GraphicsContainer BeginContainer()
     {
-        GraphicsContext context = new GraphicsContext(this);
-        int status = Gdip.GdipBeginContainer2(new HandleRef(this, NativeGraphics), out int state);
+        GraphicsContext context = new(this);
+        uint state;
+        Status status = PInvoke.GdipBeginContainer2(NativeGraphics, &state);
+        GC.KeepAlive(this);
 
-        if (status != Gdip.Ok)
+        if (status != Status.Ok)
         {
             context.Dispose();
             throw Gdip.StatusException(status);
         }
 
-        context.State = state;
+        context.State = (int)state;
         PushContext(context);
 
-        return new GraphicsContainer(state);
+        return new GraphicsContainer((int)state);
     }
 
     public void EndContainer(GraphicsContainer container)
     {
         ArgumentNullException.ThrowIfNull(container);
-
-        Gdip.CheckStatus(Gdip.GdipEndContainer(new HandleRef(this, NativeGraphics), container.nativeGraphicsContainer));
-        PopContext(container.nativeGraphicsContainer);
+        CheckStatus(PInvoke.GdipEndContainer(NativeGraphics, (uint)container._nativeGraphicsContainer));
+        PopContext(container._nativeGraphicsContainer);
     }
 
     public GraphicsContainer BeginContainer(Rectangle dstrect, Rectangle srcrect, GraphicsUnit unit)
-    {
-        GraphicsContext context = new GraphicsContext(this);
-
-        int status = Gdip.GdipBeginContainerI(
-            new HandleRef(this, NativeGraphics), ref dstrect, ref srcrect, unit, out int state);
-
-        if (status != Gdip.Ok)
-        {
-            context.Dispose();
-            throw Gdip.StatusException(status);
-        }
-
-        context.State = state;
-        PushContext(context);
-
-        return new GraphicsContainer(state);
-    }
+        => BeginContainer((RectangleF)dstrect, (RectangleF)srcrect, unit);
 
     public void AddMetafileComment(byte[] data)
     {
         ArgumentNullException.ThrowIfNull(data);
-
-        Gdip.CheckStatus(Gdip.GdipComment(new HandleRef(this, NativeGraphics), data.Length, data));
+        fixed (byte* b = data)
+        {
+            CheckStatus(PInvoke.GdipComment(NativeGraphics, (uint)data.Length, b));
+        }
     }
 
     public static IntPtr GetHalftonePalette()
@@ -3801,52 +3481,57 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                     AppDomain.CurrentDomain.DomainUnload += OnDomainUnload;
                     AppDomain.CurrentDomain.ProcessExit += OnDomainUnload;
 
-                    s_halftonePalette = Gdip.GdipCreateHalftonePalette();
+                    s_halftonePalette = PInvoke.GdipCreateHalftonePalette();
                 }
             }
         }
+
         return s_halftonePalette;
     }
 
     // This is called from AppDomain.ProcessExit and AppDomain.DomainUnload.
     private static void OnDomainUnload(object? sender, EventArgs e)
     {
-        if (s_halftonePalette != IntPtr.Zero)
+        if (!s_halftonePalette.IsNull)
         {
-            Gdi32.DeleteObject(s_halftonePalette);
-            s_halftonePalette = IntPtr.Zero;
+            PInvokeCore.DeleteObject(s_halftonePalette);
+            s_halftonePalette = HPALETTE.Null;
         }
     }
 
     /// <summary>
-    /// GDI+ will return a 'generic error' with specific win32 last error codes when
-    /// a terminal server session has been closed, minimized, etc... We don't want
-    /// to throw when this happens, so we'll guard against this by looking at the
-    /// 'last win32 error code' and checking to see if it is either 1) access denied
-    /// or 2) proc not found and then ignore it.
+    ///  GDI+ will return a 'generic error' with specific win32 last error codes when
+    ///  a terminal server session has been closed, minimized, etc... We don't want
+    ///  to throw when this happens, so we'll guard against this by looking at the
+    ///  'last win32 error code' and checking to see if it is either 1) access denied
+    ///  or 2) proc not found and then ignore it.
     ///
-    /// The problem is that when you lock the machine, the secure desktop is enabled and
-    /// rendering fails which is expected (since the app doesn't have permission to draw
-    /// on the secure desktop). Not sure if there's anything you can do, short of catching
-    /// the desktop switch message and absorbing all the exceptions that get thrown while
-    /// it's the secure desktop.
+    ///  The problem is that when you lock the machine, the secure desktop is enabled and
+    ///  rendering fails which is expected (since the app doesn't have permission to draw
+    ///  on the secure desktop). Not sure if there's anything you can do, short of catching
+    ///  the desktop switch message and absorbing all the exceptions that get thrown while
+    ///  it's the secure desktop.
     /// </summary>
-    private static void CheckErrorStatus(int status)
+    private void CheckErrorStatus(Status status)
     {
-        if (status == Gdip.Ok)
+        if (status == Status.Ok)
+        {
             return;
+        }
 
         // Generic error from GDI+ can be GenericError or Win32Error.
-        if (status == Gdip.GenericError || status == Gdip.Win32Error)
+        if (status is Status.GenericError or Status.Win32Error)
         {
-            int error = Marshal.GetLastWin32Error();
-            if (error == SafeNativeMethods.ERROR_ACCESS_DENIED || error == SafeNativeMethods.ERROR_PROC_NOT_FOUND ||
-                    // Here, we'll check to see if we are in a terminal services session...
-                    (((User32.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
+            WIN32_ERROR error = (WIN32_ERROR)Marshal.GetLastWin32Error();
+            if (error == WIN32_ERROR.ERROR_ACCESS_DENIED || error == WIN32_ERROR.ERROR_PROC_NOT_FOUND ||
+                    // Here, we'll check to see if we are in a terminal services session.
+                    (((PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
             {
                 return;
             }
         }
+
+        GC.KeepAlive(this);
 
         // Legitimate error, throw our status exception.
         throw Gdip.StatusException(status);
@@ -3860,7 +3545,9 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// <param name="cachedBitmap">The <see cref="CachedBitmap"/> that contains the image to be drawn.</param>
     /// <param name="x">The x-coordinate of the upper-left corner of the drawn image.</param>
     /// <param name="y">The y-coordinate of the upper-left corner of the drawn image.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="cachedBitmap"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///  <para><paramref name="cachedBitmap"/> is <see langword="null"/>.</para>
+    /// </exception>
     /// <exception cref="InvalidOperationException">
     ///  <para>
     ///   The <paramref name="cachedBitmap"/> is not compatible with the <see cref="Graphics"/> device state.
@@ -3876,10 +3563,57 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(cachedBitmap);
 
-        Gdip.CheckStatus(Gdip.GdipDrawCachedBitmap(
-            new(this, NativeGraphics),
-            new(cachedBitmap, cachedBitmap.Handle),
+        CheckStatus(PInvoke.GdipDrawCachedBitmap(
+            NativeGraphics,
+            (GpCachedBitmap*)cachedBitmap.Handle,
             x, y));
+
+        GC.KeepAlive(cachedBitmap);
     }
 #endif
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="DrawImage(Image, Effect, RectangleF, Matrix?, GraphicsUnit, ImageAttributes?)"/>
+    public void DrawImage(
+        Image image,
+        Effect effect) => DrawImage(image, effect, srcRect: default, transform: default, GraphicsUnit.Pixel, imageAttr: null);
+
+    /// <summary>
+    ///  Draws a portion of an image after applying a specified effect.
+    /// </summary>
+    /// <param name="image"><see cref="Image"/> to be drawn.</param>
+    /// <param name="effect">The effect to be applied when drawing.</param>
+    /// <param name="srcRect">The portion of the image to be drawn. <see cref="RectangleF.Empty"/> draws the full image.</param>
+    /// <param name="transform">The transform to apply to the <paramref name="srcRect"/> to determine the destination.</param>
+    /// <param name="srcUnit">Unit of measure of the <paramref name="srcRect"/>.</param>
+    /// <param name="imageAttr">Additional adjustments to be applied, if any.</param>
+    public void DrawImage(
+        Image image,
+        Effect effect,
+        RectangleF srcRect = default,
+        Matrix? transform = default,
+        GraphicsUnit srcUnit = GraphicsUnit.Pixel,
+        ImageAttributes? imageAttr = default)
+    {
+        PInvoke.GdipDrawImageFX(
+            NativeGraphics,
+            image.Pointer(),
+            srcRect.IsEmpty ? null : (RectF*)&srcRect,
+            transform.Pointer(),
+            effect.Pointer(),
+            imageAttr.Pointer(),
+            (Unit)srcUnit).ThrowIfFailed();
+
+        GC.KeepAlive(effect);
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(image);
+        GC.KeepAlive(this);
+    }
+#endif
+
+    private void CheckStatus(Status status)
+    {
+        status.ThrowIfFailed();
+        GC.KeepAlive(this);
+    }
 }

@@ -7,14 +7,14 @@ public static partial class StronglyTypedResourceBuilder
 {
     internal sealed class ResourceData
     {
-        internal ResourceData(Type type, string valueAsString)
+        internal ResourceData(Type? type, string? valueAsString)
         {
             Type = type;
             ValueAsString = valueAsString;
         }
 
-        internal Type Type { get; }
+        internal Type? Type { get; }
 
-        internal string ValueAsString { get; }
+        internal string? ValueAsString { get; }
     }
 }

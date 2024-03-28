@@ -14,13 +14,13 @@ public class BinaryEditorTests
         // Ensure that we can instantiate the modal editor.
 
         BinaryEditor editor = new();
-        var editorService = new Mock<IWindowsFormsEditorService>();
+        Mock<IWindowsFormsEditorService> editorService = new();
         editorService.Setup(e => e.ShowDialog(It.IsAny<Form>()))
             .Callback<Form>(f => { f.Show(); f.Close(); })
             .Returns(DialogResult.OK);
-        var serviceProvider = new Mock<IServiceProvider>();
+        Mock<IServiceProvider> serviceProvider = new();
         serviceProvider.Setup(s => s.GetService(typeof(IWindowsFormsEditorService))).Returns(editorService.Object);
 
-        var result = editor.EditValue(serviceProvider.Object, new byte[10]);
+        object result = editor.EditValue(serviceProvider.Object, new byte[10]);
     }
 }

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
@@ -13,59 +11,32 @@ internal sealed partial class DesignerActionPanel
 {
     private abstract class PropertyLine : Line
     {
-        private DesignerActionList _actionList;
-        private DesignerActionPropertyItem _propertyItem;
-        private object _value;
+        private DesignerActionList? _actionList;
         private bool _pushingValue;
-        private PropertyDescriptor _propDesc;
-        private ITypeDescriptorContext _typeDescriptorContext;
+        private PropertyDescriptor? _propDesc;
+        private ITypeDescriptorContext? _typeDescriptorContext;
 
-        public PropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+        protected PropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
         {
         }
 
-        public sealed override string FocusId
-        {
-            get => $"PROPERTY:{_actionList.GetType().FullName}.{_propertyItem.MemberName}";
-        }
+        public sealed override string FocusId => $"PROPERTY:{_actionList!.GetType().FullName}.{PropertyItem!.MemberName}";
 
-        protected PropertyDescriptor PropertyDescriptor
-        {
-            get
-            {
-                _propDesc ??= TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
+        protected PropertyDescriptor PropertyDescriptor => _propDesc ??= TypeDescriptor.GetProperties(_actionList!)[PropertyItem!.MemberName]!;
 
-                return _propDesc;
-            }
-        }
+        protected DesignerActionPropertyItem? PropertyItem { get; private set; }
 
-        protected DesignerActionPropertyItem PropertyItem
-        {
-            get => _propertyItem;
-        }
+        protected ITypeDescriptorContext TypeDescriptorContext => _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList!);
 
-        protected ITypeDescriptorContext TypeDescriptorContext
-        {
-            get
-            {
-                _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
-
-                return _typeDescriptorContext;
-            }
-        }
-
-        protected object Value
-        {
-            get => _value;
-        }
+        protected object? Value { get; private set; }
 
         protected abstract void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex);
 
         protected abstract void OnValueChanged();
 
-        protected void SetValue(object newValue)
+        protected void SetValue(object? newValue)
         {
-            if (_pushingValue || ActionPanel.DropDownActive)
+            if (_pushingValue || ActionPanel._dropDownActive)
             {
                 return;
             }
@@ -85,7 +56,7 @@ internal sealed partial class DesignerActionPanel
                             // If we can't convert it, show an error
                             if (!PropertyDescriptor.Converter.CanConvertFrom(_typeDescriptorContext, valueType))
                             {
-                                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_CouldNotConvertValue, newValue, _propDesc.PropertyType));
+                                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_CouldNotConvertValue, newValue, PropertyDescriptor.PropertyType));
                                 return;
                             }
                             else
@@ -96,11 +67,11 @@ internal sealed partial class DesignerActionPanel
                     }
                 }
 
-                if (!Equals(_value, newValue))
+                if (!Equals(Value, newValue))
                 {
                     PropertyDescriptor.SetValue(_actionList, newValue);
                     // Update the value we're caching
-                    _value = PropertyDescriptor.GetValue(_actionList);
+                    Value = PropertyDescriptor.GetValue(_actionList);
                     OnValueChanged();
                 }
             }
@@ -108,7 +79,7 @@ internal sealed partial class DesignerActionPanel
             {
                 if (e is TargetInvocationException)
                 {
-                    e = e.InnerException;
+                    e = e.InnerException!;
                 }
 
                 ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_ErrorSettingValue, newValue, PropertyDescriptor.Name, e.Message));
@@ -119,13 +90,14 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal sealed override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal sealed override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _actionList = actionList;
-            _propertyItem = (DesignerActionPropertyItem)actionItem;
+            PropertyLineInfo info = (PropertyLineInfo)lineInfo;
+            _actionList = info.List;
+            PropertyItem = info.Item;
             _propDesc = null;
             _typeDescriptorContext = null;
-            _value = PropertyDescriptor.GetValue(actionList);
+            Value = PropertyDescriptor.GetValue(info.List);
             OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
             _pushingValue = true;
             try
@@ -136,6 +108,11 @@ internal sealed partial class DesignerActionPanel
             {
                 _pushingValue = false;
             }
+        }
+
+        protected abstract class PropertyLineInfo(DesignerActionList list, DesignerActionPropertyItem item) : StandardLineInfo(list)
+        {
+            public override DesignerActionPropertyItem Item { get; } = item;
         }
     }
 }

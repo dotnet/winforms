@@ -9,17 +9,17 @@ public class SRDescriptionAttributeTests
     [Fact]
     public void VerifyDescriptionAttributeValue()
     {
-        SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute(nameof(SR.AboutBoxDesc));
-        Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
+        SRDescriptionAttribute srDescriptionAttribute = new(nameof(SR.AboutBoxDesc));
+        Assert.Equal(SR.AboutBoxDesc, srDescriptionAttribute.Description);
 
         // Getting srDescriptionAttribute.Description again should also return description value
-        Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
+        Assert.Equal(SR.AboutBoxDesc, srDescriptionAttribute.Description);
     }
 
     [Fact]
     public void InvalidDescriptionAttributeShouldReturnNull()
     {
-        SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute("fake");
+        SRDescriptionAttribute srDescriptionAttribute = new("fake");
         Assert.Null(srDescriptionAttribute.Description);
     }
 }

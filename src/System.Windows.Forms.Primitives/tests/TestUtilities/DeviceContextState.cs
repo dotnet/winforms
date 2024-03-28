@@ -17,7 +17,7 @@ internal unsafe class DeviceContextState
     // Not all state is handled yet. Backfilling in as we write specific tests. Of special note is that we don't
     // have tracking for Save/RestoreDC yet.
 
-    private readonly List<State> _savedStates = new();
+    private readonly List<State> _savedStates = [];
     private State _currentState;
 
     /// <summary>
@@ -25,12 +25,12 @@ internal unsafe class DeviceContextState
     /// </summary>
     public DeviceContextState(HDC hdc)
     {
-        MapMode = (HDC_MAP_MODE)PInvoke.GetMapMode(hdc);
+        MapMode = PInvoke.GetMapMode(hdc);
         BackColor = PInvoke.GetBkColor(hdc);
         TextColor = PInvoke.GetTextColor(hdc);
-        Rop2Mode = (R2_MODE)PInvoke.GetROP2(hdc);
-        TextAlign = (TEXT_ALIGN_OPTIONS)PInvoke.GetTextAlign(hdc);
-        BackgroundMode = (BACKGROUND_MODE)PInvoke.GetBkMode(hdc);
+        Rop2Mode = PInvoke.GetROP2(hdc);
+        TextAlign = PInvoke.GetTextAlign(hdc);
+        BackgroundMode = PInvoke.GetBkMode(hdc);
 
         Matrix3x2 transform = default;
         PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
@@ -41,15 +41,15 @@ internal unsafe class DeviceContextState
         BrushOrigin = point;
 
         var hfont = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
-        PInvoke.GetObject(hfont, out LOGFONTW logfont);
+        PInvokeCore.GetObject(hfont, out LOGFONTW logfont);
         SelectedFont = logfont;
 
         var hpen = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_PEN);
-        PInvoke.GetObject(hpen, out LOGPEN logpen);
+        PInvokeCore.GetObject(hpen, out LOGPEN logpen);
         SelectedPen = logpen;
 
         var hbrush = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_BRUSH);
-        PInvoke.GetObject(hbrush, out LOGBRUSH logbrush);
+        PInvokeCore.GetObject(hbrush, out LOGBRUSH logbrush);
         SelectedBrush = logbrush;
     }
 
@@ -89,7 +89,7 @@ internal unsafe class DeviceContextState
     /// <summary>
     ///  When using to parse a metafile, this is the list of known created objects.
     /// </summary>
-    public List<EmfRecord> GdiObjects { get; } = new List<EmfRecord>();
+    public List<EmfRecord> GdiObjects { get; } = [];
 
     /// <summary>
     ///  Adds the given object to <see cref="GdiObjects"/>.
@@ -140,7 +140,7 @@ internal unsafe class DeviceContextState
 
         if (selectionRecord->IsStockObject)
         {
-            HGDIOBJ hgdiobj = PInvoke.GetStockObject(selectionRecord->StockObject);
+            HGDIOBJ hgdiobj = PInvokeCore.GetStockObject(selectionRecord->StockObject);
 
             switch (selectionRecord->StockObject)
             {
@@ -151,7 +151,7 @@ internal unsafe class DeviceContextState
                 case GET_STOCK_OBJECT_FLAGS.DEVICE_DEFAULT_FONT:
                 case GET_STOCK_OBJECT_FLAGS.SYSTEM_FIXED_FONT:
                 case GET_STOCK_OBJECT_FLAGS.DEFAULT_GUI_FONT:
-                    PInvoke.GetObject(hgdiobj, out LOGFONTW logfont);
+                    PInvokeCore.GetObject(hgdiobj, out LOGFONTW logfont);
                     SelectedFont = logfont;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.WHITE_BRUSH:
@@ -161,14 +161,14 @@ internal unsafe class DeviceContextState
                 case GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH:
                 case GET_STOCK_OBJECT_FLAGS.NULL_BRUSH:
                 case GET_STOCK_OBJECT_FLAGS.DC_BRUSH:
-                    PInvoke.GetObject(hgdiobj, out LOGBRUSH logBrush);
+                    PInvokeCore.GetObject(hgdiobj, out LOGBRUSH logBrush);
                     SelectedBrush = logBrush;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.WHITE_PEN:
                 case GET_STOCK_OBJECT_FLAGS.BLACK_PEN:
                 case GET_STOCK_OBJECT_FLAGS.NULL_PEN:
                 case GET_STOCK_OBJECT_FLAGS.DC_PEN:
-                    PInvoke.GetObject(hgdiobj, out LOGPEN logPen);
+                    PInvokeCore.GetObject(hgdiobj, out LOGPEN logPen);
                     SelectedPen = logPen;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.DEFAULT_PALETTE:

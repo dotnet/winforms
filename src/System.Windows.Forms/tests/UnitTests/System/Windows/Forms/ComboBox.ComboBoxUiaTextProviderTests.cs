@@ -3,11 +3,12 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
-public class ComboBox_ComboBoxUiaTextProviderTests
+public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 {
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
@@ -16,12 +17,12 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
 
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
 
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
@@ -41,8 +42,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(provider.IsMultiline);
             Assert.False(comboBox.IsHandleCreated);
@@ -57,8 +58,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(provider.IsReadOnly);
             Assert.False(comboBox.IsHandleCreated);
@@ -71,9 +72,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_IsScrollable_IsTrue(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Assert.True(provider.IsScrollable);
         Assert.True(comboBox.IsHandleCreated);
@@ -87,8 +88,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(provider.IsScrollable);
             Assert.False(comboBox.IsHandleCreated);
@@ -103,8 +104,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
             Assert.False(comboBox.IsHandleCreated);
@@ -119,9 +120,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple, RightToLeft.No, false)]
     public void ComboBoxUiaTextProvider_IsReadingRTL_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, RightToLeft rightToLeft, bool expectedResult)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, RightToLeft = rightToLeft };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, RightToLeft = rightToLeft };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Assert.Equal(expectedResult, provider.IsReadingRTL);
         Assert.True(comboBox.IsHandleCreated);
@@ -137,8 +138,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, RightToLeft = rightToLeft };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, RightToLeft = rightToLeft };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(provider.IsReadingRTL);
             Assert.False(comboBox.IsHandleCreated);
@@ -153,11 +154,15 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            Assert.Equal(comboBox.ChildEditAccessibleObject, provider.DocumentRange.GetEnclosingElement());
-            Assert.Equal(provider, provider.DocumentRange.TestAccessor().Dynamic._provider);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
+
+            using ComScope<ITextRangeProvider> range = new(provider.DocumentRange);
+            using ComScope<IRawElementProviderSimple> elementProvider = new(range.Value->GetEnclosingElement());
+            Assert.Equal(comboBox.ChildEditAccessibleObject, ComHelpers.GetObjectForIUnknown(elementProvider));
+            UiaTextRange rangeObj = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
+            Assert.Equal(provider, rangeObj?.TestAccessor().Dynamic._provider);
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
     }
@@ -165,13 +170,13 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
-    public void ComboBoxUiaTextProvider_DocumentRange_IsNull_ThowException(ComboBoxStyle dropDownStyle)
+    public void ComboBoxUiaTextProvider_DocumentRange_IsNull_ThrowException(ComboBoxStyle dropDownStyle)
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            Assert.Throws<NullReferenceException>(() => provider.DocumentRange);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
+            Assert.Throws<NullReferenceException>(() =>  _ = provider.DocumentRange);
         }
     }
 
@@ -182,11 +187,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            UiaCore.SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
+            SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
 
-            Assert.Equal(UiaCore.SupportedTextSelection.Single, uiaTextRange);
+            Assert.Equal(SupportedTextSelection.SupportedTextSelection_Single, uiaTextRange);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -197,13 +202,15 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_GetCaretRange_IsNotNull(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
+        ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
 
-        Assert.NotNull(uiaTextRange);
+        Assert.False(uiaTextRange.IsNull);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -215,12 +222,14 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-            UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
+            using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+            BOOL isActive = default;
+            Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
 
-            Assert.Null(uiaTextRange);
+            Assert.True(uiaTextRange.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -233,8 +242,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.Equal(-1, provider.LinesPerPage);
             Assert.False(comboBox.IsHandleCreated);
@@ -247,9 +256,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_LinesPerPage_ReturnsOne_WithHandle(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Assert.Equal(1, provider.LinesPerPage);
         Assert.True(comboBox.IsHandleCreated);
@@ -271,11 +280,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         int height,
         int charIndex)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(width, height) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(width, height) };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing GetLineFromCharIndex method");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         int actualLine = provider.GetLineFromCharIndex(charIndex);
 
@@ -295,10 +304,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(width, height) };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(width, height) };
             comboBox.Items.Add("Some test text for testing GetLineFromCharIndex method");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             int actualLine = provider.GetLineFromCharIndex(charIndex);
 
@@ -333,11 +342,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         int height,
         int lineIndex)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(width, height) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(width, height) };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing GetLineIndex method");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         int actualIndex = provider.GetLineIndex(lineIndex);
 
@@ -356,10 +365,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(width, height) };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(width, height) };
             comboBox.Items.Add("Some test text for testing GetLineIndex method");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             int actualIndex = provider.GetLineIndex(lineIndex);
 
@@ -376,11 +385,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-            LOGFONTW expected = LOGFONTW.FromFont(comboBox.Font);
+            LOGFONTW expected = comboBox.Font.ToLogicalFont();
             LOGFONTW actual = provider.Logfont;
             Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);
@@ -396,8 +405,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             LOGFONTW expected = default;
 
             LOGFONTW actual = provider.Logfont;
@@ -422,11 +431,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromChar_TestData))]
     public void ComboBoxUiaTextProvider_GetPositionFromChar_ReturnsCorrectValue(ComboBoxStyle dropdownStyle, Size size, string text, int charIndex, Point expectedPoint)
     {
-        using ComboBox comboBox = new ComboBox() { Size = size, DropDownStyle = dropdownStyle };
+        using ComboBox comboBox = new() { Size = size, DropDownStyle = dropdownStyle };
         comboBox.CreateControl();
         comboBox.Items.Add(text);
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Point actualPoint = provider.GetPositionFromChar(charIndex);
 
@@ -451,10 +460,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
             comboBox.Items.Add(text);
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Point actualPoint = provider.GetPositionFromChar(charIndex);
 
@@ -488,11 +497,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue_TestData))]
     public void ComboBoxUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, Size size, string text, int charIndex, Point expectedPoint)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
         comboBox.CreateControl();
         comboBox.Items.Add(text);
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Point actualPoint = provider.GetPositionFromCharForUpperRightCorner(charIndex, comboBox.Text);
 
@@ -528,10 +537,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
             comboBox.Items.Add(text);
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Point actualPoint = provider.GetPositionFromCharForUpperRightCorner(charIndex, comboBox.Text);
 
@@ -562,9 +571,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_GetFormattingRectangle_TestData))]
     public void ComboBoxUiaTextProvider_GetFormattingRectangle_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, Size size, Rectangle expectedRectangle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Rectangle providerRectangle = provider.BoundingRectangle;
 
@@ -581,11 +590,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         using (new NoAssertContext())
         {
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(250, 100) };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Rectangle providerRectangle = provider.BoundingRectangle;
 
-            Assert.Equal(Drawing.Rectangle.Empty, providerRectangle);
+            Assert.Equal(Rectangle.Empty, providerRectangle);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -611,11 +620,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_Text_TestData))]
     public void ComboBoxUiaTextProvider_Text_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, string text)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
         comboBox.Items.Add(text);
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
         string expected = comboBox.Text;
 
         string actual = provider.Text.Trim('\0');
@@ -631,10 +640,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.Items.Add(text);
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             string actual = provider.Text.Trim('\0');
 
@@ -648,11 +657,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_Text_TestData))]
     public void ComboBoxUiaTextProvider_TextLength_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, string text)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
         comboBox.Items.Add(text);
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Assert.Equal(comboBox.Text.Length, provider.TextLength);
         Assert.True(comboBox.IsHandleCreated);
@@ -665,10 +674,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.Items.Add(text);
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.Equal(-1, provider.TextLength);
             Assert.False(comboBox.IsHandleCreated);
@@ -681,9 +690,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_WindowExStyle_ReturnsCorrectValue(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
         WINDOW_EX_STYLE actual = provider.WindowExStyle;
         Assert.Equal((WINDOW_EX_STYLE)0, actual);
         Assert.True(comboBox.IsHandleCreated);
@@ -697,8 +706,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             WINDOW_EX_STYLE actual = provider.WindowExStyle;
 
@@ -713,9 +722,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_EditStyle_ReturnsCorrectValue(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         WINDOW_STYLE actual = provider.WindowStyle;
 
@@ -733,8 +742,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             WINDOW_STYLE actual = provider.WindowStyle;
 
@@ -767,11 +776,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBox_GetVisibleRangePoints_ForSinglelineComboBox_TestData))]
     public void ComboBoxUiaTextProvider_GetVisibleRangePoints_ForSinglelineComboBox_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, Size size, int expectedStart, int expectedEnd)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         provider.GetVisibleRangePoints(out int providerVisibleStart, out int providerVisibleEnd);
 
@@ -809,10 +818,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
             comboBox.Items.Add("Some test text for testing");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             provider.GetVisibleRangePoints(out int providerVisibleStart, out int providerVisibleEnd);
 
@@ -835,13 +844,16 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_GetVisibleRanges_TestData))]
     public void ComboBoxUiaTextProvider_GetVisibleRanges_ReturnsCorrectValue(ComboBoxStyle dropDownStyle, Size size)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        Assert.NotNull(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> result = new(null);
+        Assert.True(provider.GetVisibleRanges(result).Succeeded);
+
+        Assert.False(result.IsEmpty);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -852,12 +864,15 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = size };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = size };
             comboBox.Items.Add("Some test text for testing");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-            Assert.Null(provider.GetVisibleRanges());
+            using ComSafeArrayScope<ITextRangeProvider> result = new(null);
+            Assert.True(provider.GetVisibleRanges(result).Succeeded);
+
+            Assert.True(result.IsEmpty);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -870,13 +885,15 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             // RangeFromChild doesn't throw an exception
-            UiaCore.ITextRangeProvider range = provider.RangeFromChild(comboBox.AccessibilityObject);
+            using ComScope<ITextRangeProvider> range = new(null);
+            using var rawElementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(comboBox.AccessibilityObject);
+            Assert.True(provider.RangeFromChild(rawElementProvider, range).Succeeded);
             // RangeFromChild implementation can be changed so this test can be changed too
-            Assert.Null(range);
+            Assert.True(range.IsNull);
         }
     }
 
@@ -892,13 +909,14 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [MemberData(nameof(ComboBoxUiaTextProvider_RangeFromPoint_TestData))]
     public void ComboBoxUiaTextProvider_RangeFromPoint_DoesntThrowAnException(ComboBoxStyle dropDownStyle, Point point)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
 
-        Assert.NotNull(textRangeProvider);
+        Assert.False(range.IsNull);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -909,12 +927,13 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-            UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
+            using ComScope<ITextRangeProvider> range = new(null);
+            Assert.True(provider.RangeFromPoint(point, range).Succeeded);
 
-            Assert.Null(textRangeProvider);
+            Assert.True(range.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -927,16 +946,19 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple, 0, 10)]
     public void ComboBoxUiaTextProvider_SetSelection_GetSelection_ReturnCorrectValue(ComboBoxStyle dropDownStyle, int start, int end)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
         provider.SetSelection(start, end);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        UiaTextRange textRange = selection[0] as UiaTextRange;
 
-        Assert.NotNull(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        using ComScope<ITextRangeProvider> range = new(selection[0]);
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
+
+        Assert.False(selection.IsNull);
         Assert.NotNull(textRange);
         Assert.Equal(start, textRange.Start);
         Assert.Equal(end, textRange.End);
@@ -955,17 +977,18 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.Items.Add("Some test text for testing");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             provider.SetSelection(start, end);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
 
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
 
-            Assert.Null(selection);
+            Assert.True(selection.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             Assert.Equal(0, comboBox.SelectionStart);
@@ -984,16 +1007,19 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
             comboBox.Items.Add("Some test text for testing");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             provider.SetSelection(start, end);
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-            Assert.NotNull(selection);
 
-            UiaTextRange textRange = selection[0] as UiaTextRange;
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
+            Assert.False(selection.IsEmpty);
+
+            using ComScope<ITextRangeProvider> range = new(selection[0]);
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
 
             Assert.NotNull(textRange);
             Assert.Equal(0, textRange.Start);
@@ -1012,11 +1038,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple, 2)]
     public void ComboBoxUiaTextProvider_LineScroll_ReturnsFalse(ComboBoxStyle dropDownStyle, int newLine)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
         comboBox.CreateControl();
         comboBox.Items.Add("Some long long test text for testing GetFirstVisibleLine method");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         Assert.False(provider.LineScroll(0, newLine));
         Assert.Equal(0, provider.FirstVisibleLine);
@@ -1033,10 +1059,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
             comboBox.Items.Add("Some long long test text for testing GetFirstVisibleLine method");
             comboBox.SelectedIndex = 0;
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(provider.LineScroll(0, newLine));
             Assert.Equal(-1, provider.FirstVisibleLine);
@@ -1050,9 +1076,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_GetLogfont_ReturnSegoe_ByDefault(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
         LOGFONTW logFont = provider.Logfont;
 
         string actual = logFont.FaceName.ToString();
@@ -1069,8 +1095,8 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
-            ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+            using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
+            ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             Assert.Equal(new LOGFONTW(), provider.Logfont);
@@ -1082,9 +1108,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_FirstVisibleLine_DefaultValueCorrect(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_GETFIRSTVISIBLELINE);
 
@@ -1096,9 +1122,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBoxUiaTextProvider_LinesCount_DefaultValueCorrect(ComboBoxStyle dropDownStyle)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
         comboBox.CreateControl();
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_GETLINECOUNT);
 
@@ -1120,11 +1146,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         int height,
         int charIndex)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(width, height) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(width, height) };
         comboBox.CreateControl();
         comboBox.Items.Add("Some test text for testing GetLineFromCharIndex method");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         int expectedLine = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_LINEFROMCHAR, (WPARAM)charIndex);
         int actualLine = provider.GetLineFromCharIndex(charIndex);
@@ -1141,11 +1167,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.Simple, 2)]
     public void ComboBoxUiaTextProvider_LineScroll_DefaultValueCorrect(ComboBoxStyle dropDownStyle, int newLine)
     {
-        using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(50, 100) };
+        using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
         comboBox.CreateControl();
         comboBox.Items.Add("Some long long test text for testing GetFirstVisibleLine method");
         comboBox.SelectedIndex = 0;
-        ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
+        ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
         bool expectedValue = PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_LINESCROLL, 0, newLine) != 0;
 

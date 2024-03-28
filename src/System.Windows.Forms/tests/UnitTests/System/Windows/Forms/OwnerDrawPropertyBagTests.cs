@@ -12,7 +12,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Ctor_Default()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
         Assert.Equal(Color.Empty, bag.BackColor);
         Assert.Null(bag.Font);
@@ -24,7 +24,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void OwnerDrawPropertyBag_BackColor_Set_GetReturnsExpected(Color value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.BackColor = value;
@@ -41,7 +41,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void OwnerDrawPropertyBag_Font_Set_GetReturnsExpected(Font value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.Font = value;
@@ -58,7 +58,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.ForeColor = value;
@@ -74,7 +74,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Copy_CustomValue_ReturnsClone()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
         value.BackColor = Color.Blue;
         value.Font = SystemFonts.MenuFont;
@@ -91,7 +91,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Copy_NullValue_ReturnsDefault()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
         OwnerDrawPropertyBag bag = OwnerDrawPropertyBag.Copy(value);
         Assert.NotSame(value, bag);
@@ -104,27 +104,27 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Serialize_Deserialize_Success()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        using var treeView = new SubTreeView();
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);
         original.BackColor = Color.Blue;
         original.Font = SystemFonts.MenuFont;
         original.ForeColor = Color.Red;
 
-        using (var stream = new MemoryStream())
-        {
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(stream, original);
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        formatter.Serialize(stream, original);
 
-            stream.Position = 0;
-            OwnerDrawPropertyBag bag = Assert.IsType<OwnerDrawPropertyBag>(formatter.Deserialize(stream));
+        stream.Position = 0;
+        // cs/dangerous-binary-deserialization
+        OwnerDrawPropertyBag bag = Assert.IsType<OwnerDrawPropertyBag>(formatter.Deserialize(stream)); // CodeQL[SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-            Assert.Equal(Color.Blue, bag.BackColor);
-            Assert.Equal(SystemFonts.MenuFont.Name, bag.Font.Name);
-            Assert.Equal(Color.Red, bag.ForeColor);
-            Assert.False(bag.IsEmpty());
-        }
+        Assert.Equal(Color.Blue, bag.BackColor);
+        Assert.Equal(SystemFonts.MenuFont.Name, bag.Font.Name);
+        Assert.Equal(Color.Red, bag.ForeColor);
+        Assert.False(bag.IsEmpty());
     }
 
     private class SubTreeView : TreeView

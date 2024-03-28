@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.ComCtl32;
+using Windows.Win32.UI.Controls;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
@@ -26,7 +26,7 @@ public class TASKDIALOG_BUTTONTests
             return;
         }
 
-        TASKDIALOG_BUTTON sut = new TASKDIALOG_BUTTON();
+        TASKDIALOG_BUTTON sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.nButtonID - addr);                // 4, int
@@ -52,7 +52,7 @@ public class TASKDIALOG_BUTTONTests
             return;
         }
 
-        TASKDIALOG_BUTTON sut = new TASKDIALOG_BUTTON();
+        TASKDIALOG_BUTTON sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.nButtonID - addr);                // 4, int

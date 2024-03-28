@@ -50,6 +50,7 @@
   .custom instance void [INTEROP_ASSEMBLY]System.Runtime.InteropServices.GuidAttribute::.ctor(string) = ( 01 00 24 31 45 41 34 44 42 46 30 2D 33 43 33 42   // ..$1EA4DBF0-3C3B
                                                                                                   2D 31 31 43 46 2D 38 31 30 43 2D 30 30 41 41 30   // -11CF-810C-00AA0
                                                                                                   30 33 38 39 42 37 31 00 00 )                      // 0389B71..
+  .hash algorithm 0x00008004 // SHA1
   .ver 4:0:0:0
 }
 .module Accessibility.dll

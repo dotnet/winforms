@@ -144,8 +144,10 @@ public class FormTests : ControlTestBase
         await RunFormWithoutControlAsync(
             () =>
             {
-                var form = new Form();
-                form.TopMost = true;
+                Form form = new()
+                {
+                    TopMost = true
+                };
 
                 return form;
             },

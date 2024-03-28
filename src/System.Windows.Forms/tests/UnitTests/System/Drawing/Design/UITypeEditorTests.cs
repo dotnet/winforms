@@ -13,39 +13,39 @@ public class UITypeEditorTests
     [Fact]
     public void UITypeEditor_Ctor_Default()
     {
-        var editor = new UITypeEditor();
+        UITypeEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
     public static IEnumerable<object[]> EditValue_ITypeDescriptorContext_IServiceProvider_Object_TestData()
     {
         yield return new object[] { null, null, null };
-        var mockTypeDescriptorContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-        yield return new object[] { mockTypeDescriptorContext.Object, mockServiceProvider.Object, new object() };
+        Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockServiceProvider = new(MockBehavior.Strict);
+        yield return new object[] { mockTypeDescriptorContext.Object, mockServiceProvider.Object, new() };
     }
 
     [Theory]
     [MemberData(nameof(EditValue_ITypeDescriptorContext_IServiceProvider_Object_TestData))]
     public void UITypeEditor_EditValue_Invoke_ReturnsValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
     {
-        var editor = new UITypeEditor();
+        UITypeEditor editor = new();
         Assert.Same(value, editor.EditValue(context, provider, value));
     }
 
     public static IEnumerable<object[]> EditValue_IServiceProvider_Object_TestData()
     {
         yield return new object[] { null, null };
-        var mockServiceProvider = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-        yield return new object[] { mockServiceProvider.Object, new object() };
+        Mock<ITypeDescriptorContext> mockServiceProvider = new(MockBehavior.Strict);
+        yield return new object[] { mockServiceProvider.Object, new() };
     }
 
     [Theory]
     [MemberData(nameof(EditValue_IServiceProvider_Object_TestData))]
     public void UITypeEditor_EditValue_Invoke_CallsVirtualEditValue(IServiceProvider provider, object value)
     {
-        var result = new object();
-        var mockEditor = new Mock<UITypeEditor>(MockBehavior.Strict);
+        object result = new();
+        Mock<UITypeEditor> mockEditor = new(MockBehavior.Strict);
         mockEditor
             .Setup(e => e.EditValue(null, provider, value))
             .Returns(result)
@@ -58,14 +58,14 @@ public class UITypeEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void UITypeEditor_GetEditStyle_Invoke_ReturnsNone(ITypeDescriptorContext context)
     {
-        var editor = new UITypeEditor();
+        UITypeEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.None, editor.GetEditStyle(context));
     }
 
     [Fact]
     public void UITypeEditor_GetEditStyle_Invoke_CallsVirtualGetEditStyle()
     {
-        var mockEditor = new Mock<UITypeEditor>(MockBehavior.Strict);
+        Mock<UITypeEditor> mockEditor = new(MockBehavior.Strict);
         mockEditor
             .Setup(e => e.GetEditStyle(null))
             .Returns(UITypeEditorEditStyle.Modal)
@@ -78,7 +78,7 @@ public class UITypeEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void UITypeEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new UITypeEditor();
+        UITypeEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
@@ -86,7 +86,7 @@ public class UITypeEditorTests
     [BoolData]
     public void UITypeEditor_GetPaintValueSupported_Invoke_CallsVirtualGetPaintValueSupported(bool result)
     {
-        var mockEditor = new Mock<UITypeEditor>(MockBehavior.Strict);
+        Mock<UITypeEditor> mockEditor = new(MockBehavior.Strict);
         mockEditor
             .Setup(e => e.GetPaintValueSupported(null))
             .Returns(result)
@@ -97,7 +97,7 @@ public class UITypeEditorTests
 
     public static IEnumerable<object[]> PaintValue_PaintValueEventArgs_TestData()
     {
-        var bitmap = new Bitmap(10, 10);
+        Bitmap bitmap = new(10, 10);
         Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { null };
         yield return new object[] { new PaintValueEventArgs(null, null, graphics, Rectangle.Empty) };
@@ -107,31 +107,29 @@ public class UITypeEditorTests
     [MemberData(nameof(PaintValue_PaintValueEventArgs_TestData))]
     public void UITypeEditor_PaintValue_Invoke_Nop(PaintValueEventArgs e)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var graphics = Graphics.FromImage(image))
-        {
-            var editor = new UITypeEditor();
-            editor.PaintValue(e);
-        }
+        using Bitmap image = new(10, 10);
+        using var graphics = Graphics.FromImage(image);
+        UITypeEditor editor = new();
+        editor.PaintValue(e);
     }
 
     public static IEnumerable<object[]> PaintValue_Object_Graphics_Rectangle_TestData()
     {
-        var bitmap = new Bitmap(10, 10);
+        Bitmap bitmap = new(10, 10);
         Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { null, graphics, Rectangle.Empty };
-        yield return new object[] { new object(), graphics, new Rectangle(1, 2, 3, 4) };
+        yield return new object[] { new(), graphics, new Rectangle(1, 2, 3, 4) };
     }
 
     [Theory]
     [MemberData(nameof(PaintValue_Object_Graphics_Rectangle_TestData))]
     public void UITypeEditor_PaintValue_Invoke_CallsVirtualPaintValue(object value, Graphics canvas, Rectangle rectangle)
     {
-        var mockEditor = new Mock<UITypeEditor>(MockBehavior.Strict);
+        Mock<UITypeEditor> mockEditor = new(MockBehavior.Strict);
         mockEditor
             .Setup(e => e.PaintValue(It.IsAny<PaintValueEventArgs>()))
             .Verifiable();
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (var graphics = Graphics.FromImage(image))
         {
             mockEditor.Object.PaintValue(value, canvas, rectangle);
@@ -143,7 +141,7 @@ public class UITypeEditorTests
     [Fact]
     public void UITypeEditor_PaintValue_NullCanvas_ThrowsArgumentNullException()
     {
-        var editor = new UITypeEditor();
+        UITypeEditor editor = new();
         Assert.Throws<ArgumentNullException>("graphics", () => editor.PaintValue(new object(), null, Rectangle.Empty));
     }
 }

@@ -48,7 +48,7 @@ public class ListViewSubItemConverterTests
 
     public static IEnumerable<object[]> ConvertTo_InstanceDescriptor_TestData()
     {
-        var item = new ListViewItem();
+        ListViewItem item = new();
         yield return new object[]
         {
             new ListViewItem.ListViewSubItem(item, "text"),

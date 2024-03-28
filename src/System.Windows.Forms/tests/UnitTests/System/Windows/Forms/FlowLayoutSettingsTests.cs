@@ -14,7 +14,7 @@ public class FlowLayoutSettingsTests
     [InlineData(FlowDirection.TopDown, 1)]
     public void FlowLayoutSettings_FlowDirection_Set_GetReturnsExpected(FlowDirection value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -44,7 +44,7 @@ public class FlowLayoutSettingsTests
     [InvalidEnumData<FlowDirection>]
     public void FlowLayoutSettings_FlowDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlowDirection value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -57,7 +57,7 @@ public class FlowLayoutSettingsTests
     [InlineData(false, 1)]
     public void FlowLayoutSettings_WrapContents_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -92,7 +92,7 @@ public class FlowLayoutSettingsTests
     [WinFormsFact]
     public void FlowLayoutSettings_GetFlowBreak_InvokeValidControl_ReturnsExpected()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -103,7 +103,7 @@ public class FlowLayoutSettingsTests
     [WinFormsFact]
     public void FlowLayoutSettings_GetFlowBreak_NullChild_ThrowsArgumentNullException()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -114,7 +114,7 @@ public class FlowLayoutSettingsTests
     [WinFormsFact]
     public void FlowLayoutSettings_GetFlowBreak_InvalidChild_ThrowsNotSupportedException()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -126,12 +126,12 @@ public class FlowLayoutSettingsTests
     [BoolData]
     public void FlowLayoutSettings_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
         FlowLayoutSettings settings = Assert.IsType<FlowLayoutSettings>(control.LayoutSettings);
-        using var child = new Control();
+        using Control child = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -166,13 +166,13 @@ public class FlowLayoutSettingsTests
     [InlineData(false, 0)]
     public void FlowLayoutSettings_SetFlowBreak_InvokeControlWithParent_GetFlowBreakReturnsExpected(bool value, int expectedParentLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
         FlowLayoutSettings settings = Assert.IsType<FlowLayoutSettings>(control.LayoutSettings);
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
@@ -229,7 +229,7 @@ public class FlowLayoutSettingsTests
     [BoolData]
     public void FlowLayoutSettings_SetFlowBreak_NullChild_ThrowsArgumentNullException(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };
@@ -241,7 +241,7 @@ public class FlowLayoutSettingsTests
     [BoolData]
     public void FlowLayoutSettings_SetFlowBreak_InvalidChild_ThrowsNotSupportedException(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = ToolStripLayoutStyle.Flow
         };

@@ -28,10 +28,10 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     private EscapeHandler _escapeHandler;                               // active during drags to override escape.
     private Control _pendingRemoveControl;                              // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
     private IComponentChangeService _changeService;
-    private DragAssistanceManager _dragManager;                         //used to apply snaplines when dragging a new tool rect on the designer's surface
-    private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbox
-    private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbox
-    private Graphics _graphics;                                         //graphics object of the adornerwindow (via BehaviorService)
+    private DragAssistanceManager _dragManager;                         // used to apply snaplines when dragging a new tool rect on the designer's surface
+    private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; // used to store extra info about a beh. svc. dragdrop from the toolbox
+    private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   // this is our generic snapline box for dragging comps from the toolbox
+    private Graphics _graphics;                                         // graphics object of the adornerwindow (via BehaviorService)
 
     // Services that we keep around for the duration of a drag.  you should always check
     // to see if you need to get this service.  We cache it, but demand create it.
@@ -41,7 +41,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     private const int MaxGridSize = 200;
 
     // designer options...
-    private Point _adornerWindowToScreenOffset;                         //quick lookup for offsetting snaplines for new tools
+    private Point _adornerWindowToScreenOffset;                         // quick lookup for offsetting snaplines for new tools
 
     private bool _checkSnapLineSetting = true;                          // Since layout options is global for the duration of the designer, we should only query it once.
     private bool _defaultUseSnapLines;
@@ -50,7 +50,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     private Size _gridSize = Size.Empty;
     private bool _drawGrid = true;
 
-    private bool _parentCanSetDrawGrid = true;                          //since we can inherit the grid/snap setting of our parent,
+    private bool _parentCanSetDrawGrid = true;                          // since we can inherit the grid/snap setting of our parent,
     private bool _parentCanSetGridSize = true;                          //  these 3 properties let us know if these values have
     private bool _parentCanSetGridSnap = true;                          //  been set explicitly by a user - so to ignore the parent's setting
 
@@ -141,9 +141,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             {
                 _drawGrid = true;
 
-                //Before we check our options page, we need to see if our parent
-                //is a ParentControlDesigner, is so, then we will want to inherit all
-                //our grid/snap setting from it - instead of our options page
+                // Before we check our options page, we need to see if our parent
+                // is a ParentControlDesigner, is so, then we will want to inherit all
+                // our grid/snap setting from it - instead of our options page
                 ParentControlDesigner parent = GetParentControlDesignerOfParent();
                 if (parent is not null)
                 {
@@ -152,9 +152,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 else
                 {
                     object value = DesignerUtils.GetOptionValue(ServiceProvider, "ShowGrid");
-                    if (value is bool)
+                    if (value is bool boolValue)
                     {
-                        _drawGrid = (bool)value;
+                        _drawGrid = boolValue;
                     }
                 }
             }
@@ -178,11 +178,11 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
                 _drawGrid = value;
 
-                //invalidate the control to remove or draw the grid based on the new value
+                // invalidate the control to remove or draw the grid based on the new value
                 Control control = Control;
                 control?.Invalidate(true);
 
-                //now, notify all child parent control designers that we have changed our setting
+                // now, notify all child parent control designers that we have changed our setting
                 // 'cause they might to change along with us, unless the user has explicitly set
                 // those values...
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -217,9 +217,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             {
                 _gridSize = new Size(8, 8);
 
-                //Before we check our options page, we need to see if our parent
-                //is a ParentControlDesigner, is so, then we will want to inherit all
-                //our grid/snap setting from it - instead of our options page
+                // Before we check our options page, we need to see if our parent
+                // is a ParentControlDesigner, is so, then we will want to inherit all
+                // our grid/snap setting from it - instead of our options page
                 ParentControlDesigner parent = GetParentControlDesignerOfParent();
                 if (parent is not null)
                 {
@@ -249,7 +249,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 _getDefaultGridSize = false;
             }
 
-            //do some validation checking here, against min & max GridSize
+            // do some validation checking here, against min & max GridSize
             if (value.Width < MinGridSize || value.Height < MinGridSize ||
                 value.Width > MaxGridSize || value.Height > MaxGridSize)
                 throw new ArgumentException(string.Format(SR.InvalidArgument,
@@ -257,11 +257,11 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                                                           value.ToString()));
             _gridSize = value;
 
-            //invalidate the control
+            // invalidate the control
             Control control = Control;
             control?.Invalidate(true);
 
-            //now, notify all child parent control designers that we have changed our setting
+            // now, notify all child parent control designers that we have changed our setting
             // 'cause they might to change along with us, unless the user has explicitly set
             // those values...
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -295,20 +295,24 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     // We need to allocation new ArrayList and pass it to the caller..
     // So its ok to Suppress this.
     protected void AddPaddingSnapLines(ref ArrayList snapLines)
-    {
-        snapLines ??= new ArrayList(4);
+        => AddPaddingSnapLinesCommon((snapLines ??= new(4)).Adapt<SnapLine>());
 
-        //In order to add padding, we need to get the offset from the usable client area of our control
-        //and the actual origin of our control.  In other words: how big is the non-client area here?
+    internal void AddPaddingSnapLines(ref IList<SnapLine> snapLines)
+        => AddPaddingSnapLinesCommon(snapLines ??= new List<SnapLine>(4));
+
+    private void AddPaddingSnapLinesCommon(IList<SnapLine> snapLines)
+    {
+        // In order to add padding, we need to get the offset from the usable client area of our control
+        // and the actual origin of our control.  In other words: how big is the non-client area here?
         // Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
         Point offset = GetOffsetToClientArea();
 
-        //the display rectangle should be the client area combined with the padding value
+        // the display rectangle should be the client area combined with the padding value
         Rectangle displayRectangle = Control.DisplayRectangle;
-        displayRectangle.X += offset.X; //offset for non-client area
-        displayRectangle.Y += offset.Y; //offset for non-client area
+        displayRectangle.X += offset.X; // offset for non-client area
+        displayRectangle.Y += offset.Y; // offset for non-client area
 
-        //add the four paddings of our control
+        // add the four paddings of our control
 
         // Even if a control does not have padding, we still want to add Padding snaplines.
         // This is because we only try to match to matching snaplines. Makes the code a little easier...
@@ -328,16 +332,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         get
         {
-            ArrayList snapLines = base.SnapLines as ArrayList;
+            IList<SnapLine> snapLines = SnapLinesInternal;
 
             if (snapLines is null)
             {
                 Debug.Fail("why did base.SnapLines return null?");
-                snapLines = new ArrayList(4);
+                snapLines = new List<SnapLine>(4);
             }
 
             AddPaddingSnapLines(ref snapLines);
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 
@@ -359,9 +363,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             {
                 _gridSnap = true;
 
-                //Before we check our options page, we need to see if our parent
-                //is a ParentControlDesigner, is so, then we will want to inherit all
-                //our grid/snap setting from it - instead of our options page
+                // Before we check our options page, we need to see if our parent
+                // is a ParentControlDesigner, is so, then we will want to inherit all
+                // our grid/snap setting from it - instead of our options page
                 ParentControlDesigner parent = GetParentControlDesignerOfParent();
                 if (parent is not null)
                 {
@@ -395,7 +399,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
                 _gridSnap = value;
 
-                //now, notify all child parent control designers that we have changed our setting
+                // now, notify all child parent control designers that we have changed our setting
                 // 'cause they might to change along with us, unless the user has explicitly set
                 // those values...
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -429,7 +433,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         Point location = Point.Empty;
         Size size = Size.Empty;
-        Size offset = new Size(0, 0);
+        Size offset = new(0, 0);
         bool hasLocation = (defaultValues is not null && defaultValues.Contains("Location"));
         bool hasSize = (defaultValues is not null && defaultValues.Contains("Size"));
 
@@ -449,7 +453,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // Otherwise, proceed with the parenting and locating.
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         if (host is not null && newChild is not null && !Control.Contains(newChild)
-            && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
+            && host.GetDesigner(newChild) as ControlDesigner is not null && !(newChild is Form form && form.TopLevel))
         {
             Rectangle bounds = default;
 
@@ -529,18 +533,18 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             bounds.X += offset.Width;
             bounds.Y += offset.Height;
 
-            //check to see if we have additional information for bounds from
-            //the behavior service drag drop logic
+            // check to see if we have additional information for bounds from
+            // the behavior service drag drop logic
             if (defaultValues is not null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
             {
                 ToolboxSnapDragDropEventArgs e = defaultValues["ToolboxSnapDragDropEventArgs"] as ToolboxSnapDragDropEventArgs;
                 Rectangle snappedBounds = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e, bounds, Control.IsMirrored);
 
-                //Make sure the snapped bounds intersects with the bounds of the root control before we go
-                //adjusting the drag offset.  A race condition exists where the user can drag a tbx item so fast
-                //that the adorner window will never receive the proper drag/mouse move messages and
-                //never properly adjust the snap drag info.  This cause the control to be added @ 0,0 w.r.t.
-                //the adorner window.
+                // Make sure the snapped bounds intersects with the bounds of the root control before we go
+                // adjusting the drag offset.  A race condition exists where the user can drag a tbx item so fast
+                // that the adorner window will never receive the proper drag/mouse move messages and
+                // never properly adjust the snap drag info.  This cause the control to be added @ 0,0 w.r.t.
+                // the adorner window.
                 Control rootControl = host.RootComponent as Control;
                 if (rootControl is not null && snappedBounds.IntersectsWith(rootControl.ClientRectangle))
                 {
@@ -562,19 +566,19 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 PropertyDescriptor prop = props["Size"];
                 prop?.SetValue(newChild, new Size(bounds.Width, bounds.Height));
 
-                //VSWhidbey# 364133 - ControlDesigner shadows the Location property. If the control is parented
-                //and the parent is a scrollable control, then it expects the Location to be in display rectangle coordinates.
-                //At this point bounds are in client rectangle coordinates, so we need to check if we need to adjust the coordinates.
-                //The reason this worked in Everett was that the AddChildControl was done AFTER this. The AddChildControl was moved
-                //above a while back. Not sure what will break if AddChildControl is moved down below, so let's just fix up things
-                //here.
+                // VSWhidbey# 364133 - ControlDesigner shadows the Location property. If the control is parented
+                // and the parent is a scrollable control, then it expects the Location to be in display rectangle coordinates.
+                // At this point bounds are in client rectangle coordinates, so we need to check if we need to adjust the coordinates.
+                // The reason this worked in Everett was that the AddChildControl was done AFTER this. The AddChildControl was moved
+                // above a while back. Not sure what will break if AddChildControl is moved down below, so let's just fix up things
+                // here.
 
-                Point pt = new Point(bounds.X, bounds.Y);
+                Point pt = new(bounds.X, bounds.Y);
                 ScrollableControl p = newChild.Parent as ScrollableControl;
                 if (p is not null)
                 {
                     Point ptScroll = p.AutoScrollPosition;
-                    pt.Offset(-ptScroll.X, -ptScroll.Y); //always want to add the control below/right of the AutoScrollPosition
+                    pt.Offset(-ptScroll.X, -ptScroll.Y); // always want to add the control below/right of the AutoScrollPosition
                 }
 
                 prop = props["Location"];
@@ -624,7 +628,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             }
             else
             {
-                //name = null;
+                // name = null;
                 // we don't want to add unsited child controls because
                 // these may be items from a composite control.  if they
                 // are legitimate children, the ComponentModelPersister would have
@@ -674,11 +678,11 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             // the associated Component. Doing so can cause a crash in hosted designers.
             // It doesn't make sense to do so anyway, since the designer (and thus
             // the component) is being disposed.
-            OnMouseDragEnd((_mouseDragBase == InvalidPoint) ? true : false);
+            OnMouseDragEnd(_mouseDragBase == InvalidPoint);
 
             EnableDragDrop(false);
 
-            if (Control is ScrollableControl control)
+            if (HasComponent && Control is ScrollableControl control)
             {
                 control.Scroll -= new ScrollEventHandler(OnScroll);
             }
@@ -825,7 +829,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         }
         finally
         {
-            //clear the toolboxSnap drag args so we won't provide bad information the next time around
+            // clear the toolboxSnap drag args so we won't provide bad information the next time around
             _toolboxSnapDragDropEventArgs = null;
         }
 
@@ -851,12 +855,12 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// <summary>
     ///  Finds the array of components within the given rectangle.  This uses the rectangle to
     ///  find controls within our control, and then uses those controls to find the actual
-    ///  components.  It returns an object array so the output can be directly fed into
+    ///  components.  It returns an object list so the output can be directly fed into
     ///  the selection service.
     /// </summary>
-    internal object[] GetComponentsInRect(Rectangle value, bool screenCoords, bool containRect)
+    internal List<Control> GetComponentsInRect(Rectangle value, bool screenCoords, bool containRect)
     {
-        ArrayList list = new ArrayList();
+        List<Control> list = [];
         Rectangle rect = screenCoords ? Control.RectangleToClient(value) : value;
 
         IContainer container = Component.Site.Container;
@@ -878,7 +882,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             }
         }
 
-        return list.ToArray();
+        return list;
     }
 
     /// <summary>
@@ -930,7 +934,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     private static Size GetDefaultSize(IComponent component)
     {
-        //Check to see if the control is AutoSized. VSWhidbey #416721
+        // Check to see if the control is AutoSized. VSWhidbey #416721
         PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
 
         Size size;
@@ -1028,25 +1032,25 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         GlyphCollection glyphs = base.GetGlyphs(selectionType);
 
-        //only add this glyph if our container is 1) moveable 2) not read-only
-        //AND 3) it is selected .
+        // only add this glyph if our container is 1) moveable 2) not read-only
+        // AND 3) it is selected .
         if ((SelectionRules & SelectionRules.Moveable) != 0 &&
           InheritanceAttribute != InheritanceAttribute.InheritedReadOnly && selectionType != GlyphSelectionType.NotSelected)
         {
-            //get the adornerwindow-relative coords for the container control
+            // get the adornerwindow-relative coords for the container control
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
-            Rectangle translatedBounds = new Rectangle(loc, ((Control)Component).Size);
+            Rectangle translatedBounds = new(loc, ((Control)Component).Size);
 
-            int glyphOffset = (int)(DesignerUtils.CONTAINERGRABHANDLESIZE * .5);
+            int glyphOffset = (int)(DesignerUtils.s_containerGrabHandleSize * .5);
 
-            //if the control is too small for our ideal position...
-            if (translatedBounds.Width < 2 * DesignerUtils.CONTAINERGRABHANDLESIZE)
+            // if the control is too small for our ideal position...
+            if (translatedBounds.Width < 2 * DesignerUtils.s_containerGrabHandleSize)
             {
                 glyphOffset = -1 * glyphOffset;
             }
 
-            ContainerSelectorBehavior behavior = new ContainerSelectorBehavior((Control)Component, Component.Site, true);
-            ContainerSelectorGlyph containerSelectorGlyph = new ContainerSelectorGlyph(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
+            ContainerSelectorBehavior behavior = new((Control)Component, Component.Site, true);
+            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.s_containerGrabHandleSize, glyphOffset, behavior);
 
             glyphs.Insert(0, containerSelectorGlyph);
         }
@@ -1087,15 +1091,15 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         Rectangle adjustedRect = GetUpdatedRect(originalRect, dragRect, true);
 
-        //now, preserve the width and height that was originally passed in
+        // now, preserve the width and height that was originally passed in
         adjustedRect.Width = dragRect.Width;
         adjustedRect.Height = dragRect.Height;
 
-        //we need to keep in mind that if we adjust to the snap, that we could
-        //have possibly moved the control's position outside of the display rect.
-        //ex: groupbox's display rect.x = 3, but we might snap to 0.
-        //so we need to check with the control's designer to make sure this
-        //doesn't happen
+        // we need to keep in mind that if we adjust to the snap, that we could
+        // have possibly moved the control's position outside of the display rect.
+        // ex: groupbox's display rect.x = 3, but we might snap to 0.
+        // so we need to check with the control's designer to make sure this
+        // doesn't happen
         Point minimumLocation = DefaultControlLocation;
         if (adjustedRect.X < minimumLocation.X)
         {
@@ -1107,7 +1111,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             adjustedRect.Y = minimumLocation.Y;
         }
 
-        //here's our rect that has been snapped to grid
+        // here's our rect that has been snapped to grid
         return adjustedRect;
     }
 
@@ -1132,7 +1136,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (SnapToGrid)
         {
             Size gridSize = GridSize;
-            Point halfGrid = new Point(gridSize.Width / 2, gridSize.Height / 2);
+            Point halfGrid = new(gridSize.Width / 2, gridSize.Height / 2);
 
             updatedRect = dragRect;
             updatedRect.X = originalRect.X;
@@ -1192,9 +1196,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         base.Initialize(component);
 
-        if (Control is ScrollableControl)
+        if (Control is ScrollableControl control)
         {
-            ((ScrollableControl)Control).Scroll += new ScrollEventHandler(OnScroll);
+            control.Scroll += OnScroll;
         }
 
         EnableDragDrop(true);
@@ -1230,50 +1234,45 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
         if (defaultValues is not null && defaultValues["Size"] is not null && defaultValues["Location"] is not null && defaultValues["Parent"] is not null)
         {
-            //build our rect that may have covered some child controls
-            Rectangle bounds = new Rectangle((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
+            // build our rect that may have covered some child controls
+            Rectangle bounds = new((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
 
-            //ask the parent to give us the comps within this rect
-            IComponent parent = defaultValues["Parent"] as IComponent;
-            if (parent is null)
+            // ask the parent to give us the comps within this rect
+            if (defaultValues["Parent"] is not IComponent parent)
             {
                 Debug.Fail("Couldn't get the parent instance from 'defaultValues'");
                 return;
             }
 
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host is null)
+            if (GetService(typeof(IDesignerHost)) is not IDesignerHost host)
             {
                 Debug.Fail("Failed to IDesignerHost");
                 return;
             }
 
-            ParentControlDesigner parentDesigner = host.GetDesigner(parent) as ParentControlDesigner;
-            if (parentDesigner is null)
+            if (host.GetDesigner(parent) is not ParentControlDesigner parentDesigner)
             {
                 Debug.Fail($"Could not get ParentControlDesigner for {parent}");
                 return;
             }
 
-            object[] comps = parentDesigner.GetComponentsInRect(bounds, true, true /* component should be fully contained*/);
+            List<Control> selectedControls = parentDesigner.GetComponentsInRect(bounds, true, true /* component should be fully contained*/);
 
-            if (comps is null || comps.Length == 0)
+            if (selectedControls is null || selectedControls.Count == 0)
             {
-                //no comps to re-parent
+                // no comps to re-parent
                 return;
             }
 
-            ArrayList selectedControls = new ArrayList(comps);
-
-            //remove this
+            // remove this
             if (selectedControls.Contains(Control))
             {
                 selectedControls.Remove(Control);
             }
 
-            //Finally, we have identified that we need to re-parent the lasso'd controls.
-            //We will start a designer transaction, send some changing notifications
-            //and swap parents...
+            // Finally, we have identified that we need to re-parent the lasso'd controls.
+            // We will start a designer transaction, send some changing notifications
+            // and swap parents...
             ReParentControls(Control, selectedControls, string.Format(SR.ParentControlDesignerLassoShortcutRedo, Control.Site.Name), host);
         }
     }
@@ -1325,7 +1324,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (comp is not null && comp.Parent is not null && comp.Parent == Control)
         {
             _pendingRemoveControl = comp;
-            //We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo
+            // We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo
             // see bug 488115
             if (_suspendChanging == 0)
             {
@@ -1379,8 +1378,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     // Standard 'catch all - rethrow critical' exception pattern
     protected override void OnDragDrop(DragEventArgs de)
     {
-        //if needed, cache extra info about the behavior dragdrop event
-        //ex: snapline and offset info
+        // if needed, cache extra info about the behavior dragdrop event
+        // ex: snapline and offset info
         if (de is ToolboxSnapDragDropEventArgs)
         {
             _toolboxSnapDragDropEventArgs = de as ToolboxSnapDragDropEventArgs;
@@ -1458,7 +1457,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             behDataObject = data;
             behDataObject.Target = Component;
             de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
-            newTarget = !(data.Source.Equals(Component)); //Check if we are moving to a new target
+            newTarget = !(data.Source.Equals(Component)); // Check if we are moving to a new target
         }
 
         // If tab order UI is being shown, then don't allow anything to be
@@ -1478,8 +1477,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         object[] dragComps;
         if (behDataObject is not null && behDataObject.DragComponents is not null)
         {
-            dragComps = new object[behDataObject.DragComponents.Count];
-            behDataObject.DragComponents.CopyTo(dragComps, 0);
+            dragComps = behDataObject.DragComponents.ToArray();
         }
         else
         {
@@ -1514,8 +1512,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             for (int i = 0; i < dragComps.Length; i++)
             {
-                IComponent comp = dragComps[i] as IComponent;
-                if (host is null || comp is null)
+                if (host is null || dragComps[i] is not IComponent comp)
                 {
                     continue;
                 }
@@ -1560,8 +1557,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                     return;
                 }
 
-                //Can the component be dropped on this parent? I.e. you can only
-                //drop a tab page on a tab control, not say a panel
+                // Can the component be dropped on this parent? I.e. you can only
+                // drop a tab page on a tab control, not say a panel
                 if (!((IOleDragClient)this).IsDropOk(comp))
                 {
                     de.Effect = DragDropEffects.None;
@@ -1584,11 +1581,11 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             _mouseDragTool = _toolboxService.DeserializeToolboxItem(de.Data, host);
 
-            //If we have a valid toolbox item to drag and
-            //we haven't pushed our behavior, then do so now...
+            // If we have a valid toolbox item to drag and
+            // we haven't pushed our behavior, then do so now...
             if ((_mouseDragTool is not null) && BehaviorService is not null && BehaviorService.UseSnapLines)
             {
-                //demand create
+                // demand create
                 _toolboxItemSnapLineBehavior ??= new ToolboxItemSnapLineBehavior(Component.Site, BehaviorService, this, AllowGenericDragBox);
 
                 if (!_toolboxItemSnapLineBehavior.IsPushed)
@@ -1641,7 +1638,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     protected override void OnDragLeave(EventArgs e)
     {
-        //if we're dragging around our generic snapline box - let's remove it here
+        // if we're dragging around our generic snapline box - let's remove it here
         if (_toolboxItemSnapLineBehavior is not null && _toolboxItemSnapLineBehavior.IsPushed)
         {
             BehaviorService.PopBehavior(_toolboxItemSnapLineBehavior);
@@ -1662,10 +1659,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
         }
 
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
-
-        // If tab order UI is being shown, then don't allow anything to be
-        // dropped here.
+        // If tab order UI is being shown, then don't allow anything to be dropped here.
         IMenuCommandService ms = (IMenuCommandService)GetService(typeof(IMenuCommandService));
         if (ms is not null)
         {
@@ -1694,8 +1688,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             de.Effect = DragDropEffects.Copy;
             return;
         }
-
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
     }
 
     /// <summary>
@@ -1743,8 +1735,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // Get the event handler service.  We push a handler to handle the escape
         // key.
         IEventHandlerService eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));
-        //UNDONE: Behavior Work
-        //Debug.Assert(escapeHandler == null, "Why is there already an escape handler?");
+        // UNDONE: Behavior Work
+        // Debug.Assert(escapeHandler == null, "Why is there already an escape handler?");
 
         if (eventSvc is not null && _escapeHandler is null)
         {
@@ -1752,7 +1744,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             eventSvc.PushHandler(_escapeHandler);
         }
 
-        //Need this since we are drawing the frame in the adorner window
+        // Need this since we are drawing the frame in the adorner window
         _adornerWindowToScreenOffset = BehaviorService.AdornerWindowToScreen();
     }
 
@@ -1787,14 +1779,14 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // Clear out the drag frame.
         if (!offset.IsEmpty && _graphics is not null)
         {
-            Rectangle frameRect = new Rectangle(offset.X - _adornerWindowToScreenOffset.X,
+            Rectangle frameRect = new(offset.X - _adornerWindowToScreenOffset.X,
                                                  offset.Y - _adornerWindowToScreenOffset.Y,
                                                  offset.Width, offset.Height);
 
             int frameWidth = FrameWidth(_mouseDragFrame);
             _graphics.SetClip(frameRect);
 
-            using (Region newRegion = new Region(frameRect))
+            using (Region newRegion = new(frameRect))
             {
                 newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
                 BehaviorService.Invalidate(newRegion);
@@ -1809,7 +1801,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             _graphics = null;
         }
 
-        //destroy the snapline engine (if we used it)
+        // destroy the snapline engine (if we used it)
         if (_dragManager is not null)
         {
             _dragManager.OnMouseUp();
@@ -1863,9 +1855,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             try
             {
-                //avoid allowing the user creating a 1x1 sized control (for ex)
-                //by enforcing a min size 2xMinDragSize...
-                Size minControlSize = new Size(DesignerUtils.MinDragSize.Width * 2, DesignerUtils.MinDragSize.Height * 2);
+                // avoid allowing the user creating a 1x1 sized control (for ex)
+                // by enforcing a min size 2xMinDragSize...
+                Size minControlSize = new(DesignerUtils.MinDragSize.Width * 2, DesignerUtils.MinDragSize.Height * 2);
                 if (offset.Width < minControlSize.Width)
                 {
                     offset.Width = minControlSize.Width;
@@ -1890,8 +1882,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             var selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc is not null)
             {
-                object[] selection = GetComponentsInRect(offset, true, false /*component does not need to be fully contained*/);
-                if (selection.Length > 0)
+                List<Control> selection = GetComponentsInRect(offset, true, false /*component does not need to be fully contained*/);
+                if (selection.Count > 0)
                 {
                     selSvc.SetSelectedComponents(selection);
                 }
@@ -1906,8 +1898,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     protected override void OnMouseDragMove(int x, int y)
     {
-        //if we pushed a snapline behavior during a drag operation - make sure we have popped it
-        //if we're now receiving mouse move messages.
+        // if we pushed a snapline behavior during a drag operation - make sure we have popped it
+        // if we're now receiving mouse move messages.
         if (_toolboxItemSnapLineBehavior is not null && _toolboxItemSnapLineBehavior.IsPushed)
         {
             BehaviorService.PopBehavior(_toolboxItemSnapLineBehavior);
@@ -1929,9 +1921,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         _mouseDragOffset.Width = x - _mouseDragBase.X;
         _mouseDragOffset.Height = y - _mouseDragBase.Y;
 
-        //if we have a valid dragtool - then we'll spin up our snapline engine
-        //and use it when the user drags a reversible rect -- but only if the
-        //parentcontroldesigner wants to allow Snaplines
+        // if we have a valid dragtool - then we'll spin up our snapline engine
+        // and use it when the user drags a reversible rect -- but only if the
+        // parentcontroldesigner wants to allow Snaplines
 
         if (_dragManager is null && ParticipatesWithSnapLines && _mouseDragTool is not null && BehaviorService.UseSnapLines)
         {
@@ -1940,9 +1932,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
         if (_dragManager is not null)
         {
-            //here, we build up our new rect (offset by the adorner window)
-            //and ask the snapline engine to adjust our coords
-            Rectangle r = new Rectangle(_mouseDragBase.X - _adornerWindowToScreenOffset.X,
+            // here, we build up our new rect (offset by the adorner window)
+            // and ask the snapline engine to adjust our coords
+            Rectangle r = new(_mouseDragBase.X - _adornerWindowToScreenOffset.X,
                                    _mouseDragBase.Y - _adornerWindowToScreenOffset.Y,
                                    x - _mouseDragBase.X, y - _mouseDragBase.Y);
             Point offset = _dragManager.OnMouseMove(r, GenerateNewToolSnapLines(r));
@@ -1979,40 +1971,40 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // And draw the new drag frame
         if (!_mouseDragOffset.IsEmpty && _graphics is not null)
         {
-            Rectangle frameRect = new Rectangle(_mouseDragOffset.X - _adornerWindowToScreenOffset.X,
+            Rectangle frameRect = new(_mouseDragOffset.X - _adornerWindowToScreenOffset.X,
                                                  _mouseDragOffset.Y - _adornerWindowToScreenOffset.Y,
                                                  _mouseDragOffset.Width, _mouseDragOffset.Height);
 
-            //graphics.SetClip(frameRect);
+            // graphics.SetClip(frameRect);
 
-            //draw the new border
-            using Region newRegion = new Region(frameRect);
+            // draw the new border
+            using Region newRegion = new(frameRect);
             int frameWidth = FrameWidth(_mouseDragFrame);
             newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
 
-            //erase the right part of the old frame
+            // erase the right part of the old frame
             if (!oldFrameRect.IsEmpty)
             {
                 oldFrameRect.X -= _adornerWindowToScreenOffset.X;
                 oldFrameRect.Y -= _adornerWindowToScreenOffset.Y;
 
-                //Let's not try and be smart about invalidating just the part of the old frame
-                //that's not part of the new frame. When I did that (using the commented out
-                //lines below), you could get serious screen artifacts when dragging fast. I think
-                //this might be because of some bad region forming (bad region, bad), or some missing
-                //updates.
+                // Let's not try and be smart about invalidating just the part of the old frame
+                // that's not part of the new frame. When I did that (using the commented out
+                // lines below), you could get serious screen artifacts when dragging fast. I think
+                // this might be because of some bad region forming (bad region, bad), or some missing
+                // updates.
 
                 // Since we invalidate and then immediately redraw, the flicker should be minimal.
-                using Region oldRegion = new Region(oldFrameRect);
+                using Region oldRegion = new(oldFrameRect);
                 oldRegion.Exclude(Rectangle.Inflate(oldFrameRect, -frameWidth, -frameWidth));
-                //oldRegion.Union(newRegion);
-                //oldRegion.Exclude(newRegion);
+                // oldRegion.Union(newRegion);
+                // oldRegion.Exclude(newRegion);
                 BehaviorService.Invalidate(oldRegion);
             }
 
             DesignerUtils.DrawFrame(_graphics, newRegion, _mouseDragFrame, Control.BackColor);
 
-            //graphics.ResetClip();
+            // graphics.ResetClip();
         }
 
         // We are looking at the primary control
@@ -2136,7 +2128,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  Control in the toolbox then drags a rectangle around four Buttons on the Form's surface.  We'll attempt
     ///  to re-parent those four Buttons to the newly created Panel.
     /// </summary>
-    private void ReParentControls(Control newParent, ArrayList controls, string transactionName, IDesignerHost host)
+    private void ReParentControls(Control newParent, List<Control> controls, string transactionName, IDesignerHost host)
     {
         using DesignerTransaction dt = host.CreateTransaction(transactionName);
         var changeService = GetService<IComponentChangeService>();
@@ -2144,8 +2136,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
         PropertyDescriptor locationProp = TypeDescriptor.GetProperties(newParent)["Location"];
 
-        //get the location of our parent - so we can correctly offset the new lasso'd controls
-        //once they are re-parented
+        // get the location of our parent - so we can correctly offset the new lasso'd controls
+        // once they are re-parented
         Point parentLoc = Point.Empty;
         if (locationProp is not null)
         {
@@ -2154,44 +2146,43 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
         changeService?.OnComponentChanging(newParent, controlsProp);
 
-        //enumerate the lasso'd controls relocate and re-parent...
-        foreach (object comp in controls)
+        // enumerate the lasso'd controls relocate and re-parent...
+        foreach (Control control in controls)
         {
-            Control control = comp as Control;
             Control oldParent = control.Parent;
             Point controlLoc = Point.Empty;
 
-            //do not want to reparent any control that is inherited readonly
+            // do not want to reparent any control that is inherited readonly
             InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(control)[typeof(InheritanceAttribute)];
             if (inheritanceAttribute is not null && inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
             {
                 continue;
             }
 
-            //get the current location of the control
+            // get the current location of the control
             PropertyDescriptor locProp = TypeDescriptor.GetProperties(control)["Location"];
             if (locProp is not null)
             {
                 controlLoc = (Point)locProp.GetValue(control);
             }
 
-            //fire comp changing on parent and control
+            // fire comp changing on parent and control
             if (oldParent is not null)
             {
                 changeService?.OnComponentChanging(oldParent, controlsProp);
 
-                //remove control from the old parent
+                // remove control from the old parent
                 oldParent.Controls.Remove(control);
             }
 
-            //finally add & relocate the control with the new parent
+            // finally add & relocate the control with the new parent
             newParent.Controls.Add(control);
 
             Point newLoc = Point.Empty;
 
-            //this condition will determine which way we need to 'offset' our control location
-            //based on whether we are moving controls into a child or bringing them out to
-            //a parent
+            // this condition will determine which way we need to 'offset' our control location
+            // based on whether we are moving controls into a child or bringing them out to
+            // a parent
             if (oldParent is not null)
             {
                 if (oldParent.Controls.Contains(newParent))
@@ -2207,7 +2198,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             locProp.SetValue(control, newLoc);
 
-            //fire our comp changed events
+            // fire our comp changed events
             if (changeService is not null && oldParent is not null)
             {
                 changeService.OnComponentChanged(oldParent, controlsProp);
@@ -2216,7 +2207,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
         changeService?.OnComponentChanged(newParent, controlsProp);
 
-        //commit the transaction
+        // commit the transaction
         dt.Commit();
     }
 
@@ -2225,16 +2216,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     private bool ShouldSerializeDrawGrid()
     {
-        //To determine if we need to persist this value, we first need to check
-        //if we have a parent who is a parentcontroldesigner, then get their
-        //setting...
+        // To determine if we need to persist this value, we first need to check
+        // if we have a parent who is a parentcontroldesigner, then get their
+        // setting...
         ParentControlDesigner parent = GetParentControlDesignerOfParent();
         if (parent is not null)
         {
             return !(DrawGrid == parent.DrawGrid);
         }
 
-        //Otherwise, we'll compare the value to the options page...
+        // Otherwise, we'll compare the value to the options page...
         return !IsOptionDefault("ShowGrid", DrawGrid);
     }
 
@@ -2243,16 +2234,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     private bool ShouldSerializeSnapToGrid()
     {
-        //To determine if we need to persist this value, we first need to check
-        //if we have a parent who is a parentcontroldesigner, then get their
-        //setting...
+        // To determine if we need to persist this value, we first need to check
+        // if we have a parent who is a parentcontroldesigner, then get their
+        // setting...
         ParentControlDesigner parent = GetParentControlDesignerOfParent();
         if (parent is not null)
         {
             return !(SnapToGrid == parent.SnapToGrid);
         }
 
-        //Otherwise, we'll compare the value to the options page...
+        // Otherwise, we'll compare the value to the options page...
         return !IsOptionDefault("SnapToGrid", SnapToGrid);
     }
 
@@ -2261,16 +2252,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     private bool ShouldSerializeGridSize()
     {
-        //To determine if we need to persist this value, we first need to check
-        //if we have a parent who is a parentcontroldesigner, then get their
-        //setting...
+        // To determine if we need to persist this value, we first need to check
+        // if we have a parent who is a parentcontroldesigner, then get their
+        // setting...
         ParentControlDesigner parent = GetParentControlDesignerOfParent();
         if (parent is not null)
         {
             return !(GridSize.Equals(parent.GridSize));
         }
 
-        //Otherwise, we'll compare the value to the options page...
+        // Otherwise, we'll compare the value to the options page...
         return !IsOptionDefault("GridSize", GridSize);
     }
 
@@ -2278,7 +2269,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         _getDefaultGridSize = true;
         _parentCanSetGridSize = true;
-        //invalidate the control
+        // invalidate the control
         Control control = Control;
         control?.Invalidate(true);
     }
@@ -2287,7 +2278,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         _getDefaultDrawGrid = true;
         _parentCanSetDrawGrid = true;
-        //invalidate the control
+        // invalidate the control
         Control control = Control;
         control?.Invalidate(true);
     }
@@ -2383,8 +2374,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 }
                 else
                 {
-                    //there wad no container move ... but then this operation is not supported so
-                    //just remove this component
+                    // there wad no container move ... but then this operation is not supported so
+                    // just remove this component
                     container.Remove(component);
                 }
             }
@@ -2403,9 +2394,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             // set it's handler to this
             Control parent = GetParentForComponent(component);
-            Form form = c as Form;
 
-            if (form is null || !form.TopLevel)
+            if (c is not Form form || !form.TopLevel)
             {
                 if (c.Parent != parent)
                 {
@@ -2430,7 +2420,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                     parent.Controls.Add(c);
                     // sburke 78059 -- not sure why we need this call. this should move things to the beginning of the
                     // z-order, but do we need that?
-                    //parent.Controls.SetChildIndex(c, 0);
+                    // parent.Controls.SetChildIndex(c, 0);
                     _changeService?.OnComponentChanged(parent, controlsProp, parent.Controls, parent.Controls);
                 }
                 else
@@ -2493,7 +2483,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 ControlDesigner cd = designer as ControlDesigner;
                 if (cd is not null)
                 {
-                    //Make sure the component doesn't get set to Visible
+                    // Make sure the component doesn't get set to Visible
                     cd.ForceVisible = false;
                 }
 

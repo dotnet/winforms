@@ -21,7 +21,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
     private readonly Type _type;
 
-    private readonly Dictionary<int, DispatchEntry> _members = new();
+    private readonly Dictionary<int, DispatchEntry> _members = [];
     private readonly Dictionary<string, int> _reverseLookup = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly ClassPropertyDispatchAdapter? _priorAdapter;
@@ -29,11 +29,15 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// <param name="priorAdapter">
     ///  A prior adapter for chaining. This adapter will be consulted first for all results.
     /// </param>
-    public ClassPropertyDispatchAdapter(object instance, ClassPropertyDispatchAdapter? priorAdapter = null)
+    public ClassPropertyDispatchAdapter(
+        object instance,
+        ClassPropertyDispatchAdapter? priorAdapter = null)
     {
         ArgumentNullException.ThrowIfNull(instance);
         _instance = new(instance);
+#pragma warning disable IL2074 // value stored in field does not satisfy DynamicallyAccessedMemberTypes.PublicProperties requirements. https://github.com/dotnet/winforms/issues/10226
         _type = instance.GetType();
+#pragma warning restore IL2074
         _priorAdapter = priorAdapter;
 
         var properties = _type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
@@ -69,7 +73,7 @@ internal unsafe class ClassPropertyDispatchAdapter
 
     private int GetUnusedDispId(int desiredId)
     {
-        if (desiredId != PInvoke.DISPID_UNKNOWN && !IdInUse(desiredId))
+        if (desiredId != PInvokeCore.DISPID_UNKNOWN && !IdInUse(desiredId))
         {
             return desiredId;
         }
@@ -204,7 +208,7 @@ internal unsafe class ClassPropertyDispatchAdapter
                     bindingFlags,
                     binder: null,
                     target,
-                    new object?[] { value });
+                    [value]);
             }
             catch (Exception ex)
             {
@@ -256,7 +260,7 @@ internal unsafe class ClassPropertyDispatchAdapter
             return true;
         }
 
-        bool foundLast = dispId == PInvoke.DISPID_STARTENUM;
+        bool foundLast = dispId == PInvokeCore.DISPID_STARTENUM;
 
         foreach (int currentId in _members.Keys)
         {
@@ -269,7 +273,7 @@ internal unsafe class ClassPropertyDispatchAdapter
             foundLast = dispId == currentId;
         }
 
-        nextDispId = PInvoke.DISPID_UNKNOWN;
+        nextDispId = PInvokeCore.DISPID_UNKNOWN;
         return false;
     }
 
@@ -307,29 +311,16 @@ internal unsafe class ClassPropertyDispatchAdapter
     // {
     //     int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? Interop.DISPID_UNKNOWN;
     //     string name = info.Name;
-    //     FDEX_PROP_FLAGS flags =
-    //         FDEX_PROP_FLAGS.fdexPropCanGet
-    //         | FDEX_PROP_FLAGS.fdexPropCanPut
-    //         | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-    //         | FDEX_PROP_FLAGS.fdexPropCannotCall
-    //         | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-    //         | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
+    //     FDEX_PROP_FLAGS flags = IDispatch.GetFieldProperty();
     //
     //     return (name, dispid, flags);
     // }
 
     private static (string Name, int DispId, FDEX_PROP_FLAGS Flags) GetPropertyInfo(PropertyInfo info)
     {
-        int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? PInvoke.DISPID_UNKNOWN;
+        int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? PInvokeCore.DISPID_UNKNOWN;
         string name = info.Name;
-        FDEX_PROP_FLAGS flags =
-            (info.CanRead ? FDEX_PROP_FLAGS.fdexPropCanGet : FDEX_PROP_FLAGS.fdexPropCannotGet)
-            | (info.CanWrite ? FDEX_PROP_FLAGS.fdexPropCanPut : FDEX_PROP_FLAGS.fdexPropCannotPut)
-            | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-            | FDEX_PROP_FLAGS.fdexPropCannotCall
-            | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-            | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
-
+        FDEX_PROP_FLAGS flags = IDispatch.GetPropertyFlags(info.CanRead, info.CanWrite);
         return (name, dispid, flags);
     }
 

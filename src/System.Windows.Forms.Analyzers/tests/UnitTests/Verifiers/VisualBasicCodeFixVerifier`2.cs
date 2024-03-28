@@ -29,7 +29,7 @@ public static partial class VisualBasicCodeFixVerifier<TAnalyzer, TCodeFix>
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
     public static async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
     {
-        var test = new Test
+        Test test = new()
         {
             TestCode = source,
         };
@@ -44,12 +44,12 @@ public static partial class VisualBasicCodeFixVerifier<TAnalyzer, TCodeFix>
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult, string)"/>
     public static async Task VerifyCodeFixAsync(string source, DiagnosticResult expected, string fixedSource)
-        => await VerifyCodeFixAsync(source, new[] { expected }, fixedSource);
+        => await VerifyCodeFixAsync(source, [expected], fixedSource);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult[], string)"/>
     public static async Task VerifyCodeFixAsync(string source, DiagnosticResult[] expected, string fixedSource)
     {
-        var test = new Test
+        Test test = new()
         {
             TestCode = source,
             FixedCode = fixedSource,

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Design;
@@ -24,13 +22,13 @@ public partial class CollectionEditor
         private const int PaintIndent = 26;
         private static readonly double s_log10 = Math.Log(10);
 
-        private ArrayList _createdItems;
-        private ArrayList _removedItems;
-        private ArrayList _originalItems;
+        private List<object>? _createdItems;
+        private List<object>? _removedItems;
+        private List<object>? _originalItems;
 
         private readonly CollectionEditor _editor;
 
-        private FilterListBox _listbox;
+        private FilterListBox _listBox;
         private SplitButton _addButton;
         private Button _removeButton;
         private Button _cancelButton;
@@ -40,7 +38,6 @@ public partial class CollectionEditor
         private PropertyGrid _propertyGrid;
         private Label _membersLabel;
         private Label _propertiesLabel;
-        private readonly ContextMenuStrip _addDownMenu;
         private TableLayoutPanel _okCancelTableLayoutPanel;
         private TableLayoutPanel _overArchingTableLayoutPanel;
         private TableLayoutPanel _addRemoveTableLayoutPanel;
@@ -53,7 +50,7 @@ public partial class CollectionEditor
         {
             _editor = editor;
             InitializeComponent();
-            if (DpiHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequired)
             {
                 ScaleButtonImageLogicalToDevice(_downButton);
                 ScaleButtonImageLogicalToDevice(_upButton);
@@ -66,13 +63,13 @@ public partial class CollectionEditor
             Type[] newItemTypes = NewItemTypes;
             if (newItemTypes.Length > 1)
             {
-                EventHandler addDownMenuClick = new EventHandler(AddDownMenu_click);
+                EventHandler addDownMenuClick = new(AddDownMenu_click);
                 _addButton.ShowSplit = true;
-                _addDownMenu = new ContextMenuStrip();
-                _addButton.ContextMenuStrip = _addDownMenu;
+                ContextMenuStrip addDownMenu = new();
+                _addButton.ContextMenuStrip = addDownMenu;
                 for (int i = 0; i < newItemTypes.Length; i++)
                 {
-                    _addDownMenu.Items.Add(new TypeMenuItem(newItemTypes[i], addDownMenuClick));
+                    addDownMenu.Items.Add(new TypeMenuItem(newItemTypes[i], addDownMenuClick));
                 }
             }
 
@@ -83,7 +80,7 @@ public partial class CollectionEditor
         {
             get
             {
-                foreach (ListItem item in _listbox.SelectedItems)
+                foreach (ListItem item in _listBox.SelectedItems)
                 {
                     Type type = item.Value.GetType();
 
@@ -108,7 +105,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Adds a new element to the collection.
         /// </summary>
-        private void AddButton_click(object sender, EventArgs e)
+        private void AddButton_click(object? sender, EventArgs e)
         {
             PerformAdd();
         }
@@ -116,7 +113,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Processes a click of the drop down type menu. This creates a new instance.
         /// </summary>
-        private void AddDownMenu_click(object sender, EventArgs e)
+        private void AddDownMenu_click(object? sender, EventArgs e)
         {
             if (sender is TypeMenuItem typeMenuItem)
             {
@@ -129,31 +126,31 @@ public partial class CollectionEditor
         /// </summary>
         private void AddItems(IList instances)
         {
-            _createdItems ??= new ArrayList();
+            _createdItems ??= [];
 
-            _listbox.BeginUpdate();
+            _listBox.BeginUpdate();
             try
             {
-                foreach (object instance in instances)
+                foreach (object? instance in instances)
                 {
                     if (instance is not null)
                     {
                         _dirty = true;
                         _createdItems.Add(instance);
-                        ListItem created = new ListItem(_editor, instance);
-                        _listbox.Items.Add(created);
+                        ListItem created = new(_editor, instance);
+                        _listBox.Items.Add(created);
                     }
                 }
             }
             finally
             {
-                _listbox.EndUpdate();
+                _listBox.EndUpdate();
             }
 
             if (instances.Count == 1)
             {
                 // optimize for the case where we just added one thing...
-                UpdateItemWidths(_listbox.Items[_listbox.Items.Count - 1] as ListItem);
+                UpdateItemWidths(_listBox.Items[^1] as ListItem);
             }
             else
             {
@@ -163,23 +160,23 @@ public partial class CollectionEditor
             SuspendEnabledUpdates();
             try
             {
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = _listBox.Items.Count - 1;
 
-                object[] items = new object[_listbox.Items.Count];
+                object[] items = new object[_listBox.Items.Count];
                 for (int i = 0; i < items.Length; i++)
                 {
-                    items[i] = ((ListItem)_listbox.Items[i]).Value;
+                    items[i] = ((ListItem)_listBox.Items[i]).Value;
                 }
 
                 Items = items;
 
                 // If someone changes the edit value which resets the selindex, we
                 // should keep the new index.
-                if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
+                if (_listBox.Items.Count > 0 && _listBox.SelectedIndex != _listBox.Items.Count - 1)
                 {
-                    _listbox.ClearSelected();
-                    _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                    _listBox.ClearSelected();
+                    _listBox.SelectedIndex = _listBox.Items.Count - 1;
                 }
             }
             finally
@@ -190,7 +187,7 @@ public partial class CollectionEditor
 
         private void AdjustListBoxItemHeight()
         {
-            _listbox.ItemHeight = Font.Height + SystemInformation.BorderSize.Width * 2;
+            _listBox.ItemHeight = Font.Height + SystemInformation.BorderSize.Width * 2;
         }
 
         /// <summary>
@@ -211,8 +208,8 @@ public partial class CollectionEditor
 
         private int CalcItemWidth(Graphics g, ListItem item)
         {
-            int c = Math.Max(2, _listbox.Items.Count);
-            SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
+            int c = Math.Max(2, _listBox.Items.Count);
+            SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listBox.Font);
 
             int charactersInNumber = ((int)(Math.Log(c - 1) / s_log10) + 1);
             int w = 4 + charactersInNumber * (Font.Height / 2);
@@ -220,7 +217,7 @@ public partial class CollectionEditor
             w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
             w += SystemInformation.BorderSize.Width * 4;
 
-            SizeF size = g.MeasureString(GetDisplayText(item), _listbox.Font);
+            SizeF size = g.MeasureString(GetDisplayText(item), _listBox.Font);
             int pic = 0;
             if (item.Editor is not null && item.Editor.GetPaintValueSupported())
             {
@@ -233,7 +230,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Aborts changes made in the editor.
         /// </summary>
-        private void CancelButton_click(object sender, EventArgs e)
+        private void CancelButton_click(object? sender, EventArgs e)
         {
             try
             {
@@ -245,12 +242,11 @@ public partial class CollectionEditor
                 }
 
                 _dirty = false;
-                _listbox.Items.Clear();
+                _listBox.Items.Clear();
 
                 if (_createdItems is not null)
                 {
-                    object[] items = _createdItems.ToArray();
-                    if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site is not null)
+                    if (_createdItems is [IComponent { Site: not null }, ..])
                     {
                         // here we bail now because we don't want to do the "undo" manually,
                         // we're part of a transaction, we've added item, the rollback will be
@@ -260,6 +256,7 @@ public partial class CollectionEditor
                         return;
                     }
 
+                    object[] items = [.. _createdItems];
                     for (int i = 0; i < items.Length; i++)
                     {
                         DestroyInstance(items[i]);
@@ -273,20 +270,14 @@ public partial class CollectionEditor
                 // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                 // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
                 // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
-                if (_originalItems is not null && (_originalItems.Count > 0))
+                if (_originalItems is not null && _originalItems.Count > 0)
                 {
-                    object[] items = new object[_originalItems.Count];
-                    for (int i = 0; i < _originalItems.Count; i++)
-                    {
-                        items[i] = _originalItems[i];
-                    }
-
-                    Items = items;
+                    Items = [.. _originalItems];
                     _originalItems.Clear();
                 }
                 else
                 {
-                    Items = Array.Empty<object>();
+                    Items = [];
                 }
             }
             catch (Exception ex)
@@ -320,33 +311,31 @@ public partial class CollectionEditor
         /// <summary>
         ///  Moves the selected item down one.
         /// </summary>
-        private void DownButton_click(object sender, EventArgs e)
+        private void DownButton_click(object? sender, EventArgs e)
         {
             try
             {
                 SuspendEnabledUpdates();
                 _dirty = true;
-                int index = _listbox.SelectedIndex;
-                if (index == _listbox.Items.Count - 1)
+                int index = _listBox.SelectedIndex;
+                if (index == _listBox.Items.Count - 1)
                 {
                     return;
                 }
 
-                int ti = _listbox.TopIndex;
-                object itemMove = _listbox.Items[index];
-                _listbox.Items[index] = _listbox.Items[index + 1];
-                _listbox.Items[index + 1] = itemMove;
+                int ti = _listBox.TopIndex;
+                (_listBox.Items[index + 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index + 1]);
 
-                if (ti < _listbox.Items.Count - 1)
+                if (ti < _listBox.Items.Count - 1)
                 {
-                    _listbox.TopIndex = ti + 1;
+                    _listBox.TopIndex = ti + 1;
                 }
 
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = index + 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = index + 1;
 
                 // enabling/disabling the buttons has moved the focus to the OK button, move it back to the sender
-                Control ctrlSender = (Control)sender;
+                Control ctrlSender = (Control)sender!;
 
                 if (ctrlSender.Enabled)
                 {
@@ -359,13 +348,13 @@ public partial class CollectionEditor
             }
         }
 
-        private void CollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)
+        private void CollectionEditor_HelpButtonClicked(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
             _editor.ShowHelp();
         }
 
-        private void Form_HelpRequested(object sender, HelpEventArgs e)
+        private void Form_HelpRequested(object? sender, HelpEventArgs e)
         {
             _editor.ShowHelp();
         }
@@ -376,17 +365,17 @@ public partial class CollectionEditor
         ///  This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
         ///  The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
         /// </summary>
-        private static string GetDisplayText(ListItem item)
+        private static string GetDisplayText(ListItem? item)
         {
             return (item is null) ? string.Empty : item.ToString();
         }
 
         private void HookEvents()
         {
-            _listbox.KeyDown += Listbox_keyDown;
-            _listbox.DrawItem += Listbox_drawItem;
-            _listbox.SelectedIndexChanged += Listbox_SelectedIndexChanged;
-            _listbox.HandleCreated += Listbox_HandleCreated;
+            _listBox.KeyDown += ListBox_keyDown;
+            _listBox.DrawItem += ListBox_drawItem;
+            _listBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+            _listBox.HandleCreated += ListBox_HandleCreated;
             _upButton.Click += UpButton_Click;
             _downButton.Click += DownButton_click;
             _propertyGrid.PropertyValueChanged += PropertyGrid_propertyValueChanged;
@@ -399,11 +388,24 @@ public partial class CollectionEditor
             Shown += Form_Shown;
         }
 
+        [MemberNotNull(nameof(_membersLabel))]
+        [MemberNotNull(nameof(_listBox))]
+        [MemberNotNull(nameof(_upButton))]
+        [MemberNotNull(nameof(_downButton))]
+        [MemberNotNull(nameof(_propertiesLabel))]
+        [MemberNotNull(nameof(_propertyGrid))]
+        [MemberNotNull(nameof(_addButton))]
+        [MemberNotNull(nameof(_removeButton))]
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
+        [MemberNotNull(nameof(_overArchingTableLayoutPanel))]
+        [MemberNotNull(nameof(_addRemoveTableLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(CollectionEditor));
+            ComponentResourceManager resources = new(typeof(CollectionEditor));
             _membersLabel = new Label();
-            _listbox = new FilterListBox();
+            _listBox = new FilterListBox();
             _upButton = new Button();
             _downButton = new Button();
             _propertiesLabel = new Label();
@@ -424,13 +426,13 @@ public partial class CollectionEditor
             _membersLabel.Margin = new Padding(0, 0, 3, 3);
             _membersLabel.Name = "membersLabel";
 
-            resources.ApplyResources(_listbox, "listbox");
-            _listbox.SelectionMode = (CanSelectMultipleInstances() ? SelectionMode.MultiExtended : SelectionMode.One);
-            _listbox.DrawMode = DrawMode.OwnerDrawFixed;
-            _listbox.FormattingEnabled = true;
-            _listbox.Margin = new Padding(0, 3, 3, 3);
-            _listbox.Name = "listbox";
-            _overArchingTableLayoutPanel.SetRowSpan(_listbox, 2);
+            resources.ApplyResources(_listBox, "listbox");
+            _listBox.SelectionMode = (CanSelectMultipleInstances() ? SelectionMode.MultiExtended : SelectionMode.One);
+            _listBox.DrawMode = DrawMode.OwnerDrawFixed;
+            _listBox.FormattingEnabled = true;
+            _listBox.Margin = new Padding(0, 3, 3, 3);
+            _listBox.Name = "listbox";
+            _overArchingTableLayoutPanel.SetRowSpan(_listBox, 2);
 
             resources.ApplyResources(_upButton, "upButton");
             _upButton.Name = "upButton";
@@ -479,7 +481,7 @@ public partial class CollectionEditor
             _overArchingTableLayoutPanel.Controls.Add(_addRemoveTableLayoutPanel, 0, 3);
             _overArchingTableLayoutPanel.Controls.Add(_propertiesLabel, 2, 0);
             _overArchingTableLayoutPanel.Controls.Add(_membersLabel, 0, 0);
-            _overArchingTableLayoutPanel.Controls.Add(_listbox, 0, 1);
+            _overArchingTableLayoutPanel.Controls.Add(_listBox, 0, 1);
             _overArchingTableLayoutPanel.Controls.Add(_propertyGrid, 2, 1);
             _overArchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 4);
             _overArchingTableLayoutPanel.Controls.Add(_upButton, 1, 1);
@@ -511,57 +513,55 @@ public partial class CollectionEditor
             ResumeLayout(false);
         }
 
-        private void UpdateItemWidths(ListItem item)
+        private void UpdateItemWidths(ListItem? item)
         {
-            if (!_listbox.IsHandleCreated)
+            if (!_listBox.IsHandleCreated)
             {
                 return;
             }
 
-            using (Graphics g = _listbox.CreateGraphics())
+            using Graphics g = _listBox.CreateGraphics();
+            int old = _listBox.HorizontalExtent;
+
+            if (item is not null)
             {
-                int old = _listbox.HorizontalExtent;
-
-                if (item is not null)
+                int w = CalcItemWidth(g, item);
+                if (w > old)
                 {
-                    int w = CalcItemWidth(g, item);
-                    if (w > old)
+                    _listBox.HorizontalExtent = w;
+                }
+            }
+            else
+            {
+                int max = 0;
+                foreach (ListItem i in _listBox.Items)
+                {
+                    int w = CalcItemWidth(g, i);
+                    if (w > max)
                     {
-                        _listbox.HorizontalExtent = w;
+                        max = w;
                     }
                 }
-                else
-                {
-                    int max = 0;
-                    foreach (ListItem i in _listbox.Items)
-                    {
-                        int w = CalcItemWidth(g, i);
-                        if (w > max)
-                        {
-                            max = w;
-                        }
-                    }
 
-                    _listbox.HorizontalExtent = max;
-                }
+                _listBox.HorizontalExtent = max;
             }
         }
 
         /// <summary>
-        ///  This draws a row of the listbox.
+        ///  This draws a row of the listBox.
         /// </summary>
-        private void Listbox_drawItem(object sender, DrawItemEventArgs e)
+        private void ListBox_drawItem(object? sender, DrawItemEventArgs e)
         {
             if (e.Index != -1)
             {
-                ListItem item = (ListItem)_listbox.Items[e.Index];
+                ListItem item = (ListItem)_listBox.Items[e.Index];
 
                 Graphics g = e.Graphics;
 
-                int c = _listbox.Items.Count;
+                int c = _listBox.Items.Count;
                 int maxC = (c > 1) ? c - 1 : c;
                 // We add the +4 is a fudge factor...
-                SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
+                SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listBox.Font);
 
                 int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1); // Luckily, this is never called if count = 0
                 int w = 4 + charactersInNumber * (Font.Height / 2);
@@ -569,7 +569,7 @@ public partial class CollectionEditor
                 w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
                 w += SystemInformation.BorderSize.Width * 4;
 
-                Rectangle button = new Rectangle(e.Bounds.X, e.Bounds.Y, w, e.Bounds.Height);
+                Rectangle button = e.Bounds with { Width = w };
 
                 ControlPaint.DrawButton(g, button, ButtonState.Normal);
                 button.Inflate(-SystemInformation.BorderSize.Width * 2, -SystemInformation.BorderSize.Height * 2);
@@ -584,9 +584,7 @@ public partial class CollectionEditor
                     textColor = SystemColors.HighlightText;
                 }
 
-                Rectangle res = new Rectangle(e.Bounds.X + offset, e.Bounds.Y,
-                                              e.Bounds.Width - offset,
-                                              e.Bounds.Height);
+                Rectangle res = e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset };
                 g.FillRectangle(new SolidBrush(backColor), res);
                 if ((e.State & DrawItemState.Focus) == DrawItemState.Focus)
                 {
@@ -597,45 +595,33 @@ public partial class CollectionEditor
 
                 if (item.Editor is not null && item.Editor.GetPaintValueSupported())
                 {
-                    Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
+                    Rectangle baseVar = new(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
                     g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
                     baseVar.Inflate(-1, -1);
                     item.Editor.PaintValue(item.Value, g, baseVar);
                     offset += PaintIndent + TextIndent;
                 }
 
-                StringFormat format = new StringFormat();
-                try
+                using (StringFormat format = new())
                 {
                     format.Alignment = StringAlignment.Center;
                     g.DrawString(e.Index.ToString(CultureInfo.CurrentCulture), Font, SystemBrushes.ControlText,
-                                 new Rectangle(e.Bounds.X, e.Bounds.Y, w, e.Bounds.Height), format);
+                        e.Bounds with { Width = w }, format);
                 }
-
-                finally
-                {
-                    format?.Dispose();
-                }
-
-                Brush textBrush = new SolidBrush(textColor);
 
                 string itemText = GetDisplayText(item);
 
-                try
+                using (Brush textBrush = new SolidBrush(textColor))
                 {
-                    g.DrawString(itemText, Font, textBrush, new Rectangle(e.Bounds.X + offset, e.Bounds.Y, e.Bounds.Width - offset, e.Bounds.Height));
+                    g.DrawString(itemText, Font, textBrush,
+                        e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset });
                 }
 
-                finally
-                {
-                    textBrush?.Dispose();
-                }
-
-                // Check to see if we need to change the horizontal extent of the listbox
+                // Check to see if we need to change the horizontal extent of the listBox
                 int width = offset + (int)g.MeasureString(itemText, Font).Width;
-                if (width > e.Bounds.Width && _listbox.HorizontalExtent < width)
+                if (width > e.Bounds.Width && _listBox.HorizontalExtent < width)
                 {
-                    _listbox.HorizontalExtent = width;
+                    _listBox.HorizontalExtent = width;
                 }
             }
         }
@@ -643,9 +629,9 @@ public partial class CollectionEditor
         /// <summary>
         ///  Handles keypress events for the list box.
         /// </summary>
-        private void Listbox_keyDown(object sender, KeyEventArgs kevent)
+        private void ListBox_keyDown(object? sender, KeyEventArgs e)
         {
-            switch (kevent.KeyData)
+            switch (e.KeyData)
             {
                 case Keys.Delete:
                     PerformRemove();
@@ -659,7 +645,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the selected list box index changes.
         /// </summary>
-        private void Listbox_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateEnabled();
         }
@@ -667,7 +653,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the list box's window handle is created.
         /// </summary>
-        private void Listbox_HandleCreated(object sender, EventArgs e)
+        private void ListBox_HandleCreated(object? sender, EventArgs e)
         {
             UpdateItemWidths(null);
         }
@@ -675,7 +661,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Commits the changes to the editor.
         /// </summary>
-        private void OKButton_Click(object sender, EventArgs e)
+        private void OKButton_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -688,10 +674,10 @@ public partial class CollectionEditor
 
                 if (_dirty)
                 {
-                    object[] items = new object[_listbox.Items.Count];
+                    object[] items = new object[_listBox.Items.Count];
                     for (int i = 0; i < items.Length; i++)
                     {
-                        items[i] = ((ListItem)_listbox.Items[i]).Value;
+                        items[i] = ((ListItem)_listBox.Items[i]).Value;
                     }
 
                     Items = items;
@@ -699,7 +685,7 @@ public partial class CollectionEditor
 
                 if (_removedItems is not null && _dirty)
                 {
-                    object[] deadItems = _removedItems.ToArray();
+                    object[] deadItems = [.. _removedItems];
 
                     for (int i = 0; i < deadItems.Length; i++)
                     {
@@ -712,7 +698,7 @@ public partial class CollectionEditor
                 _createdItems?.Clear();
                 _originalItems?.Clear();
 
-                _listbox.Items.Clear();
+                _listBox.Items.Clear();
                 _dirty = false;
             }
             catch (Exception ex)
@@ -725,12 +711,12 @@ public partial class CollectionEditor
         /// <summary>
         ///  Reflect any change events to the instance object
         /// </summary>
-        private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+        private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
         {
             // see if this is any of the items in our list...this can happen if we launched a child editor
             if (!_dirty && _originalItems is not null)
             {
-                foreach (object item in _originalItems)
+                foreach (object? item in _originalItems)
                 {
                     if (item == e.Component)
                     {
@@ -753,12 +739,12 @@ public partial class CollectionEditor
             }
 
             // Remember these contents for cancellation
-            _originalItems ??= new ArrayList();
+            _originalItems ??= [];
 
             _originalItems.Clear();
 
             // Now update the list box.
-            _listbox.Items.Clear();
+            _listBox.Items.Clear();
             _propertyGrid.Site = new PropertyGridSite(Context, _propertyGrid);
             if (EditValue is not null)
             {
@@ -768,13 +754,13 @@ public partial class CollectionEditor
                     object[] items = Items;
                     for (int i = 0; i < items.Length; i++)
                     {
-                        _listbox.Items.Add(new ListItem(_editor, items[i]));
+                        _listBox.Items.Add(new ListItem(_editor, items[i]));
                         _originalItems.Add(items[i]);
                     }
 
-                    if (_listbox.Items.Count > 0)
+                    if (_listBox.Items.Count > 0)
                     {
-                        _listbox.SelectedIndex = 0;
+                        _listBox.SelectedIndex = 0;
                     }
                 }
                 finally
@@ -812,16 +798,16 @@ public partial class CollectionEditor
         /// </summary>
         private void PerformRemove()
         {
-            int index = _listbox.SelectedIndex;
+            int index = _listBox.SelectedIndex;
 
             if (index != -1)
             {
                 SuspendEnabledUpdates();
                 try
                 {
-                    if (_listbox.SelectedItems.Count > 1)
+                    if (_listBox.SelectedItems.Count > 1)
                     {
-                        ArrayList toBeDeleted = new ArrayList(_listbox.SelectedItems);
+                        List<ListItem> toBeDeleted = _listBox.SelectedItems.Cast<ListItem>().ToList();
                         foreach (ListItem item in toBeDeleted)
                         {
                             RemoveInternal(item);
@@ -829,16 +815,16 @@ public partial class CollectionEditor
                     }
                     else
                     {
-                        RemoveInternal((ListItem)_listbox.SelectedItem);
+                        RemoveInternal((ListItem?)_listBox.SelectedItem);
                     }
 
-                    if (index < _listbox.Items.Count)
+                    if (index < _listBox.Items.Count)
                     {
-                        _listbox.SelectedIndex = index;
+                        _listBox.SelectedIndex = index;
                     }
-                    else if (_listbox.Items.Count > 0)
+                    else if (_listBox.Items.Count > 0)
                     {
-                        _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                        _listBox.SelectedIndex = _listBox.Items.Count - 1;
                     }
                 }
                 finally
@@ -851,18 +837,18 @@ public partial class CollectionEditor
         /// <summary>
         ///  When something in the properties window changes, we update pertinent text here.
         /// </summary>
-        private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
+        private void PropertyGrid_propertyValueChanged(object? sender, PropertyValueChangedEventArgs e)
         {
             _dirty = true;
 
-            // Refresh selected listbox item so that it picks up any name change
+            // Refresh selected listBox item so that it picks up any name change
             SuspendEnabledUpdates();
             try
             {
-                int selectedItem = _listbox.SelectedIndex;
+                int selectedItem = _listBox.SelectedIndex;
                 if (selectedItem >= 0)
                 {
-                    _listbox.RefreshItem(_listbox.SelectedIndex);
+                    _listBox.RefreshItem(_listBox.SelectedIndex);
                 }
             }
             finally
@@ -872,16 +858,16 @@ public partial class CollectionEditor
 
             // if a property changes, invalidate the grid in case it affects the item's name.
             UpdateItemWidths(null);
-            _listbox.Invalidate();
+            _listBox.Invalidate();
 
             // also update the string above the grid.
-            _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+            _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem?)_listBox.SelectedItem));
         }
 
         /// <summary>
         ///  Used to actually remove the items, one by one.
         /// </summary>
-        private void RemoveInternal(ListItem item)
+        private void RemoveInternal(ListItem? item)
         {
             if (item is not null)
             {
@@ -893,7 +879,7 @@ public partial class CollectionEditor
                 {
                     DestroyInstance(item.Value);
                     _createdItems.Remove(item.Value);
-                    _listbox.Items.Remove(item);
+                    _listBox.Items.Remove(item);
                 }
                 else
                 {
@@ -901,14 +887,14 @@ public partial class CollectionEditor
                     {
                         if (CanRemoveInstance(item.Value))
                         {
-                            _removedItems ??= new ArrayList();
+                            _removedItems ??= [];
 
                             _removedItems.Add(item.Value);
-                            _listbox.Items.Remove(item);
+                            _listBox.Items.Remove(item);
                         }
                         else
                         {
-                            throw new Exception(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                            throw new InvalidOperationException(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                         }
                     }
                     catch (Exception ex)
@@ -924,12 +910,12 @@ public partial class CollectionEditor
         /// <summary>
         ///  Removes the selected item.
         /// </summary>
-        private void RemoveButton_Click(object sender, EventArgs e)
+        private void RemoveButton_Click(object? sender, EventArgs e)
         {
             PerformRemove();
 
             // enabling/disabling the buttons has moved the focus to the OK button, move it back to the sender
-            Control ctrlSender = (Control)sender;
+            Control ctrlSender = (Control)sender!;
             if (ctrlSender.Enabled)
             {
                 ctrlSender.Focus();
@@ -967,7 +953,7 @@ public partial class CollectionEditor
         /// </summary>
         protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
         {
-            IComponentChangeService changeService = _editor.Context.GetService<IComponentChangeService>();
+            IComponentChangeService? changeService = _editor.Context?.GetService<IComponentChangeService>();
             DialogResult result = DialogResult.OK;
             try
             {
@@ -977,7 +963,7 @@ public partial class CollectionEditor
                 }
 
                 // This is cached across requests, so reset the initial focus.
-                ActiveControl = _listbox;
+                ActiveControl = _listBox;
                 result = base.ShowEditorDialog(edSvc);
             }
             finally
@@ -994,9 +980,9 @@ public partial class CollectionEditor
         /// <summary>
         ///  Moves an item up one in the list box.
         /// </summary>
-        private void UpButton_Click(object sender, EventArgs e)
+        private void UpButton_Click(object? sender, EventArgs e)
         {
-            int index = _listbox.SelectedIndex;
+            int index = _listBox.SelectedIndex;
             if (index == 0)
             {
                 return;
@@ -1006,21 +992,19 @@ public partial class CollectionEditor
             try
             {
                 SuspendEnabledUpdates();
-                int ti = _listbox.TopIndex;
-                object itemMove = _listbox.Items[index];
-                _listbox.Items[index] = _listbox.Items[index - 1];
-                _listbox.Items[index - 1] = itemMove;
+                int ti = _listBox.TopIndex;
+                (_listBox.Items[index - 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index - 1]);
 
                 if (ti > 0)
                 {
-                    _listbox.TopIndex = ti - 1;
+                    _listBox.TopIndex = ti - 1;
                 }
 
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = index - 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = index - 1;
 
                 // enabling/disabling the buttons has moved the focus to the OK button, move it back to the sender
-                Control ctrlSender = (Control)sender;
+                Control ctrlSender = (Control)sender!;
 
                 if (ctrlSender.Enabled)
                 {
@@ -1044,14 +1028,14 @@ public partial class CollectionEditor
                 return;
             }
 
-            bool editEnabled = (_listbox.SelectedItem is not null) && CollectionEditable;
-            _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listbox.SelectedItem).Value);
-            _upButton.Enabled = editEnabled && _listbox.Items.Count > 1;
-            _downButton.Enabled = editEnabled && _listbox.Items.Count > 1;
+            bool editEnabled = (_listBox.SelectedItem is not null) && CollectionEditable;
+            _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listBox.SelectedItem!).Value);
+            _upButton.Enabled = editEnabled && _listBox.Items.Count > 1;
+            _downButton.Enabled = editEnabled && _listBox.Items.Count > 1;
             _propertyGrid.Enabled = editEnabled;
             _addButton.Enabled = CollectionEditable;
 
-            if (_listbox.SelectedItem is not null)
+            if (_listBox.SelectedItem is not null)
             {
                 object[] items;
 
@@ -1059,22 +1043,22 @@ public partial class CollectionEditor
                 // otherwise, the user will be presented with a batch of read only properties, which isn't terribly useful.
                 if (IsImmutable)
                 {
-                    items = new object[] { new SelectionWrapper(CollectionType, CollectionItemType, _listbox, _listbox.SelectedItems) };
+                    items = [new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems)];
                 }
                 else
                 {
-                    items = new object[_listbox.SelectedItems.Count];
+                    items = new object[_listBox.SelectedItems.Count];
                     for (int i = 0; i < items.Length; i++)
                     {
-                        items[i] = ((ListItem)_listbox.SelectedItems[i]).Value;
+                        items[i] = ((ListItem)_listBox.SelectedItems[i]!).Value;
                     }
                 }
 
-                int selectedItemCount = _listbox.SelectedItems.Count;
-                if ((selectedItemCount == 1) || (selectedItemCount == -1))
+                int selectedItemCount = _listBox.SelectedItems.Count;
+                if (selectedItemCount is 1 or -1)
                 {
-                    // handle both single select listboxes and a single item selected in a multi-select listbox
-                    _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                    // handle both single select listBoxes and a single item selected in a multi-select listBox
+                    _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listBox.SelectedItem));
                 }
                 else
                 {
@@ -1106,7 +1090,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
         /// </summary>
-        private void Form_Shown(object sender, EventArgs e)
+        private void Form_Shown(object? sender, EventArgs e)
         {
             OnEditValueChanged();
         }
@@ -1116,16 +1100,14 @@ public partial class CollectionEditor
         ///  Note: original image might be disposed.
         /// </summary>
         /// <param name="button">button with an image, image size is defined in logical units</param>
-        private static void ScaleButtonImageLogicalToDevice(Button button)
+        private static void ScaleButtonImageLogicalToDevice(Button? button)
         {
-            if (button is null || !(button.Image is Bitmap buttonBitmap))
+            if (button?.Image is not Bitmap buttonBitmap)
             {
                 return;
             }
 
-            Bitmap deviceBitmap = DpiHelper.CreateScaledBitmap(buttonBitmap);
-            button.Image.Dispose();
-            button.Image = deviceBitmap;
+            button.Image = ScaleHelper.ScaleToDpi(buttonBitmap, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
         }
 
         /// <summary>
@@ -1138,16 +1120,16 @@ public partial class CollectionEditor
             private readonly Control _control;
             private readonly ICollection _collection;
             private readonly PropertyDescriptorCollection _properties;
-            private object _value;
+            private object? _value;
 
             public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection)
-                : base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
+                : base("Value", [new CategoryAttribute(collectionItemType.Name)])
             {
                 ComponentType = collectionType;
                 PropertyType = collectionItemType;
                 _control = control;
                 _collection = collection;
-                _properties = new PropertyDescriptorCollection(new PropertyDescriptor[] { this });
+                _properties = new PropertyDescriptorCollection([this]);
 
                 Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                 _value = this;
@@ -1161,7 +1143,7 @@ public partial class CollectionEditor
                     }
                     else
                     {
-                        object nextValue = li.Value;
+                        object? nextValue = li.Value;
                         if (_value is not null)
                         {
                             if (nextValue is null)
@@ -1214,7 +1196,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  When overridden in a derived class, gets the current value of the property on a component.
             /// </summary>
-            public override object GetValue(object component) => _value;
+            public override object? GetValue(object? component) => _value;
 
             /// <summary>
             ///  When overridden in a derived class, resets the value for this property of the component.
@@ -1226,13 +1208,13 @@ public partial class CollectionEditor
             /// <summary>
             ///  When overridden in a derived class, sets the value of the component to a different value.
             /// </summary>
-            public override void SetValue(object component, object value)
+            public override void SetValue(object? component, object? value)
             {
                 _value = value;
 
                 foreach (ListItem li in _collection)
                 {
-                    li.Value = value;
+                    li.Value = value!;
                 }
 
                 _control.Invalidate();
@@ -1247,10 +1229,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves an array of member attributes for the given object.
             /// </summary>
-            AttributeCollection ICustomTypeDescriptor.GetAttributes()
-            {
-                return TypeDescriptor.GetAttributes(PropertyType);
-            }
+            AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(PropertyType);
 
             /// <summary>
             ///  Retrieves the class name for this object. If null is returned, the type name is used.
@@ -1260,17 +1239,18 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the name for this object. If null is returned, the default is used.
             /// </summary>
-            string ICustomTypeDescriptor.GetComponentName() => null;
+            string? ICustomTypeDescriptor.GetComponentName() => null;
 
             /// <summary>
             ///  Retrieves the type converter for this object.
             /// </summary>
-            TypeConverter ICustomTypeDescriptor.GetConverter() => null;
+            [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
+            TypeConverter? ICustomTypeDescriptor.GetConverter() => null;
 
             /// <summary>
             ///  Retrieves the default event.
             /// </summary>
-            EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() => null;
+            EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => null;
 
             /// <summary>
             ///  Retrieves the default property.
@@ -1280,7 +1260,8 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the an editor for this object.
             /// </summary>
-            object ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
+            [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
+            object? ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
             /// <summary>
             ///  Retrieves an array of events that the given component instance provides.
@@ -1298,20 +1279,15 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional events.
             ///  The returned array of events will be filtered by the given set of attributes.
             /// </summary>
-            EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
-            {
-                return EventDescriptorCollection.Empty;
-            }
+            EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attributes) => EventDescriptorCollection.Empty;
 
             /// <summary>
             ///  Retrieves an array of properties that the given component instance provides.
             ///  This may differ from the set of properties the class provides.
             ///  If the component is sited, the site may add or remove additional properties.
             /// </summary>
-            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
-            {
-                return _properties;
-            }
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
+            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => _properties;
 
             /// <summary>
             ///  Retrieves an array of properties that the given component instance provides.
@@ -1319,10 +1295,8 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional properties.
             ///  The returned array of properties will be filtered by the given set of attributes.
             /// </summary>
-            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
-            {
-                return _properties;
-            }
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
+            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes) => _properties;
 
             /// <summary>
             ///  Retrieves the object that directly depends on this value being edited.
@@ -1330,10 +1304,7 @@ public partial class CollectionEditor
             ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should return the default object,
             ///  that is the main object that exposes the properties and attributes
             /// </summary>
-            object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
-            {
-                return this;
-            }
+            object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd) => this;
         }
 
         /// <summary>
@@ -1343,7 +1314,7 @@ public partial class CollectionEditor
         private class ListItem
         {
             private object _value;
-            private object _uiTypeEditor;
+            private object? _uiTypeEditor;
             private readonly CollectionEditor _parentCollectionEditor;
 
             public ListItem(CollectionEditor parentCollectionEditor, object value)
@@ -1352,12 +1323,9 @@ public partial class CollectionEditor
                 _parentCollectionEditor = parentCollectionEditor;
             }
 
-            public override string ToString()
-            {
-                return _parentCollectionEditor.GetDisplayText(_value);
-            }
+            public override string ToString() => _parentCollectionEditor.GetDisplayText(_value);
 
-            public UITypeEditor Editor
+            public UITypeEditor? Editor
             {
                 get
                 {

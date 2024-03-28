@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="es" original="../StyleCollectionEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Column and Row Styles</source>
+        <target state="translated">Estilos de columna y fila</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="absoluteNumericUpDown.AccessibleName">
+        <source>Absolute</source>
+        <target state="translated">Absoluta</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="absoluteRadioButton.Text">
+        <source>A&amp;bsolute</source>
+        <target state="translated">&amp;Absoluto</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="addButton.Text">
+        <source>&amp;Add</source>
+        <target state="translated">&amp;Agregar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="autoSizedRadioButton.Text">
+        <source>A&amp;utoSize</source>
+        <target state="translated">&amp;Ajuste automático</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">Cancelar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsAndRowsListView.AccessibleName">
+        <source>Columns and Rows List</source>
+        <target state="translated">Lista de filas y columnas</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsOrRowsComboBox.Items">
+        <source>Columns</source>
+        <target state="translated">Columnas</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsOrRowsComboBox.Items1">
+        <source>Rows</source>
+        <target state="translated">Filas</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="helperLinkLabel1.Text">
+        <source>Column and row spanning:
+If you want a control to span multiple rows or columns, set the RowSpan and ColumnSpan properties on the control.</source>
+        <target state="translated">Amplitud de fila y columna:
+Si desea que un control abarque varias filas o columnas, establezca las propiedades RowSpan y ColumnSpan en el control.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="helperLinkLabel2.Text">
+        <source>Alignment and stretching:
+If you want to align a control within a cell, or if you want a control to stretch within a cell, use the control's Anchor property.</source>
+        <target state="translated">Alineación y ajuste:
+Si desea alinear un control dentro de una celda, o si desea que un control se ajuste dentro de una celda, utilice la propiedad Anchor del control.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="insertButton.Text">
+        <source>&amp;Insert</source>
+        <target state="translated">&amp;Insertar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="memberTypeLabel.Text">
+        <source>&amp;Show:</source>
+        <target state="translated">&amp;Mostrar:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="membersColumnHeader.Text">
+        <source>Member</source>
+        <target state="translated">Miembros</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">Aceptar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentLabel.Text">
+        <source>%</source>
+        <target state="translated">%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentNumericUpDown.AccessibleName">
+        <source>Percent</source>
+        <target state="translated">Porcentaje</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentRadioButton.Text">
+        <source>&amp;Percent</source>
+        <target state="translated">&amp;Por ciento</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pixelsLabel.Text">
+        <source>pixels</source>
+        <target state="translated">píxeles</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="removeButton.Text">
+        <source>&amp;Delete</source>
+        <target state="translated">&amp;Eliminar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sizeTypeColumnHeader.Text">
+        <source>Size Type</source>
+        <target state="translated">Tamaño</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sizeTypeGroupBox.Text">
+        <source>Size Type</source>
+        <target state="translated">Tamaño</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="valueColumnHeader.Text">
+        <source>Value</source>
+        <target state="translated">Valor</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

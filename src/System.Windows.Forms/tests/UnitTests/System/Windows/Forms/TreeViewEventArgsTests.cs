@@ -16,14 +16,14 @@ public class TreeViewEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_TestData))]
     public void Ctor_TreeNode(TreeNode node)
     {
-        var e = new TreeViewEventArgs(node);
+        TreeViewEventArgs e = new(node);
         Assert.Equal(node, e.Node);
         Assert.Equal(TreeViewAction.Unknown, e.Action);
     }
 
     public static IEnumerable<object[]> Ctor_TreeNode_TreeViewAction_TestData()
     {
-        yield return new object[] { null, (TreeViewAction)(TreeViewAction.Unknown - 1) };
+        yield return new object[] { null, TreeViewAction.Unknown - 1 };
         yield return new object[] { new TreeNode(), TreeViewAction.ByKeyboard };
     }
 
@@ -31,7 +31,7 @@ public class TreeViewEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_TreeViewAction_TestData))]
     public void Ctor_TreeNode_TreeViewAction(TreeNode node, TreeViewAction action)
     {
-        var e = new TreeViewEventArgs(node, action);
+        TreeViewEventArgs e = new(node, action);
         Assert.Equal(node, e.Node);
         Assert.Equal(action, e.Action);
     }

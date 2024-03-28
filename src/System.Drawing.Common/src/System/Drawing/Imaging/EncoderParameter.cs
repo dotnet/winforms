@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Imaging;
 
@@ -14,16 +13,16 @@ public sealed unsafe class EncoderParameter : IDisposable
     private readonly EncoderParameterValueType _parameterValueType;
     private nint _parameterValue;
 
-    internal EncoderParameterNative ToNative() => new()
+    internal GdiPlus.EncoderParameter ToNative() => new()
     {
-        ParameterGuid = _parameterGuid,
-        ParameterValueType = _parameterValueType,
+        Guid = _parameterGuid,
+        Type = (uint)_parameterValueType,
         NumberOfValues = (uint)_numberOfValues,
-        ParameterValue = (void*)_parameterValue
+        Value = (void*)_parameterValue
     };
 
     /// <summary>
-    ///  Gets/Sets the Encoder for the EncoderPameter.
+    ///  Gets/Sets the Encoder for the EncoderParameter.
     /// </summary>
     public Encoder Encoder
     {
@@ -48,22 +47,18 @@ public sealed unsafe class EncoderParameter : IDisposable
 
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.KeepAlive(this);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
         if (_parameterValue != 0)
         {
             Marshal.FreeHGlobal(_parameterValue);
         }
 
         _parameterValue = 0;
+
+        GC.KeepAlive(this);
+        GC.SuppressFinalize(this);
     }
 
-    ~EncoderParameter() => Dispose(disposing: false);
+    ~EncoderParameter() => Dispose();
 
     public EncoderParameter(Encoder encoder, byte value)
     {
@@ -112,7 +107,7 @@ public sealed unsafe class EncoderParameter : IDisposable
         _numberOfValues = 1;
         _parameterValue = Marshal.AllocHGlobal(sizeof(int));
 
-        *(int*)_parameterValue = unchecked((int)value);
+        *(int*)_parameterValue = (int)value;
         GC.KeepAlive(this);
     }
 
@@ -137,8 +132,8 @@ public sealed unsafe class EncoderParameter : IDisposable
         _numberOfValues = 1;
         _parameterValue = Marshal.AllocHGlobal(2 * sizeof(int));
 
-        ((int*)_parameterValue)[0] = unchecked((int)rangebegin);
-        ((int*)_parameterValue)[1] = unchecked((int)rangeend);
+        ((int*)_parameterValue)[0] = (int)rangebegin;
+        ((int*)_parameterValue)[1] = (int)rangeend;
         GC.KeepAlive(this);
     }
 
@@ -223,9 +218,10 @@ public sealed unsafe class EncoderParameter : IDisposable
         {
             for (int i = 0; i < value.Length; i++)
             {
-                dest[i] = unchecked((int)source[i]);
+                dest[i] = (int)source[i];
             }
         }
+
         GC.KeepAlive(this);
     }
 
@@ -234,7 +230,7 @@ public sealed unsafe class EncoderParameter : IDisposable
         _parameterGuid = encoder.Guid;
 
         if (numerator.Length != denominator.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         _parameterValueType = EncoderParameterValueType.ValueTypeRational;
         _numberOfValues = numerator.Length;
@@ -245,6 +241,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             ((int*)_parameterValue)[i * 2 + 0] = numerator[i];
             ((int*)_parameterValue)[i * 2 + 1] = denominator[i];
         }
+
         GC.KeepAlive(this);
     }
 
@@ -253,7 +250,7 @@ public sealed unsafe class EncoderParameter : IDisposable
         _parameterGuid = encoder.Guid;
 
         if (rangebegin.Length != rangeend.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         _parameterValueType = EncoderParameterValueType.ValueTypeLongRange;
         _numberOfValues = rangebegin.Length;
@@ -261,9 +258,10 @@ public sealed unsafe class EncoderParameter : IDisposable
 
         for (int i = 0; i < _numberOfValues; i++)
         {
-            ((int*)_parameterValue)[i * 2 + 0] = unchecked((int)rangebegin[i]);
-            ((int*)_parameterValue)[i * 2 + 1] = unchecked((int)rangeend[i]);
+            ((int*)_parameterValue)[i * 2 + 0] = (int)rangebegin[i];
+            ((int*)_parameterValue)[i * 2 + 1] = (int)rangeend[i];
         }
+
         GC.KeepAlive(this);
     }
 
@@ -279,7 +277,7 @@ public sealed unsafe class EncoderParameter : IDisposable
         if (numerator1.Length != denominator1.Length ||
             numerator1.Length != denominator2.Length ||
             denominator1.Length != denominator2.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         _parameterValueType = EncoderParameterValueType.ValueTypeRationalRange;
         _numberOfValues = numerator1.Length;
@@ -292,13 +290,14 @@ public sealed unsafe class EncoderParameter : IDisposable
             ((int*)_parameterValue)[i * 4 + 2] = numerator2[i];
             ((int*)_parameterValue)[i * 4 + 3] = denominator2[i];
         }
+
         GC.KeepAlive(this);
     }
 
     [Obsolete("This constructor has been deprecated. Use EncoderParameter(Encoder encoder, int numberValues, EncoderParameterValueType type, IntPtr value) instead.")]
     public EncoderParameter(Encoder encoder, int NumberOfValues, int Type, int Value)
     {
-        var size = (EncoderParameterValueType)Type switch
+        int size = (EncoderParameterValueType)Type switch
         {
             EncoderParameterValueType.ValueTypeByte or EncoderParameterValueType.ValueTypeAscii => 1,
             EncoderParameterValueType.ValueTypeShort => 2,
@@ -306,7 +305,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             EncoderParameterValueType.ValueTypeRational or EncoderParameterValueType.ValueTypeLongRange => 2 * 4,
             EncoderParameterValueType.ValueTypeUndefined => 1,
             EncoderParameterValueType.ValueTypeRationalRange => 2 * 2 * 4,
-            _ => throw Gdip.StatusException(Gdip.WrongState),
+            _ => throw Status.WrongState.GetException()
         };
 
         int bytes = checked(size * NumberOfValues);
@@ -323,7 +322,7 @@ public sealed unsafe class EncoderParameter : IDisposable
 
     public EncoderParameter(Encoder encoder, int numberValues, EncoderParameterValueType type, IntPtr value)
     {
-        var size = type switch
+        int size = type switch
         {
             EncoderParameterValueType.ValueTypeByte or EncoderParameterValueType.ValueTypeAscii => 1,
             EncoderParameterValueType.ValueTypeShort => 2,
@@ -332,7 +331,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             EncoderParameterValueType.ValueTypeUndefined => 1,
             EncoderParameterValueType.ValueTypeRationalRange => 2 * 2 * 4,
             EncoderParameterValueType.ValueTypePointer => IntPtr.Size,
-            _ => throw Gdip.StatusException(Gdip.WrongState),
+            _ => throw Status.WrongState.GetException()
         };
 
         int bytes = checked(size * numberValues);

@@ -32,7 +32,7 @@ partial class TreeViewTest
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeViewTest));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(TreeViewTest));
         this.treeView1 = new System.Windows.Forms.TreeView();
         this.imageList1 = new System.Windows.Forms.ImageList(this.components);
         this.SuspendLayout();

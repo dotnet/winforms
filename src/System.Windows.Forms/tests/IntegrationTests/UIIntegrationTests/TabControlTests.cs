@@ -49,8 +49,7 @@ public class TabControlTests : ControlTestBase
         });
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/6654")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6654")]
+    [WinFormsFact]
     public async Task TabControl_TabPage_IsHoveredWithMouse_IsFalse_WhenMouseIs_OutsideMainScreenAsync()
     {
         await RunTestAsync(async (form, tabControl) =>
@@ -152,5 +151,5 @@ public class TabControlTests : ControlTestBase
     }
 
     // Bug https://github.com/dotnet/winforms/issues/7837 occured only when TabControl was subclassed.
-    class SubclassedTabControl : TabControl { }
+    private class SubclassedTabControl : TabControl { }
 }

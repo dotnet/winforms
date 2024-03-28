@@ -7,7 +7,7 @@ using System.Collections;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Provides a base designer for data grid view columns.
+///  Provides a base designer for data grid view columns.
 /// </summary>
 internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
 {
@@ -79,7 +79,7 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
 
         s_bindingContext ??= new BindingContext();
 
-        BindingMemberInfo bindingMemberInfo = new BindingMemberInfo(dataMember);
+        BindingMemberInfo bindingMemberInfo = new(dataMember);
         BindingManagerBase bindingManagerBase;
 
         try
@@ -91,9 +91,8 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
             return false;
         }
 
-        return bindingManagerBase is null
-            ? false
-            : (bindingManagerBase.GetItemProperties()?[bindingMemberInfo.BindingField]) is not null;
+        return bindingManagerBase is not null
+            && (bindingManagerBase.GetItemProperties()?[bindingMemberInfo.BindingField]) is not null;
     }
 
     protected override void PreFilterProperties(IDictionary properties)
@@ -103,13 +102,13 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
         PropertyDescriptor? property = (PropertyDescriptor?)properties["ValueMember"];
         if (property is not null)
         {
-            properties["ValueMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, Array.Empty<Attribute>());
+            properties["ValueMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, []);
         }
 
         property = (PropertyDescriptor?)properties["DisplayMember"];
         if (property is not null)
         {
-            properties["DisplayMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, Array.Empty<Attribute>());
+            properties["DisplayMember"] = TypeDescriptor.CreateProperty(typeof(DataGridViewComboBoxColumnDesigner), property, []);
         }
     }
 }

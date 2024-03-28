@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design.Serialization;
 /// <summary>
 ///  This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
 /// </summary>
-internal sealed class ComponentCache : IDisposable
+internal sealed partial class ComponentCache : IDisposable
 {
     private Dictionary<object, Entry>? _cache;
     private readonly IDesignerSerializationManager _serManager;
@@ -18,11 +18,11 @@ internal sealed class ComponentCache : IDisposable
         _serManager = manager;
         if (manager.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
         {
-            cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            cs.ComponentRemoving += new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentChanging += OnComponentChanging;
+            cs.ComponentChanged += OnComponentChanged;
+            cs.ComponentRemoving += OnComponentRemove;
+            cs.ComponentRemoved += OnComponentRemove;
+            cs.ComponentRename += OnComponentRename;
         }
 
         if (manager.TryGetService(out DesignerOptionService? options))
@@ -30,9 +30,9 @@ internal sealed class ComponentCache : IDisposable
             PropertyDescriptor? componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
             object? optionValue = componentCacheProp?.GetValue(null);
 
-            if (optionValue is bool)
+            if (optionValue is bool boolValue)
             {
-                Enabled = (bool)optionValue;
+                Enabled = boolValue;
             }
         }
     }
@@ -55,9 +55,9 @@ internal sealed class ComponentCache : IDisposable
         }
         set
         {
-            if (_cache is null && Enabled)
+            if (Enabled)
             {
-                _cache = new Dictionary<object, Entry>();
+                _cache ??= [];
             }
 
             // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
@@ -219,17 +219,6 @@ internal sealed class ComponentCache : IDisposable
         }
     }
 
-    internal struct ResourceEntry
-    {
-        public bool ForceInvariant;
-        public bool EnsureInvariant;
-        public bool ShouldSerializeValue;
-        public string Name;
-        public object Value;
-        public PropertyDescriptor PropertyDescriptor;
-        public ExpressionContext ExpressionContext;
-    }
-
     // A single cache entry
     internal sealed class Entry
     {
@@ -242,7 +231,7 @@ internal sealed class ComponentCache : IDisposable
         }
 
         public object? Component; // pointer back to the component that generated this entry
-        public CodeStatementCollection Statements = new();
+        public CodeStatementCollection Statements = [];
 
         public ICollection<ResourceEntry>? Metadata => _metadata;
 
@@ -258,14 +247,14 @@ internal sealed class ComponentCache : IDisposable
 
         internal void AddLocalName(string name)
         {
-            LocalNames ??= new List<string>();
+            LocalNames ??= [];
 
             LocalNames.Add(name);
         }
 
         public void AddDependency(object dep)
         {
-            Dependencies ??= new List<object>();
+            Dependencies ??= [];
 
             if (!Dependencies.Contains(dep))
             {
@@ -275,14 +264,14 @@ internal sealed class ComponentCache : IDisposable
 
         public void AddMetadata(ResourceEntry re)
         {
-            _metadata ??= new List<ResourceEntry>();
+            _metadata ??= [];
 
             _metadata.Add(re);
         }
 
         public void AddResource(ResourceEntry re)
         {
-            _resources ??= new List<ResourceEntry>();
+            _resources ??= [];
 
             _resources.Add(re);
         }

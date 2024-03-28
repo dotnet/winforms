@@ -8,7 +8,7 @@ namespace DesignSurfaceExt;
 
 public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 {
-    private const string _Name_ = "DesignSurfaceExt";
+    private const string Name = "DesignSurfaceExt";
 
     #region IDesignSurfaceExt Members
 
@@ -86,42 +86,42 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     {
         try
         {
-            //- step.1
-            //- get the IDesignerHost
-            //- if we are not not able to get it
-            //- then rollback (return without do nothing)
+            // - step.1
+            // - get the IDesignerHost
+            // - if we are not not able to get it
+            // - then rollback (return without do nothing)
             IDesignerHost host = GetIDesignerHost();
             if (host is null)
                 return null;
-            //- check if the root component has already been set
-            //- if so then rollback (return without do nothing)
+            // - check if the root component has already been set
+            // - if so then rollback (return without do nothing)
             if (host.RootComponent is not null)
                 return null;
-            //-
-            //-
-            //- step.2
-            //- create a new root component and initialize it via its designer
-            //- if the component has not a designer
-            //- then rollback (return without do nothing)
-            //- else do the initialization
+            // -
+            // -
+            // - step.2
+            // - create a new root component and initialize it via its designer
+            // - if the component has not a designer
+            // - then rollback (return without do nothing)
+            // - else do the initialization
             BeginLoad(typeof(TControl));
             if (LoadErrors.Count > 0)
-                throw new Exception($"the BeginLoad() failed! Some error during {typeof(TControl).FullName} loding");
-            //-
-            //-
-            //- step.3
-            //- try to modify the Size of the object just created
+                throw new InvalidOperationException($"the BeginLoad() failed! Some error during {typeof(TControl).FullName} loding");
+            // -
+            // -
+            // - step.3
+            // - try to modify the Size of the object just created
             IDesignerHost ihost = GetIDesignerHost();
-            //- Set the backcolor and the Size
+            // - Set the backcolor and the Size
             Control ctrl = null;
             Type hostType = host.RootComponent.GetType();
             if (hostType == typeof(Form))
             {
                 ctrl = View as Control;
                 ctrl.BackColor = Color.LightGray;
-                //- set the Size
+                // - set the Size
                 PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(ctrl);
-                //- Sets a PropertyDescriptor to the specific property.
+                // - Sets a PropertyDescriptor to the specific property.
                 PropertyDescriptor pdS = pdc.Find("Size", false);
                 pdS?.SetValue(ihost.RootComponent, controlSize);
             }
@@ -129,9 +129,9 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             {
                 ctrl = View as Control;
                 ctrl.BackColor = Color.DarkGray;
-                //- set the Size
+                // - set the Size
                 PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(ctrl);
-                //- Sets a PropertyDescriptor to the specific property.
+                // - Sets a PropertyDescriptor to the specific property.
                 PropertyDescriptor pdS = pdc.Find("Size", false);
                 pdS?.SetValue(ihost.RootComponent, controlSize);
             }
@@ -139,18 +139,18 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             {
                 ctrl = View as Control;
                 ctrl.BackColor = Color.White;
-                //- don't set the Size
+                // - don't set the Size
             }
             else
             {
-                throw new Exception($"Undefined Host Type: {hostType}");
+                throw new InvalidOperationException($"Undefined Host Type: {hostType}");
             }
 
             return (TControl)ihost.RootComponent;
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
         }
     }
 
@@ -159,41 +159,41 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     {
         try
         {
-            //- step.1
+            // - step.1
             IComponent newComp = CreateComponent<TControl>(out IDesignerHost host);
             if (newComp is null)
                 return null;
 
-            //-
-            //-
-            //- step.3
-            //- try to modify the Size/Location of the object just created
+            // -
+            // -
+            // - step.3
+            // - try to modify the Size/Location of the object just created
             PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(newComp);
-            //- Sets a PropertyDescriptor to the specific property.
+            // - Sets a PropertyDescriptor to the specific property.
             PropertyDescriptor pdS = pdc.Find("Size", false);
             pdS?.SetValue(newComp, controlSize);
             PropertyDescriptor pdL = pdc.Find("Location", false);
             pdL?.SetValue(newComp, controlLocation);
-            //-
-            //-
-            //- step.4
-            //- commit the Creation Operation
-            //- adding the control to the DesignSurface's root component
-            //- and return the control just created to let further initializations
+            // -
+            // -
+            // - step.4
+            // - commit the Creation Operation
+            // - adding the control to the DesignSurface's root component
+            // - and return the control just created to let further initializations
             ((Control)newComp).Parent = host.RootComponent as Control;
 
             return (TControl)newComp;
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::CreateControl() - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::CreateControl() - Exception: (see Inner Exception)", ex);
         }
     }
 
     public TComponent CreateComponent<TComponent>()
         where TComponent : IComponent
     {
-        return CreateComponent<TComponent>(out IDesignerHost _);
+        return CreateComponent<TComponent>(out _);
     }
 
     private TComponent CreateComponent<TComponent>(out IDesignerHost host)
@@ -201,45 +201,31 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     {
         try
         {
-            //- step.1
-            //- get the IDesignerHost
-            //- if we are not able to get it
-            //- then rollback (return without do nothing)
+            // Create a new component and initialize it via its designer
+
             host = GetIDesignerHost();
-            if (host is null)
+            if (host is null
+                || host.RootComponent is null
+                || host.CreateComponent(typeof(TComponent)) is not IComponent newComp
+                || host.GetDesigner(newComp) is not IDesigner designer)
+            {
                 return default;
-            //- check if the root component has already been set
-            //- if not so then rollback (return without do nothing)
-            if (host.RootComponent is null)
-                return default;
-            //-
-            //-
-            //- step.2
-            //- create a new component and initialize it via its designer
-            //- if the component has not a designer
-            //- then rollback (return without do nothing)
-            //- else do the initialization
-            IComponent newComp = host.CreateComponent(typeof(TComponent));
-            if (newComp is null)
-                return default;
-            IDesigner designer = host.GetDesigner(newComp);
-            if (designer is null)
-                return default;
-            if (designer is IComponentInitializer)
-                ((IComponentInitializer)designer).InitializeNewComponent(null);
+            }
+
+            if (designer is IComponentInitializer initializer)
+            {
+                initializer.InitializeNewComponent(null);
+            }
 
             return (TComponent)newComp;
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
         }
     }
 
-    public IDesignerHost GetIDesignerHost()
-    {
-        return (IDesignerHost)(GetService(typeof(IDesignerHost)));
-    }
+    public IDesignerHost GetIDesignerHost() => (IDesignerHost)GetService(typeof(IDesignerHost));
 
     public Control GetView()
     {
@@ -292,33 +278,29 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
     #endregion
 
-    //- ctor
+    // - ctor
     public DesignSurfaceExt()
     {
         InitServices();
     }
 
-    //- The DesignSurface class provides several design-time services automatically.
-    //- The DesignSurface class adds all of its services in its constructor.
-    //- Most of these services can be overridden by replacing them in the
-    //- protected ServiceContainer property.To replace a service, override the constructor,
-    //- call base, and make any changes through the protected ServiceContainer property.
+    // - The DesignSurface class provides several design-time services automatically.
+    // - The DesignSurface class adds all of its services in its constructor.
+    // - Most of these services can be overridden by replacing them in the
+    // - protected ServiceContainer property.To replace a service, override the constructor,
+    // - call base, and make any changes through the protected ServiceContainer property.
     private void InitServices()
     {
-        //- each DesignSurface has its own default services
-        //- We can leave the default services in their present state,
-        //- or we can remove them and replace them with our own.
-        //- Now add our own services using IServiceContainer
-        //-
-        //-
-        //- Note
-        //- before loading the root control in the design surface
-        //- we must add an instance of naming service to the service container.
-        //- otherwise the root component did not have a name and this caused
-        //- troubles when we try to use the UndoEngine
-        //-
-        //-
-        //- 1. NameCreationService
+        // - each DesignSurface has its own default services
+        // - We can leave the default services in their present state,
+        // - or we can remove them and replace them with our own.
+        // - Now add our own services using IServiceContainer
+        // - Note
+        // - before loading the root control in the design surface
+        // - we must add an instance of naming service to the service container.
+        // - otherwise the root component did not have a name and this caused
+        // - troubles when we try to use the UndoEngine
+        // - 1. NameCreationService
         _nameCreationService = new NameCreationServiceImp();
         if (_nameCreationService is not null)
         {
@@ -326,48 +308,46 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
         }
 
-        //-
-        //-
-        //- 2. CodeDomComponentSerializationService
+        // - 2. CodeDomComponentSerializationService
         _codeDomComponentSerializationService = new CodeDomComponentSerializationService(ServiceContainer);
         if (_codeDomComponentSerializationService is not null)
         {
-            //- the CodeDomComponentSerializationService is ready to be replaced
+            // - the CodeDomComponentSerializationService is ready to be replaced
             ServiceContainer.RemoveService(typeof(ComponentSerializationService), false);
             ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
         }
 
-        //-
-        //-
-        //- 3. IDesignerSerializationService
+        // - 3. IDesignerSerializationService
         _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
         if (_designerSerializationService is not null)
         {
-            //- the IDesignerSerializationService is ready to be replaced
+            // - the IDesignerSerializationService is ready to be replaced
             ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
             ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
         }
 
-        //-
-        //-
-        //- 4. UndoEngine
-        _undoEngine = new UndoEngineExt(ServiceContainer);
-        //- disable the UndoEngine
-        _undoEngine.Enabled = false;
+        // - 4. UndoEngine
+        _undoEngine = new UndoEngineExt(ServiceContainer)
+        {
+            // Disable the UndoEngine
+            Enabled = false
+        };
+
         if (_undoEngine is not null)
         {
-            //- the UndoEngine is ready to be replaced
+            // - the UndoEngine is ready to be replaced
             ServiceContainer.RemoveService(typeof(UndoEngine), false);
             ServiceContainer.AddService(typeof(UndoEngine), _undoEngine);
         }
 
-        //-
-        //-
-        //- 5. IMenuCommandService
+        // - 5. IMenuCommandService
         ServiceContainer.AddService(typeof(IMenuCommandService), new MenuCommandService(this));
+
+        // - 6. ITypeDiscoveryService
+        ServiceContainer.AddService(typeof(ITypeDiscoveryService), new TypeDiscoveryService());
     }
 
-    //- do some Edit menu command using the MenuCommandService
+    // - do some Edit menu command using the MenuCommandService
     public void DoAction(string command)
     {
         if (string.IsNullOrEmpty(command))
@@ -379,7 +359,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
         try
         {
-            CommandID commandId = command.ToUpper() switch
+            CommandID commandId = command.ToUpperInvariant() switch
             {
                 "CUT" => StandardCommands.Cut,
                 "COPY" => StandardCommands.Copy,
@@ -399,7 +379,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         }
         catch (Exception ex)
         {
-            throw new Exception($"{_Name_}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
+            throw new InvalidOperationException($"{Name}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
         }
     }
 }

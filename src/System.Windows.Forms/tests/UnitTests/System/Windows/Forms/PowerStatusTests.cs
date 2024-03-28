@@ -50,7 +50,7 @@ public class PowerStatusTests
     {
         PowerStatus status = SystemInformation.PowerStatus;
         float value = status.BatteryLifePercent;
-        Assert.True((value >= 0 && value <= 100) || value == 255);
+        Assert.True(value is >= 0 and <= 100 or 255);
     }
 
     [Fact]
@@ -64,6 +64,6 @@ public class PowerStatusTests
     public void PowerStatus_PowerLineStatus_Get_ReturnsExpected()
     {
         PowerStatus status = SystemInformation.PowerStatus;
-        Assert.True(Enum.IsDefined(typeof(PowerLineStatus), status.PowerLineStatus));
+        Assert.True(Enum.IsDefined(status.PowerLineStatus));
     }
 }

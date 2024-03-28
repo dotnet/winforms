@@ -7,7 +7,7 @@ namespace System.Drawing.Tests;
 
 public class ImageAnimatorManualTests
 {
-    public static string OutputFolder = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+    public static string OutputFolder { get; } = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
 
     [Fact(Skip = "Manual Test")]
     public void AnimateAndCaptureFrames()
@@ -25,8 +25,8 @@ public class ImageAnimatorManualTests
         // folder for each configuration, and then under an `ImageAnimatorManualTests` folder
         // with a timestamped folder under that. Each animation image gets its own folder too.
 
-        string[] images = new string[]
-        {
+        string[] images =
+        [
             "animated-timer-1fps-repeat-2.gif",
             "animated-timer-1fps-repeat-infinite.gif",
             "animated-timer-10fps-repeat-2.gif",
@@ -34,15 +34,15 @@ public class ImageAnimatorManualTests
             "animated-timer-100fps-repeat-2.gif",
             "animated-timer-100fps-repeat-infinite.gif",
             "animated-timer-0-delay-all-frames.gif",
-        };
+        ];
 
-        Dictionary<string, EventHandler> handlers = new();
-        Dictionary<string, int> frameIndexes = new();
-        Dictionary<string, Bitmap> bitmaps = new();
+        Dictionary<string, EventHandler> handlers = [];
+        Dictionary<string, int> frameIndexes = [];
+        Dictionary<string, Bitmap> bitmaps = [];
 
         Stopwatch stopwatch = new();
 
-        foreach (var imageName in images)
+        foreach (string imageName in images)
         {
             string testOutputFolder = Path.Combine(OutputFolder, Path.GetFileNameWithoutExtension(imageName));
             Directory.CreateDirectory(testOutputFolder);
@@ -67,7 +67,7 @@ public class ImageAnimatorManualTests
         stopwatch.Start();
         Thread.Sleep(60_000);
 
-        foreach (var imageName in images)
+        foreach (string imageName in images)
         {
             ImageAnimator.StopAnimate(bitmaps[imageName], handlers[imageName]);
             bitmaps[imageName].Dispose();

@@ -19,11 +19,13 @@ public class BinaryFormatWriterTests
         BinaryFormatWriter.WriteString(stream, testString);
         stream.Position = 0;
 
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
 #pragma warning restore
-        object deserialized = formatter.Deserialize(stream);
+
+        // cs/dangerous-binary-deserialization
+        object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
         deserialized.Should().Be(testString);
     }
 
@@ -32,20 +34,24 @@ public class BinaryFormatWriterTests
     public void BinaryFormatWriter_TryWriteObject_SupportedObjects_BinaryFormatterRead(object value)
     {
         using MemoryStream stream = new();
-        BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
+        bool success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
+        success.Should().BeTrue();
         stream.Position = 0;
 
-        using BinaryFormatterScope formaterScope = new(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-        object deserialized = formatter.Deserialize(stream);
+
+        // cs/dangerous-binary-deserialization
+        object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 
         if (value is Hashtable hashtable)
         {
             Hashtable deserializedHashtable = (Hashtable)deserialized;
             deserializedHashtable.Count.Should().Be(hashtable.Count);
-            foreach (var key in hashtable.Keys)
+            foreach (object? key in hashtable.Keys)
             {
                 deserializedHashtable[key].Should().Be(hashtable[key]);
             }
@@ -75,7 +81,7 @@ public class BinaryFormatWriterTests
         {
             Hashtable deserializedHashtable = (Hashtable)deserialized!;
             deserializedHashtable.Count.Should().Be(hashtable.Count);
-            foreach (var key in hashtable.Keys)
+            foreach (object? key in hashtable.Keys)
             {
                 deserializedHashtable[key].Should().Be(hashtable[key]);
             }

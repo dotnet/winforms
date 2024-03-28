@@ -8,7 +8,7 @@ public class RowStyleTests
     [WinFormsFact]
     public void RowStyle_Ctor_Default()
     {
-        var style = new RowStyle();
+        RowStyle style = new();
         Assert.Equal(SizeType.AutoSize, style.SizeType);
         Assert.Equal(0, style.Height);
     }
@@ -18,7 +18,7 @@ public class RowStyleTests
     [InvalidEnumData<SizeType>]
     public void RowStyle_Ctor_SizeType(SizeType sizeType)
     {
-        var style = new RowStyle(sizeType);
+        RowStyle style = new(sizeType);
         Assert.Equal(sizeType, style.SizeType);
         Assert.Equal(0, style.Height);
     }
@@ -27,11 +27,11 @@ public class RowStyleTests
     [InlineData(SizeType.AutoSize, 0)]
     [InlineData(SizeType.Absolute, 1)]
     [InlineData(SizeType.Percent, 2)]
-    [InlineData((SizeType)(SizeType.AutoSize - 1), 3)]
-    [InlineData((SizeType)(SizeType.Percent + 1), 4)]
+    [InlineData((SizeType.AutoSize - 1), 3)]
+    [InlineData((SizeType.Percent + 1), 4)]
     public void RowStyle_Ctor_SizeType_Float(SizeType sizeType, float width)
     {
-        var style = new RowStyle(sizeType, width);
+        RowStyle style = new(sizeType, width);
         Assert.Equal(sizeType, style.SizeType);
         Assert.Equal(width, style.Height);
     }
@@ -48,7 +48,7 @@ public class RowStyleTests
     [InlineData(float.MaxValue)]
     public void RowStyle_Height_Set_GetReturnsExpected(float value)
     {
-        var style = new RowStyle
+        RowStyle style = new()
         {
             Height = value
         };
@@ -65,8 +65,8 @@ public class RowStyleTests
     [InlineData(float.MaxValue, 1)]
     public void RowStyle_Height_SetWithOwner_GetReturnsExpected(float value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new RowStyle();
+        using TableLayoutPanel control = new();
+        RowStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -95,8 +95,8 @@ public class RowStyleTests
     [InlineData(float.MaxValue, 1)]
     public void RowStyle_Height_SetWithOwnerWithHandle_GetReturnsExpected(float value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new RowStyle();
+        using TableLayoutPanel control = new();
+        RowStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -135,7 +135,7 @@ public class RowStyleTests
     [WinFormsFact]
     public void RowStyle_Height_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var style = new RowStyle();
+        RowStyle style = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => style.Height = -1);
     }
 }

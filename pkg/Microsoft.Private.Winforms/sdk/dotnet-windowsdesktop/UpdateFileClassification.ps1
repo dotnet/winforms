@@ -64,7 +64,7 @@ else {
     $output = "<!--
     This props file comes from dotnet/winforms. It gets ingested by dotnet/windowsdesktop and processed by
     pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
-   -->
+-->
 <Project>
   <ItemGroup Condition=`"'`$(PackageTargetRuntime)' == ''`">`r`n";
     $assemblies | `

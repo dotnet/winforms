@@ -12,9 +12,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
-    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
-    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
-    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,11 +24,11 @@ internal readonly struct ArrayInfo : IBinaryWriteable
         ObjectId = objectId;
     }
 
-    public static ArrayInfo Parse(BinaryReader reader, out Count length)
+    public static Id Parse(BinaryReader reader, out Count length)
     {
-        ArrayInfo arrayInfo = new(reader.ReadInt32(), reader.ReadInt32());
-        length = arrayInfo.Length;
-        return arrayInfo;
+        Id id = reader.ReadInt32();
+        length = reader.ReadInt32();
+        return id;
     }
 
     public readonly void Write(BinaryWriter writer)

@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using Windows.Win32.System.SystemServices;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -20,9 +19,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 public partial class ControlDesigner : ComponentDesigner
 {
-#pragma warning disable IDE1006 // Naming Styles - Public API
     protected static readonly Point InvalidPoint = new(int.MinValue, int.MinValue);
-#pragma warning restore IDE1006
 
     private static uint s_currentProcessId;
     private IDesignerHost _host;                        // the host for our designer
@@ -58,7 +55,6 @@ public partial class ControlDesigner : ComponentDesigner
     private int _lastClickMessagePositionX;
     private int _lastClickMessagePositionY;
 
-    private Point _downPos = Point.Empty;               // point used to track first down of a double click
     private event EventHandler DisposingHandler;
     private CollectionChangeEventHandler _dataBindingsCollectionChanged;
     private Exception _thrownException;
@@ -74,7 +70,6 @@ public partial class ControlDesigner : ComponentDesigner
     private static bool s_inContextMenu;
 
     private DockingActionList _dockingAction;
-    private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
     private Dictionary<IntPtr, bool> _subclassedChildren;
 
     protected BehaviorService BehaviorService => _behaviorService ??= GetService<BehaviorService>();
@@ -125,7 +120,7 @@ public partial class ControlDesigner : ComponentDesigner
             {
                 if (control.Site is not null)
                 {
-                    sitedChildren ??= new();
+                    sitedChildren ??= [];
                     sitedChildren.Add(control);
                 }
             }
@@ -166,15 +161,11 @@ public partial class ControlDesigner : ComponentDesigner
 
     private string Name
     {
-        get
-        {
-            return Component.Site.Name;
-        }
+        get => Component.Site.Name;
         set
         {
-            // don't do anything here during loading, if a refactor changed it we don't want to do anything
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host is null || (host is not null && !host.Loading))
+            // Don't do anything here during loading, if a refactor changed it we don't want to do anything.
+            if (GetService(typeof(IDesignerHost)) is not IDesignerHost host || (host is not null && !host.Loading))
             {
                 Component.Site.Name = value;
             }
@@ -186,18 +177,8 @@ public partial class ControlDesigner : ComponentDesigner
     ///  the component being designed is a control, and if it is it returns its parent.  This property can return
     ///  null if there is no parent component.
     /// </summary>
-    protected override IComponent ParentComponent
-    {
-        get
-        {
-            if (Component is Control c && c.Parent is not null)
-            {
-                return c.Parent;
-            }
-
-            return base.ParentComponent;
-        }
-    }
+    protected override IComponent ParentComponent =>
+        Component is Control c && c.Parent is not null ? c.Parent : base.ParentComponent;
 
     /// <summary>
     ///  Determines whether or not the ControlDesigner will allow SnapLine alignment during a drag operation when
@@ -210,8 +191,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     private IDesignerTarget DesignerTarget { get; set; }
 
-    private Dictionary<IntPtr, bool> SubclassedChildWindows
-        => _subclassedChildren ??= new Dictionary<IntPtr, bool>();
+    private Dictionary<IntPtr, bool> SubclassedChildWindows => _subclassedChildren ??= [];
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more
@@ -356,13 +336,15 @@ public partial class ControlDesigner : ComponentDesigner
     ///  Returns a list of SnapLine objects representing interesting alignment points for this control.
     ///  These SnapLines are used to assist in the positioning of the control on a parent's surface.
     /// </summary>
-    public virtual IList SnapLines => SnapLinesInternal();
+    public virtual IList SnapLines => EdgeAndMarginSnapLines().Unwrap();
 
-    internal IList SnapLinesInternal() => SnapLinesInternal(Control.Margin);
+    internal IList<SnapLine> SnapLinesInternal => EdgeAndMarginSnapLines();
 
-    internal IList SnapLinesInternal(Padding margin)
+    internal IList<SnapLine> EdgeAndMarginSnapLines() => EdgeAndMarginSnapLines(Control.Margin);
+
+    internal IList<SnapLine> EdgeAndMarginSnapLines(Padding margin)
     {
-        ArrayList snapLines = new ArrayList(4);
+        List<SnapLine> snapLines = new(8);
         int width = Control.Width;
         int height = Control.Height;
 
@@ -464,7 +446,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            if (Control is not null)
+            if (HasComponent)
             {
                 if (_dataBindingsCollectionChanged is not null)
                 {
@@ -492,16 +474,14 @@ public partial class ControlDesigner : ComponentDesigner
 
             DesignerTarget?.Dispose();
 
-            _downPos = Point.Empty;
-
-            if (Control is not null)
+            if (HasComponent)
             {
-                Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
-                Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
-                Control.ParentChanged -= new EventHandler(OnParentChanged);
-                Control.SizeChanged -= new EventHandler(OnSizeChanged);
-                Control.LocationChanged -= new EventHandler(OnLocationChanged);
-                Control.EnabledChanged -= new EventHandler(OnEnabledChanged);
+                Control.ControlAdded -= OnControlAdded;
+                Control.ControlRemoved -= OnControlRemoved;
+                Control.ParentChanged -= OnParentChanged;
+                Control.SizeChanged -= OnSizeChanged;
+                Control.LocationChanged -= OnLocationChanged;
+                Control.EnabledChanged -= OnEnabledChanged;
             }
         }
 
@@ -517,7 +497,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // No designer means we must replace the window target in this control.
         IWindowTarget oldTarget = e.Control.WindowTarget;
-        if (!(oldTarget is ChildWindowTarget))
+        if (oldTarget is not ChildWindowTarget)
         {
             e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
@@ -545,7 +525,7 @@ public partial class ControlDesigner : ComponentDesigner
     private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
     {
         // It is possible to use the control designer with NON CONTROl types.
-        if (!(Component is Control ctl))
+        if (Component is not Control ctl)
         {
             return;
         }
@@ -744,7 +724,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
     {
-        GlyphCollection glyphs = new GlyphCollection();
+        GlyphCollection glyphs = [];
 
         if (selectionType == GlyphSelectionType.NotSelected)
         {
@@ -1003,9 +983,6 @@ public partial class ControlDesigner : ComponentDesigner
 
         // And force some shadow properties that we change in the course of initializing the form.
         AllowDrop = Control.AllowDrop;
-
-        // update the Status Command
-        _statusCommandUI = new StatusCommandUI(component.Site);
     }
 
     // This is a workaround to some problems with the ComponentCache that we should fix. When this is removed
@@ -1244,7 +1221,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragEnter);
+        DragEventHandler handler = new(OnDragEnter);
         control.DragEnter -= handler;
         ((IDropTarget)Control).OnDragEnter(de);
         control.DragEnter += handler;
@@ -1265,7 +1242,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragDrop);
+        DragEventHandler handler = new(OnDragDrop);
         control.DragDrop -= handler;
         ((IDropTarget)Control).OnDragDrop(de);
         control.DragDrop += handler;
@@ -1279,7 +1256,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        EventHandler handler = new EventHandler(OnDragLeave);
+        EventHandler handler = new(OnDragLeave);
         control.DragLeave -= handler;
         ((IDropTarget)Control).OnDragLeave(e);
         control.DragLeave += handler;
@@ -1292,7 +1269,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragOver);
+        DragEventHandler handler = new(OnDragOver);
         control.DragOver -= handler;
         ((IDropTarget)Control).OnDragOver(de);
         control.DragOver += handler;
@@ -1422,7 +1399,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (BehaviorService is not null && selectionService is not null)
         {
             // create our list of controls-to-drag
-            List<IComponent> dragControls = new();
+            List<IComponent> dragControls = [];
             ICollection selComps = selectionService.GetSelectedComponents();
 
             // must identify a required parent to avoid dragging mixes of children
@@ -1437,7 +1414,7 @@ public partial class ControlDesigner : ComponentDesigner
                     }
                     else if (!requiredParent.Equals(control.Parent))
                     {
-                        continue; //mixed selection of different parents - don't add this
+                        continue; // mixed selection of different parents - don't add this
                     }
 
                     if (_host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
@@ -1451,7 +1428,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (dragControls.Count > 0)
             {
                 using Graphics adornerGraphics = BehaviorService.AdornerWindowGraphics;
-                DropSourceBehavior dsb = new DropSourceBehavior(dragControls, Control.Parent, _mouseDragLast);
+                DropSourceBehavior dsb = new(dragControls, Control.Parent, _mouseDragLast);
                 BehaviorService.DoDragDrop(dsb);
             }
         }
@@ -1564,14 +1541,29 @@ public partial class ControlDesigner : ComponentDesigner
     ///  Called each time the cursor needs to be set.
     /// </summary>
     /// <remarks>
-    /// The ControlDesigner behavior here will set the cursor to one of three things:
-    ///
-    ///  1.  If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
-    ///  2.  If the selection UI service shows a locked selection, or if there is no location property on the
-    ///  control, then the default arrow will be set.
-    ///  3.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
-    ///  4.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four
-    ///  headed arrow.
+    ///  <para>
+    ///   The ControlDesigner behavior here will set the cursor to one of three things:
+    ///  </para>
+    ///  <list type="number">
+    ///   <item>
+    ///    <description>
+    ///     If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     If the selection UI service shows a locked selection, or if there is no location property on the
+    ///     control, then the default arrow will be set. Otherwise, the four headed arrow will be set to indicate that
+    ///     the component can be clicked and moved.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     If the user is currently dragging a component, the crosshair cursor will be used instead of the four
+    ///     headed arrow.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
     protected virtual void OnSetCursor()
     {
@@ -1626,9 +1618,9 @@ public partial class ControlDesigner : ComponentDesigner
         PropertyDescriptor prop;
 
         // Handle shadowed properties
-        string[] shadowProps = new string[] { "Visible", "Enabled", "AllowDrop", "Location", "Name" };
+        string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];
@@ -1692,7 +1684,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            if (!(oldTarget is DesignerWindowTarget))
+            if (oldTarget is not DesignerWindowTarget)
             {
                 UnhookChildControls(child);
             }
@@ -2043,7 +2035,7 @@ public partial class ControlDesigner : ComponentDesigner
             case PInvoke.WM_PRINTCLIENT:
                 {
                     using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-                    using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
+                    using PaintEventArgs e = new(g, Control.ClientRectangle);
                     DefWndProc(ref m);
                     OnPaintAdornments(e);
                 }
@@ -2067,10 +2059,10 @@ public partial class ControlDesigner : ComponentDesigner
                     // First, save off the update region and call our base class.
 
                     RECT clip = default;
-                    using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
+                    using var hrgn = new RegionScope(0, 0, 0, 0);
                     PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                     PInvoke.GetUpdateRect(m.HWND, &clip, false);
-                    using Region region = hrgn.CreateGdiPlusRegion();
+                    using Region region = hrgn.ToRegion();
 
                     // Call the base class to do its own painting.
                     if (_thrownException is null)
@@ -2100,7 +2092,7 @@ public partial class ControlDesigner : ComponentDesigner
                     }
                     else
                     {
-                        using PInvoke.BeginPaintScope scope = new((HWND)m.HWnd);
+                        using BeginPaintScope scope = new(m.HWND);
                         PaintException(pevent, _thrownException);
                     }
 
@@ -2134,10 +2126,10 @@ public partial class ControlDesigner : ComponentDesigner
                     if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is not null)
                     {
                         // we have a non-client region to invalidate
-                        Rectangle controlScreenBounds = new Rectangle(Control.Parent.PointToScreen(Control.Location), Control.Size);
-                        Rectangle clientAreaScreenBounds = new Rectangle(Control.PointToScreen(Point.Empty), Control.ClientSize);
+                        Rectangle controlScreenBounds = new(Control.Parent.PointToScreen(Control.Location), Control.Size);
+                        Rectangle clientAreaScreenBounds = new(Control.PointToScreen(Point.Empty), Control.ClientSize);
 
-                        using Region nonClient = new Region(controlScreenBounds);
+                        using Region nonClient = new(controlScreenBounds);
                         nonClient.Exclude(clientAreaScreenBounds);
                         OverlayService.InvalidateOverlays(nonClient);
                     }
@@ -2183,11 +2175,11 @@ public partial class ControlDesigner : ComponentDesigner
                 // the focus in that case, the Windows Narrator won't follow navigation via the keyboard.
                 // NB:  "ToolStrip" is a bit of a misnomer here, because the ToolStripTemplateNode is also used
                 // for MenuStrip, StatusStrip, etc...
-                //if (Control.FromHandle(m.HWnd) is ToolStripTemplateNode.TransparentToolStrip)
-                //{
+                // if (Control.FromHandle(m.HWnd) is ToolStripTemplateNode.TransparentToolStrip)
+                // {
                 //    DefWndProc(ref m);
-                //}
-                //else
+                // }
+                // else
                 if (_host is not null && _host.RootComponent is not null && _host.GetDesigner(_host.RootComponent) is IRootDesigner rd)
                 {
                     ViewTechnology[] techs = rd.SupportedTechnologies;
@@ -2252,7 +2244,7 @@ public partial class ControlDesigner : ComponentDesigner
         };
 
         string exceptionText = ex.ToString();
-        stringFormat.SetMeasurableCharacterRanges(new CharacterRange[] { new CharacterRange(0, exceptionText.Length) });
+        stringFormat.SetMeasurableCharacterRanges([new(0, exceptionText.Length)]);
 
         // rendering calculations...
         int penThickness = 2;
@@ -2267,14 +2259,14 @@ public partial class ControlDesigner : ComponentDesigner
         borderRectangle.Width -= 2;
         borderRectangle.Height -= 2;
 
-        Rectangle imageRect = new Rectangle(marginX, marginY, glyphSize.Width, glyphSize.Height);
+        Rectangle imageRect = new(marginX, marginY, glyphSize.Width, glyphSize.Height);
         Rectangle textRect = clientRectangle;
         textRect.X = imageRect.X + imageRect.Width + 2 * marginX;
         textRect.Y = imageRect.Y;
         textRect.Width -= (textRect.X + marginX + penThickness);
         textRect.Height -= (textRect.Y + marginY + penThickness);
 
-        using (Font errorFont = new Font(
+        using (Font errorFont = new(
             Control.Font.FontFamily,
             Math.Max(SystemInformation.ToolWindowCaptionHeight - SystemInformation.BorderSize.Height - 2, Control.Font.Height),
             GraphicsUnit.Pixel))
@@ -2294,7 +2286,7 @@ public partial class ControlDesigner : ComponentDesigner
                 e.Graphics.Clip = originalClip;
             }
 
-            using (Pen pen = new Pen(Color.Red, penThickness))
+            using (Pen pen = new(Color.Red, penThickness))
             {
                 e.Graphics.DrawRectangle(pen, borderRectangle);
             }
@@ -2328,31 +2320,28 @@ public partial class ControlDesigner : ComponentDesigner
             return true;
         }
 
-        switch (msg)
+        return (uint)msg switch
         {
             // WM messages not covered by the above block
-            case PInvoke.WM_MOUSEHOVER:
-            case PInvoke.WM_MOUSELEAVE:
-            // WM_NC messages
-            case PInvoke.WM_NCMOUSEMOVE:
-            case PInvoke.WM_NCLBUTTONDOWN:
-            case PInvoke.WM_NCLBUTTONUP:
-            case PInvoke.WM_NCLBUTTONDBLCLK:
-            case PInvoke.WM_NCRBUTTONDOWN:
-            case PInvoke.WM_NCRBUTTONUP:
-            case PInvoke.WM_NCRBUTTONDBLCLK:
-            case PInvoke.WM_NCMBUTTONDOWN:
-            case PInvoke.WM_NCMBUTTONUP:
-            case PInvoke.WM_NCMBUTTONDBLCLK:
-            case PInvoke.WM_NCMOUSEHOVER:
-            case PInvoke.WM_NCMOUSELEAVE:
-            case PInvoke.WM_NCXBUTTONDOWN:
-            case PInvoke.WM_NCXBUTTONUP:
-            case PInvoke.WM_NCXBUTTONDBLCLK:
-                return true;
-            default:
-                return false;
-        }
+            PInvoke.WM_MOUSEHOVER
+                or PInvoke.WM_MOUSELEAVE
+                or PInvoke.WM_NCMOUSEMOVE
+                or PInvoke.WM_NCLBUTTONDOWN
+                or PInvoke.WM_NCLBUTTONUP
+                or PInvoke.WM_NCLBUTTONDBLCLK
+                or PInvoke.WM_NCRBUTTONDOWN
+                or PInvoke.WM_NCRBUTTONUP
+                or PInvoke.WM_NCRBUTTONDBLCLK
+                or PInvoke.WM_NCMBUTTONDOWN
+                or PInvoke.WM_NCMBUTTONUP
+                or PInvoke.WM_NCMBUTTONDBLCLK
+                or PInvoke.WM_NCMOUSEHOVER
+                or PInvoke.WM_NCMOUSELEAVE
+                or PInvoke.WM_NCXBUTTONDOWN
+                or PInvoke.WM_NCXBUTTONUP
+                or PInvoke.WM_NCXBUTTONDBLCLK => true,
+            _ => false,
+        };
     }
 
     private bool IsDoubleClick(int x, int y)
@@ -2504,7 +2493,7 @@ public partial class ControlDesigner : ComponentDesigner
         string typeName = owner.GetType().FullName;
         string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
-        Exception wrapper = new Exception(
+        InvalidOperationException wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
             exception);
         DisplayError(wrapper);

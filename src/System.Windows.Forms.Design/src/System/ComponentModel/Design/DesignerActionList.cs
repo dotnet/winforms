@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace System.ComponentModel.Design;
@@ -12,27 +13,23 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignerActionList
 {
-    public DesignerActionList(IComponent? component)
-    {
-        Component = component;
-    }
+    public DesignerActionList(IComponent? component) => Component = component;
 
     public virtual bool AutoShow { get; set; }
 
     public IComponent? Component { get; }
 
-    public object? GetService(Type serviceType)
-    {
-        return Component?.Site?.GetService(serviceType);
-    }
+    public object? GetService(Type serviceType) => Component?.Site?.GetService(serviceType);
 
     public virtual DesignerActionItemCollection GetSortedActionItems()
     {
         var items = new SortedList<string, DesignerActionItem>();
 
         // we want to ignore the public methods and properties for THIS class (only take the inherited ones)
-        IList<MethodInfo> originalMethods = Array.AsReadOnly(typeof(DesignerActionList).GetMethods(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public));
-        IList<PropertyInfo> originalProperties = Array.AsReadOnly(typeof(DesignerActionList).GetProperties(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public));
+        ReadOnlyCollection<MethodInfo> originalMethods = Array.AsReadOnly(
+            typeof(DesignerActionList).GetMethods(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public));
+        ReadOnlyCollection<PropertyInfo> originalProperties = Array.AsReadOnly(
+            typeof(DesignerActionList).GetProperties(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public));
 
         // Do methods
         MethodInfo[] methods = GetType().GetMethods(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
@@ -64,11 +61,7 @@ public class DesignerActionList
             items.Add(dispName, new DesignerActionPropertyItem(info.Name, dispName, cat, desc));
         }
 
-        var returnValue = new DesignerActionItemCollection();
-        foreach (DesignerActionItem dai in items.Values)
-        {
-            returnValue.Add(dai);
-        }
+        DesignerActionItemCollection returnValue = [.. items.Values];
 
         return returnValue;
     }

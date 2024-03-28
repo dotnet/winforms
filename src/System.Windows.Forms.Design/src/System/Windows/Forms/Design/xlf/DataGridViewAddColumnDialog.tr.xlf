@@ -24,17 +24,17 @@
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="translated">&amp;Veri bağlama sütunu</target>
+        <target state="translated">&amp;Veri Bağlama sütunu</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">&amp;Donduruldu</target>
+        <target state="translated">D&amp;onduruldu</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">Üst &amp;bilgi metni:</target>
+        <target state="translated">&amp;Üst bilgi metni:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">Gö&amp;rünür</target>
+        <target state="translated">&amp;Görünür</target>
         <note />
       </trans-unit>
     </body>

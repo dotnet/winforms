@@ -32,7 +32,7 @@ internal abstract class Record : IRecord
         PrimitiveType.DateTime => reader.ReadDateTime(),
         PrimitiveType.TimeSpan => new TimeSpan(reader.ReadInt64()),
         // String is handled with a record, never on it's own
-        _ => throw new SerializationException($"Failure trying to read primitve '{primitiveType}'"),
+        _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
     };
 
     /// <summary>
@@ -44,6 +44,84 @@ internal abstract class Record : IRecord
         for (int i = 0; i < count; i++)
         {
             values.Add(ReadPrimitiveType(reader, primitiveType));
+        }
+
+        return values;
+    }
+
+    private protected static IReadOnlyList<T> ReadPrimitiveTypes<T>(BinaryReader reader, int count)
+        where T : unmanaged
+    {
+        // Special casing byte for performance.
+        if (typeof(T) == typeof(byte))
+        {
+            byte[] bytes = reader.ReadBytes(count);
+            return (IReadOnlyList<T>)(object)bytes;
+        }
+
+        List<T> values = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
+        for (int i = 0; i < count; i++)
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                values.Add((T)(object)reader.ReadBoolean());
+            }
+            else if (typeof(T) == typeof(sbyte))
+            {
+                values.Add((T)(object)reader.ReadSByte());
+            }
+            else if (typeof(T) == typeof(char))
+            {
+                values.Add((T)(object)reader.ReadChar());
+            }
+            else if (typeof(T) == typeof(short))
+            {
+                values.Add((T)(object)reader.ReadInt16());
+            }
+            else if (typeof(T) == typeof(ushort))
+            {
+                values.Add((T)(object)reader.ReadUInt16());
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                values.Add((T)(object)reader.ReadInt32());
+            }
+            else if (typeof(T) == typeof(uint))
+            {
+                values.Add((T)(object)reader.ReadUInt32());
+            }
+            else if (typeof(T) == typeof(long))
+            {
+                values.Add((T)(object)reader.ReadInt64());
+            }
+            else if (typeof(T) == typeof(ulong))
+            {
+                values.Add((T)(object)reader.ReadUInt64());
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                values.Add((T)(object)reader.ReadSingle());
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                values.Add((T)(object)reader.ReadDouble());
+            }
+            else if (typeof(T) == typeof(decimal))
+            {
+                values.Add((T)(object)decimal.Parse(reader.ReadString(), CultureInfo.InvariantCulture));
+            }
+            else if (typeof(T) == typeof(DateTime))
+            {
+                values.Add((T)(object)reader.ReadDateTime());
+            }
+            else if (typeof(T) == typeof(TimeSpan))
+            {
+                values.Add((T)(object)new TimeSpan(reader.ReadInt64()));
+            }
+            else
+            {
+                throw new SerializationException($"Failure trying to read primitive '{typeof(T)}'");
+            }
         }
 
         return values;
@@ -120,10 +198,97 @@ internal abstract class Record : IRecord
         }
     }
 
+    private protected static void WritePrimitiveTypes<T>(BinaryWriter writer, IReadOnlyList<T> values)
+        where T : unmanaged
+    {
+        // Special casing byte[] for performance.
+        if (typeof(T) == typeof(byte))
+        {
+            if (values is byte[] byteArray)
+            {
+                writer.Write(byteArray);
+                return;
+            }
+            else if (values is ArraySegment<byte> arraySegment)
+            {
+                writer.Write(arraySegment);
+                return;
+            }
+        }
+
+        for (int i = 0; i < values.Count; i++)
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                writer.Write((bool)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(byte))
+            {
+                writer.Write((byte)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(sbyte))
+            {
+                writer.Write((sbyte)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(char))
+            {
+                writer.Write((char)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(short))
+            {
+                writer.Write((short)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(ushort))
+            {
+                writer.Write((ushort)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                writer.Write((int)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(uint))
+            {
+                writer.Write((uint)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(long))
+            {
+                writer.Write((long)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(ulong))
+            {
+                writer.Write((ulong)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                writer.Write((float)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                writer.Write((double)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(decimal))
+            {
+                writer.Write(((decimal)(object)values[i]).ToString(CultureInfo.InvariantCulture));
+            }
+            else if (typeof(T) == typeof(DateTime))
+            {
+                writer.Write((DateTime)(object)values[i]);
+            }
+            else if (typeof(T) == typeof(TimeSpan))
+            {
+                writer.Write(((TimeSpan)(object)values[i]).Ticks);
+            }
+            else
+            {
+                throw new SerializationException($"Failure trying to write primitive '{typeof(T)}'");
+            }
+        }
+    }
+
     /// <summary>
     ///  Reads the next record from the given <paramref name="reader"/>.
     /// </summary>
-    /// <exception cref="NotImplementedException">Found a mulitdimensional array.</exception>
+    /// <exception cref="NotImplementedException">Found a multidimensional array.</exception>
     /// <exception cref="NotSupportedException">Found a remote method invocation record.</exception>
     /// <exception cref="SerializationException">Unknown or corrupted data.</exception>
     internal static IRecord ReadBinaryFormatRecord(BinaryReader reader, RecordMap recordMap)
@@ -148,13 +313,43 @@ internal abstract class Record : IRecord
             RecordType.BinaryLibrary => ReadSpecificRecord<BinaryLibrary>(recordMap),
             RecordType.ObjectNullMultiple256 => ReadSpecificRecord<NullRecord.ObjectNullMultiple256>(recordMap),
             RecordType.ObjectNullMultiple => ReadSpecificRecord<NullRecord.ObjectNullMultiple>(recordMap),
-            RecordType.ArraySinglePrimitive => ReadSpecificRecord<ArraySinglePrimitive>(recordMap),
+            RecordType.ArraySinglePrimitive => ReadArraySinglePrimitive(recordMap),
             RecordType.ArraySingleObject => ReadSpecificRecord<ArraySingleObject>(recordMap),
             RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(recordMap),
             RecordType.MethodCall => throw new NotSupportedException(),
             RecordType.MethodReturn => throw new NotSupportedException(),
             _ => throw new SerializationException("Invalid record type."),
         };
+
+        IRecord ReadArraySinglePrimitive(RecordMap recordMap)
+        {
+            // Special casing to avoid excessive boxing/unboxing.
+            Id id = ArrayInfo.Parse(reader, out Count length);
+            PrimitiveType primitiveType = (PrimitiveType)reader.ReadByte();
+
+            IRecord record = primitiveType switch
+            {
+                PrimitiveType.Boolean => new ArraySinglePrimitive<bool>(id, ReadPrimitiveTypes<bool>(reader, length)),
+                PrimitiveType.Byte => new ArraySinglePrimitive<byte>(id, ReadPrimitiveTypes<byte>(reader, length)),
+                PrimitiveType.SByte => new ArraySinglePrimitive<sbyte>(id, ReadPrimitiveTypes<sbyte>(reader, length)),
+                PrimitiveType.Char => new ArraySinglePrimitive<char>(id, ReadPrimitiveTypes<char>(reader, length)),
+                PrimitiveType.Int16 => new ArraySinglePrimitive<short>(id, ReadPrimitiveTypes<short>(reader, length)),
+                PrimitiveType.UInt16 => new ArraySinglePrimitive<ushort>(id, ReadPrimitiveTypes<ushort>(reader, length)),
+                PrimitiveType.Int32 => new ArraySinglePrimitive<int>(id, ReadPrimitiveTypes<int>(reader, length)),
+                PrimitiveType.UInt32 => new ArraySinglePrimitive<uint>(id, ReadPrimitiveTypes<uint>(reader, length)),
+                PrimitiveType.Int64 => new ArraySinglePrimitive<long>(id, ReadPrimitiveTypes<long>(reader, length)),
+                PrimitiveType.UInt64 => new ArraySinglePrimitive<ulong>(id, ReadPrimitiveTypes<ulong>(reader, length)),
+                PrimitiveType.Single => new ArraySinglePrimitive<float>(id, ReadPrimitiveTypes<float>(reader, length)),
+                PrimitiveType.Double => new ArraySinglePrimitive<double>(id, ReadPrimitiveTypes<double>(reader, length)),
+                PrimitiveType.Decimal => new ArraySinglePrimitive<decimal>(id, ReadPrimitiveTypes<decimal>(reader, length)),
+                PrimitiveType.DateTime => new ArraySinglePrimitive<DateTime>(id, ReadPrimitiveTypes<DateTime>(reader, length)),
+                PrimitiveType.TimeSpan => new ArraySinglePrimitive<TimeSpan>(id, ReadPrimitiveTypes<TimeSpan>(reader, length)),
+                _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
+            };
+
+            recordMap[id] = record;
+            return record;
+        }
 
         unsafe TRecord ReadSpecificRecord<TRecord>(RecordMap recordMap) where TRecord : class, IRecord<TRecord>
         {

@@ -8,8 +8,8 @@ public class AudioTests
     [Fact]
     public void Play()
     {
-        var location = Path.Combine(Path.GetTempPath(), GetUniqueName());
-        var audio = new Audio();
+        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        Audio audio = new();
         Assert.Throws<FileNotFoundException>(() => audio.Play(location));
     }
 
@@ -19,7 +19,7 @@ public class AudioTests
     [Fact]
     public void Stop()
     {
-        var audio = new Audio();
+        Audio audio = new();
         audio.Stop();
     }
 

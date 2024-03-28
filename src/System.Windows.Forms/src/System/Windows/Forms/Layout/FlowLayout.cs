@@ -1,47 +1,28 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if DEBUG
-using System.ComponentModel;
-#endif
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout;
 
 internal partial class FlowLayout : LayoutEngine
 {
-    internal static readonly FlowLayout Instance = new();
+    internal static FlowLayout Instance { get; } = new();
 
     private static readonly int s_wrapContentsProperty = PropertyStore.CreateKey();
     private static readonly int s_flowDirectionProperty = PropertyStore.CreateKey();
 
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
     {
-#if DEBUG
-        Debug.WriteLineIf(CompModSwitches.FlowLayout.TraceInfo,
-            $"FlowLayout::Layout(container={container}, displayRect={container.DisplayRectangle}, args={args})");
-        Debug.Indent();
-#endif
-
         // ScrollableControl will first try to get the layoutbounds from the derived control when
         // trying to figure out if ScrollBars should be added.
         CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, measureOnly: false));
-
-        Debug.Unindent();
-
         return CommonProperties.GetAutoSize(container);
     }
 
     internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
     {
-#if DEBUG
-        if (CompModSwitches.FlowLayout.TraceInfo)
-        {
-            Debug.WriteLine($"FlowLayout::GetPreferredSize(container={container}, proposedConstraints={proposedConstraints})");
-            Debug.Indent();
-        }
-#endif
-        Rectangle measureBounds = new Rectangle(new Point(0, 0), proposedConstraints);
+        Rectangle measureBounds = new(new Point(0, 0), proposedConstraints);
         Size prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
 
         if (prefSize.Width > proposedConstraints.Width || prefSize.Height > proposedConstraints.Height)
@@ -53,13 +34,6 @@ internal partial class FlowLayout : LayoutEngine
             prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
         }
 
-#if DEBUG
-        if (CompModSwitches.FlowLayout.TraceInfo)
-        {
-            Debug.Unindent();
-            Debug.WriteLine($"GetPreferredSize returned {prefSize}");
-        }
-#endif
         return prefSize;
     }
 
@@ -99,10 +73,8 @@ internal partial class FlowLayout : LayoutEngine
 
         for (int i = 0; i < container.Children.Count;)
         {
-            Size rowSize = Size.Empty;
-
-            Rectangle measureBounds = new Rectangle(displayRect.X, displayRect.Y, displayRect.Width, displayRect.Height - layoutSize.Height);
-            rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out int breakIndex);
+            Rectangle measureBounds = new(displayRect.X, displayRect.Y, displayRect.Width, displayRect.Height - layoutSize.Height);
+            Size rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out int breakIndex);
 
             // if we are not wrapping contents, then the breakIndex (as set in MeasureRow)
             // should be equal to the count of child items in the container.
@@ -111,7 +83,7 @@ internal partial class FlowLayout : LayoutEngine
 
             if (!measureOnly)
             {
-                Rectangle rowBounds = new Rectangle(displayRect.X,
+                Rectangle rowBounds = new(displayRect.X,
                     layoutSize.Height + displayRect.Y,
                     rowSize.Width,
                     rowSize.Height);
@@ -211,7 +183,7 @@ internal partial class FlowLayout : LayoutEngine
             Size prefSize;
             if (elementProxy.AutoSize)
             {
-                Size elementConstraints = new Size(int.MaxValue, rowBounds.Height - elementProxy.Margin.Size.Height);
+                Size elementConstraints = new(int.MaxValue, rowBounds.Height - elementProxy.Margin.Size.Height);
                 if (i == startIndex)
                 {
                     // If the element is the first in the row, attempt to pack it to the row width. (If its not 1st, it will wrap
@@ -250,7 +222,7 @@ internal partial class FlowLayout : LayoutEngine
                 // If measureOnly = false, rowBounds.Height = measured row height
                 // (otherwise its the remaining displayRect of the container)
 
-                Rectangle cellBounds = new Rectangle(location, new Size(requiredSize.Width, rowBounds.Height));
+                Rectangle cellBounds = new(location, new Size(requiredSize.Width, rowBounds.Height));
 
                 // We laid out the rows with the elementProxy's margins included.
                 // We now deflate the rect to get the actual elementProxy bounds.

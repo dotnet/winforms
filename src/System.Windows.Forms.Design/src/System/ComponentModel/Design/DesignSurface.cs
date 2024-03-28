@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignSurface : IDisposable, IServiceProvider
 {
-    private ServiceContainer _serviceContainer;
+    private DesignSurfaceServiceContainer _serviceContainer;
     private DesignerHost _host;
     private ICollection? _loadErrors;
 
@@ -32,14 +32,14 @@ public class DesignSurface : IDisposable, IServiceProvider
         _serviceContainer = new DesignSurfaceServiceContainer(parentProvider);
 
         // Configure our default services
-        ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
-        ServiceContainer.AddService(typeof(ISelectionService), callback);
-        ServiceContainer.AddService(typeof(IExtenderProviderService), callback);
-        ServiceContainer.AddService(typeof(IExtenderListService), callback);
-        ServiceContainer.AddService(typeof(ITypeDescriptorFilterService), callback);
-        ServiceContainer.AddService(typeof(IReferenceService), callback);
+        ServiceCreatorCallback callback = new(OnCreateService);
+        ServiceContainer.AddService<ISelectionService>(callback);
+        ServiceContainer.AddService<IExtenderProviderService>(callback);
+        ServiceContainer.AddService<IExtenderListService>(callback);
+        ServiceContainer.AddService<ITypeDescriptorFilterService>(callback);
+        ServiceContainer.AddService<IReferenceService>(callback);
 
-        ServiceContainer.AddService(typeof(DesignSurface), this);
+        ServiceContainer.AddService(this);
         _host = new DesignerHost(this);
     }
 
@@ -114,10 +114,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     {
         get
         {
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(ToString());
-            }
+            ObjectDisposedException.ThrowIf(_host is null, this);
 
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
@@ -258,21 +255,21 @@ public class DesignSurface : IDisposable, IServiceProvider
 
         // Locate an appropriate constructor for IComponents.
         object? instance = null;
-        ConstructorInfo? ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
+        ConstructorInfo? ctor = TypeDescriptor.GetReflectionType(type).GetConstructor([]);
         if (ctor is not null)
         {
-            instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
+            instance = TypeDescriptor.CreateInstance(this, type, [], []);
         }
         else
         {
             if (typeof(IComponent).IsAssignableFrom(type))
             {
-                ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
+                ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, [typeof(IContainer)], null);
             }
 
             if (ctor is not null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
+                instance = TypeDescriptor.CreateInstance(this, type, [typeof(IContainer)], [ComponentContainer]);
             }
         }
 
@@ -329,7 +326,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                 {
                     if (_serviceContainer is not null)
                     {
-                        _serviceContainer.RemoveService(typeof(DesignSurface));
+                        _serviceContainer.RemoveService<DesignSurface>();
                         _serviceContainer.Dispose();
                     }
                 }
@@ -415,7 +412,7 @@ public class DesignSurface : IDisposable, IServiceProvider
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
-                ArrayList newErrors = new ArrayList();
+                ArrayList newErrors = [];
                 Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                 {
                     HelpLink = SR.DesignSurfaceNoRootComponent

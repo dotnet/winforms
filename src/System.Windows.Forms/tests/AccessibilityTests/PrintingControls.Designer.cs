@@ -28,7 +28,7 @@ partial class PrintingControls
     /// </summary>
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintingControls));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(PrintingControls));
         this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
         this.printDocument1 = new System.Drawing.Printing.PrintDocument();
         this.printDialog1 = new System.Windows.Forms.PrintDialog();

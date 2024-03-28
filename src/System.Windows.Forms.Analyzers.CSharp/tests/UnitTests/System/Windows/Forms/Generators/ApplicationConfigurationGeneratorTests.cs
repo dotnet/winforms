@@ -41,8 +41,8 @@ namespace MyProject
     {
         foreach (OutputKind projectType in Enum.GetValues(typeof(OutputKind)))
         {
-            if (projectType != OutputKind.ConsoleApplication &&
-                projectType != OutputKind.WindowsApplication)
+            if (projectType is not OutputKind.ConsoleApplication
+                and not OutputKind.WindowsApplication)
             {
                 yield return new object[] { projectType };
             }
@@ -66,7 +66,7 @@ namespace MyProject
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     [Theory]
@@ -89,7 +89,7 @@ namespace MyProject
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     [Fact]
@@ -110,7 +110,7 @@ namespace MyProject
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     [Fact]
@@ -141,7 +141,7 @@ build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     [Fact]
@@ -166,7 +166,7 @@ ApplicationConfiguration.Initialize();
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     [Fact]
@@ -201,7 +201,7 @@ build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
             },
         };
 
-        await test.RunAsync().ConfigureAwait(false);
+        await test.RunAsync();
     }
 
     private SourceText LoadFileContent(string testName)

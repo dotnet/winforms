@@ -16,7 +16,7 @@ public class ColumnHeaderCollectionEditorTests
     public void ColumnHeaderCollectionEditor_EditValue_ReturnsValue()
     {
         ColumnHeaderCollectionEditor editor = new(typeof(string));
-        string[] value = new string[] { "asdf", "qwer", "zxcv" };
+        string[] value = ["asdf", "qwer", "zxcv"];
 
         Assert.Same(value, editor.EditValue(null, value));
     }

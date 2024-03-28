@@ -11,10 +11,10 @@ public class ResXFileRefTests
     [Fact]
     public void ResXFileRef_Constructor()
     {
-        var fileName = "SomeFile";
-        var typeName = "SomeType";
+        string fileName = "SomeFile";
+        string typeName = "SomeType";
 
-        var fileRef = new ResXFileRef(fileName, typeName);
+        ResXFileRef fileRef = new(fileName, typeName);
 
         Assert.Equal(fileName, fileRef.FileName);
         Assert.Equal(typeName, fileRef.TypeName);
@@ -24,11 +24,11 @@ public class ResXFileRefTests
     [Fact]
     public void ResXFileRef_EncodingConstructor()
     {
-        var fileName = "SomeFile";
-        var typeName = "SomeType";
+        string fileName = "SomeFile";
+        string typeName = "SomeType";
         Encoding encoding = Encoding.Default;
 
-        var fileRef = new ResXFileRef(fileName, typeName, encoding);
+        ResXFileRef fileRef = new(fileName, typeName, encoding);
 
         Assert.Equal(fileName, fileRef.FileName);
         Assert.Equal(typeName, fileRef.TypeName);

@@ -15,7 +15,7 @@ public class DesignerVerbCollectionTests
     public static IEnumerable<object[]> Ctor_DesignerVerbArray_TestData()
     {
         yield return new object[] { Array.Empty<DesignerVerb>() };
-        yield return new object[] { new DesignerVerb[] { new DesignerVerb(null, null), null } };
+        yield return new object[] { new DesignerVerb[] { new(null, null), null } };
     }
 
     [Theory]

@@ -262,11 +262,6 @@
         <target state="translated">所要求的動作只支援一維陣列。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">需要非負數。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">目標陣列類型與集合中項目的類型不相容。</target>
@@ -415,6 +410,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">繫結導覽</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">啟用應用程式修剪時，不支援繫結作業。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -4140,8 +4140,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">DataGridView 比較兩個儲存格值以執行排序作業時發生。</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">在 DataGridView 控件完成排序作業時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -5210,6 +5210,11 @@ Do you want to replace it?</source>
         <target state="translated">顯示在對話方塊中樹狀檢視控制項上方的字串。這個字串可以用來指定對使用者的指示。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="translated">控制對話方塊中是否可選取多個資料夾。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">控制是否在使用者巡覽檢視或編輯檔案名稱 (如適用) 之前，停用對話方塊的 [確定] 按鈕。請注意: 停用 [確定] 按鈕無法防止透過 Enter 鍵送出對話方塊。</target>
@@ -5223,6 +5228,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">對話方塊中第一個選取的資料夾或使用者選取的最後一個資料夾的路徑。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="translated">擷取對話方塊中所有已選取資料夾的路徑。</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -5854,11 +5864,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">嘗試在此控制項上執行的動作是從錯誤的執行緒呼叫。請使用 Control.Invoke 或 Control.BeginInvoke 封送處理至正確的執行緒，以執行此動作。</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須大於 {2} 並小於 {3}。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">無效的檔案格式。</target>
@@ -5877,26 +5882,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">無效的 HDC 類型: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須小於 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須小於或等於 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須大於 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須大於或等於 {2}。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">
@@ -7409,11 +7394,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">表示每按一下按鈕所增加/減少的數量。</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">參數值必須大於或等於 0。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">表示數值上下按鈕控制項的最大值。</target>
@@ -8267,11 +8247,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">文字</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">定位點索引無效。</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
@@ -10242,6 +10217,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemRightToLeftDescr">
         <source>Indicates whether the item should draw right-to-left for RTL languages.</source>
         <target state="translated">表示項目是否使用 RTL 語言的方式由右至左繪製。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="translated">選取的屬性值變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -47,7 +47,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
     {
         // VERY limited support for cloning.
 
-        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+        ContextMenuStrip contextMenuStrip = new();
 
         // copy over events
         contextMenuStrip.Events.AddHandlers(Events);
@@ -128,7 +128,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         // Because of this inconsistency, we intentionally recreate the handle that triggers scaling according to the new DPI, after setting the "visible" property.
         if (visible
             && IsHandleCreated
-            && DpiHelper.IsPerMonitorV2Awareness
+            && ScaleHelper.IsThreadPerMonitorV2Aware
             && DeviceDpi != (int)PInvoke.GetDpiForWindow(this))
         {
             RecreateHandle();
@@ -143,7 +143,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuOpenedEventId);
             }
         }
 
@@ -158,7 +158,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         {
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuClosedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuClosedEventId);
             }
 
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);

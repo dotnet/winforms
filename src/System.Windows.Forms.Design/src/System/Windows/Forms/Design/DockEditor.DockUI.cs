@@ -9,68 +9,108 @@ namespace System.Windows.Forms.Design;
 public sealed partial class DockEditor
 {
     /// <summary>
-    ///  User Interface for the DockEditor.
+    ///  User interface for the DockEditor.
     /// </summary>
     private sealed class DockUI : SelectionPanelBase
     {
-        private const int NoneHeight = 24;
-        private const int NoneWidth = 90;
-        private const int ControlWidth = 94;
-        private const int ControlHeight = 116;
-        private const int Offset2X = 2;
-        private const int Offset2Y = 2;
+        private static int s_initialSystemDpi = -1;
 
-        private static bool s_isScalingInitialized;
-        private static readonly Size s_buttonSizeDefault = new(20, 20);
-        private static readonly Size s_containerSizeDefault = new(90, 90);
-
-        private static int s_noneHeight = NoneHeight;
-        private static int s_noneWidth = NoneWidth;
-        private static Size s_buttonSize = s_buttonSizeDefault;
-        private static Size s_containerSize = s_containerSizeDefault;
-        private static int s_controlWidth = ControlWidth;
-        private static int s_controlHeight = ControlHeight;
-        private static int s_offset2X = Offset2X;
-        private static int s_offset2Y = Offset2Y;
-
-        private readonly ContainerPlaceholder _container = new();
-        private readonly DockEditor _editor;
-        private readonly RadioButton _fill = new SelectionPanelRadioButton();
-        private readonly RadioButton _left = new SelectionPanelRadioButton();
+        private readonly ContainerPlaceholder _container;
+        private readonly RadioButton _fill;
+        private readonly RadioButton _left;
         private readonly RadioButton[] _leftRightOrder;
-        private readonly RadioButton _none = new SelectionPanelRadioButton();
-        private readonly RadioButton _right = new SelectionPanelRadioButton();
+        private readonly RadioButton _none;
+        private readonly RadioButton _right;
         private readonly RadioButton[] _tabOrder;
-        private readonly RadioButton _top = new SelectionPanelRadioButton();
-        private readonly RadioButton _bottom = new SelectionPanelRadioButton();
+        private readonly RadioButton _top;
+        private readonly RadioButton _bottom;
         private readonly RadioButton[] _upDownOrder;
 
-        public DockUI(DockEditor editor)
+        public DockUI()
         {
-            _editor = editor;
-            _upDownOrder = new[] { _top, _fill, _bottom, _none };
-            _leftRightOrder = new[] { _left, _fill, _right };
-            _tabOrder = new[] { _top, _left, _fill, _right, _bottom, _none };
-
-            if (!s_isScalingInitialized)
+            if (s_initialSystemDpi == -1)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_noneHeight = DpiHelper.LogicalToDeviceUnitsY(NoneHeight);
-                    s_noneWidth = DpiHelper.LogicalToDeviceUnitsX(NoneWidth);
-                    s_controlHeight = DpiHelper.LogicalToDeviceUnitsY(ControlHeight);
-                    s_controlWidth = DpiHelper.LogicalToDeviceUnitsX(ControlWidth);
-                    s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Y);
-                    s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2X);
-
-                    s_buttonSize = DpiHelper.LogicalToDeviceUnits(s_buttonSizeDefault);
-                    s_containerSize = DpiHelper.LogicalToDeviceUnits(s_containerSizeDefault);
-                }
-
-                s_isScalingInitialized = true;
+                s_initialSystemDpi = ScaleHelper.InitialSystemDpi;
             }
 
-            InitializeComponent();
+            _container = new()
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+                Dock = DockStyle.Fill
+            };
+
+            _none = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Bottom,
+                Name = "_none",
+                Text = DockStyle.None.ToString(),
+                TabIndex = 0,
+                TabStop = true,
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorNoneAccName
+            };
+
+            _right = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Right,
+                TabIndex = 4,
+                TabStop = true,
+                Name = "_right",
+                // Needs at least one character so focus rect will show.
+                Text = " ",
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorRightAccName
+            };
+
+            _left = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Left,
+                TabIndex = 2,
+                TabStop = true,
+                Name = "_left",
+                Text = " ",
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorLeftAccName
+            };
+
+            _top = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Top,
+                TabIndex = 1,
+                TabStop = true,
+                Name = "_top",
+                Text = " ",
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorTopAccName
+            };
+
+            _bottom = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Bottom,
+                TabIndex = 5,
+                TabStop = true,
+                Name = "_bottom",
+                Text = " ",
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorBottomAccName
+            };
+
+            _fill = new SelectionPanelRadioButton()
+            {
+                Dock = DockStyle.Fill,
+                TabIndex = 3,
+                TabStop = true,
+                Name = "_fill",
+                Text = " ",
+                Appearance = Appearance.Button,
+                AccessibleName = SR.DockEditorFillAccName
+            };
+
+            InitializeComponent(s_initialSystemDpi);
+
+            _upDownOrder = [_top, _fill, _bottom, _none];
+            _leftRightOrder = [_left, _fill, _right];
+            _tabOrder = [_top, _left, _fill, _right, _bottom, _none];
         }
 
         private DockStyle DockStyle
@@ -81,23 +121,19 @@ public sealed partial class DockEditor
                 {
                     return DockStyle.Fill;
                 }
-
-                if (CheckedControl == _left)
+                else if (CheckedControl == _left)
                 {
                     return DockStyle.Left;
                 }
-
-                if (CheckedControl == _right)
+                else if (CheckedControl == _right)
                 {
                     return DockStyle.Right;
                 }
-
-                if (CheckedControl == _top)
+                else if (CheckedControl == _top)
                 {
                     return DockStyle.Top;
                 }
-
-                if (CheckedControl == _bottom)
+                else if (CheckedControl == _bottom)
                 {
                     return DockStyle.Bottom;
                 }
@@ -132,95 +168,62 @@ public sealed partial class DockEditor
 
         protected override ControlCollection SelectionOptions => _container.Controls;
 
-        private void InitializeComponent()
+        private void InitializeComponent(int dpi)
         {
-            SetBounds(0, 0, s_controlWidth, s_controlHeight);
+            const int LogicalNoneHeight = 24;
+            const int LogicalNoneWidth = 90;
+            const int LogicalControlWidth = 94;
+            const int LogicalControlHeight = 116;
+            const int LogicalContainerOffset = 2;
+            const int LogicalContainerSize = 90;
+            const int LogicalButtonSize = 20;
+
+            SetBounds(
+                0,
+                0,
+                ScaleHelper.ScaleToDpi(LogicalControlWidth, dpi),
+                ScaleHelper.ScaleToDpi(LogicalControlHeight, dpi));
 
             BackColor = SystemColors.Control;
             ForeColor = SystemColors.ControlText;
             AccessibleName = SR.DockEditorAccName;
 
-            _none.Dock = DockStyle.Bottom;
-            _none.Size = new Size(s_noneWidth, s_noneHeight);
-            _none.Name = "_none";
-            _none.Text = DockStyle.None.ToString();
-            _none.TabIndex = 0;
-            _none.TabStop = true;
-            _none.Appearance = Appearance.Button;
-            _none.AccessibleName = SR.DockEditorNoneAccName;
+            _none.Size = ScaleHelper.ScaleToDpi(new Size(LogicalNoneWidth, LogicalNoneHeight), dpi);
 
-            _container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-            _container.Location = new Point(s_offset2X, s_offset2Y);
-            _container.Size = s_containerSize;
+            int scaledOffset = ScaleHelper.ScaleToDpi(LogicalContainerOffset, dpi);
+            _container.Location = new Point(scaledOffset, scaledOffset);
+            _container.Size = ScaleHelper.ScaleToDpi(new Size(LogicalContainerSize, LogicalContainerSize), dpi);
 
-            _none.Dock = DockStyle.Bottom;
-            _container.Dock = DockStyle.Fill;
+            Size scaledButtonSize = ScaleHelper.ScaleToDpi(new Size(LogicalButtonSize, LogicalButtonSize), dpi);
 
-            _right.Dock = DockStyle.Right;
-            _right.Size = s_buttonSize;
-            _right.TabIndex = 4;
-            _right.TabStop = true;
-            _right.Name = "_right";
-            _right.Text = " "; // Needs at least one character so focus rect will show.
-            _right.Appearance = Appearance.Button;
-            _right.AccessibleName = SR.DockEditorRightAccName;
-
-            _left.Dock = DockStyle.Left;
-            _left.Size = s_buttonSize;
-            _left.TabIndex = 2;
-            _left.TabStop = true;
-            _left.Name = "_left";
-            _left.Text = " ";
-            _left.Appearance = Appearance.Button;
-            _left.AccessibleName = SR.DockEditorLeftAccName;
-
-            _top.Dock = DockStyle.Top;
-            _top.Size = s_buttonSize;
-            _top.TabIndex = 1;
-            _top.TabStop = true;
-            _top.Name = "_top";
-            _top.Text = " ";
-            _top.Appearance = Appearance.Button;
-            _top.AccessibleName = SR.DockEditorTopAccName;
-
-            _bottom.Dock = DockStyle.Bottom;
-            _bottom.Size = s_buttonSize;
-            _bottom.TabIndex = 5;
-            _bottom.TabStop = true;
-            _bottom.Name = "_bottom";
-            _bottom.Text = " ";
-            _bottom.Appearance = Appearance.Button;
-            _bottom.AccessibleName = SR.DockEditorBottomAccName;
-
-            _fill.Dock = DockStyle.Fill;
-            _fill.Size = s_buttonSize;
-            _fill.TabIndex = 3;
-            _fill.TabStop = true;
-            _fill.Name = "_fill";
-            _fill.Text = " ";
-            _fill.Appearance = Appearance.Button;
-            _fill.AccessibleName = SR.DockEditorFillAccName;
+            _right.Size = scaledButtonSize;
+            _left.Size = scaledButtonSize;
+            _top.Size = scaledButtonSize;
+            _bottom.Size = scaledButtonSize;
+            _fill.Size = scaledButtonSize;
 
             Controls.Clear();
             Controls.Add(_container);
 
             _container.Controls.Clear();
-            _container.Controls.AddRange(new Control[]
-            {
+            _container.Controls.AddRange(
+            [
                 _fill,
                 _left,
                 _right,
                 _top,
                 _bottom,
                 _none
-            });
+            ]);
 
             ConfigureButtons();
         }
 
-        protected override RadioButton ProcessDownKey(RadioButton checkedControl) => ProcessUpDown(checkedControl, false);
+        protected override RadioButton ProcessDownKey(RadioButton checkedControl)
+            => ProcessUpDown(checkedControl, upDirection: false);
 
-        protected override RadioButton ProcessLeftKey(RadioButton checkedControl) => ProcessLeftRight(checkedControl, true);
+        protected override RadioButton ProcessLeftKey(RadioButton checkedControl)
+            => ProcessLeftRight(checkedControl, leftDirection: true);
 
         private RadioButton ProcessLeftRight(RadioButton checkedControl, bool leftDirection)
         {

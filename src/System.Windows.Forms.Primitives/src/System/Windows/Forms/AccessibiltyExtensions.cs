@@ -13,7 +13,7 @@ internal static unsafe class AccessibiltyExtensions
     {
         // https://learn.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
 
-        using var unknown = ComHelpers.TryGetComScope<IUnknown>(accessible, out HRESULT hr);
+        using var unknown = ComHelpers.TryGetComScope<IUnknown>(accessible, out _);
 
         return PInvoke.LresultFromObject(
             IID.Get<global::Windows.Win32.UI.Accessibility.IAccessible>(),

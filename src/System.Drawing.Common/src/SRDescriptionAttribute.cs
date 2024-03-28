@@ -17,8 +17,9 @@ internal sealed class SRDescriptionAttribute : DescriptionAttribute
             if (!_replaced)
             {
                 _replaced = true;
-                base.DescriptionValue = SR.GetResourceString(base.Description);
+                DescriptionValue = SR.GetResourceString(base.Description);
             }
+
             return base.Description;
         }
     }

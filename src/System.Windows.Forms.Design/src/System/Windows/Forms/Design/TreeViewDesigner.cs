@@ -1,12 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -17,9 +14,9 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class TreeViewDesigner : ControlDesigner
 {
-    private ComCtl32.TVHITTESTINFO _tvhit;
-    private DesignerActionListCollection _actionLists;
-    private TreeView _treeView;
+    private TVHITTESTINFO _tvhit;
+    private DesignerActionListCollection? _actionLists;
+    private TreeView? _treeView;
 
     public TreeViewDesigner()
     {
@@ -55,7 +52,7 @@ internal class TreeViewDesigner : ControlDesigner
         point = Control.PointToClient(point);
         _tvhit.pt = point;
         PInvoke.SendMessage(Control, PInvoke.TVM_HITTEST, 0, ref _tvhit);
-        return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
+        return _tvhit.flags == TVHITTESTINFO_FLAGS.TVHT_ONITEMBUTTON;
     }
 
     public override void Initialize(IComponent component)
@@ -70,11 +67,10 @@ internal class TreeViewDesigner : ControlDesigner
         }
     }
 
-    private void TreeViewInvalidate(object sender, TreeViewEventArgs e) => _treeView?.Invalidate();
+    private void TreeViewInvalidate(object? sender, TreeViewEventArgs e) => _treeView?.Invalidate();
 
-    public override DesignerActionListCollection ActionLists
-        => _actionLists ??= new DesignerActionListCollection
-            {
-                new TreeViewActionList(this)
-            };
+    public override DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection
+    {
+        new TreeViewActionList(this)
+    };
 }

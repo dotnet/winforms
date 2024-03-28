@@ -25,25 +25,10 @@ public partial class PrintControllerWithStatusDialog : PrintController
         _dialogTitle = dialogTitle;
     }
 
-    /// <summary>
-    ///  This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller
-    ///  and return its IsPreview Property.
-    /// </summary>
-    public override bool IsPreview
-    {
-        get
-        {
-            if (_underlyingController is not null)
-            {
-                return _underlyingController.IsPreview;
-            }
-
-            return false;
-        }
-    }
+    public override bool IsPreview => _underlyingController?.IsPreview ?? false;
 
     /// <summary>
-    ///  Implements StartPrint by delegating to the underlying controller.
+    ///  Begins the control sequence that determines when and how to print a document.
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
@@ -57,9 +42,6 @@ public partial class PrintControllerWithStatusDialog : PrintController
             _backgroundThread = new BackgroundThread(this); // starts running & shows dialog automatically
         }
 
-        // OnStartPrint does the security check... lots of
-        // extra setup to make sure that we tear down
-        // correctly...
         try
         {
             _underlyingController.OnStartPrint(document, e);
@@ -67,7 +49,6 @@ public partial class PrintControllerWithStatusDialog : PrintController
         catch
         {
             _backgroundThread?.Stop();
-
             throw;
         }
         finally
@@ -80,7 +61,7 @@ public partial class PrintControllerWithStatusDialog : PrintController
     }
 
     /// <summary>
-    ///  Implements StartPage by delegating to the underlying controller.
+    ///  Begins the control sequence that determines when and how to print a page of a document.
     /// </summary>
     public override Graphics? OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
@@ -98,7 +79,7 @@ public partial class PrintControllerWithStatusDialog : PrintController
     }
 
     /// <summary>
-    ///  Implements EndPage by delegating to the underlying controller.
+    ///  Completes the control sequence that determines when and how to print a page of a document.
     /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
@@ -114,7 +95,7 @@ public partial class PrintControllerWithStatusDialog : PrintController
     }
 
     /// <summary>
-    ///  Implements EndPrint by delegating to the underlying controller.
+    ///  Completes the control sequence that determines when and how to print a document.
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {

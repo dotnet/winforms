@@ -5,21 +5,20 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles;
 
 /// <summary>
 ///  Record that represents a 16 bit Poly record.
 /// </summary>
-/// <remarks>
+/// <devdoc>
 ///   Not an actual Win32 define, encapsulates:
 ///
 ///  - EMRPOLYPOLYLINE16
 ///  - EMRPOLYPOLYBEZIER16
 ///  - EMRPOLYPOLYGON16
 ///  - EMRPOLYPOLYLINETO16
-/// </remarks>
+/// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRPOLYPOLY16
 {
@@ -36,7 +35,7 @@ internal struct EMRPOLYPOLY16
 
     public string ToString(DeviceContextState? state)
     {
-        StringBuilder sb = new StringBuilder(512);
+        StringBuilder sb = new(512);
         sb.Append($"[EMR{emr.iType}] Bounds: {rclBounds} Poly count: {nPolys} Total points: {cpts}");
 
         for (int i = 0; i < nPolys; i++)

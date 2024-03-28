@@ -15,7 +15,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Ctor_Default()
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -106,7 +106,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("msctls_progress32", createParams.ClassName);
@@ -131,7 +131,7 @@ public class ProgressBarTests
     [InlineData(ProgressBarStyle.Marquee, false, 0x56010008)]
     public void ProgressBar_CreateParams_GetStyle_ReturnsExpected(ProgressBarStyle style, bool designMode, int expectedStyle)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(designMode);
@@ -141,7 +141,7 @@ public class ProgressBarTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             Style = style,
             Site = mockSite.Object
@@ -170,7 +170,7 @@ public class ProgressBarTests
     [InlineData(RightToLeft.Yes, false, 0x56010000, 0x7000)]
     public void ProgressBar_CreateParams_GetRightToLeft_ReturnsExpected(RightToLeft rightToLeft, bool rightToLeftLayout, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             RightToLeft = rightToLeft,
             RightToLeftLayout = rightToLeftLayout
@@ -194,7 +194,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_AllowDrop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             AllowDrop = value
         };
@@ -216,7 +216,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void ProgressBar_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             BackgroundImage = value
         };
@@ -232,7 +232,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -244,7 +244,7 @@ public class ProgressBarTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        var image1 = new Bitmap(10, 10);
+        Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -255,7 +255,7 @@ public class ProgressBarTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var image2 = new Bitmap(10, 10);
+        Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -276,7 +276,7 @@ public class ProgressBarTests
     [EnumData<ImageLayout>]
     public void ProgressBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             BackgroundImageLayout = value
         };
@@ -294,7 +294,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -331,7 +331,7 @@ public class ProgressBarTests
     [InvalidEnumData<ImageLayout>]
     public void ProgressBar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
@@ -339,7 +339,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_CausesValidation_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             CausesValidation = value
         };
@@ -360,7 +360,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_CausesValidation_SetWithHandler_CallsCausesValidationChanged()
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             CausesValidation = true
         };
@@ -399,7 +399,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_DoubleBuffered_Get_ReturnsExpected(bool value)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
         Assert.Equal(value, control.DoubleBuffered);
     }
@@ -408,7 +408,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_DoubleBuffered_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             DoubleBuffered = value
         };
@@ -433,7 +433,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -473,7 +473,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ProgressBar_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             Font = value
         };
@@ -491,7 +491,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -502,7 +502,7 @@ public class ProgressBarTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -534,7 +534,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ProgressBar_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             ForeColor = value
         };
@@ -558,7 +558,7 @@ public class ProgressBarTests
     [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
     public void ProgressBar_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -586,7 +586,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -622,7 +622,7 @@ public class ProgressBarTests
     public void ProgressBar_ForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.ForeColor)];
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.False(property.CanResetValue(control));
 
         control.ForeColor = Color.Red;
@@ -638,7 +638,7 @@ public class ProgressBarTests
     public void ProgressBar_ForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.ForeColor)];
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.ForeColor = Color.Red;
@@ -672,7 +672,7 @@ public class ProgressBarTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void ProgressBar_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             ImeMode = value
         };
@@ -689,7 +689,7 @@ public class ProgressBarTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void ProgressBar_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -717,7 +717,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_ImeMode_SetWithHandler_CallsImeModeChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -753,7 +753,7 @@ public class ProgressBarTests
     [InvalidEnumData<ImeMode>]
     public void ProgressBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
     }
 
@@ -772,7 +772,7 @@ public class ProgressBarTests
     [MemberData(nameof(MarqueeAnimationSpeed_Set_TestData))]
     public void ProgressBar_MarqueeAnimationSpeed_Set_GetReturnsExpected(ProgressBarStyle style, int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style,
             MarqueeAnimationSpeed = value
@@ -790,7 +790,7 @@ public class ProgressBarTests
     [MemberData(nameof(MarqueeAnimationSpeed_Set_TestData))]
     public void ProgressBar_MarqueeAnimationSpeed_SetDesignMode_GetReturnsExpected(ProgressBarStyle style, int value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
@@ -800,7 +800,7 @@ public class ProgressBarTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Site = mockSite.Object,
             Style = style,
@@ -819,7 +819,7 @@ public class ProgressBarTests
     [MemberData(nameof(MarqueeAnimationSpeed_Set_TestData))]
     public void ProgressBar_MarqueeAnimationSpeed_SetWithHandle_GetReturnsExpected(ProgressBarStyle style, int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style
         };
@@ -851,7 +851,7 @@ public class ProgressBarTests
     [MemberData(nameof(MarqueeAnimationSpeed_Set_TestData))]
     public void ProgressBar_MarqueeAnimationSpeed_SetWithHandleDesignMode_GetReturnsExpected(ProgressBarStyle style, int value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
@@ -861,7 +861,7 @@ public class ProgressBarTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Site = mockSite.Object,
             Style = style
@@ -893,7 +893,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_MarqueeAnimationSpeed_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.MarqueeAnimationSpeed = -1);
     }
 
@@ -909,7 +909,7 @@ public class ProgressBarTests
     [MemberData(nameof(Maximum_Set_TestData))]
     public void ProgressBar_Maximum_Set_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Maximum = value
         };
@@ -931,7 +931,7 @@ public class ProgressBarTests
     [InlineData(0)]
     public void ProgressBar_Maximum_SetLessThanMinimum_SetsMinimumToMaximum(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Minimum = 5,
             Maximum = value
@@ -946,7 +946,7 @@ public class ProgressBarTests
     [InlineData(0)]
     public void ProgressBar_Maximum_SetLessThanValue_SetsMinimumToValue(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = 5,
             Maximum = value
@@ -960,7 +960,7 @@ public class ProgressBarTests
     [MemberData(nameof(Maximum_Set_TestData))]
     public void ProgressBar_Maximum_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -992,7 +992,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Maximum_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Maximum = -1);
     }
 
@@ -1006,7 +1006,7 @@ public class ProgressBarTests
     [MemberData(nameof(Minimum_Set_TestData))]
     public void ProgressBar_Minimum_Set_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = 5,
             Minimum = value
@@ -1029,7 +1029,7 @@ public class ProgressBarTests
     [InlineData(int.MaxValue)]
     public void ProgressBar_Minimum_SetGreaterThanMaximum_SetsMaximumToMinimum(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Minimum = value
         };
@@ -1042,7 +1042,7 @@ public class ProgressBarTests
     [InlineData(6)]
     public void ProgressBar_Minimum_SetGreaterThanValue_SetsMinimumToValue(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = 5,
             Minimum = value
@@ -1056,7 +1056,7 @@ public class ProgressBarTests
     [MemberData(nameof(Minimum_Set_TestData))]
     public void ProgressBar_Minimum_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = 5
         };
@@ -1091,7 +1091,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Minimum_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Minimum = -1);
     }
 
@@ -1099,7 +1099,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ProgressBar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Padding = value
         };
@@ -1116,7 +1116,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ProgressBar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1144,7 +1144,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1155,7 +1155,7 @@ public class ProgressBarTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -1166,7 +1166,7 @@ public class ProgressBarTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -1187,7 +1187,7 @@ public class ProgressBarTests
     [InlineData(RightToLeft.Inherit, false, 0)]
     public void ProgressBar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1227,7 +1227,7 @@ public class ProgressBarTests
     [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
     public void ProgressBar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1277,7 +1277,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             RightToLeftLayout = true
         };
@@ -1315,7 +1315,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -1352,7 +1352,7 @@ public class ProgressBarTests
     [MemberData(nameof(Step_Set_TestData))]
     public void ProgressBar_Step_Set_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Step = value
         };
@@ -1369,7 +1369,7 @@ public class ProgressBarTests
     [MemberData(nameof(Step_Set_TestData))]
     public void ProgressBar_Step_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Step = 5
         };
@@ -1401,7 +1401,7 @@ public class ProgressBarTests
     [EnumData<ProgressBarStyle>]
     public void ProgressBar_Style_Set_GetReturnsExpected(ProgressBarStyle value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = value
         };
@@ -1418,7 +1418,7 @@ public class ProgressBarTests
     [EnumData<ProgressBarStyle>]
     public void ProgressBar_Style_SetZeroMarqueeAnimationSpeed_GetReturnsExpected(ProgressBarStyle value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             MarqueeAnimationSpeed = 0,
             Style = value
@@ -1438,7 +1438,7 @@ public class ProgressBarTests
     [InlineData(ProgressBarStyle.Marquee, 1)]
     public void ProgressBar_Style_SetWithHandle_GetReturnsExpected(ProgressBarStyle value, int expectedCreatedCallCount)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1469,7 +1469,7 @@ public class ProgressBarTests
     [InlineData(ProgressBarStyle.Marquee, 1)]
     public void ProgressBar_Style_SetWithHandleZeroMarqueeAnimationSpeed_GetReturnsExpected(ProgressBarStyle value, int expectedCreatedCallCount)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             MarqueeAnimationSpeed = 0
         };
@@ -1501,7 +1501,7 @@ public class ProgressBarTests
     [InvalidEnumData<ProgressBarStyle>]
     public void ProgressBar_Style_SetInvalidValue_ThrowsInvalidEnumArgumentException(ProgressBarStyle value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Style = value);
     }
 
@@ -1509,7 +1509,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             TabStop = value
         };
@@ -1531,7 +1531,7 @@ public class ProgressBarTests
     [BoolData]
     public void ProgressBar_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1567,7 +1567,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             TabStop = true
         };
@@ -1606,7 +1606,7 @@ public class ProgressBarTests
     [NormalizedStringData]
     public void ProgressBar_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Text = value
         };
@@ -1623,7 +1623,7 @@ public class ProgressBarTests
     [NormalizedStringData]
     public void ProgressBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1651,7 +1651,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1693,7 +1693,7 @@ public class ProgressBarTests
     [MemberData(nameof(Value_Set_TestData))]
     public void ProgressBar_Value_Set_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = value
         };
@@ -1714,7 +1714,7 @@ public class ProgressBarTests
     [MemberData(nameof(Value_Set_TestData))]
     public void ProgressBar_Value_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Value = 5
         };
@@ -1751,7 +1751,7 @@ public class ProgressBarTests
     [InlineData(101)]
     public void ProgressBar_Value_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
     }
 
@@ -1760,7 +1760,7 @@ public class ProgressBarTests
     [InlineData(false, AccessibleRole.None)]
     public void ProgressBar_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         if (createControl)
         {
             control.CreateControl();
@@ -1779,7 +1779,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_CreateHandle_Invoke_Success()
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         control.CreateHandle();
         Assert.True(control.Created);
         Assert.True(control.IsHandleCreated);
@@ -1789,7 +1789,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1816,7 +1816,7 @@ public class ProgressBarTests
     [InlineData((ControlStyles)(-1), false)]
     public void ProgressBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1826,7 +1826,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1849,7 +1849,7 @@ public class ProgressBarTests
     [MemberData(nameof(Increment_TestData))]
     public void ProgressBar_Increment_Invoke_Success(ProgressBarStyle style, int originalValue, int value, int expectedValue)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style,
             Value = originalValue
@@ -1863,7 +1863,7 @@ public class ProgressBarTests
     [MemberData(nameof(Increment_TestData))]
     public void ProgressBar_Increment_InvokeWithHandle_Success(ProgressBarStyle style, int originalValue, int value, int expectedValue)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style,
             Value = originalValue
@@ -1890,7 +1890,7 @@ public class ProgressBarTests
     [InlineData(1)]
     public void ProgressBar_Increment_Marquee_ThrowsInvalidOperationException(int value)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = ProgressBarStyle.Marquee
         };
@@ -1901,7 +1901,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1927,7 +1927,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -1972,7 +1972,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void MonthControl_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1996,7 +1996,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2020,7 +2020,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2046,7 +2046,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -2102,7 +2102,7 @@ public class ProgressBarTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void ProgressBar_OnHandleCreated_Invoke_CallsHandleCreated(ProgressBarStyle style, EventArgs eventArgs)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             Style = style
         };
@@ -2133,7 +2133,7 @@ public class ProgressBarTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void ProgressBar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(ProgressBarStyle style, EventArgs eventArgs)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             Style = style
         };
@@ -2167,7 +2167,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2195,7 +2195,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -2225,7 +2225,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void ProgressBar_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -2249,7 +2249,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void ProgressBar_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -2273,7 +2273,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void ProgressBar_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -2297,7 +2297,7 @@ public class ProgressBarTests
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2321,7 +2321,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void ProgressBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2345,7 +2345,7 @@ public class ProgressBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ProgressBar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
     {
-        using var control = new SubProgressBar();
+        using SubProgressBar control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -2379,7 +2379,7 @@ public class ProgressBarTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
     public void ProgressBar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -2418,7 +2418,7 @@ public class ProgressBarTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
     public void ProgressBar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -2459,7 +2459,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
     {
-        using var control = new SubProgressBar
+        using SubProgressBar control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -2502,7 +2502,7 @@ public class ProgressBarTests
     [MemberData(nameof(PerformStep_TestData))]
     public void ProgressBar_PerformStep_Invoke_Success(ProgressBarStyle style, int originalValue, int step, int expectedValue)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style,
             Value = originalValue,
@@ -2517,7 +2517,7 @@ public class ProgressBarTests
     [MemberData(nameof(PerformStep_TestData))]
     public void ProgressBar_PerformStep_InvokeWithHandle_Success(ProgressBarStyle style, int originalValue, int step, int expectedValue)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = style,
             Value = originalValue,
@@ -2545,7 +2545,7 @@ public class ProgressBarTests
     [InlineData(1)]
     public void ProgressBar_PerformStep_Marquee_ThrowsInvalidOperationException(int step)
     {
-        using var control = new ProgressBar
+        using ProgressBar control = new()
         {
             Style = ProgressBarStyle.Marquee,
             Step = step
@@ -2556,7 +2556,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_ResetForeColor_Invoke_Success()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
 
         // Reset without value.
         control.ResetForeColor();
@@ -2575,7 +2575,7 @@ public class ProgressBarTests
     [WinFormsFact]
     public void ProgressBar_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new ProgressBar();
+        using ProgressBar control = new();
         Assert.Equal("System.Windows.Forms.ProgressBar, Minimum: 0, Maximum: 100, Value: 0", control.ToString());
     }
 

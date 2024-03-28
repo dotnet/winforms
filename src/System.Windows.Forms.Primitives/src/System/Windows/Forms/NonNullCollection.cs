@@ -13,15 +13,11 @@ internal abstract class NonNullCollection<T>
     : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable, IList, ICollection, IReadOnlyList<T>, IReadOnlyCollection<T>
     where T : class
 {
-    private readonly List<T> _list;
+    private readonly List<T> _list = [];
 
-    public NonNullCollection() => _list = new();
+    public NonNullCollection() { }
 
-    public NonNullCollection(IEnumerable<T> items)
-    {
-        _list = new();
-        AddRange(items);
-    }
+    public NonNullCollection(IEnumerable<T> items) => AddRange(items);
 
     public T this[int index]
     {
@@ -70,6 +66,8 @@ internal abstract class NonNullCollection<T>
     /// </summary>
     public void AddRange(IEnumerable<T> items)
     {
+        // We don't want to put in partial items, so we need to enumerate twice to throw appropriately.
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
         if (items is null || items.Contains(default))
         {
             ThrowArgumentNull(nameof(items));
@@ -81,6 +79,7 @@ internal abstract class NonNullCollection<T>
         {
             ItemAdded(item);
         }
+#pragma warning restore CA1851
     }
 
     int IList.Add(object? value)

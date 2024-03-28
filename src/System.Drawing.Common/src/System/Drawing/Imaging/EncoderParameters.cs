@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Imaging;
 
@@ -14,15 +13,16 @@ public sealed class EncoderParameters : IDisposable
 
     public EncoderParameter[] Param { get; set; }
 
-    internal unsafe nint ConvertToNative()
+    internal unsafe GdiPlus.EncoderParameters* ConvertToNative()
     {
         int length = Param.Length;
 
         // The struct has the first EncoderParameter in it.
-        nint native = Marshal.AllocHGlobal(sizeof(EncoderParametersNative) + ((length - 1) * sizeof(EncoderParameterNative)));
+        GdiPlus.EncoderParameters* native = (GdiPlus.EncoderParameters*)Marshal.AllocHGlobal(
+            sizeof(GdiPlus.EncoderParameters) + ((length - 1) * sizeof(GdiPlus.EncoderParameter)));
 
-        ((EncoderParametersNative*)native)->Count = (uint)length;
-        var parameters = ((EncoderParametersNative*)native)->Parameters;
+        native->Count = (uint)length;
+        Span<GdiPlus.EncoderParameter> parameters = native->Parameters;
 
         for (int i = 0; i < length; i++)
         {
@@ -32,22 +32,22 @@ public sealed class EncoderParameters : IDisposable
         return native;
     }
 
-    internal static unsafe EncoderParameters ConvertFromNative(EncoderParametersNative* native)
+    internal static unsafe EncoderParameters ConvertFromNative(GdiPlus.EncoderParameters* native)
     {
         if (native is null)
         {
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
         }
 
         var nativeParameters = native->Parameters;
-        EncoderParameters parameters = new EncoderParameters(nativeParameters.Length);
+        EncoderParameters parameters = new(nativeParameters.Length);
         for (int i = 0; i < nativeParameters.Length; i++)
         {
             parameters.Param[i] = new EncoderParameter(
-                new Encoder(nativeParameters[i].ParameterGuid),
+                new Encoder(nativeParameters[i].Guid),
                 (int)nativeParameters[i].NumberOfValues,
-                nativeParameters[i].ParameterValueType,
-                (nint)nativeParameters[i].ParameterValue);
+                (EncoderParameterValueType)nativeParameters[i].Type,
+                (nint)nativeParameters[i].Value);
         }
 
         return parameters;

@@ -13,15 +13,15 @@ namespace WinformsControlsTest.UserControls;
 
 internal partial class CollectionEditors : Form
 {
-    private string[] _stringArray = new[] { "Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem." };
-    private List<string> _stringList = new() { "Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem." };
-    private Collection<string> _stringCollection = new() { "Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem." };
+    private readonly string[] _stringArray = ["Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem."];
+    private readonly List<string> _stringList = ["Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem."];
+    private readonly Collection<string> _stringCollection = ["Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem."];
 
     public CollectionEditors()
     {
         InitializeComponent();
 
-        var imageList = new ImageList();
+        ImageList imageList = new();
         imageList.Images.Add("SmallA", Image.FromFile("Images\\SmallA.bmp"));
         imageList.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));
         imageList.Images.Add("LargeA", Image.FromFile("Images\\LargeA.bmp"));

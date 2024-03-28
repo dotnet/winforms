@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Threading;
 using Xunit.Abstractions;
@@ -20,48 +21,79 @@ public class ImageListTests : ControlTestBase
     {
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/6635")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6635")]
+    [WinFormsFact]
     public void ImageList_FinalizerReleasesNativeHandle_ReturnsExpected()
     {
+        // Call GetGdiHandles at the start of the test to attempt to clear out any leftovers from previous tests
+        uint referenceGdiHandleCount = GetGdiHandles();
+        TestOutputHelper.WriteLine($"Reference GDI handle count at start of test: {referenceGdiHandleCount}");
+
         // Warm up to create any GDI handles that are necessary, e.g. fonts, brushes, etc.
-        using (Form form = CreateForm())
-        {
-            form.Show();
-        }
+        ShowForm();
 
         uint startGdiHandleCount = GetGdiHandles();
         TestOutputHelper.WriteLine($"GDI handles before: {startGdiHandleCount}");
 
         // Now test for real
-        using (Form form = CreateForm())
-        {
-            form.Show();
-        }
+        ShowForm();
 
         uint endGdiHandleCount = GetGdiHandles();
         TestOutputHelper.WriteLine($"GDI handles after: {endGdiHandleCount}");
 
         Assert.Equal(startGdiHandleCount, endGdiHandleCount);
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         static uint GetGdiHandles()
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect(0);
+            uint result = GetGdiHandlesOnce();
+            while (true)
+            {
+                uint updatedResult = GetGdiHandlesOnce();
+                if (updatedResult > result)
+                {
+                    // Nothing should be creating new GDI handles during this call, so throw an exception if this method
+                    // ever fails to make progress.
+                    throw new InvalidOperationException("Unexpected GDI handle count increase during cleanup.");
+                }
 
-            uint result = PInvoke.GetGuiResources((HANDLE)Process.GetCurrentProcess().Handle,
+                if (updatedResult == result)
+                {
+                    // When two invocations return the same value, it's assumed to have stabilized
+                    return result;
+                }
+
+                result = updatedResult;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static uint GetGdiHandlesOnce()
+        {
+            GC.GetTotalMemory(true);
+
+            uint result = PInvokeCore.GetGuiResources(
+                (HANDLE)Process.GetCurrentProcess().Handle,
                 GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
+
             if (result == 0)
             {
                 int lastWin32Error = Marshal.GetLastWin32Error();
-                throw new Win32Exception(lastWin32Error, "Failed to retrieves the count of GDI handles");
+                if (lastWin32Error != 0)
+                    throw new Win32Exception(lastWin32Error, "Failed to retrieves the count of GDI handles");
             }
 
             return result;
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void ShowForm()
+    {
+        using Form form = CreateForm();
+        form.Show();
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
     private Form CreateForm()
     {
         ListView listView1 = new()
@@ -74,14 +106,18 @@ public class ImageListTests : ControlTestBase
             UseCompatibleStateImageBehavior = false
         };
 
-        Form form = new();
-        form.AutoScaleMode = AutoScaleMode.Font;
+        Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
         form.Controls.Add(listView1);
         form.Name = "ListViewTest";
         form.Text = "ListView Test";
 
-        ImageList imageList1 = new();
-        imageList1.ImageStream = DeserializeStreamer(DevMsImageListStreamer);
+        ImageList imageList1 = new()
+        {
+            ImageStream = DeserializeStreamer(DevMsImageListStreamer)
+        };
         listView1.SmallImageList = imageList1;
 
         return form;
@@ -90,7 +126,6 @@ public class ImageListTests : ControlTestBase
     private static ImageListStreamer DeserializeStreamer(string base64String)
     {
         byte[] bytes = Convert.FromBase64String(base64String);
-        using MemoryStream ms = new(bytes);
-        return new ImageListStreamer(ms);
+        return new ImageListStreamer(bytes);
     }
 }
