@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Posts a message to close the progress dialog
+        '''  Posts a message to close the progress dialog
         ''' </summary>
         Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
             ' Don't invoke unless dialog is up and running
@@ -50,8 +50,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
-        ''' Maps older networkCredentials to HttpClientHandler
+        '''  Sends and receives a packet to and from the passed in Uri.
+        '''  Maps older networkCredentials to HttpClientHandler
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -111,7 +111,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -151,7 +151,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -179,7 +179,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -241,7 +241,7 @@ Namespace Microsoft.VisualBasic.Devices
 #End If
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -315,7 +315,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Gets network credentials from a userName and password
+        '''  Gets network credentials from a userName and password
         ''' </summary>
         ''' <param name="userName">The name of the user</param>
         ''' <param name="password">The password of the user</param>
@@ -329,7 +329,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
+        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -348,7 +348,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
+        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
         ''' </summary>
         ''' <param name="address">The remote file address</param>
         ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
@@ -362,7 +362,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -385,7 +385,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -408,7 +408,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -435,7 +435,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -463,7 +463,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -522,7 +522,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -587,7 +587,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -638,7 +638,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -694,7 +694,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -744,7 +744,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
