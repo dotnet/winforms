@@ -18,6 +18,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </remarks>
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public Class ContextValue(Of T)
+
         Public Sub New()
             _contextKey = Guid.NewGuid.ToString
         End Sub

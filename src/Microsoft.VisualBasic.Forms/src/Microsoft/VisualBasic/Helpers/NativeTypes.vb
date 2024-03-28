@@ -56,6 +56,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Protected Overrides Function ReleaseHandle() As Boolean
                 Return NativeMethods.CloseHandle(handle) <> 0
             End Function
+
         End Class
 
         ''' <summary>
@@ -76,6 +77,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Friend Sub New()
             End Sub
+
         End Class
 
         ''' <summary>
@@ -154,6 +156,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
+
         End Class
 
         ' Handle Values

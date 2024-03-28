@@ -23,5 +23,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Indicates whether the application should exit upon exiting the exception handler
         ''' </summary>
         Public Property ExitApplication() As Boolean
+
     End Class
 End Namespace
