@@ -406,7 +406,7 @@ public static partial class ToolStripManager
                 // For something that never closes, don't use menu mode.
                 ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
 
-                if (dropDown.AutoClose == false)
+                if (!dropDown.AutoClose)
                 {
                     // Store off the current active hwnd
                     HWND hwndActive = PInvoke.GetActiveWindow();

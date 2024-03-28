@@ -235,7 +235,7 @@ public sealed partial class Application
             // fine if it is an external manager, because it has already pushed a loop.
             if (ComponentManager is not null && _externalComponentManager)
             {
-                if (mustBeActive == false)
+                if (!mustBeActive)
                 {
                     return true;
                 }

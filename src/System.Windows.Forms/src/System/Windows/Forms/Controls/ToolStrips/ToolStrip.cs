@@ -431,7 +431,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             if (!Focused)
             {
                 // if  ContainsFocus in one of the children = false, someone is just mousing by, we can hot track
-                return (ContainsFocus == false);
+                return !ContainsFocus;
             }
             else
             {
