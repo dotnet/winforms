@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Lib "user32" (hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
 
         ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
+        '''  Adding a private constructor to prevent the compiler from generating a default constructor.
         ''' </summary>
         Private Sub New()
         End Sub

@@ -7,7 +7,7 @@ Imports Microsoft.VisualBasic.CompilerServices.Utils
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Exception for when the WinForms VB application model isn't supplied with a startup form
+    '''  Exception for when the WinForms VB application model isn't supplied with a startup form
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>

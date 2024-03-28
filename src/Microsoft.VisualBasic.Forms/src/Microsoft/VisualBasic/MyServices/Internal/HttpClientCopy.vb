@@ -20,11 +20,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private ReadOnly _httpClient As HttpClient
 
         Private _cancelTokenSourceGet As CancellationTokenSource
-
         Private _cancelTokenSourceRead As CancellationTokenSource
-
         Private _cancelTokenSourceReadStream As CancellationTokenSource
-
         Private _cancelTokenSourceWrite As CancellationTokenSource
 
         ' The percentage of the operation completed
@@ -34,7 +31,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private Delegate Sub DoIncrement(Increment As Integer)
 
         ''' <summary>
-        ''' Creates an instance of a HttpClientCopy, used to download or upload a file
+        '''  Creates an instance of a HttpClientCopy, used to download or upload a file
         ''' </summary>
         ''' <param name="client">The HttpClient used to do the downloading or uploading</param>
         ''' <param name="dialog">UI for indicating progress</param>
@@ -89,12 +86,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' If the user clicks cancel on the Progress dialog, we need to cancel
-        ''' the current async file transfer operation
-        ''' </summary>
+        '''  If the user clicks cancel on the Progress dialog, we need to cancel
+        '''  the current async file transfer operation
+        '''  </summary>
         ''' <remarks>
-        ''' Note that we don't want to close the progress dialog here.  Wait until
-        ''' the actual file transfer cancel event comes through and do it there.
+        '''  Note that we don't want to close the progress dialog here.  Wait until
+        '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserHitCancel()
             'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
@@ -105,7 +102,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Downloads a file
+        '''  Downloads a file
         ''' </summary>
         ''' <param name="address">The source for the file</param>
         ''' <param name="destinationFileName">The path and name where the file is saved</param>
@@ -176,7 +173,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
 #If False Then
         ''' <summary>
-        ''' Uploads a file
+        '''  Uploads a file
         ''' </summary>
         ''' <param name="sourceFileName">The name and path of the source file</param>
         ''' <param name="address">The address to which the file is uploaded</param>

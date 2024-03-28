@@ -8,7 +8,7 @@ Imports System.Threading
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Provides the exception encountered along with a flag on whether to abort the program
+    '''  Provides the exception encountered along with a flag on whether to abort the program
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced), ComVisible(False)>
     Public Class UnhandledExceptionEventArgs
@@ -20,8 +20,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Indicates whether the application should exit upon exiting the exception handler
+        '''  Indicates whether the application should exit upon exiting the exception handler
         ''' </summary>
         Public Property ExitApplication() As Boolean
+
     End Class
 End Namespace

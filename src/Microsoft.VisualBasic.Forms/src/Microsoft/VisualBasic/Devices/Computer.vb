@@ -24,7 +24,7 @@ Namespace Microsoft.VisualBasic.Devices
         '  If you dim them up yourself, you are responsible for managing the threading.
 
         ''' <summary>
-        ''' Gets an Audio object which can play sound files or resources.
+        '''  Gets an Audio object which can play sound files or resources.
         ''' </summary>
         ''' <value>A sound object.</value>
         Public ReadOnly Property Audio() As Audio
@@ -36,7 +36,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' A thin wrapper for System.Windows.Forms.Clipboard
+        '''  A thin wrapper for System.Windows.Forms.Clipboard
         ''' </summary>
         ''' <value>An object representing the clipboard</value>
         Public ReadOnly Property Clipboard() As ClipboardProxy
@@ -50,8 +50,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' This property returns the Mouse object containing information about
-        ''' the physical mouse installed to the machine.
+        '''  This property returns the Mouse object containing information about
+        '''  the physical mouse installed to the machine.
         ''' </summary>
         ''' <value>An instance of the Mouse class.</value>
         Public ReadOnly Property Mouse() As Mouse
@@ -63,8 +63,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' This property returns the Keyboard object representing some
-        ''' keyboard properties and a send keys method
+        '''  This property returns the Keyboard object representing some
+        '''  keyboard properties and a send keys method
         ''' </summary>
         ''' <value>An instance of the Keyboard class.</value>
         Public ReadOnly Property Keyboard() As Keyboard
@@ -76,7 +76,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' This property returns the primary display screen.
+        '''  This property returns the primary display screen.
         ''' </summary>
         ''' <value>A System.Windows.Forms.Screen object as the primary screen.</value>
         Public ReadOnly Property Screen() As Screen

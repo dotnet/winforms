@@ -38,12 +38,12 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            ''' Plays a .wav file in the passed in mode
+            '''  Plays a .wav file in the passed in mode
             ''' </summary>
             ''' <param name="location">The name of the file</param>
             ''' <param name="playMode">
-            ''' An enum value representing the mode, Background (async),
-            ''' WaitToComplete (sync) or BackgroundLoop
+            '''  An enum value representing the mode, Background (async),
+            '''  WaitToComplete (sync) or BackgroundLoop
             ''' </param>
             Public Sub Play(location As String, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
@@ -146,7 +146,7 @@ Namespace Microsoft.VisualBasic
             End Function
 
             ''' <summary>
-            ''' Validates that the value being passed as an AudioPlayMode enum is a legal value
+            '''  Validates that the value being passed as an AudioPlayMode enum is a legal value
             ''' </summary>
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)

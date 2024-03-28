@@ -9,7 +9,7 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    ''' An extremely thin wrapper around Microsoft.VisualBasic.FileIO.FileSystem to expose the type through My.
+    '''  An extremely thin wrapper around Microsoft.VisualBasic.FileIO.FileSystem to expose the type through My.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class FileSystemProxy
@@ -268,7 +268,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        ''' Proxy class can only created by internal classes.
+        '''  Proxy class can only created by internal classes.
         ''' </summary>
         Friend Sub New()
         End Sub

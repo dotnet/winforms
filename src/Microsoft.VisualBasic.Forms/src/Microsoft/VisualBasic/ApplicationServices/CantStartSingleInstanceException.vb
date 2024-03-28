@@ -7,8 +7,8 @@ Imports Microsoft.VisualBasic.CompilerServices.Utils
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Exception for when we launch a single-instance application and it can't connect with the
-    ''' original instance.
+    '''  Exception for when we launch a single-instance application and it can't connect with the
+    '''  original instance.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>

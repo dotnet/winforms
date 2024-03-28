@@ -8,14 +8,14 @@ Imports System.Runtime.InteropServices
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Provides context for the Startup event.
+    '''  Provides context for the Startup event.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced), ComVisible(False)>
     Public Class StartupEventArgs
         Inherits CancelEventArgs
 
         ''' <summary>
-        ''' Creates a new instance of the StartupEventArgs.
+        '''  Creates a new instance of the StartupEventArgs.
         ''' </summary>
         Public Sub New(args As ReadOnlyCollection(Of String))
             If args Is Nothing Then
@@ -26,8 +26,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Returns the command line sent to this application
+        '''  Returns the command line sent to this application
         ''' </summary>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
+
     End Class
 End Namespace

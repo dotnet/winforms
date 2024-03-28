@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class FileSystemUtils
 
         ''' <summary>
-        ''' Normalize the path, but throw exception if the path ends with separator.
+        '''  Normalize the path, but throw exception if the path ends with separator.
         ''' </summary>
         ''' <param name="Path">The input path.</param>
         ''' <param name="ParamName">The parameter name to include in the exception if one is raised.</param>
@@ -24,7 +24,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Get full path, get long format, and remove any pending separator.
+        '''  Get full path, get long format, and remove any pending separator.
         ''' </summary>
         ''' <param name="Path">The path to be normalized.</param>
         ''' <returns>The normalized path.</returns>
@@ -35,7 +35,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Throw ArgumentException if the file path ends with a separator.
+        '''  Throw ArgumentException if the file path ends with a separator.
         ''' </summary>
         ''' <param name="path">The file path.</param>
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
@@ -104,7 +104,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Checks if the full path is a root path.
+        '''  Checks if the full path is a root path.
         ''' </summary>
         ''' <param name="Path">The path to check.</param>
         ''' <returns>True if FullPath is a root path, False otherwise.</returns>
@@ -126,7 +126,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Removes all directory separators at the end of a path.
+        '''  Removes all directory separators at the end of a path.
         ''' </summary>
         ''' <param name="Path">a full or relative path.</param>
         ''' <returns>If Path is a root path, the same value. Otherwise, removes any directory separators at the end.</returns>
