@@ -430,7 +430,7 @@ public partial class ListBox : ListControl
         {
             base.Font = value;
 
-            if (_integralHeight == false)
+            if (!_integralHeight)
             {
                 // Refresh the list to force the scroll bars to display
                 // when the integral height is false.

@@ -867,7 +867,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         if (Index >= 0)
         {
             ListView lv = ListView!;
-            if (lv.LabelEdit == false)
+            if (!lv.LabelEdit)
             {
                 throw new InvalidOperationException(SR.ListViewBeginEditFailed);
             }

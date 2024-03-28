@@ -1276,7 +1276,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         if (HTREEITEMInternal != IntPtr.Zero)
         {
             TreeView tv = TreeView!;
-            if (tv.LabelEdit == false)
+            if (!tv.LabelEdit)
             {
                 throw new InvalidOperationException(SR.TreeNodeBeginEditFailed);
             }

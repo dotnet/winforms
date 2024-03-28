@@ -1412,7 +1412,7 @@ internal partial class CommandSet : IDisposable
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] bytes = stream.GetBuffer();
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
-                if (ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false) == false)
+                if (!ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false))
                 {
                     _uiService?.ShowError(SR.ClipboardError);
                 }

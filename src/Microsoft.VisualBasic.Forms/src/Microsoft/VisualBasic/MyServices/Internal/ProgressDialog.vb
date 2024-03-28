@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
@@ -18,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Inherits Form
 
         ''' <summary>
-        ''' Event raised when user cancels the dialog or closes it before the operation is completed
+        '''  Event raised when user cancels the dialog or closes it before the operation is completed
         ''' </summary>
         Public Event UserHitCancel()
 
@@ -83,8 +80,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Property
 
         ''' <summary>
-        ''' Used to set or get the semaphore which signals when the dialog
-        ''' is in a closable state.
+        '''  Used to set or get the semaphore which signals when the dialog
+        '''  is in a closable state.
         ''' </summary>
         ''' <value>The ManualResetEvent</value>
         Public ReadOnly Property FormClosableSemaphore() As ManualResetEvent
@@ -120,7 +117,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Property
 
         ''' <summary>
-        ''' This enables a dialog with a close button, sizable borders, and no icon
+        '''  This enables a dialog with a close button, sizable borders, and no icon
         ''' </summary>
         Protected Overrides ReadOnly Property CreateParams() As CreateParams
             Get
@@ -142,13 +139,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Indicates the form is closing
+        '''  Indicates the form is closing
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         ''' <remarks>
-        ''' We listen for this event since we want to make closing the dialog before it's
-        ''' finished behave the same as a cancel
+        '''  We listen for this event since we want to make closing the dialog before it's
+        '''  finished behave the same as a cancel
         '''</remarks>
         Private Sub ProgressDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
             If e.CloseReason = CloseReason.UserClosing And Not _closeDialogInvoked Then
@@ -166,14 +163,14 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Ensure the label resizes with the dialog
+        '''  Ensure the label resizes with the dialog
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         ''' <remarks>
-        ''' Since the label has AutoSize set to True we have to set the maximum size so the label
-        ''' will grow down rather than off the dialog. As the size of the dialog changes, the maximum
-        ''' size needs to be adjusted.
+        '''  Since the label has AutoSize set to True we have to set the maximum size so the label
+        '''  will grow down rather than off the dialog. As the size of the dialog changes, the maximum
+        '''  size needs to be adjusted.
         ''' </remarks>
         Private Sub ProgressDialog_Resize(sender As Object, e As EventArgs) Handles Me.Resize
             LabelInfo.MaximumSize = New Size(ClientSize.Width - BORDER_SIZE, 0)
@@ -208,8 +205,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' Border area for label (10 pixels on each side)
         Private Const BORDER_SIZE As Integer = 20
 
-#Region " Windows Form Designer generated code "
-
         'Form overrides dispose to clean up the component list.
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
@@ -221,6 +216,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
             MyBase.Dispose(disposing)
         End Sub
+
         Friend WithEvents LabelInfo As Label
         Friend WithEvents ProgressBarWork As ProgressBar
         Friend WithEvents ButtonCloseDialog As Button
@@ -270,8 +266,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             PerformLayout()
 
         End Sub
-
-#End Region
 
     End Class
 End Namespace

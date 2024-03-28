@@ -7,7 +7,7 @@ Imports Microsoft.VisualBasic.CompilerServices
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' Provides configuration information about the current computer and the current process.
+    '''  Provides configuration information about the current computer and the current process.
     ''' </summary>
     <DebuggerTypeProxy(GetType(ComputerInfo.ComputerInfoDebugView))>
     Public Class ComputerInfo
@@ -15,14 +15,15 @@ Namespace Microsoft.VisualBasic.Devices
         ' Keep the debugger proxy current as you change this class - see the nested ComputerInfoDebugView below.
 
         ''' <summary>
-        ''' Default constructor
+        '''  Default constructor
         ''' </summary>
         Public Sub New()
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
+
         ''' <summary>
-        ''' Gets the total size of physical memory on the machine.
+        '''  Gets the total size of physical memory on the machine.
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of total physical memory on the machine, in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
@@ -34,7 +35,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the total size of free physical memory on the machine.
+        '''  Gets the total size of free physical memory on the machine.
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of free physical memory on the machine, in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
@@ -46,10 +47,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the total size of user potion of virtual address space for calling process.
+        '''  Gets the total size of user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process, 
-        '''          in bytes.</value>
+        ''' <value>
+        '''  A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
+        '''  in bytes.
+        ''' </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
@@ -59,10 +62,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the total size of free user potion of virtual address space for calling process.
+        '''  Gets the total size of free user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process, 
-        '''          in bytes.</value>
+        ''' <value>
+        '''  A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process,
+        '''  in bytes.
+        ''' </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
@@ -70,10 +75,11 @@ Namespace Microsoft.VisualBasic.Devices
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
-        ''' Gets the current UICulture installed on the machine.
+        '''  Gets the current UICulture installed on the machine.
         ''' </summary>
         ''' <value>A CultureInfo object represents the UI culture installed on the machine.</value>
         Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
@@ -83,7 +89,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the full operating system name.
+        '''  Gets the full operating system name.
         ''' </summary>
         ''' <value>A string contains the operating system name.</value>
         Public ReadOnly Property OSFullName() As String
@@ -93,7 +99,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the platform OS name.
+        '''  Gets the platform OS name.
         ''' </summary>
         ''' <value>A string containing a Platform ID like "Win32NT", "Win32S", "Win32Windows". See PlatformID enum.</value>
         ''' <exception cref="ExecutionEngineException">If cannot obtain the OS Version information.</exception>
@@ -104,7 +110,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the current version number of the operating system.
+        '''  Gets the current version number of the operating system.
         ''' </summary>
         ''' <value>A string contains the current version number of the operating system.</value>
         ''' <exception cref="ExecutionEngineException">If cannot obtain the OS Version information.</exception>
@@ -115,15 +121,17 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Debugger proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
-        ''' so we offer a view that doesn't have that field.
+        '''  Debugger proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
+        '''  so we offer a view that doesn't have that field.
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
+
             Public Sub New(RealClass As ComputerInfo)
                 _instanceBeingWatched = RealClass
             End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
@@ -151,6 +159,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
@@ -176,10 +185,11 @@ Namespace Microsoft.VisualBasic.Devices
 
             <DebuggerBrowsable(DebuggerBrowsableState.Never)>
             Private ReadOnly _instanceBeingWatched As ComputerInfo
+
         End Class
 
         ''' <summary>
-        ''' Gets the whole memory information details.
+        '''  Gets the whole memory information details.
         ''' </summary>
         ''' <value>An InternalMemoryStatus class.</value>
         Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
@@ -194,13 +204,15 @@ Namespace Microsoft.VisualBasic.Devices
         Private _internalMemoryStatus As InternalMemoryStatus ' Cache our InternalMemoryStatus
 
         ''' <summary>
-        ''' Calls GlobalMemoryStatusEx and returns the correct value.
+        '''  Calls GlobalMemoryStatusEx and returns the correct value.
         ''' </summary>
         Private NotInheritable Class InternalMemoryStatus
+
             Friend Sub New()
             End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -228,6 +240,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
             Private Sub Refresh()

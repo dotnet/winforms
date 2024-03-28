@@ -6406,7 +6406,7 @@ public partial class Form : ContainerControl
 
         if (Modal && _dialogResult == DialogResult.None)
         {
-            if (GetState(States.Recreate) == false)
+            if (!GetState(States.Recreate))
             {
                 DialogResult = DialogResult.Cancel;
             }

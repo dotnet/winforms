@@ -646,7 +646,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         if (ChangingText)
         {
-            Debug.Assert(UserEdit == false, "OnTextBoxTextChanged() - UserEdit == true");
+            Debug.Assert(!UserEdit, "OnTextBoxTextChanged() - UserEdit == true");
             ChangingText = false;
         }
         else
