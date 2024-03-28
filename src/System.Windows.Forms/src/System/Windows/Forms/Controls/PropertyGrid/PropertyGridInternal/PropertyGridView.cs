@@ -5086,7 +5086,11 @@ internal sealed partial class PropertyGridView :
         {
             while (temp is not null)
             {
-                _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                if (temp.HelpKeyword is not null)
+                {
+                    _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                }
+
                 temp = temp.ParentGridEntry;
             }
         }
@@ -5107,7 +5111,7 @@ internal sealed partial class PropertyGridView :
         }
 
         UpdateHelpAttributes(helpService, entry.ParentGridEntry, false);
-        string helpKeyword = entry.HelpKeyword;
+        string? helpKeyword = entry.HelpKeyword;
         if (helpKeyword is not null)
         {
             helpService.AddContextAttribute("Keyword", helpKeyword, addAsF1 ? HelpKeywordType.F1Keyword : HelpKeywordType.GeneralKeyword);
