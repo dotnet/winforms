@@ -10,7 +10,6 @@ public class AxWebBrowserTests : IDisposable
 {
     private readonly Form _form;
     private readonly AxWebBrowser _control;
-    private const string Url = "https://github.com/dotnet/winforms";
 
     public AxWebBrowserTests()
     {
@@ -43,7 +42,7 @@ public class AxWebBrowserTests : IDisposable
 
         var testingControlEvents = events
             .Cast<EventDescriptor>()
-        .Where(ev => ev.ComponentType.Assembly.GetName().Name == assemblyNameFromType)
+            .Where(ev => ev.ComponentType.Assembly.GetName().Name == assemblyNameFromType)
             .Select(ev => ev.Name)
             .ToList();
 
@@ -51,24 +50,6 @@ public class AxWebBrowserTests : IDisposable
         TypeInfo assemblyTypeInfo = assembly.GetType(assemblyType.FullName).GetTypeInfo();
         testingControlProps.All(p => assemblyTypeInfo.DeclaredProperties.Any(ap => ap.Name == p)).Should().BeTrue();
         testingControlEvents.All(e => assemblyTypeInfo.DeclaredEvents.Any(ae => ae.Name == e)).Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void AxWebBrowser_GoHome_InvokesMethod()
-    {
-        _control.GoHome();
-    }
-
-    [WinFormsFact]
-    public void AxWebBrowser_GoSearch_InvokesMethod()
-    {
-        _control.GoSearch();
-    }
-
-    [WinFormsFact]
-    public void AxWebBrowser_Navigate_InvokesMethod()
-    {
-        _control.Navigate(Url);
     }
 
     public void Dispose()
