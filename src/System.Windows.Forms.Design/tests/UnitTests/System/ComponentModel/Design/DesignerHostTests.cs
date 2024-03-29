@@ -724,25 +724,17 @@ public class DesignerHostTests
         SubDesignSurface surface = new(mockServiceProvider.Object);
         IDesignerLoaderHost2 host = surface.Host;
         using RootDesignerComponent component1 = new();
+        host.Container.Add(component1, name);
+        Assert.Same(name, component1.Site.Name);
+        mockNameCreationService.Verify(s => s.ValidateName(name), Times.Once());
+        mockServiceProvider.Verify(p => p.GetService(typeof(INameCreationService)), Times.Once());
 
-        if (string.IsNullOrEmpty(name))
-        {
-            Assert.Throws<MockException>(() => host.Container.Add(component1, name));
-        }
-        else
-        {
-            host.Container.Add(component1, name);
-            Assert.Same(name, component1.Site.Name);
-            mockNameCreationService.Verify(s => s.ValidateName(name), Times.Once());
-            mockServiceProvider.Verify(p => p.GetService(typeof(INameCreationService)), Times.Once());
-
-            // Add another.
-            using DesignerComponent component2 = new();
-            host.Container.Add(component2, "name2");
-            Assert.Equal("name2", component2.Site.Name);
-            mockNameCreationService.Verify(s => s.ValidateName("name2"), Times.Once());
-            mockServiceProvider.Verify(p => p.GetService(typeof(INameCreationService)), Times.Exactly(2));
-        }
+        // Add another.
+        using DesignerComponent component2 = new();
+        host.Container.Add(component2, "name2");
+        Assert.Equal("name2", component2.Site.Name);
+        mockNameCreationService.Verify(s => s.ValidateName("name2"), Times.Once());
+        mockServiceProvider.Verify(p => p.GetService(typeof(INameCreationService)), Times.Exactly(2));
     }
 
     [WinFormsFact]
