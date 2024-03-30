@@ -61,7 +61,7 @@ public partial class ControlDesigner
                 // If the designer disposed us, then we should follow suit.
                 if (_designer.DesignerTarget is null)
                 {
-                    designerTarget!.Dispose();
+                    designerTarget?.Dispose();
                 }
                 else
                 {
