@@ -228,8 +228,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            PropertyDescriptor? propDock = props["Dock"];
-            if (propDock is not null)
+            if (props["Dock"] is PropertyDescriptor propDock)
             {
                 DockStyle dock = (DockStyle)(int)propDock.GetValue(component)!;
 
@@ -268,8 +267,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            PropertyDescriptor? pd = props["Locked"];
-            if (pd is not null)
+            if (props["Locked"] is PropertyDescriptor pd)
             {
                 object? value = pd.GetValue(component);
 
@@ -289,9 +287,9 @@ public partial class ControlDesigner : ComponentDesigner
     internal Point GetOffsetToClientArea()
     {
         Point nativeOffset = default;
-        if (Control.Parent is not null)
+        if (Control.Parent is { } parent)
         {
-            PInvoke.MapWindowPoints(Control, Control.Parent, ref nativeOffset);
+            PInvoke.MapWindowPoints(Control, parent, ref nativeOffset);
         }
 
         Point offset = Control.Location;
@@ -2127,10 +2125,10 @@ public partial class ControlDesigner : ComponentDesigner
                 // RDW_ERASENOW | RDW_UPDATENOW.
                 if (OverlayService is not null)
                 {
-                    if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is not null)
+                    if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is { } parent)
                     {
                         // we have a non-client region to invalidate
-                        Rectangle controlScreenBounds = new(Control.Parent.PointToScreen(Control.Location), Control.Size);
+                        Rectangle controlScreenBounds = new(parent.PointToScreen(Control.Location), Control.Size);
                         Rectangle clientAreaScreenBounds = new(Control.PointToScreen(Point.Empty), Control.ClientSize);
 
                         using Region nonClient = new(controlScreenBounds);
