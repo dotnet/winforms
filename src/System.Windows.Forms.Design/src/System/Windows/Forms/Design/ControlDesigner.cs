@@ -215,6 +215,7 @@ public partial class ControlDesigner : ComponentDesigner
 
             if ((prop = props["Size"]) is not null && !prop.IsReadOnly)
             {
+                Debug.Assert(_host is not null);
                 if (AutoResizeHandles && Component != _host?.RootComponent)
                 {
                     rules = IsResizableConsiderAutoSize(autoSizeProp, autoSizeModeProp)
