@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const TestingConnectionTimeout As Integer = 100000
 
         ''' <summary>
-        '''  Verify that tmpDirectoryPath exists, that destinationFilename exist and what its length is
+        '''  Verify that testDirectory exists, that destinationFilename exist and what its length is
         ''' </summary>
         ''' <param name="destinationFilename">The full path and filename of the new file</param>
         ''' <returns>
@@ -34,13 +34,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return fileInfo.Length
         End Function
 
-        Private Sub CleanUp(listener As HttpListener, Optional tmpDirectoryPath As String = Nothing)
-            Debug.Assert(tmpDirectoryPath <> Path.GetTempPath)
+        Private Sub CleanUp(listener As HttpListener, Optional testDirectory As String = Nothing)
+            Debug.Assert(testDirectory <> Path.GetTempPath)
             listener.Stop()
             listener.Close()
-            If Not String.IsNullOrWhiteSpace(tmpDirectoryPath) Then
-                Assert.True(tmpDirectoryPath.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase))
-                Directory.Delete(tmpDirectoryPath, recursive:=True)
+            If Not String.IsNullOrWhiteSpace(testDirectory) Then
+                Assert.True(testDirectory.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase))
+                Directory.Delete(testDirectory, recursive:=True)
             End If
         End Sub
 
@@ -48,7 +48,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(Nothing)>
         <InlineData("")>
         Public Sub DownloadFile_Url_destinationFilename_Throw(destinationFilename As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
+            Dim testDirectory As String = CreateTempDirectory()
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -63,14 +63,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -82,7 +82,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -90,8 +90,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(Nothing)>
         <InlineData("")>
         Public Sub DownloadFile_Url_UrlEqualsNothing_Throws(address As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -105,14 +105,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_Password_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -126,7 +126,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -134,8 +134,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(Nothing)>
         <InlineData("WrongPassword")>
         Public Sub DownloadFile_Url_WrongPassword_Throw(password As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, "")
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -152,14 +152,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                      End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Ur_InvalidUrl_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -178,7 +178,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -208,8 +208,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_FileExistsNoOverwrite_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpDirectoryPath, size:=1)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(testDirectory, size:=1)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -227,16 +227,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), 1)
 
-            CleanUp(listener, tmpDirectoryPath)
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_FileExistsOverwrite_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpDirectoryPath, 1)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(testDirectory, size:=1)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -251,17 +251,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=True)
 
-                Assert.True(Directory.Exists(tmpDirectoryPath))
+                Assert.True(Directory.Exists(testDirectory))
                 Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_InvalidUrlDoNotShowUI_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -281,14 +281,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_TimeOut_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -309,14 +309,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_TimeoutNegative_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -336,14 +336,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_UsernameEqualNothing_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -360,7 +360,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -368,8 +368,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\")>
         <InlineData("/")>
         Public Sub DownloadFile_CheckFilePathTrailingSeparator_Throw(separator As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -390,14 +390,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_GetLongPath_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -407,7 +407,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(address,
-                                      destinationFileName:=tmpDirectoryPath, ' This is a Directory!
+                                      destinationFileName:=testDirectory, ' This is a Directory!
                                       userName:="",
                                       password:="",
                                       showUI:=False,
@@ -418,7 +418,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -426,8 +426,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("C:")>
         <InlineData("\\myshare\mydir")>
         Public Sub DownloadFile_RootDirectory_Throw(root As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -448,7 +448,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
@@ -456,8 +456,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("C:\")>
         <InlineData("\\myshare\mydir\")>
         Public Sub DownloadFile_RootDirectoryTrailingSeparator_Throw(root As String)
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -478,14 +478,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Url_AllOptionsSet_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim address As String = webListener.Address
@@ -499,16 +499,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               overwrite:=True,
                               onUserCancel:=UICancelOption.DoNothing)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
-            CleanUp(listener, tmpDirectoryPath)
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -519,14 +519,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_ICredentialsShowUiTimeOutOverwriteSpecified_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As ICredentials = New NetworkCredential(DefaultUserName, DefaultPassword)
@@ -541,14 +541,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_UserNamePassword_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -561,14 +561,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_UserNamePassword_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -584,14 +584,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                  End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_OverwriteShowUISpecified_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpDirectoryPath, size:=1)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(testDirectory, size:=1)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -607,14 +607,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadLargeFileSize)
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UriWhereAllOptionsSpecifiedExceptUserCancel_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -627,16 +627,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               TestingConnectionTimeout,
                               overwrite:=True)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
-            CleanUp(listener, tmpDirectoryPath)
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_AllOptionsSpecified_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -650,17 +650,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               overwrite:=True,
                               UICancelOption.DoNothing)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
-            CleanUp(listener, tmpDirectoryPath)
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_TargetDirectoryDoesNotExist_Success()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
-            Directory.Delete(tmpDirectoryPath, recursive:=True)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Directory.Delete(testDirectory, recursive:=True)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             My.Computer.Network _
@@ -673,16 +673,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               overwrite:=True,
                               UICancelOption.DoNothing)
 
-            Assert.True(Directory.Exists(tmpDirectoryPath))
+            Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
-            CleanUp(listener, tmpDirectoryPath)
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_Uri_UriIsNothing_Throws()
-            Dim tmpDirectoryPath As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(tmpDirectoryPath)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
@@ -701,7 +701,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
-                CleanUp(listener, tmpDirectoryPath)
+                CleanUp(listener, testDirectory)
             End Try
         End Sub
 
