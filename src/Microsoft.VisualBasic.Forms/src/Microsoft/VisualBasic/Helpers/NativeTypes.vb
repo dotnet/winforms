@@ -35,6 +35,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose()
                 MyBase.Finalize()
             End Sub
+
         End Class
 
         ''' <summary>

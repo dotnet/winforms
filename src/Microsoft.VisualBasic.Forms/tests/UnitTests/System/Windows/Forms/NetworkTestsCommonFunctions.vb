@@ -6,10 +6,10 @@ Imports System.Runtime.CompilerServices
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class NetworkTests
+    Public Module TempDirectoryFileFunctions
 
         ' The base path is system temp directory/a guaranteed unique directory based on a GUID/A temp directory bases on TestName
-        Private Shared ReadOnly s_baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
+        Friend ReadOnly s_baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
 
         ''' <summary>
         '''  Creates or returns a directory based on the name of the function that
@@ -18,8 +18,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         ''' <param name="memberName"></param>
         ''' <returns></returns>
-        Private Shared Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing) As String
-            Dim folder As String = Path.Combine(s_baseTempPath, $"{memberName}Test")
+        Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing) As String
+            Dim folder As String = Path.Combine(s_baseTempPath, memberName)
 
             Directory.CreateDirectory(folder)
             Return folder
@@ -29,13 +29,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  If size >= 0 then create the file with size length
         ''' </summary>
         ''' <param name="tmpFilePath">Full path to working directory</param>
+        ''' <param name="optionalFilename"></param>
         ''' <param name="size">File size to be created</param>
         ''' <returns>
         '''  The full path and file name of the created file
         '''  If size = -1 no file is create but the full path is returned
         ''' </returns>
-        Private Shared Function CreateTempFile(tmpFilePath As String, size As Integer) As String
-            Dim filename As String = GetDestinationFileName(tmpFilePath)
+        Friend Function CreateTempFile(tmpFilePath As String, Optional optionalFilename As String = "Testing.Text", Optional size As Integer = -1) As String
+            Dim filename As String = GetDestinationFileName(tmpFilePath, optionalFilename)
 
             If size >= 0 Then
                 Using destinationStream As FileStream = File.Create(filename)
@@ -47,9 +48,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return filename
         End Function
 
-        Private Shared Function GetDestinationFileName(tmpFilePath As String) As String
-            Return Path.Combine(tmpFilePath, "testing.txt")
+        Friend Function GetDestinationFileName(tmpFilePath As String, Optional filename As String = "testing.txt") As String
+            Return Path.Combine(tmpFilePath, filename)
         End Function
 
-    End Class
+    End Module
 End Namespace
