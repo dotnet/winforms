@@ -30,11 +30,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         ''' <param name="tmpFilePath">Full path to working directory</param>
         ''' <param name="optionalFilename"></param>
+        ''' <param name="size">File size to be created</param>
         ''' <returns>
         '''  The full path and file name of the created file
         '''  If size = -1 no file is create but the full path is returned
         ''' </returns>
-        ''' <param name="size">File size to be created</param>
         Friend Function CreateTempFile(tmpFilePath As String, Optional optionalFilename As String = "Testing.Text", Optional size As Integer = -1) As String
             Dim filename As String = GetDestinationFileName(tmpFilePath, optionalFilename)
 

@@ -102,38 +102,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
-
+        ' Not tested
         'Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
-        '    FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI)
-        'End Sub
-
         'Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        '    FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI, onUserCancel)
-        'End Sub
-
         'Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
-        '    FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI)
-        'End Sub
-
         'Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        '    FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI, onUserCancel)
-        'End Sub
-
         'Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
-        '    FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
-        'End Sub
-
         'Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        '    FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI, onUserCancel)
-        'End Sub
-
         'Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
-        '    FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
-        'End Sub
-
         'Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        '    FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI, onUserCancel)
-        'End Sub
 
         <WinFormsFact>
         Public Sub DeleteFileProxyTest()
@@ -149,21 +126,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
+        ' Not Tested
         'Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
-        '    FileIO.FileSystem.DeleteFile(file, showUI, recycle)
-        'End Sub
-
-        'Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption,
-        '    onUserCancel As UICancelOption)
-
-        '    FileIO.FileSystem.DeleteFile(file, showUI, recycle, onUserCancel)
-        'End Sub
-
-        'Public Sub DeleteDirectory(directory As String,
-        '    showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
-
-        '    FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle, onUserCancel)
-        'End Sub
+        'Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
+        'Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
 
         <WinFormsTheory>
         <InlineData(Nothing)>
@@ -268,15 +234,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
+
+        ' Not Tested
         'Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
-        '    Return FileIO.FileSystem.OpenTextFileWriter(file, append)
-        'End Function
-
-        'Public Function OpenTextFileWriter(file As String, append As Boolean,
-        '    encoding As Encoding) As IO.StreamWriter
-
-        '    Return FileIO.FileSystem.OpenTextFileWriter(file, append, encoding)
-        'End Function
+        'Public Function OpenTextFileWriter(file As String, append As Boolean, encoding As Encoding) As IO.StreamWriter
 
     End Class
 End Namespace

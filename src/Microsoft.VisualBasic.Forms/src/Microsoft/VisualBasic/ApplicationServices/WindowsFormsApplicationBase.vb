@@ -5,6 +5,7 @@ Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO.Pipes
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
@@ -339,7 +340,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' --- This is the first instance of a single-instance application to run.
                     ' This is the instance that subsequent instances will attach to.
                     Using pipeServer
-                        Dim tokenSource = New CancellationTokenSource()
+                        Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
                         WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
@@ -349,10 +350,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Else
 
                     ' --- We are launching a subsequent instance.
-                    Dim tokenSource = New CancellationTokenSource()
+                    Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -503,7 +504,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
+            Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode) With
             {
@@ -525,7 +526,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
             ' Then, it's applying what we got back as HighDpiMode.
-            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
+            Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
@@ -881,7 +882,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RemoveHandler MainForm.Load, AddressOf MainFormLoadingDone
 
             ' Now, we don't want to eat up a complete Processor Core just for waiting on the main form,
-            ' since this is eating up a LOT of enegery and workload, espacially on Notebooks and tablets.
+            ' since this is eating up a LOT of energy and workload, especially on Notebooks and tablets.
             If _splashScreenCompletionSource IsNot Nothing Then
 
                 _formLoadWaiter = New AutoResetEvent(False)
@@ -914,7 +915,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
 
-            Dim invoked = False
+            Dim invoked As Boolean = False
 
             Try
                 Dim handleNextInstance As New Action(

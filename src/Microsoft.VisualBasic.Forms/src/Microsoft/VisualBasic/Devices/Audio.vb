@@ -10,10 +10,8 @@ Namespace Microsoft.VisualBasic
     '''  Enum for three ways to play a .wav file
     ''' </summary>
     Public Enum AudioPlayMode
-
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
         WaitToComplete = 0 'Synchronous
-
         Background = 1     'Asynchronous
         BackgroundLoop = 2 'Asynchronous and looping
     End Enum
@@ -162,5 +160,4 @@ Namespace Microsoft.VisualBasic
 
         End Class 'Audio
     End Namespace
-
 End Namespace
