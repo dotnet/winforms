@@ -17,9 +17,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  Even if directory exists this call will success and just return it
         ''' </summary>
         ''' <param name="memberName"></param>
+        ''' <param name="lineNumber">If >1 use line number as part of name</param>
         ''' <returns></returns>
-        Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing) As String
-            Dim folder As String = Path.Combine(s_baseTempPath, memberName)
+        Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing, Optional lineNumber As Integer = -1) As String
+            Dim folder As String
+            If lineNumber > 1 Then
+                folder = Path.Combine(s_baseTempPath, $"{memberName}{lineNumber}")
+            Else
+                folder = Path.Combine(s_baseTempPath, memberName)
+            End If
 
             Directory.CreateDirectory(folder)
             Return folder
