@@ -102,15 +102,131 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
-        ' Not tested
-        'Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
-        'Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        'Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
-        'Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        'Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
-        'Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
-        'Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
-        'Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
+        <WinFormsFact>
+        Public Sub CopyFileWithShowUIProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.CopyFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            Assert.Equal(bytes.Length, 1)
+            Assert.Equal(bytes(0), 4)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CopyFileWithShowUIWithCancelOptionProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.CopyFile(file1, file2, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            Assert.Equal(bytes.Length, 1)
+            Assert.Equal(bytes(0), 4)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveFileWithShowUIProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            Assert.False(IO.File.Exists(file1))
+            Assert.True(IO.File.Exists(file2))
+            Assert.Equal(bytes.Length, 1)
+            Assert.Equal(bytes(0), 4)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveFileWithShowUIWithCancelOptionProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            Assert.False(IO.File.Exists(file1))
+            Assert.True(IO.File.Exists(file2))
+            Assert.Equal(bytes.Length, 1)
+            Assert.Equal(bytes(0), 4)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CopyDirectoryWithShowUIProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
+            Assert.True(IO.Directory.Exists(testDirectory))
+            Assert.True(IO.Directory.Exists(destinationDirectory))
+            Assert.Equal(IO.Directory.EnumerateFiles(testDirectory).Count, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CopyDirectoryWithShowUICancelOptionsProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
+            Assert.True(IO.Directory.Exists(testDirectory))
+            Assert.True(IO.Directory.Exists(destinationDirectory))
+            Assert.Equal(IO.Directory.EnumerateFiles(testDirectory).Count, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveDirectoryWithShowUIProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
+            Assert.False(IO.Directory.Exists(testDirectory))
+            Assert.True(IO.Directory.Exists(destinationDirectory))
+            Assert.Equal(1, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveDirectoryWithShowUICancelOptionsProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
+            Assert.False(IO.Directory.Exists(testDirectory))
+            Assert.True(IO.Directory.Exists(destinationDirectory))
+            Assert.Equal(1, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
 
         <WinFormsFact>
         Public Sub DeleteFileProxyTest()
@@ -126,10 +242,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
-        ' Not Tested
-        'Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
-        'Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
-        'Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
+        <WinFormsFact>
+        Public Sub DeleteFileWithRecycleOptionProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+            Assert.True(IO.File.Exists(file1))
+
+            _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
+            Assert.False(IO.File.Exists(file1))
+
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DeleteFileWithUIProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+            Assert.True(IO.File.Exists(file1))
+
+            _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
+            Assert.False(IO.File.Exists(file1))
+
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+        End Sub
 
         <WinFormsTheory>
         <InlineData(Nothing)>
@@ -234,10 +373,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
-
-        ' Not Tested
-        'Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
-        'Public Function OpenTextFileWriter(file As String, append As Boolean, encoding As Encoding) As IO.StreamWriter
 
     End Class
 End Namespace
