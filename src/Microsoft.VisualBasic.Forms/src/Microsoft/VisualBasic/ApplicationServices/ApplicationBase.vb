@@ -110,7 +110,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Threading.Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
-        Private _log As Logging.Log 'Lazy-initialized and cached log object.
-        Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
+        'Lazy-initialized and cached log object.
+        Private _log As Logging.Log
+        ' The executing application (the EntryAssembly)
+        Private _info As AssemblyInfo
     End Class 'ApplicationBase
 End Namespace
