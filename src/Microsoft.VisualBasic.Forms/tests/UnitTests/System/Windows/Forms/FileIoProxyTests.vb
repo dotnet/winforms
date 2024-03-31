@@ -270,6 +270,30 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
+        <WinFormsFact>
+        Public Sub DeleteDirectoryWithUIProxyRecycleTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+            Assert.True(IO.File.Exists(file1))
+
+            _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
+            Assert.False(IO.Directory.Exists(testDirectory))
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DeleteDirectoryRecycleWithUICancelOptionsProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+            Assert.True(IO.File.Exists(file1))
+
+            _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
+            Assert.False(IO.Directory.Exists(testDirectory))
+        End Sub
+
         <WinFormsTheory>
         <InlineData(Nothing)>
         <InlineData(",")>
