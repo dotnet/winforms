@@ -347,7 +347,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
             TypeConverter converter = TypeConverter;
             UITypeEditor? editor = UITypeEditor;
-            object value = Instance;
+            object? value = Instance;
             bool forceReadOnly = ForceReadOnly;
 
             if (value is not null)
@@ -517,7 +517,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         get => _parent?.OwnerGridView;
         set => throw new NotSupportedException();
     }
-
+#nullable enable
     public override GridItemType GridItemType => GridItemType.Property;
 
     /// <summary>
@@ -528,7 +528,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Retrieves the keyword that Visual Studio dynamic help window will use when this entry is selected.
     /// </summary>
-    public virtual string HelpKeyword => _parent?.HelpKeyword ?? string.Empty;
+    public virtual string? HelpKeyword => _parent?.HelpKeyword ?? string.Empty;
 
     /// <summary>
     ///  Returns true when the entry has an <see cref="UITypeEditor"/> that custom paints a value.
@@ -540,7 +540,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             // Prevent full flag population if possible by not hitting EntryFlags if flags have not been checked yet.
             if (!_flags.HasFlag(Flags.Checked))
             {
-                UITypeEditor editor = UITypeEditor;
+                UITypeEditor? editor = UITypeEditor;
                 if (editor is not null)
                 {
                     if (_flags.HasFlag(Flags.CustomPaint) || _flags.HasFlag(Flags.NoCustomPaint))
@@ -588,8 +588,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Retrieves the component that is invoking the method on the formatter object. This may
     ///  return null if there is no component responsible for the call.
     /// </summary>
-    public object Instance => GetValueOwner() ?? _parent?.Instance;
-#nullable enable
+    public object? Instance => GetValueOwner() ?? _parent?.Instance;
+
     public override string? Label => PropertyLabel;
 
     public override PropertyDescriptor? PropertyDescriptor => null;
