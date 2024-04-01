@@ -1530,7 +1530,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
         // Then look for a better ToolTip location.
-        if (TryGetBubbleSize(tool, ownerWindow, out Size bubbleSize))
+        if (TryGetBubbleSize(ownerWindow, out Size bubbleSize))
         {
             Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
@@ -1568,7 +1568,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
     }
 
-    private bool TryGetBubbleSize(IKeyboardToolTip tool, IWin32Window ownerWindow, out Size bubbleSize)
+    private bool TryGetBubbleSize(IWin32Window ownerWindow, out Size bubbleSize)
     {
         // Get bubble size to use it for optimal position calculation. Requesting the bubble
         // size will AV if there isn't a current tool window.
