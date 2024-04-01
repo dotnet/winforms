@@ -7,6 +7,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
+
 public class MonthCalendar_SelectionRangeConverterTests
 {
     [WinFormsTheory]
