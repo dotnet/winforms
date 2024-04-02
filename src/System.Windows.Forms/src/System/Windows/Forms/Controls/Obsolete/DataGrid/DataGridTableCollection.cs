@@ -6,62 +6,51 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
 #nullable disable
-[Obsolete("GridTableStylesCollection has been deprecated.")]
+#pragma warning disable RS0016 // Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
+// These types will not work, but if they are not accessed, other features in the application will work.
+[Obsolete(
+    Obsoletions.GridTableStylesCollectionMessage,
+    error: false,
+    DiagnosticId = Obsoletions.GridTableStylesCollectionDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
-    private DataGrid owner;
-
     int IList.Add(object value)
-    {
-        return Add((DataGridTableStyle)value);
-    }
+        => Add((DataGridTableStyle)value);
 
     void IList.Clear()
-    {
-        Clear();
-    }
+        => Clear();
 
     bool IList.Contains(object value)
-    {
-        return default;
-    }
+        => default;
 
     int IList.IndexOf(object value)
-    {
-        return default;
-    }
+        => default;
 
     void IList.Insert(int index, object value)
-    {
-        throw new NotSupportedException();
-    }
+        => throw new NotSupportedException();
 
     void IList.Remove(object value)
-    {
-        Remove((DataGridTableStyle)value);
-    }
+        => Remove((DataGridTableStyle)value);
 
     void IList.RemoveAt(int index)
-    {
-        RemoveAt(index);
-    }
+        => RemoveAt(index);
 
     bool IList.IsFixedSize
     {
-        get { return false; }
+        get => false;
     }
 
     bool IList.IsReadOnly
     {
-        get { return false; }
+        get => false;
     }
 
     object IList.this[int index]
     {
-        get { return default; }
-        set { throw new NotSupportedException(); }
+        get => default;
+        set => throw new NotSupportedException();
     }
 
     void ICollection.CopyTo(Array array, int index)
@@ -70,119 +59,69 @@ public class GridTableStylesCollection : BaseCollection, IList
 
     int ICollection.Count
     {
-        get { return default; }
+        get => default;
     }
 
     bool ICollection.IsSynchronized
     {
-        get { return false; }
+        get => false;
     }
 
     object ICollection.SyncRoot
     {
-        get { return this; }
+        get => this;
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return default;
-    }
-
-    internal GridTableStylesCollection(DataGrid grid)
-    {
-        owner = grid;
-    }
+    IEnumerator IEnumerable.GetEnumerator() => default;
 
     protected override ArrayList List
     {
-        get
-        {
-            return default;
-        }
+        get => default;
     }
 
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridTableStyle this[int index]
     {
-        get
-        {
-            throw new PlatformNotSupportedException();
-        }
+        get => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridTableStyle this[string tableName]
     {
-        get
-        {
-            throw new PlatformNotSupportedException();
-        }
-    }
-
-    internal void CheckForMappingNameDuplicates(DataGridTableStyle table)
-    {
-        if (string.IsNullOrEmpty(table.MappingName))
-            return;
+        get => throw new PlatformNotSupportedException();
     }
 
     public virtual int Add(DataGridTableStyle table)
-    {
-        throw new PlatformNotSupportedException();
-    }
-
-    private void TableStyleMappingNameChanged(object sender, EventArgs pcea)
-    {
-        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
-    }
+        => throw new PlatformNotSupportedException();
 
     public virtual void AddRange(DataGridTableStyle[] tables)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public event CollectionChangeEventHandler CollectionChanged
     {
-        add
-        {
-            throw new PlatformNotSupportedException();
-        }
-        remove
-        {
-            throw new PlatformNotSupportedException();
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     public void Clear()
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     public bool Contains(DataGridTableStyle table)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     public bool Contains(string name)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected void OnCollectionChanged(CollectionChangeEventArgs e)
-    {
-        DataGrid grid = owner;
-        if (grid is not null)
-        {
-            grid.checkHierarchy = true;
-        }
-    }
+        => throw new PlatformNotSupportedException();
 
     public void Remove(DataGridTableStyle table)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     public void RemoveAt(int index)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 }

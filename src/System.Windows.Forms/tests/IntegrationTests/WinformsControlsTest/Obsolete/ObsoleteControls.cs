@@ -4,14 +4,17 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-#pragma warning disable CS0618
+#pragma warning disable WFDEV007, WFDEV009, WFDEV010, WFDEV014, WFDEV017, WFDEV032, WFDEV036, WFDEV039, WFDEV040, WFDEV044, WFDEV050, WFDEV053 // Type or member is obsolete
 using static System.Windows.Forms.DataGrid;
 
 namespace WinformsControlsTest;
 
+/// <summary>
+/// This is added to test compile time compatibility only. 
+/// </summary>
 public partial class ObsoleteControls : Form
 {
-    private bool TablesAlreadyAdded;
+    private bool _tablesAlreadyAdded;
     public ObsoleteControls()
     {
         InitializeComponent();
@@ -26,19 +29,19 @@ public partial class ObsoleteControls : Form
         mainMenu.MenuItems.Add(fileMenuItem);
     }
 
-    void menuItem1_Click(object sender, System.EventArgs e)
+    private void menuItem1_Click(object sender, System.EventArgs e)
     {
         MessageBox.Show("New menu item clicked", "DataGrid");
     }
 
-    void menuItem2_Click(object sender, System.EventArgs e)
+    private void menuItem2_Click(object sender, System.EventArgs e)
     {
         MessageBox.Show("New menu item clicked", "MainMenu");
     }
 
     private void button1_Click(object sender, System.EventArgs e)
     {
-        if (TablesAlreadyAdded)
+        if (_tablesAlreadyAdded)
             return;
         AddCustomDataTableStyle();
     }
@@ -61,56 +64,66 @@ public partial class ObsoleteControls : Form
 
     private void AddCustomDataTableStyle()
     {
-        DataGridTableStyle ts1 = new DataGridTableStyle();
-        ts1.MappingName = "Customers";
-        // Set other properties.
-        ts1.AlternatingBackColor = Color.LightGray;
+        DataGridTableStyle ts1 = new DataGridTableStyle
+        {
+            MappingName = "Customers",
+            // Set other properties.
+            AlternatingBackColor = Color.LightGray
+        };
 
         /* Add a GridColumnStyle and set its MappingName 
         to the name of a DataColumn in the DataTable. 
         Set the HeaderText and Width properties. */
 
-        DataGridColumnStyle boolCol = new DataGridBoolColumn();
-        boolCol.MappingName = "Current";
-        boolCol.HeaderText = "IsCurrent Customer";
-        boolCol.Width = 150;
+        DataGridColumnStyle boolCol = new DataGridBoolColumn
+        {
+            MappingName = "Current",
+            HeaderText = "IsCurrent Customer",
+            Width = 150
+        };
         ts1.GridColumnStyles.Add(boolCol);
 
         // Add a second column style.
-        DataGridColumnStyle TextCol = new DataGridTextBoxColumn();
-        TextCol.MappingName = "custName";
-        TextCol.HeaderText = "Customer Name";
-        TextCol.Width = 250;
+        DataGridColumnStyle TextCol = new DataGridTextBoxColumn
+        {
+            MappingName = "custName",
+            HeaderText = "Customer Name",
+            Width = 250
+        };
         ts1.GridColumnStyles.Add(TextCol);
 
         // Create the second table style with columns.
-        DataGridTableStyle ts2 = new DataGridTableStyle();
-        ts2.MappingName = "Orders";
+        DataGridTableStyle ts2 = new DataGridTableStyle
+        {
+            MappingName = "Orders",
 
-        // Set other properties.
-        ts2.AlternatingBackColor = Color.LightBlue;
+            // Set other properties.
+            AlternatingBackColor = Color.LightBlue
+        };
 
         // Create new ColumnStyle objects
-        DataGridColumnStyle cOrderDate =
-        new DataGridTextBoxColumn();
-        cOrderDate.MappingName = "OrderDate";
-        cOrderDate.HeaderText = "Order Date";
-        cOrderDate.Width = 100;
+        DataGridColumnStyle cOrderDate = new DataGridTextBoxColumn
+        {
+            MappingName = "OrderDate",
+            HeaderText = "Order Date",
+            Width = 100
+        };
         ts2.GridColumnStyles.Add(cOrderDate);
 
         /* Use a PropertyDescriptor to create a formatted
         column. First get the PropertyDescriptorCollection
         for the data source and data member. */
-        PropertyDescriptorCollection pcol = this.BindingContext
+        PropertyDescriptorCollection pcol = BindingContext
         [myDataSet, "Customers.custToOrders"].GetItemProperties();
 
         /* Create a formatted column using a PropertyDescriptor.
         The formatting character "c" specifies a currency format. */
-        DataGridColumnStyle csOrderAmount =
-        new DataGridTextBoxColumn(pcol["OrderAmount"], "c", true);
-        csOrderAmount.MappingName = "OrderAmount";
-        csOrderAmount.HeaderText = "Total";
-        csOrderAmount.Width = 100;
+        DataGridColumnStyle csOrderAmount = new DataGridTextBoxColumn(pcol["OrderAmount"], "c", true)
+        {
+            MappingName = "OrderAmount",
+            HeaderText = "Total",
+            Width = 100
+        };
         ts2.GridColumnStyles.Add(csOrderAmount);
 
         /* Add the DataGridTableStyle instances to 
@@ -119,7 +132,7 @@ public partial class ObsoleteControls : Form
         dataGrid1.TableStyles.Add(ts2);
 
         // Sets the TablesAlreadyAdded to true so this doesn't happen again.
-        TablesAlreadyAdded = true;
+        _tablesAlreadyAdded = true;
     }
 
     private void SetUp()
@@ -208,4 +221,3 @@ public partial class ObsoleteControls : Form
         }
     }
 }
-#pragma warning restore CS0618 // Type or member is obsolete
