@@ -5,19 +5,22 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-[Obsolete("ToolBarButtonStyle has been deprecated.")]
 #pragma warning disable RS0016 // Add public types and members to the declared API
+[Obsolete(
+    Obsoletions.ToolBarButtonClickEventArgsMessage,
+    error: false,
+    DiagnosticId = Obsoletions.ToolBarButtonClickEventArgsDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
 public class ToolBarButtonClickEventArgs : EventArgs
 {
-    /// <summary>
-    ///  Initializes a new instance of the <see cref='ToolBarButtonClickEventArgs'/>
-    ///  class.
-    /// </summary>
     public ToolBarButtonClickEventArgs(ToolBarButton button)
-    {
-        throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public ToolBarButton Button { get; set; }
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public ToolBarButton Button
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
 }
