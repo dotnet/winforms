@@ -21,14 +21,12 @@ jobs:
         demands: ImageOverride -equals windows.vs2019.amd64
     strategy:
       matrix:
-        ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-          Debug:
-            _BuildConfig: Debug
-            # override some variables for debug
-            _SignType: test
-            # Code coverage uploads fail on internal PRs
-            ${{ if eq(variables['System.TeamProject'], 'public') }}:
-              _Coverage: false
+        Debug:
+          _BuildConfig: Debug
+          # override some variables for debug
+          _SignType: test
+          ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            _Coverage: false
         Release:
           _BuildConfig: Release
           _Coverage: false
@@ -78,37 +76,35 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc-${{ parameters.targetArchitecture }}.binlog
       displayName: Build
 
-    - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-      # Run Unit Tests
-      # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
-      - script: eng\cibuild.cmd
-          -test
-          -configuration $(_BuildConfig)
-          /p:Platform=${{ parameters.targetArchitecture }}
-          /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-          $(_OfficialBuildIdArgs)
-          $(_InternalRuntimeDownloadArgs)
-          /p:Coverage=$(_Coverage)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
-          /m:1
-        displayName: Run Unit Tests
-        condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
+    # Run Unit Tests
+    # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
+    - script: eng\cibuild.cmd
+        -test
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /p:Coverage=$(_Coverage)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      displayName: Run Unit Tests
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
 
-    - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-      # Run Integration Tests
-      # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
-      # UI race conditions
-      - script: eng\cibuild.cmd
-          -integrationTest
-          -configuration $(_BuildConfig)
-          /p:Platform=${{ parameters.targetArchitecture }}
-          /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-          $(_OfficialBuildIdArgs)
-          $(_InternalRuntimeDownloadArgs)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
-          /m:1
-        displayName: Run Integration Tests
-        condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'))
+    # Run Integration Tests
+    # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
+    # UI race conditions
+    - script: eng\cibuild.cmd
+        -integrationTest
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      displayName: Run Integration Tests
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'))
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
