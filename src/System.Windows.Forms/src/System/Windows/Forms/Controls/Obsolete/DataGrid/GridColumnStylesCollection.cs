@@ -17,10 +17,10 @@ namespace System.Windows.Forms;
 public class GridColumnStylesCollection : BaseCollection, IList
 {
     int IList.Add(object value)
-        => Add((DataGridColumnStyle)value);
+        => throw new PlatformNotSupportedException();
 
     void IList.Clear()
-        => Clear();
+        => throw new PlatformNotSupportedException();
 
     bool IList.Contains(object value)
         => throw new PlatformNotSupportedException();
@@ -32,25 +32,25 @@ public class GridColumnStylesCollection : BaseCollection, IList
         => throw new PlatformNotSupportedException();
 
     void IList.Remove(object value)
-        => Remove((DataGridColumnStyle)value);
+        => throw new PlatformNotSupportedException();
 
     void IList.RemoveAt(int index)
-        => RemoveAt(index);
+        => throw new PlatformNotSupportedException();
 
     bool IList.IsFixedSize
     {
-        get => false;
+        get => throw new PlatformNotSupportedException();
     }
 
     bool IList.IsReadOnly
     {
-        get => false;
+        get => throw new PlatformNotSupportedException();
     }
 
     object IList.this[int index]
     {
-        get => throw new NotSupportedException();
-        set => throw new NotSupportedException();
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     void ICollection.CopyTo(Array array, int index)
@@ -63,12 +63,12 @@ public class GridColumnStylesCollection : BaseCollection, IList
 
     bool ICollection.IsSynchronized
     {
-        get => false;
+        get => throw new PlatformNotSupportedException();
     }
 
     object ICollection.SyncRoot
     {
-        get => this;
+        get => throw new PlatformNotSupportedException();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

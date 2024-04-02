@@ -67,20 +67,7 @@ internal abstract class DataGridRow : MarshalByRefObject
     [ResourceExposure(ResourceScope.Machine)]
     [ResourceConsumption(ResourceScope.Machine)]
     protected Bitmap GetBitmap(string bitmapName)
-    {
-        Bitmap b = null;
-        try
-        {
-            b = new Bitmap(typeof(DataGridCaption), bitmapName);
-            b.MakeTransparent();
-        }
-        catch
-        {
-            throw;
-        }
-
-        return b;
-    }
+        => throw new PlatformNotSupportedException();
 
     public virtual Rectangle GetCellBounds(int col)
         => throw new PlatformNotSupportedException();
@@ -187,7 +174,7 @@ internal abstract class DataGridRow : MarshalByRefObject
         DataGridColumnStyle column,
         Brush backBr,
         Brush foreBrush)
-        => PaintCellContents(g, cellBounds, column, backBr, foreBrush, false);
+        => throw new PlatformNotSupportedException();
 
     protected virtual void PaintCellContents(Graphics g,
         Rectangle cellBounds,
@@ -195,7 +182,7 @@ internal abstract class DataGridRow : MarshalByRefObject
         Brush backBr,
         Brush foreBrush,
         bool alignToRight)
-        => g.FillRectangle(backBr, cellBounds);
+        => throw new PlatformNotSupportedException();
 
     protected Rectangle PaintIcon(Graphics g,
         Rectangle visualBounds,
@@ -245,7 +232,7 @@ internal abstract class DataGridRow : MarshalByRefObject
             => throw new PlatformNotSupportedException();
 
         protected virtual AccessibleObject CreateCellAccessibleObject(int column)
-            => new AccessibleObject();
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

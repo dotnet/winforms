@@ -297,7 +297,7 @@ public class ToolBar : Control
 
         object IList.this[int index]
         {
-            get => this[index];
+            get => throw new PlatformNotSupportedException();
             set => throw new PlatformNotSupportedException();
         }
 
@@ -317,17 +317,17 @@ public class ToolBar : Control
 
         object ICollection.SyncRoot
         {
-            get => this;
+            get => throw new PlatformNotSupportedException();
         }
 
         bool ICollection.IsSynchronized
         {
-            get => false;
+            get => throw new PlatformNotSupportedException();
         }
 
         bool IList.IsFixedSize
         {
-            get => false;
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false)]

@@ -21,29 +21,17 @@ public class DataGridTextBox : TextBox
         => throw new PlatformNotSupportedException();
 
     protected override void WndProc(ref Message m)
-        => base.WndProc(ref m);
+        => throw new PlatformNotSupportedException();
 
     protected override void OnMouseWheel(MouseEventArgs e)
     {
     }
 
     protected override void OnKeyPress(KeyPressEventArgs e)
-    {
-        base.OnKeyPress(e);
-
-        if (e.KeyChar == ' ' && (ModifierKeys & Keys.Shift) == Keys.Shift)
-            return;
-
-        if (ReadOnly)
-            return;
-
-        if ((ModifierKeys & Keys.Control) == Keys.Control && ((ModifierKeys & Keys.Alt) == 0))
-            return;
-        IsInEditOrNavigateMode = false;
-    }
+        => throw new PlatformNotSupportedException();
 
     protected internal override bool ProcessKeyMessage(ref Message m)
-        => base.ProcessKeyMessage(ref m);
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
