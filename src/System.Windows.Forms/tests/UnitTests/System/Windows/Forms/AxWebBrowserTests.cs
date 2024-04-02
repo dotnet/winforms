@@ -4,12 +4,14 @@
 using System.ComponentModel;
 using System.Reflection;
 using AxSHDocVw;
+using SHDocVw;
 
 namespace System.Windows.Forms.Tests;
 public class AxWebBrowserTests : IDisposable
 {
     private readonly Form _form;
     private readonly AxWebBrowser _control;
+    private object _url = "https://github.com/dotnet/winforms";
 
     public AxWebBrowserTests()
     {
@@ -52,10 +54,82 @@ public class AxWebBrowserTests : IDisposable
         testingControlEvents.All(e => assemblyTypeInfo.DeclaredEvents.Any(ae => ae.Name == e)).Should().BeTrue();
     }
 
+    [WinFormsFact]
+    public void AxWebBrowser_GoHome_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.GoHome()).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_GoSearch_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.GoSearch()).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_Navigate_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.Navigate(_url.ToString())).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_Navigate2_ShouldRaiseBeforeNavigate2()
+    {
+        bool eventRaised = false;
+        _control.BeforeNavigate2 += (sender, e) => eventRaised = true;
+
+        _control.Invoking(c => c.Navigate2(ref _url)).Should().NotThrow();
+
+        eventRaised.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_Stop_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.Stop()).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_GetProperty_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.GetProperty("url")).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void AxWebBrowser_PutProperty_ShouldNotThrowException()
+    {
+        _control.Invoking(c => c.PutProperty("url", _url)).Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData(new object[] { OLECMDID.OLECMDID_OPEN })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_FOCUSVIEWCONTROLS })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE })]
+    public void AxWebBrowser_QueryStatusWB_ShouldNotThrowException(OLECMDID cmdId)
+    {
+        _control.Invoking(c => c.QueryStatusWB(cmdId)).Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
+    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
+    public void AxWebBrowser_ExecWB_ShouldNotThrowException(OLECMDID cmdId, OLECMDEXECOPT cmdexecopt)
+    {
+        _control.Invoking(c => c.ExecWB(cmdId, cmdexecopt)).Should().NotThrow();
+    }
+
     public void Dispose()
     {
-        // This line was added due to https://github.com/dotnet/winforms/issues/10692
-        using NoAssertContext context = new NoAssertContext();
         _control.Dispose();
         _form.Dispose();
     }
