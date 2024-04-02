@@ -4,7 +4,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 
 namespace System.Windows.Forms;
 
@@ -71,23 +70,23 @@ public class StatusBar : Control
 
     protected override CreateParams CreateParams
     {
-        get => base.CreateParams;
+        get => throw new PlatformNotSupportedException();
     }
 
     protected override ImeMode DefaultImeMode
     {
-        get => ImeMode.Disable;
+        get => throw new PlatformNotSupportedException();
     }
 
     protected override Size DefaultSize
     {
-        get => new Size(100, 22);
+        get => throw new PlatformNotSupportedException();
     }
 
     protected override bool DoubleBuffered
     {
-        get => base.DoubleBuffered;
-        set => base.DoubleBuffered = value;
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false)]
@@ -202,44 +201,34 @@ public class StatusBar : Control
     }
 
     protected override void CreateHandle()
-        => base.CreateHandle();
+        => throw new PlatformNotSupportedException();
 
     protected override void Dispose(bool disposing)
-        => base.Dispose(disposing);
+        => throw new PlatformNotSupportedException();
 
     protected override void OnHandleCreated(EventArgs e)
-        => base.OnHandleCreated(e);
+        => throw new PlatformNotSupportedException();
 
     protected override void OnHandleDestroyed(EventArgs e)
-        => base.OnHandleDestroyed(e);
+        => throw new PlatformNotSupportedException();
 
     protected override void OnMouseDown(MouseEventArgs e)
-        => base.OnMouseDown(e);
+        => throw new PlatformNotSupportedException();
 
     protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
         => throw new PlatformNotSupportedException();
 
     protected override void OnLayout(LayoutEventArgs levent)
-        => base.OnLayout(levent);
+        => throw new PlatformNotSupportedException();
 
     protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent)
         => throw new PlatformNotSupportedException();
 
     protected override void OnResize(EventArgs e)
-        => base.OnResize(e);
+        => throw new PlatformNotSupportedException();
 
     public override string ToString()
-    {
-        string s = base.ToString();
-        if (Panels is not null)
-        {
-            s += ", Panels.Count: " + Panels.Count.ToString(CultureInfo.CurrentCulture);
-            if (Panels.Count > 0)
-                s += ", Panels[0]: " + Panels[0].ToString();
-        }
-
-        return s;
-    }
+        => throw new PlatformNotSupportedException();
 
     protected override void WndProc(ref Message m)
         => throw new PlatformNotSupportedException();
@@ -264,7 +253,7 @@ public class StatusBar : Control
 
         object IList.this[int index]
         {
-            get => this[index];
+            get => throw new PlatformNotSupportedException();
             set => throw new PlatformNotSupportedException();
         }
 
@@ -284,17 +273,17 @@ public class StatusBar : Control
 
         object ICollection.SyncRoot
         {
-            get => this;
+            get => throw new PlatformNotSupportedException();
         }
 
         bool ICollection.IsSynchronized
         {
-            get => false;
+            get => throw new PlatformNotSupportedException();
         }
 
         bool IList.IsFixedSize
         {
-            get => false;
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false)]
@@ -320,7 +309,7 @@ public class StatusBar : Control
             => throw new PlatformNotSupportedException();
 
         bool IList.Contains(object panel)
-            => false;
+            => throw new PlatformNotSupportedException();
 
         public virtual bool ContainsKey(string key)
             => throw new PlatformNotSupportedException();
@@ -347,7 +336,7 @@ public class StatusBar : Control
             => throw new PlatformNotSupportedException();
 
         void IList.Remove(object value)
-            => Remove((StatusBarPanel)value);
+            => throw new PlatformNotSupportedException();
 
         public virtual void RemoveAt(int index)
             => throw new PlatformNotSupportedException();

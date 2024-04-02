@@ -239,7 +239,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
     }
 
     protected virtual bool ShouldSerializeLinkHoverColor()
-        => false;
+        => throw new PlatformNotSupportedException();
 
     public void ResetLinkHoverColor()
         => throw new PlatformNotSupportedException();
@@ -496,17 +496,5 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         => throw new PlatformNotSupportedException();
 
     protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            GridColumnStylesCollection cols = GridColumnStyles;
-            if (cols is not null)
-            {
-                for (int i = 0; i < cols.Count; i++)
-                    cols[i].Dispose();
-            }
-        }
-
-        base.Dispose(disposing);
-    }
+        => throw new PlatformNotSupportedException();
 }

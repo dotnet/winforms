@@ -27,11 +27,7 @@ internal class DataGridCaption
         => throw new PlatformNotSupportedException();
 
     protected virtual void RaiseEvent(object key, EventArgs e)
-    {
-        Delegate handler = GetEventHandler(key);
-        if (handler is not null)
-            ((EventHandler)handler)(this, e);
-    }
+        => throw new PlatformNotSupportedException();
 
     protected virtual void RemoveEventHandler(object key, Delegate handler)
         => throw new PlatformNotSupportedException();
