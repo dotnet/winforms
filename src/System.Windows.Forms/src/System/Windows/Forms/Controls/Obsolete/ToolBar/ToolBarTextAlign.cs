@@ -5,13 +5,15 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-[Obsolete("ToolBarTextAlign has been deprecated.")]
+[EditorBrowsable(EditorBrowsableState.Never)]
+[Obsolete(
+    Obsoletions.ToolBarTextAlignMessage,
+    error: false,
+    DiagnosticId = Obsoletions.ToolBarTextAlignDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
 #pragma warning disable RS0016 // Add public types and members to the declared API
 public enum ToolBarTextAlign
 {
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     Underneath = 0,
-
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     Right = 1,
 }

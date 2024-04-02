@@ -7,27 +7,35 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #pragma warning disable RS0016 // Add public types and members to the declared API
-[Obsolete("StatusBarDrawItemEventArgs has been deprecated.  Use DrawItemEventArgs instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
+[Obsolete(
+    Obsoletions.StatusBarDrawItemEventArgsMessage,
+    error: false,
+    DiagnosticId = Obsoletions.StatusBarDrawItemEventArgsDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
 public class StatusBarDrawItemEventArgs : DrawItemEventArgs
 {
-    public StatusBarDrawItemEventArgs(Graphics g, Font font, Rectangle r, int itemId,
-        DrawItemState itemState, StatusBarPanel panel) : base(g, font, r, itemId, itemState)
-    {
-        throw new PlatformNotSupportedException();
-    }
+    public StatusBarDrawItemEventArgs(Graphics g,
+        Font font,
+        Rectangle r,
+        int itemId,
+        DrawItemState itemState,
+        StatusBarPanel panel) : base(g, font, r, itemId, itemState)
+            => throw new PlatformNotSupportedException();
 
-    public StatusBarDrawItemEventArgs(System.Drawing.Graphics g, Font font, Rectangle r, int itemId,
-        DrawItemState itemState, StatusBarPanel panel, Color foreColor, Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor)
-    {
-        throw new PlatformNotSupportedException();
-    }
+    public StatusBarDrawItemEventArgs(Graphics g,
+        Font font,
+        Rectangle r,
+        int itemId,
+        DrawItemState itemState,
+        StatusBarPanel panel,
+        Color foreColor,
+        Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor)
+            => throw new PlatformNotSupportedException();
 
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanel Panel
     {
-        get
-        {
-            throw new PlatformNotSupportedException();
-        }
+        get => throw new PlatformNotSupportedException();
     }
 }
