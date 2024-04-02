@@ -117,11 +117,11 @@ public class StatusBarPanel : Component, ISupportInitialize
         => throw new PlatformNotSupportedException();
 
     protected override void Dispose(bool disposing)
-        => base.Dispose(disposing);
+        => throw new PlatformNotSupportedException();
 
     public void EndInit()
         => throw new PlatformNotSupportedException();
 
     public override string ToString()
-        => "StatusBarPanel: {" + Text + "}";
+        => throw new PlatformNotSupportedException();
 }
