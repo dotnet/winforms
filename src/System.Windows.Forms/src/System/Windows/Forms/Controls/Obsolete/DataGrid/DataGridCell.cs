@@ -50,5 +50,5 @@ public struct DataGridCell : IEquatable<DataGridCell>
          => throw new PlatformNotSupportedException();
 
     public static bool operator !=(DataGridCell left, DataGridCell right)
-         => !(left == right);
+         => throw new PlatformNotSupportedException();
 }

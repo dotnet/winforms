@@ -72,7 +72,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
          => throw new PlatformNotSupportedException();
 
     protected virtual void SetDataGrid(DataGrid value)
-        => SetDataGridInColumn(value);
+        => throw new PlatformNotSupportedException();
 
     protected virtual void SetDataGridInColumn(DataGrid value)
     {
@@ -196,16 +196,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
     protected internal abstract int GetPreferredHeight(Graphics g, object value);
 
     protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
-    {
-        CheckValidDataSource(source);
-        if (PropertyDescriptor is null)
-        {
-            throw new InvalidOperationException("SR.GetString(SR.DataGridColumnNoPropertyDescriptor)");
-        }
-
-        object value = PropertyDescriptor.GetValue(source[rowNum]);
-        return value;
-    }
+        => throw new PlatformNotSupportedException();
 
     protected virtual void Invalidate()
     {
@@ -269,10 +260,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         => Paint(g, bounds, source, rowNum, alignToRight);
 
     protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
-    {
-        CheckValidDataSource(source);
-        PropertyDescriptor.SetValue(source[rowNum], value);
-    }
+        => throw new PlatformNotSupportedException();
 
     void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl)
     {
@@ -326,7 +314,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected DataGridColumnStyle Owner
         {
-            get;
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false)]

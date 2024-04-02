@@ -81,7 +81,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     protected override Size DefaultSize
     {
-        get => new Size(130, 80);
+        get => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false)]
@@ -741,7 +741,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
         => throw new PlatformNotSupportedException();
 
     protected override void Dispose(bool disposing)
-        => base.Dispose(disposing);
+        => throw new PlatformNotSupportedException();
 
     public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort)
         => throw new PlatformNotSupportedException();

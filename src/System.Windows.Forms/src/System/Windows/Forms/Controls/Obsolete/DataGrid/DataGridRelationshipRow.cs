@@ -146,7 +146,7 @@ internal class DataGridRelationshipRow : DataGridRow
 
         protected DataGridRelationshipRow Owner
         {
-            get;
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false)]
@@ -158,7 +158,7 @@ internal class DataGridRelationshipRow : DataGridRow
 
         protected DataGrid DataGrid
         {
-            get;
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false)]
