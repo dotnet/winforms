@@ -10,6 +10,21 @@ namespace System.Windows.Forms.Tests;
 
 public class MonthCalendar_SelectionRangeConverterTests
 {
+    private readonly SelectionRange _range = new(new DateTime(2022, 1, 1), new DateTime(2022, 12, 31));
+
+    private readonly SelectionRangeConverter _converter;
+
+    public MonthCalendar_SelectionRangeConverterTests()
+    {
+        _converter = new SelectionRangeConverter();
+    }
+
+    private static IDictionary CreatePropertyValues(object start, object end) => new Dictionary<string, object>
+    {
+        { "Start", start },
+        { "End", end }
+    };
+
     [WinFormsTheory]
     [InlineData(typeof(string), true)]
     [InlineData(typeof(DateTime), true)]
@@ -64,21 +79,22 @@ public class MonthCalendar_SelectionRangeConverterTests
         act.Should().Throw<ArgumentException>();
     }
 
-    [WinFormsTheory]
-    [InlineData("2022-01-01, 2022-12-31")]
-    public void ConvertTo_String_ReturnsCorrectString(string expected)
+    public static readonly TheoryData<string, Type, object> s_convertToData = new()
     {
-        string result = (string)_converter.ConvertTo(null, CultureInfo.InvariantCulture, _range, typeof(string));
-
-        result.Should().Be(expected);
-    }
+        { "2022-01-01, 2022-12-31", typeof(string), "2022-01-01, 2022-12-31" },
+        { "2022-01-01", typeof(DateTime), new DateTime(2022, 1, 1) }
+    };
 
     [WinFormsTheory]
-    [InlineData("2022-01-01")]
-    public void ConvertTo_DateTime_ReturnsStartOfRange(string dateValue)
+    [MemberData(nameof(s_convertToData))]
+    public void ConvertTo_ReturnsExpected(string dateValue, Type targetType, object expected)
     {
-        DateTime expected = DateTime.Parse(dateValue);
-        DateTime result = (DateTime)_converter.ConvertTo(null, CultureInfo.InvariantCulture, _range, typeof(DateTime));
+        string[] dates = dateValue.Split(',');
+        DateTime start = DateTime.Parse(dates[0]);
+        DateTime end = dates.Length > 1 ? DateTime.Parse(dates[1]) : start;
+        SelectionRange range = new(start, end);
+
+        object result = _converter.ConvertTo(null, CultureInfo.InvariantCulture, range, targetType);
 
         result.Should().Be(expected);
     }
@@ -101,41 +117,29 @@ public class MonthCalendar_SelectionRangeConverterTests
         act.Should().Throw<NotSupportedException>();
     }
 
-    [WinFormsFact]
-    public void CreateInstance_ValidPropertyValues_ReturnsCorrectSelectionRange()
+    public static readonly TheoryData<object, object> s_test_TheoryData = new()
     {
-        IDictionary propertyValues = CreatePropertyValues(new DateTime(2022, 1, 1), new DateTime(2022, 12, 31));
-        SelectionRange range = (SelectionRange)_converter.CreateInstance(null, propertyValues);
+        { "invalid", new DateTime(2022, 12, 31) },
+        { null, new DateTime(2022, 12, 31) },
+        { new DateTime(2022, 1, 1), new DateTime(2022, 12, 31) }
+    };
 
-        range.Start.Should().Be(new DateTime(2022, 1, 1));
-        range.End.Should().Be(new DateTime(2022, 12, 31));
-    }
-
-    [WinFormsFact]
-    public void CreateInstance_InvalidStart_ThrowsArgumentException()
+    [WinFormsTheory]
+    [MemberData(nameof(s_test_TheoryData))]
+    public void CreateInstance_InvalidStart_ReturnExcepted(object startDate, object endDate)
     {
-        IDictionary propertyValues = CreatePropertyValues("invalid", new DateTime(2022, 12, 31));
-        Action act = () => _converter.CreateInstance(null, propertyValues);
-
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [WinFormsFact]
-    public void CreateInstance_InvalidEnd_ThrowsArgumentException()
-    {
-        IDictionary propertyValues = CreatePropertyValues(new DateTime(2022, 1, 1), "invalid");
-        Action act = () => _converter.CreateInstance(null, propertyValues);
-
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [WinFormsFact]
-    public void CreateInstance_MissingEnd_ThrowsArgumentException()
-    {
-        IDictionary propertyValues = CreatePropertyValues(new DateTime(2022, 1, 1), null);
-        Action act = () => _converter.CreateInstance(null, propertyValues);
-
-        act.Should().Throw<ArgumentException>();
+        IDictionary propertyValues = CreatePropertyValues(startDate, endDate);
+        Func<SelectionRange> func = () => (SelectionRange)_converter.CreateInstance(null, propertyValues);
+        if (startDate is not DateTime startTime || endDate is not DateTime endTime)
+        {
+            func.Should().Throw<ArgumentException>();
+        }
+        else
+        {
+            SelectionRange range = func();
+            range.Start.Should().Be(startTime);
+            range.End.Should().Be(endTime);
+        }
     }
 
     [WinFormsFact]
@@ -160,19 +164,4 @@ public class MonthCalendar_SelectionRangeConverterTests
     {
         _converter.GetPropertiesSupported(null).Should().BeTrue();
     }
-
-    private readonly SelectionRange _range = new(new DateTime(2022, 1, 1), new DateTime(2022, 12, 31));
-
-    private readonly SelectionRangeConverter _converter;
-
-    public MonthCalendar_SelectionRangeConverterTests()
-    {
-        _converter = new SelectionRangeConverter();
-    }
-
-    private static IDictionary CreatePropertyValues(object start, object end) => new Dictionary<string, object>
-    {
-        { "Start", start },
-        { "End", end }
-    };
 }

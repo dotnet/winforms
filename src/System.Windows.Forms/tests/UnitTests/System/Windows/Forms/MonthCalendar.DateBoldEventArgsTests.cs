@@ -25,6 +25,8 @@ public class MonthCalendar_DateBoldEventArgsTests
     public static readonly TheoryData<int[]> s_daysToBold_GetSetWorksCorrectly_Data = new()
     {
         { new int[] {1, 2, 3, 4, 5} },
+        { Array.Empty<int>() },
+        { new int[] {-1, -2, -3} },
         { null }
     };
 
