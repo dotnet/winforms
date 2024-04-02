@@ -663,10 +663,10 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     protected override void OnHandleDestroyed(EventArgs e)
         => throw new PlatformNotSupportedException();
 
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
         => throw new PlatformNotSupportedException();
 
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
         => throw new PlatformNotSupportedException();
 
     protected override void OnKeyDown(KeyEventArgs e)
