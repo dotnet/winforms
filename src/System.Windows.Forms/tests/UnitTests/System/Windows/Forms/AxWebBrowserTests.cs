@@ -96,36 +96,42 @@ public class AxWebBrowserTests : IDisposable
     }
 
     [WinFormsFact]
-    public void AxWebBrowser_PutProperty_ShouldNotThrowException()
+    public void AxWebBrowser_PutProperty_ReturnsExpected()
     {
+        object prop = _control.GetProperty("url");
+        prop.Should().BeNull();
+
         _control.Invoking(c => c.PutProperty("url", _url)).Should().NotThrow();
+
+        prop = _control.GetProperty("url");
+        prop.Should().NotBeNull();
     }
 
     [WinFormsTheory]
-    [InlineData(new object[] { OLECMDID.OLECMDID_OPEN })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_FOCUSVIEWCONTROLS })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE })]
+    [InlineData(OLECMDID.OLECMDID_OPEN)]
+    [InlineData(OLECMDID.OLECMDID_FOCUSVIEWCONTROLS)]
+    [InlineData(OLECMDID.OLECMDID_CLOSE)]
     public void AxWebBrowser_QueryStatusWB_ShouldNotThrowException(OLECMDID cmdId)
     {
         _control.Invoking(c => c.QueryStatusWB(cmdId)).Should().NotThrow();
     }
 
     [WinFormsTheory]
-    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER })]
-    [InlineData(new object[] { OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP })]
-    public void AxWebBrowser_ExecWB_ShouldNotThrowException(OLECMDID cmdId, OLECMDEXECOPT cmdexecopt)
+    [InlineData(OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT)]
+    [InlineData(OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_COPY, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP)]
+    [InlineData(OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT)]
+    [InlineData(OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_STOP, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP)]
+    [InlineData(OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT)]
+    [InlineData(OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER)]
+    [InlineData(OLECMDID.OLECMDID_CLOSE, OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP)]
+    public void AxWebBrowser_ExecWB_ShouldNotThrowException(OLECMDID cmdId, OLECMDEXECOPT cmdExecOpt)
     {
-        _control.Invoking(c => c.ExecWB(cmdId, cmdexecopt)).Should().NotThrow();
+        _control.Invoking(c => c.ExecWB(cmdId, cmdExecOpt)).Should().NotThrow();
     }
 
     public void Dispose()
