@@ -46,15 +46,17 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         Assert.Equal(expected, output);
     }
 
-    public static IEnumerable<object[]> GenerateInitializeData()
+    public static TheoryData<CultureInfo, object, string> GenerateInitializeData()
     {
+        var testData = new TheoryData<CultureInfo, object, string>();
+
         foreach (string cultureName in s_locales)
         {
             CultureInfo culture = new(cultureName);
 
             // EnableVisualStyles: false, true
-            yield return new object[]
-            {
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: false,
@@ -63,9 +65,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
                 ),
                 "EnableVisualStyles=false"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: true,
@@ -74,11 +77,11 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
                 ),
                 "EnableVisualStyles=true"
-            };
+            );
 
             // UseCompatibleTextRendering: false, true
-            yield return new object[]
-            {
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -87,9 +90,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: false
                 ),
                 "UseCompTextRendering=false"
-            };
-            yield return new object[]
-            {
+            );
+            
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -98,11 +102,11 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "UseCompTextRendering=true"
-            };
+            );
 
             // DefaultFont: null, FontDescriptor
-            yield return new object[]
-            {
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -111,9 +115,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: false
                 ),
                 "DefaultFont=null"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -122,9 +127,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=default"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -133,9 +139,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=Tahoma"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add
+            (
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -144,8 +151,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=SansSerif"
-            };
+            );
         }
+
+        return testData;
     }
 
     [Theory]
