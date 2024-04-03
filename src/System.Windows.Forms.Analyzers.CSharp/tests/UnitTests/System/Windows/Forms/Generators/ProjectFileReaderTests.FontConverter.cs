@@ -26,9 +26,10 @@ public partial class ProjectFileReaderTests
             "zh-CN"
         ];
 
-        public static TheoryData<string, string, PropertyValue.FontSize, int, int> TestConvertFormData()
+        public static TheoryData<CultureInfo, string, string, PropertyValue.FontSize, int, int> TestConvertFormData()
         {
-            var testData = new TheoryData<string, 
+            var testData = new TheoryData<CultureInfo,
+                                          string, 
                                           string, 
                                           PropertyValue.FontSize,
                                           int,
