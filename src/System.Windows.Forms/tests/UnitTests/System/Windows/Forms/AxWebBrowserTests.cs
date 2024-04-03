@@ -105,6 +105,7 @@ public class AxWebBrowserTests : IDisposable
 
         prop = _control.GetProperty("url");
         prop.Should().NotBeNull();
+        prop.Should().Be(_url.ToString());
     }
 
     [WinFormsTheory]
