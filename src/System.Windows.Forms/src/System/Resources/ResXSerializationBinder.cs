@@ -38,6 +38,9 @@ internal class ResXSerializationBinder : SerializationBinder
     {
         if (_typeResolver is null)
         {
+            // cs/deserialization/nullbindtotype
+            // CodeQL [SM04225] : This class is meant to redirect to .NET Framework type names.
+            // If this cannot be done, the default binder should be used.
             return null;
         }
 

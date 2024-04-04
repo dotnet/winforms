@@ -18,6 +18,7 @@ namespace System.Drawing;
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
 {
+    [NonSerialized]
     private GpFont* _nativeFont;
     private float _fontSize;
     private FontStyle _fontStyle;
