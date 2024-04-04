@@ -26,24 +26,24 @@ public partial class ProjectFileReaderTests
             "zh-CN"
         ];
 
-        public static TheoryData<CultureInfo, string, string, PropertyValue.FontSize, int, int> TestConvertFormData()
+        public static TheoryData<CultureInfo, string, string, float, GraphicsUnit, FontStyle> TestConvertFormData()
         {
             var testData = new TheoryData<CultureInfo,
-                                          string, 
-                                          string, 
-                                          PropertyValue.FontSize,
-                                          int,
-                                          int>();
+                                          string,
+                                          string,
+                                          float,
+                                          GraphicsUnit,
+                                          FontStyle>();
 
             foreach (string cultureName in s_locales)
             {
                 CultureInfo culture = new(cultureName);
 
                 testData.Add(culture,
-                             $"Courier New", 
-                             "Courier New", 
-                             PropertyDefaultValue.FontSize, 
-                             (int)GraphicsUnit.Point, 
+                             $"Courier New",
+                             "Courier New",
+                             PropertyDefaultValue.FontSize,
+                             (int)GraphicsUnit.Point,
                              (int)FontStyle.Regular);
 
                 testData.Add(culture,
