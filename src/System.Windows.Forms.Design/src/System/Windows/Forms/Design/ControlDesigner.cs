@@ -83,8 +83,7 @@ public partial class ControlDesigner : ComponentDesigner
         {
             Point loc = Control.Location;
 
-            ScrollableControl? parent = Control.Parent as ScrollableControl;
-            if (parent is not null)
+            if (Control.Parent is ScrollableControl parent)
             {
                 Point pt = parent.AutoScrollPosition;
                 loc.Offset(-pt.X, -pt.Y);
@@ -94,8 +93,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
         set
         {
-            ScrollableControl? parent = Control.Parent as ScrollableControl;
-            if (parent is not null)
+            if (Control.Parent is ScrollableControl parent)
             {
                 Point pt = parent.AutoScrollPosition;
                 value.Offset(pt.X, pt.Y);
