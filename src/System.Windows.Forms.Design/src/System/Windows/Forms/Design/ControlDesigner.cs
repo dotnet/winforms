@@ -313,8 +313,8 @@ public partial class ControlDesigner : ComponentDesigner
         bool autoSize = false;
         bool growOnly = false;
 
-        AttributeCollection? attributes = autoSizeProp?.Attributes;
-        if (attributes is not null && !(attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
+        if (autoSizeProp?.Attributes is AttributeCollection attributes
+            && !(attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
                 || attributes.Contains(BrowsableAttribute.No)))
         {
             autoSize = (bool)autoSizeProp!.GetValue(component)!;
