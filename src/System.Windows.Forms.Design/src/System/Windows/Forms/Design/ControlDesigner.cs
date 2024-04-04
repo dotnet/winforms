@@ -161,7 +161,7 @@ public partial class ControlDesigner : ComponentDesigner
         set
         {
             // Don't do anything here during loading, if a refactor changed it we don't want to do anything.
-            if ((GetService(typeof(IDesignerHost)) is not IDesignerHost host || (host is not null && !host.Loading))
+            if ((!TryGetService(out IDesignerHost? host) || (host is not null && !host.Loading))
                 && Component.Site is not null)
             {
                 Component.Site.Name = value;
