@@ -20,8 +20,7 @@ internal class ListControlStringCollectionEditor : StringCollectionEditor
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         // If we're trying to edit the items in an object that has a DataSource set, throw an exception.
-        ListControl? control = context?.Instance as ListControl;
-        if (control?.DataSource is not null)
+        if (context?.Instance is ListControl control && control.DataSource is not null)
         {
             throw new ArgumentException(SR.DataSourceLocksItems);
         }
