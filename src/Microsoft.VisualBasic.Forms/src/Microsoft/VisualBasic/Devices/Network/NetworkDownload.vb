@@ -92,7 +92,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="dialog">A ProgressDialog or Nothing</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        Private Shared Async Function DownloadFileAsync(address As String,
+        Friend Shared Async Function DownloadFileAsync(address As String,
                                         destinationFileName As String,
                                         userName As String,
                                         password As String,
@@ -121,7 +121,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Private Shared Async Function DownloadFileAsync(address As String,
+        Friend Shared Async Function DownloadFileAsync(address As String,
                                         destinationFileName As String,
                                         userName As String,
                                         password As String,
@@ -160,7 +160,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="dialog">A ProgressDialog or Nothing</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
+        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         userName As String,
                                         password As String,
@@ -189,7 +189,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
+        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         userName As String,
                                         password As String,
@@ -223,7 +223,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <remarks>
         '''  Calls to all the other overloads will come through here
         ''' </remarks>
-        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
+        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         networkCredentials As ICredentials,
                                         dialog As ProgressDialog,
@@ -251,7 +251,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
+        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         clientHandler As HttpClientHandler,
                                         dialog As ProgressDialog,
@@ -266,9 +266,9 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw ExUtils.GetArgumentNullException(NameOf(addressUri))
             End If
 
-            Dim client As HttpClient = If(clientHandler IsNot Nothing,
-                                          New HttpClient(clientHandler),
-                                          New HttpClient()
+            Dim client As HttpClient = If(clientHandler Is Nothing,
+                                          New HttpClient(),
+                                          New HttpClient(clientHandler)
                                          )
 
             ' Set credentials if we have any
