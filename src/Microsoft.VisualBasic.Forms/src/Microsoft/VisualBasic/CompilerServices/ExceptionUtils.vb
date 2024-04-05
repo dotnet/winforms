@@ -20,7 +20,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         Private Shared Function GetResourceStringResourceId(ResourceId As Integer) As String
             Dim id As String = $"ID{ResourceId}"
-            Return SR.GetResourceString(id, id)
+            ' always return a string
+            Return $"{SR.GetResourceString(id, id)}"
         End Function
 
         Friend Shared Function VbMakeException(ResourceId As Integer) As Exception
