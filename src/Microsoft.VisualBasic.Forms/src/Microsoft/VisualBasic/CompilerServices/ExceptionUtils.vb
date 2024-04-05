@@ -18,19 +18,19 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private Sub New()
         End Sub
 
-        Private Shared Function GetResourceStringResourceId(ResourceId As vbErrors) As String
-            Dim id As String = "ID" & CStr(ResourceId)
+        Private Shared Function GetResourceStringResourceId(ResourceId As Integer) As String
+            Dim id As String = $"ID{ResourceId}"
             Return SR.GetResourceString(id, id)
         End Function
 
-        Friend Shared Function VbMakeException(hr As Integer) As Exception
+        Friend Shared Function VbMakeException(ResourceId As Integer) As Exception
             Dim description As String = ""
 
-            If hr > 0 AndAlso hr <= &HFFFFI Then
-                description = GetResourceStringResourceId(CType(hr, vbErrors))
+            If ResourceId > 0 AndAlso ResourceId <= &HFFFFI Then
+                description = GetResourceStringResourceId(ResourceId)
             End If
 
-            Select Case hr
+            Select Case ResourceId
 
                 Case vbErrors.FileNotFound
                     Return New IO.FileNotFoundException(description)
