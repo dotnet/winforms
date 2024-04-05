@@ -50,6 +50,53 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
+        '''  Gets network credentials from a userName and password
+        ''' </summary>
+        ''' <param name="userName">The name of the user</param>
+        ''' <param name="password">The password of the user</param>
+        ''' <returns>A NetworkCredentials</returns>
+        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
+
+            Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
+                      Nothing,
+                      DirectCast(New NetworkCredential(userName, password), ICredentials)
+                     )
+        End Function
+
+        ''' <summary>
+        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <returns></returns>
+        Private Shared Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
+            If showUI AndAlso Environment.UserInteractive Then
+                'Construct the local file. This will validate the full name and path
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(Path:=destinationFileName, ParamName:=NameOf(destinationFileName))
+                Return New ProgressDialog With {
+                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                            .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
+                            }
+            End If
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
+        ''' </summary>
+        ''' <param name="address">The remote file address</param>
+        ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
+        Private Shared Function GetUri(address As String) As Uri
+            Try
+                Return New Uri(address)
+            Catch ex As UriFormatException
+                'Throw an exception with an error message more appropriate to our API
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
+            End Try
+        End Function
+
+        ''' <summary>
         '''  Sends and receives a packet to and from the passed in Uri.
         '''  Maps older networkCredentials to HttpClientHandler
         ''' </summary>
@@ -61,7 +108,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel"></param>
         ''' <returns></returns>
-        Private Shared Function DownloadFileAsync(addressUri As Uri,
+        Friend Shared Function DownloadFileAsync(addressUri As Uri,
                                     destinationFileName As String,
                                     networkCredentials As ICredentials,
                                     dialog As ProgressDialog,
@@ -239,7 +286,6 @@ Namespace Microsoft.VisualBasic.Devices
                     onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 #End If
-
         ''' <summary>
         '''  Downloads a file from the network to the specified path
         ''' </summary>
@@ -312,53 +358,6 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             End Try
 
-        End Function
-
-        ''' <summary>
-        '''  Gets network credentials from a userName and password
-        ''' </summary>
-        ''' <param name="userName">The name of the user</param>
-        ''' <param name="password">The password of the user</param>
-        ''' <returns>A NetworkCredentials</returns>
-        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
-
-            Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
-                      Nothing,
-                      DirectCast(New NetworkCredential(userName, password), ICredentials)
-                     )
-        End Function
-
-        ''' <summary>
-        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
-        ''' </summary>
-        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <returns></returns>
-        Private Shared Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
-            If showUI AndAlso Environment.UserInteractive Then
-                'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(Path:=destinationFileName, ParamName:=NameOf(destinationFileName))
-                Return New ProgressDialog With {
-                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
-                            }
-            End If
-            Return Nothing
-        End Function
-
-        ''' <summary>
-        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
-        ''' </summary>
-        ''' <param name="address">The remote file address</param>
-        ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
-        Private Shared Function GetUri(address As String) As Uri
-            Try
-                Return New Uri(address)
-            Catch ex As UriFormatException
-                'Throw an exception with an error message more appropriate to our API
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
-            End Try
         End Function
 
         ''' <summary>
@@ -491,7 +490,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel:=UICancelOption.ThrowException)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+                If t.IsFaulted Then
+                    ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
@@ -567,7 +567,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
@@ -618,7 +619,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel:=UICancelOption.ThrowException)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
@@ -674,7 +676,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
@@ -724,7 +727,9 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel:=UICancelOption.ThrowException)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
@@ -780,7 +785,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     connectionTimeout,
                                     overwrite,
                                     onUserCancel)
-                If t.IsFaulted Then ' This will be true if any parameters are bad
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()

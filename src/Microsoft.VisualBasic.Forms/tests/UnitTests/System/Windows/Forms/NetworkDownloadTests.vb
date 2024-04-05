@@ -40,7 +40,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             listener.Stop()
             listener.Close()
             If Not String.IsNullOrWhiteSpace(testDirectory) Then
+
                 Assert.True(testDirectory.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase))
+
                 Directory.Delete(testDirectory, recursive:=True)
             End If
         End Sub
@@ -67,6 +69,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -96,6 +99,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -125,6 +129,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -154,6 +159,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -172,6 +178,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -189,15 +196,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
-                                      destinationFilename,
-                                      userName:="",
-                                      password:="",
-                                      showUI:=True,
-                                      connectionTimeout:=-1,
-                                      overwrite:=False)
+                            destinationFilename,
+                            userName:="",
+                            password:="",
+                            showUI:=True,
+                            connectionTimeout:=-1,
+                            overwrite:=False)
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -215,15 +223,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
-                                          destinationFilename,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False)
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -241,16 +250,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
-                                          destinationFilename,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False,
-                                          UICancelOption.DoNothing)
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False,
+                                UICancelOption.DoNothing)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -268,16 +278,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
-                                          destinationFilename,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False,
-                                          UICancelOption.DoNothing)
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False,
+                                UICancelOption.DoNothing)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -292,13 +303,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
-                              destinationFilename,
-                              userName:="",
-                              password:="",
-                              showUI:=False,
-                              TestingConnectionTimeout,
-                              overwrite:=True,
-                              UICancelOption.DoNothing)
+                    destinationFilename,
+                    userName:="",
+                    password:="",
+                    showUI:=False,
+                    TestingConnectionTimeout,
+                    overwrite:=True,
+                    UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
@@ -315,17 +326,98 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
-                              destinationFilename,
-                              userName:="",
-                              password:="",
-                              showUI:=False,
-                              TestingConnectionTimeout,
-                              overwrite:=True)
+                    destinationFilename,
+                    userName:="",
+                    password:="",
+                    showUI:=False,
+                    TestingConnectionTimeout,
+                    overwrite:=True)
 
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UriWithAllOptionsSpecifiedWhereInvalidAddress_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentNullException)(
+                        Sub()
+                            My.Computer.Network _
+                                .DownloadFile(CType(Nothing, Uri),
+                                    destinationFilename,
+                                    userName:="",
+                                    password:="",
+                                    showUI:=False,
+                                    TestingConnectionTimeout,
+                                    overwrite:=True,
+                                    onUserCancel:=UICancelOption.DoNothing)
+                        End Sub)
+
+                Assert.False(File.Exists(destinationFilename))
+                Assert.True(Directory.Exists(testDirectory))
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UriWithAllOptionsSpecifiedWhereInvalidTimeout_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentException)(
+                        Sub()
+                            My.Computer.Network _
+                                .DownloadFile(New Uri(webListener.Address),
+                                    destinationFilename,
+                                    userName:="",
+                                    password:="",
+                                    showUI:=False,
+                                    connectionTimeout:=-1,
+                                    overwrite:=True,
+                                    onUserCancel:=UICancelOption.DoNothing)
+                        End Sub)
+
+                Assert.False(File.Exists(destinationFilename))
+                Assert.True(Directory.Exists(testDirectory))
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UriWithICredentialsEqualNothingShowUiTimeOutOverwriteSpecified_Success()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                My.Computer.Network _
+                    .DownloadFile(New Uri(webListener.Address),
+                        destinationFilename,
+                        networkCredentials:=Nothing,
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True)
+
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
         End Sub
 
         <WinFormsFact>
@@ -339,13 +431,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 My.Computer.Network _
                     .DownloadFile(New Uri(webListener.Address),
-                                  destinationFilename,
-                                  networkCredentials,
-                                  showUI:=False,
-                                  TestingConnectionTimeout,
-                                  overwrite:=True)
+                        destinationFilename,
+                        networkCredentials,
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -360,13 +453,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim listener As HttpListener = webListener.ProcessRequests()
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
-                              destinationFilename,
-                              userName:="",
-                              password:="",
-                              showUI:=False,
-                              TestingConnectionTimeout,
-                              overwrite:=True,
-                              UICancelOption.DoNothing)
+                    destinationFilename,
+                    userName:="",
+                    password:="",
+                    showUI:=False,
+                    TestingConnectionTimeout,
+                    overwrite:=True,
+                    UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
@@ -384,14 +477,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 My.Computer.Network _
                     .DownloadFile(New Uri(webListener.Address),
-                                  destinationFilename,
-                                  userName:="",
-                                  password:="",
-                                  showUI:=True,
-                                  TestingConnectionTimeout,
-                                  overwrite:=True)
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=True,
+                        TestingConnectionTimeout,
+                        overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadLargeFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -410,6 +504,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -430,6 +525,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultPassword)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -455,6 +551,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                  End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -472,16 +569,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
-                                      destinationFileName:=testDirectory, ' This is a Directory!
-                                      userName:="",
-                                      password:="",
-                                      showUI:=False,
-                                      TestingConnectionTimeout,
-                                      overwrite:=True,
-                                      onUserCancel:=UICancelOption.DoNothing)
+                            destinationFileName:=testDirectory, ' This is a Directory!
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing)
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -501,16 +599,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
-                                      $"{destinationFilename}{separator}",
-                                      userName:="",
-                                      password:="",
-                                      showUI:=False,
-                                      TestingConnectionTimeout,
-                                      overwrite:=True,
-                                      onUserCancel:=UICancelOption.DoNothing)
+                            $"{destinationFilename}{separator}",
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing)
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -530,16 +629,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
-                                      destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
-                                      showUI:=False,
-                                      TestingConnectionTimeout,
-                                      overwrite:=True,
-                                      onUserCancel:=UICancelOption.DoNothing)
+                            destinationFileName:=root, ' This is a Root Directory!
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing)
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -559,16 +659,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
-                                      destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
-                                      showUI:=False,
-                                      TestingConnectionTimeout,
-                                      overwrite:=True,
-                                      onUserCancel:=UICancelOption.DoNothing)
+                            destinationFileName:=root, ' This is a Root Directory!
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing)
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -587,6 +688,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -605,11 +707,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
                         My.Computer.Network _
-                            .DownloadFile(address,
-                                          destinationFilename)
+                            .DownloadFile(address, destinationFilename)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -632,6 +734,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -649,14 +752,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(webListener.Address,
-                                          destinationFileName:=Nothing,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False)
+                                destinationFileName:=Nothing,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False)
 
                     End Sub)
+
             Finally
                 CleanUp(listener)
             End Try
@@ -674,15 +778,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(webListener.Address,
-                                          destinationFileName:=Nothing,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False,
-                                          UICancelOption.DoNothing)
+                                destinationFileName:=Nothing,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False,
+                                UICancelOption.DoNothing)
 
                     End Sub)
+
             Finally
                 CleanUp(listener)
             End Try
@@ -699,15 +804,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
-                                      destinationFilename,
-                                      userName:="",
-                                      password:="",
-                                      showUI:=False,
-                                      TestingConnectionTimeout,
-                                      overwrite:=False)
+                            destinationFilename,
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            TestingConnectionTimeout,
+                            overwrite:=False)
 
                 End Sub)
-
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), 1)
 
@@ -726,16 +830,45 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(InvalidUrlAddress,
-                                          destinationFilename,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=False,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False)
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=False,
+                                TestingConnectionTimeout,
+                                overwrite:=False)
 
                     End Sub)
 
                 Assert.False(File.Exists(destinationFilename))
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UrlWhereUriIsNothingSpecifyOnUserCancel_Throws()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentNullException)(
+                    Sub()
+                        My.Computer.Network _
+                            .DownloadFile(address:=CType(Nothing, String),
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False,
+                                UICancelOption.DoNothing)
+
+                    End Sub)
+                Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -753,15 +886,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Sub()
                         My.Computer.Network _
                             .DownloadFile(InvalidUrlAddress,
-                                          destinationFilename,
-                                          userName:="",
-                                          password:="",
-                                          showUI:=True,
-                                          TestingConnectionTimeout,
-                                          overwrite:=False)
+                                destinationFilename,
+                                userName:="",
+                                password:="",
+                                showUI:=True,
+                                TestingConnectionTimeout,
+                                overwrite:=False)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -777,14 +911,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 My.Computer.Network _
                     .DownloadFile(webListener.Address,
-                                  destinationFilename,
-                                  userName:=Nothing,
-                                  password:="",
-                                  showUI:=True,
-                                  TestingConnectionTimeout,
-                                  overwrite:=False)
+                        destinationFilename,
+                        userName:=Nothing,
+                        password:="",
+                        showUI:=True,
+                        TestingConnectionTimeout,
+                        overwrite:=False)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -799,18 +934,78 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             My.Computer.Network _
                 .DownloadFile(webListener.Address,
-                              destinationFilename,
-                              userName:="",
-                              password:="",
-                              showUI:=False,
-                              TestingConnectionTimeout,
-                              overwrite:=True,
-                              onUserCancel:=UICancelOption.DoNothing)
+                    destinationFilename,
+                    userName:="",
+                    password:="",
+                    showUI:=False,
+                    TestingConnectionTimeout,
+                    overwrite:=True,
+                    onUserCancel:=UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
 
             CleanUp(listener, testDirectory)
+        End Sub
+
+        <WinFormsTheory>
+        <InlineData(Nothing)>
+        <InlineData("")>
+        Public Sub DownloadFile_UrlWithAllOptionsSpecifiedWhereInvalidAddress_Fail(address As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentNullException)(
+                        Sub()
+                            My.Computer.Network _
+                                .DownloadFile(address,
+                                    destinationFilename,
+                                    userName:="",
+                                    password:="",
+                                    showUI:=False,
+                                    TestingConnectionTimeout,
+                                    overwrite:=True,
+                                    onUserCancel:=UICancelOption.DoNothing)
+                        End Sub)
+
+                Assert.False(File.Exists(destinationFilename))
+                Assert.True(Directory.Exists(testDirectory))
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UrlWithAllOptionsSpecifiedWhereInvalidTimeout_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentException)(
+                        Sub()
+                            My.Computer.Network _
+                                .DownloadFile(webListener.Address,
+                                    destinationFilename,
+                                    userName:="",
+                                    password:="",
+                                    showUI:=False,
+                                    connectionTimeout:=-1,
+                                    overwrite:=True,
+                                    onUserCancel:=UICancelOption.DoNothing)
+                        End Sub)
+
+                Assert.False(File.Exists(destinationFilename))
+                Assert.True(Directory.Exists(testDirectory))
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
         End Sub
 
         <WinFormsFact>
@@ -823,15 +1018,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 My.Computer.Network _
                     .DownloadFile(webListener.Address,
-                                  destinationFilename,
-                                  userName:="",
-                                  password:="",
-                                  showUI:=False,
-                                  TestingConnectionTimeout,
-                                  overwrite:=True)
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True)
 
                 Assert.True(Directory.Exists(testDirectory))
                 Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -852,6 +1048,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultPassword)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -869,16 +1066,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         Sub()
                             My.Computer.Network _
                                 .DownloadFile(webListener.Address,
-                                              destinationFilename,
-                                              userName:="",
-                                              password:="",
-                                              showUI:=False,
-                                              connectionTimeout:=1,
-                                              overwrite:=True)
+                                    destinationFilename,
+                                    userName:="",
+                                    password:="",
+                                    showUI:=False,
+                                    connectionTimeout:=1,
+                                    overwrite:=True)
 
                         End Sub)
 
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -904,6 +1102,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                      End Sub)
                 Assert.False(File.Exists(destinationFilename))
+
             Finally
                 CleanUp(listener, testDirectory)
             End Try
