@@ -13,10 +13,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetArgumentNullExceptionTest_Succeed()
-            Dim resourceId As String = $"ID{CStr(vbErrors.FileNotFound)}"
-            Dim ex As Exception = ExceptionUtils.GetArgumentNullException("Test", resourceId)
+            Dim ex As Exception = ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
             Assert.IsType(Of ArgumentNullException)(ex)
-            Assert.Equal($"{resourceId} (Parameter 'Test')", ex.Message)
+            Assert.Equal($"Property MainForm cannot be set to Nothing. (Parameter 'MainForm')", ex.Message)
         End Sub
 
         <WinFormsFact>
@@ -37,15 +36,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetIOExceptionTest_Succeed()
-            Dim resourceId As String = $"ID{CStr(vbErrors.FileNotFound)}"
-            Dim ex As Exception = ExceptionUtils.GetIOException(resourceId)
-            Assert.IsType(Of IO.IOException)(ex)
+            Dim ex As Exception = ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+            Assert.IsType(Of InvalidOperationException)(ex)
         End Sub
 
         <WinFormsFact>
         Public Sub GetWin32ExceptionTest_Succeed()
             Dim ex As Exception = ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
-            Assert.IsType(Of System.ComponentModel.Win32Exception)(ex)
+            Assert.IsType(Of ComponentModel.Win32Exception)(ex)
         End Sub
 
         <WinFormsTheory>
