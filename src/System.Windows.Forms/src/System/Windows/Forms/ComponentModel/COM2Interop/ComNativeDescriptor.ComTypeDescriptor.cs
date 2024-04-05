@@ -12,6 +12,7 @@ internal partial class ComNativeDescriptor
     /// <summary>
     ///  The <see cref="ICustomTypeDescriptor"/> given by <see cref="ComNativeDescriptor"/> for a given type instance.
     /// </summary>
+    [RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses ComNativeDescriptor which is not trim-compatible.")]
     private sealed unsafe class ComTypeDescriptor : ICustomTypeDescriptor
     {
         private readonly ComNativeDescriptor _handler;

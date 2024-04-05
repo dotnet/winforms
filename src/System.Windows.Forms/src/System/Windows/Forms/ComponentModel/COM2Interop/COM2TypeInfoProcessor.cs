@@ -26,6 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   information such as IPerPropertyBrowsing is handled elsewhere.
 ///  </para>
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses ComNativeDescriptor which is not trim-compatible.")]
 internal static unsafe partial class Com2TypeInfoProcessor
 {
     private static ModuleBuilder? s_moduleBuilder;

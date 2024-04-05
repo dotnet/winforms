@@ -12,6 +12,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
     /// <summary>
     ///  Used to identify the enums that we added.
     /// </summary>
+    [RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IPerPropertyBrowsingHandler which is not trim-compatible.")]
     private unsafe class Com2IPerPropertyEnumConverter : Com2EnumConverter
     {
         private readonly Com2IPerPropertyBrowsingEnum _itemsEnum;
