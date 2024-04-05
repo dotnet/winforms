@@ -15,6 +15,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _clipboardProxy As New MyServices.ClipboardProxy
 
         <WinFormsFact>
+        Public Sub Clipboard_ContainsText()
+            Dim text As String = "This is a Test!"
+            _clipboardProxy.SetText(text)
+            Assert.Equal(text, _clipboardProxy.GetText())
+        End Sub
+
+        <WinFormsFact>
+        Public Sub Clipboard_ContainsTextWithFormat()
+            Dim text As String = "This is a Test!"
+            _clipboardProxy.SetText(text, TextDataFormat.Text)
+            Assert.Equal(text, _clipboardProxy.GetText(TextDataFormat.Text))
+        End Sub
+
+        <WinFormsFact>
         Public Sub Clipboard_GetAudioStream_InvokeMultipleTimes_Success()
             Dim result As Stream = _clipboardProxy.GetAudioStream()
             Assert.Equal(result.Length, _clipboardProxy.GetAudioStream().Length)
