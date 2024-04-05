@@ -178,6 +178,32 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub DownloadFile_UriWhereTimeoutNegative_Throws()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadLargeFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentException)(
+                Sub()
+                    My.Computer.Network _
+                        .DownloadFile(New Uri(webListener.Address),
+                                      destinationFilename,
+                                      userName:="",
+                                      password:="",
+                                      showUI:=True,
+                                      connectionTimeout:=-1,
+                                      overwrite:=False)
+
+                End Sub)
+                Assert.False(File.Exists(destinationFilename))
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
         Public Sub DownloadFile_UriWhereUriIsNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFilename As String = GetDestinationFileName(testDirectory)
@@ -195,6 +221,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False)
+
+                    End Sub)
+                Assert.False(File.Exists(destinationFilename))
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UriWhereUriIsNothingAllParameters_Throws()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Assert.Throws(Of ArgumentNullException)(
+                    Sub()
+                        My.Computer.Network _
+                            .DownloadFile(address:=CType(Nothing, Uri),
+                                          destinationFilename,
+                                          userName:="",
+                                          password:="",
+                                          showUI:=True,
+                                          TestingConnectionTimeout,
+                                          overwrite:=False,
+                                          UICancelOption.DoNothing)
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
@@ -288,7 +341,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(New Uri(webListener.Address),
                                   destinationFilename,
                                   networkCredentials,
-                                  showUI:=False, TestingConnectionTimeout,
+                                  showUI:=False,
+                                  TestingConnectionTimeout,
                                   overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
@@ -681,32 +735,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.False(File.Exists(destinationFilename))
-            Finally
-                CleanUp(listener, testDirectory)
-            End Try
-        End Sub
-
-        <WinFormsFact>
-        Public Sub DownloadFile_UrlWhereTimeoutNegative_Throws()
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
-            Dim webListener As New WebListener(DownloadLargeFileSize)
-            Dim listener As HttpListener = webListener.ProcessRequests()
-
-            Try
-                Assert.Throws(Of ArgumentException)(
-                Sub()
-                    My.Computer.Network _
-                        .DownloadFile(webListener.Address,
-                                      destinationFilename,
-                                      userName:="",
-                                      password:="",
-                                      showUI:=True,
-                                      connectionTimeout:=-1,
-                                      overwrite:=False)
-
-                End Sub)
                 Assert.False(File.Exists(destinationFilename))
             Finally
                 CleanUp(listener, testDirectory)
