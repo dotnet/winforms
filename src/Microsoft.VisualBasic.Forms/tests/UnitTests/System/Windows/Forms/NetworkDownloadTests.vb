@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports Microsoft.VisualBasic.FileIO
+Imports Microsoft.VisualBasic.MyServices.Internal
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -415,6 +416,29 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
 
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UrlWithICredentialsEqualNothingShowUiTimeOutOverwriteSpecified_Success()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                My.Computer.Network _
+                    .DownloadFile(New Uri(webListener.Address),
+                    destinationFilename,
+                    networkCredentials:=Nothing,
+                    showUI:=True,
+                    TestingConnectionTimeout,
+                    overwrite:=False,
+         UICancelOption.DoNothing)
+
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1046,6 +1070,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename,
                                   DefaultUserName,
                                   DefaultPassword)
+
+                Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
+
+            Finally
+                CleanUp(listener, testDirectory)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UriNetworkCredentials_Success()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFilename As String = GetDestinationFileName(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+
+            Try
+                Dim networkCredentials As ICredentials = New NetworkCredential(DefaultUserName, DefaultPassword)
+
+                My.Computer.Network _
+                    .DownloadFile(New Uri(webListener.Address),
+                                  destinationFilename,
+                                  networkCredentials,
+                                  Nothing,
+                   TestingConnectionTimeout,
+                                  overwrite:=False)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
 

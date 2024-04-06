@@ -104,12 +104,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Downloads a file
         ''' </summary>
-        ''' <param name="address">The source for the file</param>
-        ''' <param name="destinationFileName">The path and name where the file is saved</param>
-        Public Async Function DownloadFileAsync(address As Uri, destinationFileName As String) As Task
+        ''' <param name="addressUri">The source for the file</param>
+        ''' <param name="normalizedFilePath">The path and name where the file is to be saved</param>
+        Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String) As Task
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
-            Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
+            Debug.Assert(addressUri IsNot Nothing, "No address")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))), "Invalid path")
 
             _cancelTokenSourceGet = New CancellationTokenSource()
             _cancelTokenSourceRead = New CancellationTokenSource()
@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
             Dim response As HttpResponseMessage = Nothing
             Try
-                response = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
+                response = Await _httpClient.GetAsync(addressUri, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
             Catch ex As TaskCanceledException
                 If ex.CancellationToken = _cancelTokenSourceRead.Token Then
                     ' a real cancellation, triggered by the caller
@@ -132,7 +132,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     Dim contentLength? As Long = response?.Content.Headers.ContentLength
                     If contentLength.HasValue Then
                         Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
-                            Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
+                            Using fileStream As New FileStream(normalizedFilePath, FileMode.Create, FileAccess.Write, FileShare.None)
 
                                 Dim buffer(8191) As Byte
                                 Dim totalBytesRead As Long = 0
