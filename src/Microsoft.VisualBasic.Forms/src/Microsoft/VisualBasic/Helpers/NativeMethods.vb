@@ -136,12 +136,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
-        ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
-        ''' </summary>
-        Private Sub New()
-        End Sub
-
     End Class
-
 End Namespace

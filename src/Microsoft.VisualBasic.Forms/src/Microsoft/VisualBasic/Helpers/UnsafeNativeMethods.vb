@@ -6,7 +6,7 @@ Imports System.Runtime.InteropServices
 Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComVisible(False)>
-    Friend NotInheritable Class UnsafeNativeMethods
+    Friend Module UnsafeNativeMethods
 
         ''' <summary>
         ''' Gets the state of the specified key on the keyboard when the function
@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' if the key is toggled on (i.e. for keys like CapsLock)
         ''' </returns>
         <DllImport("User32.dll", ExactSpelling:=True, CharSet:=CharSet.Auto)>
-        Friend Shared Function GetKeyState(KeyCode As Integer) As Short
+        Friend Function GetKeyState(KeyCode As Integer) As Short
         End Function
 
         ''' <summary>
@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' by LocalAlloc or LocalReAlloc.
         ''' </summary>
         <DllImport("kernel32", ExactSpelling:=True, SetLastError:=True)>
-        Friend Shared Function LocalFree(LocalHandle As IntPtr) As IntPtr
+        Friend Function LocalFree(LocalHandle As IntPtr) As IntPtr
         End Function
 
         ''' <summary>
@@ -38,13 +38,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="TotalFreeSpace">The amount of free spave on the disk.</param>
         ''' <returns>True if function succeeds in getting info otherwise False</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, BestFitMapping:=False, SetLastError:=True)>
-        Friend Shared Function GetDiskFreeSpaceEx(Directory As String, ByRef UserSpaceFree As Long, ByRef TotalUserSpace As Long, ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Function GetDiskFreeSpaceEx(Directory As String, ByRef UserSpaceFree As Long, ByRef TotalUserSpace As Long, ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
-        ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
-        ''' </summary>
-        Private Sub New()
-        End Sub
-    End Class
+    End Module
 End Namespace
