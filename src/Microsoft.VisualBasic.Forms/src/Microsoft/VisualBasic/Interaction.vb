@@ -278,10 +278,9 @@ Namespace Microsoft.VisualBasic
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
-            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbHost = HostServices.VBHost
+            Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbHost.GetParentWindow()
             End If
@@ -352,12 +351,11 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbHost As IVbHost
-            Dim parentWindow As IWin32Window = Nothing
+            Dim ParentWindow As IWin32Window = Nothing
 
-            vbHost = HostServices.VBHost
+            Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
-                parentWindow = vbHost.GetParentWindow()
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -386,10 +384,10 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbHost Is Nothing Then
+                    If vbhost Is Nothing Then
                         sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbHost.GetWindowTitle()
+                        sTitle = vbhost.GetWindowTitle()
                     End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
@@ -404,7 +402,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(ParentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),
