@@ -12,19 +12,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
     End Enum
 
     ' Implements error utilities for Basic
-    Friend NotInheritable Class ExceptionUtils
+    Friend Module ExceptionUtils
 
-        ' Prevent creation.
-        Private Sub New()
-        End Sub
-
-        Private Shared Function GetResourceStringResourceId(ResourceId As Integer) As String
+        Private Function GetResourceStringResourceId(ResourceId As Integer) As String
             Dim id As String = $"ID{ResourceId}"
             ' always return a string
             Return $"{SR.GetResourceString(id, id)}"
         End Function
 
-        Friend Shared Function VbMakeException(ResourceId As Integer) As Exception
+        Friend Function VbMakeException(ResourceId As Integer) As Exception
             Dim description As String = ""
 
             If ResourceId > 0 AndAlso ResourceId <= &HFFFFI Then
@@ -53,9 +49,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of ArgumentException.</returns>
         ''' <remarks>This is the preferred way to construct an argument exception.</remarks>
-        Friend Shared Function GetArgumentExceptionWithArgName(ArgumentName As String,
-                ResourceID As String,
-                ParamArray PlaceHolders() As String) As ArgumentException
+        Friend Function GetArgumentExceptionWithArgName(ArgumentName As String,
+                            ResourceID As String,
+                            ParamArray PlaceHolders() As String) As ArgumentException
 
             Return New ArgumentException(GetResourceString(ResourceID, PlaceHolders), ArgumentName)
         End Function
@@ -65,7 +61,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <returns>A new instance of ArgumentNullException.</returns>
-        Friend Shared Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
+        Friend Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
 
             Return New ArgumentNullException(ArgumentName, GetResourceString(SR.General_ArgumentNullException))
         End Function
@@ -77,9 +73,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of ArgumentNullException.</returns>
-        Friend Shared Function GetArgumentNullException(ArgumentName As String,
-                ResourceID As String,
-                ParamArray PlaceHolders() As String) As ArgumentNullException
+        Friend Function GetArgumentNullException(ArgumentName As String,
+                            ResourceID As String,
+                            ParamArray PlaceHolders() As String) As ArgumentNullException
 
             Return New ArgumentNullException(ArgumentName, GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -90,8 +86,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.DirectoryNotFoundException.</returns>
-        Friend Shared Function GetDirectoryNotFoundException(ResourceID As String,
-                ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
+        Friend Function GetDirectoryNotFoundException(ResourceID As String,
+                            ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
 
             Return New IO.DirectoryNotFoundException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -103,8 +99,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.FileNotFoundException.</returns>
-        Friend Shared Function GetFileNotFoundException(FileName As String,
-            ResourceID As String, ParamArray PlaceHolders() As String) As IO.FileNotFoundException
+        Friend Function GetFileNotFoundException(FileName As String,
+                           ResourceID As String,
+                           ParamArray PlaceHolders() As String) As IO.FileNotFoundException
 
             Return New IO.FileNotFoundException(GetResourceString(ResourceID, PlaceHolders), FileName)
         End Function
@@ -115,8 +112,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of InvalidOperationException.</returns>
-        Friend Shared Function GetInvalidOperationException(
-            ResourceID As String, ParamArray PlaceHolders() As String) As InvalidOperationException
+        Friend Function GetInvalidOperationException(ResourceID As String,
+                            ParamArray PlaceHolders() As String) As InvalidOperationException
 
             Return New InvalidOperationException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -127,7 +124,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.IOException.</returns>
-        Friend Shared Function GetIOException(ResourceID As String, ParamArray PlaceHolders() As String) As IO.IOException
+        Friend Function GetIOException(ResourceID As String,
+                            ParamArray PlaceHolders() As String) As IO.IOException
 
             Return New IO.IOException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -140,10 +138,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of Win32Exception.</returns>
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
 
-        Friend Shared Function GetWin32Exception(ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
+        Friend Function GetWin32Exception(ResourceID As String,
+                            ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 
             Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
         End Function
 
-    End Class
+    End Module
 End Namespace
