@@ -12,7 +12,7 @@ Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic
 
-    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll. 
+    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
     ' Do not change this API without also updating that dependent module.
     Friend Module _Interaction
 
@@ -278,19 +278,18 @@ Namespace Microsoft.VisualBasic
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
-            Dim vbhost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = HostServices.VBHost
-            If vbhost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
-                ParentWindow = vbhost.GetParentWindow()
+            Dim vbHost As IVbHost = HostServices.VBHost
+            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             If String.IsNullOrEmpty(Title) Then
-                If vbhost Is Nothing Then
+                If vbHost Is Nothing Then
                     Title = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                 Else
-                    Title = vbhost.GetWindowTitle()
+                    Title = vbHost.GetWindowTitle()
                 End If
             End If
 
@@ -317,7 +316,7 @@ Namespace Microsoft.VisualBasic
 
             Dim Title As String
 
-            'Get the Assembly name of the calling assembly 
+            'Get the Assembly name of the calling assembly
             'Assembly.GetName requires PathDiscovery permission so we try this first
             'and if it throws we catch the security exception and parse the name
             'from the full assembly name
@@ -352,12 +351,11 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbhost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = HostServices.VBHost
-            If vbhost IsNot Nothing Then
-                ParentWindow = vbhost.GetParentWindow()
+            Dim vbHost As IVbHost = HostServices.VBHost
+            If vbHost IsNot Nothing Then
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -386,13 +384,13 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbhost Is Nothing Then
+                    If vbHost Is Nothing Then
                         sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbhost.GetWindowTitle()
+                        sTitle = vbHost.GetWindowTitle()
                     End If
                 Else
-                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
+                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
                 End If
             Catch ex As StackOverflowException
                 Throw
@@ -413,6 +411,4 @@ Namespace Microsoft.VisualBasic
         End Function
 
     End Module
-
 End Namespace
-
