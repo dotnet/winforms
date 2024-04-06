@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports Microsoft.VisualBasic.FileIO
-Imports Microsoft.VisualBasic.MyServices.Internal
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -70,7 +69,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -100,7 +98,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -130,7 +127,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -160,7 +156,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -179,7 +174,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -206,7 +200,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -233,7 +226,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -261,7 +253,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -289,7 +280,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -363,7 +353,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
                 Assert.True(Directory.Exists(testDirectory))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -392,7 +381,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
                 Assert.True(Directory.Exists(testDirectory))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -415,7 +403,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -462,7 +449,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -509,7 +495,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadLargeFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -528,7 +513,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -549,7 +533,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultPassword)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -575,7 +558,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                  End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -603,7 +585,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -633,7 +614,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -663,7 +643,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -693,7 +672,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -712,7 +690,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   destinationFilename)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -735,7 +712,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -758,7 +734,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -784,7 +759,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 overwrite:=False)
 
                     End Sub)
-
             Finally
                 CleanUp(listener)
             End Try
@@ -811,7 +785,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 UICancelOption.DoNothing)
 
                     End Sub)
-
             Finally
                 CleanUp(listener)
             End Try
@@ -864,7 +837,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub)
 
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -892,7 +864,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -919,7 +890,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -943,7 +913,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -997,7 +966,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
                 Assert.True(Directory.Exists(testDirectory))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1026,7 +994,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.False(File.Exists(destinationFilename))
                 Assert.True(Directory.Exists(testDirectory))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1051,7 +1018,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Assert.True(Directory.Exists(testDirectory))
                 Assert.Equal(ValidateDownload(destinationFilename), DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1072,7 +1038,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultPassword)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1097,7 +1062,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   overwrite:=False)
 
                 Assert.Equal(ValidateDownload(destinationFilename), actual:=DownloadSmallFileSize)
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1125,7 +1089,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         End Sub)
 
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -1151,7 +1114,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                      End Sub)
                 Assert.False(File.Exists(destinationFilename))
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
