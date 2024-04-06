@@ -384,10 +384,10 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbHost Is Nothing Then
+                    If vbhost Is Nothing Then
                         sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbHost.GetWindowTitle()
+                        sTitle = vbhost.GetWindowTitle()
                     End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
