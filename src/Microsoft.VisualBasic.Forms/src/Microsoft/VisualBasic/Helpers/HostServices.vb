@@ -4,12 +4,6 @@
 Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-    Public Interface IVbHost
-        Function GetParentWindow() As System.Windows.Forms.IWin32Window
-        Function GetWindowTitle() As String
-    End Interface
-
-    <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public NotInheritable Class HostServices
 
         Private Shared s_host As IVbHost
