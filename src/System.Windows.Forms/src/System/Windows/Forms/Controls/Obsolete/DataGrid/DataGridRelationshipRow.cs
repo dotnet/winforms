@@ -97,21 +97,17 @@ internal class DataGridRelationshipRow : DataGridRow
             => throw new PlatformNotSupportedException();
 
         protected override void AddChildAccessibleObjects(IList children)
-            => base.AddChildAccessibleObjects(children);
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string DefaultAction
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleStates State
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override void DoDefaultAction()
             => throw new PlatformNotSupportedException();
@@ -133,47 +129,33 @@ internal class DataGridRelationshipRow : DataGridRow
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Rectangle Bounds
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Name
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         protected DataGridRelationshipRow Owner
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleObject Parent
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         protected DataGrid DataGrid
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleStates State
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -186,9 +168,7 @@ internal class DataGridRelationshipRow : DataGridRow
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string DefaultAction
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override void DoDefaultAction()
             => throw new PlatformNotSupportedException();

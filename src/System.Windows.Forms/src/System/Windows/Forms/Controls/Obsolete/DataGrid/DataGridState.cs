@@ -60,37 +60,27 @@ internal sealed class DataGridState : ICloneable
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Rectangle Bounds
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Name
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleObject Parent
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Value
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

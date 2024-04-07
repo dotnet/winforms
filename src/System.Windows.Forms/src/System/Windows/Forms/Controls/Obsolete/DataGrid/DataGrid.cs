@@ -80,9 +80,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     }
 
     protected override Size DefaultSize
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -220,9 +218,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public GridTableStylesCollection TableStyles
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -265,9 +261,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int FirstVisibleColumn
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -347,9 +341,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
         => throw new PlatformNotSupportedException();
 
     protected ScrollBar HorizScrollBar
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -554,23 +546,17 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     }
 
     protected ScrollBar VertScrollBar
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int VisibleColumnCount
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int VisibleRowCount
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -841,23 +827,17 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int Column
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int Row
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public HitTestType Type
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override bool Equals(object obj)
             => throw new PlatformNotSupportedException();
@@ -908,9 +888,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override AccessibleObject GetChild(int index)
             => throw new PlatformNotSupportedException();

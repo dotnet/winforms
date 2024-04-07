@@ -69,9 +69,7 @@ public class StatusBarPanel : Component, ISupportInitialize
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBar Parent
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

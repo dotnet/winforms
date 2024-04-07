@@ -17,29 +17,21 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 internal abstract class DataGridRow : MarshalByRefObject
 {
-    protected DataGridTableStyle dgTable;
-    protected const int XOffset = 3;
-    protected const int YOffset = 2;
-
     public DataGridRow(DataGrid dataGrid, DataGridTableStyle dgTable, int rowNumber)
         => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public AccessibleObject AccessibleObject
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected virtual AccessibleObject CreateAccessibleObject()
-        => new DataGridRowAccessibleObject(this);
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGrid DataGrid
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -52,9 +44,7 @@ internal abstract class DataGridRow : MarshalByRefObject
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int RowNumber
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -237,49 +227,35 @@ internal abstract class DataGridRow : MarshalByRefObject
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Rectangle Bounds
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Name
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         protected DataGridRow Owner
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleObject Parent
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleStates State
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Value
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override AccessibleObject GetChild(int index)
             => throw new PlatformNotSupportedException();
@@ -311,49 +287,35 @@ internal abstract class DataGridRow : MarshalByRefObject
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Rectangle Bounds
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Name
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleObject Parent
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         protected DataGrid DataGrid
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string DefaultAction
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleStates State
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

@@ -104,9 +104,7 @@ public class MenuItem : Menu
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool IsParent
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -177,9 +175,7 @@ public class MenuItem : Menu
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Visible
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

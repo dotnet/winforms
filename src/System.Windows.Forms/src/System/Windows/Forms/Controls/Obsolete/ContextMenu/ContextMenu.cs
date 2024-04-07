@@ -24,9 +24,7 @@ public class ContextMenu : Menu
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Control SourceControl
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

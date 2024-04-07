@@ -48,9 +48,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public AccessibleObject HeaderAccessibleObject
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -81,14 +79,10 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual DataGridTableStyle DataGridTableStyle
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected int FontHeight
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -214,14 +208,14 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         int rowNum,
         Rectangle bounds,
         bool readOnly)
-        => Edit(source, rowNum, bounds, readOnly, null, true);
+        => throw new PlatformNotSupportedException();
 
     protected internal virtual void Edit(CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
         string displayText)
-        => Edit(source, rowNum, bounds, readOnly, displayText, true);
+        => throw new PlatformNotSupportedException();
 
     protected internal abstract void Edit(CurrencyManager source,
         int rowNum,
@@ -257,7 +251,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         Brush backBrush,
         Brush foreBrush,
         bool alignToRight)
-        => Paint(g, bounds, source, rowNum, alignToRight);
+            => throw new PlatformNotSupportedException();
 
     protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
         => throw new PlatformNotSupportedException();
@@ -275,9 +269,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TraceSwitch DGEditColumnEditing
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
     }
 
     [Obsolete(
@@ -296,40 +288,27 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Rectangle Bounds
-        {
-            get
-            {
-                throw new PlatformNotSupportedException();
-            }
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Name
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected DataGridColumnStyle Owner
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleObject Parent
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override AccessibleRole Role
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public override AccessibleObject Navigate(AccessibleNavigation navdir)
             => throw new PlatformNotSupportedException();
