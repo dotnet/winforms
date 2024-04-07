@@ -16,7 +16,7 @@ public class MonthCalendar_DateBoldEventArgsTests
     [MemberData(nameof(s_dateBoldEventArgs_Constructor_InitializesPropertiesCorrectly_Data))]
     public void DateBoldEventArgs_Constructor_InitializesPropertiesCorrectly(DateTime startDate, int size)
     {
-        var eventArgs = new DateBoldEventArgs(startDate, size);
+        DateBoldEventArgs eventArgs = new(startDate, size);
 
         eventArgs.StartDate.Should().Be(startDate);
         eventArgs.Size.Should().Be(size);
@@ -34,7 +34,7 @@ public class MonthCalendar_DateBoldEventArgsTests
     [MemberData(nameof(s_daysToBold_GetSetWorksCorrectly_Data))]
     public void DateBoldEventArgs_DaysToBold_GetSetWorksCorrectly(int[] value)
     {
-        var eventArgs = new DateBoldEventArgs(DateTime.UtcNow, 5)
+        DateBoldEventArgs eventArgs = new(DateTime.UtcNow, 5)
         {
             DaysToBold = value
         };

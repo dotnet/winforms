@@ -145,7 +145,7 @@ public class MonthCalendar_SelectionRangeConverterTests
     [WinFormsFact]
     public void GetCreateInstanceSupported_ReturnsTrue()
     {
-        _converter.GetCreateInstanceSupported(null).Should().BeTrue();
+        _converter.GetCreateInstanceSupported(context: null).Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -162,6 +162,6 @@ public class MonthCalendar_SelectionRangeConverterTests
     [WinFormsFact]
     public void GetPropertiesSupported_ReturnsTrue()
     {
-        _converter.GetPropertiesSupported(null).Should().BeTrue();
+        _converter.GetPropertiesSupported(context: null).Should().BeTrue();
     }
 }
