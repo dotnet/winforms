@@ -12,8 +12,11 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _parentWindow As IWin32Window
             Private ReadOnly _prompt As String
             Private ReadOnly _title As String
+            Private ReadOnly _defaultResponse As String
             Private ReadOnly _xPos As Integer
             Private ReadOnly _yPos As Integer
+            Private _result As String
+            Private ReadOnly _parentWindow As IWin32Window
             Private _exception As Exception
             Private _result As String
 
@@ -46,6 +49,17 @@ Namespace Microsoft.VisualBasic
                 End Try
             End Sub
 
+            Public ReadOnly Property Result() As String
+                Get
+                    Return _result
+                End Get
+            End Property
+
+            Friend ReadOnly Property Exception As Exception
+                Get
+                    Return _exception
+                End Get
+            End Property
         End Class
 
     End Module
