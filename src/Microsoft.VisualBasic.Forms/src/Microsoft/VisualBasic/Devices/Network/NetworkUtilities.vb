@@ -5,8 +5,6 @@ Imports System.Net
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-
 Namespace Microsoft.VisualBasic.Devices
     Friend Module NetworkUtilities
 
@@ -18,25 +16,6 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' UserName used in overloads where there is no userName parameter
         Friend Const DEFAULT_USERNAME As String = ""
-
-        ''' <summary>
-        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
-        ''' </summary>
-        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <returns>New ProgressDialog</returns>
-        Friend Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
-            If showUI AndAlso Environment.UserInteractive Then
-                'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(Path:=destinationFileName, ParamName:=NameOf(destinationFileName))
-                Return New ProgressDialog With {
-                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
-                            }
-            End If
-            Return Nothing
-        End Function
 
         ''' <summary>
         '''  Posts a message to close the progress dialog
@@ -71,6 +50,25 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
+        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <returns>New ProgressDialog</returns>
+        Friend Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
+            If showUI AndAlso Environment.UserInteractive Then
+                'Construct the local file. This will validate the full name and path
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(Path:=destinationFileName, ParamName:=NameOf(destinationFileName))
+                Return New ProgressDialog With {
+                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                            .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
+                            }
+            End If
+            Return Nothing
+        End Function
+
+        ''' <summary>
         '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
         ''' </summary>
         ''' <param name="address">The remote file address</param>
@@ -80,7 +78,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return New Uri(address)
             Catch ex As UriFormatException
                 'Throw an exception with an error message more appropriate to our API
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
+                Throw GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
             End Try
         End Function
 

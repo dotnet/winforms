@@ -6,8 +6,6 @@ Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-
 Namespace Microsoft.VisualBasic.Devices
 
     Partial Public Class Network
@@ -92,7 +90,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw GetArgumentNullException(NameOf(address))
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -100,7 +98,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' For uploads, we need to make sure the address includes the filename
             If String.IsNullOrEmpty(IO.Path.GetFileName(addressUri.AbsolutePath)) Then
-                Throw ExUtils.GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
+                Throw GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
             End If
 
             UploadFile(sourceFileName, addressUri, userName, password, showUI, connectionTimeout, onUserCancel)
@@ -191,11 +189,11 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended()

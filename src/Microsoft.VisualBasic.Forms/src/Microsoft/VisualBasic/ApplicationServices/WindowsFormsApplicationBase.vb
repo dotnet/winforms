@@ -378,7 +378,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As Form)
                 If value Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
+                    Throw GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
                     Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))

@@ -3,51 +3,12 @@
 
 Imports System.Security
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-
 Namespace Microsoft.VisualBasic.CompilerServices
 
     ''' <summary>
     '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
     ''' </summary>
     Friend NotInheritable Class FileSystemUtils
-
-        ''' <summary>
-        '''  Normalize the path, but throw exception if the path ends with separator.
-        ''' </summary>
-        ''' <param name="Path">The input path.</param>
-        ''' <param name="ParamName">The parameter name to include in the exception if one is raised.</param>
-        ''' <returns>The normalized path.</returns>
-        Friend Shared Function NormalizeFilePath(Path As String, ParamName As String) As String
-            CheckFilePathTrailingSeparator(Path, ParamName)
-            Return NormalizePath(Path)
-        End Function
-
-        ''' <summary>
-        '''  Get full path, get long format, and remove any pending separator.
-        ''' </summary>
-        ''' <param name="Path">The path to be normalized.</param>
-        ''' <returns>The normalized path.</returns>
-        ''' <exception cref="IO.Path.GetFullPath">See IO.Path.GetFullPath for possible exceptions.</exception>
-        ''' <remarks>Keep this function since we might change the implementation / behavior later.</remarks>
-        Friend Shared Function NormalizePath(Path As String) As String
-            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(Path)))
-        End Function
-
-        ''' <summary>
-        '''  Throw ArgumentException if the file path ends with a separator.
-        ''' </summary>
-        ''' <param name="path">The file path.</param>
-        ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
-        Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
-            If String.IsNullOrEmpty(path) Then ' Check for argument null
-                Throw ExUtils.GetArgumentNullException(paramName)
-            End If
-            If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
-                path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
-            End If
-        End Sub
 
         ''' <summary>
         '''  Returns the given path in long format (v.s 8.3 format) if the path exists.
@@ -144,6 +105,43 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             ' Otherwise, remove all separators at the end.
             Return Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
+        End Function
+
+        ''' <summary>
+        '''  Throw ArgumentException if the file path ends with a separator.
+        ''' </summary>
+        ''' <param name="path">The file path.</param>
+        ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
+        Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
+            If String.IsNullOrEmpty(path) Then ' Check for argument null
+                Throw GetArgumentNullException(paramName)
+            End If
+            If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
+                path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
+                Throw GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Normalize the path, but throw exception if the path ends with separator.
+        ''' </summary>
+        ''' <param name="Path">The input path.</param>
+        ''' <param name="ParamName">The parameter name to include in the exception if one is raised.</param>
+        ''' <returns>The normalized path.</returns>
+        Friend Shared Function NormalizeFilePath(Path As String, ParamName As String) As String
+            CheckFilePathTrailingSeparator(Path, ParamName)
+            Return NormalizePath(Path)
+        End Function
+
+        ''' <summary>
+        '''  Get full path, get long format, and remove any pending separator.
+        ''' </summary>
+        ''' <param name="Path">The path to be normalized.</param>
+        ''' <returns>The normalized path.</returns>
+        ''' <exception cref="IO.Path.GetFullPath">See IO.Path.GetFullPath for possible exceptions.</exception>
+        ''' <remarks>Keep this function since we might change the implementation / behavior later.</remarks>
+        Friend Shared Function NormalizePath(Path As String) As String
+            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(Path)))
         End Function
 
     End Class
