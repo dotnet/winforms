@@ -38,9 +38,7 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual TextBox TextBox
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected override void SetDataGridInColumn(DataGrid value)
     {
@@ -49,9 +47,7 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override PropertyDescriptor PropertyDescriptor
-    {
-        set => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

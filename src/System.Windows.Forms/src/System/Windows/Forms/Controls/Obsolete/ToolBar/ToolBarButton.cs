@@ -64,9 +64,7 @@ public class ToolBarButton : Component
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public ToolBar Parent
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -87,9 +85,7 @@ public class ToolBarButton : Component
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Rectangle Rectangle
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

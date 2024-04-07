@@ -53,5 +53,5 @@ internal class DataGridAddNewRow : DataGridRow
         Brush backBr,
         Brush foreBrush,
         bool alignToRight)
-        => base.PaintCellContents(g, cellBounds, column, backBr, foreBrush, alignToRight);
+        => throw new PlatformNotSupportedException();
 }

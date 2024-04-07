@@ -6,7 +6,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016 // Add public types and members to the declared API
+#pragma warning disable RS0016 // Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
+// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.StatusBarDrawItemEventArgsMessage,
     error: false,
@@ -20,7 +21,7 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         int itemId,
         DrawItemState itemState,
         StatusBarPanel panel) : base(g, font, r, itemId, itemState)
-            => throw new PlatformNotSupportedException();
+        => throw new PlatformNotSupportedException();
 
     public StatusBarDrawItemEventArgs(Graphics g,
         Font font,
@@ -30,12 +31,10 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         StatusBarPanel panel,
         Color foreColor,
         Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor)
-            => throw new PlatformNotSupportedException();
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanel Panel
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 }

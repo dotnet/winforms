@@ -103,9 +103,7 @@ public class ToolBar : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public ToolBarButtonCollection Buttons
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -304,38 +302,26 @@ public class ToolBar : Control
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual ToolBarButton this[string key]
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int Count
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         object ICollection.SyncRoot
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool ICollection.IsSynchronized
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool IList.IsFixedSize
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsReadOnly
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public int Add(ToolBarButton button)
             => throw new PlatformNotSupportedException();
