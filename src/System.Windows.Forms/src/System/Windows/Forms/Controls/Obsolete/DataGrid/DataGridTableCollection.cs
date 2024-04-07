@@ -38,14 +38,10 @@ public class GridTableStylesCollection : BaseCollection, IList
         => throw new PlatformNotSupportedException();
 
     bool IList.IsFixedSize
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     bool IList.IsReadOnly
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     object IList.this[int index]
     {
@@ -58,40 +54,28 @@ public class GridTableStylesCollection : BaseCollection, IList
     }
 
     int ICollection.Count
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     bool ICollection.IsSynchronized
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     object ICollection.SyncRoot
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     IEnumerator IEnumerable.GetEnumerator() => throw new PlatformNotSupportedException();
 
     protected override ArrayList List
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridTableStyle this[int index]
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridTableStyle this[string tableName]
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     public virtual int Add(DataGridTableStyle table)
         => throw new PlatformNotSupportedException();
