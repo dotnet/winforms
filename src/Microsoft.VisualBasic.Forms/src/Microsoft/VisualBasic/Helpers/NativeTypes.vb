@@ -115,7 +115,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend Sub New()
             End Sub
 
-            Private _hasBeenDisposed As Boolean ' To detect redundant calls. Default initialize = False.
+            ' To detect redundant calls. Default initialize = False.
+            Private _hasBeenDisposed As Boolean
 
             Protected Overrides Sub Finalize()
                 Dispose(False)
@@ -127,7 +128,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
                     If disposing Then
                         _hasBeenDisposed = True
 
-                        Const STARTF_USESTDHANDLES As Integer = 256 'Defined in windows.h
+                        ' 256 Defined in windows.h
+                        Const STARTF_USESTDHANDLES As Integer = 256
                         If (dwFlags And STARTF_USESTDHANDLES) <> 0 Then
                             If hStdInput <> IntPtr.Zero AndAlso hStdInput <> s_invalidHandle Then
                                 NativeMethods.CloseHandle(hStdInput)

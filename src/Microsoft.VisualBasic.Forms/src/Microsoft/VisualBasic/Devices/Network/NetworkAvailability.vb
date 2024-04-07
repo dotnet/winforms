@@ -57,7 +57,8 @@ Namespace Microsoft.VisualBasic.Devices
                         _networkAvailabilityChangedCallback = New SendOrPostCallback(AddressOf NetworkAvailabilityChangedHandler) 'the async operation posts to this delegate
                         If AsyncOperationManager.SynchronizationContext IsNot Nothing Then
                             _synchronizationContext = AsyncOperationManager.SynchronizationContext 'We need to hang on to the synchronization context associated with the thread the network object is created on
-                            Try ' Exceptions are thrown if the user isn't an admin.
+                            Try
+                                ' Exceptions are thrown if the user isn't an admin.
                                 AddHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener) 'listen to the OS event
                             Catch ex As PlatformNotSupportedException
                             Catch ex As NetInfoAlias.NetworkInformationException

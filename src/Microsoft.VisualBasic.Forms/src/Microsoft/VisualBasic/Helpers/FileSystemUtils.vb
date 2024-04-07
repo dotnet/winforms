@@ -39,7 +39,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
                                  "Must found exactly 1")
                     Return DInfo.GetDirectories(IO.Path.GetFileName(FullPath))(0).FullName
                 Else
-                    Return FullPath ' Path does not exist, cannot resolve.
+                    ' Path does not exist, cannot resolve.
+                    Return FullPath
                 End If
             Catch ex As Exception
                 ' Ignore these type of exceptions and return FullPath. These type of exceptions should either be caught by calling functions
@@ -113,7 +114,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="path">The file path.</param>
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
-            If String.IsNullOrEmpty(path) Then ' Check for argument null
+            ' Check for argument null
+            If String.IsNullOrEmpty(path) Then
                 Throw GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or

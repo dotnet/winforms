@@ -50,7 +50,8 @@ Namespace Microsoft.VisualBasic
             ' window, moves it to the foreground, and bumps the priority
             ' of the thread which owns the window.
 
-            Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+            ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+            Dim dwDummy As Integer
 
             ' Attach ourselves to the window we want to set focus to
             NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
@@ -313,7 +314,8 @@ Namespace Microsoft.VisualBasic
 
             NativeMethods.GetStartupInfo(StartupInfo)
             Try
-                StartupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW  ' we want to specify the initial window style (minimized, etc) so set this bit.
+                ' We want to specify the initial window style (minimized, etc) so set this bit.
+                StartupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW
                 StartupInfo.wShowWindow = Style
 
                 'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
@@ -362,7 +364,8 @@ Namespace Microsoft.VisualBasic
                         Throw VbMakeException(vbErrors.FileNotFound)
                     End If
                 Finally
-                    safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
+                    ' Close the process handle will not cause the process to stop.
+                    safeProcessHandle.Close()
                     safeThreadHandle.Close()
                 End Try
             Finally

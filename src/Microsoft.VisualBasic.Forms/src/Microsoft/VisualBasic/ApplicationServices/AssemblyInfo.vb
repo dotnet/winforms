@@ -232,18 +232,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
         End Function
 
-        ' Private fields.
-        Private ReadOnly _assembly As Assembly ' The assembly with the information.
+        ' The assembly with the information.
+        Private ReadOnly _assembly As Assembly
 
         ' Since these properties will not change during runtime, they're cached.
         ' "" is not Nothing so use Nothing to mark an un-accessed property.
-        Private _description As String ' Cache the assembly's description.
-
-        Private _title As String ' Cache the assembly's title.
-        Private _productName As String ' Cache the assembly's product name.
-        Private _companyName As String ' Cache the assembly's company name.
-        Private _trademark As String ' Cache the assembly's trademark.
-        Private _copyright As String ' Cache the assembly's copyright.
+        ' Cache the assembly's description.
+        Private _description As String
+        ' Cache the assembly's title.
+        Private _title As String
+        ' Cache the assembly's product name.
+        Private _productName As String
+        ' Cache the assembly's company name.
+        Private _companyName As String
+        ' Cache the assembly's trademark.
+        Private _trademark As String
+        ' Cache the assembly's copyright.
+        Private _copyright As String
 
     End Class
 End Namespace
