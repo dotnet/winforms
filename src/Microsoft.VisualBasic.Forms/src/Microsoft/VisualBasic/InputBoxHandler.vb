@@ -6,6 +6,7 @@ Imports System.Windows.Forms
 Namespace Microsoft.VisualBasic
 
     Partial Friend Module _Interaction
+
         Private NotInheritable Class InputBoxHandler
             Private ReadOnly _prompt As String
             Private ReadOnly _title As String
