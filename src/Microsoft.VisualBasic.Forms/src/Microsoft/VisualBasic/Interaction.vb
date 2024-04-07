@@ -14,81 +14,88 @@ Namespace Microsoft.VisualBasic
 
     ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
     ' Do not change this API without also updating that dependent module.
-    Friend Module _Interaction
+    Partial Friend Module _Interaction
 
-        Public Function Shell(PathName As String, Style As AppWinStyle, Wait As Boolean, Timeout As Integer) As Integer
-            Dim StartupInfo As New NativeTypes.STARTUPINFO
-            Dim ProcessInfo As New NativeTypes.PROCESS_INFORMATION
-            Dim ok As Integer
-            Dim safeProcessHandle As New NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid()
-            Dim safeThreadHandle As New NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid()
-            Dim ErrorCode As Integer = 0
-
-            If (PathName Is Nothing) Then
-                Throw New ArgumentNullException(GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
-            End If
-
-            If (Style < 0 OrElse Style > 9) Then
-                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValue1, "Style"))
-            End If
-
-            NativeMethods.GetStartupInfo(StartupInfo)
-            Try
-                StartupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW  ' we want to specify the initial window style (minimized, etc) so set this bit.
-                StartupInfo.wShowWindow = Style
-
-                'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
-                'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess() even though this version
-                'of the StartupInfo type uses IntPtr instead of String because GetStartupInfo() above requires that version so we don't
-                'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
-                'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
-
-                ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
-                If ok = 0 Then
-                    ErrorCode = Marshal.GetLastWin32Error()
-                End If
-                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.s_invalidHandle Then
-                    safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
-                End If
-                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.s_invalidHandle Then
-                    safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
-                End If
-
-                Try
-                    If (ok <> 0) Then
-                        If Wait Then
-                            ' Is infinite wait okay here ?
-                            ' This is okay since this is marked as requiring the HostPermission with ExternalProcessMgmt rights
-                            ok = NativeMethods.WaitForSingleObject(safeProcessHandle, Timeout)
-
-                            If ok = 0 Then 'succeeded
-                                'Process ran to completion
-                                Return 0
-                            Else
-                                'Wait timed out
-                                Return ProcessInfo.dwProcessId
-                            End If
+        Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
+            '  if no window with name (full or truncated) or task id, return an error
+            '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
+            Dim hwndOwned As IntPtr
+            If (Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp)) Then
+                '  scan to the next window until failure
+                hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
+                Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
+                    If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
+                        If (Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned)) Then
+                            hwndApp = hwndOwned
+                            hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                         Else
-                            NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
-                            Return ProcessInfo.dwProcessId
+                            Exit Do
                         End If
-                    Else
-                        'Check for a win32 error access denied. If it is, make and throw the exception.
-                        'If not, throw FileNotFound
-                        Const ERROR_ACCESS_DENIED As Integer = 5
-                        If ErrorCode = ERROR_ACCESS_DENIED Then
-                            Throw VbMakeException(vbErrors.PermissionDenied)
-                        End If
-
-                        Throw VbMakeException(vbErrors.FileNotFound)
                     End If
-                Finally
-                    safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
-                    safeThreadHandle.Close()
-                End Try
-            Finally
-                StartupInfo.Dispose()
+                    hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
+                Loop
+
+                '  if scan failed, return an error
+                If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
+                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, ProcessId))
+                End If
+
+                '  set active window to the owned one
+                hwndApp = hwndOwned
+            End If
+
+            ' SetActiveWindow on Win32 only activates the Window - it does
+            ' not bring to to the foreground unless the window belongs to
+            ' the current thread.  NativeMethods.SetForegroundWindow() activates the
+            ' window, moves it to the foreground, and bumps the priority
+            ' of the thread which owns the window.
+
+            Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+
+            ' Attach ourselves to the window we want to set focus to
+            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
+            ' Make it foreground and give it focus, this will occur
+            ' synchronously because we are attached.
+            NativeMethods.SetForegroundWindow(hwndApp)
+            NativeMethods.SetFocus(hwndApp)
+            ' Unattached ourselves from the window
+            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
+        End Sub
+
+        Private Function GetTitleFromAssembly(CallingAssembly As Reflection.Assembly) As String
+
+            Dim Title As String
+
+            'Get the Assembly name of the calling assembly
+            'Assembly.GetName requires PathDiscovery permission so we try this first
+            'and if it throws we catch the security exception and parse the name
+            'from the full assembly name
+            Try
+                Title = CallingAssembly.GetName().Name
+            Catch ex As SecurityException
+                Dim FullName As String = CallingAssembly.FullName
+
+                'Find the text up to the first comma. Note, this fails if the assembly has
+                'a comma in its name
+                Dim FirstCommaLocation As Integer = FullName.IndexOf(","c)
+                If FirstCommaLocation >= 0 Then
+                    Title = FullName.Substring(0, FirstCommaLocation)
+                Else
+                    'The name is not in the format we're expecting so return an empty string
+                    Title = ""
+                End If
             End Try
+
+            Return Title
+
+        End Function
+
+        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window) As String
+            Dim Box As VBInputBox = New VBInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
+            Box.ShowDialog(ParentWindow)
+
+            InternalInputBox = Box.Output
+            Box.Dispose()
         End Function
 
         Public Sub AppActivateByProcessId(ProcessId As Integer)
@@ -191,92 +198,6 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
-            '  if no window with name (full or truncated) or task id, return an error
-            '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
-            Dim hwndOwned As IntPtr
-            If (Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp)) Then
-                '  scan to the next window until failure
-                hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
-                Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
-                    If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
-                        If (Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned)) Then
-                            hwndApp = hwndOwned
-                            hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
-                        Else
-                            Exit Do
-                        End If
-                    End If
-                    hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
-                Loop
-
-                '  if scan failed, return an error
-                If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, ProcessId))
-                End If
-
-                '  set active window to the owned one
-                hwndApp = hwndOwned
-            End If
-
-            ' SetActiveWindow on Win32 only activates the Window - it does
-            ' not bring to to the foreground unless the window belongs to
-            ' the current thread.  NativeMethods.SetForegroundWindow() activates the
-            ' window, moves it to the foreground, and bumps the priority
-            ' of the thread which owns the window.
-
-            Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
-
-            ' Attach ourselves to the window we want to set focus to
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
-            ' Make it foreground and give it focus, this will occur
-            ' synchronously because we are attached.
-            NativeMethods.SetForegroundWindow(hwndApp)
-            NativeMethods.SetFocus(hwndApp)
-            ' Unattached ourselves from the window
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
-        End Sub
-
-        Private NotInheritable Class InputBoxHandler
-            Private ReadOnly _prompt As String
-            Private ReadOnly _title As String
-            Private ReadOnly _defaultResponse As String
-            Private ReadOnly _xPos As Integer
-            Private ReadOnly _yPos As Integer
-            Private _result As String
-            Private ReadOnly _parentWindow As IWin32Window
-            Private _exception As Exception
-
-            Public Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
-                _prompt = Prompt
-                _title = Title
-                _defaultResponse = DefaultResponse
-                _xPos = XPos
-                _yPos = YPos
-                _parentWindow = ParentWindow
-            End Sub
-
-            Public Sub StartHere()
-                Try
-                    _result = InternalInputBox(_prompt, _title, _defaultResponse, _xPos, _yPos, _parentWindow)
-                Catch ex As Exception
-                    _exception = ex
-                End Try
-            End Sub
-
-            Public ReadOnly Property Result() As String
-                Get
-                    Return _result
-                End Get
-            End Property
-
-            Friend ReadOnly Property Exception As Exception
-                Get
-                    Return _exception
-                End Get
-            End Property
-        End Class
-
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
             Dim ParentWindow As IWin32Window = Nothing
 
@@ -310,42 +231,6 @@ Namespace Microsoft.VisualBasic
             Else
                 Return InternalInputBox(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
             End If
-        End Function
-
-        Private Function GetTitleFromAssembly(CallingAssembly As Reflection.Assembly) As String
-
-            Dim Title As String
-
-            'Get the Assembly name of the calling assembly
-            'Assembly.GetName requires PathDiscovery permission so we try this first
-            'and if it throws we catch the security exception and parse the name
-            'from the full assembly name
-            Try
-                Title = CallingAssembly.GetName().Name
-            Catch ex As SecurityException
-                Dim FullName As String = CallingAssembly.FullName
-
-                'Find the text up to the first comma. Note, this fails if the assembly has
-                'a comma in its name
-                Dim FirstCommaLocation As Integer = FullName.IndexOf(","c)
-                If FirstCommaLocation >= 0 Then
-                    Title = FullName.Substring(0, FirstCommaLocation)
-                Else
-                    'The name is not in the format we're expecting so return an empty string
-                    Title = ""
-                End If
-            End Try
-
-            Return Title
-
-        End Function
-
-        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window) As String
-            Dim Box As VBInputBox = New VBInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
-            Box.ShowDialog(ParentWindow)
-
-            InternalInputBox = Box.Output
-            Box.Dispose()
         End Function
 
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
@@ -384,10 +269,10 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbhost Is Nothing Then
+                    If vbHost Is Nothing Then
                         sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
-                        sTitle = vbhost.GetWindowTitle()
+                        sTitle = vbHost.GetWindowTitle()
                     End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
@@ -408,6 +293,81 @@ Namespace Microsoft.VisualBasic
                  CType(Buttons And &HF00, MessageBoxDefaultButton),
                  CType(Buttons And &HFFFFF000, MessageBoxOptions)),
                  MsgBoxResult)
+        End Function
+
+        Public Function Shell(PathName As String, Style As AppWinStyle, Wait As Boolean, Timeout As Integer) As Integer
+            Dim StartupInfo As New NativeTypes.STARTUPINFO
+            Dim ProcessInfo As New NativeTypes.PROCESS_INFORMATION
+            Dim ok As Integer
+            Dim safeProcessHandle As New NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid()
+            Dim safeThreadHandle As New NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid()
+            Dim ErrorCode As Integer = 0
+
+            If (PathName Is Nothing) Then
+                Throw New ArgumentNullException(GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+            End If
+
+            If (Style < 0 OrElse Style > 9) Then
+                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValue1, "Style"))
+            End If
+
+            NativeMethods.GetStartupInfo(StartupInfo)
+            Try
+                StartupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW  ' we want to specify the initial window style (minimized, etc) so set this bit.
+                StartupInfo.wShowWindow = Style
+
+                'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
+                'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess() even though this version
+                'of the StartupInfo type uses IntPtr instead of String because GetStartupInfo() above requires that version so we don't
+                'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
+                'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
+
+                ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
+                If ok = 0 Then
+                    ErrorCode = Marshal.GetLastWin32Error()
+                End If
+                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.s_invalidHandle Then
+                    safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
+                End If
+                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.s_invalidHandle Then
+                    safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
+                End If
+
+                Try
+                    If (ok <> 0) Then
+                        If Wait Then
+                            ' Is infinite wait okay here ?
+                            ' This is okay since this is marked as requiring the HostPermission with ExternalProcessMgmt rights
+                            ok = NativeMethods.WaitForSingleObject(safeProcessHandle, Timeout)
+
+                            If ok = 0 Then 'succeeded
+                                'Process ran to completion
+                                Return 0
+                            Else
+                                'Wait timed out
+                                Return ProcessInfo.dwProcessId
+                            End If
+                        Else
+                            NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
+                            Return ProcessInfo.dwProcessId
+                        End If
+                    Else
+                        'Check for a win32 error access denied. If it is, make and throw the exception.
+                        'If not, throw FileNotFound
+                        Const ERROR_ACCESS_DENIED As Integer = 5
+                        If ErrorCode = ERROR_ACCESS_DENIED Then
+                            Throw VbMakeException(vbErrors.PermissionDenied)
+                        End If
+
+                        Throw VbMakeException(vbErrors.FileNotFound)
+                    End If
+                Finally
+                    safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
+                    safeThreadHandle.Close()
+                End Try
+            Finally
+                StartupInfo.Dispose()
+            End Try
         End Function
 
     End Module
