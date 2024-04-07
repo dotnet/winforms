@@ -38,14 +38,10 @@ public class GridColumnStylesCollection : BaseCollection, IList
         => throw new PlatformNotSupportedException();
 
     bool IList.IsFixedSize
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     bool IList.IsReadOnly
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     object IList.this[int index]
     {
@@ -57,48 +53,34 @@ public class GridColumnStylesCollection : BaseCollection, IList
         => throw new PlatformNotSupportedException();
 
     int ICollection.Count
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     bool ICollection.IsSynchronized
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     object ICollection.SyncRoot
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     IEnumerator IEnumerable.GetEnumerator()
         => throw new PlatformNotSupportedException();
 
     protected override ArrayList List
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[int index]
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[string columnName]
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[PropertyDescriptor propertyDesciptor]
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     public virtual int Add(DataGridColumnStyle column)
         => throw new PlatformNotSupportedException();

@@ -24,23 +24,17 @@ public abstract class Menu : Component
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public IntPtr Handle
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual bool IsParent
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public MenuItem MdiListItem
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -53,9 +47,7 @@ public abstract class Menu : Component
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public MenuItemCollection MenuItems
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -92,9 +84,7 @@ public abstract class Menu : Component
             => throw new PlatformNotSupportedException();
 
         public virtual MenuItem this[int index]
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         object IList.this[int index]
         {
@@ -103,34 +93,22 @@ public abstract class Menu : Component
         }
 
         public virtual MenuItem this[string key]
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public int Count
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         object ICollection.SyncRoot
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool ICollection.IsSynchronized
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool IList.IsFixedSize
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public bool IsReadOnly
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public virtual MenuItem Add(string caption)
             => throw new PlatformNotSupportedException();

@@ -25,7 +25,5 @@ public class StatusBarPanelClickEventArgs : MouseEventArgs
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanel StatusBarPanel
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 }

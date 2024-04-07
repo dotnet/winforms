@@ -401,9 +401,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual GridColumnStylesCollection GridColumnStyles
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

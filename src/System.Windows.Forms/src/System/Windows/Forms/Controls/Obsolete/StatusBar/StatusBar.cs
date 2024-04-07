@@ -69,19 +69,13 @@ public class StatusBar : Control
     }
 
     protected override CreateParams CreateParams
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected override ImeMode DefaultImeMode
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected override Size DefaultSize
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     protected override bool DoubleBuffered
     {
@@ -140,9 +134,7 @@ public class StatusBar : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanelCollection Panels
-    {
-        get => throw new PlatformNotSupportedException();
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -267,31 +259,21 @@ public class StatusBar : Control
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int Count
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         object ICollection.SyncRoot
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool ICollection.IsSynchronized
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         bool IList.IsFixedSize
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsReadOnly
-        {
-            get => throw new PlatformNotSupportedException();
-        }
+            => throw new PlatformNotSupportedException();
 
         public virtual StatusBarPanel Add(string text)
             => throw new PlatformNotSupportedException();
