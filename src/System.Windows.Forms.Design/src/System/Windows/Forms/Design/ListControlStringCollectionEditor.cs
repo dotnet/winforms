@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms.Design;
@@ -14,15 +12,15 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ListControlStringCollectionEditor : StringCollectionEditor
 {
-    public ListControlStringCollectionEditor(Type type) : base(type)
+    public ListControlStringCollectionEditor(Type type)
+        : base(type)
     {
     }
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         // If we're trying to edit the items in an object that has a DataSource set, throw an exception.
-        ListControl control = context.Instance as ListControl;
-        if (control?.DataSource is not null)
+        if (context?.Instance is ListControl control && control.DataSource is not null)
         {
             throw new ArgumentException(SR.DataSourceLocksItems);
         }
