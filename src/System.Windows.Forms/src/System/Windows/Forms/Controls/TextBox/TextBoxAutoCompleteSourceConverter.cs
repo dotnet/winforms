@@ -8,7 +8,6 @@ namespace System.Windows.Forms;
 internal class TextBoxAutoCompleteSourceConverter : EnumConverter
 {
     public TextBoxAutoCompleteSourceConverter(
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
         Type type) : base(type)
     {
     }
