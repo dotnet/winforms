@@ -75,6 +75,7 @@ public abstract class TableLayoutStyle
         _size = size;
     }
 
+    // Workaround for https://github.com/dotnet/runtime/issues/100786
     [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
     internal Type GetTypeWithConstructor() => this.GetType();
 }
