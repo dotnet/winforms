@@ -4241,6 +4241,18 @@ public class MonthCalendarTests
         Assert.Equal(expectedIndex, actualIndex);
     }
 
+    [WinFormsFact]
+    public void SelectionRange_CopyConstructor_CopiesStartAndEndDatesCorrectly()
+    {
+        DateTime startDate = new(2023, 1, 1);
+        DateTime endDate = new(2023, 12, 31);
+        SelectionRange originalRange = new(startDate, endDate);
+        SelectionRange copiedRange = new(originalRange);
+
+        copiedRange.Start.Should().Be(startDate);
+        copiedRange.End.Should().Be(endDate);
+    }
+
     private class SubMonthCalendar : MonthCalendar
     {
         public new bool CanEnableIme => base.CanEnableIme;
