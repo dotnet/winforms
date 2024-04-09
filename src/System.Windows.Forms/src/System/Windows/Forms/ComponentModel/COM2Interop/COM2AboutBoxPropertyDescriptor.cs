@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2PropertyDescriptor which is not trim-compatible.")]
 internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
 {
     private TypeConverter? _converter;
