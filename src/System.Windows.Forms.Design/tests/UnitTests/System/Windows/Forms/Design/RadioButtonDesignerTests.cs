@@ -32,7 +32,11 @@ public sealed class RadioButtonDesignerTests
         using RadioButton radioButton = new();
         radioButtonDesigner.Initialize(radioButton);
 
-        SelectionRules selectionRules = radioButtonDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = radioButtonDesigner.SelectionRules;
+        }
 
         selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }

@@ -20,7 +20,11 @@ public sealed class PictureBoxDesignerTests
         using PictureBox pictureBox = new();
         pictureBoxDesigner.Initialize(pictureBox);
 
-        SelectionRules selectionRules = pictureBoxDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = pictureBoxDesigner.SelectionRules;
+        }
 
         selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }

@@ -22,7 +22,11 @@ public sealed class MaskedTextBoxDesignerTests
         using MaskedTextBox maskedTextBox = new();
         maskedTextBoxDesigner.Initialize(maskedTextBox);
 
-        SelectionRules selectionRules = maskedTextBoxDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = maskedTextBoxDesigner.SelectionRules;
+        }
 
         selectionRules.Should().Be(SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }

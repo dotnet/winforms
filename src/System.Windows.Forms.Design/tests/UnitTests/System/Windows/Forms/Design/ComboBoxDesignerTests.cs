@@ -32,7 +32,11 @@ public sealed class ComboBoxDesignerTests
         using ComboBox comboBox = new();
         comboBoxDesigner.Initialize(comboBox);
 
-        SelectionRules selectionRules = comboBoxDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = comboBoxDesigner.SelectionRules;
+        }
 
         selectionRules.Should().Be(SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }

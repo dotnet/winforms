@@ -30,7 +30,11 @@ public sealed class LabelDesignerTests
         using Label label = new();
         labelDesigner.Initialize(label);
 
-        SelectionRules selectionRules = labelDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = labelDesigner.SelectionRules;
+        }
 
         selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
