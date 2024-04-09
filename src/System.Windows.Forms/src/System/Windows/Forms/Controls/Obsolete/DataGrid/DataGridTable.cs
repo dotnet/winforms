@@ -49,17 +49,13 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void ResetAlternatingBackColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetAlternatingBackColor() => throw new PlatformNotSupportedException();
 
-    protected virtual bool ShouldSerializeAlternatingBackColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeAlternatingBackColor() => throw new PlatformNotSupportedException();
 
-    protected bool ShouldSerializeBackColor()
-        => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeBackColor() => throw new PlatformNotSupportedException();
 
-    protected bool ShouldSerializeForeColor()
-        => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeForeColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -77,8 +73,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    public void ResetBackColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetBackColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -96,8 +91,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    public void ResetForeColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetForeColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -115,11 +109,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeGridLineColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeGridLineColor() => throw new PlatformNotSupportedException();
 
-    public void ResetGridLineColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetGridLineColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -153,11 +145,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeHeaderBackColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeHeaderBackColor() => throw new PlatformNotSupportedException();
 
-    public void ResetHeaderBackColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetHeaderBackColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -175,8 +165,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    public void ResetHeaderFont()
-        => throw new PlatformNotSupportedException();
+    public void ResetHeaderFont() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -194,11 +183,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeHeaderForeColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeHeaderForeColor() => throw new PlatformNotSupportedException();
 
-    public void ResetHeaderForeColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetHeaderForeColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -216,11 +203,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeLinkColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeLinkColor() => throw new PlatformNotSupportedException();
 
-    public void ResetLinkColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetLinkColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -238,11 +223,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeLinkHoverColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeLinkHoverColor() => throw new PlatformNotSupportedException();
 
-    public void ResetLinkHoverColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetLinkHoverColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -276,8 +259,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected bool ShouldSerializePreferredRowHeight()
-        => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializePreferredRowHeight() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -343,11 +325,9 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected bool ShouldSerializeSelectionBackColor()
-        => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeSelectionBackColor() => throw new PlatformNotSupportedException();
 
-    public void ResetSelectionBackColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetSelectionBackColor() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -365,22 +345,17 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual bool ShouldSerializeSelectionForeColor()
-        => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeSelectionForeColor() => throw new PlatformNotSupportedException();
 
-    public void ResetSelectionForeColor()
-        => throw new PlatformNotSupportedException();
+    public void ResetSelectionForeColor() => throw new PlatformNotSupportedException();
 
     public static readonly DataGridTableStyle s_defaultTableStyle = new DataGridTableStyle(true);
 
-    public DataGridTableStyle(bool isDefaultTableStyle)
-        => throw new PlatformNotSupportedException();
+    public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
 
-    public DataGridTableStyle() : this(false)
-        => throw new PlatformNotSupportedException();
+    public DataGridTableStyle() : this(false) => throw new PlatformNotSupportedException();
 
-    public DataGridTableStyle(CurrencyManager listManager) : this()
-        => throw new PlatformNotSupportedException();
+    public DataGridTableStyle(CurrencyManager listManager) : this() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -400,8 +375,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual GridColumnStylesCollection GridColumnStyles
-        => throw new PlatformNotSupportedException();
+    public virtual GridColumnStylesCollection GridColumnStyles => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -427,72 +401,49 @@ public class DataGridTableStyle : Component, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber)
-        => throw new PlatformNotSupportedException();
+    public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) => throw new PlatformNotSupportedException();
 
-    public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort)
-        => throw new PlatformNotSupportedException();
+    public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnReadOnlyChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnReadOnlyChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnMappingNameChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnMappingNameChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnAlternatingBackColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnAlternatingBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnForeColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnBackColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnAllowSortingChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnAllowSortingChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnGridLineColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnGridLineColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnGridLineStyleChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnGridLineStyleChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnHeaderBackColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnHeaderFontChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderFontChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnHeaderForeColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnLinkColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnLinkColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnLinkHoverColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnLinkHoverColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnPreferredRowHeightChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnPreferredRowHeightChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnPreferredColumnWidthChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnPreferredColumnWidthChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnColumnHeadersVisibleChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnColumnHeadersVisibleChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnRowHeadersVisibleChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnRowHeadersVisibleChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnRowHeaderWidthChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnRowHeaderWidthChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnSelectionForeColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnSelectionForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnSelectionBackColorChanged(EventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected virtual void OnSelectionBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void Dispose(bool disposing)
-        => throw new PlatformNotSupportedException();
+    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
 }

@@ -15,11 +15,9 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class ToolBarButton : Component
 {
-    public ToolBarButton()
-        => throw new PlatformNotSupportedException();
+    public ToolBarButton() => throw new PlatformNotSupportedException();
 
-    public ToolBarButton(string text) : base()
-        => throw new PlatformNotSupportedException();
+    public ToolBarButton(string text) : base() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -63,8 +61,7 @@ public class ToolBarButton : Component
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public ToolBar Parent
-        => throw new PlatformNotSupportedException();
+    public ToolBar Parent => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -84,8 +81,7 @@ public class ToolBarButton : Component
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Rectangle Rectangle
-        => throw new PlatformNotSupportedException();
+    public Rectangle Rectangle => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -127,6 +123,5 @@ public class ToolBarButton : Component
         set => throw new PlatformNotSupportedException();
     }
 
-    public override string ToString()
-        => throw new PlatformNotSupportedException();
+    public override string ToString() => throw new PlatformNotSupportedException();
 }

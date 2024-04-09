@@ -14,8 +14,7 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class ToolBarButtonClickEventArgs : EventArgs
 {
-    public ToolBarButtonClickEventArgs(ToolBarButton button)
-        => throw new PlatformNotSupportedException();
+    public ToolBarButtonClickEventArgs(ToolBarButton button) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

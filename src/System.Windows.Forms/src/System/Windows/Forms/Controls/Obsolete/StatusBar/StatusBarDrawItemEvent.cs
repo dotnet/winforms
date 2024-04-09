@@ -20,8 +20,7 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         Rectangle r,
         int itemId,
         DrawItemState itemState,
-        StatusBarPanel panel) : base(g, font, r, itemId, itemState)
-        => throw new PlatformNotSupportedException();
+        StatusBarPanel panel) : base(g, font, r, itemId, itemState) => throw new PlatformNotSupportedException();
 
     public StatusBarDrawItemEventArgs(Graphics g,
         Font font,
@@ -30,11 +29,9 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         DrawItemState itemState,
         StatusBarPanel panel,
         Color foreColor,
-        Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor)
-        => throw new PlatformNotSupportedException();
+        Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public StatusBarPanel Panel
-        => throw new PlatformNotSupportedException();
+    public StatusBarPanel Panel => throw new PlatformNotSupportedException();
 }

@@ -14,14 +14,11 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class MainMenu : Menu
 {
-    public MainMenu() : base(null)
-        => throw new PlatformNotSupportedException();
+    public MainMenu() : base(null) => throw new PlatformNotSupportedException();
 
-    public MainMenu(IContainer container) : this()
-        => throw new PlatformNotSupportedException();
+    public MainMenu(IContainer container) : this() => throw new PlatformNotSupportedException();
 
-    public MainMenu(MenuItem[] items) : base(items)
-        => throw new PlatformNotSupportedException();
+    public MainMenu(MenuItem[] items) : base(items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -39,12 +36,9 @@ public class MainMenu : Menu
         set => throw new PlatformNotSupportedException();
     }
 
-    public virtual MainMenu CloneMenu()
-        => throw new PlatformNotSupportedException();
+    public virtual MainMenu CloneMenu() => throw new PlatformNotSupportedException();
 
-    public Form GetForm()
-        => throw new PlatformNotSupportedException();
+    public Form GetForm() => throw new PlatformNotSupportedException();
 
-    public override string ToString()
-        => throw new PlatformNotSupportedException();
+    public override string ToString() => throw new PlatformNotSupportedException();
 }
