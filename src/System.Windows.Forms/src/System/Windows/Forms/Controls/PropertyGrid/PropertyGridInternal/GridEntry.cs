@@ -333,8 +333,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             // Accessible clients won't see this unless both events are raised.
 
             // Root item is hidden and should not raise events
-            if (OwnerGridView is not null
-                && OwnerGridView.IsAccessibilityObjectCreated
+            if (OwnerGridView is { } ownerGridView
+                && ownerGridView.IsAccessibilityObjectCreated
                 && GridItemType != GridItemType.Root)
             {
                 int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
@@ -470,8 +470,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 _hasFocus = value;
 
                 // Notify accessibility applications that keyboard focus has changed.
-                if (OwnerGridView is not null
-                    && OwnerGridView.IsAccessibilityObjectCreated
+                if (OwnerGridView is { } ownerGridView
+                    && ownerGridView.IsAccessibilityObjectCreated
                     && value)
                 {
                     int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
@@ -1623,7 +1623,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     private void PaintOutlineGlyph(Graphics g, Rectangle r)
     {
-        if (OwnerGridView is not null && OwnerGridView.IsExplorerTreeSupported)
+        if (OwnerGridView is { } owner && owner.IsExplorerTreeSupported)
         {
             // Draw tree-view glyphs with the current ExplorerTreeView UxTheme
 
@@ -1900,16 +1900,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             rect.Width - 4,
             rect.Height);
 
-        if (OwnerGridView is null)
-        {
-            backColor = default;
-        }
-        else
-        {
-            backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
-                ? OwnerGridView.SelectedItemWithFocusBackColor
-                : OwnerGridView.BackColor;
-        }
+        backColor = OwnerGridView is not { } owner
+            ? default
+            : paintFlags.HasFlag(PaintValueFlags.DrawSelected)
+                ? owner.SelectedItemWithFocusBackColor
+                : owner.BackColor;
 
         DRAW_TEXT_FORMAT format = DRAW_TEXT_FORMAT.DT_EDITCONTROL | DRAW_TEXT_FORMAT.DT_EXPANDTABS | DRAW_TEXT_FORMAT.DT_NOCLIP
             | DRAW_TEXT_FORMAT.DT_SINGLELINE | DRAW_TEXT_FORMAT.DT_NOPREFIX;
@@ -2049,7 +2044,13 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         try
         {
-            OwnerGridView!.SelectedGridEntry = this;
+            if (OwnerGridView is not PropertyGridView propertyGridView)
+            {
+                return false;
+            }
+
+            propertyGridView.SelectedGridEntry = this;
+
             return true;
         }
         catch (Exception ex) when (!ex.IsCriticalException())

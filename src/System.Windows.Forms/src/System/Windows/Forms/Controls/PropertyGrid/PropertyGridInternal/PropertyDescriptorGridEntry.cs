@@ -541,9 +541,9 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
         }
 
-        if (OwnerGridView is not null)
+        if (OwnerGridView is { } ownerGridView)
         {
-            OwnerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
+            ownerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
         }
     }
 
