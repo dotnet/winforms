@@ -14,24 +14,17 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class DataGridTextBox : TextBox
 {
-    public DataGridTextBox() : base()
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBox() : base() => throw new PlatformNotSupportedException();
 
-    public void SetDataGrid(DataGrid parentGrid)
-        => throw new PlatformNotSupportedException();
+    public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
 
-    protected override void WndProc(ref Message m)
-        => throw new PlatformNotSupportedException();
+    protected override void WndProc(ref Message m) => throw new PlatformNotSupportedException();
 
-    protected override void OnMouseWheel(MouseEventArgs e)
-    {
-    }
+    protected override void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void OnKeyPress(KeyPressEventArgs e)
-        => throw new PlatformNotSupportedException();
+    protected override void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
 
-    protected internal override bool ProcessKeyMessage(ref Message m)
-        => throw new PlatformNotSupportedException();
+    protected internal override bool ProcessKeyMessage(ref Message m) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

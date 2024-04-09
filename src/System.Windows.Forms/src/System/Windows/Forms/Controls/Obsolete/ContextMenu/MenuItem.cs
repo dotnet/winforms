@@ -15,25 +15,18 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class MenuItem : Menu
 {
-    public MenuItem()
-        : this(MenuMerge.Add, 0, 0, null, null, null, null, null)
-        => throw new PlatformNotSupportedException();
+    public MenuItem() : this(MenuMerge.Add, 0, 0, null, null, null, null, null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text)
-        : this(MenuMerge.Add, 0, 0, text, null, null, null, null)
-        => throw new PlatformNotSupportedException();
+    public MenuItem(string text) : this(MenuMerge.Add, 0, 0, text, null, null, null, null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick)
-        : this(MenuMerge.Add, 0, 0, text, onClick, null, null, null)
-        => throw new PlatformNotSupportedException();
+    public MenuItem(string text, EventHandler onClick) : this(MenuMerge.Add, 0, 0, text, onClick, null, null, null) =>
+        throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick, Shortcut shortcut)
-        : this(MenuMerge.Add, 0, shortcut, text, onClick, null, null, null)
-        => throw new PlatformNotSupportedException();
+    public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(MenuMerge.Add, 0, shortcut, text, onClick, null, null, null) =>
+        throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, MenuItem[] items)
-        : this(MenuMerge.Add, 0, 0, text, null, null, null, items)
-        => throw new PlatformNotSupportedException();
+    public MenuItem(string text, MenuItem[] items) : this(MenuMerge.Add, 0, 0, text, null, null, null, items) =>
+        throw new PlatformNotSupportedException();
 
     public MenuItem(MenuMerge mergeType,
         int mergeOrder,
@@ -42,8 +35,7 @@ public class MenuItem : Menu
         EventHandler onClick,
         EventHandler onPopup,
         EventHandler onSelect,
-        MenuItem[] items) : base(items)
-        => throw new PlatformNotSupportedException();
+        MenuItem[] items) : base(items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -103,8 +95,7 @@ public class MenuItem : Menu
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override bool IsParent
-        => throw new PlatformNotSupportedException();
+    public override bool IsParent => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -174,8 +165,7 @@ public class MenuItem : Menu
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public bool Visible
-        => throw new PlatformNotSupportedException();
+    public bool Visible => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -217,21 +207,15 @@ public class MenuItem : Menu
         remove => throw new PlatformNotSupportedException();
     }
 
-    public virtual MenuItem CloneMenu()
-        => throw new PlatformNotSupportedException();
+    public virtual MenuItem CloneMenu() => throw new PlatformNotSupportedException();
 
-    public virtual MenuItem MergeMenu()
-        => throw new PlatformNotSupportedException();
+    public virtual MenuItem MergeMenu() => throw new PlatformNotSupportedException();
 
-    public void MergeMenu(MenuItem itemSrc)
-        => throw new PlatformNotSupportedException();
+    public void MergeMenu(MenuItem itemSrc) => throw new PlatformNotSupportedException();
 
-    public void PerformClick()
-        => throw new PlatformNotSupportedException();
+    public void PerformClick() => throw new PlatformNotSupportedException();
 
-    public virtual void PerformSelect()
-        => throw new PlatformNotSupportedException();
+    public virtual void PerformSelect() => throw new PlatformNotSupportedException();
 
-    public override string ToString()
-        => throw new PlatformNotSupportedException();
+    public override string ToString() => throw new PlatformNotSupportedException();
 }

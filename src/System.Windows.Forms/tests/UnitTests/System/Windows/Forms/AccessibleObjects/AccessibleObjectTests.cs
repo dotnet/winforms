@@ -2690,14 +2690,10 @@ public partial class AccessibleObjectTests
 
     public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverridden_TestData()
     {
-#pragma warning disable WFDEV017, WFDEV018, WFDEV019, WFDEV020, WFDEV021, WFDEV023, WFDEV024, WFDEV025, WFDEV026, WFDEV027, WFDEV028, WFDEV029, WFDEV030, WFDEV031  // Type or member is obsolete
         var typesToIgnore = new[]
         {
-            typeof(ComboBox.ChildAccessibleObject), typeof(DataGridState.DataGridStateParentRowAccessibleObject), typeof(DataGridRow.DataGridCellAccessibleObject),
-            typeof(DataGridRow.DataGridRowAccessibleObject), typeof(DataGridRelationshipRow.DataGridRelationshipRowAccessibleObject),  typeof(DataGridRelationshipRow.DataGridRelationshipAccessibleObject),
-            typeof(DataGridParentRows.DataGridParentRowsAccessibleObject), typeof(DataGridColumnStyle.DataGridColumnHeaderAccessibleObject),
+            typeof(ComboBox.ChildAccessibleObject),
         };
-#pragma warning restore WFDEV017, WFDEV018, WFDEV019, WFDEV020, WFDEV021, WFDEV023, WFDEV024, WFDEV025, WFDEV026, WFDEV027, WFDEV028, WFDEV029, WFDEV030, WFDEV031 // Type or member is obsolete
         Assembly assembly = typeof(AccessibleObject).Assembly;
         foreach (Type type in assembly.GetTypes())
         {

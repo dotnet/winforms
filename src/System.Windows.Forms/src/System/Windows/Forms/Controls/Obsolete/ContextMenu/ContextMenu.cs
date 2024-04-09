@@ -15,16 +15,13 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class ContextMenu : Menu
 {
-    public ContextMenu() : base(null)
-        => throw new PlatformNotSupportedException();
+    public ContextMenu() : base(null) => throw new PlatformNotSupportedException();
 
-    public ContextMenu(MenuItem[] menuItems) : base(menuItems)
-        => throw new PlatformNotSupportedException();
+    public ContextMenu(MenuItem[] menuItems) : base(menuItems) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Control SourceControl
-        => throw new PlatformNotSupportedException();
+    public Control SourceControl => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -50,9 +47,7 @@ public class ContextMenu : Menu
         set => throw new PlatformNotSupportedException();
     }
 
-    public void Show(Control control, Point pos)
-        => throw new PlatformNotSupportedException();
+    public void Show(Control control, Point pos) => throw new PlatformNotSupportedException();
 
-    public void Show(Control control, Point pos, LeftRightAlignment alignment)
-        => throw new PlatformNotSupportedException();
+    public void Show(Control control, Point pos, LeftRightAlignment alignment) => throw new PlatformNotSupportedException();
 }
