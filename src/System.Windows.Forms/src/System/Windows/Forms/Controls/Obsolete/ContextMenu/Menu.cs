@@ -18,23 +18,19 @@ public abstract class Menu : Component
     public const int FindHandle = 0;
     public const int FindShortcut = 1;
 
-    protected Menu(MenuItem[] items)
-        => throw new PlatformNotSupportedException();
+    protected Menu(MenuItem[] items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public IntPtr Handle
-        => throw new PlatformNotSupportedException();
+    public IntPtr Handle => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual bool IsParent
-        => throw new PlatformNotSupportedException();
+    public virtual bool IsParent => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public MenuItem MdiListItem
-        => throw new PlatformNotSupportedException();
+    public MenuItem MdiListItem => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -46,8 +42,7 @@ public abstract class Menu : Component
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public MenuItemCollection MenuItems
-        => throw new PlatformNotSupportedException();
+    public MenuItemCollection MenuItems => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -57,20 +52,15 @@ public abstract class Menu : Component
         set => throw new PlatformNotSupportedException();
     }
 
-    public MenuItem FindMenuItem(int type, IntPtr value)
-        => throw new PlatformNotSupportedException();
+    public MenuItem FindMenuItem(int type, IntPtr value) => throw new PlatformNotSupportedException();
 
-    public ContextMenu GetContextMenu()
-        => throw new PlatformNotSupportedException();
+    public ContextMenu GetContextMenu() => throw new PlatformNotSupportedException();
 
-    public MainMenu GetMainMenu()
-        => throw new PlatformNotSupportedException();
+    public MainMenu GetMainMenu() => throw new PlatformNotSupportedException();
 
-    public virtual void MergeMenu(Menu menuSrc)
-        => throw new PlatformNotSupportedException();
+    public virtual void MergeMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
 
-    public override string ToString()
-        => throw new PlatformNotSupportedException();
+    public override string ToString() => throw new PlatformNotSupportedException();
 
     [ListBindable(false)]
     [Obsolete(
@@ -80,11 +70,9 @@ public abstract class Menu : Component
         UrlFormat = Obsoletions.SharedUrlFormat)]
     public class MenuItemCollection : IList
     {
-        public MenuItemCollection(Menu owner)
-            => throw new PlatformNotSupportedException();
+        public MenuItemCollection(Menu owner) => throw new PlatformNotSupportedException();
 
-        public virtual MenuItem this[int index]
-            => throw new PlatformNotSupportedException();
+        public virtual MenuItem this[int index] => throw new PlatformNotSupportedException();
 
         object IList.this[int index]
         {
@@ -92,82 +80,56 @@ public abstract class Menu : Component
             set => throw new PlatformNotSupportedException();
         }
 
-        public virtual MenuItem this[string key]
-            => throw new PlatformNotSupportedException();
+        public virtual MenuItem this[string key] => throw new PlatformNotSupportedException();
 
-        public int Count
-            => throw new PlatformNotSupportedException();
+        public int Count => throw new PlatformNotSupportedException();
 
-        object ICollection.SyncRoot
-            => throw new PlatformNotSupportedException();
+        object ICollection.SyncRoot => throw new PlatformNotSupportedException();
 
-        bool ICollection.IsSynchronized
-            => throw new PlatformNotSupportedException();
+        bool ICollection.IsSynchronized => throw new PlatformNotSupportedException();
 
-        bool IList.IsFixedSize
-            => throw new PlatformNotSupportedException();
+        bool IList.IsFixedSize => throw new PlatformNotSupportedException();
 
-        public bool IsReadOnly
-            => throw new PlatformNotSupportedException();
+        public bool IsReadOnly => throw new PlatformNotSupportedException();
 
-        public virtual MenuItem Add(string caption)
-            => throw new PlatformNotSupportedException();
+        public virtual MenuItem Add(string caption) => throw new PlatformNotSupportedException();
 
-        public virtual MenuItem Add(string caption, EventHandler onClick)
-            => throw new PlatformNotSupportedException();
+        public virtual MenuItem Add(string caption, EventHandler onClick) => throw new PlatformNotSupportedException();
 
-        public virtual MenuItem Add(string caption, MenuItem[] items)
-            => throw new PlatformNotSupportedException();
+        public virtual MenuItem Add(string caption, MenuItem[] items) => throw new PlatformNotSupportedException();
 
-        public virtual int Add(object value)
-            => throw new PlatformNotSupportedException();
+        public virtual int Add(object value) => throw new PlatformNotSupportedException();
 
-        public virtual int Add(int index, MenuItem item)
-            => throw new PlatformNotSupportedException();
+        public virtual int Add(int index, MenuItem item) => throw new PlatformNotSupportedException();
 
-        public virtual void AddRange(MenuItem[] items)
-            => throw new PlatformNotSupportedException();
+        public virtual void AddRange(MenuItem[] items) => throw new PlatformNotSupportedException();
 
-        public bool Contains(object value)
-            => throw new PlatformNotSupportedException();
+        public bool Contains(object value) => throw new PlatformNotSupportedException();
 
-        public virtual bool ContainsKey(string key)
-            => throw new PlatformNotSupportedException();
+        public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
-        public MenuItem[] Find(string key, bool searchAllChildren)
-            => throw new PlatformNotSupportedException();
+        public MenuItem[] Find(string key, bool searchAllChildren) => throw new PlatformNotSupportedException();
 
-        public int IndexOf(MenuItem value)
-            => throw new PlatformNotSupportedException();
+        public int IndexOf(MenuItem value) => throw new PlatformNotSupportedException();
 
-        int IList.IndexOf(object value)
-            => throw new PlatformNotSupportedException();
+        int IList.IndexOf(object value) => throw new PlatformNotSupportedException();
 
-        public virtual int IndexOfKey(string key)
-            => throw new PlatformNotSupportedException();
+        public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
-        void IList.Insert(int index, object value)
-            => throw new PlatformNotSupportedException();
+        void IList.Insert(int index, object value) => throw new PlatformNotSupportedException();
 
-        public virtual void Clear()
-            => throw new PlatformNotSupportedException();
+        public virtual void Clear() => throw new PlatformNotSupportedException();
 
-        public void CopyTo(Array array, int index)
-            => throw new PlatformNotSupportedException();
+        public void CopyTo(Array array, int index) => throw new PlatformNotSupportedException();
 
-        public IEnumerator GetEnumerator()
-            => throw new PlatformNotSupportedException();
+        public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
 
-        public virtual void RemoveAt(int index)
-            => throw new PlatformNotSupportedException();
+        public virtual void RemoveAt(int index) => throw new PlatformNotSupportedException();
 
-        public virtual void RemoveByKey(string key)
-            => throw new PlatformNotSupportedException();
+        public virtual void RemoveByKey(string key) => throw new PlatformNotSupportedException();
 
-        public virtual void Remove(MenuItem item)
-            => throw new PlatformNotSupportedException();
+        public virtual void Remove(MenuItem item) => throw new PlatformNotSupportedException();
 
-        void IList.Remove(object value)
-            => throw new PlatformNotSupportedException();
+        void IList.Remove(object value) => throw new PlatformNotSupportedException();
     }
 }

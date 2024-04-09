@@ -31,24 +31,17 @@ public struct DataGridCell : IEquatable<DataGridCell>
         set => throw new PlatformNotSupportedException();
     }
 
-    public DataGridCell(int r, int c)
-         => throw new PlatformNotSupportedException();
+    public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
 
-    public override readonly bool Equals(object obj)
-         => throw new PlatformNotSupportedException();
+    public override readonly bool Equals(object obj) => throw new PlatformNotSupportedException();
 
-    public override readonly int GetHashCode()
-         => throw new PlatformNotSupportedException();
+    public override readonly int GetHashCode() => throw new PlatformNotSupportedException();
 
-    public override readonly string ToString()
-         => throw new PlatformNotSupportedException();
+    public override readonly string ToString() => throw new PlatformNotSupportedException();
 
-    public readonly bool Equals(DataGridCell other)
-         => throw new PlatformNotSupportedException();
+    public readonly bool Equals(DataGridCell other) => throw new PlatformNotSupportedException();
 
-    public static bool operator ==(DataGridCell left, DataGridCell right)
-         => throw new PlatformNotSupportedException();
+    public static bool operator ==(DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
 
-    public static bool operator !=(DataGridCell left, DataGridCell right)
-         => throw new PlatformNotSupportedException();
+    public static bool operator !=(DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
 }

@@ -15,8 +15,7 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class StatusBarPanel : Component, ISupportInitialize
 {
-    public StatusBarPanel()
-        => throw new PlatformNotSupportedException();
+    public StatusBarPanel() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -68,8 +67,7 @@ public class StatusBarPanel : Component, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public StatusBar Parent
-        => throw new PlatformNotSupportedException();
+    public StatusBar Parent => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -111,15 +109,11 @@ public class StatusBarPanel : Component, ISupportInitialize
         set => throw new PlatformNotSupportedException();
     }
 
-    public void BeginInit()
-        => throw new PlatformNotSupportedException();
+    public void BeginInit() => throw new PlatformNotSupportedException();
 
-    protected override void Dispose(bool disposing)
-        => throw new PlatformNotSupportedException();
+    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
 
-    public void EndInit()
-        => throw new PlatformNotSupportedException();
+    public void EndInit() => throw new PlatformNotSupportedException();
 
-    public override string ToString()
-        => throw new PlatformNotSupportedException();
+    public override string ToString() => throw new PlatformNotSupportedException();
 }

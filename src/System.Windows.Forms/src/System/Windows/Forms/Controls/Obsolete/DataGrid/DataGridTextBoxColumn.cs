@@ -16,38 +16,25 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class DataGridTextBoxColumn : DataGridColumnStyle
 {
-    public DataGridTextBoxColumn() : this(null, null)
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBoxColumn() => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop)
-    : this(prop, null, false)
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBoxColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, string format)
-        : this(prop, format, false)
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBoxColumn(PropertyDescriptor prop, string format) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault)
-        : base(prop, isDefault)
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault)
-        : this(prop, null, isDefault)
-        => throw new PlatformNotSupportedException();
+    public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual TextBox TextBox
-        => throw new PlatformNotSupportedException();
+    public virtual TextBox TextBox => throw new PlatformNotSupportedException();
 
-    protected override void SetDataGridInColumn(DataGrid value)
-    {
-    }
+    protected override void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override PropertyDescriptor PropertyDescriptor
-        => throw new PlatformNotSupportedException();
+    public override PropertyDescriptor PropertyDescriptor => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -73,57 +60,38 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
         set => throw new PlatformNotSupportedException();
     }
 
-    protected internal override void ConcedeFocus()
-    {
-    }
+    protected internal override void ConcedeFocus() => throw new PlatformNotSupportedException();
 
-    protected void HideEditBox()
-    {
-    }
+    protected void HideEditBox() => throw new PlatformNotSupportedException();
 
-    protected internal override void UpdateUI(CurrencyManager source, int rowNum, string displayText)
-    {
-    }
+    protected internal override void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
 
-    protected void EndEdit()
-    {
-    }
+    protected void EndEdit() => throw new PlatformNotSupportedException();
 
-    protected internal override Size GetPreferredSize(Graphics g, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
 
-    protected internal override int GetMinimumHeight()
-        => throw new PlatformNotSupportedException();
+    protected internal override int GetMinimumHeight() => throw new PlatformNotSupportedException();
 
-    protected internal override int GetPreferredHeight(Graphics g, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal override int GetPreferredHeight(Graphics g, object value) => throw new PlatformNotSupportedException();
 
-    protected internal override void Abort(int rowNum)
-    {
-    }
+    protected internal override void Abort(int rowNum) => throw new PlatformNotSupportedException();
 
-    protected internal override void EnterNullValue()
-    {
-    }
+    protected internal override void EnterNullValue() => throw new PlatformNotSupportedException();
 
-    protected internal override bool Commit(CurrencyManager dataSource, int rowNum)
-        => throw new PlatformNotSupportedException();
+    protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw new PlatformNotSupportedException();
 
     protected internal override void Edit(CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
         string displayText,
-        bool cellIsVisible)
-    {
-    }
+        bool cellIsVisible) => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g,
         Rectangle bounds,
@@ -131,30 +99,25 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
         int rowNum,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     protected void PaintText(Graphics g,
         Rectangle bounds,
         string text,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     protected void PaintText(Graphics g,
         Rectangle textBounds,
         string text,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected internal override void ReleaseHostedControl()
-        => throw new PlatformNotSupportedException();
+    protected internal override void ReleaseHostedControl() => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g1,
         Graphics g,
         Rectangle bounds,
         CurrencyManager source,
-        int rowNum)
-        => throw new NotImplementedException();
+        int rowNum) => throw new NotImplementedException();
 }

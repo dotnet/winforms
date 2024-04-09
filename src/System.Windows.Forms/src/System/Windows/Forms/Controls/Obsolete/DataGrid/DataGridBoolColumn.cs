@@ -15,15 +15,11 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public class DataGridBoolColumn : DataGridColumnStyle
 {
-    public DataGridBoolColumn() : base()
-        => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn() => throw new PlatformNotSupportedException();
 
-    public DataGridBoolColumn(PropertyDescriptor prop) : base(prop)
-        => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
-    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
-        : base(prop, isDefault)
-        => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -65,44 +61,34 @@ public class DataGridBoolColumn : DataGridColumnStyle
         set => throw new PlatformNotSupportedException();
     }
 
-    protected internal override void ConcedeFocus()
-        => throw new PlatformNotSupportedException();
+    protected internal override void ConcedeFocus() => throw new PlatformNotSupportedException();
 
-    protected internal override object GetColumnValueAtRow(CurrencyManager source, int rowNum)
-        => throw new PlatformNotSupportedException();
+    protected internal override object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
 
-    protected internal override void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal override void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
 
-    protected internal override Size GetPreferredSize(Graphics g, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
 
-    protected internal override int GetMinimumHeight()
-        => throw new PlatformNotSupportedException();
+    protected internal override int GetMinimumHeight() => throw new PlatformNotSupportedException();
 
-    protected internal override int GetPreferredHeight(Graphics g, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal override int GetPreferredHeight(Graphics g, object value) => throw new PlatformNotSupportedException();
 
-    protected internal override void Abort(int rowNum)
-        => throw new PlatformNotSupportedException();
+    protected internal override void Abort(int rowNum) => throw new PlatformNotSupportedException();
 
-    protected internal override bool Commit(CurrencyManager dataSource, int rowNum)
-        => throw new PlatformNotSupportedException();
+    protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw new PlatformNotSupportedException();
 
     protected internal override void Edit(CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
         string displayText,
-        bool cellIsVisible)
-        => throw new PlatformNotSupportedException();
+        bool cellIsVisible) => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g,
         Rectangle bounds,
@@ -110,8 +96,7 @@ public class DataGridBoolColumn : DataGridColumnStyle
         int rowNum,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight)
-        => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -129,13 +114,11 @@ public class DataGridBoolColumn : DataGridColumnStyle
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected internal override void EnterNullValue()
-        => throw new PlatformNotSupportedException();
+    protected internal override void EnterNullValue() => throw new PlatformNotSupportedException();
 
     protected internal override void Paint(Graphics g1,
         Graphics g,
         Rectangle bounds,
         CurrencyManager source,
-        int rowNum)
-        => throw new PlatformNotSupportedException();
+        int rowNum) => throw new PlatformNotSupportedException();
 }
