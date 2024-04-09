@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -7,6 +7,7 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms;
 
 [TypeConverter(typeof(TableLayoutSettings.StyleConverter))]
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
 public abstract class TableLayoutStyle
 {
     private IArrangedElement? _owner;
@@ -73,4 +74,8 @@ public abstract class TableLayoutStyle
         Debug.Assert(size >= 0);
         _size = size;
     }
+
+    // Workaround for https://github.com/dotnet/runtime/issues/100786
+    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+    internal Type GetTypeWithConstructor() => this.GetType();
 }
