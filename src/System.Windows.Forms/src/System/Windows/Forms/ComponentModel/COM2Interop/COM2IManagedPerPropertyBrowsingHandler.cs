@@ -11,6 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// <summary>
 ///  Browsing handler for <see cref="IVSMDPerPropertyBrowsing"/>.
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses reflection to inspect types whose names are not statically known.")]
 internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IVSMDPerPropertyBrowsing>
 {
     public override void RegisterEvents(Com2PropertyDescriptor[]? properties)

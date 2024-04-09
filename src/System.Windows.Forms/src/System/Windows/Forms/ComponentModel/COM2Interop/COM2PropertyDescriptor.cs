@@ -23,6 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   of <see cref="TypeConverter"/>s.
 ///  </para>
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses ComNativeDescriptor which is not trim-compatible.")]
 internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 {
     private EventHandlerList? _events;

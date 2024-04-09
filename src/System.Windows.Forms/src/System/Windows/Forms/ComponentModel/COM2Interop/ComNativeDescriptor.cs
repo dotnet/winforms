@@ -22,8 +22,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   <see cref="TypeDescriptor.ComObjectType"/>.
 ///  </para>
 /// </remarks>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IManagedPerPropertyBrowsingHandler which is not trim-compatible.")]
 internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvider
 {
+    internal const string ComTypeDescriptorsMessage = "COM type descriptors are not trim-compatible.";
+
     private static readonly Attribute[] s_staticAttributes = [BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No];
 
     // Our collection of Object managers (Com2Properties) for native properties
