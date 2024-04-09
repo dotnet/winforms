@@ -14,5 +14,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Friend Function GetUniqueText() As String
             Return Guid.NewGuid().ToString("D")
         End Function
+
     End Module
 End Namespace
