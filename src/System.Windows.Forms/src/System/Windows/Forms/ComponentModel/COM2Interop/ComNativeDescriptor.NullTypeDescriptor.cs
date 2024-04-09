@@ -12,6 +12,7 @@ internal partial class ComNativeDescriptor
     ///  Stub descriptor for when we're passed a null to <see cref="ComNativeDescriptor"/>. This used to be
     ///  contained in <see cref="ComTypeDescriptor"/>.
     /// </summary>
+    [RequiresUnreferencedCode(ComTypeDescriptorsMessage + " Uses ComNativeDescriptor which is not trim-compatible.")]
     private sealed class NullTypeDescriptor : ICustomTypeDescriptor
     {
         AttributeCollection ICustomTypeDescriptor.GetAttributes() => new(s_staticAttributes);

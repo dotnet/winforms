@@ -10,6 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// <summary>
 ///  Browsing handler for <see cref="IPerPropertyBrowsing"/>.
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses COM2PropertyDescriptor which is not trim-compatible.")]
 internal sealed unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IPerPropertyBrowsing>
 {
     public override void RegisterEvents(Com2PropertyDescriptor[]? properties)

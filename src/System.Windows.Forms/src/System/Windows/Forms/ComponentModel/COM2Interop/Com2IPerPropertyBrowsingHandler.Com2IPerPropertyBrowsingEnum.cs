@@ -10,6 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 internal partial class Com2IPerPropertyBrowsingHandler
 {
     // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
+    [RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IPerPropertyBrowsingHandler which is not trim-compatible.")]
     private unsafe class Com2IPerPropertyBrowsingEnum : Com2Enum
     {
         private readonly string?[] _names;
