@@ -1512,7 +1512,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         bool selected,
         bool paintFullLabel)
     {
-        PropertyGridView ownerGrid = OwnerGridView!;
+        if (OwnerGridView is not PropertyGridView ownerGrid)
+        {
+            throw new InvalidOperationException();
+        }
+
         string? label = PropertyLabel;
         int borderWidth = ownerGrid.OutlineIconSize + OutlineIconPadding;
 
@@ -1786,8 +1790,10 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         PaintValueFlags paintFlags,
         string? text = null)
     {
-        PropertyGridView ownerGrid = OwnerGridView!;
-        Debug.Assert(ownerGrid is not null);
+        if (OwnerGridView is not PropertyGridView ownerGrid)
+        {
+            throw new InvalidOperationException();
+        }
 
         Color textColor = ShouldRenderReadOnly ? ownerGrid.GrayTextColor : ownerGrid.TextColor;
         object? value;
