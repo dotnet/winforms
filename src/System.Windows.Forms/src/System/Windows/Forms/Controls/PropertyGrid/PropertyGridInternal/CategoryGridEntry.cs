@@ -97,11 +97,11 @@ internal sealed partial class CategoryGridEntry : GridEntry
     {
         get
         {
-            PropertyGridView gridHost = OwnerGridView!;
+            PropertyGridView? gridHost = OwnerGridView;
 
             // Give an extra pixel for breathing room.
             // Calling base.PropertyDepth to avoid the -1 in our override.
-            return 1 + gridHost.OutlineIconSize + OutlineIconPadding
+            return 1 + (gridHost?.OutlineIconSize ?? 0) + OutlineIconPadding
                 + (base.PropertyDepth * PropertyGridView.DefaultOutlineIndent);
         }
     }
