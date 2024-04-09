@@ -16,14 +16,9 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
-    public DataGridColumnStyle()
-         => throw new PlatformNotSupportedException();
+    public DataGridColumnStyle() => throw new PlatformNotSupportedException();
 
-    public DataGridColumnStyle(PropertyDescriptor prop) : this()
-         => throw new PlatformNotSupportedException();
-
-    internal DataGridColumnStyle(PropertyDescriptor prop, bool isDefault) : this(prop)
-         => throw new PlatformNotSupportedException();
+    public DataGridColumnStyle(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -41,14 +36,11 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText)
-    {
-    }
+    protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public AccessibleObject HeaderAccessibleObject
-        => throw new PlatformNotSupportedException();
+    public AccessibleObject HeaderAccessibleObject => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -66,23 +58,17 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected virtual AccessibleObject CreateHeaderAccessibleObject()
-         => throw new PlatformNotSupportedException();
+    protected virtual AccessibleObject CreateHeaderAccessibleObject() => throw new PlatformNotSupportedException();
 
-    protected virtual void SetDataGrid(DataGrid value)
-        => throw new PlatformNotSupportedException();
+    protected virtual void SetDataGrid(DataGrid value) => throw new PlatformNotSupportedException();
 
-    protected virtual void SetDataGridInColumn(DataGrid value)
-    {
-    }
+    protected virtual void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual DataGridTableStyle DataGridTableStyle
-        => throw new PlatformNotSupportedException();
+    public virtual DataGridTableStyle DataGridTableStyle => throw new PlatformNotSupportedException();
 
-    protected int FontHeight
-        => throw new PlatformNotSupportedException();
+    protected int FontHeight => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -124,8 +110,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         remove => throw new PlatformNotSupportedException();
     }
 
-    public void ResetHeaderText()
-        => throw new PlatformNotSupportedException();
+    public void ResetHeaderText() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -175,13 +160,9 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected void BeginUpdate()
-    {
-    }
+    protected void BeginUpdate() => throw new PlatformNotSupportedException();
 
-    protected void EndUpdate()
-    {
-    }
+    protected void EndUpdate() => throw new PlatformNotSupportedException();
 
     protected internal abstract Size GetPreferredSize(Graphics g, object value);
 
@@ -189,16 +170,11 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
 
     protected internal abstract int GetPreferredHeight(Graphics g, object value);
 
-    protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
-        => throw new PlatformNotSupportedException();
+    protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
 
-    protected virtual void Invalidate()
-    {
-    }
+    protected virtual void Invalidate() => throw new PlatformNotSupportedException();
 
-    protected void CheckValidDataSource(CurrencyManager value)
-    {
-    }
+    protected void CheckValidDataSource(CurrencyManager value) => throw new PlatformNotSupportedException();
 
     protected internal abstract void Abort(int rowNum);
 
@@ -207,15 +183,13 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
     protected internal virtual void Edit(CurrencyManager source,
         int rowNum,
         Rectangle bounds,
-        bool readOnly)
-        => throw new PlatformNotSupportedException();
+        bool readOnly) => throw new PlatformNotSupportedException();
 
     protected internal virtual void Edit(CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
-        string displayText)
-        => throw new PlatformNotSupportedException();
+        string displayText) => throw new PlatformNotSupportedException();
 
     protected internal abstract void Edit(CurrencyManager source,
         int rowNum,
@@ -224,13 +198,9 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         string displayText,
         bool cellIsVisible);
 
-    protected internal virtual void EnterNullValue()
-    {
-    }
+    protected internal virtual void EnterNullValue() => throw new PlatformNotSupportedException();
 
-    protected internal virtual void ConcedeFocus()
-    {
-    }
+    protected internal virtual void ConcedeFocus() => throw new PlatformNotSupportedException();
 
     protected internal abstract void Paint(Graphics g1,
         Graphics g,
@@ -250,67 +220,18 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         int rowNum,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight)
-            => throw new PlatformNotSupportedException();
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
-        => throw new PlatformNotSupportedException();
+    protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
 
-    void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl)
-    {
-    }
+    void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
 
-    protected internal virtual void ReleaseHostedControl()
-    {
-    }
+    protected internal virtual void ReleaseHostedControl() => throw new PlatformNotSupportedException();
 
     protected class CompModSwitches
     {
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TraceSwitch DGEditColumnEditing
-            => throw new PlatformNotSupportedException();
-    }
-
-    [Obsolete(
-        Obsoletions.DataGridColumnHeaderAccessibleObjectMessage,
-        error: false,
-        DiagnosticId = Obsoletions.DataGridColumnHeaderAccessibleObjectDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    internal class DataGridColumnHeaderAccessibleObject : AccessibleObject
-    {
-        public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) : this()
-            => throw new PlatformNotSupportedException();
-
-        public DataGridColumnHeaderAccessibleObject() : base()
-            => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Rectangle Bounds
-            => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override string Name
-            => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected DataGridColumnStyle Owner
-            => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override AccessibleObject Parent
-            => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override AccessibleRole Role
-            => throw new PlatformNotSupportedException();
-
-        public override AccessibleObject Navigate(AccessibleNavigation navdir)
-            => throw new PlatformNotSupportedException();
+        public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
     }
 }
