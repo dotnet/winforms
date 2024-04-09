@@ -8,6 +8,23 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class HostServicesTests
+        Private Shared ReadOnly s_title As String = GetUniqueText()
+        Private Shared ReadOnly s_Control As New Control()
+        Private NotInheritable Class TestVbHost
+            Implements IVbHost
+
+
+            Public Function GetParentWindow() As IWin32Window Implements IVbHost.GetParentWindow
+                Return s_Control
+            End Function
+
+            Public Function GetWindowTitle() As String Implements IVbHost.GetWindowTitle
+                Return s_title
+            End Function
+
+        End Class
+
+
         <WinFormsFact>
         Public Sub InputHandlerTests_Success()
             Dim prompt As String = GetUniqueText()
@@ -18,8 +35,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim parentWindow As IWin32Window = Nothing
             Dim vbHost As IVbHost = HostServices.VBHost
             Dim inputHandler As New InputBoxHandler(prompt, title, defaultResponse, xPos, yPos, parentWindow)
+            Assert.Equal(Nothing, vbHost)
             Assert.Equal(Nothing, inputHandler.Exception)
             Assert.Equal(Nothing, inputHandler.Result)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub VbHostTests_Success()
+            Dim vbHost As IVbHost = New TestVbHost
+            Assert.Equal(s_Control, vbHost.GetParentWindow)
+            Assert.Equal(s_title, vbHost.GetWindowTitle)
         End Sub
 
     End Class
