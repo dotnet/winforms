@@ -12,8 +12,6 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 public sealed class GridTablesFactory
 {
-    private GridTablesFactory() => throw new PlatformNotSupportedException();
-
     public static DataGridTableStyle[] CreateGridTables(DataGridTableStyle gridTable,
         object dataSource,
         string dataMember,
