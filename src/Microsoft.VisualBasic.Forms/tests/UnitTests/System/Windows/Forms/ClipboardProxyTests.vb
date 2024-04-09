@@ -13,10 +13,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     ''' </summary>
     Partial Public Class ClipboardProxyTests
 
-        Private Function GetUniqueText() As String
-            Return Guid.NewGuid().ToString("D")
-        End Function
-
         <WinFormsFact>
         Public Sub Clipboard_ContainsText()
             Dim text As String = GetUniqueText()
