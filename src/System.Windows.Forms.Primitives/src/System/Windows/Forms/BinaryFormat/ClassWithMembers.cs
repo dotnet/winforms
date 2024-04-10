@@ -15,7 +15,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>
 {
-    public Id LibraryId { get; }
+    public override Id LibraryId { get; }
 
     public ClassWithMembers(ClassInfo classInfo, Id libraryId, IReadOnlyList<object> memberValues)
         : base(classInfo, memberValues)

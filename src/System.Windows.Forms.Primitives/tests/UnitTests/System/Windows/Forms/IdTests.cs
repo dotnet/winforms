@@ -6,9 +6,9 @@ namespace System.Windows.Forms.Tests;
 public class IdTests
 {
     [Fact]
-    public void IdSignedAreEquivalent()
+    public void IdSignedNotAreEquivalent()
     {
-        ((Id)1).Should().Be((Id)(-1));
+        ((Id)1).Should().NotBe((Id)(-1));
     }
 
     [Fact]
