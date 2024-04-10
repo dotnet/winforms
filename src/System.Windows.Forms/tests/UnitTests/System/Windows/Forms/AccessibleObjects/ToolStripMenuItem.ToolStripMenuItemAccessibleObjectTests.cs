@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using Xunit.Sdk;
 using static System.Windows.Forms.ToolStripMenuItem;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -22,27 +21,20 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripMenuItemAccessibleObject_Supports_InvokePattern()
     {
-        using MenuStrip menuStrip = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            // This action is temporarily commented due to issue #10244
+            // MessageBox.Show("...");
+            callCount++;
+        };
+
         using ToolStripMenuItem item1 = new();
-        menuStrip.Items.Add(item1);
-        item1.Click += Item1_Click;
-
+        item1.Click += handler;
         Assert.True(item1.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
-        Assert.Throws<TimeoutException>(()=> item1.AccessibilityObject.Invoke());
 
-        //try
-        //{
-        //    item1.AccessibilityObject.Invoke();
-        //}
-        //catch (Exception e)
-        //{
-        //    Assert.True(e is null, $"Expected no exception, but got: {e.Message}");
-        //}
-    }
-
-    private void Item1_Click(object sender, EventArgs e)
-    {
-        MessageBox.Show("...");
+        item1.AccessibilityObject.Invoke();
+        Assert.Equal(1, callCount);
     }
 
     [WinFormsFact]
