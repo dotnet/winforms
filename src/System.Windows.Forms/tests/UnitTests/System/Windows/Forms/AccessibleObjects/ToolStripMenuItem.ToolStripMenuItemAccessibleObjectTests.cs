@@ -3,6 +3,7 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
+using Xunit.Sdk;
 using static System.Windows.Forms.ToolStripMenuItem;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -16,6 +17,32 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         ToolStripMenuItemAccessibleObject accessibleObject = new(toolStripMenuItem);
 
         Assert.Equal(toolStripMenuItem, accessibleObject.Owner);
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItemAccessibleObject_Supports_InvokePattern()
+    {
+        using MenuStrip menuStrip = new();
+        using ToolStripMenuItem item1 = new();
+        menuStrip.Items.Add(item1);
+        item1.Click += Item1_Click;
+
+        Assert.True(item1.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
+        Assert.Throws<TimeoutException>(()=> item1.AccessibilityObject.Invoke());
+
+        //try
+        //{
+        //    item1.AccessibilityObject.Invoke();
+        //}
+        //catch (Exception e)
+        //{
+        //    Assert.True(e is null, $"Expected no exception, but got: {e.Message}");
+        //}
+    }
+
+    private void Item1_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("...");
     }
 
     [WinFormsFact]
