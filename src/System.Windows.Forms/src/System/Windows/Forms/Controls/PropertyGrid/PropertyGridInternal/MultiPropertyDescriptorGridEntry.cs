@@ -107,7 +107,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             RecreateChildren();
             if (Expanded)
             {
-                OwnerGridView.Refresh(false);
+                OwnerGridView?.Refresh(fullRefresh: false);
             }
         }
     }
