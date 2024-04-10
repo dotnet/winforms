@@ -11,6 +11,32 @@ public class PropertyGridExt : PropertyGrid
 {
     private IDesignerHost _host;
     private IComponentChangeService _componentChangeService;
+
+    private IComponentChangeService ComponentChangeService
+    {
+        get
+        {
+            _componentChangeService ??= (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
+            return _componentChangeService;
+        }
+    }
+
+    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+    {
+        MethodInfo methodInfo = typeof(PropertyGrid).GetMethod(nameof(OnComponentChanged), BindingFlags.NonPublic | BindingFlags.Instance);
+        methodInfo.Invoke(this, [sender, e]);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (_componentChangeService is not null)
+        {
+            _componentChangeService.ComponentChanged -= OnComponentChanged;
+        }
+
+        base.Dispose(disposing);
+    }
+
     public IDesignerHost DesignerHost
     {
         get
@@ -19,21 +45,21 @@ public class PropertyGridExt : PropertyGrid
         }
         set
         {
+            _host = value;
             if (value is not null)
             {
-                _componentChangeService ??= (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
-                if (_componentChangeService is not null)
+                if (ComponentChangeService is not null)
                 {
-                    _componentChangeService.ComponentChanged += (sender, e) =>
-                    {
-                        MethodInfo methodInfo = typeof(PropertyGrid).GetMethod("OnComponentChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                        methodInfo.Invoke(this, [sender, e]);
-                    };
+                    ComponentChangeService.ComponentChanged += OnComponentChanged;
                 }
             }
-
-            _host = value;
+            else
+            {
+                if (ComponentChangeService is not null)
+                {
+                    ComponentChangeService.ComponentChanged -= OnComponentChanged;
+                }
+            }
         }
     }
 
