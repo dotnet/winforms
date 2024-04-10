@@ -175,6 +175,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProjectWithInternals
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComDisabled.Tests", "src\System.Windows.Forms\tests\ComDisabledTests\ComDisabled.Tests.csproj", "{55F3174F-C1FE-4C8F-AF71-2512630088F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTestBinaryDeserialization", "src\System.Windows.Forms\tests\IntegrationTests\TrimTestBinaryDeserialization\TrimTestBinaryDeserialization.csproj", "{CFBCC732-C988-4FE7-A21B-98A142365374}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -963,6 +965,22 @@ Global
 		{55F3174F-C1FE-4C8F-AF71-2512630088F8}.Release|x64.Build.0 = Release|Any CPU
 		{55F3174F-C1FE-4C8F-AF71-2512630088F8}.Release|x86.ActiveCfg = Release|Any CPU
 		{55F3174F-C1FE-4C8F-AF71-2512630088F8}.Release|x86.Build.0 = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|arm64.Build.0 = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|x64.Build.0 = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Debug|x86.Build.0 = Debug|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|arm64.ActiveCfg = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|arm64.Build.0 = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|x64.ActiveCfg = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|x64.Build.0 = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|x86.ActiveCfg = Release|Any CPU
+		{CFBCC732-C988-4FE7-A21B-98A142365374}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1025,6 +1043,7 @@ Global
 		{BA61D5A8-29E9-41AA-A3FA-B7F0A7F9A191} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{61376D2A-4AD5-48F4-BF99-2BB630E21945} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{55F3174F-C1FE-4C8F-AF71-2512630088F8} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
+		{CFBCC732-C988-4FE7-A21B-98A142365374} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
