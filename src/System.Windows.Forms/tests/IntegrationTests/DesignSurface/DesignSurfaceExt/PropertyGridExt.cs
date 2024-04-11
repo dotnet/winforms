@@ -45,20 +45,25 @@ public class PropertyGridExt : PropertyGrid
         }
         set
         {
+            if (_host == value)
+            {
+                return;
+            }
+
             _host = value;
+
+            if (ComponentChangeService is null)
+            {
+                return;
+            }
+
             if (value is not null)
             {
-                if (ComponentChangeService is not null)
-                {
-                    ComponentChangeService.ComponentChanged += OnComponentChanged;
-                }
+                ComponentChangeService.ComponentChanged += OnComponentChanged;
             }
             else
             {
-                if (ComponentChangeService is not null)
-                {
-                    ComponentChangeService.ComponentChanged -= OnComponentChanged;
-                }
+                ComponentChangeService.ComponentChanged -= OnComponentChanged;
             }
         }
     }
