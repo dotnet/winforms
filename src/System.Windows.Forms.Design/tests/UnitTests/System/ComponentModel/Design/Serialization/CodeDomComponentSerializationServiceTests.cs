@@ -62,7 +62,7 @@ public class CodeDomComponentSerializationServiceTests
 
     private static void AssertAllNonCodeFieldsArNull(CodeDomComponentSerializationState state)
     {
-        Assert.Null(state.Ctx);
+        Assert.Null(state.Context);
         Assert.Null(state.Events);
         Assert.Null(state.Modifier);
         Assert.Null(state.Properties);
