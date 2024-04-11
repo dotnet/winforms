@@ -69,7 +69,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
     /// </summary>
     protected override GridEntryAccessibleObject GetAccessibilityObject() => new CategoryGridEntryAccessibleObject(this);
 
-    protected override Color BackgroundColor => OwnerGridView.LineColor;
+    protected override Color BackgroundColor => OwnerGridView?.LineColor ?? default;
 
     protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
@@ -97,11 +97,11 @@ internal sealed partial class CategoryGridEntry : GridEntry
     {
         get
         {
-            PropertyGridView gridHost = OwnerGridView;
+            PropertyGridView? gridHost = OwnerGridView;
 
             // Give an extra pixel for breathing room.
             // Calling base.PropertyDepth to avoid the -1 in our override.
-            return 1 + gridHost.OutlineIconSize + OutlineIconPadding
+            return 1 + (gridHost?.OutlineIconSize ?? 0) + OutlineIconPadding
                 + (base.PropertyDepth * PropertyGridView.DefaultOutlineIndent);
         }
     }
@@ -116,7 +116,12 @@ internal sealed partial class CategoryGridEntry : GridEntry
 
     public override string GetTestingInfo() => $"object = ({FullLabel}), Category = ({PropertyLabel})";
 
-    public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public override void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
         base.PaintLabel(g, rect, clipRect, false, true);
 

@@ -11,12 +11,21 @@ namespace System.ComponentModel.Design.Serialization;
 public sealed partial class CodeDomComponentSerializationService
 {
     /// <summary>
-    ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.
-    ///  The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
-    ///  be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
-    ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
-    ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    ///  The <see cref="CodeDomSerializationStore"/> class is an implementation-specific class that stores serialization data
+    ///  for the CodeDom component serialization service.  The service adds state to this serialization store.
+    ///  Once the store is closed it can be serialized or deserialized in memory.
     /// </summary>
+    /// <para>
+    ///   On .NET Framework, once the store is closed it can be saved to a stream.  A serialization store can be deserialized
+    ///   at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
+    ///   cannot be saved to a stream or loaded from a stream.
+    /// </para>
+    /// <para>
+    ///   <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
+    ///   that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
+    ///   <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
+    ///   The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    /// </para>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
         private const string StateKey = "State";
@@ -71,9 +80,9 @@ public sealed partial class CodeDomComponentSerializationService
             }
         }
 
-        /// <summary>
+        /// <devdoc>
         ///  Nested classes within us access this property to get to our collection of resources.
-        /// </summary>
+        /// </devdoc>
         private LocalResourceManager Resources => _resources ??= new LocalResourceManager();
 
         private ObjectData GetOrCreateObjectData(object value)
@@ -114,7 +123,7 @@ public sealed partial class CodeDomComponentSerializationService
         }
 
         /// <summary>
-        ///  The Close method closes this store and prevents any objects  from being serialized into it.  Once closed, the serialization store may be saved.
+        ///  The <see cref="Close()"/> method closes this store and prevents any objects from being added to it.
         /// </summary>
         [MemberNotNull(nameof(_objectState))]
         public override void Close()
@@ -146,7 +155,7 @@ public sealed partial class CodeDomComponentSerializationService
                 _errors = manager.Errors;
             }
 
-            // also serialize out resources if we have any  we force this in order for undo to work correctly
+            // Also serialize out resources if we have any we force this in order for undo to work correctly.
             if (_resources is not null)
             {
                 Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
@@ -262,7 +271,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// </summary>
         internal void DeserializeTo(IServiceProvider provider, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            Deserialize(provider, container, validateRecycledTypes, applyDefaults, null);
+            Deserialize(provider, container, validateRecycledTypes, applyDefaults, objects: null);
         }
 
         /// <summary>
@@ -294,22 +303,18 @@ public sealed partial class CodeDomComponentSerializationService
         }
 
         /// <summary>
-        ///  Loads our state from a stream.
+        ///  The <see cref="Save(Stream)"/> method is not supported on .NET because this class is not binary serializable.
         /// </summary>
-        internal static CodeDomSerializationStore Load(Stream stream)
-        {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-            return (CodeDomSerializationStore)new BinaryFormatter().Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-        }
-
-        /// <summary>
-        ///  The Save method is not supported.
-        /// </summary>
+        /// <exception cref="PlatformNotSupportedException">
+        ///  This method is not supported on .NET.
+        /// </exception>
         public override void Save(Stream stream) => throw new PlatformNotSupportedException();
 
         /// <summary>
-        ///  Implements the save part of ISerializable. Used in unit tests only.
+        ///  On .NET Framework, this method implements the save part of <see cref="ISerializable"/> interface.  On .NET,
+        ///  this interface is implemented only for binary compatibility with the .NET Framework.  Formatter deserialization
+        ///  is disabled .NET by removing the <see cref="SerializableAttribute"/> from this class.
+        ///  This method is used in unit tests only.
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
