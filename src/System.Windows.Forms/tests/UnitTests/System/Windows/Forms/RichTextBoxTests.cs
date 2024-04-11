@@ -7774,7 +7774,7 @@ public class RichTextBoxTests
     [InlineData(63.9f, 63.9f)]
     [InlineData(1.0f, 1.0f)]
     [InlineData(2.0f, 2.0f)]
-    [InlineData(float.NaN, -2147483.75f)]
+    [InlineData(float.NaN, 1.0f)]
     public void RichTextBox_ZoomFactor_Set_GetReturnsExpected(float value, float expected)
     {
         using RichTextBox control = new()

@@ -317,6 +317,7 @@ public partial class MainForm : Form
         if (isurf is not null)
         {
             splitContainer.Panel2.Controls.Remove(propertyGrid);
+            propertyGrid.Dispose();
             propertyGrid = new()
             {
                 DesignerHost = isurf.GetIDesignerHost(),

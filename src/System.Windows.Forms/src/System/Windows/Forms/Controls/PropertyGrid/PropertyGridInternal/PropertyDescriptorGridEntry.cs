@@ -304,14 +304,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             if (PropertyDescriptor.TryGetAttribute(out RefreshPropertiesAttribute? refreshAttribute) &&
                 !refreshAttribute.RefreshProperties.Equals(RefreshProperties.None))
             {
-                OwnerGridView.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
+                OwnerGridView?.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
             }
         }
     }
 
     internal override Point GetLabelToolTipLocation(int mouseX, int mouseY)
     {
-        if (_propertyValueUIItems is not null && _uiItemRects is not null)
+        if (_propertyValueUIItems is not null
+            && _uiItemRects is not null
+            && OwnerGridView is not null)
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -479,7 +481,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         if (_propertyValueUIItems is not null
             && _uiItemRects is not null
             && count == 2
-            && ((button & MouseButtons.Left) == MouseButtons.Left))
+            && ((button & MouseButtons.Left) == MouseButtons.Left)
+            && OwnerGridView is not null)
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -494,7 +497,12 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         return base.OnMouseClick(x, y, count, button);
     }
 
-    public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public override void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
         base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
@@ -533,7 +541,10 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
         }
 
-        OwnerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
+        if (OwnerGridView is { } ownerGridView)
+        {
+            ownerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
+        }
     }
 
     private object? SetPropertyValue(

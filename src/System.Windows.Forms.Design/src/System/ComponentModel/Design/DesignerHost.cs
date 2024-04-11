@@ -1240,8 +1240,10 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     [DynamicallyAccessedMembers(GetAllMembers)]
     MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr) => typeof(IDesignerHost).GetMember(name, bindingAttr);
 
+    [DynamicallyAccessedMembers(GetAllMembers)]
     MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr) => typeof(IDesignerHost).GetMembers(bindingAttr);
 
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
     object? IReflect.InvokeMember(
         string name,
         BindingFlags invokeAttr,

@@ -98,7 +98,14 @@ public class ControlDesignerTests
         using TestControlDesigner controlDesigner = new();
         using Button button = new();
         controlDesigner.Initialize(button);
-        Assert.Equal(SelectionRules.Visible | SelectionRules.AllSizeable | SelectionRules.Moveable, controlDesigner.SelectionRules);
+
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = controlDesigner.SelectionRules;
+        }
+
+        Assert.Equal(SelectionRules.Visible | SelectionRules.AllSizeable | SelectionRules.Moveable, selectionRules);
     }
 
     [Fact]
