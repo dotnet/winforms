@@ -28,7 +28,7 @@ internal static class TypeConverterHelper
             return false;
         }
 
-        TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
+        TypeConverter converter = TypeDescriptor.GetConverterFromKnownType(typeof(T));
         for (int i = 0; i < output.Length; i++)
         {
             // Note: ConvertFromString will raise exception if value cannot be converted.

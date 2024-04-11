@@ -86,20 +86,20 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // _itemList
         //
-        resources.ApplyResources(_itemList, "itemList");
+        resources.ApplyResources<ListBox>(_itemList, "itemList", null);
         _itemList.FormattingEnabled = true;
         _itemList.Name = "itemList";
         //
         // _okButton
         //
-        resources.ApplyResources(_okButton, "okButton");
+        resources.ApplyResources<Button>(_okButton, "okButton", null);
         _okButton.DialogResult = DialogResult.OK;
         _okButton.Margin = new Padding(0, 0, 3, 0);
         _okButton.Name = "okButton";
         //
         // _cancelButton
         //
-        resources.ApplyResources(_cancelButton, "cancelButton");
+        resources.ApplyResources<Button>(_cancelButton, "cancelButton", null);
         _cancelButton.DialogResult = DialogResult.Cancel;
         _cancelButton.Margin = new Padding(3, 0, 0, 0);
         _cancelButton.Name = "cancelButton";
@@ -118,7 +118,7 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // MdiWindowDialog
         //
-        resources.ApplyResources(this, "$this");
+        resources.ApplyResources<MdiWindowDialog>(this, "$this", null);
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(_okCancelTableLayoutPanel);
         Controls.Add(_itemList);
