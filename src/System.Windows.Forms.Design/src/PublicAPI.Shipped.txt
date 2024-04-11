@@ -16,12 +16,12 @@
 ~override System.Windows.Forms.Design.ComponentTray.OnMouseMove(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnPaint(System.Windows.Forms.PaintEventArgs pe) -> void
-~override System.Windows.Forms.Design.ControlDesigner.AssociatedComponents.get -> System.Collections.ICollection
-~override System.Windows.Forms.Design.ControlDesigner.InheritanceAttribute.get -> System.ComponentModel.InheritanceAttribute
+override System.Windows.Forms.Design.ControlDesigner.AssociatedComponents.get -> System.Collections.ICollection!
+override System.Windows.Forms.Design.ControlDesigner.InheritanceAttribute.get -> System.ComponentModel.InheritanceAttribute?
 ~override System.Windows.Forms.Design.ControlDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.InitializeExistingComponent(System.Collections.IDictionary defaultValues) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.InitializeNewComponent(System.Collections.IDictionary defaultValues) -> void
-~override System.Windows.Forms.Design.ControlDesigner.ParentComponent.get -> System.ComponentModel.IComponent
+override System.Windows.Forms.Design.ControlDesigner.ParentComponent.get -> System.ComponentModel.IComponent?
 ~override System.Windows.Forms.Design.ControlDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~override System.Windows.Forms.Design.DocumentDesigner.GetGlyphs(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.GlyphCollection
 ~override System.Windows.Forms.Design.DocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
@@ -97,10 +97,10 @@ System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.
 ~System.Windows.Forms.Design.ComponentTray.IsTrayComponent(System.ComponentModel.IComponent comp) -> bool
 ~System.Windows.Forms.Design.ComponentTray.SetLocation(System.ComponentModel.IComponent receiver, System.Drawing.Point location) -> void
 ~System.Windows.Forms.Design.ComponentTray.SetTrayLocation(System.ComponentModel.IComponent receiver, System.Drawing.Point location) -> void
-~System.Windows.Forms.Design.ControlDesigner.accessibilityObj -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.Design.ControlDesigner.BehaviorService.get -> System.Windows.Forms.Design.Behavior.BehaviorService
-~System.Windows.Forms.Design.ControlDesigner.DisplayError(System.Exception e) -> void
-~System.Windows.Forms.Design.ControlDesigner.EnableDesignMode(System.Windows.Forms.Control child, string name) -> bool
+System.Windows.Forms.Design.ControlDesigner.accessibilityObj -> System.Windows.Forms.AccessibleObject?
+System.Windows.Forms.Design.ControlDesigner.BehaviorService.get -> System.Windows.Forms.Design.Behavior.BehaviorService?
+System.Windows.Forms.Design.ControlDesigner.DisplayError(System.Exception! e) -> void
+System.Windows.Forms.Design.ControlDesigner.EnableDesignMode(System.Windows.Forms.Control! child, string! name) -> bool
 ~System.Windows.Forms.Design.ControlDesigner.HookChildControls(System.Windows.Forms.Control firstChild) -> void
 ~System.Windows.Forms.Design.ControlDesigner.UnhookChildControls(System.Windows.Forms.Control firstChild) -> void
 ~System.Windows.Forms.Design.ParentControlDesigner.AddPaddingSnapLines(ref System.Collections.ArrayList snapLines) -> void
@@ -115,12 +115,12 @@ System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.CanDisplayComponent(System.ComponentModel.IComponent component) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.RemoveComponent(System.ComponentModel.IComponent component) -> void
-~virtual System.Windows.Forms.Design.ControlDesigner.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.Design.ControlDesigner.CanBeParentedTo(System.ComponentModel.Design.IDesigner parentDesigner) -> bool
-~virtual System.Windows.Forms.Design.ControlDesigner.Control.get -> System.Windows.Forms.Control
-~virtual System.Windows.Forms.Design.ControlDesigner.GetControlGlyph(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.ControlBodyGlyph
+virtual System.Windows.Forms.Design.ControlDesigner.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.Design.ControlDesigner.CanBeParentedTo(System.ComponentModel.Design.IDesigner! parentDesigner) -> bool
+virtual System.Windows.Forms.Design.ControlDesigner.Control.get -> System.Windows.Forms.Control!
+virtual System.Windows.Forms.Design.ControlDesigner.GetControlGlyph(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.ControlBodyGlyph!
 ~virtual System.Windows.Forms.Design.ControlDesigner.GetGlyphs(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.GlyphCollection
-~virtual System.Windows.Forms.Design.ControlDesigner.InternalControlDesigner(int internalControlIndex) -> System.Windows.Forms.Design.ControlDesigner
+virtual System.Windows.Forms.Design.ControlDesigner.InternalControlDesigner(int internalControlIndex) -> System.Windows.Forms.Design.ControlDesigner?
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnDragComplete(System.Windows.Forms.DragEventArgs de) -> void
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -128,7 +128,7 @@ System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnDragOver(System.Windows.Forms.DragEventArgs de) -> void
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs e) -> void
 ~virtual System.Windows.Forms.Design.ControlDesigner.OnPaintAdornments(System.Windows.Forms.PaintEventArgs pe) -> void
-~virtual System.Windows.Forms.Design.ControlDesigner.SnapLines.get -> System.Collections.IList
+virtual System.Windows.Forms.Design.ControlDesigner.SnapLines.get -> System.Collections.IList!
 ~virtual System.Windows.Forms.Design.DocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.DocumentDesigner.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.CanAddComponent(System.ComponentModel.IComponent component) -> bool

@@ -45,7 +45,7 @@ public partial class ControlDesigner
             // We want these messages to go through the designer's WndProc method, and we want people to be able
             // to do default processing with the designer's DefWndProc.  So, we stuff the old window target into
             // the designer's target and then call their WndProc.
-            IDesignerTarget designerTarget = _designer.DesignerTarget;
+            IDesignerTarget? designerTarget = _designer.DesignerTarget;
             _designer.DesignerTarget = this;
 
             try
@@ -61,7 +61,7 @@ public partial class ControlDesigner
                 // If the designer disposed us, then we should follow suit.
                 if (_designer.DesignerTarget is null)
                 {
-                    designerTarget.Dispose();
+                    designerTarget?.Dispose();
                 }
                 else
                 {

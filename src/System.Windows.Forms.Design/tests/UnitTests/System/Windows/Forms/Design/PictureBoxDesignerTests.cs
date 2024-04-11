@@ -14,15 +14,19 @@ public sealed class PictureBoxDesignerTests
     }
 
     [Fact]
-    public void SelectionRules_WithDefaultPictureBox_ShouldThrowNullReferenceException()
+    public void SelectionRules_WithDefaultPictureBox_ShouldReturnExpectedValue()
     {
         using PictureBoxDesigner pictureBoxDesigner = new();
         using PictureBox pictureBox = new();
         pictureBoxDesigner.Initialize(pictureBox);
 
-        Action action = () => _ = pictureBoxDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = pictureBoxDesigner.SelectionRules;
+        }
 
-        action.Should().ThrowExactly<NullReferenceException>();
+        selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
 
     [Fact]

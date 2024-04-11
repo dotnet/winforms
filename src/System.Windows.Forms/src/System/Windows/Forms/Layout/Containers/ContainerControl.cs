@@ -251,6 +251,11 @@ public class ContainerControl : ScrollableControl, IContainerControl
     {
         get
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             BindingContext? bm = base.BindingContext;
             if (bm is null)
             {
