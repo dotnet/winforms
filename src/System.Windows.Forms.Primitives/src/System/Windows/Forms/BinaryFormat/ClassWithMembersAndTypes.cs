@@ -16,7 +16,7 @@ namespace System.Windows.Forms.BinaryFormat;
 internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithMembersAndTypes>
 {
     public MemberTypeInfo MemberTypeInfo { get; }
-    public Id LibraryId { get; }
+    public override Id LibraryId { get; }
 
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
