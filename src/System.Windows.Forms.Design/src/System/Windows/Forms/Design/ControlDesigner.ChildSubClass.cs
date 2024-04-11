@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 public partial class ControlDesigner
@@ -25,9 +23,9 @@ public partial class ControlDesigner
 
         void IDesignerTarget.DefWndProc(ref Message m) => DefWndProc(ref m);
 
-        public void Dispose() => _designer = null;
+        public void Dispose() => _designer = null!;
 
-        private void OnDesignerDisposing(object sender, EventArgs e) => Dispose();
+        private void OnDesignerDisposing(object? sender, EventArgs e) => Dispose();
 
         protected override void WndProc(ref Message m)
         {
@@ -50,7 +48,7 @@ public partial class ControlDesigner
             // We want these messages to go through the designer's WndProc method, and we want people to be able
             // to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers
             // window target and call their WndProc.
-            IDesignerTarget designerTarget = _designer.DesignerTarget;
+            IDesignerTarget? designerTarget = _designer.DesignerTarget;
             _designer.DesignerTarget = this;
             Debug.Assert(m.HWnd == Handle, "Message handle differs from target handle");
 
