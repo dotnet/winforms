@@ -14,14 +14,14 @@ namespace System.Windows.Forms.BinaryFormat;
 ///  can be coalesced into an <see cref="NullRecord.ObjectNullMultiple"/> or <see cref="NullRecord.ObjectNullMultiple256"/>
 ///  record.
 /// </devdoc>
-internal abstract class ArrayRecord : Record, IEnumerable
+internal abstract class ArrayRecord : ObjectRecord, IEnumerable
 {
     public ArrayInfo ArrayInfo { get; }
 
     /// <summary>
     ///  Identifier for the array.
     /// </summary>
-    public Id ObjectId => ArrayInfo.ObjectId;
+    public override Id ObjectId => ArrayInfo.ObjectId;
 
     /// <summary>
     ///  Length of the array.
