@@ -453,11 +453,29 @@ internal abstract class Record : IRecord
         BinaryReader reader,
         RecordMap recordMap,
         BinaryType type,
-        object? typeInfo) => type switch
+        object? typeInfo)
+    {
+        if (type == BinaryType.Primitive)
         {
-            BinaryType.Primitive => ReadPrimitiveType(reader, (PrimitiveType)typeInfo!),
-            BinaryType.String
-                or BinaryType.Object
+            return ReadPrimitiveType(reader, (PrimitiveType)typeInfo!);
+        }
+
+        if (type == BinaryType.String)
+        {
+            return ReadBinaryFormatRecord(reader, recordMap);
+        }
+
+        // BinaryLibrary records can be dumped in front of any member reference.
+        object record;
+        while ((record = ReadReference()) is BinaryLibrary)
+        {
+        }
+
+        return record;
+
+        object ReadReference() => type switch
+        {
+            BinaryType.Object
                 or BinaryType.StringArray
                 or BinaryType.PrimitiveArray
                 or BinaryType.Class
@@ -465,6 +483,7 @@ internal abstract class Record : IRecord
                 or BinaryType.ObjectArray => ReadBinaryFormatRecord(reader, recordMap),
             _ => throw new SerializationException("Invalid binary type."),
         };
+    }
 
     /// <summary>
     ///  Writes <paramref name="memberValues"/> as specified by the <paramref name="memberTypeInfo"/>
