@@ -398,6 +398,8 @@ public partial class ControlDesigner : ComponentDesigner
     protected void BaseWndProc(ref Message m)
         => m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
+    internal override bool CanBeAssociatedWith(IDesigner parentDesigner) => CanBeParentedTo(parentDesigner);
+
     /// <summary>
     ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
     ///  control for this designer can be parented into the given ParentControlDesigner's designer.
