@@ -54,7 +54,9 @@ internal sealed class BinaryArray : ArrayRecord<object>, IRecord<BinaryArray>
             arrayObjects.Add(ReadValue(reader, recordMap, type, typeInfo));
         }
 
-        return new(rank, arrayType, new ArrayInfo(objectId, length), memberTypeInfo, arrayObjects);
+        BinaryArray record = new(rank, arrayType, new ArrayInfo(objectId, length), memberTypeInfo, arrayObjects);
+        recordMap[objectId] = record;
+        return record;
     }
 
     public override void Write(BinaryWriter writer)

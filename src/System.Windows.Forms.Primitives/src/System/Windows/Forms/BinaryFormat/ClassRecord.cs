@@ -14,13 +14,15 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>.
 ///  </para>
 /// </remarks>
-internal abstract class ClassRecord : Record
+internal abstract class ClassRecord : ObjectRecord
 {
     internal ClassInfo ClassInfo { get; }
     public IReadOnlyList<object> MemberValues { get; }
 
     public string Name => ClassInfo.Name;
-    public virtual Id ObjectId => ClassInfo.ObjectId;
+    public override Id ObjectId => ClassInfo.ObjectId;
+    public virtual Id LibraryId => Id.Null;
+
     public IReadOnlyList<string> MemberNames => ClassInfo.MemberNames;
 
     public object this[string memberName]
