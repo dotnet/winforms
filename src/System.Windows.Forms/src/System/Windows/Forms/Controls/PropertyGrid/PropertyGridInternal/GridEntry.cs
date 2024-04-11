@@ -125,10 +125,22 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
     ///  background in a different color. The base implementation returns null.
     /// </summary>
-    protected virtual Color BackgroundColor => OwnerGridView.BackColor;
+    protected virtual Color BackgroundColor => OwnerGridView?.BackColor ?? default;
 
     protected virtual Color LabelTextColor
-        => ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : OwnerGridView.TextColor;
+    {
+        get
+        {
+            if (OwnerGridView is null)
+            {
+                return default;
+            }
+
+            return ShouldRenderReadOnly
+                ? OwnerGridView.GrayTextColor
+                : OwnerGridView.TextColor;
+        }
+    }
 
     /// <summary>
     ///  The set of attributes that will be used for browse filtering.
@@ -277,7 +289,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     public override bool Expanded
     {
         get => InternalExpanded;
-        set => OwnerGridView.SetExpand(this, value);
+        set => OwnerGridView?.SetExpand(this, value);
     }
 
     internal virtual bool ForceReadOnly => (_flags & Flags.ForceReadOnly) != 0;
@@ -321,7 +333,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             // Accessible clients won't see this unless both events are raised.
 
             // Root item is hidden and should not raise events
-            if (OwnerGridView.IsAccessibilityObjectCreated && GridItemType != GridItemType.Root)
+            if (OwnerGridView is { } ownerGridView
+                && ownerGridView.IsAccessibilityObjectCreated
+                && GridItemType != GridItemType.Root)
             {
                 int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                 if (id >= 0)
@@ -456,7 +470,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 _hasFocus = value;
 
                 // Notify accessibility applications that keyboard focus has changed.
-                if (OwnerGridView.IsAccessibilityObjectCreated && value)
+                if (OwnerGridView is { } ownerGridView
+                    && ownerGridView.IsAccessibilityObjectCreated
+                    && value)
                 {
                     int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                     if (id >= 0)
@@ -508,16 +524,17 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return new GridItemCollection(Children);
         }
     }
-#nullable disable
+
     /// <summary>
     ///  The <see cref="PropertyGridView"/> that this <see cref="GridEntry"/> belongs to.
     /// </summary>
-    internal virtual PropertyGridView OwnerGridView
+    [DisallowNull]
+    internal virtual PropertyGridView? OwnerGridView
     {
         get => _parent?.OwnerGridView;
         set => throw new NotSupportedException();
     }
-#nullable enable
+
     public override GridItemType GridItemType => GridItemType.Property;
 
     /// <summary>
@@ -601,7 +618,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         get
         {
-            int borderWidth = OwnerGridView.OutlineIconSize + OutlineIconPadding;
+            int borderWidth = (OwnerGridView?.OutlineIconSize ?? 0) + OutlineIconPadding;
             return ((_propertyDepth + 1) * borderWidth) + 1;
         }
     }
@@ -631,7 +648,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         get
         {
-            if (!_outlineRect.IsEmpty)
+            if (!_outlineRect.IsEmpty || OwnerGridView is null)
             {
                 return _outlineRect;
             }
@@ -1062,7 +1079,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 gridView.CommitValue(this, value);
             }
 
-            if (InternalExpanded)
+            if (InternalExpanded && OwnerGridView is not null)
             {
                 // If the edited property is expanded to show sub-properties, then we want to
                 // preserve the expanded states of it and all of its descendants. RecreateChildren()
@@ -1461,7 +1478,17 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     protected bool GetFlagSet(Flags flags) => (flags & EntryFlags) != 0;
 
-    protected Font GetFont(bool boldFont) => boldFont ? OwnerGridView.GetBoldFont() : OwnerGridView.GetBaseFont();
+    protected Font GetFont(bool boldFont)
+    {
+        if (OwnerGridView is null)
+        {
+            return Control.DefaultFont;
+        }
+
+        return boldFont
+            ? OwnerGridView.GetBoldFont()
+            : OwnerGridView.GetBaseFont();
+    }
 
     /// <summary>
     ///  Retrieves the requested service.  This may return null if the requested service is not available.
@@ -1478,9 +1505,18 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///   <see cref="GridEntry"/> needs to be painted.
     ///  </para>
     /// </remarks>
-    public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public virtual void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
-        PropertyGridView ownerGrid = OwnerGridView;
+        if (OwnerGridView is not PropertyGridView ownerGrid)
+        {
+            throw new InvalidOperationException();
+        }
+
         string? label = PropertyLabel;
         int borderWidth = ownerGrid.OutlineIconSize + OutlineIconPadding;
 
@@ -1591,7 +1627,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     private void PaintOutlineGlyph(Graphics g, Rectangle r)
     {
-        if (OwnerGridView.IsExplorerTreeSupported)
+        if (OwnerGridView is { } owner && owner.IsExplorerTreeSupported)
         {
             // Draw tree-view glyphs with the current ExplorerTreeView UxTheme
 
@@ -1699,7 +1735,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
             bool expanded = InternalExpanded;
 
-            Color penColor = OwnerGridView.TextColor;
+            Color penColor = OwnerGridView?.TextColor ?? default;
 
             if (ColorInversionNeededInHighContrast)
             {
@@ -1754,10 +1790,12 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         PaintValueFlags paintFlags,
         string? text = null)
     {
-        PropertyGridView ownerGrid = OwnerGridView;
-        Debug.Assert(ownerGrid is not null);
+        if (OwnerGridView is not PropertyGridView ownerGrid)
+        {
+            throw new InvalidOperationException();
+        }
 
-        Color textColor = ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : ownerGrid.TextColor;
+        Color textColor = ShouldRenderReadOnly ? ownerGrid.GrayTextColor : ownerGrid.TextColor;
         object? value;
 
         if (text is null)
@@ -1868,9 +1906,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             rect.Width - 4,
             rect.Height);
 
-        backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
-            ? OwnerGridView.SelectedItemWithFocusBackColor
-            : OwnerGridView.BackColor;
+        backColor = OwnerGridView is not { } owner
+            ? default
+            : paintFlags.HasFlag(PaintValueFlags.DrawSelected)
+                ? owner.SelectedItemWithFocusBackColor
+                : owner.BackColor;
 
         DRAW_TEXT_FORMAT format = DRAW_TEXT_FORMAT.DT_EDITCONTROL | DRAW_TEXT_FORMAT.DT_EXPANDTABS | DRAW_TEXT_FORMAT.DT_NOCLIP
             | DRAW_TEXT_FORMAT.DT_SINGLELINE | DRAW_TEXT_FORMAT.DT_NOPREFIX;
@@ -1940,7 +1980,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     public virtual bool OnMouseClick(int x, int y, int count, MouseButtons button)
     {
         // Where are we at?
-        PropertyGridView gridHost = OwnerGridView;
+        PropertyGridView gridHost = OwnerGridView!;
         Debug.Assert(gridHost is not null, "No prop entry host!");
 
         // Make sure it's the left button.
@@ -2010,7 +2050,13 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         try
         {
-            OwnerGridView.SelectedGridEntry = this;
+            if (OwnerGridView is not PropertyGridView propertyGridView)
+            {
+                return false;
+            }
+
+            propertyGridView.SelectedGridEntry = this;
+
             return true;
         }
         catch (Exception ex) when (!ex.IsCriticalException())

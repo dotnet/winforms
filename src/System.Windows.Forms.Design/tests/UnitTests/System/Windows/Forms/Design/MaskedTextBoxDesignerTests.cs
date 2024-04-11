@@ -16,15 +16,19 @@ public sealed class MaskedTextBoxDesignerTests
     }
 
     [Fact]
-    public void SelectionRules_WithDefaultMaskedTextBox_ShouldThrowNullReferenceException()
+    public void SelectionRules_WithDefaultMaskedTextBox_ShouldReturnExpectedValue()
     {
         using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
         using MaskedTextBox maskedTextBox = new();
         maskedTextBoxDesigner.Initialize(maskedTextBox);
 
-        Action action = () => _ = maskedTextBoxDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = maskedTextBoxDesigner.SelectionRules;
+        }
 
-        action.Should().ThrowExactly<NullReferenceException>();
+        selectionRules.Should().Be(SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
 
     [Fact]

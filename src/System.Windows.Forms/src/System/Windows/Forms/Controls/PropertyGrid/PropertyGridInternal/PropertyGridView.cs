@@ -1084,7 +1084,13 @@ internal sealed partial class PropertyGridView :
         return length > _location.X + LabelWidth;
     }
 
-    private void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool longLabelrequest, Rectangle clipRect)
+    private void DrawLabel(
+        Graphics g,
+        int row,
+        Rectangle rect,
+        bool selected,
+        bool longLabelrequest,
+        Rectangle clipRect)
     {
         GridEntry? gridEntry = GetGridEntryFromRow(row);
 
@@ -1118,7 +1124,12 @@ internal sealed partial class PropertyGridView :
                     fLongLabel = IsEntryLabelLong(g, gridEntry);
                 }
 
-                gridEntry.PaintLabel(g, rect, clipRect, selected, fLongLabel);
+                gridEntry.PaintLabel(
+                    g,
+                    rect,
+                    clipRect,
+                    selected,
+                    fLongLabel);
             }
             catch (Exception ex)
             {

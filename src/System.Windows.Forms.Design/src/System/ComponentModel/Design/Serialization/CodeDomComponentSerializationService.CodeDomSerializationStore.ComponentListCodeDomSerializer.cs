@@ -72,7 +72,7 @@ public sealed partial class CodeDomComponentSerializationService
                     if (objectState.TryGetValue(name, out CodeDomComponentSerializationState? state))
                     {
                         PopulateCompleteStatements(state.Code, name, completeStatements, _expressions);
-                        PopulateCompleteStatements(state.Ctx, name, completeStatements, _expressions);
+                        PopulateCompleteStatements(state.Context, name, completeStatements, _expressions);
                     }
                 }
 

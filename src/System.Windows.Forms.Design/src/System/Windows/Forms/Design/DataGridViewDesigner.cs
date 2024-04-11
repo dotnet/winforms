@@ -150,7 +150,7 @@ internal class DataGridViewDesigner : ControlDesigner
     ///   Gets the inheritance attribute for the data grid view.
     ///  </para>
     /// </devdoc>
-    protected override InheritanceAttribute InheritanceAttribute
+    protected override InheritanceAttribute? InheritanceAttribute
     {
         get
         {
