@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -29,13 +30,13 @@ public class DataObject_BitmapBinderTests
 #pragma warning restore
 
             formatter.Serialize(stream, value);
-            Assert.True(stream.Length > 0);
+            stream.Length.Should().BeGreaterThan(0);
         }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(AllowedSerializationTypes))]
-    public void BitmapBinder_BindToType_AllowedSerializationTypes(object value)
+    public unsafe void BitmapBinder_BindToType_AllowedSerializationTypes(object value)
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         using (value as IDisposable)
@@ -46,7 +47,7 @@ public class DataObject_BitmapBinderTests
             BinaryFormatter formatter = new(); // CodeQL [SM04191] This is a test. Safe because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore
             formatter.Serialize(stream, value);
-            Assert.True(stream.Length > 0);
+            stream.Length.Should().BeGreaterThan(0);
             stream.Position = 0;
 
             formatter = new()
@@ -56,11 +57,28 @@ public class DataObject_BitmapBinderTests
 
             // cs/dangerous-binary-deserialization
             object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder. 
-            Assert.NotNull(deserialized);
+            deserialized.Should().NotBeNull();
 
-            if (value is not Bitmap)
+            if (value is not Bitmap bitmap)
             {
-                Assert.Equal(value, deserialized);
+                deserialized.Should().BeEquivalentTo(value);
+            }
+            else
+            {
+                Bitmap deserializedBitmap = deserialized.Should().BeOfType<Bitmap>().Which;
+                BitmapData originalData = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                BitmapData deserializedData = deserializedBitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                try
+                {
+                    ReadOnlySpan<byte> originalBytes = new((byte*)originalData.Scan0, originalData.Stride * originalData.Height);
+                    ReadOnlySpan<byte> deserializedBytes = new((byte*)deserializedData.Scan0, deserializedData.Stride * deserializedData.Height);
+                    deserializedBytes.SequenceEqual(originalBytes).Should().BeTrue();
+                }
+                finally
+                {
+                    bitmap.UnlockBits(originalData);
+                    deserializedBitmap.UnlockBits(deserializedData);
+                }
             }
         }
     }
@@ -85,7 +103,8 @@ public class DataObject_BitmapBinderTests
         };
 #pragma warning restore SYSLIB0011
 
-        Assert.Throws<SerializationException>(() => formatter.Serialize(stream, value));
+        Action action = () => formatter.Serialize(stream, value);
+        action.Should().Throw<SerializationException>();
     }
 
     [WinFormsTheory]
@@ -99,7 +118,7 @@ public class DataObject_BitmapBinderTests
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
         formatter.Serialize(stream, value);
-        Assert.True(stream.Length > 0);
+        stream.Length.Should().BeGreaterThan(0);
         stream.Position = 0;
 
         formatter = new()
@@ -107,7 +126,8 @@ public class DataObject_BitmapBinderTests
             Binder = s_serializationBinder
         };
 
-        Assert.Throws<SerializationException>(() => formatter.Deserialize(stream));
+        Action action = () => formatter.Deserialize(stream);
+        action.Should().Throw<SerializationException>();
     }
 
     public static TheoryData<object> DisallowedSerializationTypes => new()
