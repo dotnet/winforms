@@ -12785,11 +12785,34 @@ public unsafe partial class Control :
                         // SPI_SETICONTITLELOGFONT. Waiting for SPI_SETICONTITLELOGFONT has some sort of timing issue
                         // where layout doesn't always update correctly.
                         //
-                        // Historically we reset the font on WM_SYSCOLORCHANGE, which does come through before any
+                        // Historically we reset the font (s_defaultFont) on WM_SYSCOLORCHANGE, which does come through before any
                         // of the WM_SETTINGCHANGE messages. SPI_SETNONCLIENTMETRICS seems more correct.
+                        //
+                        // We don't want reset font if scaling not actually changed: https://github.com/dotnet/winforms/issues/11037
+                        // Most (if not all) of these problems was solved with moving this code to SPI_SETNONCLIENTMETRICS!
+                        // s_defaultFont = Application.DefaultFont ?? SystemFonts.MessageBoxFont;
+                        // So we need to check both variants - manually set font (Application.DefaultFont is not null) and auto system font
 
-                        s_defaultFont = null;
-                        Application.ScaleDefaultFont();
+                        if (Application.DefaultFont is null) // auto system font
+                        {
+                            if (s_defaultFont is not null) // we need to check only if s_defaultFont already set
+                            {
+                                Font font = SystemFonts.MessageBoxFont!;
+                                if (!s_defaultFont.Equals(font)) // the font has changed
+                                {
+                                    s_defaultFont = font;
+                                }
+                                else
+                                {
+                                    font.Dispose();
+                                }
+                            }
+                        }
+                        else // manually set font
+                        {
+                            Application.ScaleDefaultFont(); // will update Application.s_defaultFont or Application.s_defaultFontScaled only if needed
+                            s_defaultFont = Application.DefaultFont; // Application.s_defaultFontScaled ?? Application.s_defaultFont
+                        }
                     }
                 }
 
