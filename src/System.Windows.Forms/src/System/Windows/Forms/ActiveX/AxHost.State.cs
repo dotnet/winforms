@@ -14,7 +14,7 @@ public abstract partial class AxHost
 {
     /// <summary>
     ///  The class which encapsulates the persisted state of the underlying activeX control.
-    ///  An instance of this class my be obtained either by calling <see cref="OcxState"/> on an
+    ///  An instance of this class may be obtained either by calling <see cref="OcxState"/> on an
     ///  AxHost object, or by reading in from a stream.
     /// </summary>
     [TypeConverter(typeof(TypeConverter))]
@@ -25,8 +25,12 @@ public abstract partial class AxHost
         private int _length;
         private byte[]? _buffer;
         private MemoryStream? _memoryStream;
+
+        [NonSerialized]
         private AgileComPointer<IStorage>? _storage;
+        [NonSerialized]
         private AgileComPointer<ILockBytes>? _lockBytes;
+
         private readonly PropertyBagStream? _propertyBag;
         private const string PropertyBagSerializationName = "PropertyBagBinary";
         private const string DataSerializationName = "Data";
