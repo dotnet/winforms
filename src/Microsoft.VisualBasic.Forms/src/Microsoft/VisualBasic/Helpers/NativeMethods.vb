@@ -143,5 +143,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
     End Class
-
 End Namespace
