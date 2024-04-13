@@ -22,8 +22,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim prompt As String = GetUniqueText()
             Dim title As String = GetUniqueText()
             Dim defaultResponse As String = GetUniqueText()
-            Dim xPos As Integer = GetUniqueInteger(positiveOnly:=True)
-            Dim yPos As Integer = GetUniqueInteger(positiveOnly:=True)
+            Dim xPos As Integer = -1
+            Dim yPos As Integer = -1
             Dim parentWindow As IWin32Window = Nothing
             Dim vbHost As IVbHost = HostServices.VBHost
             Dim inputHandler As New InputBoxHandler(prompt, title, defaultResponse, xPos, yPos, parentWindow)
