@@ -31,6 +31,8 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
     private uint _bestBytesInRes;
     private bool? _isBestImagePng;
     private Size _iconSize = Size.Empty;
+
+    [NonSerialized]
     private HICON _handle;
     private readonly bool _ownHandle = true;
 
