@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic
 
     ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
     ' Do not change this API without also updating that dependent module.
-    Partial Friend Module _Interaction
+    Friend Module _Interaction
 
         Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
             '  if no window with name (full or truncated) or task id, return an error
