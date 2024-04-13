@@ -148,5 +148,4 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
     End Class
-
 End Namespace

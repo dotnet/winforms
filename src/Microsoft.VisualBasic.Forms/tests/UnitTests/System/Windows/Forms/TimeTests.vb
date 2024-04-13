@@ -39,5 +39,4 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
     End Class
-
 End Namespace
