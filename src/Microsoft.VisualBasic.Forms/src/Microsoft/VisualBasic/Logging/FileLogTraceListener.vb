@@ -401,9 +401,9 @@ Namespace Microsoft.VisualBasic.Logging
                 HandleDateChange()
 
                 ' Check resources
-                Dim NewEntrySize As Long = Encoding.GetByteCount(message)
+                Dim newEntrySize As Long = Encoding.GetByteCount(message)
 
-                If ResourcesAvailable(NewEntrySize) Then
+                If ResourcesAvailable(newEntrySize) Then
                     ListenerStream.Write(message)
                     If AutoFlush Then
                         ListenerStream.Flush()
@@ -427,9 +427,9 @@ Namespace Microsoft.VisualBasic.Logging
                 HandleDateChange()
 
                 ' Check resources
-                Dim NewEntrySize As Long = Encoding.GetByteCount(message & vbCrLf)
+                Dim newEntrySize As Long = Encoding.GetByteCount(message & vbCrLf)
 
-                If ResourcesAvailable(NewEntrySize) Then
+                If ResourcesAvailable(newEntrySize) Then
                     ListenerStream.WriteLine(message)
                     If AutoFlush Then
                         ListenerStream.Flush()
@@ -685,7 +685,7 @@ Namespace Microsoft.VisualBasic.Logging
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
-            Dim BaseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+            Dim baseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
@@ -746,7 +746,7 @@ Namespace Microsoft.VisualBasic.Logging
             End While
             'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
             'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
-            Throw GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, BaseStreamName)
+            Throw GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
         End Function
 
         ''' <summary>
@@ -849,16 +849,16 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <returns>The total amount, in bytes, of free disk space available to the current user</returns>
         ''' <remarks>Throws an exception if API fails</remarks>
         Private Function GetFreeDiskSpace() As Long
-            Dim PathName As String = Path.GetPathRoot(Path.GetFullPath(FullLogFileName))
+            Dim pathName As String = Path.GetPathRoot(Path.GetFullPath(FullLogFileName))
 
             'Initialize FreeUserSpace so we can determine if its value is changed by the API call
-            Dim FreeUserSpace As Long = -1
-            Dim TotalUserSpace As Long
-            Dim TotalFreeSpace As Long
+            Dim freeUserSpace As Long = -1
+            Dim totalUserSpace As Long
+            Dim totalFreeSpace As Long
 
-            If UnsafeNativeMethods.GetDiskFreeSpaceEx(PathName, FreeUserSpace, TotalUserSpace, TotalFreeSpace) Then
-                If FreeUserSpace > -1 Then
-                    Return FreeUserSpace
+            If UnsafeNativeMethods.GetDiskFreeSpaceEx(pathName, freeUserSpace, totalUserSpace, totalFreeSpace) Then
+                If freeUserSpace > -1 Then
+                    Return freeUserSpace
                 End If
             End If
 
@@ -872,21 +872,21 @@ Namespace Microsoft.VisualBasic.Logging
         Private Function GetFileEncoding(fileName As String) As Encoding
 
             If File.Exists(fileName) Then
-                Dim Reader As StreamReader = Nothing
+                Dim reader As StreamReader = Nothing
                 Try
 
                     'Attempt to determine the encoding of the file. The call to Reader.ReadLine
                     'will change the current encoding of Reader to that of the file.
-                    Reader = New StreamReader(fileName, Encoding, True)
+                    reader = New StreamReader(fileName, Encoding, True)
 
                     'Ignore 0 length file
-                    If Reader.BaseStream.Length > 0 Then
-                        Reader.ReadLine()
+                    If reader.BaseStream.Length > 0 Then
+                        reader.ReadLine()
 
-                        Return Reader.CurrentEncoding
+                        Return reader.CurrentEncoding
                     End If
                 Finally
-                    Reader?.Close()
+                    reader?.Close()
                 End Try
             End If
 

@@ -217,9 +217,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="traceEventValue"></param>
         ''' <returns>The Id</returns>
         Private Shared Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
-            Dim Id As Integer = 0
-            s_idHash.TryGetValue(traceEventValue, Id)
-            Return Id
+            Dim id As Integer = 0
+            s_idHash.TryGetValue(traceEventValue, id)
+            Return id
         End Function
 
         ' The underlying TraceSource for the log

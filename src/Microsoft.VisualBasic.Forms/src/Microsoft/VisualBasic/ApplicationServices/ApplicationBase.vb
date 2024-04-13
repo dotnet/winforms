@@ -26,14 +26,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Function GetEnvironmentVariable(name As String) As String
 
             ' Framework returns Null if not found.
-            Dim VariableValue As String = Environment.GetEnvironmentVariable(name)
+            Dim variableValue As String = Environment.GetEnvironmentVariable(name)
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
-            If VariableValue Is Nothing Then
+            If variableValue Is Nothing Then
                 Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
             End If
 
-            Return VariableValue
+            Return variableValue
         End Function
 
         ''' <summary>
@@ -59,8 +59,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Info() As AssemblyInfo
             Get
                 If _info Is Nothing Then
-                    Dim Assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
-                    _info = New AssemblyInfo(Assembly)
+                    Dim assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+                    _info = New AssemblyInfo(assembly)
                 End If
                 Return _info
             End Get

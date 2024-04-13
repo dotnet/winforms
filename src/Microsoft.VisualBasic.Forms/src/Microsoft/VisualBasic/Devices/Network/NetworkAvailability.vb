@@ -102,11 +102,11 @@ Namespace Microsoft.VisualBasic.Devices
 
         'Listens to the AddressChanged event which will come on the same thread that this class was created on (AsyncEventManager is responsible for getting the event here)
         Private Sub NetworkAvailabilityChangedHandler(state As Object)
-            Dim Connected As Boolean = IsAvailable
+            Dim connected As Boolean = IsAvailable
             ' Fire an event only if the connected state has changed
-            If _connected <> Connected Then
-                _connected = Connected
-                RaiseEvent NetworkAvailabilityChanged(Me, New NetworkAvailableEventArgs(Connected))
+            If _connected <> connected Then
+                _connected = connected
+                RaiseEvent NetworkAvailabilityChanged(Me, New NetworkAvailableEventArgs(connected))
             End If
         End Sub
 

@@ -37,12 +37,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Description() As String
             Get
                 If _description Is Nothing Then
-                    Dim Attribute As AssemblyDescriptionAttribute =
+                    Dim attribute As AssemblyDescriptionAttribute =
                         CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
-                    If Attribute Is Nothing Then
+                    If attribute Is Nothing Then
                         _description = ""
                     Else
-                        _description = Attribute.Description
+                        _description = attribute.Description
                     End If
                 End If
                 Return _description
@@ -57,12 +57,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property CompanyName() As String
             Get
                 If _companyName Is Nothing Then
-                    Dim Attribute As AssemblyCompanyAttribute =
+                    Dim attribute As AssemblyCompanyAttribute =
                         CType(GetAttribute(GetType(AssemblyCompanyAttribute)), AssemblyCompanyAttribute)
-                    If Attribute Is Nothing Then
+                    If attribute Is Nothing Then
                         _companyName = ""
                     Else
-                        _companyName = Attribute.Company
+                        _companyName = attribute.Company
                     End If
                 End If
                 Return _companyName
@@ -77,12 +77,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Title() As String
             Get
                 If _title Is Nothing Then
-                    Dim Attribute As AssemblyTitleAttribute =
+                    Dim attribute As AssemblyTitleAttribute =
                         CType(GetAttribute(GetType(AssemblyTitleAttribute)), AssemblyTitleAttribute)
-                    If Attribute Is Nothing Then
+                    If attribute Is Nothing Then
                         _title = ""
                     Else
-                        _title = Attribute.Title
+                        _title = attribute.Title
                     End If
                 End If
                 Return _title
@@ -97,11 +97,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Copyright() As String
             Get
                 If _copyright Is Nothing Then
-                    Dim Attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
-                    If Attribute Is Nothing Then
+                    Dim attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+                    If attribute Is Nothing Then
                         _copyright = ""
                     Else
-                        _copyright = Attribute.Copyright
+                        _copyright = attribute.Copyright
                     End If
                 End If
                 Return _copyright
@@ -116,11 +116,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Trademark() As String
             Get
                 If _trademark Is Nothing Then
-                    Dim Attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
-                    If Attribute Is Nothing Then
+                    Dim attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
+                    If attribute Is Nothing Then
                         _trademark = ""
                     Else
-                        _trademark = Attribute.Trademark
+                        _trademark = attribute.Trademark
                     End If
                 End If
                 Return _trademark
@@ -135,11 +135,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property ProductName() As String
             Get
                 If _productName Is Nothing Then
-                    Dim Attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
-                    If Attribute Is Nothing Then
+                    Dim attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
+                    If attribute Is Nothing Then
                         _productName = ""
                     Else
-                        _productName = Attribute.Product
+                        _productName = attribute.Product
                     End If
                 End If
                 Return _productName
@@ -183,11 +183,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <exception cref="AppDomainUnloadedException">attempt on an unloaded application domain.</exception>
         Public ReadOnly Property LoadedAssemblies() As ReadOnlyCollection(Of Assembly)
             Get
-                Dim Result As New Collection(Of Assembly)
-                For Each Assembly As Assembly In AppDomain.CurrentDomain.GetAssemblies()
-                    Result.Add(Assembly)
+                Dim result As New Collection(Of Assembly)
+                For Each assembly As Assembly In AppDomain.CurrentDomain.GetAssemblies()
+                    result.Add(assembly)
                 Next
-                Return New ReadOnlyCollection(Of Assembly)(Result)
+                Return New ReadOnlyCollection(Of Assembly)(result)
             End Get
         End Property
 
@@ -223,12 +223,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Debug.Assert(_assembly IsNot Nothing, "Null m_Assembly")
 
-            Dim Attributes() As Object = _assembly.GetCustomAttributes(AttributeType, inherit:=True)
+            Dim attributes() As Object = _assembly.GetCustomAttributes(AttributeType, inherit:=True)
 
-            If Attributes.Length = 0 Then
+            If attributes.Length = 0 Then
                 Return Nothing
             Else
-                Return Attributes(0)
+                Return attributes(0)
             End If
         End Function
 

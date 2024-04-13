@@ -328,10 +328,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Note: Must pass the calling assembly from here so we can get the running app.
                 ' Otherwise, can break single instance.
-                Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
+                Dim applicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
                 Dim pipeServer As NamedPipeServerStream = Nothing
 
-                If TryCreatePipeServer(ApplicationInstanceID, pipeServer) Then
+                If TryCreatePipeServer(applicationInstanceID, pipeServer) Then
 
                     ' --- This is the first instance of a single-instance application to run.
                     ' This is the instance that subsequent instances will attach to.
@@ -349,7 +349,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(applicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -955,7 +955,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Private Sub DoApplicationModel()
 
-            Dim EventArgs As New StartupEventArgs(CommandLineArgs)
+            Dim eventArgs As New StartupEventArgs(CommandLineArgs)
 
             ' Only do the try/catch if we aren't running under the debugger.
             ' If we do try/catch under the debugger the debugger never gets
@@ -967,7 +967,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' need to be mirrored in the ELSE debugger attached clause below.
                 Try
                     If OnInitialize(CommandLineArgs) Then
-                        If OnStartup(EventArgs) Then
+                        If OnStartup(eventArgs) Then
                             OnRun()
                             OnShutdown()
                         End If
@@ -998,7 +998,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' We also don't hook up the Application.ThreadException event because WinForms ignores it
                 ' when we are running under the debugger.
                 If OnInitialize(CommandLineArgs) Then
-                    If OnStartup(EventArgs) Then
+                    If OnStartup(eventArgs) Then
                         OnRun()
                         OnShutdown()
                     End If

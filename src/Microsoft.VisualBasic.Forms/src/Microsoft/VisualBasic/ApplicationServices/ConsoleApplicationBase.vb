@@ -34,11 +34,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Get
                 If _commandLineArgs Is Nothing Then
                     'Get rid of Arg(0) which is the path of the executing program.  Main(args() as string) doesn't report the name of the app and neither will we
-                    Dim EnvArgs As String() = Environment.GetCommandLineArgs
-                    If EnvArgs.GetLength(0) >= 2 Then '1 element means no args, just the executing program.  >= 2 means executing program + one or more command line arguments
-                        Dim NewArgs(EnvArgs.GetLength(0) - 2) As String 'dimming z(0) gives a z() of 1 element.
-                        Array.Copy(EnvArgs, 1, NewArgs, 0, EnvArgs.GetLength(0) - 1) 'copy everything but the 0th element (the path of the executing program)
-                        _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(NewArgs)
+                    Dim envArgs As String() = Environment.GetCommandLineArgs
+                    If envArgs.GetLength(0) >= 2 Then '1 element means no args, just the executing program.  >= 2 means executing program + one or more command line arguments
+                        Dim newArgs(envArgs.GetLength(0) - 2) As String 'dimming z(0) gives a z() of 1 element.
+                        Array.Copy(envArgs, 1, newArgs, 0, envArgs.GetLength(0) - 1) 'copy everything but the 0th element (the path of the executing program)
+                        _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(newArgs)
                     Else
                         _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(Array.Empty(Of String)())  'provide the empty set
                     End If

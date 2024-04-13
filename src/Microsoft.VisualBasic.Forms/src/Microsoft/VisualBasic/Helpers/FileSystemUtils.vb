@@ -19,28 +19,28 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
         '''  Use DirectoryInfo.GetFiles and GetDirectories (which call FindFirstFile) so that we always have permission.
         '''</remarks>
-        Private Shared Function GetLongPath(FullPath As String) As String
-            Debug.Assert(Not String.IsNullOrEmpty(FullPath) AndAlso IO.Path.IsPathRooted(FullPath), "Must be full path")
+        Private Shared Function GetLongPath(fullPath As String) As String
+            Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso IO.Path.IsPathRooted(fullPath), "Must be full path")
             Try
                 ' If root path, return itself. UNC path do not recognize 8.3 format in root path, so this is fine.
-                If IsRoot(FullPath) Then
-                    Return FullPath
+                If IsRoot(fullPath) Then
+                    Return fullPath
                 End If
 
                 ' DirectoryInfo.GetFiles and GetDirectories call FindFirstFile which resolves 8.3 path.
                 ' Get the DirectoryInfo (user must have code permission or access permission).
-                Dim DInfo As New IO.DirectoryInfo(FileIO.FileSystem.GetParentPath(FullPath))
+                Dim dInfo As New IO.DirectoryInfo(FileIO.FileSystem.GetParentPath(fullPath))
 
-                If IO.File.Exists(FullPath) Then
-                    Debug.Assert(DInfo.GetFiles(IO.Path.GetFileName(FullPath)).Length = 1, "Must found exactly 1")
-                    Return DInfo.GetFiles(IO.Path.GetFileName(FullPath))(0).FullName
-                ElseIf IO.Directory.Exists(FullPath) Then
-                    Debug.Assert(DInfo.GetDirectories(IO.Path.GetFileName(FullPath)).Length = 1,
+                If IO.File.Exists(fullPath) Then
+                    Debug.Assert(dInfo.GetFiles(IO.Path.GetFileName(fullPath)).Length = 1, "Must found exactly 1")
+                    Return dInfo.GetFiles(IO.Path.GetFileName(fullPath))(0).FullName
+                ElseIf IO.Directory.Exists(fullPath) Then
+                    Debug.Assert(dInfo.GetDirectories(IO.Path.GetFileName(fullPath)).Length = 1,
                                  "Must found exactly 1")
-                    Return DInfo.GetDirectories(IO.Path.GetFileName(FullPath))(0).FullName
+                    Return dInfo.GetDirectories(IO.Path.GetFileName(fullPath))(0).FullName
                 Else
                     ' Path does not exist, cannot resolve.
-                    Return FullPath
+                    Return fullPath
                 End If
             Catch ex As Exception
                 ' Ignore these type of exceptions and return FullPath. These type of exceptions should either be caught by calling functions
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                         TypeOf ex Is IO.PathTooLongException OrElse
                         TypeOf ex Is NotSupportedException), "These exceptions should be caught above")
 
-                    Return FullPath
+                    Return fullPath
                 Else
                     Throw
                 End If

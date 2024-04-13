@@ -198,61 +198,61 @@ Namespace Microsoft.VisualBasic.Devices
             Private ReadOnly _instanceBeingWatched As ComputerInfo
 
             Public Sub New(RealClass As ComputerInfo)
-                    _instanceBeingWatched = RealClass
-                End Sub
+                _instanceBeingWatched = RealClass
+            End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property AvailablePhysicalMemory() As UInt64
-                    Get
-                        Return _instanceBeingWatched.AvailablePhysicalMemory
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property AvailablePhysicalMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.AvailablePhysicalMemory
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property AvailableVirtualMemory() As UInt64
-                    Get
-                        Return _instanceBeingWatched.AvailableVirtualMemory
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property AvailableVirtualMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.AvailableVirtualMemory
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
-                    Get
-                        Return _instanceBeingWatched.InstalledUICulture
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
+                Get
+                    Return _instanceBeingWatched.InstalledUICulture
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property OSPlatform() As String
-                    Get
-                        Return _instanceBeingWatched.OSPlatform
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property OSPlatform() As String
+                Get
+                    Return _instanceBeingWatched.OSPlatform
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property OSVersion() As String
-                    Get
-                        Return _instanceBeingWatched.OSVersion
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property OSVersion() As String
+                Get
+                    Return _instanceBeingWatched.OSVersion
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property TotalPhysicalMemory() As UInt64
-                    Get
-                        Return _instanceBeingWatched.TotalPhysicalMemory
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalPhysicalMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalPhysicalMemory
+                End Get
+            End Property
 
-                <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-                Public ReadOnly Property TotalVirtualMemory() As UInt64
-                    Get
-                        Return _instanceBeingWatched.TotalVirtualMemory
-                    End Get
-                End Property
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalVirtualMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalVirtualMemory
+                End Get
+            End Property
 
 #Enable Warning IDE0049 ' Simplify Names
-            End Class
         End Class
+    End Class
 End Namespace

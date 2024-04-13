@@ -229,7 +229,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         'Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
             LabelInfo = New Label
             ProgressBarWork = New ProgressBar
             ButtonCloseDialog = New Button

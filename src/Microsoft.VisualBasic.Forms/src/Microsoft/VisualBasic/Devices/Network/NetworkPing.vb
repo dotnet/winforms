@@ -71,9 +71,9 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw ExUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
             End If
 
-            Dim PingMaker As New NetInfoAlias.Ping
-            Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
-            If Reply.Status = NetInfoAlias.IPStatus.Success Then
+            Dim pingMaker As New NetInfoAlias.Ping
+            Dim reply As NetInfoAlias.PingReply = pingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
+            If reply.Status = NetInfoAlias.IPStatus.Success Then
                 Return True
             End If
             Return False
