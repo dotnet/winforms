@@ -53,9 +53,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Sub()
                     ' Start the listener to begin listening for requests.
                     Dim response As HttpListenerResponse = Nothing
+
                     Try
                         ' Note: GetContext blocks while waiting for a request.
                         Dim context As HttpListenerContext = listener.GetContext()
+                        ' Create the response.
                         response = context.Response
                         Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
