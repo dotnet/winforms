@@ -150,5 +150,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
     End Class
-
 End Namespace

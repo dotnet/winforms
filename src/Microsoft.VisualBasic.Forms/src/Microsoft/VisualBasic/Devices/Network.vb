@@ -816,5 +816,4 @@ Namespace Microsoft.VisualBasic.Devices
         ' Flag used to indicate whether or not we should use passive mode when ftp downloading
         Private _useNonPassiveFtp As Boolean
     End Class
-
 End Namespace

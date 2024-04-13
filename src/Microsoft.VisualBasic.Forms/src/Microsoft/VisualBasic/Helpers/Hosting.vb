@@ -27,7 +27,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Property
 
     End Class
-
 End Namespace
-
-

@@ -236,5 +236,4 @@ Namespace Microsoft.VisualBasic.Logging
         Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appconfig
 
     End Class
-
 End Namespace

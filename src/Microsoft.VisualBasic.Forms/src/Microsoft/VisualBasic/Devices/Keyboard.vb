@@ -113,5 +113,4 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
     End Class
-
 End Namespace
