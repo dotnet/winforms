@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _control.CreateControl()
 
                 Dim invoker As Action = AddressOf FaultingMethod
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub() _control.Invoke(invoker))
 
                 '    Expecting something Like the following.
@@ -41,7 +41,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _control.CreateControl()
 
                 Dim invoker As New MethodInvoker(AddressOf FaultingMethod)
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub() _control.Invoke(invoker))
 
                 '    Expecting something Like the following.
@@ -69,9 +69,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _control.CreateControl()
 
                 Dim invoker As Func(Of Integer, Integer) = AddressOf FaultingFunc
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub()
-                        Dim result = _control.Invoke(Function() invoker(19))
+                        Dim result As Integer = _control.Invoke(Function() invoker(19))
                     End Sub)
 
                 '    Expecting something Like the following.

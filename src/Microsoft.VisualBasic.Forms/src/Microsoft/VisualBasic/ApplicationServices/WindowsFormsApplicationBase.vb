@@ -1,14 +1,11 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO.Pipes
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
@@ -288,7 +285,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
             ' before the Network object gets created because the network object will be doing a
-            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have 
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have
             ' to have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
@@ -338,7 +335,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' --- This is the first instance of a single-instance application to run.
                     ' This is the instance that subsequent instances will attach to.
                     Using pipeServer
-                        Dim tokenSource = New CancellationTokenSource()
+                        Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
                         WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
@@ -348,10 +345,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Else
 
                     ' --- We are launching a subsequent instance.
-                    Dim tokenSource = New CancellationTokenSource()
+                    Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -416,7 +413,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <remarks>
         ''' This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
         ''' calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly 
+        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
         ''' as it is currently suggested to be used in the docs.
         ''' First step for that is to make it hidden in IntelliSense.
         ''' </remarks>
@@ -485,7 +482,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            ' Rationale for how we process the default values and how we let the user modify 
+            ' Rationale for how we process the default values and how we let the user modify
             ' them on demand via the ApplyApplicationDefaults event.
             ' ===========================================================================================
             ' a) Users used to be able to set MinimumSplashScreenDisplayTime _only_ by overriding OnInitialize
@@ -500,7 +497,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
+            Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode) With
             {
@@ -522,7 +519,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
             ' Then, it's applying what we got back as HighDpiMode.
-            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
+            Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
@@ -825,8 +822,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Displays the splash screen.  We get called here from a different thread than what the 
-        ''' main form is starting up on.  This allows us to process events for the Splash screen so 
+        ''' Displays the splash screen.  We get called here from a different thread than what the
+        ''' main form is starting up on.  This allows us to process events for the Splash screen so
         ''' it doesn't freeze up while the main form is getting it together.
         ''' </summary>
         Private Sub DisplaySplash()
@@ -876,7 +873,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RemoveHandler MainForm.Load, AddressOf MainFormLoadingDone
 
             ' Now, we don't want to eat up a complete Processor Core just for waiting on the main form,
-            ' since this is eating up a LOT of enegery and workload, espacially on Notebooks and tablets.
+            ' since this is eating up a LOT of energy and workload, especially on Notebooks and tablets.
             If _splashScreenCompletionSource IsNot Nothing Then
 
                 _formLoadWaiter = New AutoResetEvent(False)
@@ -908,7 +905,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
 
-            Dim invoked = False
+            Dim invoked As Boolean = False
 
             Try
                 Dim handleNextInstance As New Action(
