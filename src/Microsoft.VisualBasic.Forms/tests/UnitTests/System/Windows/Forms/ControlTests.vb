@@ -101,6 +101,4 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
     End Class
-
 End Namespace
-

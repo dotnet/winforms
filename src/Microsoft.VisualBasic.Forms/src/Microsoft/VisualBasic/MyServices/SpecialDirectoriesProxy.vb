@@ -73,5 +73,4 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
     End Class
-
 End Namespace

@@ -48,7 +48,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Gets the total size of user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process, 
+        ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
         '''          in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Gets the total size of free user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process, 
+        ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process,
         '''          in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
@@ -241,5 +241,4 @@ Namespace Microsoft.VisualBasic.Devices
             Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
         End Class
     End Class
-
 End Namespace

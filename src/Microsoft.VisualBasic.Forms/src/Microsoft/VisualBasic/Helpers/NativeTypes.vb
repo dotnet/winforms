@@ -171,5 +171,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
 
     End Class
-
 End Namespace
