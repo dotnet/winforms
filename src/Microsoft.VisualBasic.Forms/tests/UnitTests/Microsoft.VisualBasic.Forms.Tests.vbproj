@@ -12,6 +12,7 @@
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,7 +7,7 @@ Namespace Microsoft.VisualBasic
 
     Partial Friend Module _Interaction
 
-        Private NotInheritable Class InputBoxHandler
+        Friend NotInheritable Class InputBoxHandler
             Private ReadOnly _defaultResponse As String
             Private ReadOnly _parentWindow As IWin32Window
             Private ReadOnly _prompt As String
