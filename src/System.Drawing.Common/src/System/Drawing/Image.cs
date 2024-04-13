@@ -33,6 +33,8 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public delegate bool GetThumbnailImageAbort();
 
     GpImage* IPointer<GpImage>.Pointer => _nativeImage;
+
+    [NonSerialized]
     private GpImage* _nativeImage;
 
     private object? _userData;
