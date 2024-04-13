@@ -5,6 +5,7 @@ Imports System.Windows.Forms
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
+
     Partial Public Class ControlTests
 
         <WinFormsFact>
@@ -100,6 +101,4 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
     End Class
-
 End Namespace
-
