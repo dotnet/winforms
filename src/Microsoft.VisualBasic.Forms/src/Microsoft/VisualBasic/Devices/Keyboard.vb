@@ -41,7 +41,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public ReadOnly Property ShiftKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys
-                Return CType(keys And keys.Shift, Boolean)
+                Return CType(keys And Keys.Shift, Boolean)
             End Get
         End Property
 
@@ -52,7 +52,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public ReadOnly Property AltKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys
-                Return CType(keys And keys.Alt, Boolean)
+                Return CType(keys And Keys.Alt, Boolean)
             End Get
         End Property
 
@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public ReadOnly Property CtrlKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys
-                Return CType(keys And keys.Control, Boolean)
+                Return CType(keys And Keys.Control, Boolean)
             End Get
         End Property
 

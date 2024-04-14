@@ -21,7 +21,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Creates an AssemblyInfo from an assembly
         ''' </summary>
-        ''' <param name="CurrentAssembly">The assembly for which we want to obtain the information.</param>
+        ''' <param name="currentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
                 Throw GetArgumentNullException(NameOf(currentAssembly))
