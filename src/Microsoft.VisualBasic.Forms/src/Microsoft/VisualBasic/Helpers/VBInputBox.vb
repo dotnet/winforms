@@ -95,16 +95,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
             AddHandler MyCancelButton.Click, AddressOf MyCancelButton_Click
 
             'Re-size the dialog if the prompt is too large
-            Dim LabelGraphics As Graphics = Label.CreateGraphics
-            Dim LabelSizeNeeded As SizeF = LabelGraphics.MeasureString(Prompt, Label.Font, Label.Width)
-            LabelGraphics.Dispose()
-            If LabelSizeNeeded.Height > Label.Height Then
+            Dim labelGraphics As Graphics = Label.CreateGraphics
+            Dim labelSizeNeeded As SizeF = labelGraphics.MeasureString(Prompt, Label.Font, Label.Width)
+            labelGraphics.Dispose()
+            If labelSizeNeeded.Height > Label.Height Then
                 'The current label size is not large enough to accommodate the prompt.  We need
                 '  to expand the label and the dialog, and move the textbox to make room.
-                Dim DialogHeightChange As Integer = CInt(LabelSizeNeeded.Height) - Label.Height
-                Label.Height += DialogHeightChange
-                TextBox.Top += DialogHeightChange
-                Height += DialogHeightChange
+                Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height) - Label.Height
+                Label.Height += dialogHeightChange
+                TextBox.Top += dialogHeightChange
+                Height += dialogHeightChange
             End If
 
             'Position the form
@@ -126,5 +126,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
             Close()
         End Sub
+
     End Class
 End Namespace

@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
 Imports System.IO
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -40,12 +38,12 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            ''' Plays a .wav file in the passed in mode
+            '''  Plays a .wav file in the passed in mode
             ''' </summary>
             ''' <param name="location">The name of the file</param>
             ''' <param name="playMode">
-            ''' An enum value representing the mode, Background (async), 
-            ''' WaitToComplete (sync) or BackgroundLoop
+            '''  An enum value representing the mode, Background (async),
+            '''  WaitToComplete (sync) or BackgroundLoop
             ''' </param>
             Public Sub Play(location As String, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
@@ -61,7 +59,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw GetArgumentNullException("data")
+                    Throw GetArgumentNullException(NameOf(data))
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -78,7 +76,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw GetArgumentNullException("stream")
+                    Throw GetArgumentNullException(NameOf(stream))
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -91,7 +89,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw GetArgumentNullException("systemSound")
+                    Throw GetArgumentNullException(NameOf(systemSound))
                 End If
 
                 systemSound.Play()
@@ -141,14 +139,14 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw GetArgumentNullException("location")
+                    Throw GetArgumentNullException(NameOf(location))
                 End If
 
                 Return location
             End Function
 
             ''' <summary>
-            ''' Validates that the value being passed as an AudioPlayMode enum is a legal value
+            '''  Validates that the value being passed as an AudioPlayMode enum is a legal value
             ''' </summary>
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)

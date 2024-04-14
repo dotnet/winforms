@@ -1,17 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Exception for when the WinForms VB application model isn't supplied with a startup form
+    '''  Exception for when the WinForms VB application model isn't supplied with a startup form
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>
@@ -38,5 +34,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
+
     End Class
 End Namespace

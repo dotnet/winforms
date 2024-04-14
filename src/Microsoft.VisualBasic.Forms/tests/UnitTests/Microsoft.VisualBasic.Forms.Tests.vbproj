@@ -7,6 +7,7 @@
     <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
     <LangVersion>latest</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   
   <ItemGroup>

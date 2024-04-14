@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Security
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -71,15 +68,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
                 ' DirectoryInfo.GetFiles and GetDirectories call FindFirstFile which resolves 8.3 path.
                 ' Get the DirectoryInfo (user must have code permission or access permission).
-                Dim DInfo As New IO.DirectoryInfo(FileIO.FileSystem.GetParentPath(FullPath))
+                Dim dInfo As New IO.DirectoryInfo(FileIO.FileSystem.GetParentPath(FullPath))
 
                 If IO.File.Exists(FullPath) Then
-                    Debug.Assert(DInfo.GetFiles(IO.Path.GetFileName(FullPath)).Length = 1, "Must found exactly 1")
-                    Return DInfo.GetFiles(IO.Path.GetFileName(FullPath))(0).FullName
+                    Debug.Assert(dInfo.GetFiles(IO.Path.GetFileName(FullPath)).Length = 1, "Must found exactly 1")
+                    Return dInfo.GetFiles(IO.Path.GetFileName(FullPath))(0).FullName
                 ElseIf IO.Directory.Exists(FullPath) Then
-                    Debug.Assert(DInfo.GetDirectories(IO.Path.GetFileName(FullPath)).Length = 1,
+                    Debug.Assert(dInfo.GetDirectories(IO.Path.GetFileName(FullPath)).Length = 1,
                                  "Must found exactly 1")
-                    Return DInfo.GetDirectories(IO.Path.GetFileName(FullPath))(0).FullName
+                    Return dInfo.GetDirectories(IO.Path.GetFileName(FullPath))(0).FullName
                 Else
                     Return FullPath ' Path does not exist, cannot resolve.
                 End If

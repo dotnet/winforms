@@ -1,7 +1,4 @@
-﻿Option Strict On
-Option Explicit On
-Option Infer On
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Security
@@ -12,10 +9,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Partial Public Class WindowsFormsApplicationBase
 
         ''' <summary>
-        ''' Encapsulates an ApplicationContext.  We have our own to get the shutdown behaviors we
-        ''' offer in the application model.  This derivation of the ApplicationContext listens for when
-        ''' the main form closes and provides for shutting down when the main form closes or the
-        ''' last form closes, depending on the mode this application is running in.
+        '''  Encapsulates an ApplicationContext.  We have our own to get the shutdown behaviors we
+        '''  offer in the application model.  This derivation of the ApplicationContext listens for when
+        '''  the main form closes and provides for shutting down when the main form closes or the
+        '''  last form closes, depending on the mode this application is running in.
         ''' </summary>
         Private NotInheritable Class WinFormsAppContext
             Inherits ApplicationContext
@@ -27,9 +24,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Sub
 
             ''' <summary>
-            ''' Handles the two types of application shutdown:
-            '''   1 - shutdown when the main form closes
-            '''   2 - shutdown only after the last form closes
+            '''  Handles the two types of application shutdown:
+            '''    1 - shutdown when the main form closes
+            '''    2 - shutdown only after the last form closes
             ''' </summary>
             ''' <param name="sender"></param>
             ''' <param name="e"></param>
