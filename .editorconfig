@@ -494,7 +494,7 @@ dotnet_diagnostic.CA1070.severity = error
 # CA2016: Forward the CancellationToken parameter to methods that take one
 dotnet_diagnostic.CA2016.severity = warning
 
-# CA2020: Prevent behavioral change caused by built-in operators of IntPtr/UIntPtr 
+# CA2020: Prevent behavioral change caused by built-in operators of IntPtr/UIntPtr
 dotnet_diagnostic.CA2020.severity = warning
 
 # .NET diagnostic
@@ -594,6 +594,12 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
 
 dotnet_separate_import_directive_groups = false:warning
+
+# IDE0001: Simplify Names
+dotnet_diagnostic.IDE0001.severity = silent
+
+# IDE0002: Simplify Member Access
+dotnet_diagnostic.IDE0002.severity = silent
 
 # IDE0079: Remove unnecessary suppression
 dotnet_diagnostic.IDE0079.severity = none
