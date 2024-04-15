@@ -6,7 +6,8 @@ Imports System.Globalization
 Namespace Microsoft.VisualBasic.CompilerServices
 
     ' Purpose: various helpers for the vb runtime functions
-    Friend NotInheritable Class Utils
+    ' NOTE TO REVIEWERS: There are two Util classes and changing to Utils1 gets around issue
+    Friend NotInheritable Class Utils1
 
         Friend Shared Function GetResourceString(ResourceId As vbErrors) As String
             Dim id As String = "ID" & CStr(ResourceId)

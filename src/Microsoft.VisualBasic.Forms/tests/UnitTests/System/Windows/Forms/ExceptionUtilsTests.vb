@@ -16,22 +16,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim ex As Exception = ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
             Assert.IsType(Of ArgumentNullException)(ex)
             Assert.Equal($"Property MainForm cannot be set to Nothing. (Parameter 'MainForm')", ex.Message)
+            Assert.Equal("MainForm", CType(ex, ArgumentNullException).ParamName)
         End Sub
 
         <WinFormsFact>
         Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceId As String = $"ID{CStr(vbErrors.FileNotFound)}"
-            Dim ex As Exception = ExceptionUtils.GetDirectoryNotFoundException(resourceId)
+            Dim resourceString As String = Utils1.GetResourceString(vbErrors.FileNotFound)
+            Dim ex As Exception = ExceptionUtils.GetDirectoryNotFoundException(resourceString)
             Assert.IsType(Of IO.DirectoryNotFoundException)(ex)
-            Assert.Equal(resourceId, ex.Message)
+            Assert.Equal("File not found.", ex.Message)
         End Sub
 
         <WinFormsFact>
         Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceId As String = $"ID{CStr(vbErrors.FileNotFound)}"
-            Dim ex As Exception = ExceptionUtils.GetFileNotFoundException("Test", resourceId)
+            Dim resourceString As String = Utils1.GetResourceString(vbErrors.FileNotFound)
+            Dim ex As Exception = ExceptionUtils.GetFileNotFoundException("Test", resourceString)
             Assert.IsType(Of IO.FileNotFoundException)(ex)
-            Assert.Equal(resourceId, ex.Message)
+            Assert.Equal("File not found.", ex.Message)
+            Assert.Equal("Test", CType(ex, IO.FileNotFoundException).FileName)
         End Sub
 
         <WinFormsFact>
@@ -55,12 +57,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData(vbErrors.FileNotFound)>
-        <InlineData(vbErrors.PermissionDenied)>
-        <InlineData(vbErrors.None)>
-        Public Sub VbMakeExceptionTest_Succeed(errorCode As Integer)
+        <InlineData(vbErrors.FileNotFound, "File not found.")>
+        <InlineData(vbErrors.PermissionDenied, "Permission denied.")>
+        <InlineData(vbErrors.None, "")>
+        Public Sub VbMakeExceptionTest_Succeed(errorCode As Integer, expected As String)
             Dim id As String = $"ID{CStr(errorCode)}"
-            Assert.Equal($"{SR.GetResourceString(id, id)}", ExceptionUtils.VbMakeException(errorCode).Message)
+            Dim message As String = ExceptionUtils.VbMakeException(errorCode).Message
+            Assert.Equal(expected, message)
         End Sub
 
     End Class
