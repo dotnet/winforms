@@ -14,17 +14,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
 
-        Private Function GetResourceStringResourceId(ResourceId As Integer) As String
-            Dim id As String = $"ID{ResourceId}"
-            ' always return a string
-            Return $"{SR.GetResourceString(id, id)}"
-        End Function
-
         Friend Function VbMakeException(ResourceId As Integer) As Exception
             Dim description As String = ""
 
             If ResourceId > 0 AndAlso ResourceId <= &HFFFFI Then
-                description = GetResourceStringResourceId(ResourceId)
+                description = GetResourceString(ResourceId)
             End If
 
             Select Case ResourceId

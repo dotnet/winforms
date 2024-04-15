@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         <WinFormsFact>
         Public Sub AssemblyPublicKeyIsAsExpected()
-            Dim publicKey() As Byte = GetType(NetworkTests).Assembly.GetName().GetPublicKey()
+            Dim publicKey() As Byte = GetType(ControlTests).Assembly.GetName().GetPublicKey()
             Dim sb As New StringBuilder
             For Each [byte] As Byte In publicKey
                 sb.AppendFormat("{0:x2}", [byte])
