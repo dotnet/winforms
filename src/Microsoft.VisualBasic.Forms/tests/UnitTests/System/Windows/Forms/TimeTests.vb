@@ -19,11 +19,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub VbTimeNotNew()
-            Assert.True(My.Computer.Clock.LocalTime > New Date)
-        End Sub
-
-        <WinFormsFact>
         Public Sub VbGmtTimeCloseToDateUtcNow()
             Assert.True(timesEqual(My.Computer.Clock.GmtTime, Date.UtcNow, PrecisionTickLimit))
         End Sub
@@ -36,6 +31,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub VbTickCountCloseToEnvironmentTickCount()
             Assert.True(Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount) < PrecisionTickLimit)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub VbTimeNotNew()
+            Assert.True(My.Computer.Clock.LocalTime > New Date)
         End Sub
 
     End Class
