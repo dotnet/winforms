@@ -237,7 +237,7 @@ Namespace Microsoft.VisualBasic
             NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
         End Sub
 
-        Private NotInheritable Class InputBoxHandler
+        Friend NotInheritable Class InputBoxHandler
             Private ReadOnly _prompt As String
             Private ReadOnly _title As String
             Private ReadOnly _defaultResponse As String
