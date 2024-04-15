@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms;
 
 internal sealed partial class MdiWindowDialog : Form
@@ -86,27 +88,31 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // _itemList
         //
-        resources.ApplyResources<ListBox>(_itemList, "itemList", null);
+        TypeDescriptor.AddKnownReflectedType<ListBox>();
+        resources.ApplyResources(_itemList, "itemList", null);
         _itemList.FormattingEnabled = true;
         _itemList.Name = "itemList";
         //
         // _okButton
         //
-        resources.ApplyResources<Button>(_okButton, "okButton", null);
+        TypeDescriptor.AddKnownReflectedType<Button>();
+        resources.ApplyResources(_okButton, "okButton", null);
         _okButton.DialogResult = DialogResult.OK;
         _okButton.Margin = new Padding(0, 0, 3, 0);
         _okButton.Name = "okButton";
         //
         // _cancelButton
         //
-        resources.ApplyResources<Button>(_cancelButton, "cancelButton", null);
+        TypeDescriptor.AddKnownReflectedType<Button>();
+        resources.ApplyResources(_cancelButton, "cancelButton", null);
         _cancelButton.DialogResult = DialogResult.Cancel;
         _cancelButton.Margin = new Padding(3, 0, 0, 0);
         _cancelButton.Name = "cancelButton";
         //
         // _okCancelTableLayoutPanel
         //
-        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+        TypeDescriptor.AddKnownReflectedType<TableLayoutPanel>();
+        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel", null);
         _okCancelTableLayoutPanel.ColumnCount = 2;
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -118,7 +124,8 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // MdiWindowDialog
         //
-        resources.ApplyResources<MdiWindowDialog>(this, "$this", null);
+        TypeDescriptor.AddKnownReflectedType<MdiWindowDialog>();
+        resources.ApplyResources(this, "$this", null);
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(_okCancelTableLayoutPanel);
         Controls.Add(_itemList);

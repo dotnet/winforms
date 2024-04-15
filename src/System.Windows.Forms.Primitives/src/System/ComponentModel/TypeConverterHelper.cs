@@ -28,6 +28,7 @@ internal static class TypeConverterHelper
             return false;
         }
 
+        TypeDescriptor.AddKnownReflectedType<T>();
         TypeConverter converter = TypeDescriptor.GetConverterFromKnownType(typeof(T));
         for (int i = 0; i < output.Length; i++)
         {

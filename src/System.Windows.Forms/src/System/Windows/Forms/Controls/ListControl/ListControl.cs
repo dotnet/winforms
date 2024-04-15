@@ -527,6 +527,7 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
+        TypeDescriptor.AddKnownReflectedType<string>();
         s_stringTypeConverter ??= TypeDescriptor.GetConverterFromKnownType(typeof(string));
 
         try

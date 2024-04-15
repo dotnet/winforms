@@ -1108,6 +1108,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return string.Empty;
         }
 
+        TypeDescriptor.AddKnownReflectedType<Keys>();
         return TypeDescriptor.GetConverterFromKnownType(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
     }
 
