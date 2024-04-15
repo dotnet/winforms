@@ -25,12 +25,14 @@ public static partial class ToolStripManager
 #if DEBUG
             private readonly string _callingStack;
 
+#pragma warning disable CA1821 // Remove empty Finalizers
             ~HostedWindowsFormsMessageHook()
             {
                 Debug.Assert(
                     _messageHookHandle == IntPtr.Zero,
                     $"Finalizing an active mouse hook. This will crash the process. Calling stack: {_callingStack}");
             }
+#pragma warning restore CA1821
 #endif
 
             public bool HookMessages
@@ -87,7 +89,7 @@ public static partial class ToolStripManager
                         // Call pretranslate on the message to execute the message filters and preprocess message.
                         if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                         {
-                            msg->message = (uint)PInvoke.WM_NULL;
+                            msg->message = PInvoke.WM_NULL;
                         }
                     }
                 }

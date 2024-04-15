@@ -119,7 +119,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
                         }
                     }
 
-                    _names = assemblyList.ToArray();
+                    _names = [.. assemblyList];
                 }
             }
 

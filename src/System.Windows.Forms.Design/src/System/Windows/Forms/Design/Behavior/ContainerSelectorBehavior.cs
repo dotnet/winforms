@@ -90,7 +90,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
             {
                 selSvc.SetSelectedComponents(new object[] { _containerControl }, SelectionTypes.Primary | SelectionTypes.Toggle);
                 // Setting the selected component will create a new glyph, so this instance of the glyph won't receive any more mouse messages. So we need to tell the new glyph what the initialDragPoint and okToMove are.
-                if (!(g is ContainerSelectorGlyph selOld))
+                if (g is not ContainerSelectorGlyph selOld)
                 {
                     return false;
                 }
@@ -99,7 +99,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
                 {
                     foreach (Glyph glyph in a.Glyphs)
                     {
-                        if (!(glyph is ContainerSelectorGlyph selNew))
+                        if (glyph is not ContainerSelectorGlyph selNew)
                         {
                             continue;
                         }
@@ -205,7 +205,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
 
         // must identify a required parent to avoid dragging mixes of children
         Control requiredParent = _containerControl.Parent;
-        List<IComponent> dragControls = new();
+        List<IComponent> dragControls = [];
         ICollection selComps = selSvc.GetSelectedComponents();
         // create our list of controls-to-drag
         foreach (IComponent comp in selComps)

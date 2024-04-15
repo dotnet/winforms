@@ -7,8 +7,10 @@ namespace System.ComponentModel.Design;
 ///  Provides data for the <see cref="DesignerActionService.DesignerActionListsChanged" /> event.
 /// </summary>
 /// <remarks>
-///  The <c>DesignerActionListsChangedEventArgs</c> class is used by the <see cref="DesignerActionService"/> class
-///  to signify that a <see cref="DesignerActionList"/> was added or removed from the related object.
+///  <para>
+///   The <c>DesignerActionListsChangedEventArgs</c> class is used by the <see cref="DesignerActionService"/> class
+///   to signify that a <see cref="DesignerActionList"/> was added or removed from the related object.
+///  </para>
 /// </remarks>
 public class DesignerActionListsChangedEventArgs : EventArgs
 {

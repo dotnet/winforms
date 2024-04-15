@@ -76,7 +76,7 @@ internal sealed partial class DragAssistanceManager
             }
 
             // only makes sense to do this for Standard and Baseline
-            if ((l1.LineType != LineType.Standard) && (l1.LineType != LineType.Baseline))
+            if (l1.LineType is not LineType.Standard and not LineType.Baseline)
             {
                 return null;
             }

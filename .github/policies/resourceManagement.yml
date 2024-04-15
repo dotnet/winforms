@@ -13,7 +13,6 @@ configuration:
       - hourly:
           hour: 12
       filters:
-      - isPullRequest
       - isOpen
       - hasLabel:
           label: ':mailbox_with_no_mail: waiting-author-feedback'
@@ -21,7 +20,6 @@ configuration:
           label: ':zzz: no-recent-activity'
       - noActivitySince:
           days: 7
-      - isIssue
       actions:
       - closeIssue
       - removeMilestone
@@ -194,7 +192,7 @@ configuration:
               isRegex: False
       then:
       - addMilestone:
-          milestone: 9.0 Preview3
+          milestone: 9.0 Preview4
       description: Apply milestone to PRs on the main branch
       triggerOnOwnActions: true
     - if:

@@ -5,5 +5,5 @@ namespace System;
 
 internal static class CharacterConstants
 {
-    public static ReadOnlySpan<char> NewLine => [ '\n', '\r' ];
+    public static ReadOnlySpan<char> NewLine => ['\n', '\r'];
 }

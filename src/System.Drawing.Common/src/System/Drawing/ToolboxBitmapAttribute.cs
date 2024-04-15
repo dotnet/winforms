@@ -16,29 +16,20 @@ public class ToolboxBitmapAttribute : Attribute
     private Image? _smallImage;
     private Image? _largeImage;
 
-    private readonly string? _imageFile;
-    private readonly Type? _imageType;
-
-    private readonly string? _imageName;
-
     private static readonly Size s_largeSize = new(32, 32);
     private static readonly Size s_smallSize = new(16, 16);
 
     public ToolboxBitmapAttribute(string imageFile) : this(GetImageFromFile(imageFile, false), GetImageFromFile(imageFile, true))
     {
-        _imageFile = imageFile;
     }
 
     public ToolboxBitmapAttribute(Type t) : this(GetImageFromResource(t, null, false), GetImageFromResource(t, null, true))
     {
-        _imageType = t;
     }
 
     public ToolboxBitmapAttribute(Type t, string name)
         : this(GetImageFromResource(t, name, false), GetImageFromResource(t, name, true))
     {
-        _imageType = t;
-        _imageName = name;
     }
 
     private ToolboxBitmapAttribute(Image? smallImage, Image? largeImage)
@@ -248,7 +239,7 @@ public class ToolboxBitmapAttribute : Attribute
                 int indexDot = name.LastIndexOf('.');
                 if (indexDot != -1)
                 {
-                    name = name.Substring(indexDot + 1);
+                    name = name[(indexDot + 1)..];
                 }
 
                 // All bitmap images from winforms runtime are changed to Icons

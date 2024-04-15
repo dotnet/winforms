@@ -15,7 +15,7 @@ public static class TextRenderer
     // In various cases the DC may have already been modified, and we don't pass TextFormatFlags.PreserveGraphicsClipping
     // or TextFormatFlags.PreserveGraphicsTranslateTransform flags, that set off the asserts in GetApplyStateFlags
     // method. This flags allows us to skip those assert for the cases we know we don't need these flags.
-    internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
+    internal const TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
 #endif
 
     internal static FONT_QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
@@ -368,10 +368,12 @@ public static class TextRenderer
 
     private static TextFormatFlags BlockModifyString(TextFormatFlags flags)
     {
+#pragma warning disable CS0618 // Type or member is obsolete - ModifyString is obsolete
         if (flags.HasFlag(TextFormatFlags.ModifyString))
         {
             throw new ArgumentOutOfRangeException(nameof(flags), SR.TextFormatFlagsModifyStringNotAllowed);
         }
+#pragma warning restore CS0618
 
         return flags;
     }

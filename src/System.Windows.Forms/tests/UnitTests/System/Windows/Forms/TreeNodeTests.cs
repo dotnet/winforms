@@ -95,8 +95,8 @@ public class TreeNodeTests
         // Work around: We cannot serialize type System.Windows.Forms.TreeNode[] because it lives in the GAC.
         TreeNode_Ctor_String_TreeNodeArray_Helper(null, Array.Empty<TreeNode>(), string.Empty);
         TreeNode_Ctor_String_TreeNodeArray_Helper(string.Empty, Array.Empty<TreeNode>(), string.Empty);
-        TreeNode_Ctor_String_TreeNodeArray_Helper("text", new TreeNode[] { new() }, "text");
-        TreeNode_Ctor_String_TreeNodeArray_Helper("text", new TreeNode[] { new(), new("text") }, "text");
+        TreeNode_Ctor_String_TreeNodeArray_Helper("text", [new()], "text");
+        TreeNode_Ctor_String_TreeNodeArray_Helper("text", [new(), new("text")], "text");
     }
 
     private void TreeNode_Ctor_String_TreeNodeArray_Helper(string text, TreeNode[] children, string expectedText)
@@ -186,8 +186,8 @@ public class TreeNodeTests
         // Work around: We cannot serialize type System.Windows.Forms.TreeNode[] because it lives in the GAC.
         TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, -1, -1, Array.Empty<TreeNode>(), "");
         TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, 0, 0, Array.Empty<TreeNode>(), "");
-        TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 1, new TreeNode[] { new() }, "text");
-        TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 14, new TreeNode[] { new(), new("text") }, "text");
+        TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 1, [new()], "text");
+        TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 14, [new(), new("text")], "text");
     }
 
     private void TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(string text, int imageIndex, int selectedImageIndex, TreeNode[] children, string expectedText)
@@ -238,8 +238,8 @@ public class TreeNodeTests
     [WinFormsFact]
     public void TreeNode_Ctor_NullValueInChildren_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>("node", () => new TreeNode("text", new TreeNode[] { null }));
-        Assert.Throws<ArgumentNullException>("node", () => new TreeNode("text", 0, 0, new TreeNode[] { null }));
+        Assert.Throws<ArgumentNullException>("node", () => new TreeNode("text", [null]));
+        Assert.Throws<ArgumentNullException>("node", () => new TreeNode("text", 0, 0, [null]));
     }
 
     [WinFormsTheory]
@@ -4659,7 +4659,7 @@ public class TreeNodeTests
                 TVITEMW* pItem = (TVITEMW*)m.LParam;
                 pItem->state = GetItemStateResult;
                 Assert.Equal(IntPtr.Zero, m.WParam);
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -4678,9 +4678,9 @@ public class TreeNodeTests
             if (MakeInvalid && m.Msg == (int)PInvoke.TVM_GETITEMW)
             {
                 TVITEMW* pItem = (TVITEMW*)m.LParam;
-                pItem->state = (TREE_VIEW_ITEM_STATE_FLAGS)GetItemStateResult;
+                pItem->state = GetItemStateResult;
                 Assert.Equal(IntPtr.Zero, m.WParam);
-                m.Result = (IntPtr)0;
+                m.Result = 0;
                 return;
             }
 
@@ -4698,8 +4698,8 @@ public class TreeNodeTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                Assert.Equal((IntPtr)1, m.WParam);
-                m.Result = (IntPtr)1;
+                Assert.Equal(1, m.WParam);
+                m.Result = 1;
                 return;
             }
 

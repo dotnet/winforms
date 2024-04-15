@@ -143,7 +143,7 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether the parent font (as set by <see cref="System.Windows.Forms.Application.SetDefaultFont(Font)" />
+    ///  Gets or sets a value indicating whether the parent font (as set by <see cref="Forms.Application.SetDefaultFont(Font)" />
     ///  or by the parent control or form's font) is applied to menus.
     /// </summary>
     public static bool ApplyParentFontToMenus

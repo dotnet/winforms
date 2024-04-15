@@ -109,7 +109,9 @@ public class PropertyGridTests
             {
                 if (!PInvoke.DeactivateActCtx(0, cookie))
                 {
+#pragma warning disable CA2219 // Do not raise exceptions in finally clauses
                     throw new Win32Exception();
+#pragma warning restore CA2219
                 }
             }
         }
@@ -119,7 +121,7 @@ public class PropertyGridTests
         }
     }
 
-    private unsafe object CreateComObjectWithRawIErrorInfoUsage()
+    private static unsafe object CreateComObjectWithRawIErrorInfoUsage()
     {
         Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
         PInvokeCore.CoCreateInstance(
@@ -130,7 +132,7 @@ public class PropertyGridTests
         return ComHelpers.GetObjectForIUnknown(result);
     }
 
-    private unsafe object CreateComObjectWithStandardIErrorInfoUsage()
+    private static unsafe object CreateComObjectWithStandardIErrorInfoUsage()
     {
         Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
         PInvokeCore.CoCreateInstance(

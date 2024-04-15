@@ -21,7 +21,7 @@ public sealed class Adorner
     /// </summary>
     public Adorner()
     {
-        _glyphs = new GlyphCollection();
+        _glyphs = [];
         EnabledInternal = true;
     }
 

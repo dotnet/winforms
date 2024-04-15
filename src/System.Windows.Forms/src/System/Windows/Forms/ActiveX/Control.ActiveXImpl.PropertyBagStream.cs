@@ -18,7 +18,7 @@ public partial class Control
         /// </summary>
         private class PropertyBagStream : IPropertyBag.Interface, IManagedWrapper<IPropertyBag>
         {
-            private Hashtable _bag = new();
+            private Hashtable _bag = [];
 
             internal void Read(IStream* istream)
             {
@@ -40,7 +40,7 @@ public partial class Control
                 if (!success)
                 {
                     // Error reading. Just init an empty hashtable.
-                    _bag = new();
+                    _bag = [];
                 }
             }
 

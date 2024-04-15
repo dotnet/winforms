@@ -15,7 +15,7 @@ public partial class ListViewItem
 
         public ListViewItemDetailsAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
-            _listViewSubItemAccessibleObjects = new Dictionary<int, AccessibleObject>();
+            _listViewSubItemAccessibleObjects = [];
         }
 
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;

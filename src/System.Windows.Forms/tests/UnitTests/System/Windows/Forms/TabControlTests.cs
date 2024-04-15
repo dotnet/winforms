@@ -1023,7 +1023,7 @@ public class TabControlTests
             ImageList = imageList
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
@@ -1298,7 +1298,7 @@ public class TabControlTests
         using ImageList imageList = new();
         control.ImageList = imageList;
         Assert.True(imageList.HandleCreated);
-        Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
 
         // Set null.
         control.ImageList = null;
@@ -1419,7 +1419,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(1, 2);
         Assert.Equal(1, recreateCallCount1);
         Assert.Same(imageList1, control.ImageList);
-        Assert.Equal((nint)imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1430,7 +1430,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(2, 3);
         Assert.Equal(2, recreateCallCount1);
         Assert.Same(imageList2, control.ImageList);
-        Assert.Equal((nint)imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3738,7 +3738,7 @@ public class TabControlTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetItemRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -3844,7 +3844,7 @@ public class TabControlTests
         control.TabPages.Add(page1);
         control.TabPages.Add(page2);
         object[] result = Assert.IsType<TabPage[]>(control.GetItems());
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems());
     }
 
@@ -3873,7 +3873,7 @@ public class TabControlTests
         control.TabPages.Add(page2);
         object[] result = control.GetItems(baseType);
         Assert.IsType(baseType.MakeArrayType(), result);
-        Assert.Equal(new object[] { page1, page2 }, result);
+        Assert.Equal([page1, page2], result);
         Assert.NotSame(result, control.GetItems(baseType));
     }
 
@@ -3884,7 +3884,7 @@ public class TabControlTests
         using SubTabPage page = new();
         control.TabPages.Add(page);
         object[] result = Assert.IsType<SubTabPage[]>(control.GetItems(typeof(SubTabPage)));
-        Assert.Equal(new object[] { page }, result);
+        Assert.Equal([page], result);
         Assert.NotSame(result, control.GetItems(typeof(SubTabPage)));
     }
 

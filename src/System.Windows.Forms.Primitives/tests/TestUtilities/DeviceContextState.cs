@@ -17,7 +17,7 @@ internal unsafe class DeviceContextState
     // Not all state is handled yet. Backfilling in as we write specific tests. Of special note is that we don't
     // have tracking for Save/RestoreDC yet.
 
-    private readonly List<State> _savedStates = new();
+    private readonly List<State> _savedStates = [];
     private State _currentState;
 
     /// <summary>
@@ -25,12 +25,12 @@ internal unsafe class DeviceContextState
     /// </summary>
     public DeviceContextState(HDC hdc)
     {
-        MapMode = (HDC_MAP_MODE)PInvoke.GetMapMode(hdc);
+        MapMode = PInvoke.GetMapMode(hdc);
         BackColor = PInvoke.GetBkColor(hdc);
         TextColor = PInvoke.GetTextColor(hdc);
-        Rop2Mode = (R2_MODE)PInvoke.GetROP2(hdc);
-        TextAlign = (TEXT_ALIGN_OPTIONS)PInvoke.GetTextAlign(hdc);
-        BackgroundMode = (BACKGROUND_MODE)PInvoke.GetBkMode(hdc);
+        Rop2Mode = PInvoke.GetROP2(hdc);
+        TextAlign = PInvoke.GetTextAlign(hdc);
+        BackgroundMode = PInvoke.GetBkMode(hdc);
 
         Matrix3x2 transform = default;
         PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
@@ -89,7 +89,7 @@ internal unsafe class DeviceContextState
     /// <summary>
     ///  When using to parse a metafile, this is the list of known created objects.
     /// </summary>
-    public List<EmfRecord> GdiObjects { get; } = new();
+    public List<EmfRecord> GdiObjects { get; } = [];
 
     /// <summary>
     ///  Adds the given object to <see cref="GdiObjects"/>.

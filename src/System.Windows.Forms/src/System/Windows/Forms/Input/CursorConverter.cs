@@ -159,7 +159,7 @@ public class CursorConverter : TypeConverter
     {
         if (_values is null)
         {
-            List<object> list = new();
+            List<object> list = [];
             PropertyInfo[] props = GetProperties();
             for (int i = 0; i < props.Length; i++)
             {

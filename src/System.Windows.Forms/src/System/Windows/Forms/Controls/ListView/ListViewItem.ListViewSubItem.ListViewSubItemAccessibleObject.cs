@@ -140,13 +140,12 @@ public partial class ListViewItem
 
             internal override IRawElementProviderSimple.Interface[]? GetColumnHeaderItems()
                 => _owningListView.View == View.Details && Column > -1
-                    ? new IRawElementProviderSimple.Interface[] { _owningListView.Columns[Column].AccessibilityObject }
+                    ? [_owningListView.Columns[Column].AccessibilityObject]
                     : null;
 
             internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             {
-                if (patternId == UIA_PATTERN_ID.UIA_GridItemPatternId ||
-                    patternId == UIA_PATTERN_ID.UIA_TableItemPatternId)
+                if (patternId is UIA_PATTERN_ID.UIA_GridItemPatternId or UIA_PATTERN_ID.UIA_TableItemPatternId)
                 {
                     return _owningListView.View == View.Details;
                 }

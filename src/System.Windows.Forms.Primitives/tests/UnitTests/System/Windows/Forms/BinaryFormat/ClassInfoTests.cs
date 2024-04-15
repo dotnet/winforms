@@ -5,8 +5,8 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 
 public class ClassInfoTests
 {
-    private static readonly byte[] s_hashtableClassInfo = new byte[]
-    {
+    private static readonly byte[] s_hashtableClassInfo =
+    [
         0x01, 0x00, 0x00, 0x00, 0x1c, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x43, 0x6f, 0x6c, 0x6c,
         0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x48, 0x61, 0x73, 0x68, 0x74, 0x61, 0x62, 0x6c,
         0x65, 0x07, 0x00, 0x00, 0x00, 0x0a, 0x4c, 0x6f, 0x61, 0x64, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72,
@@ -14,7 +14,7 @@ public class ClassInfoTests
         0x72, 0x10, 0x48, 0x61, 0x73, 0x68, 0x43, 0x6f, 0x64, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64,
         0x65, 0x72, 0x08, 0x48, 0x61, 0x73, 0x68, 0x53, 0x69, 0x7a, 0x65, 0x04, 0x4b, 0x65, 0x79, 0x73,
         0x06, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x73
-    };
+    ];
 
     [Fact]
     public void ClassInfo_ReadHashtable()
@@ -25,8 +25,8 @@ public class ClassInfoTests
         memberCount.Should().Be(7);
         info.ObjectId.Should().Be(1);
         info.Name.Should().Be("System.Collections.Hashtable");
-        info.MemberNames.Should().BeEquivalentTo(new[]
-        {
+        info.MemberNames.Should().BeEquivalentTo(
+        [
             "LoadFactor",
             "Version",
             "Comparer",
@@ -34,7 +34,7 @@ public class ClassInfoTests
             "HashSize",
             "Keys",
             "Values"
-        });
+        ]);
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public class ClassInfoTests
         memberCount.Should().Be(7);
         info.ObjectId.Should().Be(1);
         info.Name.Should().Be("System.Collections.Hashtable");
-        info.MemberNames.Should().BeEquivalentTo(new[]
-        {
+        info.MemberNames.Should().BeEquivalentTo(
+        [
             "LoadFactor",
             "Version",
             "Comparer",
@@ -63,7 +63,7 @@ public class ClassInfoTests
             "HashSize",
             "Keys",
             "Values"
-        });
+        ]);
     }
 
     [Fact]

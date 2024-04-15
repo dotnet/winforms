@@ -25,15 +25,13 @@ public class SerializableTypesTests
         using (MemoryStream stream = new(256))
         {
             byte[] bytes = Encoding.UTF8.GetBytes(payload);
-            using (BinaryWriter writer = new(stream))
-            {
-                writer.Write(bytes.Length);
-                writer.Write(bytes);
-                stream.Seek(0, SeekOrigin.Begin);
+            using BinaryWriter writer = new(stream);
+            writer.Write(bytes.Length);
+            writer.Write(bytes);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                state = new AxHost.State(stream, 1, true, licenseKey);
-                netBlob = BinarySerialization.ToBase64String(state);
-            }
+            state = new AxHost.State(stream, 1, true, licenseKey);
+            netBlob = BinarySerialization.ToBase64String(state);
         }
 
         // ensure we can deserialise NET serialised data and continue to match the payload
@@ -60,7 +58,7 @@ public class SerializableTypesTests
 
             using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
-            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out ComManagedStream managedStream));
+            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut, out ComManagedStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);
@@ -92,14 +90,12 @@ public class SerializableTypesTests
         void ValidateResult(string blob)
         {
             using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
-            using (NativeImageList nativeImageList = result.GetNativeImageList())
-            {
-                Assert.True(PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), out int x, out int y));
-                Assert.Equal(16, x);
-                Assert.Equal(16, y);
-                Assert.True(PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo));
-                Assert.False(imageInfo.hbmImage.IsNull);
-            }
+            using NativeImageList nativeImageList = result.GetNativeImageList();
+            Assert.True(PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), out int x, out int y));
+            Assert.Equal(16, x);
+            Assert.Equal(16, y);
+            Assert.True(PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo));
+            Assert.False(imageInfo.hbmImage.IsNull);
         }
     }
 
@@ -295,7 +291,7 @@ public class SerializableTypesTests
             tableLayoutPanel.Controls.Add(new RadioButton() { Name = "radioButton01" }, 0, 1);
             tableLayoutPanel.Controls.Add(new CheckBox() { Name = "checkBox11" }, 1, 1);
 
-            netBlob = BinarySerialization.ToBase64String(tableLayoutPanel.LayoutSettings as TableLayoutSettings);
+            netBlob = BinarySerialization.ToBase64String(tableLayoutPanel.LayoutSettings);
         }
 
         // ensure we can deserialise NET serialised data and continue to match the payload

@@ -16,10 +16,12 @@ namespace System.Drawing.Imaging;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe class Metafile : Image
+public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
 {
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
+
+    GpMetafile* IPointer<GpMetafile>.Pointer => this.Pointer();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
@@ -628,11 +630,5 @@ public sealed unsafe class Metafile : Image
     /// <summary>
     ///  Returns a Windows handle to an enhanced <see cref='Metafile'/>.
     /// </summary>
-    public IntPtr GetHenhmetafile()
-    {
-        HENHMETAFILE hemf;
-        PInvoke.GdipGetHemfFromMetafile(this.Pointer(), &hemf).ThrowIfFailed();
-        GC.KeepAlive(this);
-        return hemf;
-    }
+    public IntPtr GetHenhmetafile() => this.GetHENHMETAFILE();
 }

@@ -18,7 +18,7 @@ public enum PaletteType
     /// <summary>
     ///  A palette that has two colors. This palette type is suitable for bitmaps that store 1 bit per pixel.
     /// </summary>
-    FixedBW = GdiPlus.PaletteType.PaletteTypeFixedBW,
+    FixedBlackAndWhite = GdiPlus.PaletteType.PaletteTypeFixedBW,
 
     /// <summary>
     ///  A palette based on two intensities each (off or full) for the red, green, and blue channels. Also contains the

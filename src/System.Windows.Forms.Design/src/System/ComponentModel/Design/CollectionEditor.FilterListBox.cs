@@ -50,7 +50,7 @@ public partial class CollectionEditor
 
                     // The first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use
                     // that to sling focus to the grid.
-                    if (m.WParamInternal == (nuint)VK_PROCESSKEY)
+                    if (m.WParamInternal == VK_PROCESSKEY)
                     {
                         if (PropertyGrid is not null)
                         {
@@ -74,7 +74,7 @@ public partial class CollectionEditor
 
                 case PInvoke.WM_CHAR:
 
-                    if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
+                    if ((ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                     {
                         break;
                     }

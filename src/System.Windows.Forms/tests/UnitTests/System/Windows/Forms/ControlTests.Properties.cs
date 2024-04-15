@@ -2124,7 +2124,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_GetWithParent_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using Control parent = new()
         {
             BindingContext = bindingContext
@@ -2139,7 +2139,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        BindingContext bindingContext = new();
+        BindingContext bindingContext = [];
         using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             BindingContext = bindingContext
@@ -2180,7 +2180,7 @@ public partial class ControlTests
     {
         using Control control = new()
         {
-            BindingContext = new BindingContext()
+            BindingContext = []
         };
 
         control.BindingContext = value;
@@ -2207,7 +2207,7 @@ public partial class ControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -2218,7 +2218,7 @@ public partial class ControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -2270,7 +2270,7 @@ public partial class ControlTests
         child2.BindingContextChanged += childHandler2;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Same(context1, child1.BindingContext);
@@ -2289,7 +2289,7 @@ public partial class ControlTests
         Assert.Equal(1, childCallCount2);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Same(context2, child1.BindingContext);
@@ -2323,8 +2323,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BindingContext_SetWithChildrenWithBindingContextWithHandler_CallsBindingContextChanged()
     {
-        BindingContext childContext1 = new();
-        BindingContext childContext2 = new();
+        BindingContext childContext1 = [];
+        BindingContext childContext2 = [];
         using Control child1 = new()
         {
             BindingContext = childContext1
@@ -2363,7 +2363,7 @@ public partial class ControlTests
         child2.BindingContextChanged += childHandler2;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Same(childContext1, child1.BindingContext);
@@ -2382,7 +2382,7 @@ public partial class ControlTests
         Assert.Equal(0, childCallCount2);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Same(childContext1, child1.BindingContext);
@@ -3696,7 +3696,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_GetUseWaitCursor_ReturnsExpected()
     {
-        using Cursor cursor = new((IntPtr)1);
+        using Cursor cursor = new(1);
         using Control control = new()
         {
             UseWaitCursor = true
@@ -3711,8 +3711,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_GetWithParent_ReturnsExpected()
     {
-        using Cursor cursor1 = new((IntPtr)1);
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor1 = new(1);
+        using Cursor cursor2 = new(2);
         using Control parent = new()
         {
             Cursor = cursor1
@@ -3731,8 +3731,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        using Cursor cursor1 = new((IntPtr)1);
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor1 = new(1);
+        using Cursor cursor2 = new(2);
         using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             Cursor = cursor1
@@ -3751,7 +3751,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_GetWithDefaultCursor_ReturnsExpected()
     {
-        using Cursor cursor = new((IntPtr)1);
+        using Cursor cursor = new(1);
         using CustomDefaultCursorControl control = new();
         Assert.Same(control.DefaultCursorResult, control.Cursor);
 
@@ -3763,8 +3763,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_GetWithDefaultCursorWithParent_ReturnsExpected()
     {
-        using Cursor cursor1 = new((IntPtr)1);
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor1 = new(1);
+        using Cursor cursor2 = new(2);
         using Control parent = new()
         {
             Cursor = cursor1
@@ -3782,7 +3782,7 @@ public partial class ControlTests
 
     private class CustomDefaultCursorControl : Control
     {
-        public Cursor DefaultCursorResult { get; } = new((IntPtr)1);
+        public Cursor DefaultCursorResult { get; } = new(1);
 
         protected override Cursor DefaultCursor => DefaultCursorResult;
     }
@@ -3859,8 +3859,8 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void Control_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
     {
-        Cursor cursor1 = new((IntPtr)1);
-        Cursor cursor2 = new((IntPtr)1);
+        Cursor cursor1 = new(1);
+        Cursor cursor2 = new(1);
         using Control child1 = new()
         {
             Cursor = cursor1
@@ -3899,7 +3899,7 @@ public partial class ControlTests
         control.CursorChanged += handler;
 
         // Set different.
-        using Cursor cursor1 = new((IntPtr)1);
+        using Cursor cursor1 = new(1);
         control.Cursor = cursor1;
         Assert.Same(cursor1, control.Cursor);
         Assert.Equal(1, callCount);
@@ -3910,7 +3910,7 @@ public partial class ControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor2 = new(2);
         control.Cursor = cursor2;
         Assert.Same(cursor2, control.Cursor);
         Assert.Equal(2, callCount);
@@ -3962,7 +3962,7 @@ public partial class ControlTests
         child2.CursorChanged += childHandler2;
 
         // Set different.
-        using Cursor cursor1 = new((IntPtr)1);
+        using Cursor cursor1 = new(1);
         control.Cursor = cursor1;
         Assert.Same(cursor1, control.Cursor);
         Assert.Same(cursor1, child1.Cursor);
@@ -3981,7 +3981,7 @@ public partial class ControlTests
         Assert.Equal(1, child2CallCount);
 
         // Set different.
-        using Cursor cursor2 = new((IntPtr)2);
+        using Cursor cursor2 = new(2);
         control.Cursor = cursor2;
         Assert.Same(cursor2, control.Cursor);
         Assert.Same(cursor2, child1.Cursor);
@@ -4015,8 +4015,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Cursor_SetWithChildrenWithCursorWithHandler_CallsCursorChanged()
     {
-        using Cursor childCursor1 = new((IntPtr)1);
-        using Cursor childCursor2 = new((IntPtr)2);
+        using Cursor childCursor1 = new(1);
+        using Cursor childCursor2 = new(2);
         using Control child1 = new()
         {
             Cursor = childCursor1
@@ -4055,7 +4055,7 @@ public partial class ControlTests
         child2.CursorChanged += childHandler2;
 
         // Set different.
-        using Cursor cursor1 = new((IntPtr)3);
+        using Cursor cursor1 = new(3);
         control.Cursor = cursor1;
         Assert.Same(cursor1, control.Cursor);
         Assert.Same(childCursor1, child1.Cursor);
@@ -4074,7 +4074,7 @@ public partial class ControlTests
         Assert.Equal(0, child2CallCount);
 
         // Set different.
-        using Cursor cursor2 = new((IntPtr)4);
+        using Cursor cursor2 = new(4);
         control.Cursor = cursor2;
         Assert.Same(cursor2, control.Cursor);
         Assert.Same(childCursor1, child1.Cursor);
@@ -10936,7 +10936,7 @@ public partial class ControlTests
             .Returns(null)
             .Verifiable();
 
-        using Cursor controlCursor = new((IntPtr)3);
+        using Cursor controlCursor = new(3);
         Font controlFont = SystemFonts.StatusFont;
         using Control control = new()
         {

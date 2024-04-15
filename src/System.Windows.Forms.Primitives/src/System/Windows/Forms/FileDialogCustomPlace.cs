@@ -4,11 +4,15 @@
 namespace System.Windows.Forms;
 
 /// <remarks>
-///  Sample Guids
-///  ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
-///  Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
-///  Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
-///  Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
+///  <para>
+///   Sample Guids
+///  </para>
+///  <list type="bullet">
+///   <item><description>ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"</description></item>
+///   <item><description>Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"</description></item>
+///   <item><description>Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"</description></item>
+///   <item><description>Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"</description></item>
+///  </list>
 /// </remarks>
 public class FileDialogCustomPlace
 {

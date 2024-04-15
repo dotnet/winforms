@@ -100,7 +100,9 @@ public class SpecialFolderEnumConverterTests
     private class CustomReflectionType
     {
 #pragma warning disable CS0649
+#pragma warning disable IDE1006 // Naming Styles
         public static int Personal;
+#pragma warning restore IDE1006
 #pragma warning restore CS0649
     }
 

@@ -412,6 +412,11 @@
         <target state="translated">BindingNavigator</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Le operazioni di binding non sono supportate quando è abilitata la limitazione dell'applicazione.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Evento generato quando l'utente chiama AddNew su BindingSource.</target>

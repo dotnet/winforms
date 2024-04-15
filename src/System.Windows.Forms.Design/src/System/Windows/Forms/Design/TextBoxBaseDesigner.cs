@@ -60,10 +60,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
 
     private string Text
     {
-        get
-        {
-            return Control.Text;
-        }
+        get => Control.Text;
         set
         {
             Control.Text = value;
@@ -105,12 +102,12 @@ internal class TextBoxBaseDesigner : ControlDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "Text",
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {

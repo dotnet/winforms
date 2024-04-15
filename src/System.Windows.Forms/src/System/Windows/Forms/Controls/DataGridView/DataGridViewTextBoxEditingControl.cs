@@ -155,7 +155,7 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
                 // If the end of the selection is on the last line of the text then
                 // send this character to the dataGridView, else process the key event
                 int end = SelectionStart + SelectionLength;
-                if (Text.IndexOf("\r\n", end) != -1)
+                if (Text.IndexOf("\r\n", end, StringComparison.Ordinal) != -1)
                 {
                     return true;
                 }
@@ -165,7 +165,8 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
             case Keys.Up:
                 // If the end of the selection is on the first line of the text then
                 // send this character to the dataGridView, else process the key event
-                if (!(Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n")))
+                if (!(Text.IndexOf("\r\n", StringComparison.Ordinal) < 0
+                    || SelectionStart + SelectionLength < Text.IndexOf("\r\n", StringComparison.Ordinal)))
                 {
                     return true;
                 }

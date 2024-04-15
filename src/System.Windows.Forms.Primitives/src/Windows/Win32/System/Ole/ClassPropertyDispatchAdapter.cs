@@ -21,7 +21,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
     private readonly Type _type;
 
-    private readonly Dictionary<int, DispatchEntry> _members = new();
+    private readonly Dictionary<int, DispatchEntry> _members = [];
     private readonly Dictionary<string, int> _reverseLookup = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly ClassPropertyDispatchAdapter? _priorAdapter;
@@ -208,7 +208,7 @@ internal unsafe class ClassPropertyDispatchAdapter
                     bindingFlags,
                     binder: null,
                     target,
-                    new object?[] { value });
+                    [value]);
             }
             catch (Exception ex)
             {

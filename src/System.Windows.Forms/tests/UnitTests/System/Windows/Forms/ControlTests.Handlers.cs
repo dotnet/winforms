@@ -699,8 +699,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_InvokeWithChildrenWithBindingContext_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext childContext1 = new();
-        BindingContext childContext2 = new();
+        BindingContext childContext1 = [];
+        BindingContext childContext2 = [];
         using Control child1 = new()
         {
             BindingContext = childContext1
@@ -1149,8 +1149,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_InvokeWithChildrenWithCursor_CallsCursorChanged(EventArgs eventArgs)
     {
-        Cursor childCursor1 = new((IntPtr)1);
-        Cursor childCursor2 = new((IntPtr)1);
+        Cursor childCursor1 = new(1);
+        Cursor childCursor2 = new(1);
         using Control child1 = new()
         {
             Cursor = childCursor1
@@ -4327,7 +4327,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBindingContextChanged_InvokeWithBindingContext_DoesNotCallBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubControl control = new()
         {
             BindingContext = context
@@ -4380,7 +4380,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentCursorChanged_InvokeWithCursor_DoesNotCallCursorChanged(EventArgs eventArgs)
     {
-        Cursor cursor = new((IntPtr)1);
+        Cursor cursor = new(1);
         using SubControl control = new()
         {
             Cursor = cursor

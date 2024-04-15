@@ -87,7 +87,7 @@ public sealed partial class HtmlElement
         public void onblur(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventLostFocus, e);
+            FireEvent(s_eventLostFocus, e);
         }
 
         public void onbounce(IHTMLEventObj evtObj) { }
@@ -105,7 +105,7 @@ public sealed partial class HtmlElement
         public bool onclick(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventClick, e);
+            FireEvent(s_eventClick, e);
             return e.ReturnValue;
         }
 
@@ -142,7 +142,7 @@ public sealed partial class HtmlElement
         public bool ondblclick(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventDoubleClick, e);
+            FireEvent(s_eventDoubleClick, e);
             return e.ReturnValue;
         }
 
@@ -151,14 +151,14 @@ public sealed partial class HtmlElement
         public bool ondrag(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventDrag, e);
+            FireEvent(s_eventDrag, e);
             return e.ReturnValue;
         }
 
         public void ondragend(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventDragEnd, e);
+            FireEvent(s_eventDragEnd, e);
         }
 
         public bool ondragenter(IHTMLEventObj evtObj)
@@ -170,13 +170,13 @@ public sealed partial class HtmlElement
         public void ondragleave(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventDragLeave, e);
+            FireEvent(s_eventDragLeave, e);
         }
 
         public bool ondragover(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventDragOver, e);
+            FireEvent(s_eventDragOver, e);
             return e.ReturnValue;
         }
 
@@ -207,19 +207,19 @@ public sealed partial class HtmlElement
         public void onfocus(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventGotFocus, e);
+            FireEvent(s_eventGotFocus, e);
         }
 
         public void onfocusin(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventFocusing, e);
+            FireEvent(s_eventFocusing, e);
         }
 
         public void onfocusout(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventLosingFocus, e);
+            FireEvent(s_eventLosingFocus, e);
         }
 
         public bool onhelp(IHTMLEventObj evtObj)
@@ -231,20 +231,20 @@ public sealed partial class HtmlElement
         public void onkeydown(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventKeyDown, e);
+            FireEvent(s_eventKeyDown, e);
         }
 
         public bool onkeypress(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventKeyPress, e);
+            FireEvent(s_eventKeyPress, e);
             return e.ReturnValue;
         }
 
         public void onkeyup(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventKeyUp, e);
+            FireEvent(s_eventKeyUp, e);
         }
 
         public void onlayoutcomplete(IHTMLEventObj evtObj) { }
@@ -256,25 +256,25 @@ public sealed partial class HtmlElement
         public void onmousedown(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseDown, e);
+            FireEvent(s_eventMouseDown, e);
         }
 
         public void onmouseenter(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseEnter, e);
+            FireEvent(s_eventMouseEnter, e);
         }
 
         public void onmouseleave(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseLeave, e);
+            FireEvent(s_eventMouseLeave, e);
         }
 
         public void onmousemove(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseMove, e);
+            FireEvent(s_eventMouseMove, e);
         }
 
         public void onmouseout(IHTMLEventObj evtObj) { }
@@ -282,13 +282,13 @@ public sealed partial class HtmlElement
         public void onmouseover(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseOver, e);
+            FireEvent(s_eventMouseOver, e);
         }
 
         public void onmouseup(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlElement.s_eventMouseUp, e);
+            FireEvent(s_eventMouseUp, e);
         }
 
         public bool onmousewheel(IHTMLEventObj evtObj)

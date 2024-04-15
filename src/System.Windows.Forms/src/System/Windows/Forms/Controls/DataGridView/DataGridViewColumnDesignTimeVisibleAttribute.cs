@@ -10,10 +10,7 @@ public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
     {
     }
 
-    public DataGridViewColumnDesignTimeVisibleAttribute(bool visible)
-    {
-        Visible = visible;
-    }
+    public DataGridViewColumnDesignTimeVisibleAttribute(bool visible) => Visible = visible;
 
     public bool Visible { get; }
 
@@ -23,10 +20,8 @@ public sealed class DataGridViewColumnDesignTimeVisibleAttribute : Attribute
 
     public static readonly DataGridViewColumnDesignTimeVisibleAttribute Default = Yes;
 
-    public override bool Equals(object? obj)
-    {
-        return obj == this ? true : obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == Visible;
-    }
+    public override bool Equals(object? obj) =>
+        obj == this || (obj is DataGridViewColumnDesignTimeVisibleAttribute other && other.Visible == Visible);
 
     public override int GetHashCode() => HashCode.Combine(typeof(DataGridViewColumnDesignTimeVisibleAttribute), Visible);
 

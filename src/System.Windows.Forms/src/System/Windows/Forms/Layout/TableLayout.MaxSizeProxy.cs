@@ -7,19 +7,12 @@ internal partial class TableLayout
 {
     private class MaxSizeProxy : SizeProxy
     {
-        private static readonly MaxSizeProxy instance = new();
         public override int Size
         {
             get { return strip.MaxSize; }
             set { strip.MaxSize = value; }
         }
 
-        public static MaxSizeProxy GetInstance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static MaxSizeProxy GetInstance { get; } = new();
     }
 }

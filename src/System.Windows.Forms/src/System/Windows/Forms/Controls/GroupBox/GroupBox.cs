@@ -424,7 +424,7 @@ public partial class GroupBox : Control
             // We only pass in the text color if it is explicitly set, else we let the renderer use the color
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
-            if (ShouldSerializeForeColor() || Enabled == false)
+            if (ShouldSerializeForeColor() || !Enabled)
             {
                 Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
                 GroupBoxRenderer.DrawGroupBox(

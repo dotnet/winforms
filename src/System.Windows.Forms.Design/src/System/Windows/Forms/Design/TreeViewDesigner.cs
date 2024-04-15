@@ -69,9 +69,8 @@ internal class TreeViewDesigner : ControlDesigner
 
     private void TreeViewInvalidate(object? sender, TreeViewEventArgs e) => _treeView?.Invalidate();
 
-    public override DesignerActionListCollection ActionLists
-        => _actionLists ??= new DesignerActionListCollection
-            {
-                new TreeViewActionList(this)
-            };
+    public override DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection
+    {
+        new TreeViewActionList(this)
+    };
 }

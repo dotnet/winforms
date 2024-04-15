@@ -34,7 +34,7 @@ public class CollectionEditorTests
         Assert.Null(editor.Context);
         Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
         Assert.False(editor.IsDropDownResizable);
-        Assert.Equal(new Type[] { expectedItemType }, editor.NewItemTypes);
+        Assert.Equal([expectedItemType], editor.NewItemTypes);
     }
 
     [Fact]
@@ -776,7 +776,7 @@ public class CollectionEditorTests
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
-    public static IEnumerable<Object[]> GetDisplayText_TestData()
+    public static IEnumerable<object[]> GetDisplayText_TestData()
     {
         yield return new object[] { null, null, string.Empty };
         yield return new object[] { null, string.Empty, "String" };
@@ -1073,7 +1073,9 @@ public class CollectionEditorTests
 
     private class ClassWithPrivateItem
     {
+#pragma warning disable IDE0051 // Remove unused private members
         private int Item { get; set; }
+#pragma warning restore IDE0051
     }
 
     private class ClassWithStaticItem
@@ -1088,7 +1090,9 @@ public class CollectionEditorTests
 
     private class ClassWithPrivateItems
     {
+#pragma warning disable IDE0051 // Remove unused private members
         private int Items { get; set; }
+#pragma warning restore IDE0051
     }
 
     private class ClassWithStaticItems
@@ -1117,7 +1121,7 @@ public class CollectionEditorTests
         public override string ToString() => null;
     }
 
-    [DefaultProperty(nameof(ClassWithStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithStringDefaultProperty
     {
         public string DefaultProperty { get; set; }
@@ -1125,7 +1129,7 @@ public class CollectionEditorTests
         public override string ToString() => nameof(ClassWithStringDefaultProperty);
     }
 
-    [DefaultProperty(nameof(ClassWithNonStringDefaultProperty.DefaultProperty))]
+    [DefaultProperty(nameof(DefaultProperty))]
     private class ClassWithNonStringDefaultProperty
     {
         public int DefaultProperty { get; set; }

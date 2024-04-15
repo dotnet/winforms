@@ -247,7 +247,7 @@ public unsafe class VARIANTTests
             yield return new object[] { VT_I4, unchecked((nint)long.MaxValue), -1 };
         }
 
-        yield return new object[] { VT_UI4, (nint)(-10), (uint)4294967286 };
+        yield return new object[] { VT_UI4, (nint)(-10), 4294967286 };
         yield return new object[] { VT_UI4, (nint)0, (uint)0 };
         yield return new object[] { VT_UI4, (nint)10, (uint)10 };
         yield return new object[] { VT_UI4, (nint)byte.MaxValue, (uint)byte.MaxValue };
@@ -278,7 +278,7 @@ public unsafe class VARIANTTests
             yield return new object[] { VT_INT, unchecked((nint)long.MaxValue), -1 };
         }
 
-        yield return new object[] { VT_UINT, (nint)(-10), (uint)4294967286 };
+        yield return new object[] { VT_UINT, (nint)(-10), 4294967286 };
         yield return new object[] { VT_UINT, (nint)0, (uint)0 };
         yield return new object[] { VT_UINT, (nint)10, (uint)10 };
         yield return new object[] { VT_UINT, (nint)byte.MaxValue, (uint)byte.MaxValue };
@@ -442,7 +442,7 @@ public unsafe class VARIANTTests
     {
         if (nint.Size == 8)
         {
-            yield return new object[] { (nint)(-10), (ulong)18446744073709551606 };
+            yield return new object[] { (nint)(-10), 18446744073709551606 };
         }
 
         yield return new object[] { (nint)0, (ulong)0 };
@@ -5697,11 +5697,11 @@ public unsafe class VARIANTTests
     {
         public IRecordInfo* GetComInterface() => (IRecordInfo*)Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo.Interface>(this);
 
-        public HRESULT RecordInit(void* pvNew) => throw new NotImplementedException();
+        public HRESULT RecordInit(void* pvNew) => HRESULT.E_NOTIMPL;
 
-        public HRESULT RecordClear(void* pvExisting) => throw new NotImplementedException();
+        public HRESULT RecordClear(void* pvExisting) => HRESULT.E_NOTIMPL;
 
-        public HRESULT RecordCopy(void* pvExisting, void* pvNew) => throw new NotImplementedException();
+        public HRESULT RecordCopy(void* pvExisting, void* pvNew) => HRESULT.E_NOTIMPL;
 
         public Func<(Guid, HRESULT)> GetGuidAction { get; set; }
 
@@ -5712,33 +5712,33 @@ public unsafe class VARIANTTests
             return hr;
         }
 
-        public HRESULT GetName(BSTR* pbstrName) => throw new NotImplementedException();
+        public HRESULT GetName(BSTR* pbstrName) => HRESULT.E_NOTIMPL;
 
         public HRESULT GetSize(uint* pcbSize)
         {
-            *pcbSize = (uint)sizeof(int);
+            *pcbSize = sizeof(int);
             return HRESULT.S_OK;
         }
 
-        public HRESULT GetTypeInfo(ITypeInfo** ppTypeInfo) => throw new NotImplementedException();
+        public HRESULT GetTypeInfo(ITypeInfo** ppTypeInfo) => HRESULT.E_NOTIMPL;
 
-        public HRESULT GetField(void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT GetField(void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => HRESULT.E_NOTIMPL;
 
-        public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
+        public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => HRESULT.E_NOTIMPL;
 
-        public HRESULT PutField(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutField(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => HRESULT.E_NOTIMPL;
 
-        public HRESULT PutFieldNoCopy(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutFieldNoCopy(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => HRESULT.E_NOTIMPL;
 
-        public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
+        public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => HRESULT.E_NOTIMPL;
 
         public BOOL IsMatchingType(IRecordInfo* pRecordInfoInfo) => throw new NotImplementedException();
 
         public void* RecordCreate() => throw new NotImplementedException();
 
-        public HRESULT RecordCreateCopy(void* pvSource, void** ppvDest) => throw new NotImplementedException();
+        public HRESULT RecordCreateCopy(void* pvSource, void** ppvDest) => HRESULT.E_NOTIMPL;
 
-        public HRESULT RecordDestroy(void* pvRecord) => throw new NotImplementedException();
+        public HRESULT RecordDestroy(void* pvRecord) => HRESULT.E_NOTIMPL;
     }
 
     private static SAFEARRAY* CreateRecordSafeArray<T>(T[] result, IRecordInfo* recordInfo, int lbound = 0)
@@ -5799,7 +5799,7 @@ public unsafe class VARIANTTests
 
         using (VARIANT variant = new())
         {
-            byte[] bytes = { 1, 2, 3 };
+            byte[] bytes = [1, 2, 3];
             Marshal.GetNativeVariantForObject(bytes, (nint)(void*)&variant);
             Assert.Equal(VT_UI1 | VT_ARRAY, variant.vt);
         }

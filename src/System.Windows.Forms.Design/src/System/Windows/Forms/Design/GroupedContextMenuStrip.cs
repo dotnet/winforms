@@ -37,7 +37,7 @@ internal class GroupedContextMenuStrip : ContextMenuStrip
     {
         get
         {
-            _groupOrdering ??= new StringCollection();
+            _groupOrdering ??= [];
 
             return _groupOrdering;
         }

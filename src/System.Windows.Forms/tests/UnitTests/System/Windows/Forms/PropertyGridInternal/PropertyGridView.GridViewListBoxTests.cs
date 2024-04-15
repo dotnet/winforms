@@ -30,7 +30,7 @@ public class PropertyGridView_GridViewListBoxTests
             ConstructorInfo constructorInfo = gridViewListBoxAccessibleObjectType.GetConstructors()[0];
 
             using PropertyGridView.GridViewListBox owningGridViewListBox = new(null);
-            constructorInfo.Invoke(new object[] { owningGridViewListBox });
+            constructorInfo.Invoke([owningGridViewListBox]);
         });
     }
 }

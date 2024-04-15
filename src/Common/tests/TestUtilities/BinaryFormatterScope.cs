@@ -38,12 +38,10 @@ public readonly ref struct BinaryFormatterScope
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
         try
         {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(null!, null!);
-#pragma warning restore SYSLIB0011
         }
         catch (NotSupportedException)
         {

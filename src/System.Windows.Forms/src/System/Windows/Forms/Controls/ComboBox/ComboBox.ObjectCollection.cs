@@ -49,7 +49,7 @@ public partial class ComboBox
         {
             get
             {
-                _innerList ??= new List<Entry>();
+                _innerList ??= [];
 
                 return _innerList;
             }

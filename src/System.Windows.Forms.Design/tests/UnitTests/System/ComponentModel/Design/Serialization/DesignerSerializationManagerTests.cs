@@ -243,7 +243,7 @@ public class DesignerSerializationManagerTests
         Mock<CustomTypeDescriptor> mockCustomTypeDescriptor = new(MockBehavior.Strict);
         mockCustomTypeDescriptor
             .Setup(d => d.GetProperties())
-            .Returns(new PropertyDescriptorCollection(new PropertyDescriptor[] { null }));
+            .Returns(new PropertyDescriptorCollection([null]));
         Mock<TypeDescriptionProvider> mockProvider = new(MockBehavior.Strict);
         mockProvider
             .Setup(p => p.GetCache(provider))
@@ -1884,12 +1884,10 @@ public class DesignerSerializationManagerTests
     {
         DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            object errorInformation = new();
-            iManager.ReportError(errorInformation);
-            Assert.Same(errorInformation, Assert.Single(manager.Errors));
-        }
+        using IDisposable session = manager.CreateSession();
+        object errorInformation = new();
+        iManager.ReportError(errorInformation);
+        Assert.Same(errorInformation, Assert.Single(manager.Errors));
     }
 
     [Fact]

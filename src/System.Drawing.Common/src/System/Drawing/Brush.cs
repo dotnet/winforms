@@ -7,9 +7,6 @@ namespace System.Drawing;
 
 public abstract unsafe class Brush : MarshalByRefObject, ICloneable, IDisposable
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
     // Handle to native GDI+ brush object to be used on demand.
     private GpBrush* _nativeBrush;
 
@@ -29,35 +26,11 @@ public abstract unsafe class Brush : MarshalByRefObject, ICloneable, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativeBrush is not null, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-
         if (_nativeBrush is not null)
         {
-            try
-            {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDeleteBrush(_nativeBrush);
-#if DEBUG
-                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-                // Catch all non fatal exceptions. This includes exceptions like EntryPointNotFoundException, that is thrown
-                // on Windows Nano.
-            }
-            finally
-            {
-                _nativeBrush = null;
-            }
+            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeleteBrush(_nativeBrush);
+            _nativeBrush = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 

@@ -34,7 +34,7 @@ public sealed partial class Application
         private AgileComPointer<IMsoComponent>? _trackingComponent;
         private msocstate _currentState;
 
-        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
+        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= [];
 
         unsafe HRESULT IMsoComponentManager.Interface.QueryService(
             Guid* guidService,
@@ -180,16 +180,12 @@ public sealed partial class Application
 
             if (uContext is msoccontext.All or msoccontext.Mine)
             {
-                Debug.Indent();
-
                 // We should notify all components we contain that the state has changed.
                 foreach (ComponentHashtableEntry entry in OleComponents.Values)
                 {
                     using var component = entry.component.GetInterface();
                     component.Value->OnEnterState(uStateID, false);
                 }
-
-                Debug.Unindent();
             }
 
             return false;

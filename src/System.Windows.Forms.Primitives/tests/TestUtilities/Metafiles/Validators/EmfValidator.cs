@@ -14,10 +14,8 @@ internal static partial class EmfValidator
         DeviceContextState state,
         params IEmfValidator[] validationSteps)
     {
-        if (state is null)
-            throw new ArgumentNullException(nameof(state));
-        if (validationSteps is null)
-            throw new ArgumentNullException(nameof(validationSteps));
+        ArgumentNullException.ThrowIfNull(state);
+        ArgumentNullException.ThrowIfNull(validationSteps);
 
         int currentIndex = 0;
         IEmfValidator? currentValidator = validationSteps[currentIndex];

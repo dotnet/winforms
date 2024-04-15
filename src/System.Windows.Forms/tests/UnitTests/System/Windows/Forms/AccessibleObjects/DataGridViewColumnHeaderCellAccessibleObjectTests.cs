@@ -126,7 +126,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     {
         DataGridViewColumnHeaderCellAccessibleObject accessibleObject = new(null);
 
-        Assert.True((bool)accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]

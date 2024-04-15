@@ -249,7 +249,6 @@ internal partial class PropertyGridView
 
         public void FocusComponent()
         {
-            CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:FocusComponent()");
             if (_currentControl is not null && Visible)
             {
                 _currentControl.Focus();
@@ -336,7 +335,7 @@ internal partial class PropertyGridView
             Debug.Assert(editor is not null, "How do we have a link without the InstanceCreationEditor?");
             if (editor is not null && _gridView?.SelectedGridEntry is not null)
             {
-                Type createType = _gridView.SelectedGridEntry.PropertyType;
+                Type? createType = _gridView.SelectedGridEntry.PropertyType;
                 if (createType is not null)
                 {
                     _gridView.CloseDropDown();
@@ -582,9 +581,6 @@ internal partial class PropertyGridView
             }
 
             _currentControl = control;
-            CompModSwitches.DebugGridView.TraceVerbose(
-                $"DropDownHolder:SetComponent({control.GetType().Name})");
-
             DockPadding.All = 0;
 
             // First handle the control. If it's a listbox, make sure it's got some height to it.
@@ -668,7 +664,6 @@ internal partial class PropertyGridView
             if (m.MsgInternal == PInvoke.WM_ACTIVATE)
             {
                 SetState(States.Modal, true);
-                CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:WM_ACTIVATE()");
                 HWND activatedWindow = (HWND)m.LParamInternal;
                 if (Visible && m.WParamInternal.LOWORD == PInvoke.WA_INACTIVE && !OwnsWindow(activatedWindow))
                 {

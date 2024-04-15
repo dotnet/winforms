@@ -26,7 +26,7 @@ public class WindowsFormsApplicationBaseTests
     private static string GetUniqueIDFromAssembly(string guid, Version version)
     {
         CustomAttributeBuilder attributeBuilder = new(
-            typeof(GuidAttribute).GetConstructor(new[] { typeof(string) }), new[] { guid });
+            typeof(GuidAttribute).GetConstructor([typeof(string)]), new[] { guid });
         var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
             new AssemblyName(Guid.NewGuid().ToString()) { Version = version },
             AssemblyBuilderAccess.RunAndCollect,

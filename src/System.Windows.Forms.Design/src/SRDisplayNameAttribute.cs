@@ -4,11 +4,10 @@
 using System.ComponentModel;
 namespace System.Windows.Forms.Design;
 
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Class |
-                AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Method)]
 internal sealed class SRDisplayNameAttribute : DisplayNameAttribute
 {
-    private bool replaced;
+    private bool _replaced;
 
     public SRDisplayNameAttribute(string displayName)
         : base(displayName)
@@ -19,9 +18,9 @@ internal sealed class SRDisplayNameAttribute : DisplayNameAttribute
     {
         get
         {
-            if (!replaced)
+            if (!_replaced)
             {
-                replaced = true;
+                _replaced = true;
                 DisplayNameValue = SR.GetResourceString(base.DisplayName);
             }
 

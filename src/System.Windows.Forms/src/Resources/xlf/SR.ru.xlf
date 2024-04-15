@@ -412,6 +412,11 @@
         <target state="translated">Привязка Navigator</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Операции привязки не поддерживаются, когда для приложений включена обрезка.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Событие, возникающее, когда пользователь вызывает метод AddNew для BindingSource</target>

@@ -126,7 +126,7 @@ public partial class CollectionEditor
         /// </summary>
         private void AddItems(IList instances)
         {
-            _createdItems ??= new List<object>();
+            _createdItems ??= [];
 
             _listBox.BeginUpdate();
             try
@@ -150,7 +150,7 @@ public partial class CollectionEditor
             if (instances.Count == 1)
             {
                 // optimize for the case where we just added one thing...
-                UpdateItemWidths(_listBox.Items[_listBox.Items.Count - 1] as ListItem);
+                UpdateItemWidths(_listBox.Items[^1] as ListItem);
             }
             else
             {
@@ -246,7 +246,7 @@ public partial class CollectionEditor
 
                 if (_createdItems is not null)
                 {
-                    if (_createdItems is [IComponent {Site: not null}, ..])
+                    if (_createdItems is [IComponent { Site: not null }, ..])
                     {
                         // here we bail now because we don't want to do the "undo" manually,
                         // we're part of a transaction, we've added item, the rollback will be
@@ -256,7 +256,7 @@ public partial class CollectionEditor
                         return;
                     }
 
-                    object[] items = _createdItems.ToArray();
+                    object[] items = [.. _createdItems];
                     for (int i = 0; i < items.Length; i++)
                     {
                         DestroyInstance(items[i]);
@@ -272,12 +272,12 @@ public partial class CollectionEditor
                 // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
                 if (_originalItems is not null && _originalItems.Count > 0)
                 {
-                    Items = _originalItems.ToArray();
+                    Items = [.. _originalItems];
                     _originalItems.Clear();
                 }
                 else
                 {
-                    Items = Array.Empty<object>();
+                    Items = [];
                 }
             }
             catch (Exception ex)
@@ -324,9 +324,7 @@ public partial class CollectionEditor
                 }
 
                 int ti = _listBox.TopIndex;
-                object itemMove = _listBox.Items[index];
-                _listBox.Items[index] = _listBox.Items[index + 1];
-                _listBox.Items[index + 1] = itemMove;
+                (_listBox.Items[index + 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index + 1]);
 
                 if (ti < _listBox.Items.Count - 1)
                 {
@@ -522,32 +520,30 @@ public partial class CollectionEditor
                 return;
             }
 
-            using (Graphics g = _listBox.CreateGraphics())
+            using Graphics g = _listBox.CreateGraphics();
+            int old = _listBox.HorizontalExtent;
+
+            if (item is not null)
             {
-                int old = _listBox.HorizontalExtent;
-
-                if (item is not null)
+                int w = CalcItemWidth(g, item);
+                if (w > old)
                 {
-                    int w = CalcItemWidth(g, item);
-                    if (w > old)
+                    _listBox.HorizontalExtent = w;
+                }
+            }
+            else
+            {
+                int max = 0;
+                foreach (ListItem i in _listBox.Items)
+                {
+                    int w = CalcItemWidth(g, i);
+                    if (w > max)
                     {
-                        _listBox.HorizontalExtent = w;
+                        max = w;
                     }
                 }
-                else
-                {
-                    int max = 0;
-                    foreach (ListItem i in _listBox.Items)
-                    {
-                        int w = CalcItemWidth(g, i);
-                        if (w > max)
-                        {
-                            max = w;
-                        }
-                    }
 
-                    _listBox.HorizontalExtent = max;
-                }
+                _listBox.HorizontalExtent = max;
             }
         }
 
@@ -689,7 +685,7 @@ public partial class CollectionEditor
 
                 if (_removedItems is not null && _dirty)
                 {
-                    object[] deadItems = _removedItems.ToArray();
+                    object[] deadItems = [.. _removedItems];
 
                     for (int i = 0; i < deadItems.Length; i++)
                     {
@@ -743,7 +739,7 @@ public partial class CollectionEditor
             }
 
             // Remember these contents for cancellation
-            _originalItems ??= new List<object>();
+            _originalItems ??= [];
 
             _originalItems.Clear();
 
@@ -891,14 +887,14 @@ public partial class CollectionEditor
                     {
                         if (CanRemoveInstance(item.Value))
                         {
-                            _removedItems ??= new List<object>();
+                            _removedItems ??= [];
 
                             _removedItems.Add(item.Value);
                             _listBox.Items.Remove(item);
                         }
                         else
                         {
-                            throw new Exception(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                            throw new InvalidOperationException(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                         }
                     }
                     catch (Exception ex)
@@ -997,9 +993,7 @@ public partial class CollectionEditor
             {
                 SuspendEnabledUpdates();
                 int ti = _listBox.TopIndex;
-                object itemMove = _listBox.Items[index];
-                _listBox.Items[index] = _listBox.Items[index - 1];
-                _listBox.Items[index - 1] = itemMove;
+                (_listBox.Items[index - 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index - 1]);
 
                 if (ti > 0)
                 {
@@ -1049,7 +1043,7 @@ public partial class CollectionEditor
                 // otherwise, the user will be presented with a batch of read only properties, which isn't terribly useful.
                 if (IsImmutable)
                 {
-                    items = new object[] { new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems) };
+                    items = [new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems)];
                 }
                 else
                 {
@@ -1129,13 +1123,13 @@ public partial class CollectionEditor
             private object? _value;
 
             public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection)
-                : base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
+                : base("Value", [new CategoryAttribute(collectionItemType.Name)])
             {
                 ComponentType = collectionType;
                 PropertyType = collectionItemType;
                 _control = control;
                 _collection = collection;
-                _properties = new PropertyDescriptorCollection(new PropertyDescriptor[] { this });
+                _properties = new PropertyDescriptorCollection([this]);
 
                 Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                 _value = this;
@@ -1250,6 +1244,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the type converter for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
             TypeConverter? ICustomTypeDescriptor.GetConverter() => null;
 
             /// <summary>
@@ -1265,6 +1260,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the an editor for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
             object? ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
             /// <summary>
@@ -1290,6 +1286,7 @@ public partial class CollectionEditor
             ///  This may differ from the set of properties the class provides.
             ///  If the component is sited, the site may add or remove additional properties.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => _properties;
 
             /// <summary>
@@ -1298,6 +1295,7 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional properties.
             ///  The returned array of properties will be filtered by the given set of attributes.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes) => _properties;
 
             /// <summary>

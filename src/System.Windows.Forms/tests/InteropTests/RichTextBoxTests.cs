@@ -72,7 +72,7 @@ public class RichTextBoxTests
 
         Assert.Equal((UIntPtr)109, value.dwCookie);
         Assert.Equal(1577u, value.dwError);
-        Assert.Equal((IntPtr)6578, value.pfnCallback);
+        Assert.Equal(6578, value.pfnCallback);
     }
 
     [Fact]
@@ -93,8 +93,8 @@ public class RichTextBoxTests
         Assert.Equal(132u, value.cb);
         Assert.Equal(GETTEXTEX_FLAGS.GT_RAWTEXT, value.flags);
         Assert.Equal(432u, value.codepage);
-        Assert.Equal((IntPtr)22, value.lpDefaultChar);
-        Assert.Equal((IntPtr)6578, value.lpUsedDefChar);
+        Assert.Equal(22, value.lpDefaultChar);
+        Assert.Equal(6578, value.lpUsedDefChar);
     }
 
     [Fact]

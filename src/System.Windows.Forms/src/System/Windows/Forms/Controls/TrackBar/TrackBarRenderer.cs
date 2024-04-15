@@ -14,7 +14,7 @@ public static class TrackBarRenderer
     // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
-    private const int lineWidth = 2;
+    private const int LineWidth = 2;
 
     /// <summary>
     ///  Returns true if this class is supported for the current OS and user/application settings,
@@ -117,17 +117,17 @@ public static class TrackBarRenderer
         // trivial case -- avoid calcs
         if (numTicks == 1)
         {
-            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
+            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, LineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
             return;
         }
 
-        float inc = ((float)bounds.Width - lineWidth) / ((float)numTicks - 1);
+        float inc = ((float)bounds.Width - LineWidth) / ((float)numTicks - 1);
 
         while (numTicks > 0)
         {
             // draw the nth tick
-            float x = bounds.X + ((float)(numTicks - 1)) * inc;
-            t_visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
+            float x = bounds.X + (numTicks - 1) * inc;
+            t_visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, LineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
             numTicks--;
         }
     }
@@ -147,17 +147,17 @@ public static class TrackBarRenderer
         // trivial case
         if (numTicks == 1)
         {
-            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
+            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, bounds.Width, LineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
             return;
         }
 
-        float inc = ((float)bounds.Height - lineWidth) / ((float)numTicks - 1);
+        float inc = ((float)bounds.Height - LineWidth) / ((float)numTicks - 1);
 
         while (numTicks > 0)
         {
             // draw the nth tick
-            float y = bounds.Y + ((float)(numTicks - 1)) * inc;
-            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
+            float y = bounds.Y + (numTicks - 1) * inc;
+            t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, LineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
             numTicks--;
         }
     }

@@ -262,7 +262,7 @@ internal partial class GridErrorDialog : Form
 
         AcceptButton = _okButton;
         AutoSize = true;
-        AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         AutoSizeMode = AutoSizeMode.GrowAndShrink;
         CancelButton = _cancelButton;
@@ -311,7 +311,7 @@ internal partial class GridErrorDialog : Form
 
             // Location is relative to its parent.
             Control? parent = _detailsButton.Parent;
-            while (parent is not null && parent is not Form)
+            while (parent is not null and not Form)
             {
                 y += parent.Location.Y;
                 parent = parent.Parent;

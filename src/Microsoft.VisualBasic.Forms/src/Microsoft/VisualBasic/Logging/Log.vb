@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Logging
                 InitializeWithDefaultsSinceNoConfigExists()
             End If
             ' Make sure to flush the log when the application closes
-            AddHandler System.AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
+            AddHandler AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
         End Sub
 
         ''' <summary>
@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' TraceSource has other constructors, this is the only one we care about for this internal class
             ''' </summary>
             ''' <param name="name"></param>
-            Sub New(name As String)
+            Public Sub New(name As String)
                 MyBase.New(name)
             End Sub
 
@@ -186,7 +186,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Make sure we flush the log on exit
         ''' </summary>
         Private Sub CloseOnProcessExit(sender As Object, e As EventArgs)
-            RemoveHandler System.AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
+            RemoveHandler AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
             TraceSource.Close()
         End Sub
 

@@ -26,110 +26,110 @@ namespace System.Windows.Forms;
 [DesignerCategory("Form")]
 public partial class Form : ContainerControl
 {
-    private static readonly object EVENT_ACTIVATED = new();
-    private static readonly object EVENT_CLOSING = new();
-    private static readonly object EVENT_CLOSED = new();
-    private static readonly object EVENT_FORMCLOSING = new();
-    private static readonly object EVENT_FORMCLOSED = new();
-    private static readonly object EVENT_DEACTIVATE = new();
-    private static readonly object EVENT_LOAD = new();
-    private static readonly object EVENT_MDI_CHILD_ACTIVATE = new();
-    private static readonly object EVENT_INPUTLANGCHANGE = new();
-    private static readonly object EVENT_INPUTLANGCHANGEREQUEST = new();
-    private static readonly object EVENT_MENUSTART = new();
-    private static readonly object EVENT_MENUCOMPLETE = new();
-    private static readonly object EVENT_MAXIMUMSIZECHANGED = new();
-    private static readonly object EVENT_MINIMUMSIZECHANGED = new();
-    private static readonly object EVENT_HELPBUTTONCLICKED = new();
-    private static readonly object EVENT_SHOWN = new();
-    private static readonly object EVENT_RESIZEBEGIN = new();
-    private static readonly object EVENT_RESIZEEND = new();
-    private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new();
-    private static readonly object EVENT_DPI_CHANGED = new();
+    private static readonly object s_activatedEvent = new();
+    private static readonly object s_closingEvent = new();
+    private static readonly object s_closedEvent = new();
+    private static readonly object s_formClosingEvent = new();
+    private static readonly object s_formClosedEvent = new();
+    private static readonly object s_deactivateEvent = new();
+    private static readonly object s_loadEvent = new();
+    private static readonly object s_mdiChildActivateEvent = new();
+    private static readonly object s_inputLanguageChangeEvent = new();
+    private static readonly object s_inputLanguageChangeRequestEvent = new();
+    private static readonly object s_menuStartEvent = new();
+    private static readonly object s_menuCompleteEvent = new();
+    private static readonly object s_maximumSizeChangedEvent = new();
+    private static readonly object s_minimumSizeChangedEvent = new();
+    private static readonly object s_helpButtonChangedEvent = new();
+    private static readonly object s_shownEvent = new();
+    private static readonly object s_resizeBeginEvent = new();
+    private static readonly object s_resizeEndEvent = new();
+    private static readonly object s_rightToLeftLayoutChangedEvent = new();
+    private static readonly object s_dpiChangedEvent = new();
 
     //
     // The following flags should be used with formState[..] not formStateEx[..]
     // Don't add any more sections to this vector, it is already full.
     //
-    private static readonly BitVector32.Section FormStateAllowTransparency = BitVector32.CreateSection(1);
-    private static readonly BitVector32.Section FormStateBorderStyle = BitVector32.CreateSection(6, FormStateAllowTransparency);
-    private static readonly BitVector32.Section FormStateTaskBar = BitVector32.CreateSection(1, FormStateBorderStyle);
-    private static readonly BitVector32.Section FormStateControlBox = BitVector32.CreateSection(1, FormStateTaskBar);
-    private static readonly BitVector32.Section FormStateKeyPreview = BitVector32.CreateSection(1, FormStateControlBox);
-    private static readonly BitVector32.Section FormStateLayered = BitVector32.CreateSection(1, FormStateKeyPreview);
-    private static readonly BitVector32.Section FormStateMaximizeBox = BitVector32.CreateSection(1, FormStateLayered);
-    private static readonly BitVector32.Section FormStateMinimizeBox = BitVector32.CreateSection(1, FormStateMaximizeBox);
-    private static readonly BitVector32.Section FormStateHelpButton = BitVector32.CreateSection(1, FormStateMinimizeBox);
-    private static readonly BitVector32.Section FormStateStartPos = BitVector32.CreateSection(4, FormStateHelpButton);
-    private static readonly BitVector32.Section FormStateWindowState = BitVector32.CreateSection(2, FormStateStartPos);
-    private static readonly BitVector32.Section FormStateShowWindowOnCreate = BitVector32.CreateSection(1, FormStateWindowState);
-    private static readonly BitVector32.Section FormStateAutoScaling = BitVector32.CreateSection(1, FormStateShowWindowOnCreate);
-    private static readonly BitVector32.Section FormStateSetClientSize = BitVector32.CreateSection(1, FormStateAutoScaling);
-    private static readonly BitVector32.Section FormStateTopMost = BitVector32.CreateSection(1, FormStateSetClientSize);
-    private static readonly BitVector32.Section FormStateSWCalled = BitVector32.CreateSection(1, FormStateTopMost);
-    private static readonly BitVector32.Section FormStateMdiChildMax = BitVector32.CreateSection(1, FormStateSWCalled);
-    private static readonly BitVector32.Section FormStateRenderSizeGrip = BitVector32.CreateSection(1, FormStateMdiChildMax);
-    private static readonly BitVector32.Section FormStateSizeGripStyle = BitVector32.CreateSection(2, FormStateRenderSizeGrip);
-    private static readonly BitVector32.Section FormStateIsWindowActivated = BitVector32.CreateSection(1, FormStateSizeGripStyle);
-    private static readonly BitVector32.Section FormStateIsTextEmpty = BitVector32.CreateSection(1, FormStateIsWindowActivated);
-    private static readonly BitVector32.Section FormStateIsActive = BitVector32.CreateSection(1, FormStateIsTextEmpty);
-    private static readonly BitVector32.Section FormStateIconSet = BitVector32.CreateSection(1, FormStateIsActive);
+    private static readonly BitVector32.Section s_formStateAllowTransparency = BitVector32.CreateSection(1);
+    private static readonly BitVector32.Section s_formStateBorderStyle = BitVector32.CreateSection(6, s_formStateAllowTransparency);
+    private static readonly BitVector32.Section s_formStateTaskBar = BitVector32.CreateSection(1, s_formStateBorderStyle);
+    private static readonly BitVector32.Section s_formStateControlBox = BitVector32.CreateSection(1, s_formStateTaskBar);
+    private static readonly BitVector32.Section s_formStateKeyPreview = BitVector32.CreateSection(1, s_formStateControlBox);
+    private static readonly BitVector32.Section s_formStateLayered = BitVector32.CreateSection(1, s_formStateKeyPreview);
+    private static readonly BitVector32.Section s_formStateMaximizeBox = BitVector32.CreateSection(1, s_formStateLayered);
+    private static readonly BitVector32.Section s_formStateMinimizeBox = BitVector32.CreateSection(1, s_formStateMaximizeBox);
+    private static readonly BitVector32.Section s_formStateHelpButton = BitVector32.CreateSection(1, s_formStateMinimizeBox);
+    private static readonly BitVector32.Section s_formStateStartPos = BitVector32.CreateSection(4, s_formStateHelpButton);
+    private static readonly BitVector32.Section s_formStateWindowState = BitVector32.CreateSection(2, s_formStateStartPos);
+    private static readonly BitVector32.Section s_formStateShowWindowOnCreate = BitVector32.CreateSection(1, s_formStateWindowState);
+    private static readonly BitVector32.Section s_formStateAutoScaling = BitVector32.CreateSection(1, s_formStateShowWindowOnCreate);
+    private static readonly BitVector32.Section s_formStateSetClientSize = BitVector32.CreateSection(1, s_formStateAutoScaling);
+    private static readonly BitVector32.Section s_formStateTopMost = BitVector32.CreateSection(1, s_formStateSetClientSize);
+    private static readonly BitVector32.Section s_formStateSWCalled = BitVector32.CreateSection(1, s_formStateTopMost);
+    private static readonly BitVector32.Section s_formStateMdiChildMax = BitVector32.CreateSection(1, s_formStateSWCalled);
+    private static readonly BitVector32.Section s_formStateRenderSizeGrip = BitVector32.CreateSection(1, s_formStateMdiChildMax);
+    private static readonly BitVector32.Section s_formStateSizeGripStyle = BitVector32.CreateSection(2, s_formStateRenderSizeGrip);
+    private static readonly BitVector32.Section s_formStateIsWindowActivated = BitVector32.CreateSection(1, s_formStateSizeGripStyle);
+    private static readonly BitVector32.Section s_formStateIsTextEmpty = BitVector32.CreateSection(1, s_formStateIsWindowActivated);
+    private static readonly BitVector32.Section s_formStateIsActive = BitVector32.CreateSection(1, s_formStateIsTextEmpty);
+    private static readonly BitVector32.Section s_formStateIconSet = BitVector32.CreateSection(1, s_formStateIsActive);
 
     // The following flags should be used with formStateEx[...] not formState[..]
-    private static readonly BitVector32.Section FormStateExCalledClosing = BitVector32.CreateSection(1);
-    private static readonly BitVector32.Section FormStateExUpdateMenuHandlesSuspendCount = BitVector32.CreateSection(8, FormStateExCalledClosing);
-    private static readonly BitVector32.Section FormStateExUpdateMenuHandlesDeferred = BitVector32.CreateSection(1, FormStateExUpdateMenuHandlesSuspendCount);
-    private static readonly BitVector32.Section FormStateExUseMdiChildProc = BitVector32.CreateSection(1, FormStateExUpdateMenuHandlesDeferred);
-    private static readonly BitVector32.Section FormStateExCalledOnLoad = BitVector32.CreateSection(1, FormStateExUseMdiChildProc);
-    private static readonly BitVector32.Section FormStateExCalledMakeVisible = BitVector32.CreateSection(1, FormStateExCalledOnLoad);
-    private static readonly BitVector32.Section FormStateExCalledCreateControl = BitVector32.CreateSection(1, FormStateExCalledMakeVisible);
-    private static readonly BitVector32.Section FormStateExAutoSize = BitVector32.CreateSection(1, FormStateExCalledCreateControl);
-    private static readonly BitVector32.Section FormStateExInUpdateMdiControlStrip = BitVector32.CreateSection(1, FormStateExAutoSize);
-    private static readonly BitVector32.Section FormStateExShowIcon = BitVector32.CreateSection(1, FormStateExInUpdateMdiControlStrip);
-    private static readonly BitVector32.Section FormStateExMnemonicProcessed = BitVector32.CreateSection(1, FormStateExShowIcon);
-    private static readonly BitVector32.Section FormStateExInScale = BitVector32.CreateSection(1, FormStateExMnemonicProcessed);
-    private static readonly BitVector32.Section FormStateExInModalSizingLoop = BitVector32.CreateSection(1, FormStateExInScale);
-    private static readonly BitVector32.Section FormStateExSettingAutoScale = BitVector32.CreateSection(1, FormStateExInModalSizingLoop);
-    private static readonly BitVector32.Section FormStateExWindowBoundsWidthIsClientSize = BitVector32.CreateSection(1, FormStateExSettingAutoScale);
-    private static readonly BitVector32.Section FormStateExWindowBoundsHeightIsClientSize = BitVector32.CreateSection(1, FormStateExWindowBoundsWidthIsClientSize);
-    private static readonly BitVector32.Section FormStateExWindowClosing = BitVector32.CreateSection(1, FormStateExWindowBoundsHeightIsClientSize);
+    private static readonly BitVector32.Section s_formStateExCalledClosing = BitVector32.CreateSection(1);
+    private static readonly BitVector32.Section s_formStateExUpdateMenuHandlesSuspendCount = BitVector32.CreateSection(8, s_formStateExCalledClosing);
+    private static readonly BitVector32.Section s_formStateExUpdateMenuHandlesDeferred = BitVector32.CreateSection(1, s_formStateExUpdateMenuHandlesSuspendCount);
+    private static readonly BitVector32.Section s_formStateExUseMdiChildProc = BitVector32.CreateSection(1, s_formStateExUpdateMenuHandlesDeferred);
+    private static readonly BitVector32.Section s_formStateExCalledOnLoad = BitVector32.CreateSection(1, s_formStateExUseMdiChildProc);
+    private static readonly BitVector32.Section s_formStateExCalledMakeVisible = BitVector32.CreateSection(1, s_formStateExCalledOnLoad);
+    private static readonly BitVector32.Section s_formStateExCalledCreateControl = BitVector32.CreateSection(1, s_formStateExCalledMakeVisible);
+    private static readonly BitVector32.Section s_formStateExAutoSize = BitVector32.CreateSection(1, s_formStateExCalledCreateControl);
+    private static readonly BitVector32.Section s_formStateExInUpdateMdiControlStrip = BitVector32.CreateSection(1, s_formStateExAutoSize);
+    private static readonly BitVector32.Section s_formStateExShowIcon = BitVector32.CreateSection(1, s_formStateExInUpdateMdiControlStrip);
+    private static readonly BitVector32.Section s_formStateExMnemonicProcessed = BitVector32.CreateSection(1, s_formStateExShowIcon);
+    private static readonly BitVector32.Section s_formStateExInScale = BitVector32.CreateSection(1, s_formStateExMnemonicProcessed);
+    private static readonly BitVector32.Section s_formStateExInModalSizingLoop = BitVector32.CreateSection(1, s_formStateExInScale);
+    private static readonly BitVector32.Section s_formStateExSettingAutoScale = BitVector32.CreateSection(1, s_formStateExInModalSizingLoop);
+    private static readonly BitVector32.Section s_formStateExWindowBoundsWidthIsClientSize = BitVector32.CreateSection(1, s_formStateExSettingAutoScale);
+    private static readonly BitVector32.Section s_formStateExWindowBoundsHeightIsClientSize = BitVector32.CreateSection(1, s_formStateExWindowBoundsWidthIsClientSize);
+    private static readonly BitVector32.Section s_formStateExWindowClosing = BitVector32.CreateSection(1, s_formStateExWindowBoundsHeightIsClientSize);
 
     private const int SizeGripSize = 16;
 
-    private static Icon? defaultIcon;
-    private static readonly object internalSyncObject = new();
+    private static Icon? s_defaultIcon;
+    private static readonly object s_internalSyncObject = new();
 
     // Property store keys for properties.  The property store allocates most efficiently
     // in groups of four, so we try to lump properties in groups of four based on how
     // likely they are going to be used in a group.
-    //
-    private static readonly int PropAcceptButton = PropertyStore.CreateKey();
-    private static readonly int PropCancelButton = PropertyStore.CreateKey();
-    private static readonly int PropDefaultButton = PropertyStore.CreateKey();
-    private static readonly int PropDialogOwner = PropertyStore.CreateKey();
 
-    private static readonly int PropOwner = PropertyStore.CreateKey();
-    private static readonly int PropOwnedForms = PropertyStore.CreateKey();
-    private static readonly int PropMaximizedBounds = PropertyStore.CreateKey();
-    private static readonly int PropOwnedFormsCount = PropertyStore.CreateKey();
+    private static readonly int s_propAcceptButton = PropertyStore.CreateKey();
+    private static readonly int s_propCancelButton = PropertyStore.CreateKey();
+    private static readonly int s_propDefaultButton = PropertyStore.CreateKey();
+    private static readonly int s_propDialogOwner = PropertyStore.CreateKey();
 
-    private static readonly int PropMinTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int PropMinTrackSizeHeight = PropertyStore.CreateKey();
-    private static readonly int PropMaxTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int PropMaxTrackSizeHeight = PropertyStore.CreateKey();
+    private static readonly int s_propOwner = PropertyStore.CreateKey();
+    private static readonly int s_propOwnedForms = PropertyStore.CreateKey();
+    private static readonly int s_propMaximizedBounds = PropertyStore.CreateKey();
+    private static readonly int s_propOwnedFormsCount = PropertyStore.CreateKey();
 
-    private static readonly int PropFormMdiParent = PropertyStore.CreateKey();
-    private static readonly int PropActiveMdiChild = PropertyStore.CreateKey();
-    private static readonly int PropFormerlyActiveMdiChild = PropertyStore.CreateKey();
-    private static readonly int PropMdiChildFocusable = PropertyStore.CreateKey();
+    private static readonly int s_propMinTrackSizeWidth = PropertyStore.CreateKey();
+    private static readonly int s_propMinTrackSizeHeight = PropertyStore.CreateKey();
+    private static readonly int s_propMaxTrackSizeWidth = PropertyStore.CreateKey();
+    private static readonly int s_propMaxTrackSizeHeight = PropertyStore.CreateKey();
 
-    private static readonly int PropDummyMdiMenu = PropertyStore.CreateKey();
-    private static readonly int PropMainMenuStrip = PropertyStore.CreateKey();
-    private static readonly int PropMdiWindowListStrip = PropertyStore.CreateKey();
-    private static readonly int PropMdiControlStrip = PropertyStore.CreateKey();
+    private static readonly int s_propFormMdiParent = PropertyStore.CreateKey();
+    private static readonly int s_propActiveMdiChild = PropertyStore.CreateKey();
+    private static readonly int s_propFormerlyActiveMdiChild = PropertyStore.CreateKey();
+    private static readonly int s_propMdiChildFocusable = PropertyStore.CreateKey();
 
-    private static readonly int PropOpacity = PropertyStore.CreateKey();
-    private static readonly int PropTransparencyKey = PropertyStore.CreateKey();
+    private static readonly int s_propDummyMdiMenu = PropertyStore.CreateKey();
+    private static readonly int s_propMainMenuStrip = PropertyStore.CreateKey();
+    private static readonly int s_propMdiWindowListStrip = PropertyStore.CreateKey();
+    private static readonly int s_propMdiControlStrip = PropertyStore.CreateKey();
+
+    private static readonly int s_propOpacity = PropertyStore.CreateKey();
+    private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -166,31 +166,31 @@ public partial class Form : ContainerControl
     public Form() : base()
     {
         // Assert section.
-        Debug.Assert(_formState[FormStateAllowTransparency] == 0, "Failed to set formState[FormStateAllowTransparency]");
-        Debug.Assert(_formState[FormStateBorderStyle] == (int)FormBorderStyle.Sizable, "Failed to set formState[FormStateBorderStyle]");
-        Debug.Assert(_formState[FormStateTaskBar] == 1, "Failed to set formState[FormStateTaskBar]");
-        Debug.Assert(_formState[FormStateControlBox] == 1, "Failed to set formState[FormStateControlBox]");
-        Debug.Assert(_formState[FormStateKeyPreview] == 0, "Failed to set formState[FormStateKeyPreview]");
-        Debug.Assert(_formState[FormStateLayered] == 0, "Failed to set formState[FormStateLayered]");
-        Debug.Assert(_formState[FormStateMaximizeBox] == 1, "Failed to set formState[FormStateMaximizeBox]");
-        Debug.Assert(_formState[FormStateMinimizeBox] == 1, "Failed to set formState[FormStateMinimizeBox]");
-        Debug.Assert(_formState[FormStateHelpButton] == 0, "Failed to set formState[FormStateHelpButton]");
-        Debug.Assert(_formState[FormStateStartPos] == (int)FormStartPosition.WindowsDefaultLocation, "Failed to set formState[FormStateStartPos]");
-        Debug.Assert(_formState[FormStateWindowState] == (int)FormWindowState.Normal, "Failed to set formState[FormStateWindowState]");
-        Debug.Assert(_formState[FormStateShowWindowOnCreate] == 0, "Failed to set formState[FormStateShowWindowOnCreate]");
-        Debug.Assert(_formState[FormStateAutoScaling] == 1, "Failed to set formState[FormStateAutoScaling]");
-        Debug.Assert(_formState[FormStateSetClientSize] == 0, "Failed to set formState[FormStateSetClientSize]");
-        Debug.Assert(_formState[FormStateTopMost] == 0, "Failed to set formState[FormStateTopMost]");
-        Debug.Assert(_formState[FormStateSWCalled] == 0, "Failed to set formState[FormStateSWCalled]");
-        Debug.Assert(_formState[FormStateMdiChildMax] == 0, "Failed to set formState[FormStateMdiChildMax]");
-        Debug.Assert(_formState[FormStateRenderSizeGrip] == 0, "Failed to set formState[FormStateRenderSizeGrip]");
-        Debug.Assert(_formState[FormStateSizeGripStyle] == 0, "Failed to set formState[FormStateSizeGripStyle]");
-        Debug.Assert(_formState[FormStateIsWindowActivated] == 0, "Failed to set formState[FormStateIsWindowActivated]");
-        Debug.Assert(_formState[FormStateIsTextEmpty] == 0, "Failed to set formState[FormStateIsTextEmpty]");
-        Debug.Assert(_formState[FormStateIsActive] == 0, "Failed to set formState[FormStateIsActive]");
-        Debug.Assert(_formState[FormStateIconSet] == 0, "Failed to set formState[FormStateIconSet]");
+        Debug.Assert(_formState[s_formStateAllowTransparency] == 0, "Failed to set formState[FormStateAllowTransparency]");
+        Debug.Assert(_formState[s_formStateBorderStyle] == (int)FormBorderStyle.Sizable, "Failed to set formState[FormStateBorderStyle]");
+        Debug.Assert(_formState[s_formStateTaskBar] == 1, "Failed to set formState[FormStateTaskBar]");
+        Debug.Assert(_formState[s_formStateControlBox] == 1, "Failed to set formState[FormStateControlBox]");
+        Debug.Assert(_formState[s_formStateKeyPreview] == 0, "Failed to set formState[FormStateKeyPreview]");
+        Debug.Assert(_formState[s_formStateLayered] == 0, "Failed to set formState[FormStateLayered]");
+        Debug.Assert(_formState[s_formStateMaximizeBox] == 1, "Failed to set formState[FormStateMaximizeBox]");
+        Debug.Assert(_formState[s_formStateMinimizeBox] == 1, "Failed to set formState[FormStateMinimizeBox]");
+        Debug.Assert(_formState[s_formStateHelpButton] == 0, "Failed to set formState[FormStateHelpButton]");
+        Debug.Assert(_formState[s_formStateStartPos] == (int)FormStartPosition.WindowsDefaultLocation, "Failed to set formState[FormStateStartPos]");
+        Debug.Assert(_formState[s_formStateWindowState] == (int)FormWindowState.Normal, "Failed to set formState[FormStateWindowState]");
+        Debug.Assert(_formState[s_formStateShowWindowOnCreate] == 0, "Failed to set formState[FormStateShowWindowOnCreate]");
+        Debug.Assert(_formState[s_formStateAutoScaling] == 1, "Failed to set formState[FormStateAutoScaling]");
+        Debug.Assert(_formState[s_formStateSetClientSize] == 0, "Failed to set formState[FormStateSetClientSize]");
+        Debug.Assert(_formState[s_formStateTopMost] == 0, "Failed to set formState[FormStateTopMost]");
+        Debug.Assert(_formState[s_formStateSWCalled] == 0, "Failed to set formState[FormStateSWCalled]");
+        Debug.Assert(_formState[s_formStateMdiChildMax] == 0, "Failed to set formState[FormStateMdiChildMax]");
+        Debug.Assert(_formState[s_formStateRenderSizeGrip] == 0, "Failed to set formState[FormStateRenderSizeGrip]");
+        Debug.Assert(_formState[s_formStateSizeGripStyle] == 0, "Failed to set formState[FormStateSizeGripStyle]");
+        Debug.Assert(_formState[s_formStateIsWindowActivated] == 0, "Failed to set formState[FormStateIsWindowActivated]");
+        Debug.Assert(_formState[s_formStateIsTextEmpty] == 0, "Failed to set formState[FormStateIsTextEmpty]");
+        Debug.Assert(_formState[s_formStateIsActive] == 0, "Failed to set formState[FormStateIsActive]");
+        Debug.Assert(_formState[s_formStateIconSet] == 0, "Failed to set formState[FormStateIconSet]");
 
-        _formStateEx[FormStateExShowIcon] = 1;
+        _formStateEx[s_formStateExShowIcon] = 1;
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
@@ -206,13 +206,13 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (IButtonControl?)Properties.GetObject(PropAcceptButton);
+            return (IButtonControl?)Properties.GetObject(s_propAcceptButton);
         }
         set
         {
             if (AcceptButton != value)
             {
-                Properties.SetObject(PropAcceptButton, value);
+                Properties.SetObject(s_propAcceptButton, value);
                 UpdateDefaultButton();
             }
         }
@@ -228,15 +228,14 @@ public partial class Form : ContainerControl
             Form? parentForm = ParentForm;
             if (parentForm is null)
             {
-                return _formState[FormStateIsActive] != 0;
+                return _formState[s_formStateIsActive] != 0;
             }
 
             return parentForm.ActiveControl == this && parentForm.Active;
         }
         set
         {
-            s_focusTracing.TraceVerbose($"Form::set_Active - {Name}");
-            if ((_formState[FormStateIsActive] != 0) != value)
+            if ((_formState[s_formStateIsActive] != 0) != value)
             {
                 if (value)
                 {
@@ -246,11 +245,11 @@ public partial class Form : ContainerControl
                     }
                 }
 
-                _formState[FormStateIsActive] = value ? 1 : 0;
+                _formState[s_formStateIsActive] = value ? 1 : 0;
 
                 if (value)
                 {
-                    _formState[FormStateIsWindowActivated] = 1;
+                    _formState[s_formStateIsWindowActivated] = 1;
 
                     // Check if validation has been canceled to avoid raising Validation event multiple times.
                     if (!ValidationCancelled)
@@ -268,7 +267,7 @@ public partial class Form : ContainerControl
                 }
                 else
                 {
-                    _formState[FormStateIsWindowActivated] = 0;
+                    _formState[s_formStateIsWindowActivated] = 0;
                     OnDeactivate(EventArgs.Empty);
                 }
             }
@@ -327,12 +326,12 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (Form?)Properties.GetObject(PropActiveMdiChild);
+            return (Form?)Properties.GetObject(s_propActiveMdiChild);
         }
 
         set
         {
-            Properties.SetObject(PropActiveMdiChild, value);
+            Properties.SetObject(s_propActiveMdiChild, value);
         }
     }
 
@@ -342,12 +341,12 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (Form?)Properties.GetObject(PropFormerlyActiveMdiChild);
+            return (Form?)Properties.GetObject(s_propFormerlyActiveMdiChild);
         }
 
         set
         {
-            Properties.SetObject(PropFormerlyActiveMdiChild, value);
+            Properties.SetObject(s_propFormerlyActiveMdiChild, value);
         }
     }
 
@@ -363,28 +362,28 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formState[FormStateAllowTransparency] != 0;
+            return _formState[s_formStateAllowTransparency] != 0;
         }
         set
         {
-            if (value != (_formState[FormStateAllowTransparency] != 0))
+            if (value != (_formState[s_formStateAllowTransparency] != 0))
             {
-                _formState[FormStateAllowTransparency] = (value ? 1 : 0);
+                _formState[s_formStateAllowTransparency] = (value ? 1 : 0);
 
-                _formState[FormStateLayered] = _formState[FormStateAllowTransparency];
+                _formState[s_formStateLayered] = _formState[s_formStateAllowTransparency];
 
                 UpdateStyles();
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(PropOpacity))
+                    if (Properties.ContainsObject(s_propOpacity))
                     {
-                        Properties.SetObject(PropOpacity, 1.0f);
+                        Properties.SetObject(s_propOpacity, 1.0f);
                     }
 
-                    if (Properties.ContainsObject(PropTransparencyKey))
+                    if (Properties.ContainsObject(s_propTransparencyKey))
                     {
-                        Properties.SetObject(PropTransparencyKey, Color.Empty);
+                        Properties.SetObject(s_propTransparencyKey, Color.Empty);
                     }
 
                     UpdateLayered();
@@ -408,17 +407,17 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formState[FormStateAutoScaling] != 0;
+            return _formState[s_formStateAutoScaling] != 0;
         }
 
         set
         {
-            _formStateEx[FormStateExSettingAutoScale] = 1;
+            _formStateEx[s_formStateExSettingAutoScale] = 1;
             try
             {
                 if (value)
                 {
-                    _formState[FormStateAutoScaling] = 1;
+                    _formState[s_formStateAutoScaling] = 1;
 
                     // if someone insists on auto scaling,
                     // force the new property back to none so they
@@ -427,12 +426,12 @@ public partial class Form : ContainerControl
                 }
                 else
                 {
-                    _formState[FormStateAutoScaling] = 0;
+                    _formState[s_formStateAutoScaling] = 0;
                 }
             }
             finally
             {
-                _formStateEx[FormStateExSettingAutoScale] = 0;
+                _formStateEx[s_formStateExSettingAutoScale] = 0;
             }
         }
     }
@@ -440,13 +439,11 @@ public partial class Form : ContainerControl
     // Our STRONG recommendation to customers is to upgrade to AutoScaleDimensions
     // however, since this is generated by default in Everett, and there's not a 1:1 mapping of
     // the old to the new, we are un-obsoleting the setter for AutoScaleBaseSize only.
+
     /// <summary>
-    ///  The base size used for autoscaling. The AutoScaleBaseSize is used
-    ///  internally to determine how much to scale the form when AutoScaling is
-    ///  used.
+    ///  The base size used for autoscaling. The AutoScaleBaseSize is used internally to determine how much to scale
+    ///  the form when AutoScaling is used.
     /// </summary>
-    //
-    // Virtual so subclasses like PrintPreviewDialog can prevent changes.
     [Localizable(true)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -457,7 +454,9 @@ public partial class Form : ContainerControl
         {
             if (_autoScaleBaseSize.IsEmpty)
             {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 SizeF real = GetAutoScaleSize(Font);
+#pragma warning restore CS0618
                 return new Size((int)Math.Round(real.Width), (int)Math.Round(real.Height));
             }
 
@@ -503,12 +502,12 @@ public partial class Form : ContainerControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public override bool AutoSize
     {
-        get { return _formStateEx[FormStateExAutoSize] != 0; }
+        get { return _formStateEx[s_formStateExAutoSize] != 0; }
         set
         {
             if (value != AutoSize)
             {
-                _formStateEx[FormStateExAutoSize] = value ? 1 : 0;
+                _formStateEx[s_formStateExAutoSize] = value ? 1 : 0;
                 if (!AutoSize)
                 {
                     _minAutoSize = Size.Empty;
@@ -617,11 +616,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formStateEx[FormStateExCalledClosing] != 0;
+            return _formStateEx[s_formStateExCalledClosing] != 0;
         }
         set
         {
-            _formStateEx[FormStateExCalledClosing] = (value ? 1 : 0);
+            _formStateEx[s_formStateExCalledClosing] = (value ? 1 : 0);
         }
     }
 
@@ -629,11 +628,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formStateEx[FormStateExCalledCreateControl] != 0;
+            return _formStateEx[s_formStateExCalledCreateControl] != 0;
         }
         set
         {
-            _formStateEx[FormStateExCalledCreateControl] = (value ? 1 : 0);
+            _formStateEx[s_formStateExCalledCreateControl] = (value ? 1 : 0);
         }
     }
 
@@ -641,11 +640,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formStateEx[FormStateExCalledMakeVisible] != 0;
+            return _formStateEx[s_formStateExCalledMakeVisible] != 0;
         }
         set
         {
-            _formStateEx[FormStateExCalledMakeVisible] = (value ? 1 : 0);
+            _formStateEx[s_formStateExCalledMakeVisible] = (value ? 1 : 0);
         }
     }
 
@@ -653,11 +652,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formStateEx[FormStateExCalledOnLoad] != 0;
+            return _formStateEx[s_formStateExCalledOnLoad] != 0;
         }
         set
         {
-            _formStateEx[FormStateExCalledOnLoad] = (value ? 1 : 0);
+            _formStateEx[s_formStateExCalledOnLoad] = (value ? 1 : 0);
         }
     }
 
@@ -670,15 +669,16 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormBorderStyleDescr))]
     public FormBorderStyle FormBorderStyle
     {
-        get => (FormBorderStyle)_formState[FormStateBorderStyle];
+        get => (FormBorderStyle)_formState[s_formStateBorderStyle];
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            _formState[FormStateBorderStyle] = (int)value;
-            if (_formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
+            _formState[s_formStateBorderStyle] = (int)value;
+            if (_formState[s_formStateSetClientSize] == 1 && !IsHandleCreated)
             {
-                ClientSize = ClientSize;
+                Size size = ClientSize;
+                ClientSize = size;
             }
 
             // Since setting the border style induces a call to SetBoundsCore, which,
@@ -691,15 +691,15 @@ public partial class Form : ContainerControl
             // the restoredWindowBounds field.
             Rectangle preClientUpdateRestoredWindowBounds = _restoredWindowBounds;
             BoundsSpecified preClientUpdateRestoredWindowBoundsSpecified = _restoredWindowBoundsSpecified;
-            int preWindowBoundsWidthIsClientSize = _formStateEx[FormStateExWindowBoundsWidthIsClientSize];
-            int preWindowBoundsHeightIsClientSize = _formStateEx[FormStateExWindowBoundsHeightIsClientSize];
+            int preWindowBoundsWidthIsClientSize = _formStateEx[s_formStateExWindowBoundsWidthIsClientSize];
+            int preWindowBoundsHeightIsClientSize = _formStateEx[s_formStateExWindowBoundsHeightIsClientSize];
 
             UpdateFormStyles();
 
             // In Windows Theme, the FixedDialog tend to have a small Icon.
             // So to make this behave uniformly with other styles, we need to make
             // the call to UpdateIcon after the form styles have been updated.
-            if (_formState[FormStateIconSet] == 0)
+            if (_formState[s_formStateIconSet] == 0)
             {
                 UpdateWindowIcon(false);
             }
@@ -709,8 +709,8 @@ public partial class Form : ContainerControl
             {
                 _restoredWindowBounds = preClientUpdateRestoredWindowBounds;
                 _restoredWindowBoundsSpecified = preClientUpdateRestoredWindowBoundsSpecified;
-                _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = preWindowBoundsWidthIsClientSize;
-                _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = preWindowBoundsHeightIsClientSize;
+                _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = preWindowBoundsWidthIsClientSize;
+                _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = preWindowBoundsHeightIsClientSize;
             }
         }
     }
@@ -727,11 +727,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (IButtonControl?)Properties.GetObject(PropCancelButton);
+            return (IButtonControl?)Properties.GetObject(s_propCancelButton);
         }
         set
         {
-            Properties.SetObject(PropCancelButton, value);
+            Properties.SetObject(s_propCancelButton, value);
 
             if (value is not null && value.DialogResult == DialogResult.None)
             {
@@ -760,10 +760,10 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormControlBoxDescr))]
     public bool ControlBox
     {
-        get => _formState[FormStateControlBox] != 0;
+        get => _formState[s_formStateControlBox] != 0;
         set
         {
-            _formState[FormStateControlBox] = value ? 1 : 0;
+            _formState[s_formStateControlBox] = value ? 1 : 0;
             UpdateFormStyles();
         }
     }
@@ -790,12 +790,12 @@ public partial class Form : ContainerControl
                 cp.Style &= ~(int)WINDOW_STYLE.WS_DISABLED;
             }
 
-            if (TopLevel && (_formState[FormStateLayered] != 0))
+            if (TopLevel && (_formState[s_formStateLayered] != 0))
             {
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
             }
 
-            IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
+            IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(s_propDialogOwner);
             if (dialogOwner is not null)
             {
                 cp.Parent = GetSafeHandle(dialogOwner).Handle;
@@ -805,7 +805,7 @@ public partial class Form : ContainerControl
             FillInCreateParamsWindowState(cp);
             FillInCreateParamsBorderIcons(cp);
 
-            if (_formState[FormStateTaskBar] != 0)
+            if (_formState[s_formStateTaskBar] != 0)
             {
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_APPWINDOW;
             }
@@ -825,19 +825,19 @@ public partial class Form : ContainerControl
                         && (WindowState == FormWindowState.Maximized
                             || WindowState == FormWindowState.Normal))
                 {
-                    Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);
+                    Form? formMdiParent = (Form?)Properties.GetObject(s_propFormMdiParent);
                     Form? form = formMdiParent?.ActiveMdiChildInternal;
 
                     if (form is not null
                         && form.WindowState == FormWindowState.Maximized)
                     {
                         cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
-                        _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
+                        _formState[s_formStateWindowState] = (int)FormWindowState.Maximized;
                         SetState(States.SizeLockedByOS, true);
                     }
                 }
 
-                if (_formState[FormStateMdiChildMax] != 0)
+                if (_formState[s_formStateMdiChildMax] != 0)
                 {
                     cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                 }
@@ -854,12 +854,12 @@ public partial class Form : ContainerControl
                 //
                 if ((cp.Style & (int)WINDOW_STYLE.WS_VISIBLE) != 0)
                 {
-                    _formState[FormStateShowWindowOnCreate] = 1;
+                    _formState[s_formStateShowWindowOnCreate] = 1;
                     cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                 }
                 else
                 {
-                    _formState[FormStateShowWindowOnCreate] = 0;
+                    _formState[s_formStateShowWindowOnCreate] = 0;
                 }
             }
 
@@ -889,17 +889,17 @@ public partial class Form : ContainerControl
         get
         {
             // Avoid locking if the value is filled in...
-            if (defaultIcon is null)
+            if (s_defaultIcon is null)
             {
-                lock (internalSyncObject)
+                lock (s_internalSyncObject)
                 {
                     // Once we grab the lock, we re-check the value to avoid a
                     // race condition.
-                    defaultIcon ??= new Icon(typeof(Form), "wfc");
+                    s_defaultIcon ??= new Icon(typeof(Form), "wfc");
                 }
             }
 
-            return defaultIcon;
+            return s_defaultIcon;
         }
     }
 
@@ -1005,18 +1005,18 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formState[FormStateHelpButton] != 0;
+            return _formState[s_formStateHelpButton] != 0;
         }
 
         set
         {
             if (value)
             {
-                _formState[FormStateHelpButton] = 1;
+                _formState[s_formStateHelpButton] = 1;
             }
             else
             {
-                _formState[FormStateHelpButton] = 0;
+                _formState[s_formStateHelpButton] = 0;
             }
 
             UpdateFormStyles();
@@ -1029,8 +1029,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormHelpButtonClickedDescr))]
     public event CancelEventHandler? HelpButtonClicked
     {
-        add => Events.AddHandler(EVENT_HELPBUTTONCLICKED, value);
-        remove => Events.RemoveHandler(EVENT_HELPBUTTONCLICKED, value);
+        add => Events.AddHandler(s_helpButtonChangedEvent, value);
+        remove => Events.RemoveHandler(s_helpButtonChangedEvent, value);
     }
 
     /// <summary>
@@ -1044,7 +1044,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            if (_formState[FormStateIconSet] == 0)
+            if (_formState[s_formStateIconSet] == 0)
             {
                 return DefaultIcon;
             }
@@ -1057,13 +1057,13 @@ public partial class Form : ContainerControl
             {
                 // If the user is setting the default back in, treat this
                 // as a reset.
-                if (value == defaultIcon)
+                if (value == s_defaultIcon)
                 {
                     value = null;
                 }
 
                 // If null is passed, reset the icon.
-                _formState[FormStateIconSet] = value is null ? 0 : 1;
+                _formState[s_formStateIconSet] = value is null ? 0 : 1;
                 _icon = value;
 
                 if (_smallIcon is not null)
@@ -1084,11 +1084,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formStateEx[FormStateExWindowClosing] == 1;
+            return _formStateEx[s_formStateExWindowClosing] == 1;
         }
         set
         {
-            _formStateEx[FormStateExWindowClosing] = value ? 1 : 0;
+            _formStateEx[s_formStateExWindowClosing] = value ? 1 : 0;
         }
     }
 
@@ -1098,7 +1098,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (WindowState == FormWindowState.Maximized || (IsMdiChild && (_formState[FormStateMdiChildMax] == 1)));
+            return (WindowState == FormWindowState.Maximized || (IsMdiChild && (_formState[s_formStateMdiChildMax] == 1)));
         }
     }
 
@@ -1113,21 +1113,19 @@ public partial class Form : ContainerControl
     [MemberNotNullWhen(true, nameof(MdiParentInternal))]
     public bool IsMdiChild
     {
-        get => Properties.ContainsObjectThatIsNotNull(PropFormMdiParent);
+        get => Properties.ContainsObjectThatIsNotNull(s_propFormMdiParent);
     }
 
     // Deactivates active MDI child and temporarily marks it as unfocusable,
     // so that WM_SETFOCUS sent to MDIClient does not activate that child. (See MdiClient.WndProc).
     internal bool IsMdiChildFocusable
     {
-        get => Properties.TryGetObject(PropMdiChildFocusable, out bool value)
-            ? value
-            : false;
+        get => Properties.TryGetObject(s_propMdiChildFocusable, out bool value) && value;
         set
         {
             if (value != IsMdiChildFocusable)
             {
-                Properties.SetObject(PropMdiChildFocusable, value);
+                Properties.SetObject(s_propMdiChildFocusable, value);
             }
         }
     }
@@ -1191,21 +1189,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormKeyPreviewDescr))]
     public bool KeyPreview
     {
-        get
-        {
-            return _formState[FormStateKeyPreview] != 0;
-        }
-        set
-        {
-            if (value)
-            {
-                _formState[FormStateKeyPreview] = 1;
-            }
-            else
-            {
-                _formState[FormStateKeyPreview] = 0;
-            }
-        }
+        get => _formState[s_formStateKeyPreview] != 0;
+        set => _formState[s_formStateKeyPreview] = value ? 1 : 0;
     }
 
     /// <summary>
@@ -1224,29 +1209,25 @@ public partial class Form : ContainerControl
     /// </summary>
     protected Rectangle MaximizedBounds
     {
-        get
-        {
-            return Properties.GetRectangle(PropMaximizedBounds, out _);
-        }
+        get => Properties.GetRectangle(s_propMaximizedBounds, out _);
         set
         {
             if (!value.Equals(MaximizedBounds))
             {
-                Properties.SetRectangle(PropMaximizedBounds, value);
+                Properties.SetRectangle(s_propMaximizedBounds, value);
                 OnMaximizedBoundsChanged(EventArgs.Empty);
             }
         }
     }
 
-    private static readonly object EVENT_MAXIMIZEDBOUNDSCHANGED = new();
+    private static readonly object s_maximizeBoundsChangedEvent = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
     public event EventHandler? MaximizedBoundsChanged
     {
-        add => Events.AddHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
-
-        remove => Events.RemoveHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
+        add => Events.AddHandler(s_maximizeBoundsChangedEvent, value);
+        remove => Events.RemoveHandler(s_maximizeBoundsChangedEvent, value);
     }
 
     /// <summary>
@@ -1261,9 +1242,9 @@ public partial class Form : ContainerControl
     {
         get
         {
-            if (Properties.ContainsInteger(PropMaxTrackSizeWidth))
+            if (Properties.ContainsInteger(s_propMaxTrackSizeWidth))
             {
-                return new Size(Properties.GetInteger(PropMaxTrackSizeWidth), Properties.GetInteger(PropMaxTrackSizeHeight));
+                return new Size(Properties.GetInteger(s_propMaxTrackSizeWidth), Properties.GetInteger(s_propMaxTrackSizeHeight));
             }
 
             return Size.Empty;
@@ -1284,20 +1265,20 @@ public partial class Form : ContainerControl
 
     private void UpdateMaximumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
-        Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
+        Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
+        Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
 
         // Bump minimum size if necessary
         if (!MinimumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(PropMinTrackSizeWidth) > value.Width)
+            if (Properties.GetInteger(s_propMinTrackSizeWidth) > value.Width)
             {
-                Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
+                Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
             }
 
-            if (Properties.GetInteger(PropMinTrackSizeHeight) > value.Height)
+            if (Properties.GetInteger(s_propMinTrackSizeHeight) > value.Height)
             {
-                Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
+                Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
             }
         }
 
@@ -1320,9 +1301,9 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
     public event EventHandler? MaximumSizeChanged
     {
-        add => Events.AddHandler(EVENT_MAXIMUMSIZECHANGED, value);
+        add => Events.AddHandler(s_maximumSizeChangedEvent, value);
 
-        remove => Events.RemoveHandler(EVENT_MAXIMUMSIZECHANGED, value);
+        remove => Events.RemoveHandler(s_maximumSizeChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatWindowStyle))]
@@ -1333,11 +1314,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (MenuStrip?)Properties.GetObject(PropMainMenuStrip);
+            return (MenuStrip?)Properties.GetObject(s_propMainMenuStrip);
         }
         set
         {
-            Properties.SetObject(PropMainMenuStrip, value);
+            Properties.SetObject(s_propMainMenuStrip, value);
             if (IsHandleCreated)
             {
                 UpdateMenuHandles(recreateMenu: true);
@@ -1378,9 +1359,9 @@ public partial class Form : ContainerControl
     {
         get
         {
-            if (Properties.ContainsInteger(PropMinTrackSizeWidth))
+            if (Properties.ContainsInteger(s_propMinTrackSizeWidth))
             {
-                return new Size(Properties.GetInteger(PropMinTrackSizeWidth), Properties.GetInteger(PropMinTrackSizeHeight));
+                return new Size(Properties.GetInteger(s_propMinTrackSizeWidth), Properties.GetInteger(s_propMinTrackSizeHeight));
             }
 
             return DefaultMinimumSize;
@@ -1405,20 +1386,20 @@ public partial class Form : ContainerControl
 
     private void UpdateMinimumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
-        Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
+        Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
+        Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
 
         // Bump maximum size if necessary
         if (!MaximumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(PropMaxTrackSizeWidth) < value.Width)
+            if (Properties.GetInteger(s_propMaxTrackSizeWidth) < value.Width)
             {
-                Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
+                Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
             }
 
-            if (Properties.GetInteger(PropMaxTrackSizeHeight) < value.Height)
+            if (Properties.GetInteger(s_propMaxTrackSizeHeight) < value.Height)
             {
-                Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
+                Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
             }
         }
 
@@ -1455,9 +1436,9 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
     public event EventHandler? MinimumSizeChanged
     {
-        add => Events.AddHandler(EVENT_MINIMUMSIZECHANGED, value);
+        add => Events.AddHandler(s_minimumSizeChangedEvent, value);
 
-        remove => Events.RemoveHandler(EVENT_MINIMUMSIZECHANGED, value);
+        remove => Events.RemoveHandler(s_minimumSizeChangedEvent, value);
     }
 
     /// <summary>
@@ -1471,17 +1452,17 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formState[FormStateMaximizeBox] != 0;
+            return _formState[s_formStateMaximizeBox] != 0;
         }
         set
         {
             if (value)
             {
-                _formState[FormStateMaximizeBox] = 1;
+                _formState[s_formStateMaximizeBox] = 1;
             }
             else
             {
-                _formState[FormStateMaximizeBox] = 0;
+                _formState[s_formStateMaximizeBox] = 0;
             }
 
             UpdateFormStyles();
@@ -1507,7 +1488,7 @@ public partial class Form : ContainerControl
             }
             else
             {
-                return Array.Empty<Form>();
+                return [];
             }
         }
     }
@@ -1516,7 +1497,11 @@ public partial class Form : ContainerControl
     /// Gets or sets the anchoring for minimized MDI children.
     /// </summary>
     /// <value><see langword="true" /> to anchor minimized MDI children to the bottom left of the parent form; <see langword="false" /> to anchor to the top left of the parent form.</value>
-    /// <remarks>By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.</remarks>
+    /// <remarks>
+    ///  <para>
+    ///   By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [DefaultValue(true)]
     [SRDescription(nameof(SR.FormMdiChildrenMinimizedAnchorBottomDescr))]
@@ -1557,10 +1542,10 @@ public partial class Form : ContainerControl
 
     private Form? MdiParentInternal
     {
-        get => (Form?)Properties.GetObject(PropFormMdiParent);
+        get => (Form?)Properties.GetObject(s_propFormMdiParent);
         set
         {
-            Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);
+            Form? formMdiParent = (Form?)Properties.GetObject(s_propFormMdiParent);
             if (value == formMdiParent && (value is not null || ParentInternal is null))
             {
                 return;
@@ -1599,7 +1584,7 @@ public partial class Form : ContainerControl
                     // and create the handle here.
 
                     Dock = DockStyle.None;
-                    Properties.SetObject(PropFormMdiParent, value);
+                    Properties.SetObject(s_propFormMdiParent, value);
 
                     SetState(States.TopLevel, false);
                     ParentInternal = value.MdiClient;
@@ -1629,14 +1614,14 @@ public partial class Form : ContainerControl
 
     private MdiWindowListStrip? MdiWindowListStrip
     {
-        get { return Properties.GetObject(PropMdiWindowListStrip) as MdiWindowListStrip; }
-        set { Properties.SetObject(PropMdiWindowListStrip, value); }
+        get { return Properties.GetObject(s_propMdiWindowListStrip) as MdiWindowListStrip; }
+        set { Properties.SetObject(s_propMdiWindowListStrip, value); }
     }
 
     private MdiControlStrip? MdiControlStrip
     {
-        get { return Properties.GetObject(PropMdiControlStrip) as MdiControlStrip; }
-        set { Properties.SetObject(PropMdiControlStrip, value); }
+        get { return Properties.GetObject(s_propMdiControlStrip) as MdiControlStrip; }
+        set { Properties.SetObject(s_propMdiControlStrip, value); }
     }
 
     /// <summary>
@@ -1649,17 +1634,17 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return _formState[FormStateMinimizeBox] != 0;
+            return _formState[s_formStateMinimizeBox] != 0;
         }
         set
         {
             if (value)
             {
-                _formState[FormStateMinimizeBox] = 1;
+                _formState[s_formStateMinimizeBox] = 1;
             }
             else
             {
-                _formState[FormStateMinimizeBox] = 0;
+                _formState[s_formStateMinimizeBox] = 0;
             }
 
             UpdateFormStyles();
@@ -1694,7 +1679,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            object? opacity = Properties.GetObject(PropOpacity);
+            object? opacity = Properties.GetObject(s_propOpacity);
             if (opacity is not null)
             {
                 return Convert.ToDouble(opacity, CultureInfo.InvariantCulture);
@@ -1713,16 +1698,16 @@ public partial class Form : ContainerControl
                 value = 0.0f;
             }
 
-            Properties.SetObject(PropOpacity, value);
+            Properties.SetObject(s_propOpacity, value);
 
-            bool oldLayered = (_formState[FormStateLayered] != 0);
+            bool oldLayered = (_formState[s_formStateLayered] != 0);
 
             if (OpacityAsByte < 255)
             {
                 AllowTransparency = true;
-                if (_formState[FormStateLayered] != 1)
+                if (_formState[s_formStateLayered] != 1)
                 {
-                    _formState[FormStateLayered] = 1;
+                    _formState[s_formStateLayered] = 1;
                     if (!oldLayered)
                     {
                         UpdateStyles();
@@ -1731,8 +1716,8 @@ public partial class Form : ContainerControl
             }
             else
             {
-                _formState[FormStateLayered] = (TransparencyKey != Color.Empty) ? 1 : 0;
-                if (oldLayered != (_formState[FormStateLayered] != 0))
+                _formState[s_formStateLayered] = (TransparencyKey != Color.Empty) ? 1 : 0;
+                if (oldLayered != (_formState[s_formStateLayered] != 0))
                 {
                     CreateParams cp = CreateParams;
                     if ((int)ExtendedWindowStyle != cp.ExStyle)
@@ -1765,8 +1750,8 @@ public partial class Form : ContainerControl
     {
         get
         {
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
 
             Form[] result = new Form[ownedFormsCount];
             if (ownedFormsCount > 0)
@@ -1807,11 +1792,11 @@ public partial class Form : ContainerControl
             CheckParentingCycle(this, value);
             CheckParentingCycle(value, this);
 
-            Properties.SetObject(PropOwner, null);
+            Properties.SetObject(s_propOwner, null);
 
             ownerOld?.RemoveOwnedForm(this);
 
-            Properties.SetObject(PropOwner, value);
+            Properties.SetObject(s_propOwner, value);
 
             value?.AddOwnedForm(this);
 
@@ -1823,7 +1808,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (Form?)Properties.GetObject(PropOwner);
+            return (Form?)Properties.GetObject(s_propOwner);
         }
     }
 
@@ -1903,12 +1888,12 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormShowInTaskbarDescr))]
     public bool ShowInTaskbar
     {
-        get => _formState[FormStateTaskBar] != 0;
+        get => _formState[s_formStateTaskBar] != 0;
         set
         {
             if (ShowInTaskbar != value)
             {
-                _formState[FormStateTaskBar] = value ? 1 : 0;
+                _formState[s_formStateTaskBar] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
                     RecreateHandle();
@@ -1928,10 +1913,10 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormShowIconDescr))]
     public bool ShowIcon
     {
-        get => _formStateEx[FormStateExShowIcon] != 0;
+        get => _formStateEx[s_formStateExShowIcon] != 0;
         set
         {
-            _formStateEx[FormStateExShowIcon] = value ? 1 : 0;
+            _formStateEx[s_formStateExShowIcon] = value ? 1 : 0;
             if (!value)
             {
                 UpdateStyles();
@@ -2013,7 +1998,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (SizeGripStyle)_formState[FormStateSizeGripStyle];
+            return (SizeGripStyle)_formState[s_formStateSizeGripStyle];
         }
         set
         {
@@ -2024,7 +2009,7 @@ public partial class Form : ContainerControl
                 // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
-                _formState[FormStateSizeGripStyle] = (int)value;
+                _formState[s_formStateSizeGripStyle] = (int)value;
                 UpdateRenderSizeGrip();
             }
         }
@@ -2042,13 +2027,13 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return (FormStartPosition)_formState[FormStateStartPos];
+            return (FormStartPosition)_formState[s_formStateStartPos];
         }
         set
         {
             // valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
-            _formState[FormStateStartPos] = (int)value;
+            _formState[s_formStateStartPos] = (int)value;
         }
     }
 
@@ -2152,7 +2137,7 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormTopMostDescr))]
     public bool TopMost
     {
-        get => _formState[FormStateTopMost] != 0;
+        get => _formState[s_formStateTopMost] != 0;
         set
         {
             if (IsHandleCreated && TopLevel)
@@ -2164,7 +2149,7 @@ public partial class Form : ContainerControl
                     SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
             }
 
-            _formState[FormStateTopMost] = value ? 1 : 0;
+            _formState[s_formStateTopMost] = value ? 1 : 0;
         }
     }
 
@@ -2177,7 +2162,7 @@ public partial class Form : ContainerControl
     {
         get
         {
-            object? key = Properties.GetObject(PropTransparencyKey);
+            object? key = Properties.GetObject(s_propTransparencyKey);
             if (key is not null)
             {
                 return (Color)key;
@@ -2187,21 +2172,21 @@ public partial class Form : ContainerControl
         }
         set
         {
-            Properties.SetObject(PropTransparencyKey, value);
+            Properties.SetObject(s_propTransparencyKey, value);
             if (!IsMdiContainer)
             {
-                bool oldLayered = (_formState[FormStateLayered] == 1);
+                bool oldLayered = (_formState[s_formStateLayered] == 1);
                 if (value != Color.Empty)
                 {
                     AllowTransparency = true;
-                    _formState[FormStateLayered] = 1;
+                    _formState[s_formStateLayered] = 1;
                 }
                 else
                 {
-                    _formState[FormStateLayered] = (OpacityAsByte < 255) ? 1 : 0;
+                    _formState[s_formStateLayered] = (OpacityAsByte < 255) ? 1 : 0;
                 }
 
-                if (oldLayered != (_formState[FormStateLayered] != 0))
+                if (oldLayered != (_formState[s_formStateLayered] != 0))
                 {
                     UpdateStyles();
                 }
@@ -2216,7 +2201,7 @@ public partial class Form : ContainerControl
     /// </summary>
     internal void AdjustFormPosition()
     {
-        FormStartPosition startPos = (FormStartPosition)_formState[FormStateStartPos];
+        FormStartPosition startPos = (FormStartPosition)_formState[s_formStateStartPos];
         if (startPos == FormStartPosition.CenterParent)
         {
             CenterToParent();
@@ -2230,8 +2215,6 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void SetVisibleCore(bool value)
     {
-        s_focusTracing.TraceVerbose($"Form::SetVisibleCore({value}) - {Name}");
-
         // If DialogResult.OK and the value == Visible then this code has been called either through
         // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
         // This will avoid flashing during closing the dialog;
@@ -2285,7 +2268,7 @@ public partial class Form : ContainerControl
             // it won't send a WM_SHOWWINDOW the first time it's called.
             // when WM_SHOWWINDOW gets called, we'll flip this bit to true
             //
-            if (_formState[FormStateSWCalled] == 0)
+            if (_formState[s_formStateSWCalled] == 0)
             {
                 PInvoke.SendMessage(this, PInvoke.WM_SHOWWINDOW, (WPARAM)(BOOL)value);
             }
@@ -2353,7 +2336,7 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormWindowStateDescr))]
     public FormWindowState WindowState
     {
-        get => (FormWindowState)_formState[FormStateWindowState];
+        get => (FormWindowState)_formState[s_formStateWindowState];
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -2388,7 +2371,7 @@ public partial class Form : ContainerControl
             // Now set the local property to the passed in value so that
             // when UpdateWindowState is by the ShowWindow call above, the window state in effect when
             // this call was made will still be effective while processing that method.
-            _formState[FormStateWindowState] = (int)value;
+            _formState[s_formStateWindowState] = (int)value;
         }
     }
 
@@ -2424,8 +2407,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnActivateDescr))]
     public event EventHandler? Activated
     {
-        add => Events.AddHandler(EVENT_ACTIVATED, value);
-        remove => Events.RemoveHandler(EVENT_ACTIVATED, value);
+        add => Events.AddHandler(s_activatedEvent, value);
+        remove => Events.RemoveHandler(s_activatedEvent, value);
     }
 
     /// <summary>
@@ -2437,8 +2420,8 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     public event CancelEventHandler? Closing
     {
-        add => Events.AddHandler(EVENT_CLOSING, value);
-        remove => Events.RemoveHandler(EVENT_CLOSING, value);
+        add => Events.AddHandler(s_closingEvent, value);
+        remove => Events.RemoveHandler(s_closingEvent, value);
     }
 
     /// <summary>
@@ -2450,8 +2433,8 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler? Closed
     {
-        add => Events.AddHandler(EVENT_CLOSED, value);
-        remove => Events.RemoveHandler(EVENT_CLOSED, value);
+        add => Events.AddHandler(s_closedEvent, value);
+        remove => Events.RemoveHandler(s_closedEvent, value);
     }
 
     /// <summary>
@@ -2461,8 +2444,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnDeactivateDescr))]
     public event EventHandler? Deactivate
     {
-        add => Events.AddHandler(EVENT_DEACTIVATE, value);
-        remove => Events.RemoveHandler(EVENT_DEACTIVATE, value);
+        add => Events.AddHandler(s_deactivateEvent, value);
+        remove => Events.RemoveHandler(s_deactivateEvent, value);
     }
 
     /// <summary>
@@ -2472,8 +2455,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnFormClosingDescr))]
     public event FormClosingEventHandler? FormClosing
     {
-        add => Events.AddHandler(EVENT_FORMCLOSING, value);
-        remove => Events.RemoveHandler(EVENT_FORMCLOSING, value);
+        add => Events.AddHandler(s_formClosingEvent, value);
+        remove => Events.RemoveHandler(s_formClosingEvent, value);
     }
 
     /// <summary>
@@ -2483,8 +2466,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnFormClosedDescr))]
     public event FormClosedEventHandler? FormClosed
     {
-        add => Events.AddHandler(EVENT_FORMCLOSED, value);
-        remove => Events.RemoveHandler(EVENT_FORMCLOSED, value);
+        add => Events.AddHandler(s_formClosedEvent, value);
+        remove => Events.RemoveHandler(s_formClosedEvent, value);
     }
 
     /// <summary>
@@ -2494,8 +2477,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnLoadDescr))]
     public event EventHandler? Load
     {
-        add => Events.AddHandler(EVENT_LOAD, value);
-        remove => Events.RemoveHandler(EVENT_LOAD, value);
+        add => Events.AddHandler(s_loadEvent, value);
+        remove => Events.RemoveHandler(s_loadEvent, value);
     }
 
     /// <summary>
@@ -2506,8 +2489,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
     public event EventHandler? MdiChildActivate
     {
-        add => Events.AddHandler(EVENT_MDI_CHILD_ACTIVATE, value);
-        remove => Events.RemoveHandler(EVENT_MDI_CHILD_ACTIVATE, value);
+        add => Events.AddHandler(s_mdiChildActivateEvent, value);
+        remove => Events.RemoveHandler(s_mdiChildActivateEvent, value);
     }
 
     /// <summary>
@@ -2518,8 +2501,8 @@ public partial class Form : ContainerControl
     [Browsable(false)]
     public event EventHandler? MenuComplete
     {
-        add => Events.AddHandler(EVENT_MENUCOMPLETE, value);
-        remove => Events.RemoveHandler(EVENT_MENUCOMPLETE, value);
+        add => Events.AddHandler(s_menuCompleteEvent, value);
+        remove => Events.RemoveHandler(s_menuCompleteEvent, value);
     }
 
     /// <summary>
@@ -2530,8 +2513,8 @@ public partial class Form : ContainerControl
     [Browsable(false)]
     public event EventHandler? MenuStart
     {
-        add => Events.AddHandler(EVENT_MENUSTART, value);
-        remove => Events.RemoveHandler(EVENT_MENUSTART, value);
+        add => Events.AddHandler(s_menuStartEvent, value);
+        remove => Events.RemoveHandler(s_menuStartEvent, value);
     }
 
     /// <summary>
@@ -2541,8 +2524,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
     public event InputLanguageChangedEventHandler? InputLanguageChanged
     {
-        add => Events.AddHandler(EVENT_INPUTLANGCHANGE, value);
-        remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGE, value);
+        add => Events.AddHandler(s_inputLanguageChangeEvent, value);
+        remove => Events.RemoveHandler(s_inputLanguageChangeEvent, value);
     }
 
     /// <summary>
@@ -2553,16 +2536,16 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
     public event InputLanguageChangingEventHandler? InputLanguageChanging
     {
-        add => Events.AddHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
-        remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
+        add => Events.AddHandler(s_inputLanguageChangeRequestEvent, value);
+        remove => Events.RemoveHandler(s_inputLanguageChangeRequestEvent, value);
     }
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
     public event EventHandler? RightToLeftLayoutChanged
     {
-        add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+        add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
+        remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
     }
 
     /// <summary>
@@ -2572,8 +2555,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnShownDescr))]
     public event EventHandler? Shown
     {
-        add => Events.AddHandler(EVENT_SHOWN, value);
-        remove => Events.RemoveHandler(EVENT_SHOWN, value);
+        add => Events.AddHandler(s_shownEvent, value);
+        remove => Events.RemoveHandler(s_shownEvent, value);
     }
 
     /// <summary>
@@ -2654,8 +2637,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
 
         // Make sure this isn't already in the list:
         for (int i = 0; i < ownedFormsCount; i++)
@@ -2669,18 +2652,18 @@ public partial class Form : ContainerControl
         if (ownedForms is null)
         {
             ownedForms = new Form[4];
-            Properties.SetObject(PropOwnedForms, ownedForms);
+            Properties.SetObject(s_propOwnedForms, ownedForms);
         }
         else if (ownedForms.Length == ownedFormsCount)
         {
             Form[] newOwnedForms = new Form[ownedFormsCount * 2];
             Array.Copy(ownedForms, 0, newOwnedForms, 0, ownedFormsCount);
             ownedForms = newOwnedForms;
-            Properties.SetObject(PropOwnedForms, ownedForms);
+            Properties.SetObject(s_propOwnedForms, ownedForms);
         }
 
         ownedForms[ownedFormsCount] = ownedForm;
-        Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount + 1);
+        Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount + 1);
     }
 
     // When shrinking the form (i.e. going from Large Fonts to Small
@@ -2736,8 +2719,7 @@ public partial class Form : ContainerControl
         UpdateWindowState();
         FormWindowState winState = WindowState;
         FormBorderStyle borderStyle = FormBorderStyle;
-        bool sizableBorder = (borderStyle == FormBorderStyle.SizableToolWindow
-                              || borderStyle == FormBorderStyle.Sizable);
+        bool sizableBorder = borderStyle is FormBorderStyle.SizableToolWindow or FormBorderStyle.Sizable;
 
         bool showMin = MinimizeBox && winState != FormWindowState.Minimized;
         bool showMax = MaximizeBox && winState != FormWindowState.Maximized;
@@ -2814,24 +2796,15 @@ public partial class Form : ContainerControl
     [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected void ApplyAutoScaling()
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "ApplyAutoScaling... ");
-        Debug.Indent();
-        // NOTE : This function is cloned in FormDocumentDesigner... remember to keep
-        //      : them in sync
-        //
+        // NOTE : This function is cloned in FormDocumentDesigner, remember to keep them in sync.
 
-        // We also don't do this if the property is empty.  Otherwise we will perform
-        // two GetAutoScaleBaseSize calls only to find that they returned the same
-        // value.
-        //
+        // We also don't do this if the property is empty. Otherwise we will perform two GetAutoScaleBaseSize
+        // calls only to find that they returned the same value.
         if (!_autoScaleBaseSize.IsEmpty)
         {
             Size baseVar = AutoScaleBaseSize;
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"base  ={baseVar}");
             SizeF newVarF = GetAutoScaleSize(Font);
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(f)={newVarF}");
             Size newVar = new((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(i)={newVar}");
 
             // We save a significant amount of time by bailing early if there's no work to be done
             if (baseVar.Equals(newVar))
@@ -2841,16 +2814,11 @@ public partial class Form : ContainerControl
 
             float percY = AdjustScale(newVar.Height / ((float)baseVar.Height));
             float percX = AdjustScale(newVar.Width / ((float)baseVar.Width));
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"scale={percX}, {percY}");
             Scale(percX, percY);
-            // This would ensure that we use the new
-            // font information to calculate the AutoScaleBaseSize. According to Triage
-            // this was decided to Fix in this version.
-            //
+
+            // This would ensure that we use the new font information to calculate the AutoScaleBaseSize.
             AutoScaleBaseSize = newVar;
         }
-
-        Debug.Unindent();
     }
 
     /// <summary>
@@ -2859,7 +2827,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void ApplyClientSize()
     {
-        if ((FormWindowState)_formState[FormStateWindowState] != FormWindowState.Normal
+        if ((FormWindowState)_formState[s_formStateWindowState] != FormWindowState.Normal
             || !IsHandleCreated)
         {
             return;
@@ -2879,10 +2847,10 @@ public partial class Form : ContainerControl
         // don't get set to the correct size.
         //
         bool adjustScroll = false;
-        if (_formState[FormStateSetClientSize] != 0)
+        if (_formState[s_formStateSetClientSize] != 0)
         {
             adjustScroll = true;
-            _formState[FormStateSetClientSize] = 0;
+            _formState[s_formStateSetClientSize] = 0;
         }
 
         if (adjustScroll)
@@ -2951,10 +2919,10 @@ public partial class Form : ContainerControl
     {
         // If we are being unparented from the MDI client control, remove
         // formMDIParent as well.
-        Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);
+        Form? formMdiParent = (Form?)Properties.GetObject(s_propFormMdiParent);
         if (formMdiParent is not null && formMdiParent.MdiClient != value)
         {
-            Properties.SetObject(PropFormMdiParent, null);
+            Properties.SetObject(s_propFormMdiParent, null);
         }
 
         base.AssignParent(value);
@@ -3074,7 +3042,7 @@ public partial class Form : ContainerControl
 
     protected override AccessibleObject CreateAccessibilityInstance()
     {
-        AccessibleObject accessibleObject = new FormAccessibleObject(this);
+        FormAccessibleObject accessibleObject = new(this);
 
         // Try to raise UIA focus event for the form, if it's focused.
         // Try it after the accessible object creation, because a screen reader
@@ -3136,7 +3104,7 @@ public partial class Form : ContainerControl
         // updates on the parent while creating the handle. Otherwise if the
         // child is created maximized, the menu ends up with two sets of
         // MDI child ornaments.
-        Form? form = (Form?)Properties.GetObject(PropFormMdiParent);
+        Form? form = (Form?)Properties.GetObject(s_propFormMdiParent);
         form?.SuspendUpdateMenuHandles();
 
         try
@@ -3159,15 +3127,15 @@ public partial class Form : ContainerControl
             // We really should find out what causes this... but I can't find it...
             //
             if (IsMdiChild
-                && (FormWindowState)_formState[FormStateWindowState] == FormWindowState.Maximized)
+                && (FormWindowState)_formState[s_formStateWindowState] == FormWindowState.Maximized)
             {
                 // This is the reason why we see the blue borders
                 // when creating a maximized mdi child, unfortunately we cannot fix this now...
-                _formState[FormStateWindowState] = (int)FormWindowState.Normal;
-                _formState[FormStateMdiChildMax] = 1;
+                _formState[s_formStateWindowState] = (int)FormWindowState.Normal;
+                _formState[s_formStateMdiChildMax] = 1;
                 base.CreateHandle();
-                _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
-                _formState[FormStateMdiChildMax] = 0;
+                _formState[s_formStateWindowState] = (int)FormWindowState.Maximized;
+                _formState[s_formStateMdiChildMax] = 0;
             }
             else
             {
@@ -3179,12 +3147,12 @@ public partial class Form : ContainerControl
 
             AdjustSystemMenu();
 
-            if ((FormStartPosition)_formState[FormStateStartPos] != FormStartPosition.WindowsDefaultBounds)
+            if ((FormStartPosition)_formState[s_formStateStartPos] != FormStartPosition.WindowsDefaultBounds)
             {
                 ApplyClientSize();
             }
 
-            if (_formState[FormStateShowWindowOnCreate] == 1)
+            if (_formState[s_formStateShowWindowOnCreate] == 1)
             {
                 Visible = true;
             }
@@ -3209,7 +3177,7 @@ public partial class Form : ContainerControl
                 }
             }
 
-            if (_formState[FormStateTopMost] != 0)
+            if (_formState[s_formStateTopMost] != 0)
             {
                 TopMost = true;
             }
@@ -3289,7 +3257,7 @@ public partial class Form : ContainerControl
 
             GC.KeepAlive(_ctlClient);
         }
-        else if (_formStateEx[FormStateExUseMdiChildProc] != 0)
+        else if (_formStateEx[s_formStateExUseMdiChildProc] != 0)
         {
             m.ResultInternal = PInvoke.DefMDIChildProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
         }
@@ -3311,24 +3279,24 @@ public partial class Form : ContainerControl
             CalledMakeVisible = false;
             CalledCreateControl = false;
 
-            if (Properties.ContainsObject(PropAcceptButton))
+            if (Properties.ContainsObject(s_propAcceptButton))
             {
-                Properties.SetObject(PropAcceptButton, null);
+                Properties.SetObject(s_propAcceptButton, null);
             }
 
-            if (Properties.ContainsObject(PropCancelButton))
+            if (Properties.ContainsObject(s_propCancelButton))
             {
-                Properties.SetObject(PropCancelButton, null);
+                Properties.SetObject(s_propCancelButton, null);
             }
 
-            if (Properties.ContainsObject(PropDefaultButton))
+            if (Properties.ContainsObject(s_propDefaultButton))
             {
-                Properties.SetObject(PropDefaultButton, null);
+                Properties.SetObject(s_propDefaultButton, null);
             }
 
-            if (Properties.ContainsObject(PropActiveMdiChild))
+            if (Properties.ContainsObject(s_propActiveMdiChild))
             {
-                Properties.SetObject(PropActiveMdiChild, null);
+                Properties.SetObject(s_propActiveMdiChild, null);
             }
 
             if (MdiWindowListStrip is not null)
@@ -3349,17 +3317,17 @@ public partial class Form : ContainerControl
                 MainMenuStrip = null;
             }
 
-            Form? owner = (Form?)Properties.GetObject(PropOwner);
+            Form? owner = (Form?)Properties.GetObject(s_propOwner);
             if (owner is not null)
             {
                 owner.RemoveOwnedForm(this);
-                Properties.SetObject(PropOwner, null);
+                Properties.SetObject(s_propOwner, null);
             }
 
-            Properties.SetObject(PropDialogOwner, null);
+            Properties.SetObject(s_propDialogOwner, null);
 
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
 
             for (int i = ownedFormsCount - 1; i >= 0; i--)
             {
@@ -3376,9 +3344,9 @@ public partial class Form : ContainerControl
             base.Dispose(disposing);
             _ctlClient = null;
 
-            if (Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
+            if (Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.RemoveObject(PropDummyMdiMenu);
+                Properties.RemoveObject(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
         }
@@ -3447,7 +3415,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void FillInCreateParamsBorderStyles(CreateParams cp)
     {
-        switch ((FormBorderStyle)_formState[FormStateBorderStyle])
+        switch ((FormBorderStyle)_formState[s_formStateBorderStyle])
         {
             case FormBorderStyle.None:
                 break;
@@ -3481,7 +3449,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void FillInCreateParamsStartPosition(CreateParams cp)
     {
-        if (_formState[FormStateSetClientSize] != 0)
+        if (_formState[s_formStateSetClientSize] != 0)
         {
             // When computing the client window size, don't tell them that we are going to be maximized.
             int maskedStyle = cp.Style & ~(int)(WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE);
@@ -3490,7 +3458,7 @@ public partial class Form : ContainerControl
             cp.Height = correct.Height;
         }
 
-        switch ((FormStartPosition)_formState[FormStateStartPos])
+        switch ((FormStartPosition)_formState[s_formStateStartPos])
         {
             case FormStartPosition.WindowsDefaultBounds:
                 cp.Width = PInvoke.CW_USEDEFAULT;
@@ -3523,7 +3491,7 @@ public partial class Form : ContainerControl
                 else
                 {
                     Screen desktop;
-                    IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
+                    IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(s_propDialogOwner);
                     if ((OwnerInternal is not null) || (dialogOwner is not null))
                     {
                         HandleRef<HWND> ownerHandle = dialogOwner is not null
@@ -3555,7 +3523,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void FillInCreateParamsWindowState(CreateParams cp)
     {
-        switch ((FormWindowState)_formState[FormStateWindowState])
+        switch ((FormWindowState)_formState[s_formStateWindowState])
         {
             case FormWindowState.Maximized:
                 cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
@@ -3596,13 +3564,12 @@ public partial class Form : ContainerControl
 
         try
         {
-            using (Graphics graphics = Graphics.FromHwndInternal(IntPtr.Zero /*screen*/))
-            {
-                string magicString = "The quick brown fox jumped over the lazy dog.";
-                double magicNumber = 44.549996948242189; // chosen for compatibility with older versions of windows forms, but approximately magicString.Length
-                float stringWidth = graphics.MeasureString(magicString, font).Width;
-                width = (float)(stringWidth / magicNumber);
-            }
+            // Get the screen HDC
+            using Graphics graphics = Graphics.FromHwndInternal(0);
+            string magicString = "The quick brown fox jumped over the lazy dog.";
+            double magicNumber = 44.549996948242189; // chosen for compatibility with older versions of windows forms, but approximately magicString.Length
+            float stringWidth = graphics.MeasureString(magicString, font).Width;
+            width = (float)(stringWidth / magicNumber);
         }
         catch
         {
@@ -3653,11 +3620,11 @@ public partial class Form : ContainerControl
     /// </summary>
     internal override bool CanProcessMnemonic()
     {
-#if DEBUG
-        TraceCanProcessMnemonic();
-#endif
         // If this is a Mdi child form, child controls should process mnemonics only if this is the active mdi child.
-        if (IsMdiChild && (_formStateEx[FormStateExMnemonicProcessed] == 1 || this != MdiParentInternal.ActiveMdiChildInternal || WindowState == FormWindowState.Minimized))
+        if (IsMdiChild &&
+            (_formStateEx[s_formStateExMnemonicProcessed] == 1
+                || this != MdiParentInternal.ActiveMdiChildInternal
+                || WindowState == FormWindowState.Minimized))
         {
             return false;
         }
@@ -3805,7 +3772,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnActivated(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_ACTIVATED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_activatedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3815,10 +3782,12 @@ public partial class Form : ContainerControl
     private protected override void OnAutoScaleModeChanged()
     {
         base.OnAutoScaleModeChanged();
-        if (_formStateEx[FormStateExSettingAutoScale] != 1)
+        if (_formStateEx[s_formStateExSettingAutoScale] != 1)
         {
             // Obsolete code required here for backwards compat
+#pragma warning disable CS0618 // Type or member is obsolete
             AutoScale = false;
+#pragma warning restore CS0618
         }
     }
 
@@ -3850,7 +3819,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnClosing(CancelEventArgs e)
     {
-        ((CancelEventHandler?)Events[EVENT_CLOSING])?.Invoke(this, e);
+        ((CancelEventHandler?)Events[s_closingEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3859,7 +3828,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnClosed(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_CLOSED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_closedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3868,7 +3837,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnFormClosing(FormClosingEventArgs e)
     {
-        ((FormClosingEventHandler?)Events[EVENT_FORMCLOSING])?.Invoke(this, e);
+        ((FormClosingEventHandler?)Events[s_formClosingEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3880,7 +3849,7 @@ public partial class Form : ContainerControl
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
-        ((FormClosedEventHandler?)Events[EVENT_FORMCLOSED])?.Invoke(this, e);
+        ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3905,7 +3874,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnDeactivate(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_DEACTIVATE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_deactivateEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -3932,7 +3901,7 @@ public partial class Form : ContainerControl
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         base.OnEnter(e);
 
@@ -3975,7 +3944,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnHandleCreated(EventArgs e)
     {
-        _formStateEx[FormStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
+        _formStateEx[s_formStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
         base.OnHandleCreated(e);
         UpdateLayered();
     }
@@ -3989,7 +3958,7 @@ public partial class Form : ContainerControl
     protected override void OnHandleDestroyed(EventArgs e)
     {
         base.OnHandleDestroyed(e);
-        _formStateEx[FormStateExUseMdiChildProc] = 0;
+        _formStateEx[s_formStateExUseMdiChildProc] = 0;
 
         // Remove the form from OpenForms collection only if we're not recreating the handle of this form
         // (e.g., when ShowInTaskbar or RightToLeft properties get changed).
@@ -4005,7 +3974,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnHelpButtonClicked(CancelEventArgs e)
     {
-        ((CancelEventHandler?)Events[EVENT_HELPBUTTONCLICKED])?.Invoke(this, e);
+        ((CancelEventHandler?)Events[s_helpButtonChangedEvent])?.Invoke(this, e);
     }
 
     protected override void OnLayout(LayoutEventArgs levent)
@@ -4046,13 +4015,15 @@ public partial class Form : ContainerControl
         }
 
         // This will apply AutoScaling to the form just before the form becomes visible.
-        if (_formState[FormStateAutoScaling] == 1 && !DesignMode)
+        if (_formState[s_formStateAutoScaling] == 1 && !DesignMode)
         {
             // Turn off autoscaling so we don't do this on every handle creation.
-            _formState[FormStateAutoScaling] = 0;
+            _formState[s_formStateAutoScaling] = 0;
 
             // Obsolete code required here for backwards compat.
+#pragma warning disable CS0618 // Type or member is obsolete
             ApplyAutoScaling();
+#pragma warning restore CS0618
         }
 
         // Also, at this time we can now locate the form on the correct area of the screen.
@@ -4064,7 +4035,7 @@ public partial class Form : ContainerControl
 
         // There is no good way to explain this event except to say
         // that it's just another name for OnControlCreated.
-        EventHandler? handler = (EventHandler?)Events[EVENT_LOAD];
+        EventHandler? handler = (EventHandler?)Events[s_loadEvent];
         if (handler is not null)
         {
             string text = Text;
@@ -4095,7 +4066,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMaximizedBoundsChanged(EventArgs e)
     {
-        if (Events[EVENT_MAXIMIZEDBOUNDSCHANGED] is EventHandler eh)
+        if (Events[s_maximizeBoundsChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -4104,7 +4075,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMaximumSizeChanged(EventArgs e)
     {
-        if (Events[EVENT_MAXIMUMSIZECHANGED] is EventHandler eh)
+        if (Events[s_maximumSizeChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -4113,7 +4084,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMinimumSizeChanged(EventArgs e)
     {
-        if (Events[EVENT_MINIMUMSIZECHANGED] is EventHandler eh)
+        if (Events[s_minimumSizeChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -4126,7 +4097,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnInputLanguageChanged(InputLanguageChangedEventArgs e)
     {
-        ((InputLanguageChangedEventHandler?)Events[EVENT_INPUTLANGCHANGE])?.Invoke(this, e);
+        ((InputLanguageChangedEventHandler?)Events[s_inputLanguageChangeEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4136,7 +4107,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnInputLanguageChanging(InputLanguageChangingEventArgs e)
     {
-        ((InputLanguageChangingEventHandler?)Events[EVENT_INPUTLANGCHANGEREQUEST])?.Invoke(this, e);
+        ((InputLanguageChangingEventHandler?)Events[s_inputLanguageChangeRequestEvent])?.Invoke(this, e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4176,7 +4147,7 @@ public partial class Form : ContainerControl
     {
         UpdateMenuHandles();
         UpdateToolStrip();
-        ((EventHandler?)Events[EVENT_MDI_CHILD_ACTIVATE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_mdiChildActivateEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4185,7 +4156,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMenuStart(EventArgs e)
     {
-        EventHandler? handler = (EventHandler?)Events[EVENT_MENUSTART];
+        EventHandler? handler = (EventHandler?)Events[s_menuStartEvent];
         handler?.Invoke(this, e);
     }
 
@@ -4195,7 +4166,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnMenuComplete(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_MENUCOMPLETE])?.Invoke(this, e);
+        ((EventHandler?)Events[s_menuCompleteEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4205,7 +4176,7 @@ public partial class Form : ContainerControl
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
-        if (_formState[FormStateRenderSizeGrip] != 0)
+        if (_formState[s_formStateRenderSizeGrip] != 0)
         {
             Size size = ClientSize;
             if (Application.RenderWithVisualStyles)
@@ -4247,7 +4218,7 @@ public partial class Form : ContainerControl
         }
 
         base.OnResize(e);
-        if (_formState[FormStateRenderSizeGrip] != 0)
+        if (_formState[s_formStateRenderSizeGrip] != 0)
         {
             Invalidate();
         }
@@ -4267,7 +4238,7 @@ public partial class Form : ContainerControl
             _oldDeviceDpi = e.DeviceDpiOld;
 
             // call any additional handlers
-            ((DpiChangedEventHandler?)Events[EVENT_DPI_CHANGED])?.Invoke(this, e);
+            ((DpiChangedEventHandler?)Events[s_dpiChangedEvent])?.Invoke(this, e);
 
             if (e.Cancel)
             {
@@ -4280,7 +4251,7 @@ public partial class Form : ContainerControl
                 // for AutoScaleMode is Font. In other modes, Windows OS will compute Form's size.
                 if (AutoScaleMode == AutoScaleMode.Font)
                 {
-                    _dpiFormSizes ??= new Dictionary<int, Size>();
+                    _dpiFormSizes ??= [];
 
                     if (!_dpiFormSizes.ContainsKey(e.DeviceDpiNew))
                     {
@@ -4315,8 +4286,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnDpiChangedDescr))]
     public event DpiChangedEventHandler? DpiChanged
     {
-        add => Events.AddHandler(EVENT_DPI_CHANGED, value);
-        remove => Events.RemoveHandler(EVENT_DPI_CHANGED, value);
+        add => Events.AddHandler(s_dpiChangedEvent, value);
+        remove => Events.RemoveHandler(s_dpiChangedEvent, value);
     }
 
     /// <summary>
@@ -4403,7 +4374,7 @@ public partial class Form : ContainerControl
             RecreateHandle();
         }
 
-        if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
+        if (Events[s_rightToLeftLayoutChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -4424,7 +4395,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnShown(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_SHOWN])?.Invoke(this, e);
+        ((EventHandler?)Events[s_shownEvent])?.Invoke(this, e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4434,12 +4405,12 @@ public partial class Form : ContainerControl
 
         // If there is no control box, there should only be a title bar if text != "".
         int newTextEmpty = Text.Length == 0 ? 1 : 0;
-        if (!ControlBox && _formState[FormStateIsTextEmpty] != newTextEmpty)
+        if (!ControlBox && _formState[s_formStateIsTextEmpty] != newTextEmpty)
         {
             RecreateHandle();
         }
 
-        _formState[FormStateIsTextEmpty] = newTextEmpty;
+        _formState[s_formStateIsTextEmpty] = newTextEmpty;
     }
 
     /// <summary>
@@ -4504,7 +4475,7 @@ public partial class Form : ContainerControl
             switch (keyCode)
             {
                 case Keys.Return:
-                    button = (IButtonControl?)Properties.GetObject(PropDefaultButton);
+                    button = (IButtonControl?)Properties.GetObject(s_propDefaultButton);
                     if (button is not null)
                     {
                         // PerformClick now checks for validationcancelled...
@@ -4518,7 +4489,7 @@ public partial class Form : ContainerControl
 
                     break;
                 case Keys.Escape:
-                    button = (IButtonControl?)Properties.GetObject(PropCancelButton);
+                    button = (IButtonControl?)Properties.GetObject(s_propCancelButton);
                     if (button is not null)
                     {
                         // In order to keep the behavior in sync with native
@@ -4546,11 +4517,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override bool ProcessDialogChar(char charCode)
     {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"Form.ProcessDialogChar [{charCode}]");
-#endif
-        // If we're the top-level form or control, we need to do the mnemonic handling
-        //
+        // If we're the top-level form or control, we need to do the mnemonic handling.
         if (IsMdiChild && charCode != ' ')
         {
             if (ProcessMnemonic(charCode))
@@ -4560,14 +4527,14 @@ public partial class Form : ContainerControl
 
             // ContainerControl calls ProcessMnemonic starting from the active MdiChild form (this)
             // so let's flag it as processed.
-            _formStateEx[FormStateExMnemonicProcessed] = 1;
+            _formStateEx[s_formStateExMnemonicProcessed] = 1;
             try
             {
                 return base.ProcessDialogChar(charCode);
             }
             finally
             {
-                _formStateEx[FormStateExMnemonicProcessed] = 0;
+                _formStateEx[s_formStateExMnemonicProcessed] = 0;
             }
         }
 
@@ -4577,7 +4544,7 @@ public partial class Form : ContainerControl
 
     protected override bool ProcessKeyPreview(ref Message m)
     {
-        if (_formState[FormStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
+        if (_formState[s_formStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
         {
             return true;
         }
@@ -4616,7 +4583,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosed event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -4646,7 +4613,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosing event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -4747,8 +4714,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
 
         if (ownedForms is not null)
         {
@@ -4770,7 +4737,7 @@ public partial class Form : ContainerControl
                 }
             }
 
-            Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount);
+            Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount);
         }
     }
 
@@ -4786,7 +4753,7 @@ public partial class Form : ContainerControl
             _smallIcon = null;
         }
 
-        _formState[FormStateIconSet] = 0;
+        _formState[s_formStateIconSet] = 0;
         UpdateWindowIcon(true);
     }
 
@@ -4805,8 +4772,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnResizeBeginDescr))]
     public event EventHandler? ResizeBegin
     {
-        add => Events.AddHandler(EVENT_RESIZEBEGIN, value);
-        remove => Events.RemoveHandler(EVENT_RESIZEBEGIN, value);
+        add => Events.AddHandler(s_resizeBeginEvent, value);
+        remove => Events.RemoveHandler(s_resizeBeginEvent, value);
     }
 
     /// <summary>
@@ -4816,8 +4783,8 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnResizeEndDescr))]
     public event EventHandler? ResizeEnd
     {
-        add => Events.AddHandler(EVENT_RESIZEEND, value);
-        remove => Events.RemoveHandler(EVENT_RESIZEEND, value);
+        add => Events.AddHandler(s_resizeEndEvent, value);
+        remove => Events.RemoveHandler(s_resizeEndEvent, value);
     }
 
     /// <summary>
@@ -4828,7 +4795,7 @@ public partial class Form : ContainerControl
     {
         // If we're currently minimized, resume our layout because we are
         // about to snap out of it.
-        if (_formState[FormStateWindowState] == (int)FormWindowState.Minimized)
+        if (_formState[s_formStateWindowState] == (int)FormWindowState.Minimized)
         {
             ResumeLayout();
         }
@@ -4851,13 +4818,13 @@ public partial class Form : ContainerControl
             }
 
             SetBounds(_restoredWindowBounds.X, _restoredWindowBounds.Y,
-                _formStateEx[FormStateExWindowBoundsWidthIsClientSize] == 1 ? restoredSize.Width : _restoredWindowBounds.Width,
-                _formStateEx[FormStateExWindowBoundsHeightIsClientSize] == 1 ? restoredSize.Height : _restoredWindowBounds.Height,
+                _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] == 1 ? restoredSize.Width : _restoredWindowBounds.Width,
+                _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] == 1 ? restoredSize.Height : _restoredWindowBounds.Height,
                       _restoredWindowBoundsSpecified);
             _restoredWindowBoundsSpecified = 0;
             _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
-            _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 0;
-            _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 0;
+            _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
+            _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
         }
     }
 
@@ -4868,14 +4835,14 @@ public partial class Form : ContainerControl
     /// </summary>
     private void ResumeUpdateMenuHandles()
     {
-        int suspendCount = _formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
+        int suspendCount = _formStateEx[s_formStateExUpdateMenuHandlesSuspendCount];
         if (suspendCount <= 0)
         {
             throw new InvalidOperationException(SR.TooManyResumeUpdateMenuHandles);
         }
 
-        _formStateEx[FormStateExUpdateMenuHandlesSuspendCount] = --suspendCount;
-        if (suspendCount == 0 && _formStateEx[FormStateExUpdateMenuHandlesDeferred] != 0)
+        _formStateEx[s_formStateExUpdateMenuHandlesSuspendCount] = --suspendCount;
+        if (suspendCount == 0 && _formStateEx[s_formStateExUpdateMenuHandlesDeferred] != 0)
         {
             UpdateMenuHandles();
         }
@@ -4919,8 +4886,6 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float x, float y)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({x}, {y})");
-
         using SuspendLayoutScope scope = new(this);
 
         // Get size values in advance to prevent one change from affecting another.
@@ -4934,7 +4899,9 @@ public partial class Form : ContainerControl
 
         foreach (Control control in Controls)
         {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
             control?.Scale(x, y);
+#pragma warning restore CS0618
         }
     }
 
@@ -4986,7 +4953,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
     {
-        _formStateEx[FormStateExInScale] = 1;
+        _formStateEx[s_formStateExInScale] = 1;
         try
         {
             // don't scale the location of MDI child forms
@@ -4999,7 +4966,7 @@ public partial class Form : ContainerControl
         }
         finally
         {
-            _formStateEx[FormStateExInScale] = 0;
+            _formStateEx[s_formStateExInScale] = 0;
         }
     }
 
@@ -5030,13 +4997,13 @@ public partial class Form : ContainerControl
             if ((specified & BoundsSpecified.Width) != 0)
             {
                 _restoredWindowBounds.Width = width;
-                _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 0;
+                _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
             }
 
             if ((specified & BoundsSpecified.Height) != 0)
             {
                 _restoredWindowBounds.Height = height;
-                _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 0;
+                _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
             }
         }
 
@@ -5105,13 +5072,13 @@ public partial class Form : ContainerControl
     /// </summary>
     private void SetDefaultButton(IButtonControl? button)
     {
-        IButtonControl? defaultButton = (IButtonControl?)Properties.GetObject(PropDefaultButton);
+        IButtonControl? defaultButton = (IButtonControl?)Properties.GetObject(s_propDefaultButton);
 
         if (defaultButton != button)
         {
             defaultButton?.NotifyDefault(false);
 
-            Properties.SetObject(PropDefaultButton, button);
+            Properties.SetObject(s_propDefaultButton, button);
             button?.NotifyDefault(true);
         }
     }
@@ -5152,7 +5119,7 @@ public partial class Form : ContainerControl
             }
         }
 
-        _formState[FormStateSetClientSize] = 1;
+        _formState[s_formStateSetClientSize] = 1;
     }
 
     /// <summary>
@@ -5214,7 +5181,7 @@ public partial class Form : ContainerControl
 
         HWND activeHwnd = PInvoke.GetActiveWindow();
         HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
-        Properties.SetObject(PropDialogOwner, owner);
+        Properties.SetObject(s_propDialogOwner, owner);
         Form? oldOwner = OwnerInternal;
         if (owner is Form ownerForm && owner != oldOwner)
         {
@@ -5336,7 +5303,7 @@ public partial class Form : ContainerControl
                 // the window may never receive Dpi changed event even if its parent has different Dpi.
                 // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
 
-                Properties.SetObject(PropDialogOwner, owner);
+                Properties.SetObject(s_propDialogOwner, owner);
                 if (owner is Form form && owner != oldOwner)
                 {
                     Owner = form;
@@ -5397,7 +5364,7 @@ public partial class Form : ContainerControl
         finally
         {
             Owner = oldOwner;
-            Properties.SetObject(PropDialogOwner, null);
+            Properties.SetObject(s_propDialogOwner, null);
             GC.KeepAlive(ownerHwnd.Wrapper);
         }
 
@@ -5411,7 +5378,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeAutoScaleBaseSize()
     {
-        return _formState[FormStateAutoScaling] != 0;
+        return _formState[s_formStateAutoScaling] != 0;
     }
 
     private static bool ShouldSerializeClientSize()
@@ -5424,7 +5391,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private bool ShouldSerializeIcon()
     {
-        return _formState[FormStateIconSet] == 1;
+        return _formState[s_formStateIconSet] == 1;
     }
 
     /// <summary>
@@ -5466,7 +5433,7 @@ public partial class Form : ContainerControl
     {
         // If we're not currently minimized, suspend our layout because we are
         // about to become minimized
-        if (_formState[FormStateWindowState] != (int)FormWindowState.Minimized)
+        if (_formState[s_formStateWindowState] != (int)FormWindowState.Minimized)
         {
             SuspendLayout();
         }
@@ -5477,8 +5444,8 @@ public partial class Form : ContainerControl
     /// </summary>
     private void SuspendUpdateMenuHandles()
     {
-        int suspendCount = _formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
-        _formStateEx[FormStateExUpdateMenuHandlesSuspendCount] = ++suspendCount;
+        int suspendCount = _formStateEx[s_formStateExUpdateMenuHandlesSuspendCount];
+        _formStateEx[s_formStateExUpdateMenuHandlesSuspendCount] = ++suspendCount;
     }
 
     /// <summary>
@@ -5496,7 +5463,7 @@ public partial class Form : ContainerControl
 
     private void UpdateRenderSizeGrip()
     {
-        int current = _formState[FormStateRenderSizeGrip];
+        int current = _formState[s_formStateRenderSizeGrip];
         switch (FormBorderStyle)
         {
             case FormBorderStyle.None:
@@ -5504,26 +5471,26 @@ public partial class Form : ContainerControl
             case FormBorderStyle.Fixed3D:
             case FormBorderStyle.FixedDialog:
             case FormBorderStyle.FixedToolWindow:
-                _formState[FormStateRenderSizeGrip] = 0;
+                _formState[s_formStateRenderSizeGrip] = 0;
                 break;
             case FormBorderStyle.Sizable:
             case FormBorderStyle.SizableToolWindow:
                 switch (SizeGripStyle)
                 {
                     case SizeGripStyle.Show:
-                        _formState[FormStateRenderSizeGrip] = 1;
+                        _formState[s_formStateRenderSizeGrip] = 1;
                         break;
                     case SizeGripStyle.Hide:
-                        _formState[FormStateRenderSizeGrip] = 0;
+                        _formState[s_formStateRenderSizeGrip] = 0;
                         break;
                     case SizeGripStyle.Auto:
                         if (GetState(States.Modal))
                         {
-                            _formState[FormStateRenderSizeGrip] = 1;
+                            _formState[s_formStateRenderSizeGrip] = 1;
                         }
                         else
                         {
-                            _formState[FormStateRenderSizeGrip] = 0;
+                            _formState[s_formStateRenderSizeGrip] = 0;
                         }
 
                         break;
@@ -5532,7 +5499,7 @@ public partial class Form : ContainerControl
                 break;
         }
 
-        if (_formState[FormStateRenderSizeGrip] != current)
+        if (_formState[s_formStateRenderSizeGrip] != current)
         {
             Invalidate();
         }
@@ -5557,9 +5524,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        if (containerControl.ActiveControl is IButtonControl)
+        if (containerControl.ActiveControl is IButtonControl buttonControl)
         {
-            SetDefaultButton((IButtonControl)containerControl.ActiveControl);
+            SetDefaultButton(buttonControl);
         }
         else
         {
@@ -5576,7 +5543,7 @@ public partial class Form : ContainerControl
         {
             IHandle<HWND> ownerHwnd = NullHandle<HWND>.Instance;
 
-            Form? owner = (Form?)Properties.GetObject(PropOwner);
+            Form? owner = (Form?)Properties.GetObject(s_propOwner);
 
             if (owner is not null)
             {
@@ -5601,7 +5568,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void UpdateLayered()
     {
-        if ((_formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel)
+        if ((_formState[s_formStateLayered] != 0) && IsHandleCreated && TopLevel)
         {
             BOOL result;
 
@@ -5654,10 +5621,10 @@ public partial class Form : ContainerControl
                 // (set to null) so that duplicate control buttons are not placed on the menu bar when
                 // an ole menu is being removed.
                 // Make MDI forget the mdi item position.
-                if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
+                if (!Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                 {
                     dummyMenu = PInvoke.CreateMenu();
-                    Properties.SetObject(PropDummyMdiMenu, dummyMenu);
+                    Properties.SetObject(s_propDummyMdiMenu, dummyMenu);
                 }
 
                 PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
@@ -5690,7 +5657,7 @@ public partial class Form : ContainerControl
         }
 
         PInvoke.DrawMenuBar(this);
-        _formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
+        _formStateEx[s_formStateExUpdateMenuHandlesDeferred] = 0;
     }
 
     // Call this function instead of UpdateStyles() when the form's client-size must
@@ -5699,7 +5666,7 @@ public partial class Form : ContainerControl
     internal void UpdateFormStyles()
     {
         Size previousClientSize = ClientSize;
-        base.UpdateStyles();
+        UpdateStyles();
         if (!ClientSize.Equals(previousClientSize))
         {
             ClientSize = previousClientSize;
@@ -5708,8 +5675,10 @@ public partial class Form : ContainerControl
 
     private static Type? FindClosestStockType(Type type)
     {
-        Type[] stockTypes = new Type[] { typeof(MenuStrip) }; // as opposed to what we had before...
-                                                              // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
+        Type[] stockTypes = [typeof(MenuStrip)];
+
+        // Add other types here from most specific to most generic if we want to merge other types of toolstrips.
+
         foreach (Type t in stockTypes)
         {
             if (t.IsAssignableFrom(type))
@@ -5766,13 +5735,13 @@ public partial class Form : ContainerControl
 
     private void UpdateMdiControlStrip(bool maximized)
     {
-        if (_formStateEx[FormStateExInUpdateMdiControlStrip] != 0)
+        if (_formStateEx[s_formStateExInUpdateMdiControlStrip] != 0)
         {
             return;
         }
 
         // we don't want to be redundantly called as we could merge in two control menus.
-        _formStateEx[FormStateExInUpdateMdiControlStrip] = 1;
+        _formStateEx[s_formStateExInUpdateMdiControlStrip] = 1;
 
         try
         {
@@ -5806,34 +5775,26 @@ public partial class Form : ContainerControl
                 MdiControlStrip = null;
             }
 
-            if (ActiveMdiChildInternal is not null && maximized)
+            if (ActiveMdiChildInternal is not null && maximized && ActiveMdiChildInternal.ControlBox)
             {
-                if (ActiveMdiChildInternal.ControlBox)
+                // Determine if we need to add control gadgets into the MenuStrip.
+                // Double check GetMenu incase someone is using interop.
+                HMENU hMenu = PInvoke.GetMenu(this);
+                if (hMenu == HMENU.Null)
                 {
-                    ToolStrip.s_mdiMergeDebug.TraceVerbose("UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
-
-                    // determine if we need to add control gadgets into the MenuStrip
-                    // double check GetMenu incase someone is using interop
-                    HMENU hMenu = PInvoke.GetMenu(this);
-                    if (hMenu == HMENU.Null)
+                    MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+                    if (sourceMenuStrip is not null)
                     {
-                        MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-                        if (sourceMenuStrip is not null)
-                        {
-                            MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: built up an MDI control strip for {ActiveMdiChildInternal.Text} with {MdiControlStrip.Items.Count} items.");
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: {sourceMenuStrip.Items.Count}");
-                            ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
-                            ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: {sourceMenuStrip.Items.Count}");
-                            MdiControlStrip.MergedMenu = sourceMenuStrip;
-                        }
+                        MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
+                        ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
+                        MdiControlStrip.MergedMenu = sourceMenuStrip;
                     }
                 }
             }
         }
         finally
         {
-            _formStateEx[FormStateExInUpdateMdiControlStrip] = 0;
+            _formStateEx[s_formStateExInUpdateMdiControlStrip] = 0;
         }
     }
 
@@ -5870,7 +5831,7 @@ public partial class Form : ContainerControl
     {
         if (CanRaiseEvents)
         {
-            ((EventHandler?)Events[EVENT_RESIZEBEGIN])?.Invoke(this, e);
+            ((EventHandler?)Events[s_resizeBeginEvent])?.Invoke(this, e);
         }
     }
 
@@ -5883,7 +5844,7 @@ public partial class Form : ContainerControl
     {
         if (CanRaiseEvents)
         {
-            ((EventHandler?)Events[EVENT_RESIZEEND])?.Invoke(this, e);
+            ((EventHandler?)Events[s_resizeEndEvent])?.Invoke(this, e);
         }
     }
 
@@ -5905,7 +5866,7 @@ public partial class Form : ContainerControl
 
             // Preserve Win32 behavior by keeping the icon we set NULL if
             // the user hasn't specified an icon and we are a dialog frame.
-            if ((FormBorderStyle == FormBorderStyle.FixedDialog && _formState[FormStateIconSet] == 0) || !ShowIcon)
+            if ((FormBorderStyle == FormBorderStyle.FixedDialog && _formState[s_formStateIconSet] == 0) || !ShowIcon)
             {
                 icon = null;
             }
@@ -5980,25 +5941,25 @@ public partial class Form : ContainerControl
             case SHOW_WINDOW_CMD.SW_SHOW:
             case SHOW_WINDOW_CMD.SW_SHOWNA:
             case SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE:
-                if (_formState[FormStateWindowState] != (int)FormWindowState.Normal)
+                if (_formState[s_formStateWindowState] != (int)FormWindowState.Normal)
                 {
-                    _formState[FormStateWindowState] = (int)FormWindowState.Normal;
+                    _formState[s_formStateWindowState] = (int)FormWindowState.Normal;
                 }
 
                 break;
             case SHOW_WINDOW_CMD.SW_SHOWMAXIMIZED:
-                if (_formState[FormStateMdiChildMax] == 0)
+                if (_formState[s_formStateMdiChildMax] == 0)
                 {
-                    _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
+                    _formState[s_formStateWindowState] = (int)FormWindowState.Maximized;
                 }
 
                 break;
             case SHOW_WINDOW_CMD.SW_SHOWMINIMIZED:
             case SHOW_WINDOW_CMD.SW_MINIMIZE:
             case SHOW_WINDOW_CMD.SW_SHOWMINNOACTIVE:
-                if (_formState[FormStateMdiChildMax] == 0)
+                if (_formState[s_formStateMdiChildMax] == 0)
                 {
-                    _formState[FormStateWindowState] = (int)FormWindowState.Minimized;
+                    _formState[s_formStateWindowState] = (int)FormWindowState.Minimized;
                 }
 
                 break;
@@ -6019,8 +5980,8 @@ public partial class Form : ContainerControl
             if (!OsVersion.IsWindows11_OrGreater())
             {
                 _restoredWindowBounds.Size = ClientSize;
-                _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
-                _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
+                _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 1;
+                _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 1;
                 _restoredWindowBoundsSpecified = BoundsSpecified.Size;
                 _restoredWindowBounds.Location = Location;
                 _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
@@ -6092,7 +6053,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmEnterSizeMove()
     {
-        _formStateEx[FormStateExInModalSizingLoop] = 1;
+        _formStateEx[s_formStateExInModalSizingLoop] = 1;
         OnResizeBegin(EventArgs.Empty);
     }
 
@@ -6101,7 +6062,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmExitSizeMove()
     {
-        _formStateEx[FormStateExInModalSizingLoop] = 0;
+        _formStateEx[s_formStateExInModalSizingLoop] = 0;
         OnResizeEnd(EventArgs.Empty);
     }
 
@@ -6192,7 +6153,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosing/OnFormClosing on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     FormClosingEventArgs cfe = new(CloseReason.FormOwnerClosing, e.Cancel);
@@ -6258,7 +6219,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosed/OnFormClosed on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
+                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
@@ -6315,7 +6276,7 @@ public partial class Form : ContainerControl
         // When we're set to AutoSize true, we should take a look at minAutoSize - which is snapped in onlayout.
         // as the form contracts, we should not let it size past here as we're just going to readjust the size
         // back to it later.
-        Size minTrack = (AutoSize && _formStateEx[FormStateExInModalSizingLoop] == 1) ? LayoutUtils.UnionSizes(_minAutoSize, MinimumSize) : MinimumSize;
+        Size minTrack = (AutoSize && _formStateEx[s_formStateExInModalSizingLoop] == 1) ? LayoutUtils.UnionSizes(_minAutoSize, MinimumSize) : MinimumSize;
 
         Size maxTrack = MaximumSize;
         Rectangle maximizedBounds = MaximizedBounds;
@@ -6389,10 +6350,10 @@ public partial class Form : ContainerControl
     private void WmMdiActivate(ref Message m)
     {
         base.WndProc(ref m);
-        Debug.Assert(Properties.ContainsObjectThatIsNotNull(PropFormMdiParent), "how is formMdiParent null?");
+        Debug.Assert(Properties.ContainsObjectThatIsNotNull(s_propFormMdiParent), "how is formMdiParent null?");
         Debug.Assert(IsHandleCreated, "how is handle 0?");
 
-        Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);
+        Form? formMdiParent = (Form?)Properties.GetObject(s_propFormMdiParent);
 
         if (formMdiParent is not null)
         {
@@ -6445,7 +6406,7 @@ public partial class Form : ContainerControl
 
         if (Modal && _dialogResult == DialogResult.None)
         {
-            if (GetState(States.Recreate) == false)
+            if (!GetState(States.Recreate))
             {
                 DialogResult = DialogResult.Cancel;
             }
@@ -6457,7 +6418,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmNCHitTest(ref Message m)
     {
-        if (_formState[FormStateRenderSizeGrip] != 0)
+        if (_formState[s_formStateRenderSizeGrip] != 0)
         {
             // Convert to client coordinates
             Point point = PointToClient(PARAM.ToPoint(m.LParamInternal));
@@ -6485,7 +6446,7 @@ public partial class Form : ContainerControl
         if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
         {
             int result = (int)m.ResultInternal;
-            if (result >= (int)PInvoke.HTLEFT && result <= (int)PInvoke.HTBOTTOMRIGHT)
+            if (result is >= ((int)PInvoke.HTLEFT) and <= ((int)PInvoke.HTBOTTOMRIGHT))
             {
                 m.ResultInternal = (LRESULT)(nint)PInvoke.HTBORDER;
             }
@@ -6497,7 +6458,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmShowWindow(ref Message m)
     {
-        _formState[FormStateSWCalled] = 1;
+        _formState[s_formStateSWCalled] = 1;
         base.WndProc(ref m);
     }
 
@@ -6529,7 +6490,7 @@ public partial class Form : ContainerControl
             case PInvoke.SC_SIZE:
             case PInvoke.SC_MOVE:
                 // Set this before WM_ENTERSIZELOOP because WM_GETMINMAXINFO can be called before WM_ENTERSIZELOOP.
-                _formStateEx[FormStateExInModalSizingLoop] = 1;
+                _formStateEx[s_formStateExInModalSizingLoop] = 1;
                 break;
             case PInvoke.SC_CONTEXTHELP:
                 CancelEventArgs e = new(false);

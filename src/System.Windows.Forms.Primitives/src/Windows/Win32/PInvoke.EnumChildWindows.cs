@@ -28,7 +28,7 @@ internal static partial class PInvoke
         }
     }
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static BOOL EnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
         return ((EnumChildWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);

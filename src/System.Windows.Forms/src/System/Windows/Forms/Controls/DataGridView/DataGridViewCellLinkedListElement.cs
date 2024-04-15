@@ -8,32 +8,15 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class DataGridViewCellLinkedListElement
 {
-    private readonly DataGridViewCell dataGridViewCell;
-    private DataGridViewCellLinkedListElement? next;
+    private readonly DataGridViewCell _dataGridViewCell;
 
     public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
     {
         Debug.Assert(dataGridViewCell is not null);
-        this.dataGridViewCell = dataGridViewCell;
+        _dataGridViewCell = dataGridViewCell;
     }
 
-    public DataGridViewCell DataGridViewCell
-    {
-        get
-        {
-            return dataGridViewCell;
-        }
-    }
+    public DataGridViewCell DataGridViewCell => _dataGridViewCell;
 
-    public DataGridViewCellLinkedListElement? Next
-    {
-        get
-        {
-            return next;
-        }
-        set
-        {
-            next = value;
-        }
-    }
+    public DataGridViewCellLinkedListElement? Next { get; set; }
 }

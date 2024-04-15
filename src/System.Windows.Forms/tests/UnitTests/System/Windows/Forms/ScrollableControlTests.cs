@@ -2534,7 +2534,7 @@ public class ScrollableControlTests
             VScroll = vScroll,
             ClientSize = clientSize
         };
-        if ((activeControl is LargeControl || activeControl is SmallControl))
+        if ((activeControl is LargeControl or SmallControl))
         {
             control.Controls.Add(activeControl.Parent ?? activeControl);
         }

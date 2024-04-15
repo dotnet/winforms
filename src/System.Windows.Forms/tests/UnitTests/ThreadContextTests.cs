@@ -10,9 +10,9 @@ public class ThreadContextTests
     private delegate bool MessageCallback(ref Message m);
 
     // WM_USER is 0x400, just need to be above that
-    const uint TestMessageId1 = 0x441;
-    const uint TestMessageId2 = 0x442;
-    const uint TestMessageId3 = 0x443;
+    private const uint TestMessageId1 = 0x441;
+    private const uint TestMessageId2 = 0x442;
+    private const uint TestMessageId3 = 0x443;
 
     [StaFact]
     public void ThreadContext_EmptyProcessFiltersWorks()
@@ -37,7 +37,7 @@ public class ThreadContextTests
         threadContext.AddMessageFilter(mockContext.Object);
         MSG msg = new()
         {
-            message = (uint)TestMessageId1
+            message = TestMessageId1
         };
         Assert.False(threadContext.PreTranslateMessage(ref msg));
         mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
@@ -83,7 +83,7 @@ public class ThreadContextTests
 
         MSG msg = new()
         {
-            message = (uint)TestMessageId1
+            message = TestMessageId1
         };
         Assert.False(threadContext.PreTranslateMessage(ref msg));
 
@@ -92,7 +92,7 @@ public class ThreadContextTests
 
         msg = new MSG
         {
-            message = (uint)TestMessageId2
+            message = TestMessageId2
         };
         Assert.True(threadContext.PreTranslateMessage(ref msg));
 
@@ -101,7 +101,7 @@ public class ThreadContextTests
 
         msg = new MSG
         {
-            message = (uint)TestMessageId3
+            message = TestMessageId3
         };
         Assert.True(threadContext.PreTranslateMessage(ref msg));
 

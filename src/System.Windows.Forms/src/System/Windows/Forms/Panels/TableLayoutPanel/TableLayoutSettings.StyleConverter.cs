@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -29,12 +29,12 @@ public sealed partial class TableLayoutSettings
                 {
                     case SizeType.AutoSize:
                         return new InstanceDescriptor(
-                            style.GetType().GetConstructor(Array.Empty<Type>()),
+                            style.GetTypeWithConstructor().GetConstructor([]),
                             Array.Empty<object>());
                     case SizeType.Absolute:
                     case SizeType.Percent:
                         return new InstanceDescriptor(
-                            style.GetType().GetConstructor(new Type[] { typeof(SizeType), typeof(int) }),
+                            style.GetTypeWithConstructor().GetConstructor([typeof(SizeType), typeof(int)]),
                             new object[] { style.SizeType, style.Size });
                     default:
                         break;

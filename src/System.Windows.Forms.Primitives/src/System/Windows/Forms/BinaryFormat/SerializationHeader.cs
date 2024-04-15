@@ -47,12 +47,12 @@ internal sealed class SerializationHeader : IRecord<SerializationHeader>
     static SerializationHeader IBinaryFormatParseable<SerializationHeader>.Parse(
         BinaryReader reader,
         RecordMap recordMap) => new()
-    {
-        RootId = reader.ReadInt32(),
-        HeaderId = reader.ReadInt32(),
-        MajorVersion = reader.ReadInt32(),
-        MinorVersion = reader.ReadInt32(),
-    };
+        {
+            RootId = reader.ReadInt32(),
+            HeaderId = reader.ReadInt32(),
+            MajorVersion = reader.ReadInt32(),
+            MinorVersion = reader.ReadInt32(),
+        };
 
     public void Write(BinaryWriter writer)
     {

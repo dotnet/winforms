@@ -27,7 +27,7 @@ public partial class ListViewGroup
                     ? listView
                     : throw new InvalidOperationException(nameof(owningGroup.ListView)));
 
-            _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListView.ListViewAccessibleObject
+            _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListViewAccessibleObject
                 ?? throw new InvalidOperationException(nameof(_owningListView.AccessibilityObject));
 
             _owningGroupIsDefault = owningGroupIsDefault;
@@ -197,7 +197,7 @@ public partial class ListViewGroup
 
         internal IReadOnlyList<ListViewItem> GetVisibleItems()
         {
-            List<ListViewItem> visibleItems = new();
+            List<ListViewItem> visibleItems = [];
             if (_owningGroupIsDefault)
             {
                 foreach (ListViewItem? listViewItem in _owningListView.Items)

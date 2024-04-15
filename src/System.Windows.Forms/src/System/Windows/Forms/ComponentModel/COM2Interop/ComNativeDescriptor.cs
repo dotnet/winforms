@@ -22,8 +22,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   <see cref="TypeDescriptor.ComObjectType"/>.
 ///  </para>
 /// </remarks>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IManagedPerPropertyBrowsingHandler which is not trim-compatible.")]
 internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvider
 {
+    internal const string ComTypeDescriptorsMessage = "COM type descriptors are not trim-compatible.";
+
     private static readonly Attribute[] s_staticAttributes = [BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No];
 
     // Our collection of Object managers (Com2Properties) for native properties
@@ -96,6 +99,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
 
     internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
+    [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
     internal static object? GetEditor(object component, Type baseEditorType)
         => TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
 
@@ -166,7 +170,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     internal static bool IsNameDispId(object? @object, int dispid)
     {
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(@object, out HRESULT hr);
-        return hr.Failed ? false : dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
+        return !hr.Failed && dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
     }
 
     /// <summary>

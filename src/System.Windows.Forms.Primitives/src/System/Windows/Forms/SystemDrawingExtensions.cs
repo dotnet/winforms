@@ -18,13 +18,16 @@ internal static class SystemDrawingExtensions
     ///  didn't actually change. This retains the state of the color.
     /// </summary>
     /// <remarks>
-    ///  This is important as the color only changes if <paramref name="graphics"/> has a very low color depth. This
-    ///  is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
-    ///  state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
-    ///  us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
-    ///
-    ///  Ideally we'd drop checking at all and just support full color drawing to improve performance for the
-    ///  expected normal case (more than 8 BITSPIXEL for the HDC).
+    ///  <para>
+    ///   This is important as the color only changes if <paramref name="graphics"/> has a very low color depth. This
+    ///   is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
+    ///   state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
+    ///   us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
+    ///  </para>
+    ///  <para>
+    ///   Ideally we'd drop checking at all and just support full color drawing to improve performance for the
+    ///   expected normal case (more than 8 BITSPIXEL for the HDC).
+    ///  </para>
     /// </remarks>
     internal static Color FindNearestColor(this Graphics graphics, Color color)
     {
@@ -88,7 +91,7 @@ internal static class SystemDrawingExtensions
     ///  Creates a <see cref="Pen"/>. If <paramref name="color"/> is a system color, makes a static copy of the
     ///  current color value to avoid having the pen hook itself against <see cref="SystemEvents"/>.
     /// </summary>
-    internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle, float size = 1.0f)
+    internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle)
     {
         if (dashStyle == DashStyle.Solid)
         {

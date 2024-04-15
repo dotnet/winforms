@@ -15,8 +15,8 @@ namespace System.Drawing.Design;
 /// </summary>
 public class IconEditor : UITypeEditor
 {
-    private static readonly List<string> s_iconExtensions = new() { "ico" };
-    private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
+    private static readonly List<string> s_iconExtensions = ["ico"];
+    private static readonly Type[] s_imageExtenders = [];
     private FileDialog? _fileDialog;
 
     protected static string? CreateExtensionsString(string?[]? extensions, string sep)
@@ -99,7 +99,7 @@ public class IconEditor : UITypeEditor
 
     protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
 
-    protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
+    protected virtual string[] GetExtensions() => [.. s_iconExtensions];
 
     /// <inheritdoc />
     public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;

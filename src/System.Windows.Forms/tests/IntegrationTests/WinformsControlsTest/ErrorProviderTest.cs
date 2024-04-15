@@ -12,7 +12,7 @@ public partial class ErrorProviderTest : Form
 
     private void submitButton_Click(object sender, EventArgs e)
     {
-        if (textBox1.TextLength < 5 || textBox1.TextLength > 10)
+        if (textBox1.TextLength is < 5 or > 10)
         {
             errorProvider1.SetError(textBox1, "The length of the testbox is invalid!");
         }
@@ -22,7 +22,7 @@ public partial class ErrorProviderTest : Form
             MessageBox.Show("All right!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        if (textBox2.TextLength < 5 || textBox2.TextLength > 20)
+        if (textBox2.TextLength is < 5 or > 20)
         {
             errorProvider2.SetError(textBox2, "The length of the testbox is invalid!");
         }

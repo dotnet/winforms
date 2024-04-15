@@ -12,7 +12,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the <see cref="System.Windows.Forms.FlowLayoutPanel"/>
+///  This class handles all design time behavior for the <see cref="Forms.FlowLayoutPanel"/>
 ///  control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
 ///  draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
 ///  some cached state to see if we believe that it needs to be inserted at a particular index. If
@@ -33,14 +33,14 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Store the maximum height/width of each row/column.
     /// </summary>
-    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = new();
+    private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = [];
 
-    private const int s_invalidIndex = -1;
+    private const int InvalidIndex = -1;
 
     /// <summary>
     ///  The index which we will re-insert a newly added child.
     /// </summary>
-    private int _insertionIndex = s_invalidIndex;
+    private int _insertionIndex = InvalidIndex;
 
     /// <summary>
     ///  Tracks the top or left last rendered I-bar location.
@@ -82,7 +82,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private FlowLayoutPanel FlowLayoutPanel => (FlowLayoutPanel)Control;
+    private FlowLayoutPanel FlowLayoutPanel => Control;
 
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -92,7 +92,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
         if (flowDirection is not null)
         {
-            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, Array.Empty<Attribute>());
+            properties["FlowDirection"] = TypeDescriptor.CreateProperty(typeof(FlowLayoutPanelDesigner), flowDirection, []);
         }
     }
 
@@ -116,15 +116,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Returns true if flow direction is right-to-left or left-to-right
     /// </summary>
-    private bool HorizontalFlow
-    {
-        get
-        {
-            var direction = FlowLayoutPanel.FlowDirection;
-            return direction == FlowDirection.RightToLeft
-                || direction == FlowDirection.LeftToRight;
-        }
-    }
+    private bool HorizontalFlow =>
+        FlowLayoutPanel.FlowDirection is FlowDirection.RightToLeft or FlowDirection.LeftToRight;
 
     /// <summary>
     ///  Get and cache the selection service
@@ -177,7 +170,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         var children = Control.Controls;
         if (children.Count == 0)
         {
-            _childInfo = Array.Empty<ChildInfo>();
+            _childInfo = [];
             return;
         }
 
@@ -382,10 +375,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// </summary>
     private FlowDirection FlowDirection
     {
-        get
-        {
-            return Control.FlowDirection;
-        }
+        get => Control.FlowDirection;
         set
         {
             if (value != Control.FlowDirection)
@@ -613,7 +603,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             else
             {
                 // We are inserting past the last control.
-                _insertionIndex = s_invalidIndex;
+                _insertionIndex = InvalidIndex;
             }
 
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
@@ -659,7 +649,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
                 }
             }
 
-            if (_insertionIndex == s_invalidIndex)
+            if (_insertionIndex == InvalidIndex)
             {
                 // Either _insertionIndex was _childInfo.Length (inserting past the end) or
                 // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
@@ -725,7 +715,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         try
         {
-            if (_insertionIndex == s_invalidIndex)
+            if (_insertionIndex == InvalidIndex)
             {
                 return;
             }
@@ -748,7 +738,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         finally
         {
             Control.ControlAdded -= OnChildControlAdded;
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
     }
 
@@ -760,7 +750,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragEnter(de);
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _lastMouseLocation = Point.Empty;
         _primaryDragControl = null;
 
@@ -779,7 +769,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         EraseIBar();
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
         _primaryDragControl = null;
         _dragControls?.Clear();
 
@@ -816,7 +806,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             controlOffset.X += Control.Width;
         }
 
-        _insertionIndex = s_invalidIndex;
+        _insertionIndex = InvalidIndex;
 
         // Brute force hit testing to first determine if we're over one
         // of our margin bounds.
@@ -889,7 +879,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             }
         }
 
-        if (_insertionIndex == s_invalidIndex)
+        if (_insertionIndex == InvalidIndex)
         {
             // Here, we're at the 'end' of the FlowLayoutPanel - not over
             // any controls and not in a row/column.
@@ -914,7 +904,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             // Manipulating our controls. We do it ourselves, so that we can set the indices right.
             ReorderControls(de);
 
-            _insertionIndex = s_invalidIndex;
+            _insertionIndex = InvalidIndex;
         }
         else
         {

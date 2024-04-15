@@ -38,13 +38,13 @@ public partial class ListViewItem : ICloneable, ISerializable
     private string? _groupName;
 
     private ListViewSubItemCollection? _listViewSubItemCollection;
-    private List<ListViewSubItem> _subItems = new();
+    private List<ListViewSubItem> _subItems = [];
 
     // we stash the last index we got as a seed to GetDisplayIndex.
     private int _lastIndex = -1;
 
     // An ID unique relative to a given list view that comctl uses to identify items.
-    internal int ID = -1;
+    internal int _id = -1;
 
     private BitVector32 _state;
     private ListViewItemImageIndexer? _imageIndexer;
@@ -261,7 +261,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                     View.List => new ListViewItemListAccessibleObject(this),
                     View.SmallIcon => new ListViewItemSmallIconAccessibleObject(this),
                     View.Tile => new ListViewItemTileAccessibleObject(this),
-                    _ => throw new Exception()
+                    _ => throw new InvalidOperationException()
                 };
             }
 
@@ -776,8 +776,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                _subItems = new List<ListViewSubItem>(1);
-                _subItems.Add(new ListViewSubItem(this, string.Empty));
+                _subItems = [new ListViewSubItem(this, string.Empty)];
                 SubItemCount = 1;
             }
 
@@ -868,7 +867,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         if (Index >= 0)
         {
             ListView lv = ListView!;
-            if (lv.LabelEdit == false)
+            if (!lv.LabelEdit)
             {
                 throw new InvalidOperationException(SR.ListViewBeginEditFailed);
             }
@@ -998,7 +997,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         Debug.Assert(_listView is null || !_listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
         Debug.Assert(parent is null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
 
-        ID = id;
+        _id = id;
         _listView = parent;
 
         // If the index is valid, then the handle has been created.
@@ -1099,7 +1098,7 @@ public partial class ListViewItem : ICloneable, ISerializable
 
             nint result = PInvoke.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
-            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
+            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
             Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
         }
 
@@ -1147,7 +1146,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             _group = null;
             foreach (ListViewGroup lvg in ListView!.Groups)
             {
-                if (lvg.ID == (int)lvItem.iGroupId)
+                if (lvg.ID == lvItem.iGroupId)
                 {
                     _group = lvg;
                     break;
@@ -1175,7 +1174,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         ReleaseUiaProvider();
 
         // Make sure you do these last, as the first several lines depends on this information
-        ID = -1;
+        _id = -1;
         _listView = null;
     }
 

@@ -149,12 +149,12 @@ public partial class Control
             control.WindowTarget = this;
 
             _activeXState = default;
-            _ambientProperties = new AmbientProperty[]
-            {
+            _ambientProperties =
+            [
                 new("Font", PInvokeCore.DISPID_AMBIENT_FONT),
                 new("BackColor", PInvokeCore.DISPID_AMBIENT_BACKCOLOR),
                 new("ForeColor", PInvokeCore.DISPID_AMBIENT_FORECOLOR)
-            };
+            ];
         }
 
         /// <summary>
@@ -449,7 +449,7 @@ public partial class Control
                 // system. This puts us in the most similar coordinates as we currently use.
                 Point p1 = new(rc.left, rc.top);
                 Point p2 = new(rc.right - rc.left, rc.bottom - rc.top);
-                PInvoke.LPtoDP(hdcDraw, new Point[] { p1, p2 }.AsSpan());
+                PInvoke.LPtoDP(hdcDraw, [p1, p2]);
 
                 iMode = (HDC_MAP_MODE)PInvoke.SetMapMode(hdcDraw, HDC_MAP_MODE.MM_ANISOTROPIC);
                 PInvoke.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
@@ -612,7 +612,7 @@ public partial class Control
         {
             if (_accelCount == -1)
             {
-                List<char> mnemonicList = new();
+                List<char> mnemonicList = [];
                 GetMnemonicList(_control, mnemonicList);
 
                 _accelCount = (short)mnemonicList.Count;

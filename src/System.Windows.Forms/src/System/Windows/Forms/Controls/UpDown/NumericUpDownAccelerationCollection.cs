@@ -108,7 +108,7 @@ public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollecti
     /// </summary>
     public NumericUpDownAccelerationCollection()
     {
-        _items = new List<NumericUpDownAcceleration>();
+        _items = [];
     }
 
     /// <summary>

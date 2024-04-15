@@ -9,9 +9,9 @@ namespace TestConsole;
 
 public partial class MainForm : Form
 {
-    ISelectionService _selectionService;
+    private ISelectionService _selectionService;
 
-    private List<IDesignSurfaceExt> _listOfDesignSurface = new();
+    private readonly List<IDesignSurfaceExt> _listOfDesignSurface = [];
 
     public MainForm()
     {
@@ -317,6 +317,7 @@ public partial class MainForm : Form
         if (isurf is not null)
         {
             splitContainer.Panel2.Controls.Remove(propertyGrid);
+            propertyGrid.Dispose();
             propertyGrid = new()
             {
                 DesignerHost = isurf.GetIDesignerHost(),

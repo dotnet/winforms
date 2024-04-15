@@ -91,11 +91,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        Shared Sub FaultingMethod()
+        Public Shared Sub FaultingMethod()
             Throw New DivideByZeroException()
         End Sub
 
-        Shared Function FaultingFunc(a As Integer) As Integer
+        Public Shared Function FaultingFunc(a As Integer) As Integer
             Return a \ 0
         End Function
 

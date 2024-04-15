@@ -50,17 +50,12 @@ public partial class MonthCalendar
         /// <summary>
         ///  Determines whether a given HitArea should have a corresponding valid DateTime
         /// </summary>
-        internal static bool HitAreaHasValidDateTime(HitArea hitArea)
-        {
+        internal static bool HitAreaHasValidDateTime(HitArea hitArea) =>
             // ComCtl does not provide a valid date for DayOfWeek.
-            switch (hitArea)
+            hitArea switch
             {
-                case HitArea.Date:
-                case HitArea.WeekNumbers:
-                    return true;
-            }
-
-            return false;
-        }
+                HitArea.Date or HitArea.WeekNumbers => true,
+                _ => false,
+            };
     }
 }

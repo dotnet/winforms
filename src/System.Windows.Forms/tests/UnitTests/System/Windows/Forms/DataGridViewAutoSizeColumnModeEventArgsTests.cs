@@ -8,7 +8,7 @@ public class DataGridViewAutoSizeColumnModeEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn_TestData()
     {
-        yield return new object[] { null, (DataGridViewAutoSizeColumnMode)(DataGridViewAutoSizeColumnMode.NotSet - 1) };
+        yield return new object[] { null, DataGridViewAutoSizeColumnMode.NotSet - 1 };
         yield return new object[] { new DataGridViewColumn(), DataGridViewAutoSizeColumnMode.AllCells };
     }
 

@@ -7,8 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Specifies a component that creates
-///  an icon in the Windows System Tray. This class cannot be inherited.
+///  Specifies a component that creates an icon in the Windows System Tray. This class cannot be inherited.
 /// </summary>
 [DefaultProperty(nameof(Text))]
 [DefaultEvent(nameof(MouseDoubleClick))]
@@ -18,19 +17,19 @@ namespace System.Windows.Forms;
 public sealed partial class NotifyIcon : Component
 {
     internal const int MaxTextSize = 127;
-    private static readonly object EVENT_MOUSEDOWN = new();
-    private static readonly object EVENT_MOUSEMOVE = new();
-    private static readonly object EVENT_MOUSEUP = new();
-    private static readonly object EVENT_CLICK = new();
-    private static readonly object EVENT_DOUBLECLICK = new();
-    private static readonly object EVENT_MOUSECLICK = new();
-    private static readonly object EVENT_MOUSEDOUBLECLICK = new();
-    private static readonly object EVENT_BALLOONTIPSHOWN = new();
-    private static readonly object EVENT_BALLOONTIPCLICKED = new();
-    private static readonly object EVENT_BALLOONTIPCLOSED = new();
+    private static readonly object s_mouseDownEvent = new();
+    private static readonly object s_mouseMoveEvent = new();
+    private static readonly object s_mouseUpEvent = new();
+    private static readonly object s_clickEvent = new();
+    private static readonly object s_doubleClickEvent = new();
+    private static readonly object s_mouseClickEvent = new();
+    private static readonly object s_mouseDoubleClickEvent = new();
+    private static readonly object s_balloonTipShownEvent = new();
+    private static readonly object s_balloonTipClickedEvent = new();
+    private static readonly object s_balloonTipClosedEvent = new();
 
     private const int WM_TRAYMOUSEMESSAGE = (int)PInvoke.WM_USER + 1024;
-    private static readonly MessageId WM_TASKBARCREATED = PInvoke.RegisterWindowMessage("TaskbarCreated");
+    private static uint WM_TASKBARCREATED { get; } = PInvoke.RegisterWindowMessage("TaskbarCreated");
 
     private readonly object _syncObj = new();
 
@@ -150,9 +149,9 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
     public event EventHandler? BalloonTipClicked
     {
-        add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
+        add => Events.AddHandler(s_balloonTipClickedEvent, value);
 
-        remove => Events.RemoveHandler(EVENT_BALLOONTIPCLICKED, value);
+        remove => Events.RemoveHandler(s_balloonTipClickedEvent, value);
     }
 
     /// <summary>
@@ -162,9 +161,9 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
     public event EventHandler? BalloonTipClosed
     {
-        add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
+        add => Events.AddHandler(s_balloonTipClosedEvent, value);
 
-        remove => Events.RemoveHandler(EVENT_BALLOONTIPCLOSED, value);
+        remove => Events.RemoveHandler(s_balloonTipClosedEvent, value);
     }
 
     /// <summary>
@@ -174,8 +173,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
     public event EventHandler? BalloonTipShown
     {
-        add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
-        remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
+        add => Events.AddHandler(s_balloonTipShownEvent, value);
+        remove => Events.RemoveHandler(s_balloonTipShownEvent, value);
     }
 
     [DefaultValue(null)]
@@ -302,8 +301,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.ControlOnClickDescr))]
     public event EventHandler? Click
     {
-        add => Events.AddHandler(EVENT_CLICK, value);
-        remove => Events.RemoveHandler(EVENT_CLICK, value);
+        add => Events.AddHandler(s_clickEvent, value);
+        remove => Events.RemoveHandler(s_clickEvent, value);
     }
 
     /// <summary>
@@ -313,8 +312,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
     public event EventHandler? DoubleClick
     {
-        add => Events.AddHandler(EVENT_DOUBLECLICK, value);
-        remove => Events.RemoveHandler(EVENT_DOUBLECLICK, value);
+        add => Events.AddHandler(s_doubleClickEvent, value);
+        remove => Events.RemoveHandler(s_doubleClickEvent, value);
     }
 
     /// <summary>
@@ -324,8 +323,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
     public event MouseEventHandler? MouseClick
     {
-        add => Events.AddHandler(EVENT_MOUSECLICK, value);
-        remove => Events.RemoveHandler(EVENT_MOUSECLICK, value);
+        add => Events.AddHandler(s_mouseClickEvent, value);
+        remove => Events.RemoveHandler(s_mouseClickEvent, value);
     }
 
     /// <summary>
@@ -335,8 +334,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
     public event MouseEventHandler? MouseDoubleClick
     {
-        add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
-        remove => Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
+        add => Events.AddHandler(s_mouseDoubleClickEvent, value);
+        remove => Events.RemoveHandler(s_mouseDoubleClickEvent, value);
     }
 
     /// <summary>
@@ -347,8 +346,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
     public event MouseEventHandler? MouseDown
     {
-        add => Events.AddHandler(EVENT_MOUSEDOWN, value);
-        remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
+        add => Events.AddHandler(s_mouseDownEvent, value);
+        remove => Events.RemoveHandler(s_mouseDownEvent, value);
     }
 
     /// <summary>
@@ -359,8 +358,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
     public event MouseEventHandler? MouseMove
     {
-        add => Events.AddHandler(EVENT_MOUSEMOVE, value);
-        remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
+        add => Events.AddHandler(s_mouseMoveEvent, value);
+        remove => Events.RemoveHandler(s_mouseMoveEvent, value);
     }
 
     /// <summary>
@@ -372,8 +371,8 @@ public sealed partial class NotifyIcon : Component
     [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
     public event MouseEventHandler? MouseUp
     {
-        add => Events.AddHandler(EVENT_MOUSEUP, value);
-        remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
+        add => Events.AddHandler(s_mouseUpEvent, value);
+        remove => Events.RemoveHandler(s_mouseUpEvent, value);
     }
 
     /// <summary>
@@ -417,7 +416,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnBalloonTipClicked()
     {
-        ((EventHandler?)Events[EVENT_BALLOONTIPCLICKED])?.Invoke(this, EventArgs.Empty);
+        ((EventHandler?)Events[s_balloonTipClickedEvent])?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -425,7 +424,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnBalloonTipClosed()
     {
-        ((EventHandler?)Events[EVENT_BALLOONTIPCLOSED])?.Invoke(this, EventArgs.Empty);
+        ((EventHandler?)Events[s_balloonTipClosedEvent])?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -433,7 +432,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnBalloonTipShown()
     {
-        ((EventHandler?)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
+        ((EventHandler?)Events[s_balloonTipShownEvent])?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -445,7 +444,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnClick(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_CLICK])?.Invoke(this, e);
+        ((EventHandler?)Events[s_clickEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -454,7 +453,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnDoubleClick(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_DOUBLECLICK])?.Invoke(this, e);
+        ((EventHandler?)Events[s_doubleClickEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -463,7 +462,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnMouseClick(MouseEventArgs mea)
     {
-        ((MouseEventHandler?)Events[EVENT_MOUSECLICK])?.Invoke(this, mea);
+        ((MouseEventHandler?)Events[s_mouseClickEvent])?.Invoke(this, mea);
     }
 
     /// <summary>
@@ -472,7 +471,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnMouseDoubleClick(MouseEventArgs mea)
     {
-        ((MouseEventHandler?)Events[EVENT_MOUSEDOUBLECLICK])?.Invoke(this, mea);
+        ((MouseEventHandler?)Events[s_mouseDoubleClickEvent])?.Invoke(this, mea);
     }
 
     /// <summary>
@@ -482,7 +481,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnMouseDown(MouseEventArgs e)
     {
-        ((MouseEventHandler?)Events[EVENT_MOUSEDOWN])?.Invoke(this, e);
+        ((MouseEventHandler?)Events[s_mouseDownEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -491,7 +490,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnMouseMove(MouseEventArgs e)
     {
-        ((MouseEventHandler?)Events[EVENT_MOUSEMOVE])?.Invoke(this, e);
+        ((MouseEventHandler?)Events[s_mouseMoveEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -500,7 +499,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private void OnMouseUp(MouseEventArgs e)
     {
-        ((MouseEventHandler?)Events[EVENT_MOUSEUP])?.Invoke(this, e);
+        ((MouseEventHandler?)Events[s_mouseUpEvent])?.Invoke(this, e);
     }
 
     /// <summary>

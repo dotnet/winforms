@@ -1590,9 +1590,7 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Draws an image and makes it look disabled.
     /// </summary>
-#pragma warning disable IDE0060 // Remove unused parameter- public API
     public static void DrawImageDisabled(Graphics graphics, Image image, int x, int y, Color background)
-#pragma warning restore IDE0060
         => DrawImageDisabled(graphics, image, new Rectangle(x, y, image.Width, image.Height), unscaledImage: false);
 
     /// <summary>

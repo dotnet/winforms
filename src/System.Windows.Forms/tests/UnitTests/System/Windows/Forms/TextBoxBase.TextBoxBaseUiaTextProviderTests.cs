@@ -508,7 +508,7 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
 
         Rectangle providerRectangle = provider.BoundingRectangle;
 
-        Assert.Equal(Drawing.Rectangle.Empty, providerRectangle);
+        Assert.Equal(Rectangle.Empty, providerRectangle);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 #pragma warning restore xUnit1026
@@ -826,7 +826,7 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
         Assert.False(selection.IsEmpty);
 
         using ComScope<ITextRangeProvider> range = new(selection[0]);
-        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
         Assert.NotNull(textRange);
 
         Assert.Equal(start, textRange.Start);
@@ -868,7 +868,7 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
             Assert.False(selection.IsEmpty);
 
             using ComScope<ITextRangeProvider> range = new(selection[0]);
-            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
             Assert.NotNull(textRange);
 
             Assert.Equal(0, textRange.Start);

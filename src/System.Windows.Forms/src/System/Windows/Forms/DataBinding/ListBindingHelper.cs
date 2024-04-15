@@ -9,17 +9,9 @@ namespace System.Windows.Forms;
 
 public static class ListBindingHelper
 {
-    private static Attribute[]? browsableAttribute;
+    private static Attribute[]? s_browsableAttribute;
 
-    private static Attribute[] BrowsableAttributeList
-    {
-        get
-        {
-            browsableAttribute ??= new Attribute[] { new BrowsableAttribute(true) };
-
-            return browsableAttribute;
-        }
-    }
+    private static Attribute[] BrowsableAttributeList => s_browsableAttribute ??= [new BrowsableAttribute(true)];
 
     public static object? GetList(object? list)
     {
@@ -52,12 +44,9 @@ public static class ListBindingHelper
             return dataSource;
         }
 
-        PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
-        PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
-        if (dmProp is null)
-        {
-            throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
-        }
+        PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
+        PropertyDescriptor? dmProp = dsProps.Find(dataMember, true)
+            ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
 
         object? currentItem;
 
@@ -165,7 +154,7 @@ public static class ListBindingHelper
         }
         else if (list is Type type)
         {
-            return GetListItemPropertiesByType(type, listAccessors, 0);
+            return GetListItemPropertiesByType(listAccessors, 0);
         }
 
         object? target = GetList(list);
@@ -189,7 +178,7 @@ public static class ListBindingHelper
         if (!string.IsNullOrEmpty(dataMember))
         {
             // Find the property on the data source specified by the data member
-            PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
+            PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
             PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
 
             // Add the data member property to the list accessors
@@ -353,7 +342,7 @@ public static class ListBindingHelper
         return name;
     }
 
-    private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex)
+    private static PropertyDescriptorCollection GetListItemPropertiesByType(PropertyDescriptor[] listAccessors, int startIndex)
     {
         PropertyDescriptorCollection? pdc = null;
         if (listAccessors[startIndex] is null)
@@ -362,6 +351,7 @@ public static class ListBindingHelper
         }
 
         Type subType = listAccessors[startIndex].PropertyType;
+
         // subType is the property type - which is not to be confused with the item type.
         // For example, if a class Customer has a property of type Orders[], then Given:
         //        GetListItemProperties(typeof(Customer), PDForOrders)
@@ -381,7 +371,7 @@ public static class ListBindingHelper
         else
         {
             // Walk down the tree
-            pdc = GetListItemPropertiesByType(subType, listAccessors, startIndex);
+            pdc = GetListItemPropertiesByType(listAccessors, startIndex);
         }
 
         // Return descriptors
@@ -416,7 +406,7 @@ public static class ListBindingHelper
         if (subList is null)
         {
             // Can't get shape by Instance, try by Type
-            pdc = GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
+            pdc = GetListItemPropertiesByType(listAccessors, startIndex);
         }
         else
         {
@@ -472,7 +462,7 @@ public static class ListBindingHelper
             if (value is null)
             {
                 // It's null - we can't walk down by Instance so use Type
-                return GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
+                return GetListItemPropertiesByType(listAccessors, startIndex);
             }
             else
             {

@@ -42,7 +42,7 @@ public static class CustomConverter
 
     public class CustomTypeDescriptionProvider : TypeDescriptionProvider
     {
-        private TypeConverter _converter;
+        private readonly TypeConverter _converter;
 
         public CustomTypeDescriptionProvider(TypeDescriptionProvider parent, TypeConverter converter) : base(parent)
             => _converter = converter;
@@ -53,7 +53,7 @@ public static class CustomConverter
 
         private sealed class TypeConverterProvider : CustomTypeDescriptor
         {
-            private TypeConverter _converter;
+            private readonly TypeConverter _converter;
 
             public TypeConverterProvider(ICustomTypeDescriptor? parent, TypeConverter converter) : base(parent)
                 => _converter = converter;

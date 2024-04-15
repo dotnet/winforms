@@ -19,10 +19,9 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     {
         DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
         {
-            AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            AlignmentInternal = DataGridViewContentAlignment.MiddleCenter,
+            NullValue = threeState ? CheckState.Indeterminate : false
         };
-
-        defaultCellStyle.NullValue = threeState ? CheckState.Indeterminate : false;
 
         DefaultCellStyle = defaultCellStyle;
     }
@@ -225,15 +224,11 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
                 DataGridView.InvalidateColumn(Index);
             }
 
-            if (value &&
-                DefaultCellStyle.NullValue is bool &&
-                (bool)DefaultCellStyle.NullValue == false)
+            if (value && DefaultCellStyle.NullValue is bool boolValue && !boolValue)
             {
                 DefaultCellStyle.NullValue = CheckState.Indeterminate;
             }
-            else if (!value &&
-                     DefaultCellStyle.NullValue is CheckState &&
-                     (CheckState)DefaultCellStyle.NullValue == CheckState.Indeterminate)
+            else if (!value && DefaultCellStyle.NullValue is CheckState state && state == CheckState.Indeterminate)
             {
                 DefaultCellStyle.NullValue = false;
             }

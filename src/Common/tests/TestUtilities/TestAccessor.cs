@@ -47,7 +47,7 @@ namespace System;
 public class TestAccessor<T> : ITestAccessor
 {
     private static readonly Type s_type = typeof(T);
-    protected readonly T? _instance;
+    private readonly T? _instance;
     private readonly DynamicWrapper _dynamicWrapper;
 
     /// <param name="instance">The type instance, can be null for statics.</param>
@@ -74,10 +74,7 @@ public class TestAccessor<T> : ITestAccessor
             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
             binder: null,
             types,
-            modifiers: null);
-
-        if (methodInfo is null)
-            throw new ArgumentException($"Could not find non public method {methodName}.");
+            modifiers: null) ?? throw new ArgumentException($"Could not find non public method {methodName}.");
 
         return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
     }
@@ -142,7 +139,7 @@ public class TestAccessor<T> : ITestAccessor
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -154,7 +151,7 @@ public class TestAccessor<T> : ITestAccessor
         {
             result = null;
 
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -162,7 +159,7 @@ public class TestAccessor<T> : ITestAccessor
             return true;
         }
 
-        private MemberInfo? GetFieldOrPropertyInfo(string memberName)
+        private static MemberInfo? GetFieldOrPropertyInfo(string memberName)
         {
             Type? type = s_type;
             MemberInfo? info;

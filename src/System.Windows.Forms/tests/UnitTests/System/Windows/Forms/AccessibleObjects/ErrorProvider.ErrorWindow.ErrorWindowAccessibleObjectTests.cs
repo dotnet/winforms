@@ -15,7 +15,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.Null(accessibleObject.TestAccessor().Dynamic._owner);
         Assert.Equal(AccessibleRole.Grouping, accessibleObject.Role);
@@ -26,7 +26,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.True(accessibleObject.IsReadOnly);
     }
@@ -36,7 +36,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.Equal(AccessibleStates.ReadOnly, accessibleObject.State);
     }
@@ -47,7 +47,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -57,7 +57,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
@@ -67,7 +67,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
@@ -79,7 +79,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+        var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
         Assert.Equal(accessibleObject, accessibleObject.FragmentRoot);
     }
@@ -106,7 +106,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorWindow window = new(provider, control);
         for (int i = 0; i < testCount; i++)
         {
-            window.ControlItems.Add(new(provider, control, (IntPtr)i));
+            window.ControlItems.Add(new(provider, control, i));
         }
 
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -122,8 +122,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
 
         window.ControlItems.AddRange(new[] { item1, item2 });
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -144,8 +144,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
         window.ControlItems.AddRange(new[] { item1, item2 });
 
         AccessibleObject accessibleObject = window.AccessibilityObject;
@@ -162,9 +162,9 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         ErrorProvider provider = new();
         ErrorWindow window = new(provider, control);
 
-        ControlItem item1 = new(provider, control, (IntPtr)100);
-        ControlItem item2 = new(provider, control, (IntPtr)200);
-        ControlItem item3 = new(provider, control, (IntPtr)300);
+        ControlItem item1 = new(provider, control, 100);
+        ControlItem item2 = new(provider, control, 200);
+        ControlItem item3 = new(provider, control, 300);
 
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
         AccessibleObject accessibleObject = window.AccessibilityObject;

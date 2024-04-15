@@ -12,7 +12,7 @@ namespace Microsoft.Office;
 internal unsafe partial struct IMsoComponentManager : IComIID
 {
     // 000C0601-0000-0000-C000-000000000046
-    internal static readonly Guid Guid = new(0x000C0601, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+    internal static Guid Guid { get; } = new(0x000C0601, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
     static ref readonly Guid IComIID.Guid
     {

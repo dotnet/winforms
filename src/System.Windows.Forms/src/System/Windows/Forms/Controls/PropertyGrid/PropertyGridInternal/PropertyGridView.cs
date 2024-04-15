@@ -22,8 +22,6 @@ internal sealed partial class PropertyGridView :
 {
     private static Point InvalidPoint { get; } = new(int.MinValue, int.MinValue);
 
-    private static readonly TraceSwitch s_gridViewDebugPaint = new("GridViewDebugPaint", "PropertyGridView: Debug property painting");
-
     // Constants
     private const int EditIndent = 0;
     private const int OutlineIndent = 10;
@@ -83,7 +81,7 @@ internal sealed partial class PropertyGridView :
     private DropDownHolder? _dropDownHolder;
     private Rectangle _lastClientRect = Rectangle.Empty;
     private Control? _currentEditor;
-    private ScrollBar? _scrollBar;
+    private VScrollBar? _scrollBar;
     private GridToolTip? _toolTip;
     private GridErrorDialog? _errorDialog;
 
@@ -572,7 +570,7 @@ internal sealed partial class PropertyGridView :
             {
                 OwnerGrid.CheckInCreate();
 
-                _toolTip = new GridToolTip(new Control[] { this, EditTextBox })
+                _toolTip = new GridToolTip([this, EditTextBox])
                 {
                     ToolTip = string.Empty,
                     Font = Font
@@ -676,9 +674,6 @@ internal sealed partial class PropertyGridView :
 
     private static void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
     {
-        s_gridViewDebugPaint.TraceVerbose(
-            $"Adjusting paint origin to ({newOrigin.X},{newOrigin.Y})");
-
         g.ResetTransform();
         g.TranslateTransform(newOrigin.X, newOrigin.Y);
         r.Offset(-newOrigin.X, -newOrigin.Y);
@@ -686,7 +681,6 @@ internal sealed partial class PropertyGridView :
 
     private void CancelSplitterMove()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CancelSplitterMove");
         if (_flags.HasFlag(Flags.IsSplitterMove))
         {
             SetFlag(Flags.IsSplitterMove, false);
@@ -703,7 +697,6 @@ internal sealed partial class PropertyGridView :
 
     private void ClearGridEntryEvents(GridEntryCollection? entries, int startIndex, int count)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ClearGridEntryEvents");
         if (entries is null)
         {
             return;
@@ -729,8 +722,6 @@ internal sealed partial class PropertyGridView :
 
     public void ClearGridEntries()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ClearGridEntries");
-
         if (!HasEntries)
         {
             return;
@@ -751,8 +742,6 @@ internal sealed partial class PropertyGridView :
 
     private void CloseDropDownInternal(bool resetFocus)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CloseDropDown");
-
         // The activation code in the DropDownHolder can cause this to recurse.
 
         if (_flags.HasFlag(Flags.DropDownClosing) || _dropDownHolder is null || !_dropDownHolder.Visible)
@@ -822,8 +811,6 @@ internal sealed partial class PropertyGridView :
 
     private void CommonEditorHide(bool always = false)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorHide");
-
         if (!always && !HasEntries)
         {
             return;
@@ -882,16 +869,12 @@ internal sealed partial class PropertyGridView :
 
     private void CommonEditorSetup(Control control)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorSetup");
         control.Visible = false;
         Controls.Add(control);
     }
 
     private void CommonEditorUse(Control control, Rectangle targetRectangle)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorUse");
-        s_gridViewDebugPaint.TraceVerbose("Showing common editors");
-
         Debug.Assert(control is not null, "Null control passed to CommonEditorUse");
 
         Rectangle rectCur = control.Bounds;
@@ -930,7 +913,6 @@ internal sealed partial class PropertyGridView :
 
     private static int CountPropertiesFromOutline(GridEntryCollection? entries)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CountPropertiesFromOutline");
         if (entries is null)
         {
             return 0;
@@ -976,7 +958,6 @@ internal sealed partial class PropertyGridView :
     {
         if (disposing)
         {
-            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Dispose");
             _scrollBar?.Dispose();
             _listBox?.Dispose();
             _dropDownHolder?.Dispose();
@@ -992,7 +973,7 @@ internal sealed partial class PropertyGridView :
 
             _topHelpService = null;
 
-            if (_helpService is not null && _helpService is IDisposable disposable)
+            if (_helpService is not null and IDisposable disposable)
             {
                 disposable.Dispose();
             }
@@ -1103,7 +1084,13 @@ internal sealed partial class PropertyGridView :
         return length > _location.X + LabelWidth;
     }
 
-    private void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool longLabelrequest, Rectangle clipRect)
+    private void DrawLabel(
+        Graphics g,
+        int row,
+        Rectangle rect,
+        bool selected,
+        bool longLabelrequest,
+        Rectangle clipRect)
     {
         GridEntry? gridEntry = GetGridEntryFromRow(row);
 
@@ -1111,8 +1098,6 @@ internal sealed partial class PropertyGridView :
         {
             return;
         }
-
-        s_gridViewDebugPaint.TraceVerbose($"Drawing label for property {gridEntry.PropertyLabel}");
 
         Point newOrigin = new(rect.X, rect.Y);
         clipRect = Rectangle.Intersect(rect, clipRect);
@@ -1139,7 +1124,12 @@ internal sealed partial class PropertyGridView :
                     fLongLabel = IsEntryLabelLong(g, gridEntry);
                 }
 
-                gridEntry.PaintLabel(g, rect, clipRect, selected, fLongLabel);
+                gridEntry.PaintLabel(
+                    g,
+                    rect,
+                    clipRect,
+                    selected,
+                    fLongLabel);
             }
             catch (Exception ex)
             {
@@ -1162,8 +1152,6 @@ internal sealed partial class PropertyGridView :
         {
             return;
         }
-
-        s_gridViewDebugPaint.TraceVerbose($"Drawing value for property {gridEntry.PropertyLabel}");
 
         Rectangle rect = GetRectangle(row, RowValue);
         Point newOrigin = new(rect.X, rect.Y);
@@ -1246,14 +1234,11 @@ internal sealed partial class PropertyGridView :
 
     public void DoubleClickRow(int row, bool toggleExpand, int type)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DoubleClickRow");
         GridEntry? gridEntry = GetGridEntryFromRow(row);
         if (gridEntry is null)
         {
             return;
         }
-
-        s_gridViewDebugPaint.TraceVerbose($"Property {gridEntry.PropertyLabel} double clicked");
 
         if (!toggleExpand || type == RowValue)
         {
@@ -1420,14 +1405,10 @@ internal sealed partial class PropertyGridView :
 
     public void DropDownControl(Control control)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DropDownControl");
-
         if (control is null)
         {
             return;
         }
-
-        s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control.GetType().Name})");
 
         _dropDownHolder ??= new(this);
         _dropDownHolder.Visible = false;
@@ -1496,7 +1477,6 @@ internal sealed partial class PropertyGridView :
 
     public void DropDownUpdate()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:DropDownUpdate");
         if (_dropDownHolder is not null && _dropDownHolder.GetUsed())
         {
             int row = _selectedRow;
@@ -1540,7 +1520,7 @@ internal sealed partial class PropertyGridView :
             {
                 object currentValue = values[(i + index + 1) % values.Length];
                 string text = gridEntry.GetPropertyTextValue(currentValue);
-                if (text is not null && text.Length > 0 && string.Equals(text.Substring(0, 1), letter, StringComparison.InvariantCultureIgnoreCase))
+                if (text is not null && text.Length > 0 && string.Equals(text[..1], letter, StringComparison.InvariantCultureIgnoreCase))
                 {
                     CommitValue(currentValue);
                     if (EditTextBox.Focused)
@@ -1595,8 +1575,6 @@ internal sealed partial class PropertyGridView :
         {
             return;
         }
-
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:FilterKeyPress()");
 
         EditTextBox.FilterKeyPress(keyChar);
     }
@@ -1724,7 +1702,7 @@ internal sealed partial class PropertyGridView :
         try
         {
             object[] values = gridEntry.GetPropertyValueList();
-            object value = gridEntry.PropertyValue;
+            object? value = gridEntry.PropertyValue;
             string? textValue = gridEntry.TypeConverter.ConvertToString(gridEntry, value);
 
             if (values.Length == 0)
@@ -1812,7 +1790,7 @@ internal sealed partial class PropertyGridView :
             {
                 entries[depth] = gridEntry;
                 gridEntry = gridEntry.ParentGridEntry;
-                depth = gridEntry.PropertyDepth;
+                depth = gridEntry?.PropertyDepth ?? 0;
             }
 
             return new GridEntryCollection(entries, disposeItems: false);
@@ -1839,7 +1817,6 @@ internal sealed partial class PropertyGridView :
 
     private static int GetGridEntriesFromOutline(GridEntryCollection? entries, int current, int target, GridEntry[] targetEntries)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:GetGridEntriesFromOutline");
         if (entries is null || entries.Count == 0)
         {
             return current;
@@ -2020,9 +1997,6 @@ internal sealed partial class PropertyGridView :
 
     private void InvalidateRows(int startRow, int endRow, int type)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:InvalidateRows");
-
-        s_gridViewDebugPaint.TraceVerbose($"Invalidating rows {startRow} through {endRow}");
         Rectangle rect;
 
         // Invalidate from the start row down.
@@ -2091,12 +2065,11 @@ internal sealed partial class PropertyGridView :
     private bool IsScrollValueValid(int newValue)
     {
         // Is this move valid?
-        if (newValue == ScrollBar.Value ||
-            newValue < 0 ||
-            newValue > ScrollBar.Maximum ||
-            (newValue + (ScrollBar.LargeChange - 1) >= TotalProperties))
+        if (newValue == ScrollBar.Value
+            || newValue < 0
+            || newValue > ScrollBar.Maximum
+            || (newValue + (ScrollBar.LargeChange - 1) >= TotalProperties))
         {
-            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView: move not needed, returning");
             return false;
         }
 
@@ -2190,7 +2163,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnChildLostFocus(object? sender, EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnChildLostFocus");
         InvokeLostFocus(this, e);
     }
 
@@ -2204,8 +2176,6 @@ internal sealed partial class PropertyGridView :
 
     protected override void OnGotFocus(EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnGotFocus");
-
         base.OnGotFocus(e);
 
         if (e is not null && !InPropertySet)
@@ -2267,7 +2237,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnListChange(object? sender, EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnListChange");
         if (!DropDownListBox.InSetSelectedIndex())
         {
             GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
@@ -2286,7 +2255,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnListClick(object? sender, EventArgs? e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnListClick");
         _ = GetGridEntryFromRow(_selectedRow);
 
         if (DropDownListBox.Items.Count == 0)
@@ -2321,7 +2289,6 @@ internal sealed partial class PropertyGridView :
 
         string text = (string)DropDownListBox.Items[e.Index];
 
-        s_gridViewDebugPaint.TraceVerbose($"Drawing list item, value='{text}'");
         e.DrawBackground();
         e.DrawFocusRectangle();
 
@@ -2363,9 +2330,6 @@ internal sealed partial class PropertyGridView :
 
     protected override void OnLostFocus(EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnLostFocus");
-        s_gridViewDebugPaint.TraceVerbose("PropertyGridView lost focus");
-
         if (e is not null)
         {
             base.OnLostFocus(e);
@@ -2381,7 +2345,6 @@ internal sealed partial class PropertyGridView :
         GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is not null)
         {
-            s_gridViewDebugPaint.TraceVerbose("removing gridEntry focus");
             gridEntry.HasFocus = false;
             CommonEditorHide();
             InvalidateRow(_selectedRow);
@@ -2394,7 +2357,6 @@ internal sealed partial class PropertyGridView :
         if (TotalProperties <= 0)
         {
             Rectangle clearRect = new(1, 1, Size.Width - 2, Size.Height - 2);
-            s_gridViewDebugPaint.TraceVerbose($"Filling empty gridview rect={clearRect}");
 
             Color color = BackColor;
             if (color.HasTransparency())
@@ -2414,7 +2376,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditChange(object? sender, EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditChange");
         SetCommitError(ErrorState.None, EditTextBox.Focused);
 
         ToolTip.ToolTip = string.Empty;
@@ -2423,8 +2384,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditGotFocus(object? sender, EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditGotFocus");
-
         if (!EditTextBox.Visible)
         {
             Focus();
@@ -2453,7 +2412,6 @@ internal sealed partial class PropertyGridView :
 
         if (_selectedGridEntry is not null && GetRowFromGridEntry(_selectedGridEntry) != -1)
         {
-            s_gridViewDebugPaint.TraceVerbose("adding gridEntry focus");
             _selectedGridEntry.HasFocus = true;
             InvalidateRow(_selectedRow);
 
@@ -2471,7 +2429,7 @@ internal sealed partial class PropertyGridView :
 
     private bool ProcessEnumUpAndDown(GridEntry entry, Keys keyCode, bool closeDropDown = true)
     {
-        object value = entry.PropertyValue;
+        object? value = entry.PropertyValue;
         object[] values = entry.GetPropertyValueList();
 
         for (int i = 0; i < values.Length; i++)
@@ -2526,7 +2484,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditKeyDown(object? sender, KeyEventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditKeyDown");
         if (!e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
         {
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow)!;
@@ -2554,7 +2511,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditKeyPress(object? sender, KeyPressEventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditKeyPress");
         GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is null)
         {
@@ -2569,8 +2525,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditLostFocus(object? sender, EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditLostFocus");
-
         // Believe it or not this can actually happen.
         if (EditTextBox.Focused || (_errorState == ErrorState.MessageBoxUp) || (_errorState == ErrorState.Thrown) || InPropertySet)
         {
@@ -2613,8 +2567,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnEditMouseDown(object? sender, MouseEventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditMouseDown");
-
         if (!FocusInside)
         {
             SelectGridEntry(_selectedGridEntry, pageIn: false);
@@ -2656,7 +2608,6 @@ internal sealed partial class PropertyGridView :
 
     private bool OnEscape(Control sender)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEscape");
         if ((ModifierKeys & (Keys.Alt | Keys.Control)) != 0)
         {
             return false;
@@ -2853,7 +2804,7 @@ internal sealed partial class PropertyGridView :
                     }
 
                     SetFlag(Flags.IsSpecialKey, true);
-                    bool expand = keyCode == Keys.Add || keyCode == Keys.Oemplus;
+                    bool expand = keyCode is Keys.Add or Keys.Oemplus;
                     SetExpand(entry, expand);
                     Invalidate();
                     e.Handled = true;
@@ -3100,7 +3051,7 @@ internal sealed partial class PropertyGridView :
         if ((rowMoveCurrent != TipRow || point.X != TipColumn) && !_flags.HasFlag(Flags.IsSplitterMove))
         {
             GridEntry? gridItem = GetGridEntryFromRow(rowMoveCurrent);
-            string tip = string.Empty;
+            string? tip = string.Empty;
             _tipInfo = -1;
 
             if (gridItem is not null)
@@ -3306,8 +3257,6 @@ internal sealed partial class PropertyGridView :
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnPaint");
-        s_gridViewDebugPaint.TraceVerbose($"On paint called.  Rect={e.ClipRectangle}");
         Graphics g = e.Graphics;
 
         int yPosition = 0;
@@ -3338,13 +3287,6 @@ internal sealed partial class PropertyGridView :
 
             int visibleCount = Math.Min(TotalProperties - GetScrollOffset(), 1 + _visibleRows);
 
-#if DEBUG
-            GridEntry? debugEntryStart = GetGridEntryFromRow(startRow);
-            GridEntry? debugEntryEnd = GetGridEntryFromRow(endRow);
-            string startName = debugEntryStart?.PropertyLabel ?? "(null)";
-            string endName = debugEntryEnd?.PropertyLabel ?? "(null)";
-#endif
-
             SetFlag(Flags.NeedsRefresh, false);
 
             Size size = GetOurSize();
@@ -3361,12 +3303,10 @@ internal sealed partial class PropertyGridView :
                 // Draw splitter.
                 visibleCount = Math.Min(visibleCount, endRow + 1);
 
-                s_gridViewDebugPaint.TraceVerbose("Drawing splitter");
                 using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(SplitterWidth);
                 g.DrawLine(splitterPen, _labelWidth, location.Y, _labelWidth, visibleCount * (RowHeight + 1) + location.Y);
 
                 // Draw lines.
-                s_gridViewDebugPaint.TraceVerbose("Drawing lines");
                 using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPenScope();
 
                 int currentRowHeight = 0;
@@ -3397,10 +3337,9 @@ internal sealed partial class PropertyGridView :
                             EditTextBox.Invalidate();
                         }
                     }
-                    catch
+                    catch (Exception ex) when (!ex.IsCriticalException())
                     {
-                        s_gridViewDebugPaint.TraceVerbose(
-                            $"Exception thrown during painting property {GetGridEntryFromRow(i)!.PropertyLabel}");
+                        Debug.Fail(ex.Message);
                     }
                 }
 
@@ -3414,7 +3353,6 @@ internal sealed partial class PropertyGridView :
             {
                 yPosition++;
                 Rectangle clearRect = new(1, yPosition, Size.Width - 2, Size.Height - yPosition - 1);
-                s_gridViewDebugPaint.TraceVerbose($"Filling remaining area rect={clearRect}");
 
                 using var backBrush = BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(backBrush, clearRect);
@@ -3426,15 +3364,15 @@ internal sealed partial class PropertyGridView :
 
             _boldFont = null;
         }
-        catch
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            Debug.Fail("Caught exception in OnPaint");
+            Debug.Fail(ex.Message);
         }
     }
 
     private void OnGridEntryLabelDoubleClick(object? s, EventArgs e)
     {
-        var gridEntry = (GridEntry)s!;
+        GridEntry gridEntry = (GridEntry)s!;
 
         // If we've changed since the click (probably because we moved a row into view), bail.
         if (gridEntry != _lastClickedEntry)
@@ -3448,7 +3386,7 @@ internal sealed partial class PropertyGridView :
 
     private void OnGridEntryValueDoubleClick(object? s, EventArgs e)
     {
-        var gridEntry = (GridEntry)s!;
+        GridEntry gridEntry = (GridEntry)s!;
 
         // If we've changed since the click (probably because we moved a row into view), bail.
         if (gridEntry != _lastClickedEntry)
@@ -3640,8 +3578,6 @@ internal sealed partial class PropertyGridView :
 
     protected override void OnResize(EventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnResize");
-
         Rectangle newRect = ClientRectangle;
         int yDelta = _lastClientRect == Rectangle.Empty ? 0 : newRect.Height - _lastClientRect.Height;
 
@@ -3682,9 +3618,6 @@ internal sealed partial class PropertyGridView :
 
     private void OnScroll(object? sender, ScrollEventArgs e)
     {
-        CompModSwitches.DebugGridView.TraceVerbose(
-            $"PropertyGridView:OnScroll({ScrollBar.Value} -> {e.NewValue})");
-
         if (!CommitEditTextBox() || !IsScrollValueValid(e.NewValue))
         {
             // Cancel the move
@@ -3697,7 +3630,6 @@ internal sealed partial class PropertyGridView :
         if (_selectedGridEntry is not null)
         {
             oldRow = GetRowFromGridEntry(oldGridEntry);
-            CompModSwitches.DebugGridView.TraceVerbose($"OnScroll: SelectedGridEntry={oldGridEntry!.PropertyLabel}");
         }
 
         ScrollBar.Value = e.NewValue;
@@ -3720,7 +3652,7 @@ internal sealed partial class PropertyGridView :
 
     private void OnSysColorChange(object sender, UserPreferenceChangedEventArgs e)
     {
-        if (e.Category == UserPreferenceCategory.Color || e.Category == UserPreferenceCategory.Accessibility)
+        if (e.Category is UserPreferenceCategory.Color or UserPreferenceCategory.Accessibility)
         {
             SetFlag(Flags.NeedUpdateUIBasedOnFont, true);
         }
@@ -3731,7 +3663,6 @@ internal sealed partial class PropertyGridView :
     /// </summary>
     public unsafe void PopupEditor(int row)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:PopupEditor");
         GridEntry? gridEntry = GetGridEntryFromRow(row);
         if (gridEntry is null)
         {
@@ -3826,7 +3757,7 @@ internal sealed partial class PropertyGridView :
 
             try
             {
-                SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
+                SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor?.IsDropDownResizable ?? false);
                 gridEntry.EditPropertyValue(this);
             }
             finally
@@ -3875,7 +3806,6 @@ internal sealed partial class PropertyGridView :
 
     protected override bool ProcessDialogKey(Keys keyData)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ProcessDialogKey");
         if (HasEntries)
         {
             Keys keyCode = keyData & Keys.KeyCode;
@@ -3884,7 +3814,6 @@ internal sealed partial class PropertyGridView :
                 case Keys.F4:
                     if (FocusInside)
                     {
-                        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnF4");
                         if (ModifierKeys != 0)
                         {
                             return false;
@@ -3992,7 +3921,6 @@ internal sealed partial class PropertyGridView :
 
     private void RecalculateProperties()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:RecalculateProperties");
         int propertyCount = CountPropertiesFromOutline(TopLevelGridEntries);
         if (TotalProperties != propertyCount)
         {
@@ -4054,9 +3982,6 @@ internal sealed partial class PropertyGridView :
 
     private void Refresh(bool fullRefresh, int startRow, int endRow)
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Refresh");
-        s_gridViewDebugPaint.TraceVerbose(
-            $"Refresh called for rows {startRow} through {endRow}");
         SetFlag(Flags.NeedsRefresh, true);
         GridEntry? gridEntry = null;
 
@@ -4178,7 +4103,6 @@ internal sealed partial class PropertyGridView :
 
     public void Reset()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Reset");
         GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is null)
         {
@@ -4208,10 +4132,10 @@ internal sealed partial class PropertyGridView :
     {
         if (entries is null)
         {
-            return new();
+            return [];
         }
 
-        expandedItems ??= new();
+        expandedItems ??= [];
 
         for (int i = 0; i < entries.Count; i++)
         {
@@ -4277,8 +4201,6 @@ internal sealed partial class PropertyGridView :
             return;
         }
 
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SelectGridEntry({entry.PropertyLabel})");
-
         int row = GetRowFromGridEntry(entry);
         if (row + GetScrollOffset() < 0)
         {
@@ -4324,8 +4246,6 @@ internal sealed partial class PropertyGridView :
 
     private void SelectRow(int row)
     {
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SelectRow({row})");
-
         if (!_flags.HasFlag(Flags.IsNewSelection))
         {
             if (FocusInside)
@@ -4507,7 +4427,6 @@ internal sealed partial class PropertyGridView :
 
     public void SetConstants()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:SetConstants");
         Size size = GetOurSize();
 
         _visibleRows = (int)Math.Ceiling(((double)size.Height) / (1 + RowHeight));
@@ -4537,23 +4456,6 @@ internal sealed partial class PropertyGridView :
         {
             _labelRatio = GetOurSize().Width / (double)(oldWidth - _location.X);
         }
-
-        CompModSwitches.DebugGridView.TraceVerbose($"\tsize       :{size}");
-        CompModSwitches.DebugGridView.TraceVerbose($"\tlocation   :{_location}");
-        CompModSwitches.DebugGridView.TraceVerbose($"\tvisibleRows:{_visibleRows}");
-        CompModSwitches.DebugGridView.TraceVerbose($"\tlabelWidth :{_labelWidth}");
-        CompModSwitches.DebugGridView.TraceVerbose($"\tlabelRatio :{_labelRatio}");
-        CompModSwitches.DebugGridView.TraceVerbose($"\trowHeight  :{RowHeight}");
-#if DEBUG
-        if (rgipesAll is null)
-        {
-            CompModSwitches.DebugGridView.TraceVerbose("\tIPE Count  :(null)");
-        }
-        else
-        {
-            CompModSwitches.DebugGridView.TraceVerbose($"\tIPE Count  :{rgipesAll.Count}");
-        }
-#endif
     }
 
     private void SetCommitError(ErrorState error)
@@ -4563,26 +4465,6 @@ internal sealed partial class PropertyGridView :
 
     private void SetCommitError(ErrorState error, bool capture)
     {
-#if DEBUG
-        if (CompModSwitches.DebugGridView.TraceVerbose)
-        {
-            string err = "UNKNOWN!";
-            switch (error)
-            {
-                case ErrorState.None:
-                    err = "ERROR_NONE";
-                    break;
-                case ErrorState.Thrown:
-                    err = "ERROR_THROWN";
-                    break;
-                case ErrorState.MessageBoxUp:
-                    err = "ERROR_MSGBOX_UP";
-                    break;
-            }
-
-            Debug.WriteLine($"PropertyGridView:SetCommitError(error={err}, capture={capture})");
-        }
-#endif
         _errorState = error;
         if (error != ErrorState.None)
         {
@@ -4673,7 +4555,6 @@ internal sealed partial class PropertyGridView :
 
     public void SetScrollOffset(int offset)
     {
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SetScrollOffset({offset})");
         int newPosition = Math.Max(0, Math.Min(TotalProperties - _visibleRows + 1, offset));
         int oldPosition = ScrollBar.Value;
         if (newPosition != oldPosition && IsScrollValueValid(newPosition) && _visibleRows > 0)
@@ -4690,20 +4571,14 @@ internal sealed partial class PropertyGridView :
     /// </summary>
     internal bool CommitEditTextBox()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Commit()");
-
         if (_errorState == ErrorState.MessageBoxUp)
         {
-            CompModSwitches.DebugGridView.TraceVerbose(
-                "PropertyGridView:Commit() returning false because an error has been thrown or we are in a property set");
             return false;
         }
 
         if (!EditTextBoxNeedsCommit)
         {
             SetCommitError(ErrorState.None);
-            CompModSwitches.DebugGridView.TraceVerbose(
-                "PropertyGridView:Commit() returning true because no change has been made");
             return true;
         }
 
@@ -4758,8 +4633,6 @@ internal sealed partial class PropertyGridView :
 
     internal bool CommitValue(GridEntry entry, object? value, bool closeDropDown = true)
     {
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");
-
         int propCount = entry.ChildCount;
         bool capture = EditTextBox.HookMouseDown;
         object? originalValue = null;
@@ -4854,8 +4727,6 @@ internal sealed partial class PropertyGridView :
 
     private bool CommitText(string text)
     {
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({text ?? "null"})");
-
         GridEntry? currentEntry = _selectedGridEntry;
 
         if (_selectedGridEntry is null && _selectedRow != -1)
@@ -4934,8 +4805,6 @@ internal sealed partial class PropertyGridView :
 
     private bool SetScrollbarLength()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:SetScrollBarLength");
-
         if (TotalProperties == -1)
         {
             return false;
@@ -5028,11 +4897,9 @@ internal sealed partial class PropertyGridView :
         return result;
     }
 
-    private unsafe void ShowFormatExceptionMessage(string propertyName, Exception? ex)
+    private unsafe void ShowFormatExceptionMessage(string? propertyName, Exception? ex)
     {
         propertyName ??= "(unknown)";
-
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:ShowFormatExceptionMessage(prop={propertyName})");
 
         // We have to uninstall our hook so the user can push the button!
         bool hooked = EditTextBox.HookMouseDown;
@@ -5048,8 +4915,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMessage,
             HWND.Null,
-            (uint)PInvoke.WM_MOUSEFIRST,
-            (uint)PInvoke.WM_MOUSELAST,
+            PInvoke.WM_MOUSEFIRST,
+            PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.
@@ -5104,11 +4971,9 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal unsafe void ShowInvalidMessage(string propertyName, Exception? ex)
+    internal unsafe void ShowInvalidMessage(string? propertyName, Exception? ex)
     {
         propertyName ??= "(unknown)";
-
-        CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:ShowInvalidMessage(prop={propertyName})");
 
         // We have to uninstall our hook so the user can push the button.
         bool hooked = EditTextBox.HookMouseDown;
@@ -5125,8 +4990,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMsg,
             HWND.Null,
-            (uint)PInvoke.WM_MOUSEFIRST,
-            (uint)PInvoke.WM_MOUSELAST,
+            PInvoke.WM_MOUSEFIRST,
+            PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.
@@ -5232,7 +5097,11 @@ internal sealed partial class PropertyGridView :
         {
             while (temp is not null)
             {
-                _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                if (temp.HelpKeyword is not null)
+                {
+                    _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                }
+
                 temp = temp.ParentGridEntry;
             }
         }
@@ -5245,7 +5114,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    private static void UpdateHelpAttributes(IHelpService helpService, GridEntry entry, bool addAsF1)
+    private static void UpdateHelpAttributes(IHelpService helpService, GridEntry? entry, bool addAsF1)
     {
         if (entry is null)
         {
@@ -5253,7 +5122,7 @@ internal sealed partial class PropertyGridView :
         }
 
         UpdateHelpAttributes(helpService, entry.ParentGridEntry, false);
-        string helpKeyword = entry.HelpKeyword;
+        string? helpKeyword = entry.HelpKeyword;
         if (helpKeyword is not null)
         {
             helpService.AddContextAttribute("Keyword", helpKeyword, addAsF1 ? HelpKeywordType.F1Keyword : HelpKeywordType.GeneralKeyword);
@@ -5314,7 +5183,6 @@ internal sealed partial class PropertyGridView :
 
     private bool UnfocusSelection()
     {
-        CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:UnfocusSelection()");
         GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is null)
         {

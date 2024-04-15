@@ -33,8 +33,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -65,8 +65,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -250,8 +250,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -282,8 +282,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -730,8 +730,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -762,8 +762,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -919,8 +919,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -951,8 +951,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x00, 0x00, 0xFF) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -1282,8 +1282,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x11, 0x30, 0x60) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x30, 0x41, 0x89) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -1314,8 +1314,8 @@ public class HtmlDocumentTests
         yield return new object[] { "NoSuchName", Color.FromArgb(0xFF, 0x00, 0xC0, 0x0E) };
         yield return new object[] { "Invalid", Color.FromArgb(0xFF, 0x00, 0xA0, 0xD0) };
         yield return new object[] { "Red", Color.FromArgb(0xFF, 0xFF, 0x00, 0x00) };
-        yield return new object[] { (int)0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { (int)0x12345678, Color.FromArgb(0xFF, 0x80, 0x00, 0x80) };
+        yield return new object[] { 0x123456, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { 0x12345678, Color.FromArgb(0xFF, 0x80, 0x00, 0x80) };
         yield return new object[] { "#", Color.FromArgb(0xFF, 0x00, 0x00, 0x00) };
         yield return new object[] { "#1", Color.FromArgb(0xFF, 0x1, 0x00, 0x00) };
         yield return new object[] { "#123456", Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
@@ -1864,9 +1864,9 @@ public class HtmlDocumentTests
         Assert.Equal("NoParameter1", document.InvokeScript("divide"));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", null));
         Assert.Equal("NoParameter1", document.InvokeScript("divide", Array.Empty<object>()));
-        Assert.Equal("NoParameter2", document.InvokeScript("divide", new object[] { 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
-        Assert.Equal(6, document.InvokeScript("divide", new object[] { 12, 2 }));
+        Assert.Equal("NoParameter2", document.InvokeScript("divide", [2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
+        Assert.Equal(6, document.InvokeScript("divide", [12, 2]));
     }
 
     [WinFormsFact]
@@ -1884,7 +1884,7 @@ public class HtmlDocumentTests
         Assert.Null(document.InvokeScript("NoSuchScript"));
         Assert.Null(document.InvokeScript("NoSuchScript", null));
         Assert.Null(document.InvokeScript("NoSuchScript", Array.Empty<object>()));
-        Assert.Null(document.InvokeScript("NoSuchScript", new object[] { 1 }));
+        Assert.Null(document.InvokeScript("NoSuchScript", [1]));
     }
 
     public static IEnumerable<object[]> Write_TestData()
@@ -1963,9 +1963,9 @@ public class HtmlDocumentTests
 
         Assert.True(document == document);
         Assert.False(document == newDocument);
-        Assert.False(document == (HtmlDocument)null);
-        Assert.False(document == (HtmlDocument)null);
-        Assert.True((HtmlDocument)null == (HtmlDocument)null);
+        Assert.False(document == null);
+        Assert.False(document == null);
+        Assert.True(null == (HtmlDocument)null);
     }
 
     [WinFormsFact]
@@ -1983,9 +1983,9 @@ public class HtmlDocumentTests
 
         Assert.False(document != document);
         Assert.True(document != newDocument);
-        Assert.True(document != (HtmlDocument)null);
-        Assert.True(document != (HtmlDocument)null);
-        Assert.False((HtmlDocument)null != (HtmlDocument)null);
+        Assert.True(document != null);
+        Assert.True(document != null);
+        Assert.False(null != (HtmlDocument)null);
     }
 #pragma warning restore CS1718, CSIsNull001, CSIsNull002
 

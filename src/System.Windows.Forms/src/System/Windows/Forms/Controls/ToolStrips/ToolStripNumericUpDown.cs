@@ -5,19 +5,15 @@ namespace System.Windows.Forms;
 
 internal partial class ToolStripNumericUpDown : ToolStripControlHost
 {
-    private ToolStripNumericUpDownControl _numericUpDownControl;
+    private readonly ToolStripNumericUpDownControl _numericUpDownControl;
 
-    public ToolStripNumericUpDown()
-        : base(CreateControlInstance())
+    public ToolStripNumericUpDown() : base(CreateControlInstance())
     {
         _numericUpDownControl = (ToolStripNumericUpDownControl)Control;
         _numericUpDownControl.Owner = this;
     }
 
-    public NumericUpDown NumericUpDownControl
-    {
-        get => _numericUpDownControl;
-    }
+    public NumericUpDown NumericUpDownControl => _numericUpDownControl;
 
-    private static Control CreateControlInstance() => new ToolStripNumericUpDownControl();
+    private static ToolStripNumericUpDownControl CreateControlInstance() => new();
 }

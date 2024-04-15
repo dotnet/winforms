@@ -94,7 +94,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            DesignerActionListCollection actions = new();
+            DesignerActionListCollection actions = [];
 
             // Here is our action list we'll use
             ToolStripContainerActionList actionList = new(_toolStripContainer!)
@@ -147,7 +147,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            ArrayList components = new();
+            ArrayList components = [];
             foreach (Control parent in _toolStripContainer!.Controls)
             {
                 foreach (Control control in parent.Controls)
@@ -231,7 +231,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         for (int i = 0; i <= 4; i++)
         {
             Control currentPanel = _panels![i];
-            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(currentPanel);
+            Rectangle translatedBounds = BehaviorService?.ControlRectInAdornerWindow(currentPanel) ?? Rectangle.Empty;
             ControlDesigner? panelDesigner = InternalControlDesigner(i);
             OnSetCursor();
 
@@ -295,7 +295,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         }
 
         Rectangle glyphBounds = childGlyph.Bounds;
-        Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(dropDownItem.DropDown);
+        Rectangle controlBounds = BehaviorService?.ControlRectInAdornerWindow(dropDownItem.DropDown) ?? Rectangle.Empty;
         if (!glyphBounds.IntersectsWith(controlBounds))
         {
             glyphs.Insert(0, childGlyph);
@@ -325,7 +325,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
                 && !PInvoke.IsChild(_toolStripContainer, associatedControl))
             {
                 Rectangle glyphBounds = childGlyph.Bounds;
-                Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(associatedControl);
+                Rectangle controlBounds = BehaviorService?.ControlRectInAdornerWindow(associatedControl) ?? Rectangle.Empty;
                 if ((component == _designerHost.RootComponent) || !glyphBounds.IntersectsWith(controlBounds))
                 {
                     glyphs.Insert(0, childGlyph);

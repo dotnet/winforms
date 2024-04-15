@@ -48,72 +48,6 @@ public unsafe partial class Control :
     IHandle<HWND>
 {
 #if DEBUG
-    internal static readonly TraceSwitch s_paletteTracing = new(
-        "PaletteTracing",
-        "Debug Palette code");
-    internal static readonly TraceSwitch s_controlKeyboardRouting = new(
-        "ControlKeyboardRouting",
-        "Debug Keyboard routing for controls");
-    private protected static readonly TraceSwitch s_focusTracing = new(
-        "FocusTracing",
-        "Debug focus/active control/enter/leave");
-
-    private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new(
-        "AssertOnControlCreate",
-        "Assert when anything directly deriving from control is created.");
-    private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new(
-        "TraceCanProcessMnemonic",
-        "Trace mnemonic processing calls to assure right child-parent call ordering.");
-
-    private protected void TraceCanProcessMnemonic()
-    {
-        if (s_traceMnemonicProcessing.Enabled)
-        {
-            string str;
-            try
-            {
-                str = $"{GetType().Name}<{Text}>";
-                int maxFrameCount = new StackTrace().FrameCount;
-                if (maxFrameCount > 5)
-                {
-                    maxFrameCount = 5;
-                }
-
-                int frameIndex = 1;
-                while (frameIndex < maxFrameCount)
-                {
-                    StackFrame sf = new(frameIndex);
-                    if (frameIndex == 2 && sf.GetMethod()!.Name.Equals("CanProcessMnemonic"))
-                    {
-                        // log immediate call if in a virtual/recursive call.
-                        break;
-                    }
-
-                    str += new StackTrace(sf).ToString().TrimEnd();
-                    frameIndex++;
-                }
-
-                if (frameIndex > 2)
-                {
-                    // new CanProcessMnemonic virtual/recursive call stack.
-                    str = "\r\n" + str;
-                }
-            }
-            catch (Exception ex)
-            {
-                str = ex.ToString();
-            }
-
-            Debug.WriteLine(str);
-        }
-    }
-#else
-    internal static readonly TraceSwitch? s_paletteTracing;
-    internal static readonly TraceSwitch? s_controlKeyboardRouting;
-    private protected readonly TraceSwitch? s_focusTracing;
-#endif
-
-#if DEBUG
     private static readonly BooleanSwitch s_bufferPinkRect = new(
         "BufferPinkRect",
         "Renders a pink rectangle with painting double buffered controls");
@@ -199,14 +133,11 @@ public unsafe partial class Control :
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
 
-#pragma warning disable IDE1006 // Naming Styles
     [ThreadStatic]
     private static bool t_inCrossThreadSafeCall;
 
     [ThreadStatic]
     internal static HelpInfo? t_currentHelpInfo;
-
-#pragma warning restore IDE1006
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
@@ -347,13 +278,6 @@ public unsafe partial class Control :
 
     internal Control(bool autoInstallSyncContext) : base()
     {
-#if DEBUG
-        if (s_assertOnControlCreateSwitch.Enabled)
-        {
-            Debug.Assert(GetType().BaseType != typeof(Control), $"Direct derivative of Control Created: {GetType().FullName}");
-            Debug.Assert(GetType() != typeof(Control), "Control Created!");
-        }
-#endif
         Properties = new PropertyStore();
 
         // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
@@ -1105,6 +1029,7 @@ public unsafe partial class Control :
     public virtual BindingContext? BindingContext
     {
         get => BindingContextInternal;
+        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => BindingContextInternal = value;
     }
 
@@ -2722,7 +2647,7 @@ public unsafe partial class Control :
     [Localizable(true)]
     public Padding Margin
     {
-        get { return CommonProperties.GetMargin(this); }
+        get => CommonProperties.GetMargin(this);
         set
         {
             // This should be done here rather than in the property store as
@@ -3823,7 +3748,7 @@ public unsafe partial class Control :
             // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
             // if we don't know, we shouldn't throw.
             if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
-                || (returnValue == false && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
+                || (!returnValue && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
                 || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
@@ -4659,9 +4584,6 @@ public unsafe partial class Control :
     /// </summary>
     internal virtual bool CanProcessMnemonic()
     {
-#if DEBUG
-        TraceCanProcessMnemonic();
-#endif
         if (!Enabled || !Visible)
         {
             return false;
@@ -5216,7 +5138,7 @@ public unsafe partial class Control :
         if (targetBounds.Width <= 0 || targetBounds.Height <= 0
             || targetBounds.X < 0 || targetBounds.Y < 0)
         {
-            throw new ArgumentException(nameof(targetBounds));
+            throw new ArgumentException(message: null, nameof(targetBounds));
         }
 
         if (!IsHandleCreated)
@@ -5408,8 +5330,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public bool Focus()
     {
-        s_focusTracing.TraceVerbose($"Control::Focus - {Name}");
-
         // Call the internal method (which form overrides)
         return FocusInternal();
     }
@@ -5421,7 +5341,6 @@ public unsafe partial class Control :
     /// </summary>
     private protected virtual bool FocusInternal()
     {
-        s_focusTracing.TraceVerbose($"Control::FocusInternal - {Name}");
         if (CanFocus)
         {
             PInvoke.SetFocus(this);
@@ -6620,8 +6539,6 @@ public unsafe partial class Control :
     /// </returns>
     protected virtual bool IsInputChar(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsInputChar 0x{((int)charCode):X}");
-
         int mask;
         if (charCode == (char)(int)Keys.Tab)
         {
@@ -6650,8 +6567,6 @@ public unsafe partial class Control :
     /// </returns>
     protected virtual bool IsInputKey(Keys keyData)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsInputKey {keyData}");
-
         if ((keyData & Keys.Alt) == Keys.Alt)
         {
             return false;
@@ -6682,12 +6597,9 @@ public unsafe partial class Control :
     /// </summary>
     public static bool IsMnemonic(char charCode, string? text)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.IsMnemonic({charCode}, {(text is not null ? text : "null")})");
-
         // Special case handling:
         if (charCode == '&')
         {
-            s_controlKeyboardRouting.TraceVerbose("   ...returning false");
             return false;
         }
 
@@ -6709,18 +6621,14 @@ public unsafe partial class Control :
                 }
 
                 char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                s_controlKeyboardRouting.TraceVerbose($"   ...& found... char={c1}");
+
                 if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                 {
-                    s_controlKeyboardRouting.TraceVerbose("   ...returning true");
                     return true;
                 }
             }
-
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose && pos == 0, "   ...no & found");
         }
 
-        s_controlKeyboardRouting.TraceVerbose("   ...returning false");
         return false;
     }
 
@@ -6907,20 +6815,6 @@ public unsafe partial class Control :
         m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
     }
 
-    // Used by form to notify the control that it has been "entered"
-    internal void NotifyEnter()
-    {
-        s_focusTracing.TraceVerbose($"Control::NotifyEnter() - {Name}");
-        OnEnter(EventArgs.Empty);
-    }
-
-    // Used by form to notify the control that it has been "left"
-    internal void NotifyLeave()
-    {
-        s_focusTracing.TraceVerbose($"Control::NotifyLeave() - {Name}");
-        OnLeave(EventArgs.Empty);
-    }
-
     /// <summary>
     ///  Propagates the invalidation event, notifying the control that
     ///  some part of it is being invalidated and will subsequently need
@@ -7055,6 +6949,11 @@ public unsafe partial class Control :
     {
         if (Properties.ContainsObjectThatIsNotNull(s_bindingsProperty))
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             UpdateBindings();
         }
 
@@ -7977,7 +7876,7 @@ public unsafe partial class Control :
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual void OnEnter(EventArgs e)
+    protected internal virtual void OnEnter(EventArgs e)
     {
         ((EventHandler?)Events[s_enterEvent])?.Invoke(this, e);
     }
@@ -8145,7 +8044,7 @@ public unsafe partial class Control :
     ///  Raises the <see cref="Leave"/> event.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual void OnLeave(EventArgs e)
+    protected internal virtual void OnLeave(EventArgs e)
     {
         ((EventHandler?)Events[s_leaveEvent])?.Invoke(this, e);
     }
@@ -9074,8 +8973,6 @@ public unsafe partial class Control :
         target.SetExtendedState(ExtendedStates.InputChar, false);
         target.SetExtendedState(ExtendedStates.UiCues, true);
 
-        s_controlKeyboardRouting.TraceVerbose($"Control.PreProcessControlMessageInternal {message}");
-
         try
         {
             Keys keyData = (Keys)(nint)message.WParamInternal | ModifierKeys;
@@ -9090,8 +8987,6 @@ public unsafe partial class Control :
 
                 if (args.IsInputKey)
                 {
-                    s_controlKeyboardRouting.TraceVerbose("PreviewKeyDown indicated this is an input key.");
-
                     // Control wants this message - indicate it should be dispatched.
                     return PreProcessControlState.MessageNeeded;
                 }
@@ -9107,7 +9002,6 @@ public unsafe partial class Control :
                     // or if it is safe to call - we only want it to be called once.
                     if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                     {
-                        s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                         state = PreProcessControlState.MessageNeeded;
                     }
                 }
@@ -9117,7 +9011,6 @@ public unsafe partial class Control :
                     // or if it is safe to call - we only want it to be called once.
                     if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)(nint)message.WParamInternal))
                     {
-                        s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                         state = PreProcessControlState.MessageNeeded;
                     }
                 }
@@ -9136,33 +9029,24 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a command key. This method is called during message
-    ///  pre-processing to handle command keys. Command keys are keys that always
-    ///  take precedence over regular input keys. Examples of command keys
-    ///  include accelerators and menu shortcuts. The method must return true to
-    ///  indicate that it has processed the command key, or false to indicate
-    ///  that the key is not a command key.
-    ///  processCmdKey() first checks if the control has a context menu, and if
-    ///  so calls the menu's processCmdKey() to check for menu shortcuts. If the
-    ///  command key isn't a menu shortcut, and if the control has a parent, the
-    ///  key is passed to the parent's processCmdKey() method. The net effect is
-    ///  that command keys are "bubbled" up the control hierarchy.
-    ///  When overriding processCmdKey(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed by
-    ///  the control, the result of "base.processCmdKey()" should be returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a command key.
     /// </summary>
-    protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessCmdKey {msg}");
-
-        if (_parent is not null)
-        {
-            return _parent.ProcessCmdKey(ref msg, keyData);
-        }
-
-        return false;
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message pre-processing to handle command keys. Command keys are keys that always
+    ///   take precedence over regular input keys. Examples of command keys include accelerators and menu shortcuts. The
+    ///   method must return <see langword="true"/> to indicate that it has  processed the command key, or
+    ///   <see langword="false"/> to indicate that the key is not a command key.
+    ///  </para>
+    ///  <para>
+    ///   If the control has a parent, the key is passed to the parent's <see cref="ProcessCmdKey(ref Message, Keys)"/>
+    ///   method. The net effect is that command keys are "bubbled" up the control hierarchy. In addition to the key the
+    ///   user pressed, the key data also indicates which, if any, modifier keys were pressed at the same time as the
+    ///   key. Modifier keys include the SHIFT, CTRL, and ALT keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) =>
+        _parent?.ProcessCmdKey(ref msg, keyData) ?? false;
 
     private unsafe void PrintToMetaFile(HDC hDC, IntPtr lParam)
     {
@@ -9257,63 +9141,47 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a dialog character. This method is called during message
-    ///  pre-processing to handle dialog characters, such as control mnemonics.
-    ///  This method is called only if the isInputChar() method indicates that
-    ///  the control isn't interested in the character.
-    ///  processDialogChar() simply sends the character to the parent's
-    ///  processDialogChar() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog characters.
-    ///  When overriding processDialogChar(), a control should return true to
-    ///  indicate that it has processed the character. For characters that aren't
-    ///  processed by the control, the result of "base.processDialogChar()"
-    ///  should be returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a dialog character.
     /// </summary>
-    protected virtual bool ProcessDialogChar(char charCode)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogChar [{charCode}]");
-        return _parent is not null && _parent.ProcessDialogChar(charCode);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message preprocessing to handle dialog characters, such as control mnemonics.
+    ///   This method is called only if the <see cref="IsInputChar(char)"/> method indicates that the control is not
+    ///   processing the character. The <see cref="ProcessDialogChar(char)"/> method simply sends the character to the
+    ///   parent's <see cref="ProcessDialogChar(char)"/> method, or returns <see langword="false"/> if the control has no
+    ///   parent. The <see cref="Form"/> class overrides this method to perform actual processing of dialog characters.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessDialogChar(char charCode) => _parent?.ProcessDialogChar(charCode) ?? false;
 
     /// <summary>
-    ///  Processes a dialog key. This method is called during message
-    ///  pre-processing to handle dialog characters, such as TAB, RETURN, ESCAPE,
-    ///  and arrow keys. This method is called only if the isInputKey() method
-    ///  indicates that the control isn't interested in the key.
-    ///  processDialogKey() simply sends the character to the parent's
-    ///  processDialogKey() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog keys.
-    ///  When overriding processDialogKey(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processDialogKey(...)" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a dialog key.
     /// </summary>
-    protected virtual bool ProcessDialogKey(Keys keyData)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogKey {keyData}");
-        return _parent is not null && _parent.ProcessDialogKey(keyData);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called during message preprocessing to handle dialog characters, such as TAB, RETURN, ESC, and
+    ///   arrow keys. This method is called only if the <see cref="IsInputKey(Keys)"/> method indicates that the control
+    ///   is not processing the key. The <see cref="ProcessDialogKey(Keys)"/> simply sends the character to the parent's
+    ///   <see cref="ProcessDialogKey(Keys)"/> method, or returns <see langword="false"/> if the control has no parent.
+    ///   The <see cref="Form"/> class overrides this method to perform actual processing of dialog keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessDialogKey(Keys keyData) => _parent?.ProcessDialogKey(keyData) ?? false;
 
     /// <summary>
-    ///  Processes a key message. This method is called when a control receives a
-    ///  keyboard message. The method is responsible for generating the appropriate
-    ///  key events for the message by calling OnKeyPress(), onKeyDown(), or
-    ///  onKeyUp(). The m parameter contains the window message that must
-    ///  be processed. Possible values for the m.msg field are WM_CHAR,
-    ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, WM_SYSKEYUP, and WM_IMECHAR.
-    ///  When overriding processKeyEventArgs(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processKeyEventArgs()" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a key message and generates the appropriate control events.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is called when a control receives a keyboard message. The method is responsible for generating the
+    ///   appropriate key events for the message by calling the <see cref="OnKeyPress(KeyPressEventArgs)"/>,
+    ///   <see cref="OnKeyDown(KeyEventArgs)"/>, or <see cref="OnKeyUp(KeyEventArgs)"/>. The <paramref name="m"/>
+    ///   parameter contains the window message that must be processed. Possible values for the <see cref="Message.Msg"/>
+    ///   property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, WM_SYSKEYUP, and WM_IME_CHAR.
+    ///  </para>
+    /// </remarks>
     protected virtual bool ProcessKeyEventArgs(ref Message m)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyEventArgs {m}");
         KeyEventArgs? ke = null;
         KeyPressEventArgs? kpe = null;
         WPARAM newWParam = 0;
@@ -9325,10 +9193,6 @@ public unsafe partial class Control :
             if (charsToIgnore > 0)
             {
                 charsToIgnore--;
-                Debug.WriteLineIf(
-                    CompModSwitches.ImeMode.Level >= TraceLevel.Info,
-                    $"charsToIgnore decreased, new val = {charsToIgnore}, this={this}");
-
                 ImeWmCharsToIgnore = charsToIgnore;
                 return false;
             }
@@ -9376,13 +9240,11 @@ public unsafe partial class Control :
 
         if (kpe is not null)
         {
-            s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {kpe.Handled}");
             m.WParamInternal = newWParam;
             return kpe.Handled;
         }
         else
         {
-            s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {ke!.Handled}");
             if (ke!.SuppressKeyPress)
             {
                 RemovePendingMessages(PInvoke.WM_CHAR, PInvoke.WM_CHAR);
@@ -9395,23 +9257,20 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a key message. This method is called when a control receives a
-    ///  keyboard message. The method first checks if the control has a parent,
-    ///  and if so calls the parent's processKeyPreview() method. If the parent's
-    ///  processKeyPreview() method doesn't consume the message then
-    ///  processKeyEventArgs() is called to generate the appropriate keyboard events.
-    ///  The m parameter contains the window message that must be
-    ///  processed. Possible values for the m.msg field are WM_CHAR,
-    ///  WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
-    ///  When overriding processKeyMessage(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.processKeyMessage()" should be
-    ///  returned.
-    ///  Controls will seldom, if ever, need to override this method.
+    ///  Processes a key message.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is called when a control receives a keyboard message. The method first determines whether the
+    ///   control has a parent; if so, it calls the parent's <see cref="ProcessKeyPreview(ref Message)"/> method. If the
+    ///   parent's <see cref="ProcessKeyPreview(ref Message)"/> method does not process the message then the
+    ///   <see cref="ProcessKeyEventArgs(ref Message)"/> is called to generate the appropriate keyboard events. The
+    ///   <paramref name="m"/> parameter contains the window message that must be processed. Possible values for the
+    ///   <see cref="Message.Msg"/> property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
+    ///  </para>
+    /// </remarks>
     protected internal virtual bool ProcessKeyMessage(ref Message m)
     {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyMessage {m}");
         if (_parent is not null && _parent.ProcessKeyPreview(ref m))
         {
             return true;
@@ -9421,57 +9280,36 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Previews a keyboard message. This method is called by a child control
-    ///  when the child control receives a keyboard message. The child control
-    ///  calls this method before generating any keyboard events for the message.
-    ///  If this method returns true, the child control considers the message
-    ///  consumed and does not generate any keyboard events. The m
-    ///  parameter contains the window message to preview. Possible values for
-    ///  the m.msg field are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP,
-    ///  and WM_SYSKEYUP.
-    ///  processKeyPreview() simply sends the character to the parent's
-    ///  processKeyPreview() method, or returns false if the control has no
-    ///  parent. The Form class overrides this method to perform actual
-    ///  processing of dialog keys.
-    ///  When overriding processKeyPreview(), a control should return true to
-    ///  indicate that it has processed the key. For keys that aren't processed
-    ///  by the control, the result of "base.ProcessKeyPreview(...)" should be
-    ///  returned.
+    ///  Previews a keyboard message.
     /// </summary>
-    protected virtual bool ProcessKeyPreview(ref Message m)
-    {
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyPreview {m}");
-        return _parent is not null && _parent.ProcessKeyPreview(ref m);
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called by a child control when the child control receives a keyboard message. The child control
+    ///   calls this method before generating any keyboard events for the message. If this method returns <see langword="true"/>,
+    ///   the child control considers the message processed and does not generate any keyboard events. The
+    ///   <paramref name="m"/> parameter contains the window message to preview. Possible values for the
+    ///   <see cref="Message.Msg"/> property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP. The
+    ///   <see cref="ProcessKeyPreview(ref Message)"/> method simply sends the character to the parent's
+    ///   <see cref="ProcessKeyPreview(ref Message)"/> method, or returns <see langword="false"/> if the control has no
+    ///   parent. The <see cref="Form"/> class overrides this method to perform actual processing of dialog keys.
+    ///  </para>
+    /// </remarks>
+    protected virtual bool ProcessKeyPreview(ref Message m) => _parent?.ProcessKeyPreview(ref m) ?? false;
 
     /// <summary>
-    ///  <para>
-    ///   Processes a mnemonic character. This method is called to give a control
-    ///   the opportunity to process a mnemonic character. The method should check
-    ///   if the control is in a state to process mnemonics and if the given
-    ///   character represents a mnemonic. If so, the method should perform the
-    ///   action associated with the mnemonic and return <see langword="true"/>.
-    ///   If not, the method should return <see langword="false"/>.
-    ///  </para>
-    ///  <para>
-    ///   Implementations of this method often use the isMnemonic() method to
-    ///   check if the given character matches a mnemonic in the control's text,
-    ///   for example:
-    ///  </para>
-    ///  <code>
-    ///   if (CanSelect() &amp;&amp; IsMnemonic(charCode, GetText())
-    ///   {
-    ///       // Perform action associated with mnemonic...
-    ///   }
-    ///  </code>
+    ///  Processes a mnemonic character.
     /// </summary>
-    protected internal virtual bool ProcessMnemonic(char charCode)
-    {
-#if DEBUG
-        s_controlKeyboardRouting.TraceVerbose($"Control.ProcessMnemonic [0x{((int)charCode):X}]");
-#endif
-        return false;
-    }
+    /// <remarks>
+    ///  <para>
+    ///   This method is called to give a control the opportunity to process a mnemonic character. The method should
+    ///   check if the control is in a state to process mnemonics and if the given  character represents a mnemonic. If
+    ///   so, the method should perform the action associated with the mnemonic and return <see langword="true"/>.
+    ///   If not, the method should return <see langword="false"/>. Implementations of this method often use the
+    ///   <see cref="IsMnemonic(char, string?)"/> method to determine whether the given character matches a mnemonic
+    ///   in the control's text.
+    ///  </para>
+    /// </remarks>
+    protected internal virtual bool ProcessMnemonic(char charCode) => false;
 
     /// <summary>
     ///  Preprocess keys which affect focus indicators and keyboard cues.
@@ -9924,9 +9762,6 @@ public unsafe partial class Control :
     /// </summary>
     public void ResumeLayout(bool performLayout)
     {
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
-
         bool performedLayout = false;
         if (LayoutSuspendCount > 0)
         {
@@ -10000,11 +9835,8 @@ public unsafe partial class Control :
 
             if (accept)
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {Handle}");
-
                 // Register
                 HRESULT hr = PInvoke.RegisterDragDrop(this, new DropTarget(this));
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -10012,11 +9844,8 @@ public unsafe partial class Control :
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
-
                 // Revoke
                 HRESULT hr = PInvoke.RevokeDragDrop(this);
-                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_NOTREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -10063,7 +9892,7 @@ public unsafe partial class Control :
         // zooming feature, as opposed to AutoScale.
         using (new LayoutTransaction(this, this, PropertyNames.Bounds, resumeLayout: false))
         {
-            ScaleControl(factor, factor, this);
+            ScaleControl(factor, factor);
             if (ScaleChildren)
             {
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
@@ -10104,7 +9933,7 @@ public unsafe partial class Control :
         // positions of all controls.  Therefore, we should resume(false).
         using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
         {
-            ScaleControl(includedFactor, excludedFactor, requestingControl);
+            ScaleControl(includedFactor, excludedFactor);
 
             // Certain controls like 'PropertyGrid' does special scaling. Differing scaling to their own methods.
             if (!_doNotScaleChildren)
@@ -10185,7 +10014,7 @@ public unsafe partial class Control :
     ///  The requestingControl property indicates which control has requested
     ///  the scaling function.
     /// </summary>
-    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
+    internal void ScaleControl(SizeF includedFactor, SizeF excludedFactor)
     {
         try
         {
@@ -10203,8 +10032,6 @@ public unsafe partial class Control :
             {
                 excludedSpecified |= (~RequiredScaling & BoundsSpecified.All);
             }
-
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Scaling {this} Included: {includedFactor}, Excluded: {excludedFactor}");
 
             if (includedSpecified != BoundsSpecified.None)
             {
@@ -10343,8 +10170,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected virtual void ScaleCore(float dx, float dy)
     {
-        Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
-
         using SuspendLayoutScope scope = new(this);
 
         int sx = (int)Math.Round(_x * dx);
@@ -10373,7 +10198,9 @@ public unsafe partial class Control :
             // enumerate
             for (int i = 0; i < controlsCollection.Count; i++)
             {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 controlsCollection[i].Scale(dx, dy);
+#pragma warning restore CS0618
             }
         }
     }
@@ -10475,6 +10302,7 @@ public unsafe partial class Control :
             }
         }
         while (ctl != start);
+
         return null;
     }
 
@@ -10484,8 +10312,7 @@ public unsafe partial class Control :
     /// </summary>
     private void SelectNextIfFocused()
     {
-        // We want to move focus away from hidden controls, so this
-        //           function was added.
+        // We want to move focus away from hidden controls, so this function was added.
         if (ContainsFocus && ParentInternal is not null)
         {
             IContainerControl? c = ParentInternal.GetContainerControl();
@@ -10604,9 +10431,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        Debug.WriteLineIf(CompModSwitches.SetBounds.TraceInfo,
-            $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified})");
-
         // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
         // end up in WmWindowPositionChanged which may cause the parent to layout.  We need to
         // suspend/resume to defer the parent from laying out until after InitLayout has been called
@@ -11227,8 +11051,6 @@ public unsafe partial class Control :
         }
 
         Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
-        Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-            $"{GetType().Name}::SuspendLayout(newCount = {LayoutSuspendCount})");
     }
 
     /// <summary>
@@ -11344,15 +11166,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight)
     {
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"{Name}::UpdateBounds(");
-            Debug.Indent();
-            Debug.WriteLine($"oldBounds={{x={_x} y={_y} width={_width} height={_height} clientWidth={_clientWidth} clientHeight={_clientHeight}}}");
-        }
-#endif // DEBUG
-
         bool newLocation = _x != x || _y != y;
         bool newSize = Width != width || Height != height || _clientWidth != clientWidth || _clientHeight != clientHeight;
 
@@ -11365,51 +11178,18 @@ public unsafe partial class Control :
 
         if (newLocation)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnLocationChanged(EventArgs.Empty);
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnLocationChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
 
         if (newSize)
         {
-#if DEBUG
-            Rectangle originalBounds = Bounds;
-#endif
             OnSizeChanged(EventArgs.Empty);
             OnClientSizeChanged(EventArgs.Empty);
 
             // Clear PreferredSize cache for this control
             CommonProperties.xClearPreferredSizeCache(this);
             LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
-
-#if DEBUG
-            if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
-            {
-                Debug.WriteLine($"""
-                    WARNING: Bounds changed during OnSizeChanged()
-                    before={originalBounds} after={Bounds}
-                    """);
-            }
-#endif
         }
-
-#if DEBUG
-        if (CompModSwitches.SetBounds.TraceVerbose)
-        {
-            Debug.WriteLine($"newBounds={{x={x} y={y} width={width} height={height} clientWidth={clientWidth} clientHeight={clientHeight}}}");
-            Debug.Unindent();
-        }
-#endif
     }
 
     /// <summary>
@@ -11818,8 +11598,6 @@ public unsafe partial class Control :
     /// </summary>
     private unsafe void WmGetObject(ref Message m)
     {
-        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
-
         if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders)
         {
             // If the requested object identifier is UiaRootObjectId,
@@ -11848,7 +11626,6 @@ public unsafe partial class Control :
         {
             // Obtain the Lresult.
             m.ResultInternal = accessibleObject.GetLRESULT(m.WParamInternal);
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
         }
         catch (Exception e)
         {
@@ -11975,7 +11752,6 @@ public unsafe partial class Control :
     /// </summary>
     private void WmKillFocus(ref Message m)
     {
-        s_focusTracing.TraceVerbose($"Control::WmKillFocus - {Name}");
         WmImeKillFocus();
         DefWndProc(ref m);
         InvokeLostFocus(this, EventArgs.Empty);
@@ -11986,19 +11762,18 @@ public unsafe partial class Control :
     /// </summary>
     private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
     {
-        // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then
-        // we need to see if something happens during processing of
-        // user code that changed the state of the buttons (i.e. bringing up
-        // a dialog) to keep the control in a consistent state...
+        // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then we need to see if something happens
+        // during processing of user code that changed the state of the buttons (i.e. bringing up a dialog) to keep
+        // the control in a consistent state.
         MouseButtons realState = MouseButtons;
         SetState(States.MousePressed, true);
 
-        // If the UserMouse style is set, the control does its own processing
-        // of mouse messages
+        // If the UserMouse style is set, the control does its own processing of mouse messages.
         if (!GetStyle(ControlStyles.UserMouse))
         {
             DefWndProc(ref m);
-            // we might had re-entered the message loop and processed a WM_CLOSE message
+
+            // We might have re-entered the message loop and processed a WM_CLOSE message.
             if (IsDisposed)
             {
                 return;
@@ -12461,11 +12236,9 @@ public unsafe partial class Control :
 
     private void WmQueryNewPalette(ref Message m)
     {
-        s_paletteTracing.TraceVerbose($"{Handle}: WM_QUERYNEWPALETTE");
-
         using GetDcScope dc = new(HWND);
 
-        // We don't want to unset the palette in this case so we don't do this in a using
+        // We don't want to unset the palette in this case so we don't do this in a using.
         var paletteScope = SelectPaletteScope.HalftonePalette(
             dc,
             forceBackground: true,
@@ -12556,7 +12329,6 @@ public unsafe partial class Control :
     /// </summary>
     private void WmSetFocus(ref Message m)
     {
-        s_focusTracing.TraceVerbose($"Control::WmSetFocus - {Name}");
         WmImeSetFocus();
 
         if (!HostedInWin32DialogManager)
@@ -12596,57 +12368,57 @@ public unsafe partial class Control :
 
         DefWndProc(ref m);
 
-        if ((_state & States.Recreate) == 0)
+        if (_state.HasFlag(States.Recreate))
         {
-            bool visible = m.WParamInternal != 0u;
-            bool oldVisibleProperty = Visible;
+            return;
+        }
 
-            if (visible)
+        bool visible = m.WParamInternal != 0u;
+        bool oldVisibleProperty = Visible;
+
+        if (visible)
+        {
+            bool oldVisibleBit = GetState(States.Visible);
+            SetState(States.Visible, true);
+            bool executedOk = false;
+            try
             {
-                bool oldVisibleBit = GetState(States.Visible);
-                SetState(States.Visible, true);
-                bool executedOk = false;
-                try
-                {
-                    CreateControl();
-                    executedOk = true;
-                }
-
-                finally
-                {
-                    if (!executedOk)
-                    {
-                        // We do it this way instead of a try/catch because catching and rethrowing
-                        // an exception loses call stack information
-                        SetState(States.Visible, oldVisibleBit);
-                    }
-                }
-            }
-            else
-            {
-                // not visible
-                // If Windows tells us it's visible, that's pretty unambiguous.
-                // But if it tells us it's not visible, there's more than one explanation --
-                // maybe the container control became invisible.  So we look at the parent
-                // and take a guess at the reason.
-
-                // We do not want to update state if we are on the parking window.
-                bool parentVisible = GetTopLevel();
-                if (ParentInternal is not null)
-                {
-                    parentVisible = ParentInternal.Visible;
-                }
-
-                if (parentVisible)
-                {
-                    SetState(States.Visible, false);
-                }
+                CreateControl();
+                executedOk = true;
             }
 
-            if (!GetState(States.ParentRecreating) && (oldVisibleProperty != visible))
+            finally
             {
-                OnVisibleChanged(EventArgs.Empty);
+                if (!executedOk)
+                {
+                    // We do it this way instead of a try/catch because catching and rethrowing
+                    // an exception loses call stack information
+                    SetState(States.Visible, oldVisibleBit);
+                }
             }
+        }
+        else
+        {
+            // Not visible. If Windows tells us it's visible, that's pretty unambiguous. But if it tells us it's
+            // not visible, there's more than one explanation -- maybe the container control became invisible. So
+            // we look at the parent and take a guess at the reason.
+
+            // We do not want to update state if we are on the parking window.
+            bool parentVisible = GetTopLevel();
+            if (ParentInternal is not null)
+            {
+                parentVisible = ParentInternal.Visible;
+            }
+
+            if (parentVisible)
+            {
+                SetState(States.Visible, false);
+            }
+        }
+
+        if (!GetState(States.ParentRecreating) && (oldVisibleProperty != visible))
+        {
+            OnVisibleChanged(EventArgs.Empty);
         }
     }
 
@@ -12863,17 +12635,10 @@ public unsafe partial class Control :
                 break;
 
             case PInvoke.WM_SYSCOMMAND:
-                if ((m.WParamInternal & 0xFFF0) == PInvoke.SC_KEYMENU)
+                if ((m.WParamInternal & 0xFFF0) == PInvoke.SC_KEYMENU && ToolStripManager.ProcessMenuKey(ref m))
                 {
-                    s_controlKeyboardRouting.TraceVerbose($"Control.WndProc processing {m}");
-
-                    if (ToolStripManager.ProcessMenuKey(ref m))
-                    {
-                        s_controlKeyboardRouting.TraceVerbose(
-                            $"Control.WndProc ToolStripManager.ProcessMenuKey returned true{m}");
-                        m.ResultInternal = (LRESULT)0;
-                        return;
-                    }
+                    m.ResultInternal = (LRESULT)0;
+                    return;
                 }
 
                 DefWndProc(ref m);
@@ -13309,46 +13074,25 @@ public unsafe partial class Control :
     ///
     ///  Explicit support of DropTarget
     ///
-    void IDropTarget.OnDragEnter(DragEventArgs drgEvent)
-    {
-        OnDragEnter(drgEvent);
-    }
+    void IDropTarget.OnDragEnter(DragEventArgs drgEvent) => OnDragEnter(drgEvent);
 
-    void IDropTarget.OnDragOver(DragEventArgs drgEvent)
-    {
-        OnDragOver(drgEvent);
-    }
+    void IDropTarget.OnDragOver(DragEventArgs drgEvent) => OnDragOver(drgEvent);
 
-    void IDropTarget.OnDragLeave(EventArgs e)
-    {
-        OnDragLeave(e);
-    }
+    void IDropTarget.OnDragLeave(EventArgs e) => OnDragLeave(e);
 
-    void IDropTarget.OnDragDrop(DragEventArgs drgEvent)
-    {
-        OnDragDrop(drgEvent);
-    }
+    void IDropTarget.OnDragDrop(DragEventArgs drgEvent) => OnDragDrop(drgEvent);
 
     ///
     ///  Explicit support of DropSource
     ///
-    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)
-    {
-        OnGiveFeedback(giveFeedbackEventArgs);
-    }
+    void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs) => OnGiveFeedback(giveFeedbackEventArgs);
 
-    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs)
-    {
-        OnQueryContinueDrag(queryContinueDragEventArgs);
-    }
+    void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) => OnQueryContinueDrag(queryContinueDragEventArgs);
 
     #region IKeyboardToolTip implementation
 
-    bool IKeyboardToolTip.CanShowToolTipsNow()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return IsHandleCreated && Visible && (host is null || host.CanShowToolTipsNow());
-    }
+    bool IKeyboardToolTip.CanShowToolTipsNow() =>
+        IsHandleCreated && Visible && (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.CanShowToolTipsNow());
 
     Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => GetToolNativeScreenRectangle();
 
@@ -13356,17 +13100,11 @@ public unsafe partial class Control :
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => IsHoveredWithMouse();
 
-    bool IKeyboardToolTip.HasRtlModeEnabled()
-    {
-        Control? topLevelControl = TopLevelControlInternal;
-        return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
-    }
+    bool IKeyboardToolTip.HasRtlModeEnabled() =>
+        TopLevelControlInternal is { } topLevelControl && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
 
-    bool IKeyboardToolTip.AllowsToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.AllowsToolTip()) && AllowsKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.AllowsToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.AllowsToolTip()) && AllowsKeyboardToolTip();
 
     IWin32Window IKeyboardToolTip.GetOwnerWindow() => this;
 
@@ -13376,21 +13114,12 @@ public unsafe partial class Control :
 
     string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
-    bool IKeyboardToolTip.ShowsOwnToolTip()
-    {
-        IKeyboardToolTip? host = ToolStripControlHost;
-        return (host is null || host.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
-    }
+    bool IKeyboardToolTip.ShowsOwnToolTip() =>
+        (ToolStripControlHost is not IKeyboardToolTip toolTip || toolTip.ShowsOwnToolTip()) && ShowsOwnKeyboardToolTip();
 
-    bool IKeyboardToolTip.IsBeingTabbedTo()
-    {
-        return AreCommonNavigationalKeysDown();
-    }
+    bool IKeyboardToolTip.IsBeingTabbedTo() => AreCommonNavigationalKeysDown();
 
-    bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
-    {
-        return AllowsChildrenToShowToolTips();
-    }
+    bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => AllowsChildrenToShowToolTips();
 
     #endregion
 

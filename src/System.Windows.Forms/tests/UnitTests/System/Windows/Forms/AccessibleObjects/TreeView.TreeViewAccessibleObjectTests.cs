@@ -65,7 +65,7 @@ public class TreeViewAccessibleObjectTests
     public void TreeViewAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
+        control.Nodes.AddRange([new("Node 1"), new("Node 2"), new("Node 3")]);
 
         AccessibleObject accessibleObject = control.AccessibilityObject;
         AccessibleObject expected = control.Nodes[0].AccessibilityObject;
@@ -78,7 +78,7 @@ public class TreeViewAccessibleObjectTests
     public void TreeViewAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
+        control.Nodes.AddRange([new("Node 1"), new("Node 2"), new("Node 3")]);
 
         AccessibleObject accessibleObject = control.AccessibilityObject;
         AccessibleObject expected = control.Nodes[^1].AccessibilityObject;
@@ -97,7 +97,7 @@ public class TreeViewAccessibleObjectTests
     public void TreeViewAccessibleObject_FragmentNavigate_GetChild_ReturnsExpected(int index)
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
+        control.Nodes.AddRange([new("Node 1"), new("Node 2"), new("Node 3")]);
 
         AccessibleObject expected = index >= 0 && index < control.Nodes.Count
             ? control.Nodes[index].AccessibilityObject
@@ -111,7 +111,7 @@ public class TreeViewAccessibleObjectTests
     public void TreeViewAccessibleObject_FragmentNavigate_GetChildCount_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
+        control.Nodes.AddRange([new("Node 1"), new("Node 2"), new("Node 3")]);
 
         int expected = 3;
 
@@ -214,7 +214,7 @@ public class TreeViewAccessibleObjectTests
     {
         using TreeView control = new();
         control.CreateControl();
-        control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
+        control.Nodes.AddRange([new("Node 1"), new("Node 2"), new("Node 3")]);
         control.SelectedNode = control.Nodes[1];
 
         IRawElementProviderSimple.Interface[] expected = new[] { control.Nodes[1].AccessibilityObject };

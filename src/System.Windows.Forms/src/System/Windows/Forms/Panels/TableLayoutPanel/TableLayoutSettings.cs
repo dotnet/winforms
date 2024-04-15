@@ -14,16 +14,17 @@ namespace System.Windows.Forms;
 [Serializable]  // This class participates in resx serialization.
 public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 {
-    private static readonly int[] borderStyleToOffset =
-    {
-        /*None = */ 0,
-        /*Single = */ 1,
-        /*Inset = */ 2,
-        /*InsetDouble = */ 3,
-        /*Outset = */ 2,
-        /*OutsetDouble = */ 3,
-        /*OutsetPartial = */ 3
-    };
+    private static readonly int[] s_borderStyleToOffset =
+    [
+        0,  // None
+        1,  // Single
+        2,  // Inset
+        3,  // InsetDouble
+        2,  // Outset
+        3,  // OutsetDouble
+        3   // OutsetPartial
+    ];
+
     private TableLayoutPanelCellBorderStyle _borderStyle;
     private TableLayoutSettingsStub? _stub;
 
@@ -56,8 +57,6 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     public override LayoutEngine LayoutEngine => TableLayout.Instance;
 
-    private TableLayout TableLayout => (TableLayout)LayoutEngine;
-
     /// <summary>
     ///  Internal as this is a TableLayoutPanel feature only.
     /// </summary>
@@ -74,7 +73,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             _borderStyle = value;
             // set the CellBorderWidth according to the current CellBorderStyle.
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
-            containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
+            containerInfo.CellBorderWidth = s_borderStyleToOffset[(int)value];
             LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.CellBorderStyle);
             Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set");
         }

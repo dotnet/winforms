@@ -532,7 +532,7 @@ public class FontTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => font.GetHeight(graphics));
+        AssertExtensions.Throws<ArgumentException>("graphics", () => font.GetHeight(graphics));
     }
 
     [Fact]

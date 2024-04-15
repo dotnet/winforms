@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class ButtonBaseTests
+public class ButtonBaseTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void ButtonBase_Ctor_Default()
@@ -7614,7 +7614,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7645,7 +7645,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7677,7 +7677,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7716,7 +7716,7 @@ public class ButtonBaseTests
                 Message m = new()
                 {
                     Msg = (int)PInvoke.WM_CANCELMODE,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -7757,7 +7757,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CANCELMODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7802,7 +7802,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CANCELMODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7845,7 +7845,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CANCELMODE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -7894,7 +7894,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7939,7 +7939,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -7975,7 +7975,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8012,7 +8012,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8056,7 +8056,7 @@ public class ButtonBaseTests
                 Message m = new()
                 {
                     Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -8102,7 +8102,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CAPTURECHANGED,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8152,7 +8152,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CAPTURECHANGED,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8200,7 +8200,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_CAPTURECHANGED,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8254,7 +8254,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8444,7 +8444,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8480,7 +8480,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8517,7 +8517,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8561,7 +8561,7 @@ public class ButtonBaseTests
                 Message m = new()
                 {
                     Msg = (int)PInvoke.WM_KILLFOCUS,
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
@@ -8607,7 +8607,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8657,7 +8657,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8705,7 +8705,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8759,7 +8759,7 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -8810,7 +8810,7 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -8890,7 +8890,7 @@ public class ButtonBaseTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -8926,7 +8926,7 @@ public class ButtonBaseTests
                 Msg = msg,
                 LParam = lParam,
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -8955,10 +8955,10 @@ public class ButtonBaseTests
             Message m = new()
             {
                 Msg = msg,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)250, m.Result);
+            Assert.Equal(250, m.Result);
             Assert.Equal(1, callCount);
             Assert.False(control.Capture);
             Assert.False(control.Focused);
@@ -8996,7 +8996,7 @@ public class ButtonBaseTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -9040,7 +9040,7 @@ public class ButtonBaseTests
             Msg = msg,
             LParam = lParam,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -9077,10 +9077,10 @@ public class ButtonBaseTests
         Message m = new()
         {
             Msg = msg,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(1, callCount);
         Assert.False(control.Capture);
         Assert.False(control.Focused);
@@ -9135,7 +9135,7 @@ public class ButtonBaseTests
             {
                 Msg = (int)(MessageId.WM_REFLECT_COMMAND),
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
@@ -9171,7 +9171,7 @@ public class ButtonBaseTests
         {
             Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
@@ -9335,7 +9335,7 @@ public class ButtonBaseTests
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
         public new bool GetTopLevel() => base.GetTopLevel();
-        
+
         public new void OnClick(EventArgs e) => base.OnClick(e);
 
         public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
@@ -9376,4 +9376,6 @@ public class ButtonBaseTests
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
+
+    protected override ButtonBase CreateButton() => new Button();
 }

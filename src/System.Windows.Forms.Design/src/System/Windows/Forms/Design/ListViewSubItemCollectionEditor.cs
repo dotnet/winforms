@@ -75,7 +75,7 @@ internal class ListViewSubItemCollectionEditor : CollectionEditor
 
         if (subItems.Count == 0)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         // Save the first sub item.
@@ -83,7 +83,7 @@ internal class ListViewSubItemCollectionEditor : CollectionEditor
 
         if (subItems.Count == 1)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         object[] values = new object[subItems.Count - 1];

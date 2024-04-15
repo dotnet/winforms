@@ -161,6 +161,166 @@ public class DateTimePickerTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Format = value);
     }
 
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleBackColor_GetSet_ReturnsExpected()
+    {
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        control.CalendarTitleBackColor = expectedColor;
+
+        control.CalendarTitleBackColor.Should().Be(expectedColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid color")]
+    public void DateTimePicker_CalendarTitleBackColor_SetInvalid_ThrowsArgumentException(string value)
+    {
+        using DateTimePicker control = new();
+        Action act = () => control.CalendarTitleBackColor = ColorTranslator.FromHtml(value);
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarForeColor_GetSet_ReturnsExpected()
+    {
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        control.CalendarForeColor = expectedColor;
+
+        control.CalendarForeColor.Should().Be(expectedColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid color")]
+    public void DateTimePicker_CalendarForeColor_SetInvalid_ThrowsArgumentException(string value)
+    {
+        using DateTimePicker control = new();
+        Action act = () => control.CalendarForeColor = ColorTranslator.FromHtml(value);
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleForeColor_GetSet_ReturnsExpected()
+    {
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        control.CalendarTitleForeColor = expectedColor;
+
+        control.CalendarTitleForeColor.Should().Be(expectedColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid color")]
+    public void DateTimePicker_CalendarTitleForeColor_SetInvalid_ThrowsArgumentException(string value)
+    {
+        using DateTimePicker control = new();
+        Action act = () => control.CalendarTitleForeColor = ColorTranslator.FromHtml(value);
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTrailingForeColor_GetSet_ReturnsExpected()
+    {
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        control.CalendarTrailingForeColor = expectedColor;
+
+        control.CalendarTrailingForeColor.Should().Be(expectedColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid color")]
+    public void DateTimePicker_CalendarTrailingForeColor_SetInvalid_ThrowsArgumentException(string value)
+    {
+        using DateTimePicker control = new();
+        Action act = () => control.CalendarTrailingForeColor = ColorTranslator.FromHtml(value);
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarMonthBackground_GetSet_ReturnsExpected()
+    {
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        control.CalendarMonthBackground = expectedColor;
+
+        control.CalendarMonthBackground.Should().Be(expectedColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid color")]
+    public void DateTimePicker_CalendarMonthBackground_SetInvalid_ThrowsArgumentException(string value)
+    {
+        using DateTimePicker control = new();
+        Action act = () => control.CalendarMonthBackground = ColorTranslator.FromHtml(value);
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_BackColorChangedEvent_Raised_Success()
+    {
+        using DateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.BackColorChanged += handler;
+        control.BackColor = Color.Red;
+        callCount.Should().Be(1);
+
+        control.BackColorChanged -= handler;
+        control.BackColor = Color.Green;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_BackgroundImageChangedEvent_Raised_Success()
+    {
+        using DateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.BackgroundImageChanged += handler;
+        using (Bitmap bmp = new(10, 10))
+        {
+            control.BackgroundImage = bmp;
+        }
+
+        callCount.Should().Be(1);
+
+        control.BackgroundImageChanged -= handler;
+        using (Bitmap bmp = new(20, 20))
+        {
+            control.BackgroundImage = bmp;
+        }
+
+        callCount.Should().Be(1);
+    }
+
     [WinFormsTheory]
     [InlineData(ControlStyles.ContainerControl, false)]
     [InlineData(ControlStyles.UserPaint, false)]

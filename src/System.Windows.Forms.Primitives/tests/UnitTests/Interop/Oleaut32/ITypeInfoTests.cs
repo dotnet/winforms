@@ -147,7 +147,7 @@ public class ITypeInfoTests
             fixed (int* pRgDispId = rgDispId)
             {
                 typeInfo.Value->GetIDsOfNames(pRgszNames, (uint)rgszNames.Length, pRgDispId);
-                Assert.Equal(new PWSTR[] { width, other }, rgszNames);
+                Assert.Equal([width, other], rgszNames);
                 Assert.Equal(new int[] { (int)PInvokeCore.DISPID_PICT_WIDTH, PInvokeCore.DISPID_UNKNOWN }, rgDispId);
             }
         }

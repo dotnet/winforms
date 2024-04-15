@@ -485,8 +485,8 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
     {
-        Cursor cursor1 = new((IntPtr)1);
-        Cursor cursor2 = new((IntPtr)1);
+        Cursor cursor1 = new(1);
+        Cursor cursor2 = new(1);
         Control child1 = new()
         {
             Cursor = cursor1
@@ -1584,18 +1584,18 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC hdc).Should().Be(HRESULT.E_FAIL);
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
         Assert.Equal(PICTYPE.PICTYPE_ICON, type);
         Assert.Equal(847, width);
         Assert.Equal(847, height);
-        Assert.Throws<COMException>(() => iPicture.CurDC);
         Assert.Equal(2u, attributes);
 
         Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1669,13 +1669,13 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
         iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
-        HDC curDc = iPicture.CurDC;
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC curDc).ThrowOnFailure();
 
         Assert.NotEqual(0u, handle);
         Assert.Equal(0u, hPal);
@@ -1698,18 +1698,18 @@ public class AxHostTests
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
 
-        OLE_HANDLE handle = iPicture.Handle;
-        PICTYPE type = iPicture.Type;
-        int width = iPicture.Width;
-        int height = iPicture.Height;
-        uint attributes = iPicture.Attributes;
+        iPicture.get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
+        iPicture.get_Type(out PICTYPE type).ThrowOnFailure();
+        iPicture.get_Width(out int width).ThrowOnFailure();
+        iPicture.get_Height(out int height).ThrowOnFailure();
+        iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+        iPicture.get_CurDC(out HDC hdc).Should().Be(HRESULT.E_FAIL);
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
         Assert.Equal(PICTYPE.PICTYPE_ENHMETAFILE, type);
         Assert.Equal(19972, width);
         Assert.Equal(28332, height);
-        Assert.Throws<COMException>(() => iPicture.CurDC);
         Assert.Equal(3u, attributes);
 
         var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
@@ -2733,13 +2733,13 @@ public class AxHostTests
     {
         using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
-        EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new CustomAttribute() });
+        EventDescriptorCollection events = customTypeDescriptor.GetEvents([new CustomAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        events = customTypeDescriptor.GetEvents(new Attribute[] { new CustomAttribute() });
+        events = customTypeDescriptor.GetEvents([new CustomAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.False(control.IsHandleCreated);
@@ -2758,7 +2758,7 @@ public class AxHostTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         ICustomTypeDescriptor customTypeDescriptor = control;
-        EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new CustomAttribute() });
+        EventDescriptorCollection events = customTypeDescriptor.GetEvents([new CustomAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.True(control.IsHandleCreated);
@@ -2767,7 +2767,7 @@ public class AxHostTests
         Assert.Equal(0, createdCallCount);
 
         // Call again.
-        events = customTypeDescriptor.GetEvents(new Attribute[] { new CustomAttribute() });
+        events = customTypeDescriptor.GetEvents([new CustomAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.True(control.IsHandleCreated);
@@ -2781,13 +2781,13 @@ public class AxHostTests
     {
         using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
-        EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new NoSuchAttribute() });
+        EventDescriptorCollection events = customTypeDescriptor.GetEvents([new NoSuchAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        events = customTypeDescriptor.GetEvents(new Attribute[] { new NoSuchAttribute() });
+        events = customTypeDescriptor.GetEvents([new NoSuchAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.False(control.IsHandleCreated);
@@ -2806,7 +2806,7 @@ public class AxHostTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         ICustomTypeDescriptor customTypeDescriptor = control;
-        EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new NoSuchAttribute() });
+        EventDescriptorCollection events = customTypeDescriptor.GetEvents([new NoSuchAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.True(control.IsHandleCreated);
@@ -2815,7 +2815,7 @@ public class AxHostTests
         Assert.Equal(0, createdCallCount);
 
         // Call again.
-        events = customTypeDescriptor.GetEvents(new Attribute[] { new NoSuchAttribute() });
+        events = customTypeDescriptor.GetEvents([new NoSuchAttribute()]);
         Assert.True(events.Count > 1);
         Assert.NotNull(events[nameof(CustomAxHost.CustomEvent)]);
         Assert.True(control.IsHandleCreated);
@@ -2932,13 +2932,13 @@ public class AxHostTests
     {
         using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
-        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new CustomAttribute() });
+        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties([new CustomAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        properties = customTypeDescriptor.GetProperties(new Attribute[] { new CustomAttribute() });
+        properties = customTypeDescriptor.GetProperties([new CustomAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.False(control.IsHandleCreated);
@@ -2957,7 +2957,7 @@ public class AxHostTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         ICustomTypeDescriptor customTypeDescriptor = control;
-        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new CustomAttribute() });
+        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties([new CustomAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.True(control.IsHandleCreated);
@@ -2966,7 +2966,7 @@ public class AxHostTests
         Assert.Equal(0, createdCallCount);
 
         // Call again.
-        properties = customTypeDescriptor.GetProperties(new Attribute[] { new CustomAttribute() });
+        properties = customTypeDescriptor.GetProperties([new CustomAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.True(control.IsHandleCreated);
@@ -2980,13 +2980,13 @@ public class AxHostTests
     {
         using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
-        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new NoSuchAttribute() });
+        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties([new NoSuchAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        properties = customTypeDescriptor.GetProperties(new Attribute[] { new NoSuchAttribute() });
+        properties = customTypeDescriptor.GetProperties([new NoSuchAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.False(control.IsHandleCreated);
@@ -3005,7 +3005,7 @@ public class AxHostTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         ICustomTypeDescriptor customTypeDescriptor = control;
-        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new NoSuchAttribute() });
+        PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties([new NoSuchAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.True(control.IsHandleCreated);
@@ -3014,7 +3014,7 @@ public class AxHostTests
         Assert.Equal(0, createdCallCount);
 
         // Call again.
-        properties = customTypeDescriptor.GetProperties(new Attribute[] { new NoSuchAttribute() });
+        properties = customTypeDescriptor.GetProperties([new NoSuchAttribute()]);
         Assert.True(properties.Count > 1);
         Assert.NotNull(properties[nameof(CustomAxHost.CustomProperty)]);
         Assert.True(control.IsHandleCreated);

@@ -27,7 +27,7 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
         _size = strings.Length;
 
         PInvokeCore.CoCreateInstance(
-            in CLSID.AutoComplete,
+            CLSID.AutoComplete,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
             out _autoComplete2).ThrowOnFailure();

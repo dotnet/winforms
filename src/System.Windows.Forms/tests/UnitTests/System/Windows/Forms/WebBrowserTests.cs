@@ -4472,7 +4472,7 @@ public class WebBrowserTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -4510,7 +4510,7 @@ public class WebBrowserTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -4552,12 +4552,12 @@ public class WebBrowserTests
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
             Assert.False(menu.Visible);
-            Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+            Assert.Equal(expectedResult == 250, menu.SourceControl == control);
             Assert.Equal(expectedHandleCreated, control.IsHandleCreated);
         }
     }
@@ -4582,7 +4582,7 @@ public class WebBrowserTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -4632,12 +4632,12 @@ public class WebBrowserTests
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
         Assert.False(menu.Visible);
-        Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+        Assert.Equal(expectedResult == 250, menu.SourceControl == control);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -4654,11 +4654,9 @@ public class WebBrowserTests
     {
     }
 
-#pragma warning disable CS0618
     // This class must be ComVisible because WebBrowser scripting requires IDispatch and ITypeInfo support.
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-#pragma warning restore CS0618
     public class CustomScriptingObject
     {
     }

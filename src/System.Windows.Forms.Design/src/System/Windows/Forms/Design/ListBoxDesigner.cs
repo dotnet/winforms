@@ -28,9 +28,9 @@ internal class ListBoxDesigner : ControlDesigner
             ShadowProperties[nameof(IntegralHeight)] = value;
 
             ListBox listBox = (ListBox)Component;
-            if ((listBox.Dock != DockStyle.Fill) &&
-                (listBox.Dock != DockStyle.Left) &&
-                (listBox.Dock != DockStyle.Right))
+            if (listBox.Dock is not DockStyle.Fill
+                and not DockStyle.Left
+                and not DockStyle.Right)
             {
                 listBox.IntegralHeight = value;
             }
@@ -46,7 +46,7 @@ internal class ListBoxDesigner : ControlDesigner
         set
         {
             ListBox listBox = (ListBox)Component;
-            if ((value == DockStyle.Fill) || (value == DockStyle.Left) || (value == DockStyle.Right))
+            if (value is DockStyle.Fill or DockStyle.Left or DockStyle.Right)
             {
                 // VSO 159543
                 // Allow partial listbox item displays so that we don't try to resize the listbox after we dock.
@@ -70,13 +70,13 @@ internal class ListBoxDesigner : ControlDesigner
         PropertyDescriptor integralHeightProp = (PropertyDescriptor)properties["IntegralHeight"];
         if (integralHeightProp is not null)
         {
-            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, Array.Empty<Attribute>());
+            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
         }
 
         PropertyDescriptor dockProp = (PropertyDescriptor)properties["Dock"];
         if (dockProp is not null)
         {
-            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, Array.Empty<Attribute>());
+            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
         }
 
         base.PreFilterProperties(properties);

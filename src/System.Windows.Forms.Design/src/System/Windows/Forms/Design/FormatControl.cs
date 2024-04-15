@@ -305,11 +305,13 @@ internal partial class FormatControl : UserControl
 
     private void UpdateCustomStringTextBox()
     {
-        _customStringTextBox = new TextBox();
-        _customStringTextBox.AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription;
-        _customStringTextBox.Margin = new Padding(0, 3, 0, 3);
-        _customStringTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _customStringTextBox.TabIndex = 3;
+        _customStringTextBox = new TextBox
+        {
+            AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription,
+            Margin = new Padding(0, 3, 0, 3),
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+            TabIndex = 3
+        };
         _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
     }
 

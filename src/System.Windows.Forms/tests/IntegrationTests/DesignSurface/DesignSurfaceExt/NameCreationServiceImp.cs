@@ -29,11 +29,11 @@ internal sealed class NameCreationServiceImp : INameCreationService
                 count++;
 
                 string name = comp.Site.Name;
-                if (name.StartsWith(type.Name))
+                if (name.StartsWith(type.Name, StringComparison.Ordinal))
                 {
                     try
                     {
-                        int value = int.Parse(name.Substring(type.Name.Length));
+                        int value = int.Parse(name[type.Name.Length..]);
                         if (value < min)
                             min = value;
                         if (value > max)
@@ -73,7 +73,7 @@ internal sealed class NameCreationServiceImp : INameCreationService
             return false;
 
         // - then don't allow a leading underscore
-        if (name.StartsWith("_"))
+        if (name.StartsWith('_'))
             return false;
 
         // - ok, it's a valid name

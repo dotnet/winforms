@@ -76,7 +76,7 @@ public partial class MonthCalendar
             SendMouseInput(0, 0, mouseSwapped ? MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTDOWN : MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTDOWN);
             SendMouseInput(0, 0, mouseSwapped ? MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTUP : MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTUP);
 
-            Threading.Thread.Sleep(50);
+            Thread.Sleep(50);
 
             // Set back the mouse position where it was.
             if (setOldCursorPos)

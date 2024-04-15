@@ -21,16 +21,16 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTabControl))]
 public partial class TabControl : Control
 {
-    private static readonly Size DefaultItemSize = Size.Empty;
-    private static readonly Point DefaultPaddingPoint = new(6, 3);
+    private static readonly Size s_defaultItemSize = Size.Empty;
+    private static readonly Point s_defaultPaddingPoint = new(6, 3);
 
     // Properties
     private readonly TabPageCollection _tabCollection;
     private TabAlignment _alignment = TabAlignment.Top;
     private TabDrawMode _drawMode = TabDrawMode.Normal;
     private ImageList? _imageList;
-    private Size _itemSize = DefaultItemSize;
-    private Point _padding = DefaultPaddingPoint;
+    private Size _itemSize = s_defaultItemSize;
+    private Point _padding = s_defaultPaddingPoint;
     private TabSizeMode _sizeMode = TabSizeMode.Normal;
     private TabAppearance _appearance = TabAppearance.Normal;
     private Rectangle _cachedDisplayRect;
@@ -64,7 +64,7 @@ public partial class TabControl : Control
     private readonly MessageId _tabBaseReLayoutMessage = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}{TabBaseReLayoutMessageName}");
 
     // State
-    private readonly List<TabPage> _tabPages = new();
+    private readonly List<TabPage> _tabPages = [];
     private int _lastSelection;
     private short _windowId;
 
@@ -79,7 +79,7 @@ public partial class TabControl : Control
     public TabControl()
         : base()
     {
-        _tabControlState = new Collections.Specialized.BitVector32(0x00000000);
+        _tabControlState = new BitVector32(0x00000000);
 
         _tabCollection = new TabPageCollection(this);
         SetStyle(ControlStyles.UserPaint, false);
@@ -112,7 +112,7 @@ public partial class TabControl : Control
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _alignment = value;
-                if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
+                if (_alignment is TabAlignment.Left or TabAlignment.Right)
                 {
                     SetState(State.Multiline, true);
                 }
@@ -287,14 +287,14 @@ public partial class TabControl : Control
                 cp.Style |= (int)PInvoke.TCS_TOOLTIPS;
             }
 
-            if (_alignment == TabAlignment.Bottom ||
-                _alignment == TabAlignment.Right)
+            if (_alignment is TabAlignment.Bottom or
+                TabAlignment.Right)
             {
                 cp.Style |= (int)PInvoke.TCS_BOTTOM;
             }
 
-            if (_alignment == TabAlignment.Left ||
-                _alignment == TabAlignment.Right)
+            if (_alignment is TabAlignment.Left or
+                TabAlignment.Right)
             {
                 cp.Style |= (int)PInvoke.TCS_VERTICAL | (int)PInvoke.TCS_MULTILINE;
             }
@@ -507,7 +507,7 @@ public partial class TabControl : Control
                     return GetTabRect(0).Size;
                 }
 
-                return DefaultItemSize;
+                return s_defaultItemSize;
             }
 
             return _itemSize;
@@ -557,7 +557,7 @@ public partial class TabControl : Control
             if (Multiline != value)
             {
                 SetState(State.Multiline, value);
-                if (Multiline == false && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
+                if (!Multiline && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
                 {
                     _alignment = TabAlignment.Top;
                 }
@@ -1177,16 +1177,11 @@ public partial class TabControl : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     private static void NotifyAboutFocusState(TabPage? selectedTab, bool focused)
@@ -1335,7 +1330,7 @@ public partial class TabControl : Control
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
-    protected override void OnEnter(EventArgs e)
+    protected internal override void OnEnter(EventArgs e)
     {
         base.OnEnter(e);
         SelectedTab?.FireEnter(e);
@@ -1355,7 +1350,7 @@ public partial class TabControl : Control
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
-    protected override void OnLeave(EventArgs e)
+    protected internal override void OnLeave(EventArgs e)
     {
         SelectedTab?.FireLeave(e);
 
@@ -1601,12 +1596,12 @@ public partial class TabControl : Control
 
     private void ResetItemSize()
     {
-        ItemSize = DefaultItemSize;
+        ItemSize = s_defaultItemSize;
     }
 
     private void ResetPadding()
     {
-        Padding = DefaultPaddingPoint;
+        Padding = s_defaultPaddingPoint;
     }
 
     private void ResizePages()
@@ -1764,12 +1759,12 @@ public partial class TabControl : Control
 
     private bool ShouldSerializeItemSize()
     {
-        return !_itemSize.Equals(DefaultItemSize);
+        return !_itemSize.Equals(s_defaultItemSize);
     }
 
     private new bool ShouldSerializePadding()
     {
-        return !_padding.Equals(DefaultPaddingPoint);
+        return !_padding.Equals(s_defaultPaddingPoint);
     }
 
     /// <summary>

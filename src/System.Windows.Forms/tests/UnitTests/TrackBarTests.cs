@@ -3134,7 +3134,7 @@ public class TrackBarTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -3198,10 +3198,10 @@ public class TrackBarTests
         {
             Msg = msg,
             WParam = wParam,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(10, control.Value);
         Assert.Equal(0, scrollCallCount);
         Assert.Equal(0, valueChangedCallCount);
@@ -3209,6 +3209,68 @@ public class TrackBarTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsFact]
+    public void TrackBar_AutoSizeChangedEvent_AddRemove_Success()
+    {
+        using TrackBar control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.AutoSizeChanged += handler;
+        control.AutoSize = !control.AutoSize;
+        callCount.Should().Be(1);
+
+        control.AutoSizeChanged -= handler;
+        control.AutoSize = !control.AutoSize;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(100, 200, 0, 0, 50, 100)]
+    [InlineData(200, 300, 10, 20, 70, 140)]
+    [InlineData(300, 400, -10, -20, 70, 140)]
+    [InlineData(400, 500, 0, 0, 1, 1)]
+    [InlineData(500, 600, 0, 0, 500, 600)]
+    public void TrackBar_PaintEvent_AddRemove_Success(int bitmapWidth, int bitmapHeight, int rectX, int rectY, int rectWidth, int rectHeight)
+    {
+        using Bitmap bitmap = new(bitmapWidth, bitmapHeight);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Rectangle rectangle = new(rectX, rectY, rectWidth, rectHeight);
+
+        using SubTrackBar trackBar = new();
+        int callCount = 0;
+        PaintEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(trackBar);
+            e.Graphics.Should().BeSameAs(graphics);
+            e.ClipRectangle.Should().Be(rectangle);
+            callCount++;
+        };
+
+        trackBar.Paint += handler;
+        using (var eventArgs = new PaintEventArgs(graphics, rectangle))
+        {
+            trackBar.OnPaint(eventArgs);
+        }
+
+        callCount.Should().Be(1);
+
+        callCount = 0;
+        trackBar.Paint -= handler;
+        using (var eventArgs = new PaintEventArgs(graphics, rectangle))
+        {
+            trackBar.OnPaint(eventArgs);
+        }
+
+        trackBar.Invalidate();
+        callCount.Should().Be(0);
     }
 
     public class SubTrackBar : TrackBar

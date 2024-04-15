@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
 using Windows.Win32.System.Com;
@@ -68,12 +67,12 @@ public unsafe class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
-        double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
-        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
-        {
+        double[] expected = [0, 0, 10, 5, 10, 10, 20, 30];
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(
+        [
             new(0, 0, 10, 5),
             new(10, 10, 20, 30)
-        });
+        ]);
 
         Assert.Equal(8, actual.Length);
 
@@ -99,7 +98,7 @@ public unsafe class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
-        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray([]);
         Assert.True(actual.IsEmpty);
     }
 
@@ -107,8 +106,7 @@ public unsafe class UiaTextProviderTests
     public unsafe void UiaTextProvider_SendInput_SendsOneInput()
     {
         INPUT keyboardInput = new();
-
-        int actual = UiaTextProvider.SendInput(1, ref keyboardInput, sizeof(INPUT));
+        int actual = UiaTextProvider.SendInput(ref keyboardInput);
         Assert.Equal(1, actual);
     }
 

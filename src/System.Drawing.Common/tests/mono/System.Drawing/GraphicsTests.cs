@@ -38,14 +38,14 @@ namespace MonoTests.System.Drawing;
 
 public class GraphicsTest : IDisposable
 {
-    private RectangleF[] rects;
-    private Font font;
+    private RectangleF[] _rects;
+    private readonly Font _font;
 
     public GraphicsTest()
     {
         try
         {
-            font = new Font("Arial", 12);
+            _font = new Font("Arial", 12);
         }
         catch
         {
@@ -54,7 +54,7 @@ public class GraphicsTest : IDisposable
 
     public void Dispose()
     {
-        font?.Dispose();
+        _font?.Dispose();
     }
 
     private bool IsEmptyBitmap(Bitmap bitmap, out int x, out int y)
@@ -91,12 +91,12 @@ public class GraphicsTest : IDisposable
 
     private void AssertEquals(string msg, object expected, object actual)
     {
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected, msg);
     }
 
     private void AssertEquals(string msg, double expected, double actual, int precision)
     {
-        Assert.Equal(expected, actual, precision);
+        actual.Should().BeApproximately(expected, precision, msg);
     }
 
     [Fact]
@@ -179,24 +179,24 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         g.Clip = new Region(new RectangleF(10, 10, 100, 100));
         g.ExcludeClip(new Rectangle(40, 60, 100, 20));
-        rects = g.Clip.GetRegionScans(new Matrix());
+        _rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(3, rects.Length);
+        Assert.Equal(3, _rects.Length);
 
-        Assert.Equal(10, rects[0].X);
-        Assert.Equal(10, rects[0].Y);
-        Assert.Equal(100, rects[0].Width);
-        Assert.Equal(50, rects[0].Height);
+        Assert.Equal(10, _rects[0].X);
+        Assert.Equal(10, _rects[0].Y);
+        Assert.Equal(100, _rects[0].Width);
+        Assert.Equal(50, _rects[0].Height);
 
-        Assert.Equal(10, rects[1].X);
-        Assert.Equal(60, rects[1].Y);
-        Assert.Equal(30, rects[1].Width);
-        Assert.Equal(20, rects[1].Height);
+        Assert.Equal(10, _rects[1].X);
+        Assert.Equal(60, _rects[1].Y);
+        Assert.Equal(30, _rects[1].Width);
+        Assert.Equal(20, _rects[1].Height);
 
-        Assert.Equal(10, rects[2].X);
-        Assert.Equal(80, rects[2].Y);
-        Assert.Equal(100, rects[2].Width);
-        Assert.Equal(30, rects[2].Height);
+        Assert.Equal(10, _rects[2].X);
+        Assert.Equal(80, _rects[2].Y);
+        Assert.Equal(100, _rects[2].Width);
+        Assert.Equal(30, _rects[2].Height);
     }
 
     [Fact]
@@ -206,14 +206,14 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         g.Clip = new Region(new RectangleF(260, 30, 60, 80));
         g.IntersectClip(new Rectangle(290, 40, 60, 80));
-        rects = g.Clip.GetRegionScans(new Matrix());
+        _rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(1, rects.Length);
+        Assert.Equal(1, _rects.Length);
 
-        Assert.Equal(290, rects[0].X);
-        Assert.Equal(40, rects[0].Y);
-        Assert.Equal(30, rects[0].Width);
-        Assert.Equal(70, rects[0].Height);
+        Assert.Equal(290, _rects[0].X);
+        Assert.Equal(40, _rects[0].Y);
+        Assert.Equal(30, _rects[0].Width);
+        Assert.Equal(70, _rects[0].Height);
     }
 
     [Fact]
@@ -224,14 +224,14 @@ public class GraphicsTest : IDisposable
         g.Clip = new Region(new RectangleF(260, 30, 60, 80));
         g.IntersectClip(new Rectangle(290, 40, 60, 80));
         g.ResetClip();
-        rects = g.Clip.GetRegionScans(new Matrix());
+        _rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(1, rects.Length);
+        Assert.Equal(1, _rects.Length);
 
-        Assert.Equal(-4194304, rects[0].X);
-        Assert.Equal(-4194304, rects[0].Y);
-        Assert.Equal(8388608, rects[0].Width);
-        Assert.Equal(8388608, rects[0].Height);
+        Assert.Equal(-4194304, _rects[0].X);
+        Assert.Equal(-4194304, _rects[0].Y);
+        Assert.Equal(8388608, _rects[0].Width);
+        Assert.Equal(8388608, _rects[0].Height);
     }
 
     [Fact]
@@ -352,7 +352,7 @@ public class GraphicsTest : IDisposable
             Assert.Equal("image", argumentException.ParamName);
     }
 
-    class BitmapAndGraphics : IDisposable
+    private class BitmapAndGraphics : IDisposable
     {
         private readonly Bitmap _bitmap;
         public Graphics Graphics { get; }
@@ -705,10 +705,9 @@ public class GraphicsTest : IDisposable
         Assert.Equal(3, elements[5]);
     }
 
-    static PointF[] SmallCurveF = [new(0, 0), new(15, 5), new(5, 15)];
-
-    static Point[] TooSmallCurve = [new(0, 0), new(15, 5)];
-    static PointF[] LargeCurveF = [new(0, 0), new(15, 5), new(5, 15), new(0, 20)];
+    private static readonly PointF[] s_smallCurveF = [new(0, 0), new(15, 5), new(5, 15)];
+    private static readonly Point[] s_tooSmallCurve = [new(0, 0), new(15, 5)];
+    private static readonly PointF[] s_largeCurveF = [new(0, 0), new(15, 5), new(5, 15), new(0, 20)];
 
     [Fact]
     public void DrawCurve_NotEnoughPoints()
@@ -716,7 +715,7 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         CheckForEmptyBitmap(bitmap);
-        g.DrawCurve(Pens.Black, TooSmallCurve, 0.5f);
+        g.DrawCurve(Pens.Black, s_tooSmallCurve, 0.5f);
         CheckForNonEmptyBitmap(bitmap);
         // so a "curve" can be drawn with less than 3 points!
         // actually I used to call that a line... (and it's not related to tension)
@@ -739,7 +738,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, TooSmallCurve, 0, 2, 0.5f));
+        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, s_tooSmallCurve, 0, 2, 0.5f));
 
         // aha, this is API dependent
     }
@@ -750,7 +749,7 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         // documented as bigger (or equals) to 0
-        g.DrawCurve(Pens.Black, SmallCurveF, -0.9f);
+        g.DrawCurve(Pens.Black, s_smallCurveF, -0.9f);
         CheckForNonEmptyBitmap(bitmap);
         g.Dispose();
         bitmap.Dispose();
@@ -761,7 +760,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        g.DrawCurve(Pens.Black, SmallCurveF, 0.9f);
+        g.DrawCurve(Pens.Black, s_smallCurveF, 0.9f);
         // this is not the same as -1
         CheckForNonEmptyBitmap(bitmap);
         g.Dispose();
@@ -773,7 +772,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, SmallCurveF, 0, 0));
+        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, s_smallCurveF, 0, 0));
     }
 
     [Fact]
@@ -781,7 +780,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, SmallCurveF, 0, -1));
+        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, s_smallCurveF, 0, -1));
     }
 
     [Fact]
@@ -790,7 +789,7 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         // starting offset 1 doesn't give 3 points to make a curve
-        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, SmallCurveF, 1, 2));
+        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, s_smallCurveF, 1, 2));
 
         // and in this case 2 points aren't enough to draw something
     }
@@ -800,7 +799,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        g.DrawCurve(Pens.Black, LargeCurveF, 0, 2, 0.5f);
+        g.DrawCurve(Pens.Black, s_largeCurveF, 0, 2, 0.5f);
         CheckForNonEmptyBitmap(bitmap);
         g.Dispose();
         bitmap.Dispose();
@@ -811,7 +810,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        g.DrawCurve(Pens.Black, LargeCurveF, 1, 2, 0.5f);
+        g.DrawCurve(Pens.Black, s_largeCurveF, 1, 2, 0.5f);
         CheckForNonEmptyBitmap(bitmap);
         g.Dispose();
         bitmap.Dispose();
@@ -823,7 +822,7 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         // it works even with two points because we know the previous ones
-        g.DrawCurve(Pens.Black, LargeCurveF, 2, 1, 0.5f);
+        g.DrawCurve(Pens.Black, s_largeCurveF, 2, 1, 0.5f);
         CheckForNonEmptyBitmap(bitmap);
         g.Dispose();
         bitmap.Dispose();
@@ -1575,11 +1574,11 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        SizeF size = g.MeasureString(null, font);
+        SizeF size = g.MeasureString(null, _font);
         Assert.True(size.IsEmpty);
-        size = g.MeasureString(string.Empty, font);
+        size = g.MeasureString(string.Empty, _font);
         Assert.True(size.IsEmpty);
-        g.MeasureString(string.Empty.AsSpan(), font);
+        g.MeasureString(string.Empty.AsSpan(), _font);
         Assert.True(size.IsEmpty);
 
         // null font
@@ -1605,16 +1604,16 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        SizeF size = g.MeasureString("a", font, SizeF.Empty);
+        SizeF size = g.MeasureString("a", _font, SizeF.Empty);
         Assert.False(size.IsEmpty);
 
-        size = g.MeasureString("a".AsSpan(), font, SizeF.Empty);
+        size = g.MeasureString("a".AsSpan(), _font, SizeF.Empty);
         Assert.False(size.IsEmpty);
 
-        size = g.MeasureString(string.Empty, font, SizeF.Empty);
+        size = g.MeasureString(string.Empty, _font, SizeF.Empty);
         Assert.True(size.IsEmpty);
 
-        size = g.MeasureString(string.Empty.AsSpan(), font, SizeF.Empty);
+        size = g.MeasureString(string.Empty.AsSpan(), _font, SizeF.Empty);
         Assert.True(size.IsEmpty);
     }
 
@@ -1622,9 +1621,9 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        SizeF size0 = useSpan ? g.MeasureString(s.AsSpan(), font, 0) : g.MeasureString(s, font, 0);
-        SizeF sizeN = useSpan ? g.MeasureString(s.AsSpan(), font, int.MinValue) : g.MeasureString(s, font, int.MinValue);
-        SizeF sizeP = useSpan ? g.MeasureString(s.AsSpan(), font, int.MaxValue) : g.MeasureString(s, font, int.MaxValue);
+        SizeF size0 = useSpan ? g.MeasureString(s.AsSpan(), _font, 0) : g.MeasureString(s, _font, 0);
+        SizeF sizeN = useSpan ? g.MeasureString(s.AsSpan(), _font, int.MinValue) : g.MeasureString(s, _font, int.MinValue);
+        SizeF sizeP = useSpan ? g.MeasureString(s.AsSpan(), _font, int.MaxValue) : g.MeasureString(s, _font, int.MaxValue);
         Assert.Equal(size0, sizeN);
         Assert.Equal(size0, sizeP);
     }
@@ -1657,18 +1656,18 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bitmap);
         string_format.Alignment = StringAlignment.Near;
         SizeF near = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.Alignment = StringAlignment.Center;
         SizeF center = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.Alignment = StringAlignment.Far;
         SizeF far = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         Assert.Equal((double)near.Width, center.Width, 1);
         Assert.Equal((double)near.Height, center.Height, 1);
@@ -1690,18 +1689,18 @@ public class GraphicsTest : IDisposable
 
         string_format.Alignment = StringAlignment.Near;
         SizeF near = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.Alignment = StringAlignment.Center;
         SizeF center = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.Alignment = StringAlignment.Far;
         SizeF far = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         Assert.Equal((double)near.Width, center.Width, 0);
         Assert.Equal((double)near.Height, center.Height, 0);
@@ -1721,18 +1720,18 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bitmap);
         string_format.LineAlignment = StringAlignment.Near;
         SizeF near = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.LineAlignment = StringAlignment.Center;
         SizeF center = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.LineAlignment = StringAlignment.Far;
         SizeF far = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         Assert.Equal((double)near.Width, center.Width, 1);
         Assert.Equal((double)near.Height, center.Height, 1);
@@ -1754,18 +1753,18 @@ public class GraphicsTest : IDisposable
 
         string_format.LineAlignment = StringAlignment.Near;
         SizeF near = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.LineAlignment = StringAlignment.Center;
         SizeF center = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         string_format.LineAlignment = StringAlignment.Far;
         SizeF far = useSpan
-            ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
-            : g.MeasureString(text, font, int.MaxValue, string_format);
+            ? g.MeasureString(text.AsSpan(), _font, int.MaxValue, string_format)
+            : g.MeasureString(text, _font, int.MaxValue, string_format);
 
         Assert.Equal((double)near.Width, center.Width, 1);
         Assert.Equal((double)near.Height, center.Height, 1);
@@ -1782,12 +1781,12 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         string s = "aaa aa aaaa a aaa";
-        SizeF size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        SizeF size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
 
         int chars, lines;
         SizeF size2 = useSpan
-            ? g.MeasureString(s.AsSpan(), font, new SizeF(80, size.Height), null, out chars, out lines)
-            : g.MeasureString(s, font, new SizeF(80, size.Height), null, out chars, out lines);
+            ? g.MeasureString(s.AsSpan(), _font, new SizeF(80, size.Height), null, out chars, out lines)
+            : g.MeasureString(s, _font, new SizeF(80, size.Height), null, out chars, out lines);
 
         // in pixels
         Assert.True(size2.Width < size.Width);
@@ -1806,39 +1805,39 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         string s = string.Empty;
-        SizeF size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        SizeF size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         Assert.Equal(0, size.Height);
         Assert.Equal(0, size.Width);
 
         s += " ";
-        SizeF expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        SizeF expected = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         for (int i = 1; i < 10; i++)
         {
             s += " ";
-            size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+            size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
             Assert.Equal((double)expected.Height, size.Height, 1);
             Assert.Equal((double)expected.Width, size.Width, 1);
         }
 
         s = "a";
-        expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        expected = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         s = " " + s;
-        size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         float space_width = size.Width - expected.Width;
         for (int i = 1; i < 10; i++)
         {
-            size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+            size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
             Assert.Equal((double)expected.Height, size.Height, 1);
             Assert.Equal((double)expected.Width + i * space_width, size.Width, 1);
             s = " " + s;
         }
 
         s = "a";
-        expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+        expected = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
         for (int i = 1; i < 10; i++)
         {
-            s = s + " ";
-            size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
+            s += " ";
+            size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
             Assert.Equal((double)expected.Height, size.Height, 1);
             Assert.Equal((double)expected.Width, size.Width, 1);
         }
@@ -1849,12 +1848,12 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Region[] regions = g.MeasureCharacterRanges(null, font, new RectangleF(), null);
+        Region[] regions = g.MeasureCharacterRanges(null, _font, new RectangleF(), null);
         Assert.Equal(0, regions.Length);
 
-        regions = g.MeasureCharacterRanges(string.Empty, font, new RectangleF(), null);
+        regions = g.MeasureCharacterRanges(string.Empty, _font, new RectangleF(), null);
         Assert.Equal(0, regions.Length);
-        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), font, new RectangleF(), null);
+        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), _font, new RectangleF(), null);
         Assert.Equal(0, regions.Length);
 
         // null font is ok with null or empty string
@@ -1873,10 +1872,10 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         // string format without character ranges
-        Region[] regions = g.MeasureCharacterRanges("Mono", font, new RectangleF(), new StringFormat());
+        Region[] regions = g.MeasureCharacterRanges("Mono", _font, new RectangleF(), new StringFormat());
         Assert.Equal(0, regions.Length);
 
-        g.MeasureCharacterRanges("Mono".AsSpan(), font, new RectangleF(), new StringFormat());
+        g.MeasureCharacterRanges("Mono".AsSpan(), _font, new RectangleF(), new StringFormat());
         Assert.Equal(0, regions.Length);
     }
 
@@ -1901,14 +1900,14 @@ public class GraphicsTest : IDisposable
         string_format.FormatFlags = StringFormatFlags.NoClip;
         string_format.SetMeasurableCharacterRanges(ranges);
 
-        SizeF size = g.MeasureString(text, font, new Point(0, 0), string_format);
+        SizeF size = g.MeasureString(text, _font, new Point(0, 0), string_format);
         RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
-        Region[] regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+        Region[] regions = g.MeasureCharacterRanges(text, _font, layout_rect, string_format);
 
         Assert.Equal(2, regions.Length);
         Assert.Equal(regions[0].GetBounds(g).Height, regions[1].GetBounds(g).Height);
 
-        regions = g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+        regions = g.MeasureCharacterRanges(text.AsSpan(), _font, layout_rect, string_format);
 
         Assert.Equal(2, regions.Length);
         Assert.Equal(regions[0].GetBounds(g).Height, regions[1].GetBounds(g).Height);
@@ -1925,16 +1924,16 @@ public class GraphicsTest : IDisposable
         string_format.SetMeasurableCharacterRanges(ranges);
 
         SizeF size = useSpan
-            ? g.MeasureString(text.AsSpan(), font, new Point(0, 0), string_format)
-            : g.MeasureString(text, font, new Point(0, 0), string_format);
+            ? g.MeasureString(text.AsSpan(), _font, new Point(0, 0), string_format)
+            : g.MeasureString(text, _font, new Point(0, 0), string_format);
         RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
         if (useSpan)
         {
-            g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+            g.MeasureCharacterRanges(text.AsSpan(), _font, layout_rect, string_format);
         }
         else
         {
-            g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+            g.MeasureCharacterRanges(text, _font, layout_rect, string_format);
         }
     }
 
@@ -1967,31 +1966,31 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bitmap);
         string_format.SetMeasurableCharacterRanges(ranges);
 
-        SizeF size = g.MeasureString(text, font, new Point(0, 0), string_format);
+        SizeF size = g.MeasureString(text, _font, new Point(0, 0), string_format);
         RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
 
         // here & is part of the measure and visible
         string_format.HotkeyPrefix = HotkeyPrefix.None;
-        Region[] regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+        Region[] regions = g.MeasureCharacterRanges(text, _font, layout_rect, string_format);
         RectangleF bounds_none = regions[0].GetBounds(g);
 
         // here & is part of the measure (range) but visible as an underline
         string_format.HotkeyPrefix = HotkeyPrefix.Show;
-        regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+        regions = g.MeasureCharacterRanges(text, _font, layout_rect, string_format);
         RectangleF bounds_show = regions[0].GetBounds(g);
         Assert.True(bounds_show.Width < bounds_none.Width);
 
-        regions = g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+        regions = g.MeasureCharacterRanges(text.AsSpan(), _font, layout_rect, string_format);
         bounds_show = regions[0].GetBounds(g);
         Assert.True(bounds_show.Width < bounds_none.Width);
 
         // here & is part of the measure (range) but invisible
         string_format.HotkeyPrefix = HotkeyPrefix.Hide;
-        regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+        regions = g.MeasureCharacterRanges(text, _font, layout_rect, string_format);
         RectangleF bounds_hide = regions[0].GetBounds(g);
         Assert.Equal((double)bounds_hide.Width, bounds_show.Width);
 
-        g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+        g.MeasureCharacterRanges(text.AsSpan(), _font, layout_rect, string_format);
         bounds_hide = regions[0].GetBounds(g);
         Assert.Equal((double)bounds_hide.Width, bounds_show.Width);
     }
@@ -2001,20 +2000,16 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", font, new RectangleF(), null));
-        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono".AsSpan(), font, new RectangleF(), null));
+        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", _font, new RectangleF(), null));
+        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono".AsSpan(), _font, new RectangleF(), null));
     }
 
-    static CharacterRange[] ranges = [
-                new(0, 1),
-                new(1, 1),
-                new(2, 1)
-            ];
+    private static readonly CharacterRange[] s_ranges = [new(0, 1), new(1, 1), new(2, 1)];
 
-    Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
+    private Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
     {
         using StringFormat format = StringFormat.GenericTypographic;
-        format.SetMeasurableCharacterRanges(ranges);
+        format.SetMeasurableCharacterRanges(s_ranges);
 
         using Font font = new(FontFamily.GenericSerif, 11.0f);
         return useSpan
@@ -2098,8 +2093,8 @@ public class GraphicsTest : IDisposable
         fmt.LineAlignment = StringAlignment.Center;
         fmt.FormatFlags = StringFormatFlags.NoWrap;
         fmt.Trimming = StringTrimming.EllipsisWord;
-        g.DrawString("Test String", font, Brushes.Black, rect, fmt);
-        g.DrawString("Test String".AsSpan(), font, Brushes.Black, rect, fmt);
+        g.DrawString("Test String", _font, Brushes.Black, rect, fmt);
+        g.DrawString("Test String".AsSpan(), _font, Brushes.Black, rect, fmt);
     }
 
     [Fact]
@@ -2114,8 +2109,8 @@ public class GraphicsTest : IDisposable
         fmt.Alignment = StringAlignment.Center;
         fmt.LineAlignment = StringAlignment.Center;
         fmt.Trimming = StringTrimming.EllipsisWord;
-        g.DrawString("Test String", font, Brushes.Black, rect, fmt);
-        g.DrawString("Test String".AsSpan(), font, Brushes.Black, rect, fmt);
+        g.DrawString("Test String", _font, Brushes.Black, rect, fmt);
+        g.DrawString("Test String".AsSpan(), _font, Brushes.Black, rect, fmt);
     }
 
     [Fact]
@@ -2126,13 +2121,13 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(bitmap);
         using StringFormat format = new();
         format.Alignment = StringAlignment.Center;
-        SizeF sz = g.MeasureString(text, font, 80, format);
+        SizeF sz = g.MeasureString(text, _font, 80, format);
         Assert.True(sz.Width <= 80);
-        Assert.True(sz.Height > font.Height * 2);
+        Assert.True(sz.Height > _font.Height * 2);
 
-        sz = g.MeasureString(text.AsSpan(), font, 80, format);
+        sz = g.MeasureString(text.AsSpan(), _font, 80, format);
         Assert.True(sz.Width <= 80);
-        Assert.True(sz.Height > font.Height * 2);
+        Assert.True(sz.Height > _font.Height * 2);
     }
 
     [Fact]

@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 
 namespace System.Windows.Forms;
@@ -19,7 +18,7 @@ public partial class ErrorProvider
     internal partial class ErrorWindow : NativeWindow
     {
         private AccessibleObject? _accessibleObject;
-        private readonly List<ControlItem> _items = new();
+        private readonly List<ControlItem> _items = [];
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
         private Rectangle _windowBounds;
@@ -66,10 +65,7 @@ public partial class ErrorProvider
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ErrorWindowAccessibleObject(this);
-        }
+        private ErrorWindowAccessibleObject CreateAccessibilityInstance() => new(this);
 
         /// <summary>
         ///  Called to get rid of any resources the Object may have.
@@ -401,8 +397,6 @@ public partial class ErrorProvider
         /// </summary>
         private void WmGetObject(ref Message m)
         {
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
-
             if (m.Msg == (int)PInvoke.WM_GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,

@@ -52,7 +52,7 @@ public class ListViewItemConverter : ExpandableObjectConverter
                 {
                     if (!string.IsNullOrEmpty(item.ImageKey))
                     {
-                        ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) });
+                        ctor = typeof(ListViewItem).GetConstructor([typeof(ListViewItem.ListViewSubItem[]), typeof(string)]);
                         Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                         ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -60,7 +60,7 @@ public class ListViewItemConverter : ExpandableObjectConverter
                     }
                     else
                     {
-                        ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) });
+                        ctor = typeof(ListViewItem).GetConstructor([typeof(ListViewItem.ListViewSubItem[]), typeof(int)]);
                         Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                         ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
@@ -81,14 +81,14 @@ public class ListViewItemConverter : ExpandableObjectConverter
             {
                 if (!string.IsNullOrEmpty(item.ImageKey))
                 {
-                    ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                    {
+                    ctor = typeof(ListViewItem).GetConstructor(
+                    [
                         typeof(string[]),
                         typeof(string),
                         typeof(Color),
                         typeof(Color),
                         typeof(Font)
-                    });
+                    ]);
                     Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object?[]
                     {
@@ -101,14 +101,14 @@ public class ListViewItemConverter : ExpandableObjectConverter
                 }
                 else
                 {
-                    ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                    {
+                    ctor = typeof(ListViewItem).GetConstructor(
+                    [
                         typeof(string[]),
                         typeof(int),
                         typeof(Color),
                         typeof(Color),
                         typeof(Font)
-                    });
+                    ]);
                     Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object?[]
                     {
@@ -124,7 +124,7 @@ public class ListViewItemConverter : ExpandableObjectConverter
             // Text
             if (item.ImageIndex == -1 && string.IsNullOrEmpty(item.ImageKey) && item.SubItems.Count <= 1)
             {
-                ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(string) });
+                ctor = typeof(ListViewItem).GetConstructor([typeof(string)]);
                 Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { item.Text }, false);
             }
@@ -134,21 +134,21 @@ public class ListViewItemConverter : ExpandableObjectConverter
             {
                 if (!string.IsNullOrEmpty(item.ImageKey))
                 {
-                    ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                    {
+                    ctor = typeof(ListViewItem).GetConstructor(
+                    [
                         typeof(string),
                         typeof(string)
-                    });
+                    ]);
                     Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[] { item.Text, item.ImageKey }, false);
                 }
                 else
                 {
-                    ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                    {
+                    ctor = typeof(ListViewItem).GetConstructor(
+                    [
                         typeof(string),
                         typeof(int)
-                    });
+                    ]);
                     Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[] { item.Text, item.ImageIndex }, false);
                 }
@@ -157,21 +157,21 @@ public class ListViewItemConverter : ExpandableObjectConverter
             // Text, Image and SubItems
             if (!string.IsNullOrEmpty(item.ImageKey))
             {
-                ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                {
+                ctor = typeof(ListViewItem).GetConstructor(
+                [
                     typeof(string[]),
                     typeof(string)
-                });
+                ]);
                 Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { subItems, item.ImageKey }, false);
             }
             else
             {
-                ctor = typeof(ListViewItem).GetConstructor(new Type[]
-                {
+                ctor = typeof(ListViewItem).GetConstructor(
+                [
                     typeof(string[]),
                     typeof(int)
-                });
+                ]);
                 return new InstanceDescriptor(ctor, new object[] { subItems, item.ImageIndex }, false);
             }
         }

@@ -85,7 +85,7 @@ public partial class SendKeys
     /// </summary>
     private static readonly Queue<SKEvent> s_events = new();
 
-    private static object s_lock = new();
+    private static readonly object s_lock = new();
     private static bool s_startNewChar;
     private static readonly SKWindow s_messageWindow;
 
@@ -98,11 +98,9 @@ public partial class SendKeys
     private static bool s_scrollLockChanged;
     private static bool s_kanaChanged;
 
-#pragma warning disable CA1810 // Initialize reference type static fields inline (False positive: https://github.com/dotnet/roslyn-analyzers/issues/3852)
     static SendKeys()
-#pragma warning restore CA1810 // Initialize reference type static fields inline
     {
-        Application.ThreadExit += new EventHandler(OnThreadExit);
+        Application.ThreadExit += OnThreadExit;
         s_messageWindow = new SKWindow();
         s_messageWindow.CreateControl();
     }
@@ -261,7 +259,7 @@ public partial class SendKeys
     }
 
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
 #pragma warning restore CS3016
     private static unsafe LRESULT EmptyHookCallback(int nCode, WPARAM wparam, LPARAM lparam) => (LRESULT)0;
 
@@ -443,7 +441,7 @@ public partial class SendKeys
                     }
 
                     // Have our KEYWORD. Verify it's one we know about.
-                    string keyName = keys.Substring(i + 1, j - (i + 1));
+                    string keyName = keys[(i + 1)..j];
 
                     // See if we have a space, which would mean a repeat count.
                     if (char.IsWhiteSpace(keys[j]))
@@ -515,7 +513,7 @@ public partial class SendKeys
                     }
                     else
                     {
-                        throw new ArgumentException(string.Format(SR.InvalidSendKeysKeyword, keys.Substring(i + 1, j - (i + 1))));
+                        throw new ArgumentException(string.Format(SR.InvalidSendKeysKeyword, keys[(i + 1)..j]));
                     }
 
                     // don't forget to position ourselves at the end of the {...} group
@@ -918,7 +916,7 @@ public partial class SendKeys
         SKEvent[]? previousEvents = null;
         if (s_events.Count != 0)
         {
-            previousEvents = s_events.ToArray();
+            previousEvents = [.. s_events];
         }
 
         // Generate the list of events that we're going to fire off with the hook.
@@ -975,8 +973,10 @@ public partial class SendKeys
     ///  Sends the given keys to the active application, and then waits for the messages to be processed.
     /// </summary>
     /// <remarks>
-    ///  WARNING: this method will never work if control is not null, because while Windows journaling *looks* like it
-    ///  can be directed to a specific HWND, it can't.
+    ///  <para>
+    ///   WARNING: this method will never work if control is not null, because while Windows journaling *looks* like it
+    ///   can be directed to a specific HWND, it can't.
+    ///  </para>
     /// </remarks>
     private static void SendWait(string keys, Control? control)
     {

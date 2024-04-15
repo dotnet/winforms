@@ -60,8 +60,10 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
     public void PropertyDescriptorGridEntryAccessibleObject_ExpandCollapseState_reflects_ExpandablePropertyState()
     {
         using PropertyGrid propertyGrid = new();
-        TestEntity testEntity = new();
-        testEntity.SizeProperty = Size.Empty;
+        TestEntity testEntity = new()
+        {
+            SizeProperty = Size.Empty
+        };
         propertyGrid.SelectedObject = testEntity;
 
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
@@ -121,7 +123,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
 
     private class TestGridEntry : GridEntry
     {
-        readonly PropertyGridView _propertyGridView;
+        private readonly PropertyGridView _propertyGridView;
 
         public TestGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyGridView propertyGridView)
             : base(ownerGrid, peParent)
@@ -175,7 +177,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         {
             get
             {
-                _collection ??= new GridEntryCollection();
+                _collection ??= [];
 
                 return _collection;
             }

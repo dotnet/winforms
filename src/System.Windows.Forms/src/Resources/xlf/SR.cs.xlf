@@ -412,6 +412,11 @@
         <target state="translated">Navigátor vazby</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Operace vytvoření vazby nejsou podporovány, pokud je povolen trimming aplikací.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
         <source>Event raised when the user calls AddNew on the BindingSource</source>
         <target state="translated">Událost aktivovaná při volání metody AddNew objektu BindingSource</target>

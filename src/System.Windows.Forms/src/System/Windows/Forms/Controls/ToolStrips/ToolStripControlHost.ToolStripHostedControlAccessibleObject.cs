@@ -15,8 +15,8 @@ public partial class ToolStripControlHost
     /// </summary>
     public class ToolStripHostedControlAccessibleObject : Control.ControlAccessibleObject
     {
-        private ToolStripControlHost? _toolStripControlHost;
-        private Control _toolStripHostedControl;
+        private readonly ToolStripControlHost? _toolStripControlHost;
+        private readonly Control _toolStripHostedControl;
 
         /// <summary>
         ///  Creates the new instance of ToolStripHostedControlAccessibleObject.

@@ -12,6 +12,11 @@ namespace System.Windows.Forms;
 [TypeConverter(typeof(ListBindingConverter))]
 public partial class Binding
 {
+    [FeatureSwitchDefinition("System.Windows.Forms.Binding.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    internal static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.Binding.IsSupported", out bool isSupported) ? isSupported : true;
+#pragma warning restore IDE0075 //Simplify conditional expression
+
     private BindingManagerBase? _bindingManagerBase;
 
     private readonly BindToObject _bindToObject;
@@ -338,7 +343,7 @@ public partial class Binding
         set
         {
             // Try to compare logical values, not object references...
-            if (!object.Equals(_nullValue, value))
+            if (!Equals(_nullValue, value))
             {
                 _nullValue = value;
 
@@ -358,7 +363,7 @@ public partial class Binding
         set
         {
             // Try to compare logical values, not object references...
-            if (!object.Equals(_dsNullValue, value))
+            if (!Equals(_dsNullValue, value))
             {
                 // Save old Value
                 object? oldValue = _dsNullValue;
@@ -895,7 +900,7 @@ public partial class Binding
                 else
                 {
                     object? formattedObject = FormatObject(parsedValue);
-                    if (force || !FormattingEnabled || !object.Equals(formattedObject, value))
+                    if (force || !FormattingEnabled || !Equals(formattedObject, value))
                     {
                         SetPropValue(formattedObject);
                     }
@@ -929,7 +934,7 @@ public partial class Binding
             // on this binding because we know the value in the control was valid and has been accepted by
             // the data source. But if the operation failed (or was cancelled), we must leave the dirty flag
             // alone, so that the control's value will continue to be re-validated and re-pulled later.
-            if (args.BindingCompleteState == BindingCompleteState.Success && args.Cancel == false)
+            if (args.BindingCompleteState == BindingCompleteState.Success && !args.Cancel)
             {
                 _state.ChangeFlags(BindingStates.Modified, false);
             }

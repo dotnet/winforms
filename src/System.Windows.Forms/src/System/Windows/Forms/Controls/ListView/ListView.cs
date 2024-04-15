@@ -32,21 +32,21 @@ public partial class ListView : Control
 {
     private const int MASK_HITTESTFLAG = 0x00F7;
 
-    private static readonly object EVENT_CACHEVIRTUALITEMS = new();
-    private static readonly object EVENT_COLUMNREORDERED = new();
-    private static readonly object EVENT_COLUMNWIDTHCHANGED = new();
-    private static readonly object EVENT_COLUMNWIDTHCHANGING = new();
-    private static readonly object EVENT_DRAWCOLUMNHEADER = new();
-    private static readonly object EVENT_DRAWITEM = new();
-    private static readonly object EVENT_DRAWSUBITEM = new();
-    private static readonly object EVENT_ITEMSELECTIONCHANGED = new();
-    private static readonly object EVENT_RETRIEVEVIRTUALITEM = new();
-    private static readonly object EVENT_SEARCHFORVIRTUALITEM = new();
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
-    private static readonly object EVENT_VIRTUALITEMSSELECTIONRANGECHANGED = new();
-    private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new();
-    private static readonly object EVENT_GROUPCOLLAPSEDSTATECHANGED = new();
-    private static readonly object EVENT_GROUPTASKLINKCLICK = new();
+    private static readonly object s_cacheVirtualItemsEvent = new();
+    private static readonly object s_columnReorderedEvent = new();
+    private static readonly object s_columnWidthChangedEvent = new();
+    private static readonly object s_columnWidthChangingEvent = new();
+    private static readonly object s_drawColumnHeaderEvent = new();
+    private static readonly object s_drawItemEvent = new();
+    private static readonly object s_drawSubItemEvent = new();
+    private static readonly object s_itemSelectionChangedEvent = new();
+    private static readonly object s_retrieveVirtualItemEvent = new();
+    private static readonly object s_searchForVirtualItemEvent = new();
+    private static readonly object s_selectedIndexChangedEvent = new();
+    private static readonly object s_virtualItemSelectionRangeChangedEvent = new();
+    private static readonly object s_rightToLeftLayoutChangedEvent = new();
+    private static readonly object s_groupCollapsedStateChangedEvent = new();
+    private static readonly object s_groupTaskLinkClickEvent = new();
 
     private ItemActivation _activation = ItemActivation.Standard;
     private ListViewAlignment _alignStyle = ListViewAlignment.Top;
@@ -133,16 +133,15 @@ public partial class ListView : Control
     // listItemsArray is null if the handle is created; otherwise, it contains all Items.
     // We do not try to sort listItemsArray as items are added, but during a handle recreate
     // we will make sure we get the items in the same order the ListView displays them.
-    private readonly Dictionary<int, ListViewItem> _listItemsTable = new(); // elements are ListViewItem's
-    private List<ListViewItem>? _listViewItems = new();
+    private readonly Dictionary<int, ListViewItem> _listItemsTable = []; // elements are ListViewItem's
+    private List<ListViewItem>? _listViewItems = [];
 
     private Size _tileSize = Size.Empty;
 
     // when we are in delayed update mode (that is when BeginUpdate has been called, we want to cache the items to
     // add until EndUpdate is called. To do that, we push in an array list into our PropertyStore
     // under this key.  When Endupdate is fired, we process the items all at once.
-    //
-    private static readonly int PropDelayedUpdateItems = PropertyStore.CreateKey();
+    private static readonly int s_propDelayedUpdateItems = PropertyStore.CreateKey();
 
     private int _updateCounter; // the counter we use to track how many BeginUpdate/EndUpdate calls there have been.
 
@@ -572,11 +571,11 @@ public partial class ListView : Control
                         if (CheckBoxes)
                         {
                             // We want custom checkboxes.
-                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
+                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
                         }
                         else
                         {
-                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (uint)PInvoke.LVSIL_STATE);
+                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, PInvoke.LVSIL_STATE);
                         }
                     }
 
@@ -749,19 +748,11 @@ public partial class ListView : Control
         }
     }
 
-    internal ListViewGroup DefaultGroup
-    {
-        get
+    internal ListViewGroup DefaultGroup =>
+        _defaultGroup ??= new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"))
         {
-            if (_defaultGroup is null)
-            {
-                _defaultGroup = new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"));
-                _defaultGroup.ListView = this;
-            }
-
-            return _defaultGroup;
-        }
-    }
+            ListView = this
+        };
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
@@ -833,7 +824,7 @@ public partial class ListView : Control
                     this,
                     PInvoke.LVM_GETNEXTITEM,
                     (WPARAM)(-1),
-                    (LPARAM)(uint)PInvoke.LVNI_FOCUSED);
+                    (LPARAM)PInvoke.LVNI_FOCUSED);
 
                 if (displayIndex > -1)
                 {
@@ -986,7 +977,7 @@ public partial class ListView : Control
             PInvoke.SendMessage(
                 this,
                 PInvoke.LVM_SETIMAGELIST,
-                (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER,
+                (WPARAM)PInvoke.LVSIL_GROUPHEADER,
                 (LPARAM)(value is null ? 0 : value.Handle));
         }
     }
@@ -1250,7 +1241,7 @@ public partial class ListView : Control
             PInvoke.SendMessage(
                 this,
                 PInvoke.LVM_SETIMAGELIST,
-                (WPARAM)(uint)PInvoke.LVSIL_NORMAL,
+                (WPARAM)PInvoke.LVSIL_NORMAL,
                 (LPARAM)(value?.Handle ?? 0));
             if (AutoArrange && !_listViewState1[LISTVIEWSTATE1_disposingImageLists])
             {
@@ -1381,8 +1372,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
     public event EventHandler? RightToLeftLayoutChanged
     {
-        add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+        add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
+        remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
     }
 
     /// <summary>
@@ -1486,7 +1477,7 @@ public partial class ListView : Control
                 return;
             }
 
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_SMALL, (LPARAM)(value?.Handle ?? 0));
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)(value?.Handle ?? 0));
 
             if (View == View.SmallIcon)
             {
@@ -1540,7 +1531,7 @@ public partial class ListView : Control
             if (_sorting != value)
             {
                 _sorting = value;
-                if (View == View.LargeIcon || View == View.SmallIcon)
+                if (View is View.LargeIcon or View.SmallIcon)
                 {
                     if (_listItemSorter is null)
                     {
@@ -1593,7 +1584,7 @@ public partial class ListView : Control
                 {
                     PInvoke.SendMessage(this,
                         PInvoke.LVM_SETIMAGELIST,
-                        (WPARAM)(uint)PInvoke.LVSIL_STATE,
+                        (WPARAM)PInvoke.LVSIL_STATE,
                         (LPARAM)(value?.Handle ?? 0));
                 }
             }
@@ -1609,7 +1600,7 @@ public partial class ListView : Control
                     // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                     // So we make the native listView forget about its StateImageList just before we recreate the handle.
                     // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
-                    PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_STATE);
+                    PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
                 }
 
                 _imageListState = value;
@@ -1630,7 +1621,7 @@ public partial class ListView : Control
                     PInvoke.SendMessage(
                         this,
                         PInvoke.LVM_SETIMAGELIST,
-                        (WPARAM)(uint)PInvoke.LVSIL_STATE,
+                        (WPARAM)PInvoke.LVSIL_STATE,
                         (_imageListState is null || _imageListState.Images.Count == 0) ? 0 : _imageListState.Handle);
                 }
 
@@ -1743,7 +1734,7 @@ public partial class ListView : Control
     {
         get
         {
-            if (_viewStyle == View.LargeIcon || _viewStyle == View.SmallIcon || _viewStyle == View.Tile)
+            if (_viewStyle is View.LargeIcon or View.SmallIcon or View.Tile)
             {
                 throw new InvalidOperationException(SR.ListViewGetTopItem);
             }
@@ -1770,7 +1761,7 @@ public partial class ListView : Control
         }
         set
         {
-            if (_viewStyle == View.LargeIcon || _viewStyle == View.SmallIcon || _viewStyle == View.Tile)
+            if (_viewStyle is View.LargeIcon or View.SmallIcon or View.Tile)
             {
                 throw new InvalidOperationException(SR.ListViewSetTopItem);
             }
@@ -2001,8 +1992,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewCacheVirtualItemsEventDescr))]
     public event CacheVirtualItemsEventHandler? CacheVirtualItems
     {
-        add => Events.AddHandler(EVENT_CACHEVIRTUALITEMS, value);
-        remove => Events.RemoveHandler(EVENT_CACHEVIRTUALITEMS, value);
+        add => Events.AddHandler(s_cacheVirtualItemsEvent, value);
+        remove => Events.RemoveHandler(s_cacheVirtualItemsEvent, value);
     }
 
     [SRCategory(nameof(SR.CatAction))]
@@ -2020,8 +2011,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewGroupTaskLinkClickDescr))]
     public event EventHandler<ListViewGroupEventArgs>? GroupTaskLinkClick
     {
-        add => Events.AddHandler(EVENT_GROUPTASKLINKCLICK, value);
-        remove => Events.RemoveHandler(EVENT_GROUPTASKLINKCLICK, value);
+        add => Events.AddHandler(s_groupTaskLinkClickEvent, value);
+        remove => Events.RemoveHandler(s_groupTaskLinkClickEvent, value);
     }
 
     /// <summary>
@@ -2031,8 +2022,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewColumnReorderedDscr))]
     public event ColumnReorderedEventHandler? ColumnReordered
     {
-        add => Events.AddHandler(EVENT_COLUMNREORDERED, value);
-        remove => Events.RemoveHandler(EVENT_COLUMNREORDERED, value);
+        add => Events.AddHandler(s_columnReorderedEvent, value);
+        remove => Events.RemoveHandler(s_columnReorderedEvent, value);
     }
 
     /// <summary>
@@ -2042,8 +2033,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewColumnWidthChangedDscr))]
     public event ColumnWidthChangedEventHandler? ColumnWidthChanged
     {
-        add => Events.AddHandler(EVENT_COLUMNWIDTHCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGED, value);
+        add => Events.AddHandler(s_columnWidthChangedEvent, value);
+        remove => Events.RemoveHandler(s_columnWidthChangedEvent, value);
     }
 
     /// <summary>
@@ -2053,8 +2044,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewColumnWidthChangingDscr))]
     public event ColumnWidthChangingEventHandler? ColumnWidthChanging
     {
-        add => Events.AddHandler(EVENT_COLUMNWIDTHCHANGING, value);
-        remove => Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGING, value);
+        add => Events.AddHandler(s_columnWidthChangingEvent, value);
+        remove => Events.RemoveHandler(s_columnWidthChangingEvent, value);
     }
 
     /// <summary>
@@ -2064,8 +2055,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewDrawColumnHeaderEventDescr))]
     public event DrawListViewColumnHeaderEventHandler? DrawColumnHeader
     {
-        add => Events.AddHandler(EVENT_DRAWCOLUMNHEADER, value);
-        remove => Events.RemoveHandler(EVENT_DRAWCOLUMNHEADER, value);
+        add => Events.AddHandler(s_drawColumnHeaderEvent, value);
+        remove => Events.RemoveHandler(s_drawColumnHeaderEvent, value);
     }
 
     /// <summary>
@@ -2075,8 +2066,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewDrawItemEventDescr))]
     public event DrawListViewItemEventHandler? DrawItem
     {
-        add => Events.AddHandler(EVENT_DRAWITEM, value);
-        remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
+        add => Events.AddHandler(s_drawItemEvent, value);
+        remove => Events.RemoveHandler(s_drawItemEvent, value);
     }
 
     /// <summary>
@@ -2086,8 +2077,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
     public event DrawListViewSubItemEventHandler? DrawSubItem
     {
-        add => Events.AddHandler(EVENT_DRAWSUBITEM, value);
-        remove => Events.RemoveHandler(EVENT_DRAWSUBITEM, value);
+        add => Events.AddHandler(s_drawSubItemEvent, value);
+        remove => Events.RemoveHandler(s_drawSubItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatAction))]
@@ -2134,8 +2125,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewItemSelectionChangedDescr))]
     public event ListViewItemSelectionChangedEventHandler? ItemSelectionChanged
     {
-        add => Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_ITEMSELECTIONCHANGED, value);
+        add => Events.AddHandler(s_itemSelectionChangedEvent, value);
+        remove => Events.RemoveHandler(s_itemSelectionChangedEvent, value);
     }
 
     /// <summary>
@@ -2145,8 +2136,8 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewGroupCollapsedStateChangedDescr))]
     public event EventHandler<ListViewGroupEventArgs>? GroupCollapsedStateChanged
     {
-        add => Events.AddHandler(EVENT_GROUPCOLLAPSEDSTATECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_GROUPCOLLAPSEDSTATECHANGED, value);
+        add => Events.AddHandler(s_groupCollapsedStateChangedEvent, value);
+        remove => Events.RemoveHandler(s_groupCollapsedStateChangedEvent, value);
     }
 
     [Browsable(false)]
@@ -2181,32 +2172,32 @@ public partial class ListView : Control
     [SRDescription(nameof(SR.ListViewRetrieveVirtualItemEventDescr))]
     public event RetrieveVirtualItemEventHandler? RetrieveVirtualItem
     {
-        add => Events.AddHandler(EVENT_RETRIEVEVIRTUALITEM, value);
-        remove => Events.RemoveHandler(EVENT_RETRIEVEVIRTUALITEM, value);
+        add => Events.AddHandler(s_retrieveVirtualItemEvent, value);
+        remove => Events.RemoveHandler(s_retrieveVirtualItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.ListViewSearchForVirtualItemDescr))]
     public event SearchForVirtualItemEventHandler? SearchForVirtualItem
     {
-        add => Events.AddHandler(EVENT_SEARCHFORVIRTUALITEM, value);
-        remove => Events.RemoveHandler(EVENT_SEARCHFORVIRTUALITEM, value);
+        add => Events.AddHandler(s_searchForVirtualItemEvent, value);
+        remove => Events.RemoveHandler(s_searchForVirtualItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ListViewSelectedIndexChangedDescr))]
     public event EventHandler? SelectedIndexChanged
     {
-        add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
+        add => Events.AddHandler(s_selectedIndexChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedIndexChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ListViewVirtualItemsSelectionRangeChangedDescr))]
     public event ListViewVirtualItemsSelectionRangeChangedEventHandler? VirtualItemsSelectionRangeChanged
     {
-        add => Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
+        add => Events.AddHandler(s_virtualItemSelectionRangeChangedEvent, value);
+        remove => Events.RemoveHandler(s_virtualItemSelectionRangeChangedEvent, value);
     }
 
     internal unsafe void AnnounceColumnHeader(Point point)
@@ -2258,13 +2249,13 @@ public partial class ListView : Control
     private void ApplyUpdateCachedItems()
     {
         // first check if there is a delayed update array
-        if (Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
+        if (Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
         {
             // if there is, clear it and push the items in.
-            Properties.SetObject(PropDelayedUpdateItems, null);
+            Properties.SetObject(s_propDelayedUpdateItems, null);
             if (newItems.Count > 0)
             {
-                InsertItems(_itemCount, newItems.ToArray(), checkHosting: false);
+                InsertItems(_itemCount, [.. newItems], checkHosting: false);
             }
         }
     }
@@ -2308,7 +2299,7 @@ public partial class ListView : Control
     ///  In Large Icon or Small Icon view, arranges items according to the ListView's
     ///  current alignment style.
     /// </summary>
-    public void ArrangeIcons() => ArrangeIcons((ListViewAlignment)PInvoke.LVA_DEFAULT);
+    public void ArrangeIcons() => ArrangeIcons(PInvoke.LVA_DEFAULT);
 
     private void AttachGroupImageListHandlers()
     {
@@ -2392,9 +2383,9 @@ public partial class ListView : Control
 
         // if this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
         // we can cache up any items that have been added while this is active.
-        if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
+        if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(s_propDelayedUpdateItems))
         {
-            Properties.SetObject(PropDelayedUpdateItems, new List<ListViewItem>());
+            Properties.SetObject(s_propDelayedUpdateItems, new List<ListViewItem>());
         }
     }
 
@@ -2402,7 +2393,7 @@ public partial class ListView : Control
     {
         if (selected)
         {
-            _savedSelectedItems ??= new List<ListViewItem>();
+            _savedSelectedItems ??= [];
 
             if (!_savedSelectedItems.Contains(lvi))
             {
@@ -2498,7 +2489,7 @@ public partial class ListView : Control
     /// <summary>
     ///  This is the sorting callback function called by the system ListView control.
     /// </summary>
-    private int CompareFunc(IntPtr lparam1, IntPtr lparam2, IntPtr lparamSort)
+    private int CompareFunc(nint lparam1, nint lparam2, nint lparamSort)
     {
         Debug.Assert(_listItemSorter is not null, "null sorter!");
         if (_listItemSorter is not null)
@@ -2709,7 +2700,7 @@ public partial class ListView : Control
                         }
                     }
 
-                    if (_viewStyle == View.Details || _viewStyle == View.Tile)
+                    if (_viewStyle is View.Details or View.Tile)
                     {
                         m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NOTIFYSUBITEMDRAW | PInvoke.CDRF_NEWFONT);
                         dontmess = true; // don't mess with our return value!
@@ -2868,8 +2859,7 @@ public partial class ListView : Control
                     {
                         changeColor = false;
                     }
-                    else if ((_activation == ItemActivation.OneClick)
-                          || (_activation == ItemActivation.TwoClick))
+                    else if (_activation is ItemActivation.OneClick or ItemActivation.TwoClick)
                     {
                         if ((state & (NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED
                                     | NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED
@@ -3215,7 +3205,7 @@ public partial class ListView : Control
     {
         // On the final EndUpdate, check to see if we've got any cached items.
         // If we do, insert them as normal, then turn off the painting freeze.
-        if (--_updateCounter == 0 && Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
+        if (--_updateCounter == 0 && Properties.ContainsObjectThatIsNotNull(s_propDelayedUpdateItems))
         {
             ApplyUpdateCachedItems();
         }
@@ -3281,12 +3271,12 @@ public partial class ListView : Control
 
     public ListViewItem? FindNearestItem(SearchDirectionHint searchDirection, int x, int y)
     {
-        if (View != View.SmallIcon && View != View.LargeIcon)
+        if (View is not View.SmallIcon and not View.LargeIcon)
         {
             throw new InvalidOperationException(SR.ListViewFindNearestItemWorksOnlyInIconView);
         }
 
-        if (searchDirection < SearchDirectionHint.Left || searchDirection > SearchDirectionHint.Down)
+        if (searchDirection is < SearchDirectionHint.Left or > SearchDirectionHint.Down)
         {
             throw new ArgumentOutOfRangeException(nameof(searchDirection), searchDirection, string.Format(SR.InvalidArgument, nameof(searchDirection), searchDirection));
         }
@@ -3431,12 +3421,12 @@ public partial class ListView : Control
         // Force ListView to update its checkbox bitmaps.
         if (CheckBoxes && IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)(uint)PInvoke.LVS_EX_CHECKBOXES);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)PInvoke.LVS_EX_CHECKBOXES);
             PInvoke.SendMessage(
                 this,
                 PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
-                (WPARAM)(uint)PInvoke.LVS_EX_CHECKBOXES,
-                (LPARAM)(uint)PInvoke.LVS_EX_CHECKBOXES);
+                (WPARAM)PInvoke.LVS_EX_CHECKBOXES,
+                (LPARAM)PInvoke.LVS_EX_CHECKBOXES);
 
             // Comctl should handle auto-arrange for us, but doesn't.
             if (AutoArrange)
@@ -3471,14 +3461,14 @@ public partial class ListView : Control
     internal int GetDisplayIndex(ListViewItem item, int lastIndex)
     {
         Debug.Assert(item._listView == this, "Can't GetDisplayIndex if the list item doesn't belong to us");
-        Debug.Assert(item.ID != -1, "ListViewItem has no ID yet");
+        Debug.Assert(item._id != -1, "ListViewItem has no ID yet");
 
         ApplyUpdateCachedItems();
         if (IsHandleCreated && !ListViewHandleDestroyed)
         {
             LVFINDINFOW info = new()
             {
-                lParam = item.ID,
+                lParam = item._id,
                 flags = LVFINDINFOW_FLAGS.LVFI_PARAM
             };
 
@@ -3776,7 +3766,7 @@ public partial class ListView : Control
         }
 
         nint handle = (GroupImageList is null) ? 0 : GroupImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, handle);
+        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, handle);
     }
 
     public ListViewHitTestInfo HitTest(Point point) => HitTest(point.X, point.Y);
@@ -4061,7 +4051,7 @@ public partial class ListView : Control
                 };
 
                 PInvoke.SendMessage(this, PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
-                Debug.Assert((int)lvItem.iGroupId != -1, "there is a list view item which is not parented");
+                Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
             }
         }
 #endif
@@ -4096,7 +4086,7 @@ public partial class ListView : Control
 
         // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
         // as they'll get processed on EndUpdate.
-        if (_updateCounter > 0 && Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
+        if (_updateCounter > 0 && Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
         {
             // CheckHosting.
             if (checkHosting)
@@ -4220,7 +4210,7 @@ public partial class ListView : Control
                     iItem = index + i,
                     iImage = li.ImageIndexer.ActualIndex,
                     iIndent = li.IndentCount,
-                    lParam = li.ID,
+                    lParam = li._id,
                     cColumns = (uint)(_columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0),
                 };
 
@@ -4232,7 +4222,7 @@ public partial class ListView : Control
 #if DEBUG
                     IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
                     Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
-                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
+                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
                     Debug.Assert(result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
 #endif
                 }
@@ -4390,7 +4380,7 @@ public partial class ListView : Control
         }
 
         nint handle = (LargeImageList is null) ? 0 : LargeImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_NORMAL, (LPARAM)handle);
+        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)handle);
 
         ForceCheckBoxUpdate();
     }
@@ -4495,7 +4485,7 @@ public partial class ListView : Control
 
     protected virtual void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)
     {
-        ((CacheVirtualItemsEventHandler?)Events[EVENT_CACHEVIRTUALITEMS])?.Invoke(this, e);
+        ((CacheVirtualItemsEventHandler?)Events[s_cacheVirtualItemsEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4518,7 +4508,7 @@ public partial class ListView : Control
                     : string.Format(SR.ListViewGroupExpandedStateName, listViewGroup.Header));
         }
 
-        ((EventHandler<ListViewGroupEventArgs>?)Events[EVENT_GROUPCOLLAPSEDSTATECHANGED])?.Invoke(this, e);
+        ((EventHandler<ListViewGroupEventArgs>?)Events[s_groupCollapsedStateChangedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4534,7 +4524,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnGroupTaskLinkClick(ListViewGroupEventArgs e)
     {
-        ((EventHandler<ListViewGroupEventArgs>?)Events[EVENT_GROUPTASKLINKCLICK])?.Invoke(this, e);
+        ((EventHandler<ListViewGroupEventArgs>?)Events[s_groupTaskLinkClickEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4542,7 +4532,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnColumnReordered(ColumnReorderedEventArgs e)
     {
-        ((ColumnReorderedEventHandler?)Events[EVENT_COLUMNREORDERED])?.Invoke(this, e);
+        ((ColumnReorderedEventHandler?)Events[s_columnReorderedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4550,7 +4540,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
     {
-        ((ColumnWidthChangedEventHandler?)Events[EVENT_COLUMNWIDTHCHANGED])?.Invoke(this, e);
+        ((ColumnWidthChangedEventHandler?)Events[s_columnWidthChangedEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4558,7 +4548,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnColumnWidthChanging(ColumnWidthChangingEventArgs e)
     {
-        ((ColumnWidthChangingEventHandler?)Events[EVENT_COLUMNWIDTHCHANGING])?.Invoke(this, e);
+        ((ColumnWidthChangingEventHandler?)Events[s_columnWidthChangingEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4566,7 +4556,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
     {
-        ((DrawListViewColumnHeaderEventHandler?)Events[EVENT_DRAWCOLUMNHEADER])?.Invoke(this, e);
+        ((DrawListViewColumnHeaderEventHandler?)Events[s_drawColumnHeaderEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4574,7 +4564,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnDrawItem(DrawListViewItemEventArgs e)
     {
-        ((DrawListViewItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+        ((DrawListViewItemEventHandler?)Events[s_drawItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4582,7 +4572,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnDrawSubItem(DrawListViewSubItemEventArgs e)
     {
-        ((DrawListViewSubItemEventHandler?)Events[EVENT_DRAWSUBITEM])?.Invoke(this, e);
+        ((DrawListViewSubItemEventHandler?)Events[s_drawSubItemEvent])?.Invoke(this, e);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -4678,7 +4668,7 @@ public partial class ListView : Control
         ListViewItem[]? listViewItemsToAdd = null;
         if (_listViewItems is not null)
         {
-            listViewItemsToAdd = _listViewItems.ToArray();
+            listViewItemsToAdd = [.. _listViewItems];
             _listViewItems = null;
         }
 
@@ -4771,8 +4761,7 @@ public partial class ListView : Control
             var items = new ListViewItem[tempItems.Count];
             tempItems.CopyTo(items, 0);
 
-            _listViewItems = new List<ListViewItem>(items.Length);
-            _listViewItems.AddRange(items);
+            _listViewItems = [.. items];
 
             ListViewHandleDestroyed = true;
         }
@@ -4862,7 +4851,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
     {
-        ((ListViewItemSelectionChangedEventHandler?)Events[EVENT_ITEMSELECTIONCHANGED])?.Invoke(this, e);
+        ((ListViewItemSelectionChangedEventHandler?)Events[s_itemSelectionChangedEvent])?.Invoke(this, e);
     }
 
     protected override void OnParentChanged(EventArgs e)
@@ -4890,7 +4879,7 @@ public partial class ListView : Control
 
     protected virtual void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
     {
-        ((RetrieveVirtualItemEventHandler?)Events[EVENT_RETRIEVEVIRTUALITEM])?.Invoke(this, e);
+        ((RetrieveVirtualItemEventHandler?)Events[s_retrieveVirtualItemEvent])?.Invoke(this, e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4906,7 +4895,7 @@ public partial class ListView : Control
             RecreateHandleInternal();
         }
 
-        if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
+        if (Events[s_rightToLeftLayoutChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -4917,7 +4906,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnSearchForVirtualItem(SearchForVirtualItemEventArgs e)
     {
-        ((SearchForVirtualItemEventHandler?)Events[EVENT_SEARCHFORVIRTUALITEM])?.Invoke(this, e);
+        ((SearchForVirtualItemEventHandler?)Events[s_searchForVirtualItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -4929,7 +4918,7 @@ public partial class ListView : Control
     /// </summary>
     protected virtual void OnSelectedIndexChanged(EventArgs e)
     {
-        ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedIndexChangedEvent])?.Invoke(this, e);
 
         if (SelectedIndices.Count == 0)
         {
@@ -4967,7 +4956,7 @@ public partial class ListView : Control
 
     protected virtual void OnVirtualItemsSelectionRangeChanged(ListViewVirtualItemsSelectionRangeChangedEventArgs e)
     {
-        ((ListViewVirtualItemsSelectionRangeChangedEventHandler?)Events[EVENT_VIRTUALITEMSSELECTIONRANGECHANGED])?.Invoke(this, e);
+        ((ListViewVirtualItemsSelectionRangeChangedEventHandler?)Events[s_virtualItemSelectionRangeChangedEvent])?.Invoke(this, e);
     }
 
     private unsafe void PositionHeader()
@@ -5032,22 +5021,22 @@ public partial class ListView : Control
 
         if (_imageListLarge is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
         }
 
         if (_imageListSmall is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_SMALL, (LPARAM)_imageListSmall.Handle);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)_imageListSmall.Handle);
         }
 
         if (_imageListState is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
         }
 
         if (_imageListGroup is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, (LPARAM)_imageListGroup.Handle);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, (LPARAM)_imageListGroup.Handle);
         }
     }
 
@@ -5075,7 +5064,7 @@ public partial class ListView : Control
             Debug.Assert(retval != 0);
 
             // ListView control seems to be bogus. Items affected need to be invalidated in LargeIcon and SmallIcons views.
-            if (View == View.LargeIcon || View == View.SmallIcon)
+            if (View is View.LargeIcon or View.SmallIcon)
             {
                 Rectangle rectInvalid = Items[startIndex].Bounds;
                 for (int index = startIndex + 1; index <= endIndex; index++)
@@ -5169,11 +5158,12 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    /// Does the job of telling win32 listView to remove this group
+    ///  Does the job of telling win32 listView to remove this group
     /// </summary>
     /// <remarks>
-    /// It is the job of whoever deletes this group to also turn off grouping if this was the last
-    /// group deleted
+    ///  <para>
+    ///   It is the job of whoever deletes this group to also turn off grouping if this was the last group deleted
+    ///  </para>
     /// </remarks>
     private void RemoveGroupNative(ListViewGroup group)
     {
@@ -5203,7 +5193,7 @@ public partial class ListView : Control
             // save the image to a temporary file name
             _backgroundImageFileName = Path.GetTempFileName();
 
-            BackgroundImage.Save(_backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+            BackgroundImage.Save(_backgroundImageFileName, Drawing.Imaging.ImageFormat.Bmp);
 
             backgroundImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
             backgroundImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_URL;
@@ -5348,11 +5338,11 @@ public partial class ListView : Control
 
             // If the width maps to a LVCSW_ const, then native control will autoresize.
             // We may need to compensate for that.
-            if (width == (int)PInvoke.LVSCW_AUTOSIZE_USEHEADER)
+            if (width == PInvoke.LVSCW_AUTOSIZE_USEHEADER)
             {
                 headerAutoResize = ColumnHeaderAutoResizeStyle.HeaderSize;
             }
-            else if (width == (int)PInvoke.LVSCW_AUTOSIZE)
+            else if (width == PInvoke.LVSCW_AUTOSIZE)
             {
                 headerAutoResize = ColumnHeaderAutoResizeStyle.ColumnContent;
             }
@@ -5361,12 +5351,12 @@ public partial class ListView : Control
         if (headerAutoResize == ColumnHeaderAutoResizeStyle.HeaderSize)
         {
             compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
-            width = (int)PInvoke.LVSCW_AUTOSIZE_USEHEADER;
+            width = PInvoke.LVSCW_AUTOSIZE_USEHEADER;
         }
         else if (headerAutoResize == ColumnHeaderAutoResizeStyle.ColumnContent)
         {
             compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
-            width = (int)PInvoke.LVSCW_AUTOSIZE;
+            width = PInvoke.LVSCW_AUTOSIZE;
         }
 
         if (IsHandleCreated)
@@ -5430,7 +5420,7 @@ public partial class ListView : Control
     {
         if (addItem)
         {
-            _savedCheckedItems ??= new List<ListViewItem>();
+            _savedCheckedItems ??= [];
             _savedCheckedItems.Add(item);
         }
         else if (_savedCheckedItems is not null)
@@ -5594,7 +5584,7 @@ public partial class ListView : Control
         }
 
         nint handle = (SmallImageList is null) ? 0 : SmallImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_SMALL, (LPARAM)handle);
+        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)handle);
 
         ForceCheckBoxUpdate();
     }
@@ -5627,7 +5617,7 @@ public partial class ListView : Control
         }
 
         nint handle = (StateImageList is null) ? 0 : StateImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_STATE, (LPARAM)handle);
+        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)handle);
     }
 
     /// <summary>
@@ -5750,7 +5740,7 @@ public partial class ListView : Control
                 exStyle |= PInvoke.LVS_EX_INFOTIP;
             }
 
-            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)(uint)exMask, (LPARAM)(uint)exStyle);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)exMask, (LPARAM)exStyle);
             Invalidate();
         }
     }
@@ -6445,7 +6435,7 @@ public partial class ListView : Control
         // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
         if (IsHandleCreated && StateImageList is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_STATE);
+            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
         }
 
         RecreateHandle();
@@ -6680,7 +6670,7 @@ public partial class ListView : Control
                             }
 
                             // Delay SelectedIndexChanged event because the last item isn't present yet.
-                            if (Items.Count == 0 || Items[Items.Count - 1] is not null)
+                            if (Items.Count == 0 || Items[^1] is not null)
                             {
                                 _listViewState1[LISTVIEWSTATE1_selectedIndexChangedSkipped] = false;
                                 OnSelectedIndexChanged(EventArgs.Empty);
@@ -6983,7 +6973,7 @@ public partial class ListView : Control
                 if (GroupsDisplayed && (key is VIRTUAL_KEY.VK_LEFT or VIRTUAL_KEY.VK_RIGHT) && SelectedItems.Count > 0)
                 {
                     // User can select more than one group.
-                    HashSet<int> groups = new();
+                    HashSet<int> groups = [];
                     foreach (ListViewItem selectedItem in SelectedItems)
                     {
                         ListViewGroup? group = selectedItem.Group;
@@ -7141,7 +7131,7 @@ public partial class ListView : Control
                 WmPrint(ref m);
                 break;
             case PInvoke.WM_TIMER:
-                if (m.WParamInternal != (uint)LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
+                if (m.WParamInternal != LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
                 {
                     base.WndProc(ref m);
                 }

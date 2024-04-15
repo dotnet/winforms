@@ -138,8 +138,8 @@ public sealed partial class OpenFileDialog : FileDialog
         {
             using ComScope<IShellItem> item = new(null);
             return dialog->GetResult(item).Failed
-                ? Array.Empty<string>()
-                : new string[] { GetFilePathFromShellItem(item) };
+                ? []
+                : [GetFilePathFromShellItem(item)];
         }
 
         using var openDialog = ComScope<IFileOpenDialog>.QueryFrom(dialog);
@@ -148,7 +148,7 @@ public sealed partial class OpenFileDialog : FileDialog
         HRESULT hr = openDialog.Value->GetResults(items);
         if (hr.Failed)
         {
-            return Array.Empty<string>();
+            return [];
         }
 
         items.Value->GetCount(out uint count);
@@ -166,7 +166,7 @@ public sealed partial class OpenFileDialog : FileDialog
     private protected override unsafe ComScope<IFileDialog> CreateVistaDialog()
     {
         HRESULT hr = PInvokeCore.CoCreateInstance(
-            in CLSID.FileOpenDialog,
+            CLSID.FileOpenDialog,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
             out IFileDialog* fileDialog);
@@ -188,7 +188,7 @@ public sealed partial class OpenFileDialog : FileDialog
             string[] fullPaths = FileNames;
             if (fullPaths is null || fullPaths.Length == 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             string[] safePaths = new string[fullPaths.Length];

@@ -733,7 +733,7 @@ public class FileDialogTests
             Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
             return result;
         };
-        Assert.Equal(result, dialog.RunDialog((IntPtr)1));
+        Assert.Equal(result, dialog.RunDialog(1));
     }
 
     [WinFormsTheory]
@@ -821,7 +821,9 @@ public class FileDialogTests
 
     private unsafe class SubFileDialog : FileDialog
     {
+#pragma warning disable IDE1006 // Naming Styles
         public static new readonly object EventFileOk = FileDialog.EventFileOk;
+#pragma warning restore IDE1006
 
         public new bool CanRaiseEvents => base.CanRaiseEvents;
 

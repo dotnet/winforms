@@ -30,7 +30,6 @@ public partial class RichTextBox
 
         public HRESULT GetNewStorage(IStorage** lplpstg)
         {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::GetNewStorage");
             if (lplpstg is null)
             {
                 return HRESULT.E_POINTER;
@@ -63,35 +62,17 @@ public partial class RichTextBox
         public HRESULT GetInPlaceContext(
             IOleInPlaceFrame** lplpFrame,
             IOleInPlaceUIWindow** lplpDoc,
-            OLEINPLACEFRAMEINFO* lpFrameInfo)
-        {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::GetInPlaceContext");
-            return HRESULT.E_NOTIMPL;
-        }
+            OLEINPLACEFRAMEINFO* lpFrameInfo) => HRESULT.E_NOTIMPL;
 
-        public HRESULT ShowContainerUI(BOOL fShow)
-        {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::ShowContainerUI");
-            return HRESULT.S_OK;
-        }
+        public HRESULT ShowContainerUI(BOOL fShow) => HRESULT.S_OK;
 
-        public HRESULT QueryInsertObject(Guid* lpclsid, IStorage* lpstg, int cp)
-        {
-            RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryInsertObject({(lpclsid is null ? "null" : lpclsid->ToString())})");
-            return HRESULT.S_OK;
-        }
+        public HRESULT QueryInsertObject(Guid* lpclsid, IStorage* lpstg, int cp) => HRESULT.S_OK;
 
-        public HRESULT DeleteObject(IOleObject* lpoleobj)
-        {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::DeleteObject");
-            return HRESULT.S_OK;
-        }
+        public HRESULT DeleteObject(IOleObject* lpoleobj) => HRESULT.S_OK;
 
         /// <inheritdoc cref="IRichEditOleCallback.QueryAcceptData(Com.IDataObject*, ushort*, RECO_FLAGS, BOOL, HGLOBAL)"/>
         public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, HGLOBAL hMetaPict)
         {
-            RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryAcceptData(reco={reco})");
-
             if (reco != RECO_FLAGS.RECO_DROP)
             {
                 return HRESULT.E_NOTIMPL;
@@ -99,7 +80,6 @@ public partial class RichTextBox
 
             if (!_owner.AllowDrop && !_owner.EnableAutoDragDrop)
             {
-                RichTextDbg.TraceVerbose("\tCancel data, allowdrop == false");
                 _lastDataObject = null;
                 return HRESULT.E_FAIL;
             }
@@ -201,29 +181,12 @@ public partial class RichTextBox
             }
 
             _lastEffect = e.Effect;
-            if (e.Effect == DragDropEffects.None)
-            {
-                RichTextDbg.TraceVerbose("\tCancel data");
-                return HRESULT.E_FAIL;
-            }
-            else
-            {
-                RichTextDbg.TraceVerbose("\tAccept data");
-                return HRESULT.S_OK;
-            }
+            return e.Effect == DragDropEffects.None ? HRESULT.E_FAIL : HRESULT.S_OK;
         }
 
-        public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
-        {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::ContextSensitiveHelp");
-            return HRESULT.E_NOTIMPL;
-        }
+        public HRESULT ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.E_NOTIMPL;
 
-        public HRESULT GetClipboardData(CHARRANGE* lpchrg, uint reco, Com.IDataObject** lplpdataobj)
-        {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::GetClipboardData");
-            return HRESULT.E_NOTIMPL;
-        }
+        public HRESULT GetClipboardData(CHARRANGE* lpchrg, uint reco, Com.IDataObject** lplpdataobj) => HRESULT.E_NOTIMPL;
 
         public unsafe HRESULT GetDragDropEffect(BOOL fDrag, MODIFIERKEYS_FLAGS grfKeyState, DROPEFFECT* pdwEffect)
         {
@@ -231,8 +194,6 @@ public partial class RichTextBox
             {
                 return HRESULT.E_POINTER;
             }
-
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::GetDragDropEffect");
 
             if (!_owner.AllowDrop && !_owner.EnableAutoDragDrop)
             {
@@ -314,8 +275,6 @@ public partial class RichTextBox
             CHARRANGE* lpchrg,
             HMENU* hmenu)
         {
-            RichTextDbg.TraceVerbose("IRichEditOleCallback::GetContextMenu");
-
             // Do nothing, we don't have ContextMenu any longer
             if (hmenu is not null)
             {
