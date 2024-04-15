@@ -4316,7 +4316,7 @@ public class MonthCalendarTests
         Rectangle actual = todayLinkAccessibleObject.Bounds;
         Rectangle expected = controlAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_FOOTER);
 
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [WinFormsFact]
