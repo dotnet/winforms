@@ -7,7 +7,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Partial Public Class UserTests
 
-        Private Class UserPrincipal
+        Private NotInheritable Class UserPrincipal
             Implements IPrincipal
 
             Private _role As String
