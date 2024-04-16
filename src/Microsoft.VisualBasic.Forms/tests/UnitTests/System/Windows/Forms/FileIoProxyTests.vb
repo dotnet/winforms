@@ -3,6 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.Text
+Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices
 Imports Xunit
@@ -182,6 +183,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DriveProxyTest()
             Assert.Equal(_fileSystem.Drives.Count, FileIO.FileSystem.Drives.Count)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub FileNormalizePathTest()
+            Assert.Throws(Of ArgumentException)(
+                Sub()
+                    Dim fullFilename As String = FileSystemUtils.NormalizePath("")
+                End Sub)
         End Sub
 
         <WinFormsFact>
