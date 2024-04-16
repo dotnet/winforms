@@ -20,8 +20,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Dim clipboardProxy As New MyServices.ClipboardProxy
                 Dim text As String = GetUniqueText()
                 clipboardProxy.SetText(text)
-                Assert.True(clipboardProxy.ContainsText)
-                Assert.True(clipboardProxy.ContainsData(DataFormats.Text))
+                Assert.Equal(Clipboard.ContainsText, clipboardProxy.ContainsText)
+                Assert.Equal(Clipboard.ContainsText, clipboardProxy.ContainsText(TextDataFormat.Text))
+                Assert.Equal(Clipboard.ContainsData(DataFormats.Text), clipboardProxy.ContainsData(DataFormats.Text))
                 Assert.Equal(text, clipboardProxy.GetText())
                 text = GetUniqueText()
                 clipboardProxy.SetText(text, TextDataFormat.Text)
