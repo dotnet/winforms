@@ -54,6 +54,13 @@ public class NetworkTests
         Assert.Throws<ArgumentNullException>(() => network.Ping((Uri)null));
     }
 
+    [Fact]
+    public void PingUriTimeout_Throw()
+    {
+        Network network = new();
+        Assert.Throws<ArgumentNullException>(() => network.Ping((Uri)null,1));
+    }
+
     // Not tested:
     //    Public Sub UploadFile(...) [multiple overloads]
 }
