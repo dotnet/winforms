@@ -1,0 +1,21 @@
+## DO NOT MODIFY THIS FILE MANUALLY. This is part of auto-baselining from 1ES Pipeline Templates. Go to [https://aka.ms/1espt-autobaselining] for more details.
+
+pipelines:
+  164:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2024-04-16
+        eslint:
+          lastModifiedDate: 2024-04-16
+        psscriptanalyzer:
+          lastModifiedDate: 2024-04-16
+        armory:
+          lastModifiedDate: 2024-04-16
+      binary:
+        credscan:
+          lastModifiedDate: 2024-04-16
+        binskim:
+          lastModifiedDate: 2024-04-16
+        spotbugs:
+          lastModifiedDate: 2024-04-16
