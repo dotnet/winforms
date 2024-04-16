@@ -48,7 +48,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        ''' Indicates whether or not text is available on the clipboard in 
+        ''' Indicates whether or not text is available on the clipboard in
         ''' the passed in format
         ''' </summary>
         ''' <param name="format">The type of text being checked for</param>
