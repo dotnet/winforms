@@ -189,7 +189,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub FileNormalizePathTest()
             Assert.Throws(Of ArgumentException)(
                 Sub()
-                    Dim fullFilename As String = FileSystemUtils.NormalizePath("")
+                    FileSystemUtils.NormalizePath("")
                 End Sub)
         End Sub
 
