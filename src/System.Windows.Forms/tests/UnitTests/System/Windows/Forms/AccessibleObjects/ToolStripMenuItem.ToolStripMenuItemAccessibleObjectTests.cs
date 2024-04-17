@@ -19,13 +19,11 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ToolStripMenuItemAccessibleObject_Supports_InvokePattern()
+    public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_NoPopUpDialog()
     {
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
-            // This action is temporarily commented due to issue #10244
-            // MessageBox.Show("...");
             callCount++;
         };
 
@@ -34,7 +32,35 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         Assert.True(item1.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
 
         item1.AccessibilityObject.Invoke();
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.Any,
+        "InvokePattern.Invoke blocks on a menu item, see: https://github.com/dotnet/winforms/issues/10244")]
+    public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_WithPopUpDialog()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            MessageBox.Show("TestDialog");
+            callCount++;
+        };
+
+        using ToolStripMenuItem item1 = new();
+        item1.Click += handler;
+        item1.AccessibilityObject.Invoke();
+
+        foreach (Form form in Application.OpenForms)
+        {
+            if (form.Text == "TestDialog")
+            {
+                form.Close();
+                break;
+            }
+        }
+
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
