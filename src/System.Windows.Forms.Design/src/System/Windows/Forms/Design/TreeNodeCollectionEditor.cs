@@ -32,7 +32,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
     {
         private int _nextNode;
         private TreeNode _curNode;
-        private readonly TreeNodeCollectionEditor _editor;
+        private readonly TreeNodeCollectionEditor _editor = null!;
         private Button _okButton;
         private Button _btnCancel;
         private Button _btnAddChild;
