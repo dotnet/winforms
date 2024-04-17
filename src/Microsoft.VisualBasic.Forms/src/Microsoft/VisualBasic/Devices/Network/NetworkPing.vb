@@ -1,7 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices
 Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
@@ -53,7 +53,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
         End Function
@@ -68,7 +68,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure a network is available
             If Not IsAvailable Then
-                Throw ExUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
+                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
             End If
 
             Dim pingMaker As New NetInfoAlias.Ping
@@ -89,7 +89,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
             Return Ping(address.Host, timeout)
         End Function

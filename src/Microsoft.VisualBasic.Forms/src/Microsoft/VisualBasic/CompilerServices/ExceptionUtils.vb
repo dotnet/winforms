@@ -1,7 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports Microsoft.VisualBasic.CompilerServices.Utils1
+Imports System.Globalization
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -13,6 +14,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
+
+        Friend Function GetCultureInfo() As CultureInfo
+            Return Thread.CurrentThread.CurrentCulture
+        End Function
+
+        Friend Function GetResourceString(resourceKey As String, ParamArray args() As String) As String
+            Return String.Format(GetCultureInfo(), resourceKey, args)
+        End Function
+
+        Friend Function GetResourceString(ResourceId As Integer) As String
+            Dim id As String = $"ID{ResourceId}"
+            ' always return a string
+            Return $"{SR.GetResourceString(id, id)}"
+        End Function
 
         Friend Function VbMakeException(ResourceId As Integer) As Exception
             Dim description As String = ""

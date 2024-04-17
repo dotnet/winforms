@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic
 
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw GetArgumentNullException(NameOf(data))
+                    Throw ExceptionUtils.GetArgumentNullException(NameOf(data))
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
