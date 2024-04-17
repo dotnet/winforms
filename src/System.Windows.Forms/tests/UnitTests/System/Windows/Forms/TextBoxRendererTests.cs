@@ -9,20 +9,20 @@ namespace System.Windows.Forms.Tests;
 
 public class TextBoxRendererTests
 {
-    public static IEnumerable<object[]> DrawTextBox_State_TestData()
+    public static TheoryData<TextBoxState> DrawTextBox_State_TheoryData() => new()
     {
-        yield return new object[] { TextBoxState.Normal };
-        yield return new object[] { TextBoxState.Hot };
-        yield return new object[] { TextBoxState.Selected };
-        yield return new object[] { TextBoxState.Disabled };
-    }
+            TextBoxState.Normal,
+            TextBoxState.Hot,
+            TextBoxState.Selected,
+            TextBoxState.Disabled
+    };
 
     [WinFormsTheory]
-    [MemberData(nameof(DrawTextBox_State_TestData))]
+    [MemberData(nameof(DrawTextBox_State_TheoryData))]
     public void TextBoxRenderer_DrawTextBox(TextBoxState tBState)
     {
         using Form form = new();
-        using TextBox textbox = new TextBox();
+        using TextBox textbox = new();
 
         form.Controls.Add(textbox);
 
@@ -47,11 +47,11 @@ public class TextBoxRendererTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(DrawTextBox_State_TestData))]
+    [MemberData(nameof(DrawTextBox_State_TheoryData))]
     public void TextBoxRenderer_DrawTextBox_OverloadWithTextAndFont(TextBoxState tBState)
     {
         using Form form = new();
-        using TextBox textbox = new TextBox();
+        using TextBox textbox = new();
 
         form.Controls.Add(textbox);
 
@@ -82,11 +82,11 @@ public class TextBoxRendererTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(DrawTextBox_State_TestData))]
+    [MemberData(nameof(DrawTextBox_State_TheoryData))]
     public void TextBoxRenderer_DrawTextBox_OverloadWithTextFontAndTextBounds(TextBoxState tBState)
     {
         using Form form = new();
-        using TextBox textbox = new TextBox();
+        using TextBox textbox = new();
 
         form.Controls.Add(textbox);
 
