@@ -98,7 +98,7 @@ public class TextBoxRendererTests
         using Graphics graphics = Graphics.FromHdc((IntPtr)emf.HDC);
 
         Rectangle bounds = textbox.Bounds;
-        Rectangle textBounds = new Rectangle(10, 20, 30, 40);
+        Rectangle textBounds = new(10, 20, 30, 40);
 
         TextBoxRenderer.DrawTextBox(graphics, bounds, "text", SystemFonts.DefaultFont, textBounds, tBState);
 
