@@ -339,6 +339,11 @@ public unsafe partial class DataObject
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 if (!success)
                 {
+                    if (EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                    {
+                        throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                    }
+
                     new BinaryFormatter()
                     {
                         Binder = restrictSerialization ? new BitmapBinder() : null
