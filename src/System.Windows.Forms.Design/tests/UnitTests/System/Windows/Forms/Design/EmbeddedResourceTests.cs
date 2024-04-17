@@ -61,6 +61,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.Professional1
             System.Windows.Forms.Design.Professional2
             System.Windows.Forms.Design.ToolStripTemplateNode
+            System.Windows.Forms.Design.TreeNodeCollectionEditor.resources
             System.Windows.Forms.Design.UserControlToolboxItem
             """;
 
