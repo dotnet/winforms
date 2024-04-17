@@ -193,7 +193,7 @@ public unsafe partial class DataObject
                             // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
                         }
 
-                        if (EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }
