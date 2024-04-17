@@ -186,11 +186,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub FileNormalizePathTest()
+        Public Sub FileNormalizePathTest_Fail()
             Assert.Throws(Of ArgumentException)(
                 Sub()
                     FileSystemUtils.NormalizePath("")
                 End Sub)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub FileNormalizePathTest_Success()
+            FileSystemUtils.NormalizePath(IO.Path.GetTempPath)
         End Sub
 
         <WinFormsFact>
