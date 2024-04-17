@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports Microsoft.VisualBasic.CompilerServices.Utils1
-
 Namespace Microsoft.VisualBasic.CompilerServices
 
     Friend Enum vbErrors
@@ -17,6 +15,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ' Prevent creation.
         Private Sub New()
         End Sub
+
+        Friend Shared Function GetResourceString(ResourceId As vbErrors) As String
+            Dim id As String = "ID" & CStr(ResourceId)
+            Return SR.GetResourceString(id, id)
+        End Function
+
+        Friend Shared Function GetResourceString(resourceKey As String, ParamArray args() As String) As String
+            Return String.Format(Threading.Thread.CurrentThread.CurrentCulture, resourceKey, args)
+        End Function
 
         Friend Shared Function VbMakeException(hr As Integer) As Exception
             Dim sMsg As String
@@ -158,7 +165,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of Win32Exception.</returns>
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
-
         Friend Shared Function GetWin32Exception(
             ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 

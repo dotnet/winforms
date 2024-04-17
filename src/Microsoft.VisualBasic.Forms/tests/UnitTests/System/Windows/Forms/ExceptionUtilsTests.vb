@@ -21,7 +21,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = Utils1.GetResourceString(vbErrors.FileNotFound)
+            Dim resourceString As String = ExceptionUtils.GetResourceString(vbErrors.FileNotFound)
             Dim ex As Exception = ExceptionUtils.GetDirectoryNotFoundException(resourceString)
             Assert.IsType(Of IO.DirectoryNotFoundException)(ex)
             Assert.Equal("File not found.", ex.Message)
@@ -29,7 +29,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = Utils1.GetResourceString(vbErrors.FileNotFound)
+            Dim resourceString As String = ExceptionUtils.GetResourceString(vbErrors.FileNotFound)
             Dim ex As Exception = ExceptionUtils.GetFileNotFoundException("Test", resourceString)
             Assert.IsType(Of IO.FileNotFoundException)(ex)
             Assert.Equal("File not found.", ex.Message)
