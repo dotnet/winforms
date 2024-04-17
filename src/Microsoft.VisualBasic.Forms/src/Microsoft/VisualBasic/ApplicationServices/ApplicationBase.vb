@@ -2,8 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Threading
-
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -30,7 +29,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
             If variableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
             End If
 
             Return variableValue

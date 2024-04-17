@@ -3,8 +3,6 @@
 
 Imports System.Security
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-
 Namespace Microsoft.VisualBasic.CompilerServices
 
     ''' <summary>
@@ -41,11 +39,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
             If String.IsNullOrEmpty(path) Then ' Check for argument null
-                Throw ExUtils.GetArgumentNullException(paramName)
+                Throw ExceptionUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
                 path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
             End If
         End Sub
 
