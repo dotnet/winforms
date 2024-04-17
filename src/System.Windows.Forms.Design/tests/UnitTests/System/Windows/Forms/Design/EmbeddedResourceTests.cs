@@ -61,7 +61,6 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.Professional1
             System.Windows.Forms.Design.Professional2
             System.Windows.Forms.Design.ToolStripTemplateNode
-            System.Windows.Forms.Design.TreeNodeCollectionEditor.resources
             System.Windows.Forms.Design.UserControlToolboxItem
             """;
 
@@ -120,6 +119,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.FormatControl.resources
             System.Windows.Forms.Design.LinkAreaEditor.resources
             System.Windows.Forms.Design.MaskDesignerDialog.resources
+            System.Windows.Forms.Design.TreeNodeCollectionEditor.resources
             System.Windows.Forms.Design.ShortcutKeysEditor.resources
             System.Windows.Forms.Design.StringCollectionEditor.resources
             System.Windows.Forms.Design.StyleCollectionEditor.resources
