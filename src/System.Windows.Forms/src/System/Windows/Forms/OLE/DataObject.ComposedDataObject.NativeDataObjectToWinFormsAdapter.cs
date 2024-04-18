@@ -17,9 +17,8 @@ public unsafe partial class DataObject
     internal unsafe partial class ComposedDataObject
     {
         [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
-        [FeatureGuard(typeof(RequiresUnreferencedCodeAttribute))]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-        private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : false;
+        private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : true;
 #pragma warning restore IDE0075 //Simplify conditional expression
 
         /// <summary>
@@ -194,6 +193,9 @@ public unsafe partial class DataObject
                             // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
                         }
 
+                        // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(), which has a RequiresUnreferencedCode annotation.
+                        // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
+                        // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
                         if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
