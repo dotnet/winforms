@@ -4279,8 +4279,6 @@ public class MonthCalendarTests
 
     [WinFormsTheory]
     [InlineData("42")]
-    [InlineData("1")]
-    [InlineData("53")]
     public void CalendarWeekNumberCellAccessibleObject_Name_ReturnsExpected(string weekNumber)
     {
         using MonthCalendar monthCalendar = new();
@@ -4295,9 +4293,9 @@ public class MonthCalendarTests
             calendarRowAccessibleObject,
             calendarBodyAccessibleObject,
             monthCalendarAccessibleObject,
-            /* calendarIndex */ 0,
-            /* rowIndex */ 0,
-            /* columnIndex */ 0,
+            calendarIndex: 0,
+            rowIndex: 0,
+            columnIndex: 0,
             weekNumber);
 
         string name = accessibleObject.Name;

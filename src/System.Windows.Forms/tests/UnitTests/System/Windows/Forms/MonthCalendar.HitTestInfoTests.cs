@@ -36,4 +36,16 @@ public class MonthCalendarHitTestInfoTests
 
         result.Should().Be(expectedResult);
     }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    public void HitTestInfo_Constructor_WithNullDateTime_ThrowsException(DateTime? time)
+    {
+        Point point = new(5, 5);
+        HitArea hitArea = HitArea.Date;
+
+        Action action = () => new HitTestInfo(point, hitArea, time!.Value);
+
+        action.Should().Throw<InvalidOperationException>();
+    }
 }
