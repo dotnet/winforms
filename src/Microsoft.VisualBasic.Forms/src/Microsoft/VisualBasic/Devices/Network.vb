@@ -372,7 +372,7 @@ Namespace Microsoft.VisualBasic.Devices
 
                 'Throw if the file exists and the user doesn't want to overwrite
                 If IO.File.Exists(fullFilename) And Not overwrite Then
-                    Throw New IO.IOException(Utils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                    Throw New IO.IOException(ExceptionUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
                 End If
 
                 ' Set credentials if we have any
@@ -383,8 +383,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                        .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                        .Text = ExceptionUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                        .LabelText = ExceptionUtils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                     }
                 End If
 
@@ -614,8 +614,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = Utils.GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = Utils.GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
+                        .Text = ExceptionUtils.GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
+                        .LabelText = ExceptionUtils.GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
                     }
                 End If
 
