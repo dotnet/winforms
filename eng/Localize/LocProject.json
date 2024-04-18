@@ -192,7 +192,6 @@
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"
                                           }
-
                          ],
                          "LanguageSet":  "VS_Main_Languages"
                      },

@@ -16,15 +16,14 @@ internal class TreeNodeCollectionEditor : CollectionEditor
     { }
 
     /// <summary>
-    /// Creates a new form to show the current collection.
-    /// You may inherit from CollectionForm to provide your own form.
+    ///  Creates a new form to show the current collection.
+    ///  You may inherit from CollectionForm to provide your own form.
     /// </summary>
-    /// <returns></returns>
     protected override CollectionForm CreateCollectionForm() => new TreeNodeCollectionForm(this);
 
     /// <summary>
-    /// Gets the help topic to display for the dialog help button or pressing F1.
-    /// Override to display a different help topic.
+    ///  Gets the help topic to display for the dialog help button or pressing F1.
+    ///  Override to display a different help topic.
     /// </summary>
     protected override string HelpTopic => "net.ComponentModel.TreeNodeCollectionEditor";
 
@@ -58,12 +57,13 @@ internal class TreeNodeCollectionEditor : CollectionEditor
             editor = (TreeNodeCollectionEditor)editor;
             InitializeComponent();
             HookEvents();
-            // cache in the initial value before add so that we can put this value back
+
+            // Cache in the initial value before add so that we can put this value back
             // if the operation is cancelled.
             _initialNextNode = NextNode;
             SetButtonsState();
 
-            // enable explorer tree view style
+            // Enable explorer tree view style.
             DesignerUtils.ApplyTreeViewThemeStyles(_treeView1);
 
             if (_moveDownButton.Image is Bitmap moveDown)
@@ -175,8 +175,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
             {
                 _treeView1.SelectedNode = newNode;
 
-                // we are adding a Root Node ... at Level 1
-                // so show the properties in the PropertyGrid
+                // We are adding a Root Node at Level 1, so show the properties in the PropertyGrid.
                 SetNodeProps(newNode);
             }
         }
@@ -287,14 +286,17 @@ internal class TreeNodeCollectionEditor : CollectionEditor
 
             _propertyGrid1.Name = "propertyGrid1";
             _overarchingTableLayoutPanel.SetRowSpan(_propertyGrid1, 2);
+
             // label2
             resources.ApplyResources(_label2, "label2");
             _label2.Name = "label2";
+
             // treeView1
             _treeView1.AllowDrop = true;
             resources.ApplyResources(_treeView1, "treeView1");
             _treeView1.HideSelection = false;
             _treeView1.Name = "treeView1";
+
             // label1
             resources.ApplyResources(_label1, "label1");
             _label1.Name = "label1";
@@ -385,12 +387,12 @@ internal class TreeNodeCollectionEditor : CollectionEditor
             }
             else
             {
-                // treeView nodes doesn't get font propagation in DPIChanged scenario because it inherits font from parent
+                // TreeView nodes doesn't get font propagation in DPIChanged scenario because it inherits font from parent
                 // and DpiChanged event handling of the parent happens later and doesn't raise onFontChanges() event when
                 // the control or its parent tree is derived from Form . We special handled Form class for DpiChanged event
                 // to avoid double scaling issues. One solution here is, to raise onParentChange() event to get the right font.
 
-                // this is a special handling and may need to revisit
+                // This is a special handling and may need to revisit
                 _overarchingTableLayoutPanel.Controls.Remove(_treeView1);
                 _overarchingTableLayoutPanel.Controls.Add(_treeView1, 0, 1);
             }
@@ -414,7 +416,6 @@ internal class TreeNodeCollectionEditor : CollectionEditor
                 {
                     // We need to copy the nodes into our editor TreeView, not move them.
                     // We overwrite the passed-in array with the new roots.
-                    //
                     nodes[i] = (TreeNode)((TreeNode)items[i]).Clone();
                 }
 
@@ -422,14 +423,12 @@ internal class TreeNodeCollectionEditor : CollectionEditor
                 _treeView1.Nodes.AddRange(nodes);
 
                 // Update current node related UI
-                //
                 _curNode = null;
                 _btnAddChild.Enabled = false;
                 _btnDelete.Enabled = false;
 
                 // The image list for the editor TreeView must be updated to be the same
                 // as the image list for the actual TreeView.
-                //
                 TreeView actualTV = TreeView;
                 if (actualTV is not null)
                 {
@@ -446,8 +445,6 @@ internal class TreeNodeCollectionEditor : CollectionEditor
         /// <summary>
         ///  When something in the properties window changes, we update pertinent text here.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {
             // Update the string above the grid.
@@ -458,14 +455,14 @@ internal class TreeNodeCollectionEditor : CollectionEditor
         {
             if (actualTreeView.ImageList is not null)
             {
-                // Update the treeView image-related properties
+                // Update the treeView image-related properties.
                 _treeView1.ImageList = actualTreeView.ImageList;
                 _treeView1.ImageIndex = actualTreeView.ImageIndex;
                 _treeView1.SelectedImageIndex = actualTreeView.SelectedImageIndex;
             }
             else
             {
-                // Update the treeView image-related properties
+                // Update the treeView image-related properties.
                 _treeView1.ImageList = null;
                 _treeView1.ImageIndex = -1;
                 _treeView1.SelectedImageIndex = -1;
@@ -480,7 +477,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
                 _treeView1.StateImageList = null;
             }
 
-            // also set the CheckBoxes from the actual TreeView
+            // Also set the CheckBoxes from the actual TreeView.
             _treeView1.CheckBoxes = actualTreeView.CheckBoxes;
         }
 
@@ -491,7 +488,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
                 _label2.Text = string.Format(SR.CollectionEditorProperties, node.Name.ToString());
             }
 
-            // no node is selected ... revert back the Text of the label to Properties... VsWhidbey: 338248.
+            // No node is selected. Revert back the Text of the label to Properties.
             else
             {
                 _label2.Text = string.Format(SR.CollectionEditorPropertiesNone);
@@ -540,7 +537,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
             if (dragNode != dropNode)
             {
                 // Remove this node after finding the new root
-                // but before re-adding the node to the collection
+                // but before re-adding the node to the collection.
                 _treeView1.Nodes.Remove(dragNode);
 
                 if (dropNode is not null && !CheckParent(dropNode, dragNode)) // DROPPED ON LEVEL > 0
