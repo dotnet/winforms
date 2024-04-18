@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetArgumentExceptionWithArgName(ArgumentName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentException
 
-            Return New ArgumentException(GetResourceString(ResourceID, PlaceHolders), ArgumentName)
+            Return New ArgumentException(ExceptionUtils.GetResourceString(ResourceID, PlaceHolders), ArgumentName)
         End Function
 
         ''' <summary>
@@ -93,7 +93,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of ArgumentNullException.</returns>
         Friend Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
 
-            Return New ArgumentNullException(ArgumentName, GetResourceString(SR.General_ArgumentNullException))
+            Return New ArgumentNullException(ArgumentName, ExceptionUtils.GetResourceString(SR.General_ArgumentNullException))
         End Function
 
         ''' <summary>
@@ -106,7 +106,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetArgumentNullException(ArgumentName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentNullException
 
-            Return New ArgumentNullException(ArgumentName, GetResourceString(ResourceID, PlaceHolders))
+            Return New ArgumentNullException(ArgumentName, ExceptionUtils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetDirectoryNotFoundException(
             ResourceID As String, ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
 
-            Return New IO.DirectoryNotFoundException(GetResourceString(ResourceID, PlaceHolders))
+            Return New IO.DirectoryNotFoundException(ExceptionUtils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -131,7 +131,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetFileNotFoundException(FileName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As IO.FileNotFoundException
 
-            Return New IO.FileNotFoundException(GetResourceString(ResourceID, PlaceHolders), FileName)
+            Return New IO.FileNotFoundException(ExceptionUtils.GetResourceString(ResourceID, PlaceHolders), FileName)
         End Function
 
         ''' <summary>
@@ -143,7 +143,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetInvalidOperationException(
             ResourceID As String, ParamArray PlaceHolders() As String) As InvalidOperationException
 
-            Return New InvalidOperationException(GetResourceString(ResourceID, PlaceHolders))
+            Return New InvalidOperationException(ExceptionUtils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of IO.IOException.</returns>
         Friend Function GetIOException(ResourceID As String, ParamArray PlaceHolders() As String) As IO.IOException
 
-            Return New IO.IOException(GetResourceString(ResourceID, PlaceHolders))
+            Return New IO.IOException(ExceptionUtils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -167,7 +167,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetWin32Exception(
             ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 
-            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
+            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), ExceptionUtils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
     End Module
