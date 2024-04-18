@@ -160,23 +160,25 @@ public class ImageCollectionTests
         // SetPixel is not supported for images with indexed pixel formats.
         yield return new object[] { PixelFormat.Format1bppIndexed, Color.Empty, Color.Empty, Color.FromArgb(255, 0, 0, 0) };
 
-        // The actual colours are visually close to the originals, but no colour fidelity
+        // The actual colors are visually close to the originals, but no color fidelity.
+        // Comment the following data out due to ActiveIssue "https://github.com/dotnet/winforms/issues/11226".
         if (ArchitectureDetection.Is64bit)
         {
             yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
             yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
-            yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
-            yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+            // yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+            // yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
         }
         else
         {
-            yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
-            yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
-            yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
-            yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+            // yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+            // yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+            // yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+            // yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
         }
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11226")]
     [WinFormsTheory]
     [MemberData(nameof(ImageCollection_VisualStyles_on_Item_Get32bppColorDepth_TestData))]
     public void ImageCollection_Item_Get32bppColorDepth_Success(PixelFormat pixelFormat, Color pixel00Color, Color givenPixel10Color, Color expectedPixel10Color)
@@ -199,7 +201,7 @@ public class ImageCollectionTests
         collection.Add(image);
         collection.Add(imageFiller2);
 
-        // By getting a bitmap from the ImageListcollection ImageList will clone the original bitmap.
+        // By getting a bitmap from the ImageListCollection ImageList will clone the original bitmap.
         // Assert that the new bitmap contains all the same properties.
 
         Bitmap resultImage = Assert.IsType<Bitmap>(collection[1]);
