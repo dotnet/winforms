@@ -35,9 +35,10 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         callCount.Should().Be(1);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/10244")]
     [WinFormsFact]
-    [SkipOnArchitecture(TestArchitectures.Any,
-        "InvokePattern.Invoke blocks on a menu item, see: https://github.com/dotnet/winforms/issues/10244")]
+    [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
+        "InvokePattern.Invoke blocks on a menu item")]
     public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_WithPopUpDialog()
     {
         int callCount = 0;
