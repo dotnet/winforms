@@ -1,6 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Threading
+
 Namespace Microsoft.VisualBasic.CompilerServices
 
     Friend Enum vbErrors
@@ -12,14 +14,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
 
+        Friend Function GetResourceString(resourceKey As String, ParamArray args() As String) As String
+            Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
+        End Function
+
         Friend Function GetResourceString(ResourceId As vbErrors) As String
             Dim id As String = "ID" & CStr(ResourceId)
             Return SR.GetResourceString(id, id)
         End Function
 
-        Friend Function GetResourceString(resourceKey As String, ParamArray args() As String) As String
-            Return String.Format(Threading.Thread.CurrentThread.CurrentCulture, resourceKey, args)
-        End Function
 
         Friend Function VbMakeException(hr As Integer) As Exception
             Dim sMsg As String

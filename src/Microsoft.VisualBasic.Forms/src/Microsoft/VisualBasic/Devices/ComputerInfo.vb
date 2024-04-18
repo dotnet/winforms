@@ -7,7 +7,7 @@ Imports Microsoft.VisualBasic.CompilerServices
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    '''   configuration information about the current computer and the current process.
+    '''  Provides configuration information about the current computer and the current process.
     ''' </summary>
     <DebuggerTypeProxy(GetType(ComputerInfo.ComputerInfoDebugView))>
     Public Class ComputerInfo
@@ -61,8 +61,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the total size of free user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process,
-        '''          in bytes.</value>
+        ''' <value>
+        '''  A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process,
+        '''  in bytes.
+        ''' </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
