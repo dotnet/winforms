@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend NotInheritable Class WebClientCopy
 
         ''' <summary>
-        ''' Creates an instance of a WebClientCopy, used to download or upload a file
+        '''  Creates an instance of a WebClientCopy, used to download or upload a file
         ''' </summary>
         ''' <param name="client">The WebClient used to do the downloading or uploading</param>
         ''' <param name="dialog">UI for indicating progress</param>
@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Downloads a file
+        '''  Downloads a file
         ''' </summary>
         ''' <param name="address">The source for the file</param>
         ''' <param name="destinationFileName">The path and name where the file is saved</param>
@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Uploads a file
+        '''  Uploads a file
         ''' </summary>
         ''' <param name="sourceFileName">The name and path of the source file</param>
         ''' <param name="address">The address to which the file is uploaded</param>
@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles the WebClient's DownloadFileCompleted event
+        '''  Handles the WebClient's DownloadFileCompleted event
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -139,7 +139,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles event WebClient fires whenever progress of download changes
+        '''  Handles event WebClient fires whenever progress of download changes
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles the WebClient's UploadFileCompleted event
+        '''  Handles the WebClient's UploadFileCompleted event
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -169,7 +169,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles event WebClient fires whenever progress of upload changes
+        '''  Handles event WebClient fires whenever progress of upload changes
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -179,12 +179,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' If the user clicks cancel on the Progress dialog, we need to cancel
-        ''' the current async file transfer operation
+        '''  If the user clicks cancel on the Progress dialog, we need to cancel
+        '''  the current async file transfer operation
         ''' </summary>
         ''' <remarks>
-        ''' Note that we don't want to close the progress dialog here.  Wait until
-        ''' the actual file transfer cancel event comes through and do it there.
+        '''  Note that we don't want to close the progress dialog here.  Wait until
+        '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
             m_WebClient.CancelAsync() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.

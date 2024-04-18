@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in address.
+        '''  Sends and receives a packet to and from the passed in address.
         ''' </summary>
         ''' <param name="hostNameOrAddress"></param>
         ''' <returns>True if ping was successful, otherwise False</returns>
@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
+        '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
         ''' <param name="address">A Uri representing the host</param>
         ''' <returns>True if ping was successful, otherwise False</returns>
@@ -152,7 +152,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
+        '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
         ''' <param name="address">A Uri representing the host</param>
         ''' <param name="timeout">Time to wait before aborting ping</param>
@@ -167,7 +167,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -176,7 +176,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -185,7 +185,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -196,7 +196,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -262,7 +262,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -283,7 +283,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -309,7 +309,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -330,7 +330,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
@@ -418,7 +418,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">The full name and path of the host destination</param>
@@ -427,7 +427,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -436,7 +436,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">The full name and path of the host destination</param>
@@ -447,7 +447,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -513,7 +513,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -532,7 +532,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -557,7 +557,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -574,7 +574,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Uploads a file from the local machine to the specified host
+        '''  Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
         ''' <param name="address">Uri representing the destination</param>
@@ -693,7 +693,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        ''' Gets network credentials from a userName and password
+        '''  Gets network credentials from a userName and password
         ''' </summary>
         ''' <param name="userName">The name of the user</param>
         ''' <param name="password">The password of the user</param>
@@ -747,14 +747,14 @@ Namespace Microsoft.VisualBasic.Devices
     End Class
 
     ''' <summary>
-    ''' Temporary class used to provide WebClient with a timeout property.
+    '''  Temporary class used to provide WebClient with a timeout property.
     ''' </summary>
     ''' <remarks>This class will be deleted when Timeout is added to WebClient</remarks>
     Friend NotInheritable Class WebClientExtended
         Inherits WebClient
 
         ''' <summary>
-        ''' Sets or indicates the timeout used by WebRequest used by WebClient
+        '''  Sets or indicates the timeout used by WebRequest used by WebClient
         ''' </summary>
         Public WriteOnly Property Timeout() As Integer
             Set(value As Integer)
@@ -764,7 +764,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Enables switching the server to non passive mode.
+        '''  Enables switching the server to non passive mode.
         ''' </summary>
         ''' <remarks>We need this in order for the progress UI on a download to work</remarks>
         Public WriteOnly Property UseNonPassiveFtp() As Boolean
@@ -774,8 +774,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Makes sure that the timeout value for WebRequests (used for all Download and Upload methods) is set
-        ''' to the Timeout value
+        '''  Makes sure that the timeout value for WebRequests (used for all Download and Upload methods) is set
+        '''  to the Timeout value
         ''' </summary>
         ''' <param name="address"></param>
         Protected Overrides Function GetWebRequest(address As Uri) As WebRequest
