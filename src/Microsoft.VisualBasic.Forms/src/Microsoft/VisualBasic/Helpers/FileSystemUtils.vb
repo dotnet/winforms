@@ -116,7 +116,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
             ' Check for argument null
             If String.IsNullOrEmpty(path) Then
-                Throw GetArgumentNullException(paramName)
+                Throw ExceptionUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
                 path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then

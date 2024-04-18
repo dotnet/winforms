@@ -76,7 +76,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw GetArgumentNullException(NameOf(stream))
+                    Throw ExceptionUtils.GetArgumentNullException(NameOf(stream))
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -89,7 +89,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw GetArgumentNullException(NameOf(systemSound))
+                    Throw ExceptionUtils.GetArgumentNullException(NameOf(systemSound))
                 End If
 
                 systemSound.Play()
@@ -139,7 +139,7 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw GetArgumentNullException(NameOf(location))
+                    Throw ExceptionUtils.GetArgumentNullException(NameOf(location))
                 End If
 
                 Return location

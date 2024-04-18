@@ -4,7 +4,7 @@
 Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.Logging
         Public Sub WriteException(ex As Exception, severity As TraceEventType, additionalInfo As String, id As Integer)
 
             If ex Is Nothing Then
-                Throw GetArgumentNullException(NameOf(ex))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(ex))
             End If
 
             Dim builder As New StringBuilder()
@@ -230,8 +230,8 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
-        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appConfig
-
+        'Taken from appConfig
+        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog"
 
     End Class
 End Namespace

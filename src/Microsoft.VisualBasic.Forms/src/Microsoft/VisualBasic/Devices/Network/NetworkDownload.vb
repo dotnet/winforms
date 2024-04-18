@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -209,7 +209,7 @@ Namespace Microsoft.VisualBasic.Devices
                                 overwrite As Boolean)
 
             If address Is Nothing Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -267,7 +267,7 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -318,7 +318,7 @@ Namespace Microsoft.VisualBasic.Devices
                     connectionTimeout As Integer,
                     overwrite As Boolean)
             If address Is Nothing Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -374,7 +374,7 @@ Namespace Microsoft.VisualBasic.Devices
                     onUserCancel As UICancelOption)
 
             If address Is Nothing Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExceptionUtils.GetArgumentNullException(NameOf(address))
             End If
 
             ' Get network credentials
