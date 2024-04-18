@@ -864,7 +864,10 @@ public class ToolTipTests
             Times.Once);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11234")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11234")]
     public void ToolTip_SetToolTip_TabControl_DoesNotAddToolForTabControlItself()
     {
         // We need a Form because tooltips don't work on controls without a valid parent.
