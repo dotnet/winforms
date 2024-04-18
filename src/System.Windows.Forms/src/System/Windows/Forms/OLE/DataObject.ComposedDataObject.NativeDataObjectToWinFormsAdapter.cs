@@ -16,6 +16,7 @@ public unsafe partial class DataObject
 {
     internal unsafe partial class ComposedDataObject
     {
+        [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
         [FeatureGuard(typeof(RequiresUnreferencedCodeAttribute))]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
         private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : false;
