@@ -3,6 +3,7 @@
 
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -236,7 +237,7 @@ Namespace Microsoft.VisualBasic.Devices
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
                 _memoryStatusEx.Init()
                 If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
-                    Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
+                    Throw ExUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
                 End If
             End Sub
 

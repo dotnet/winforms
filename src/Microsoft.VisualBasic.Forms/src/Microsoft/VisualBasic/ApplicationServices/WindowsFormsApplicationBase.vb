@@ -10,8 +10,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -378,10 +377,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As Form)
                 If value Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
+                    Throw ExUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
@@ -398,7 +397,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
 
                 _splashScreen = value

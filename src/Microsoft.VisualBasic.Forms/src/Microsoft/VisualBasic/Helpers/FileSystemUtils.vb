@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Security
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -39,11 +40,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
             If String.IsNullOrEmpty(path) Then ' Check for argument null
-                Throw ExceptionUtils.GetArgumentNullException(paramName)
+                Throw ExUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
                 path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
-                Throw ExceptionUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
+                Throw ExUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
             End If
         End Sub
 

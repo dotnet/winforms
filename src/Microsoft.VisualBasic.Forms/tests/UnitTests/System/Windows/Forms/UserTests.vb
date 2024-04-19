@@ -21,6 +21,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             testUser.CurrentPrincipal = userPrincipal
             Assert.NotNull(testUser.CurrentPrincipal)
             Assert.Equal(userPrincipal, testUser.CurrentPrincipal)
+            Assert.Equal("Basic", userPrincipal.Identity.AuthenticationType)
         End Sub
 
         <WinFormsFact>

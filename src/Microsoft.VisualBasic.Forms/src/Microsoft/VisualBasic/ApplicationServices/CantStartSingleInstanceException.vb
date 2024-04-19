@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -18,21 +18,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Creates a new exception
         ''' </summary>
         Public Sub New()
-            MyBase.New(GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+            MyBase.New(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
-        Public Sub New(ByVal message As String)
+        Public Sub New(message As String)
             MyBase.New(message)
         End Sub
 
-        Public Sub New(ByVal message As String, ByVal inner As Exception)
+        Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
         End Sub
 
         ' Deserialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
+        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
 

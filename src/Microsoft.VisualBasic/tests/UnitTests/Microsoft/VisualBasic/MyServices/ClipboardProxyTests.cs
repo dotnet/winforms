@@ -8,6 +8,8 @@ using TextDataFormat = System.Windows.Forms.TextDataFormat;
 
 namespace Microsoft.VisualBasic.MyServices.Tests;
 
+[Collection("Clipboard Tests")]
+[CollectionDefinition("Clipboard Tests", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
     [WinFormsFact]
