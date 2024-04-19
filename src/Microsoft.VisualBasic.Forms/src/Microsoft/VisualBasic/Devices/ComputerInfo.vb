@@ -21,6 +21,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
+
         ''' <summary>
         '''  Gets the total size of physical memory on the machine.
         ''' </summary>
