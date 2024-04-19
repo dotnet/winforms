@@ -48,6 +48,7 @@ partial class MainForm
         this.ToolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
         this.ToolStripMenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
         this.ToolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+        this.ToolStripMenuItemKeyInvokeSmartTag = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
         this.toolStripMenuItemTools = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItemTabOrder = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,6 +169,7 @@ partial class MainForm
         this.ToolStripMenuItemCopy,
         this.ToolStripMenuItemPaste,
         this.ToolStripMenuItemDelete,
+        this.ToolStripMenuItemKeyInvokeSmartTag,
         this.toolStripSeparator4});
         this.editToolStripMenuItem.Name = "editToolStripMenuItem";
         this.editToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
@@ -231,6 +233,14 @@ partial class MainForm
         this.ToolStripMenuItemDelete.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemDelete.Text = "Delete";
         this.ToolStripMenuItemDelete.Click += new System.EventHandler(this.OnMenuClick);
+        // 
+        // ToolStripMenuItemKeyInvokeSmartTag
+        // 
+        this.ToolStripMenuItemKeyInvokeSmartTag.Name = "ToolStripMenuItemKeyInvokeSmartTag";
+        this.ToolStripMenuItemKeyInvokeSmartTag.ShortcutKeys = System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10;
+        this.ToolStripMenuItemKeyInvokeSmartTag.Size = new System.Drawing.Size(165, 24);
+        this.ToolStripMenuItemKeyInvokeSmartTag.Text = "InvokeSmartTag";
+        this.ToolStripMenuItemKeyInvokeSmartTag.Click += new System.EventHandler(this.OnMenuClick);
         // 
         // toolStripSeparator4
         // 
@@ -305,6 +315,7 @@ partial class MainForm
     private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemPaste;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemDelete;
+    private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemKeyInvokeSmartTag;
     private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAbout;
     private System.Windows.Forms.TabControl tabControl1;
