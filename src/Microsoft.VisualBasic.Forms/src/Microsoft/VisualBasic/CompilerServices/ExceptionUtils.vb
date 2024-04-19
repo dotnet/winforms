@@ -19,20 +19,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
         End Function
 
-        Friend Function GetResourceString(ResourceId As Integer) As String
-            Dim id As String = $"ID{ResourceId}"
+        Friend Function GetResourceString(resourceId As Integer) As String
+            Dim id As String = $"ID{resourceId}"
             ' always return a string
             Return $"{SR.GetResourceString(id, id)}"
         End Function
 
-        Friend Function VbMakeException(ResourceId As Integer) As Exception
+        Friend Function VbMakeException(resourceId As Integer) As Exception
             Dim description As String = ""
 
-            If ResourceId > 0 AndAlso ResourceId <= &HFFFFI Then
-                description = GetResourceString(ResourceId)
+            If resourceId > 0 AndAlso resourceId <= &HFFFFI Then
+                description = GetResourceString(resourceId)
             End If
 
-            Select Case ResourceId
+            Select Case resourceId
 
                 Case vbErrors.FileNotFound
                     Return New IO.FileNotFoundException(description)
