@@ -120,8 +120,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="resourceID">The resource ID.</param>
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.DirectoryNotFoundException.</returns>
-        Friend Function GetDirectoryNotFoundException(
-                            resourceID As String,
+        Friend Function GetDirectoryNotFoundException(resourceID As String,
                             ParamArray placeHolders() As String) As IO.DirectoryNotFoundException
 
             Return New IO.DirectoryNotFoundException(GetResourceString(resourceID, placeHolders))

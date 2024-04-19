@@ -79,7 +79,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
                                  "Must found exactly 1")
                     Return dInfo.GetDirectories(IO.Path.GetFileName(fullPath))(0).FullName
                 Else
-                    Return fullPath ' Path does not exist, cannot resolve.
+                    ' Path does not exist, cannot resolve.
+                    Return fullPath
                 End If
             Catch ex As Exception
                 ' Ignore these type of exceptions and return FullPath. These type of exceptions should either be caught by calling functions
