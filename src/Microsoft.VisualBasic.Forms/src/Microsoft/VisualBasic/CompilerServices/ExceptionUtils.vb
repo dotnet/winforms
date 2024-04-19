@@ -142,7 +142,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of Win32Exception.</returns>
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
-
         Friend Function GetWin32Exception(resourceID As String,
                             ParamArray placeHolders() As String) As ComponentModel.Win32Exception
 
