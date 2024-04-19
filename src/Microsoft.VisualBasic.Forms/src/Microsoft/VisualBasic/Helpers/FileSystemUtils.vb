@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <summary>
         '''  Returns the given path in long format (v.s 8.3 format) if the path exists.
         ''' </summary>
-        ''' <param name="FullPath">The path to resolve to long format.</param>
+        ''' <param name="fullPath">The path to resolve to long format.</param>
         ''' <returns>The given path in long format if the path exists.</returns>
         ''' <remarks>
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
@@ -116,7 +116,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
             ' Check for argument null
             If String.IsNullOrEmpty(path) Then
-                Throw ExceptionUtils.GetArgumentNullException(paramName)
+                Throw GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
                 path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
