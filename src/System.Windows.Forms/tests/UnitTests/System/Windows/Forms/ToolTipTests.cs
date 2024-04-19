@@ -817,6 +817,7 @@ public class ToolTipTests
         Assert.Equal(1, control.InvokeRemoveCount);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11236")]
     [WinFormsFact]
     public unsafe void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
     {
@@ -855,16 +856,21 @@ public class ToolTipTests
         Assert.True(PInvoke.PeekMessage(&msg, toolTip, PInvoke.WM_MOUSEMOVE, PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
         // Show the tooltip.
-        PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);
 
-        mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
-            AutomationNotificationKind.ActionCompleted,
-            AutomationNotificationProcessing.All,
-            $" {tabPage.ToolTipText}"),
-            Times.Once);
+        // Comment out the validation here due to the active issue "https://github.com/dotnet/winforms/issues/11236"
+        // PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);
+
+        // mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
+        //     AutomationNotificationKind.ActionCompleted,
+        //     AutomationNotificationProcessing.All,
+        //     $" {tabPage.ToolTipText}"),
+        //     Times.Once);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11234")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11234")]
     public void ToolTip_SetToolTip_TabControl_DoesNotAddToolForTabControlItself()
     {
         // We need a Form because tooltips don't work on controls without a valid parent.

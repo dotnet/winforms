@@ -257,6 +257,41 @@ public partial class TextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InvalidEnumData<AutoCompleteMode>]
+    public void TextBox_AutoCompleteMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoCompleteMode value)
+    {
+        using SubTextBox control = new();
+
+        Action act = () => control.AutoCompleteMode = value;
+        act.Should().Throw<InvalidEnumArgumentException>().And.ParamName.Should().Be("value");
+    }
+
+    [WinFormsTheory]
+    [EnumData<AutoCompleteSource>]
+    public void TextBox_AutoCompleteSource_Set_GetReturnsExpected(AutoCompleteSource value)
+    {
+        using SubTextBox control = new()
+        {
+            AutoCompleteSource = value == AutoCompleteSource.ListItems ? AutoCompleteSource.None : value
+        };
+
+        if (value != AutoCompleteSource.ListItems)
+        {
+            control.AutoCompleteSource.Should().Be(value);
+        }         
+    }
+
+    [WinFormsTheory]
+    [InvalidEnumData<AutoCompleteSource>]
+    public void TextBox_AutoCompleteSource_InvalidAutoCompleteSource_ThrowsInvalidEnumArgumentException(AutoCompleteSource source)
+    {
+        using SubTextBox control = new();
+
+        Action act = () => control.AutoCompleteSource = source;
+        act.Should().Throw<InvalidEnumArgumentException>().And.ParamName.Should().Be("value");
+    }
+
     [WinFormsFact]
     public void TextBox_PasswordChar_GetWithoutHandle_ReturnsExpected()
     {
