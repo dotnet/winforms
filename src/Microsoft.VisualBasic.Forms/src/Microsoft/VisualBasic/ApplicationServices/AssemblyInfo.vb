@@ -3,7 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.Reflection
-Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -24,7 +24,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="currentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
-                Throw ExceptionUtils.GetArgumentNullException(NameOf(currentAssembly))
+                Throw ExUtils.GetArgumentNullException(NameOf(currentAssembly))
             End If
             _assembly = currentAssembly
         End Sub

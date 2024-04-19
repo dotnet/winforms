@@ -68,44 +68,44 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <summary>
         '''  Checks if the full path is a root path.
         ''' </summary>
-        ''' <param name="Path">The path to check.</param>
+        ''' <param name="path">The path to check.</param>
         ''' <returns>True if FullPath is a root path, False otherwise.</returns>
         ''' <remarks>
         '''   IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).
         '''   Therefore, remove any separators at the end to have correct result.
         ''' </remarks>
-        Private Shared Function IsRoot(Path As String) As Boolean
+        Private Shared Function IsRoot(path As String) As Boolean
             ' This function accepts a relative path since GetParentPath will call this,
             ' and GetParentPath accept relative paths.
-            If Not IO.Path.IsPathRooted(Path) Then
+            If Not IO.Path.IsPathRooted(path) Then
                 Return False
             End If
 
-            Path = Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
-            Return String.Equals(Path, IO.Path.GetPathRoot(Path),
+            path = path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
+            Return String.Equals(path, IO.Path.GetPathRoot(path),
                     StringComparison.OrdinalIgnoreCase)
         End Function
 
         ''' <summary>
         '''  Removes all directory separators at the end of a path.
         ''' </summary>
-        ''' <param name="Path">a full or relative path.</param>
+        ''' <param name="path">a full or relative path.</param>
         ''' <returns>If Path is a root path, the same value. Otherwise, removes any directory separators at the end.</returns>
         ''' <remarks>We decided not to return path with separators at the end.</remarks>
-        Private Shared Function RemoveEndingSeparator(Path As String) As String
-            If IO.Path.IsPathRooted(Path) Then
+        Private Shared Function RemoveEndingSeparator(path As String) As String
+            If IO.Path.IsPathRooted(path) Then
                 ' If the path is rooted, attempt to check if it is a root path.
                 ' Note: IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\myshare\mydir -> \\myshare\mydir
                 ' BUT \\myshare\mydir\ -> \\myshare\mydir!!! This function will remove the ending separator of
                 ' \\myshare\mydir\ as well. Do not use IsRoot here.
-                If Path.Equals(IO.Path.GetPathRoot(Path), StringComparison.OrdinalIgnoreCase) Then
-                    Return Path
+                If path.Equals(IO.Path.GetPathRoot(path), StringComparison.OrdinalIgnoreCase) Then
+                    Return path
                 End If
             End If
 
             ' Otherwise, remove all separators at the end.
-            Return Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
+            Return path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
         End Function
 
         ''' <summary>
@@ -127,23 +127,23 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <summary>
         '''  Normalize the path, but throw exception if the path ends with separator.
         ''' </summary>
-        ''' <param name="Path">The input path.</param>
+        ''' <param name="path">The input path.</param>
         ''' <param name="ParamName">The parameter name to include in the exception if one is raised.</param>
         ''' <returns>The normalized path.</returns>
-        Friend Shared Function NormalizeFilePath(Path As String, ParamName As String) As String
-            CheckFilePathTrailingSeparator(Path, ParamName)
-            Return NormalizePath(Path)
+        Friend Shared Function NormalizeFilePath(path As String, ParamName As String) As String
+            CheckFilePathTrailingSeparator(path, ParamName)
+            Return NormalizePath(path)
         End Function
 
         ''' <summary>
         '''  Get full path, get long format, and remove any pending separator.
         ''' </summary>
-        ''' <param name="Path">The path to be normalized.</param>
+        ''' <param name="path">The path to be normalized.</param>
         ''' <returns>The normalized path.</returns>
         ''' <exception cref="IO.Path.GetFullPath">See IO.Path.GetFullPath for possible exceptions.</exception>
         ''' <remarks>Keep this function since we might change the implementation / behavior later.</remarks>
-        Friend Shared Function NormalizePath(Path As String) As String
-            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(Path)))
+        Friend Shared Function NormalizePath(path As String) As String
+            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(path)))
         End Function
 
     End Class

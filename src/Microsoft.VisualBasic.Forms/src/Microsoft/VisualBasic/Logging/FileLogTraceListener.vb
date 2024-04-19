@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -198,7 +199,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As String)
                 If String.IsNullOrEmpty(value) Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(value), SR.ApplicationLogBaseNameNull)
+                    Throw ExUtils.GetArgumentNullException(NameOf(value), SR.ApplicationLogBaseNameNull)
                 End If
 
                 ' Test the file name. This will throw if the name is invalid.
@@ -273,7 +274,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < MIN_FILE_SIZE Then
-                    Throw ExceptionUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
+                    Throw GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
                 End If
                 _maxFileSize = value
                 _propertiesSet(MAXFILESIZE_INDEX) = True
@@ -296,7 +297,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < 0 Then
-                    Throw ExceptionUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
+                    Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
                 End If
                 _reserveDiskSpace = value
                 _propertiesSet(RESERVEDISKSPACE_INDEX) = True
@@ -341,7 +342,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As Encoding)
                 If value Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(value))
+                    Throw ExUtils.GetArgumentNullException(NameOf(value))
                 End If
                 _encoding = value
                 _propertiesSet(ENCODING_INDEX) = True
@@ -744,7 +745,7 @@ Namespace Microsoft.VisualBasic.Logging
             End While
             'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
             'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
-            Throw ExceptionUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
+            Throw ExUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
         End Function
 
         ''' <summary>
@@ -826,14 +827,14 @@ Namespace Microsoft.VisualBasic.Logging
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
+                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
             If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
+                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
                 Return False
             End If
@@ -860,7 +861,7 @@ Namespace Microsoft.VisualBasic.Logging
                 End If
             End If
 
-            Throw ExceptionUtils.GetWin32Exception(SR.ApplicationLog_FreeSpaceError)
+            Throw ExUtils.GetWin32Exception(SR.ApplicationLog_FreeSpaceError)
         End Function
 
         ''' <summary>

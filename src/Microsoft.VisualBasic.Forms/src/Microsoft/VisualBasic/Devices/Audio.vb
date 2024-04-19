@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
-Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
 
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(data))
+                    Throw ExUtils.GetArgumentNullException(NameOf(data))
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -76,7 +76,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(stream))
+                    Throw ExUtils.GetArgumentNullException(NameOf(stream))
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -89,7 +89,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(systemSound))
+                    Throw ExUtils.GetArgumentNullException(NameOf(systemSound))
                 End If
 
                 systemSound.Play()
@@ -139,7 +139,7 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw ExceptionUtils.GetArgumentNullException(NameOf(location))
+                    Throw ExUtils.GetArgumentNullException(NameOf(location))
                 End If
 
                 Return location

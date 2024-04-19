@@ -37,9 +37,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub GetIOExceptionTest_Succeed()
+        Public Sub GetInvalidOperationExceptionTest_Succeed()
             Dim ex As Exception = ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
             Assert.IsType(Of InvalidOperationException)(ex)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetIOExceptionTest_Succeed()
+            Dim ex As Exception = ExceptionUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
+            Assert.IsType(Of IO.IOException)(ex)
+            Assert.Equal($"Could not complete operation since a file already exists in this path '{IO.Path.GetTempPath}'.", ex.Message)
         End Sub
 
         <WinFormsFact>
