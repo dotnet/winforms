@@ -26,10 +26,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
             InitializeComponent()
         End Sub
 
-        Friend Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
+        Friend Sub New(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
             MyBase.New()
             InitializeComponent()
-            InitializeInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
+            InitializeInputBox(prompt, title, defaultResponse, xPos, yPos)
         End Sub
 
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
@@ -87,16 +87,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         'Initialize labels etc from the args passed in to InputBox()
-        Private Sub InitializeInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
-            Text = Title
-            Label.Text = Prompt
-            TextBox.Text = DefaultResponse
+        Private Sub InitializeInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
+            Text = title
+            Label.Text = prompt
+            TextBox.Text = defaultResponse
             AddHandler OKButton.Click, AddressOf OKButton_Click
             AddHandler MyCancelButton.Click, AddressOf MyCancelButton_Click
 
             'Re-size the dialog if the prompt is too large
             Dim labelGraphics As Graphics = Label.CreateGraphics
-            Dim labelSizeNeeded As SizeF = labelGraphics.MeasureString(Prompt, Label.Font, Label.Width)
+            Dim labelSizeNeeded As SizeF = labelGraphics.MeasureString(prompt, Label.Font, Label.Width)
             labelGraphics.Dispose()
             If labelSizeNeeded.Height > Label.Height Then
                 'The current label size is not large enough to accommodate the prompt.  We need
@@ -108,13 +108,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
 
             'Position the form
-            If (XPos = -1) AndAlso (YPos = -1) Then
+            If (xPos = -1) AndAlso (yPos = -1) Then
                 StartPosition = FormStartPosition.CenterScreen
             Else
-                If (XPos = -1) Then XPos = 600
-                If (YPos = -1) Then YPos = 350
+                If (xPos = -1) Then xPos = 600
+                If (yPos = -1) Then yPos = 350
                 StartPosition = FormStartPosition.Manual
-                DesktopLocation = New Point(XPos, YPos)
+                DesktopLocation = New Point(xPos, yPos)
             End If
         End Sub
 
