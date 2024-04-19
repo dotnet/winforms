@@ -804,6 +804,9 @@
   <data name="LocalizationProviderMissingService" xml:space="preserve">
     <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
   </data>
+  <data name="BaseNodeName" xml:space="preserve">
+    <value>Node</value>
+  </data>
   <data name="BasicDesignerLoaderDifferentHost" xml:space="preserve">
     <value>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</value>
   </data>

@@ -57,6 +57,11 @@
         <target state="translated">Contrôle ActiveX</target>
         <note />
       </trans-unit>
+      <trans-unit id="BaseNodeName">
+        <source>Node</source>
+        <target state="new">Node</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
         <target state="translated">Le concepteur est déjà chargé.</target>
