@@ -217,13 +217,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets an attribute from the assembly and throw exception if the attribute does not exist.
         ''' </summary>
-        ''' <param name="AttributeType">The type of the required attribute.</param>
+        ''' <param name="attributeType">The type of the required attribute.</param>
         ''' <returns>The attribute with the given type gotten from the assembly, or Nothing.</returns>
-        Private Function GetAttribute(AttributeType As Type) As Object
+        Private Function GetAttribute(attributeType As Type) As Object
 
             Debug.Assert(_assembly IsNot Nothing, "Null m_Assembly")
 
-            Dim attributes() As Object = _assembly.GetCustomAttributes(AttributeType, inherit:=True)
+            Dim attributes() As Object = _assembly.GetCustomAttributes(attributeType, inherit:=True)
 
             If attributes.Length = 0 Then
                 Return Nothing
