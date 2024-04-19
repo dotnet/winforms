@@ -190,7 +190,7 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
+        Private Sub AppActivateHelper(hwndApp As IntPtr, processId As String)
             '  if no window with name (full or truncated) or task id, return an error
             '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
@@ -211,7 +211,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, ProcessId))
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, processId))
                 End If
 
                 '  set active window to the owned one
@@ -312,7 +312,7 @@ Namespace Microsoft.VisualBasic
             End If
         End Function
 
-        Private Function GetTitleFromAssembly(CallingAssembly As Reflection.Assembly) As String
+        Private Function GetTitleFromAssembly(callingAssembly As Reflection.Assembly) As String
 
             Dim title As String
 
@@ -321,9 +321,9 @@ Namespace Microsoft.VisualBasic
             'and if it throws we catch the security exception and parse the name
             'from the full assembly name
             Try
-                title = CallingAssembly.GetName().Name
+                title = callingAssembly.GetName().Name
             Catch ex As SecurityException
-                Dim fullName As String = CallingAssembly.FullName
+                Dim fullName As String = callingAssembly.FullName
 
                 'Find the text up to the first comma. Note, this fails if the assembly has
                 'a comma in its name
@@ -340,9 +340,9 @@ Namespace Microsoft.VisualBasic
 
         End Function
 
-        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window) As String
-            Dim box As VBInputBox = New VBInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
-            box.ShowDialog(ParentWindow)
+        Private Function InternalInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer, parentWindow As IWin32Window) As String
+            Dim box As VBInputBox = New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
+            box.ShowDialog(parentWindow)
 
             InternalInputBox = box.Output
             box.Dispose()

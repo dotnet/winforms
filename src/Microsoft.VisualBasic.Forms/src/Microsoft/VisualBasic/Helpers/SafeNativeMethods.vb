@@ -7,8 +7,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     <ComVisible(False)>
-    Friend Module _
-        SafeNativeMethods
+    Friend Module SafeNativeMethods
 
         <PreserveSig()> Friend Declare Function _
             IsWindowEnabled _
@@ -21,6 +20,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         <PreserveSig()> Friend Declare Function _
             GetWindowThreadProcessId _
                 Lib "user32" (hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
+
     End Module
 End Namespace
-

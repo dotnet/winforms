@@ -363,7 +363,7 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
@@ -589,7 +589,7 @@ Namespace Microsoft.VisualBasic.Devices
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
-            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
+            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then

@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports Microsoft.VisualBasic.ApplicationServices
-
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests

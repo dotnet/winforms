@@ -113,7 +113,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         'Lazy-initialized and cached log object.
         Private _log As Logging.Log
-
         ' The executing application (the EntryAssembly)
         Private _info As AssemblyInfo
 
