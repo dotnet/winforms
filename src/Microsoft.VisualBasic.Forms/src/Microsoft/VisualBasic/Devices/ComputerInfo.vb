@@ -21,7 +21,6 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
-
         ''' <summary>
         '''  Gets the total size of physical memory on the machine.
         ''' </summary>
@@ -49,8 +48,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the total size of user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
-        '''          in bytes.</value>
+        ''' <value>
+        '''   A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
+        '''   in bytes.
+        '''  </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
