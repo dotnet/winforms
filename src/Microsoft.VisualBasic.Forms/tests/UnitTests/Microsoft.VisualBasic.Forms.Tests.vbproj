@@ -4,12 +4,12 @@
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
-    <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
-    <LangVersion>latest</LangVersion>
+    <RootNamespace></RootNamespace>
+    <LangVersion>16.9</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
