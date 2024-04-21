@@ -19,7 +19,7 @@ public unsafe partial class DataObject
         [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
         private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : true;
-#pragma warning restore IDE0075 //Simplify conditional expression
+#pragma warning restore IDE0075
 
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
