@@ -4,7 +4,7 @@
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
-    <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>16.9</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <OptionInfer>Off</OptionInfer>
