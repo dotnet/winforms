@@ -155,7 +155,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 if (value != Color.Empty)
                 {
-                    PropertyDescriptor? pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
+                    TypeDescriptor.AddKnownReflectedType<ButtonBase>();
+                    PropertyDescriptor? pd = TypeDescriptor.GetPropertiesFromKnownType(this)["UseVisualStyleBackColor"];
                     pd?.SetValue(this, false);
                 }
             }

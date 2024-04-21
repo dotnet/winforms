@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-
 namespace System.Windows.Forms;
 
 internal sealed partial class MdiWindowDialog : Form
@@ -88,31 +86,27 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // _itemList
         //
-        TypeDescriptor.AddKnownReflectedType<ListBox>();
-        resources.ApplyResources(_itemList, "itemList", null);
+        resources.ApplyResources(_itemList, "itemList");
         _itemList.FormattingEnabled = true;
         _itemList.Name = "itemList";
         //
         // _okButton
         //
-        TypeDescriptor.AddKnownReflectedType<Button>();
-        resources.ApplyResources(_okButton, "okButton", null);
+        resources.ApplyResources(_okButton, "okButton");
         _okButton.DialogResult = DialogResult.OK;
         _okButton.Margin = new Padding(0, 0, 3, 0);
         _okButton.Name = "okButton";
         //
         // _cancelButton
         //
-        TypeDescriptor.AddKnownReflectedType<Button>();
-        resources.ApplyResources(_cancelButton, "cancelButton", null);
+        resources.ApplyResources(_cancelButton, "cancelButton");
         _cancelButton.DialogResult = DialogResult.Cancel;
         _cancelButton.Margin = new Padding(3, 0, 0, 0);
         _cancelButton.Name = "cancelButton";
         //
         // _okCancelTableLayoutPanel
         //
-        TypeDescriptor.AddKnownReflectedType<TableLayoutPanel>();
-        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel", null);
+        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
         _okCancelTableLayoutPanel.ColumnCount = 2;
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -124,8 +118,7 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // MdiWindowDialog
         //
-        TypeDescriptor.AddKnownReflectedType<MdiWindowDialog>();
-        resources.ApplyResources(this, "$this", null);
+        resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(_okCancelTableLayoutPanel);
         Controls.Add(_itemList);

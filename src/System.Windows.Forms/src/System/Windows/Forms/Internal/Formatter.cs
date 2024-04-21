@@ -143,7 +143,7 @@ internal static class Formatter
             return sourceConverter.ConvertTo(context: null, GetFormatterCulture(formatInfo), value, targetType);
         }
 
-        TypeDescriptor.AddKnownReflectedType<Type>();
+        // TypeDescriptor.AddKnownReflectedType<Type>();
         TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromKnownType(targetType);
         if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
         {
