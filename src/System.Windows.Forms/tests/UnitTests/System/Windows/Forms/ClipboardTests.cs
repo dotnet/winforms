@@ -469,8 +469,6 @@ public partial class ClipboardTests
         Clipboard.SetData(format, Color.Black);
         Assert.True(Clipboard.ContainsData(format));
 
-        NotSupportedException value = (NotSupportedException)Clipboard.GetData(format);
-
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
