@@ -287,6 +287,11 @@
         <target state="translated">L'origine dati di un'associazione dati complessa può essere solo IList o IListSource.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>Using the BinaryFormatter is not supported.</source>
+        <target state="new">Using the BinaryFormatter is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Si verifica quando il contesto di associazione viene modificato.</target>
