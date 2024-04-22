@@ -130,7 +130,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
-
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -406,7 +405,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for.  When not set then the splash screen is hidden
+        '''  Screen should be displayed for.  When not set then the splash screen is hidden
         '''  as soon as the main form becomes active.
         ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
@@ -733,7 +732,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Hide the splash screen.  The splash screen was created on another thread
         '''  thread (main thread) than the one it was run on (secondary thread for the
-        '''  splash screen so it doesn't block app startup. We need to invoke the close.
+        '''  Splash screen so it doesn't block app startup. We need to invoke the close.
         '''  This function gets called from the main thread by the app fx.
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -932,6 +931,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
+
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions

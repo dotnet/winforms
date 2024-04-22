@@ -230,7 +230,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
-        'Taken from appConfig
+        ' Taken from appConfig
         Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog"
 
     End Class

@@ -119,7 +119,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''   proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
+        '''  Debugger proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
         '''  so we offer a view that doesn't have that field.
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
