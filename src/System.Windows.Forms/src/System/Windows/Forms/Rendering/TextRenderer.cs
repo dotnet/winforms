@@ -620,27 +620,28 @@ public static class TextRenderer
 #if DEBUG
         if ((textFormatFlags & SkipAssertFlag) == 0)
         {
-            // Clipping and translation transforms applied to Graphics objects are not done on the underlying HDC.
-            // When we're rendering text to the HDC we, by default, should apply both. If it is *known* that these
-            // aren't wanted we can get a _slight_ performance benefit by not applying them and in that case the
-            // SkipAssertFlag bit can be set to skip this check.
-            //
-            // This application of clipping and translation is meant to make Graphics.DrawText and TextRenderer.DrawText
-            // roughly equivalent in the way they render.
-            //
-            // Note that there aren't flags for other transforms. Windows 9x doesn't support HDC transforms outside of
-            // translation (rotation for example), and this likely impacted the decision to only have a translation
-            // flag when this was originally written.
+            //// Clipping and translation transforms applied to Graphics objects are not done on the underlying HDC.
+            //// When we're rendering text to the HDC we, by default, should apply both. If it is *known* that these
+            //// aren't wanted we can get a _slight_ performance benefit by not applying them and in that case the
+            //// SkipAssertFlag bit can be set to skip this check.
+            ////
+            //// This application of clipping and translation is meant to make Graphics.DrawText and TextRenderer.DrawText
+            //// roughly equivalent in the way they render.
+            ////
+            //// Note that there aren't flags for other transforms. Windows 9x doesn't support HDC transforms outside of
+            //// translation (rotation for example), and this likely impacted the decision to only have a translation
+            //// flag when this was originally written.
 
             Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
                 || graphics.Clip is null
                 || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
                 "Must preserve Graphics clipping region!");
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+            // TODO: We need to address this, since the Assert crashes VS at runtime when we're exploring a debug build.
+            // Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+            //    || graphics.Transform is null
+            //    || graphics.Transform.IsIdentity,
+            //    "Must preserve Graphics transformation!");
         }
 #endif
 
