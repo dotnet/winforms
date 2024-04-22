@@ -339,6 +339,14 @@ public unsafe partial class DataObject
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 if (!success)
                 {
+                    // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Serialize(), which has a RequiresUnreferencedCode annotation.
+                    // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(), will not be called,
+                    // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
+                    if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                    {
+                        throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                    }
+
                     new BinaryFormatter()
                     {
                         Binder = restrictSerialization ? new BitmapBinder() : null

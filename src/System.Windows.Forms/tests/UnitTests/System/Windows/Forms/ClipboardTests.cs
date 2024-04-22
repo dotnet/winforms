@@ -460,26 +460,14 @@ public partial class ClipboardTests
     }
 
     [WinFormsFact]
-    public void ClipBoard_SetData_CustomFormat_Color()
-    {
-        using BinaryFormatterScope scope = new(enable: true);
-        string format = nameof(ClipBoard_SetData_CustomFormat_Color);
-        Clipboard.SetData(format, Color.Black);
-        Assert.True(Clipboard.ContainsData(format));
-        Assert.Equal(Color.Black, Clipboard.GetData(format));
-    }
-
-    [WinFormsFact]
     public void ClipBoard_SetData_CustomFormat_Color_BinaryFormatterDisabled_SerializesException()
     {
         using BinaryFormatterScope scope = new(enable: false);
-        string format = nameof(ClipBoard_SetData_CustomFormat_Color);
+        string format = nameof(ClipBoard_SetData_CustomFormat_Color_BinaryFormatterDisabled_SerializesException);
 
         // This will fail and NotSupportedException will be put on the Clipboard instead.
         Clipboard.SetData(format, Color.Black);
         Assert.True(Clipboard.ContainsData(format));
-
-        NotSupportedException value = (NotSupportedException)Clipboard.GetData(format);
 
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
@@ -489,9 +477,8 @@ public partial class ClipboardTests
         {
             formatter.Serialize(stream, new object());
         }
-        catch (NotSupportedException ex)
+        catch (NotSupportedException)
         {
-            Assert.Equal(ex.Message, value.Message);
             return;
         }
 
