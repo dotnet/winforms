@@ -231,63 +231,44 @@ public class MaskedTextBoxTests
 
     [WinFormsTheory]
     [BoolData]
-    public void MaskedTextBox_AllowPromptAsInput_Set_GetReturnsExpected(bool value)
-    {
-        using MaskedTextBox control = new()
-        {
-            AllowPromptAsInput = value
-        };
-
-        control.AllowPromptAsInput.Should().Be(value);
-        control.IsHandleCreated.Should().BeFalse();
-
-        // Set same.
-        control.AllowPromptAsInput = value;
-        control.AllowPromptAsInput.Should().Be(value);
-        control.IsHandleCreated.Should().BeFalse();
-
-        // Set different.
-        control.AllowPromptAsInput = !value;
-        control.AllowPromptAsInput.Should().Be(!value);
-        control.IsHandleCreated.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [BoolData]
-    public void MaskedTextBox_AllowPromptAsInput_SetWithHandle_GetReturnsExpected(bool value)
+    public void MaskedTextBox_AllowPromptAsInput_Set_GetReturnsExpected(bool createHandle)
     {
         using MaskedTextBox control = new();
-        control.Handle.Should().NotBe(IntPtr.Zero);
 
-        int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
-        int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
+        if (createHandle)
+        {
+            control.Handle.Should().NotBe(IntPtr.Zero);
+        }
+
+        bool value = true;
 
         control.AllowPromptAsInput = value;
         control.AllowPromptAsInput.Should().Be(value);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().Be(createHandle);
 
         // Set same.
         control.AllowPromptAsInput = value;
         control.AllowPromptAsInput.Should().Be(value);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().Be(createHandle);
 
         // Set different.
         control.AllowPromptAsInput = !value;
         control.AllowPromptAsInput.Should().Be(!value);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().Be(createHandle);
+
+        if (createHandle)
+        {
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
+        }
     }
 
     [WinFormsTheory]
@@ -295,19 +276,27 @@ public class MaskedTextBoxTests
     [InlineData(MaskFormat.IncludePrompt)]
     [InlineData(MaskFormat.IncludePromptAndLiterals)]
     [InlineData(MaskFormat.ExcludePromptAndLiterals)]
-    public void MaskedTextBox_CutCopyMaskFormat_Set_GetReturnsExpected(MaskFormat value)
+    public void MaskedTextBox_CutCopyAndTextMaskFormat_Set_GetReturnsExpected(MaskFormat value)
     {
         using MaskedTextBox control = new();
 
         control.CutCopyMaskFormat = value;
+        control.TextMaskFormat = value;
         control.CutCopyMaskFormat.Should().Be(value);
+        control.TextMaskFormat.Should().Be(value);
 
         // Set same.
         control.CutCopyMaskFormat = value;
+        control.TextMaskFormat = value;
         control.CutCopyMaskFormat.Should().Be(value);
+        control.TextMaskFormat.Should().Be(value);
 
         // Test invalid value
         control.Invoking(c => c.CutCopyMaskFormat = (MaskFormat)4)
+        .Should().Throw<InvalidEnumArgumentException>()
+        .WithMessage("The value of argument 'value' (4) is invalid for Enum type 'MaskFormat'.*");
+
+        control.Invoking(c => c.TextMaskFormat = (MaskFormat)4)
             .Should().Throw<InvalidEnumArgumentException>()
             .WithMessage("The value of argument 'value' (4) is invalid for Enum type 'MaskFormat'.*");
     }
