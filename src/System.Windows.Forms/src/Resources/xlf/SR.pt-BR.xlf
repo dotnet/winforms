@@ -287,6 +287,11 @@
         <target state="translated">DataBinding complexa aceita IList ou IListSource como fonte de dados.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>Using the BinaryFormatter is not supported.</source>
+        <target state="new">Using the BinaryFormatter is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Ocorre quando o contexto de associação foi alterado.</target>
