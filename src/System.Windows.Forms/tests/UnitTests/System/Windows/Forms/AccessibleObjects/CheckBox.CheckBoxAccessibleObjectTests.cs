@@ -19,7 +19,8 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     public void CheckBoxAccessibleObject_Ctor_InvalidTypeControl_ThrowsArgumentException()
     {
         using CheckBox checkBox = new();
-        Assert.Throws<ArgumentException>(() => new CheckBoxAccessibleObject(checkBox));
+        Action act = () => new CheckBoxAccessibleObject(checkBox);
+        act.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]

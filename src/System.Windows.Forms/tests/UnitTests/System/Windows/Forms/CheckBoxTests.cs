@@ -696,13 +696,21 @@ public class CheckBoxTests : AbstractButtonBaseTests
         public new bool GetTopLevel() => base.GetTopLevel();
 
         public new void OnAppearanceChanged(EventArgs e) => base.OnAppearanceChanged(e);
+
         public new void OnClick(EventArgs e) => base.OnClick(e);
+
         public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
         public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
+
         public new void OnMouseUp(MouseEventArgs e) => base.OnMouseUp(e);
+
         public new void OnCheckedChanged(EventArgs e) => base.OnCheckedChanged(e);
+
         public new void OnCheckStateChanged(EventArgs e) => base.OnCheckStateChanged(e);
+
         internal new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
+
         internal new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);
     }
 
