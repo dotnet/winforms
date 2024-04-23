@@ -32,18 +32,18 @@ public class TreeNodeCollection : IList
         get
         {
             ArgumentOutOfRangeException.ThrowIfNegative(index);
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._childNodes.Count);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._childCount);
 
-            return _owner._childNodes[index];
+            return _owner._children[index];
         }
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(index);
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._childNodes.Count);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._childCount);
             ArgumentNullException.ThrowIfNull(value);
 
             TreeView tv = _owner._treeView!;
-            TreeNode actual = _owner._childNodes[index];
+            TreeNode actual = _owner._children[index];
 
             if (value._treeView is not null && value._treeView.Handle != tv.Handle)
             {
@@ -111,7 +111,7 @@ public class TreeNodeCollection : IList
 
     // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
     [Browsable(false)]
-    public int Count => _owner._childNodes.Count;
+    public int Count => _owner._childCount;
 
     object ICollection.SyncRoot => this;
 
@@ -219,9 +219,9 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        _owner.Nodes.FixedIndex = _owner._childNodes.Count;
-        _owner._childNodes.EnsureCapacity(nodes.Length);
-        for (int i = 0; i < nodes.Length; i++)
+        _owner.Nodes.FixedIndex = _owner._childCount;
+        _owner.EnsureCapacity(nodes.Length);
+        for (int i = nodes.Length - 1; i >= 0; i--)
         {
             AddInternal(nodes[i], i);
         }
@@ -327,10 +327,12 @@ public class TreeNodeCollection : IList
         {
             // if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
-            node._index = _owner._childNodes.Count;
+            _owner.EnsureCapacity(1);
+            node._index = _owner._childCount;
         }
 
-        _owner._childNodes.Add(node);
+        _owner._children[node._index] = node;
+        _owner._childCount++;
         node.Realize(false);
 
         if (tv is not null && node == tv._selectedNode)
@@ -457,9 +459,9 @@ public class TreeNodeCollection : IList
             index = 0;
         }
 
-        if (index > _owner._childNodes.Count)
+        if (index > _owner._childCount)
         {
-            index = _owner._childNodes.Count;
+            index = _owner._childCount;
         }
 
         _owner.InsertNodeAt(index, node);
@@ -575,9 +577,9 @@ public class TreeNodeCollection : IList
 
     public void CopyTo(Array dest, int index)
     {
-        if (_owner._childNodes.Count > 0)
+        if (_owner._childCount > 0)
         {
-            ((ICollection)_owner._childNodes).CopyTo(dest, index);
+            Array.Copy(_owner._children, 0, dest, index, _owner._childCount);
         }
     }
 
@@ -611,5 +613,15 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public IEnumerator GetEnumerator() => _owner._childNodes.GetEnumerator();
+    public IEnumerator GetEnumerator()
+    {
+        if (_owner._children is not null)
+        {
+            return new ArraySubsetEnumerator(_owner._children, _owner._childCount);
+        }
+        else
+        {
+            return Array.Empty<TreeNode>().GetEnumerator();
+        }
+    }
 }
