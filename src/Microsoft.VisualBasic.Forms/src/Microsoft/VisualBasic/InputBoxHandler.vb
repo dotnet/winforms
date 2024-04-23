@@ -16,6 +16,7 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _yPos As Integer
             Private _exception As Exception
             Private _result As String
+
             Public Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
                 _prompt = Prompt
                 _title = Title
@@ -44,6 +45,7 @@ Namespace Microsoft.VisualBasic
                     _exception = ex
                 End Try
             End Sub
+
         End Class
 
     End Module
