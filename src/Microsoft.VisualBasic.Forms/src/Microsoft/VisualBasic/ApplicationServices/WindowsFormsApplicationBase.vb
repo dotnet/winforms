@@ -405,7 +405,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for.  When not set then the splash screen is hidden
+        '''  Screen should be displayed for.  When not set then the splash screen is hidden
         '''  as soon as the main form becomes active.
         ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
