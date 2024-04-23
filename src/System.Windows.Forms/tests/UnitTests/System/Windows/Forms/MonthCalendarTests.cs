@@ -4326,7 +4326,7 @@ public class MonthCalendarTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
         CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
         Rectangle bounds = previousButtonAccessibleObject.Bounds;
-        Rectangle expectedBounds = new Rectangle(13, 42, 16, 16);
+        Rectangle expectedBounds = new(13, 42, 16, 16);
 
         bounds.Should().Be(expectedBounds);
     }

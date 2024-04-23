@@ -17,7 +17,7 @@ public class MonthCalendarHitTestInfoTests
         Point point = new(5, 5);
         DateTime? time = hasDateTime ? DateTime.Parse(dateTimeStr) : null;
 
-        var hitTestInfo = time.HasValue
+        HitTestInfo hitTestInfo = time.HasValue
             ? new HitTestInfo(point, hitArea, time.Value)
             : new HitTestInfo(point, hitArea);
 
