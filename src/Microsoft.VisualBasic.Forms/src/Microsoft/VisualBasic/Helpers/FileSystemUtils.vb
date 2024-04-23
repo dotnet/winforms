@@ -41,7 +41,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String,
                                 paramName As String)
-            If String.IsNullOrEmpty(path) Then ' Check for argument null
+            ' Check for argument null
+            If String.IsNullOrEmpty(path) Then
                 Throw ExUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
