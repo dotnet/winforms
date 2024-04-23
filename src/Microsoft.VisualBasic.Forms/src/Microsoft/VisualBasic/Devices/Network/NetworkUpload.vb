@@ -181,7 +181,7 @@ Namespace Microsoft.VisualBasic.Devices
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
-            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
+            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then

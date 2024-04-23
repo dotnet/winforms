@@ -130,7 +130,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
-
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 

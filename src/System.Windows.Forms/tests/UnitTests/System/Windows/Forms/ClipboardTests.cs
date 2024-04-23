@@ -12,6 +12,8 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.Tests;
 
+[Collection("Clipboard Tests")]
+[CollectionDefinition("Clipboard Tests", DisableParallelization = true)]
 public partial class ClipboardTests
 {
     [WinFormsFact]

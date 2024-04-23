@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic.Devices
         Friend Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
             If showUI AndAlso Environment.UserInteractive Then
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(path:=destinationFileName, ParamName:=NameOf(destinationFileName))
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(path:=destinationFileName, paramName:=NameOf(destinationFileName))
                 Return New ProgressDialog With {
                             .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
                             .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)

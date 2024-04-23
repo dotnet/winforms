@@ -14,9 +14,6 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' Keep the debugger proxy current as you change this class - see the nested ComputerInfoDebugView below.
 
-        ' Cache our InternalMemoryStatus
-        Private _internalMemoryStatus As InternalMemoryStatus
-
         ''' <summary>
         '''  Default constructor
         ''' </summary>
@@ -24,17 +21,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
-
         ''' <summary>
-        '''  Gets the whole memory information details.
+        '''  Gets the total size of physical memory on the machine.
         ''' </summary>
-        ''' <value>An InternalMemoryStatus class.</value>
-        Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
+        ''' <value>A 64-bit unsigned integer containing the size of total physical memory on the machine, in bytes.</value>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        <CLSCompliant(False)>
+        Public ReadOnly Property TotalPhysicalMemory() As UInt64
             Get
-                If _internalMemoryStatus Is Nothing Then
-                    _internalMemoryStatus = New InternalMemoryStatus
-                End If
-                Return _internalMemoryStatus
+                Return MemoryStatus.TotalPhysicalMemory
             End Get
         End Property
 
@@ -47,6 +42,21 @@ Namespace Microsoft.VisualBasic.Devices
         Public ReadOnly Property AvailablePhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.AvailablePhysicalMemory
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Gets the total size of user potion of virtual address space for calling process.
+        ''' </summary>
+        ''' <value>
+        '''   A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
+        '''   in bytes.
+        '''  </value>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        <CLSCompliant(False)>
+        Public ReadOnly Property TotalVirtualMemory() As UInt64
+            Get
+                Return MemoryStatus.TotalVirtualMemory
             End Get
         End Property
 
@@ -64,6 +74,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
+#Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
         '''  Gets the current UICulture installed on the machine.
@@ -108,100 +119,21 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  Gets the total size of physical memory on the machine.
-        ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of total physical memory on the machine, in bytes.</value>
-        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
-        <CLSCompliant(False)>
-        Public ReadOnly Property TotalPhysicalMemory() As UInt64
-            Get
-                Return MemoryStatus.TotalPhysicalMemory
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Gets the total size of user potion of virtual address space for calling process.
-        ''' </summary>
-        ''' <value>
-        '''  A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
-        '''  in bytes.
-        ''' </value>
-        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
-        <CLSCompliant(False)>
-        Public ReadOnly Property TotalVirtualMemory() As UInt64
-            Get
-                Return MemoryStatus.TotalVirtualMemory
-            End Get
-        End Property
-
-#Enable Warning IDE0049 ' Simplify Names
-
-        ''' <summary>
-        '''  Calls GlobalMemoryStatusEx and returns the correct value.
-        ''' </summary>
-        Private NotInheritable Class InternalMemoryStatus
-
-            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
-
-            Friend Sub New()
-            End Sub
-
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
-
-            Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullAvailPhys
-                End Get
-            End Property
-
-            Friend ReadOnly Property AvailableVirtualMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullAvailVirtual
-                End Get
-            End Property
-
-            Friend ReadOnly Property TotalPhysicalMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullTotalPhys
-                End Get
-            End Property
-
-            Friend ReadOnly Property TotalVirtualMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullTotalVirtual
-                End Get
-            End Property
-
-#Enable Warning IDE0049 ' Simplify Names
-
-            Private Sub Refresh()
-                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
-                _memoryStatusEx.Init()
-                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
-                    Throw GetWin32Exception(SR.DiagnosticInfo_Memory)
-                End If
-            End Sub
-
-        End Class
-
-        ''' <summary>
         '''  Debugger proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
         '''  so we offer a view that doesn't have that field.
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
-
-            <DebuggerBrowsable(DebuggerBrowsableState.Never)>
-            Private ReadOnly _instanceBeingWatched As ComputerInfo
-
             Public Sub New(RealClass As ComputerInfo)
                 _instanceBeingWatched = RealClass
             End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalPhysicalMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalPhysicalMemory
+                End Get
+            End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property AvailablePhysicalMemory() As UInt64
@@ -211,11 +143,19 @@ Namespace Microsoft.VisualBasic.Devices
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalVirtualMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalVirtualMemory
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
+#Enable Warning IDE0049 ' Simplify Names
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
@@ -238,21 +178,71 @@ Namespace Microsoft.VisualBasic.Devices
                 End Get
             End Property
 
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property TotalPhysicalMemory() As UInt64
+            <DebuggerBrowsable(DebuggerBrowsableState.Never)>
+            Private ReadOnly _instanceBeingWatched As ComputerInfo
+        End Class
+
+        ''' <summary>
+        '''  Gets the whole memory information details.
+        ''' </summary>
+        ''' <value>An InternalMemoryStatus class.</value>
+        Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
+            Get
+                If _internalMemoryStatus Is Nothing Then
+                    _internalMemoryStatus = New InternalMemoryStatus
+                End If
+                Return _internalMemoryStatus
+            End Get
+        End Property
+
+        Private _internalMemoryStatus As InternalMemoryStatus ' Cache our InternalMemoryStatus
+
+        ''' <summary>
+        '''  Calls GlobalMemoryStatusEx and returns the correct value.
+        ''' </summary>
+        Private NotInheritable Class InternalMemoryStatus
+            Friend Sub New()
+            End Sub
+
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+            Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
-                    Return _instanceBeingWatched.TotalPhysicalMemory
+                    Refresh()
+                    Return _memoryStatusEx.ullTotalPhys
                 End Get
             End Property
 
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property TotalVirtualMemory() As UInt64
+            Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
-                    Return _instanceBeingWatched.TotalVirtualMemory
+                    Refresh()
+                    Return _memoryStatusEx.ullAvailPhys
                 End Get
             End Property
 
+            Friend ReadOnly Property TotalVirtualMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullTotalVirtual
+                End Get
+            End Property
+
+            Friend ReadOnly Property AvailableVirtualMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullAvailVirtual
+                End Get
+            End Property
 #Enable Warning IDE0049 ' Simplify Names
+
+            Private Sub Refresh()
+                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
+                _memoryStatusEx.Init()
+                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
+                    Throw GetWin32Exception(SR.DiagnosticInfo_Memory)
+                End If
+            End Sub
+
+            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
         End Class
     End Class
 End Namespace

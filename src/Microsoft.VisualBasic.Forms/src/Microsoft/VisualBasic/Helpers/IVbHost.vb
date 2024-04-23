@@ -7,7 +7,4 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Function GetParentWindow() As System.Windows.Forms.IWin32Window
         Function GetWindowTitle() As String
     End Interface
-
 End Namespace
-
-
