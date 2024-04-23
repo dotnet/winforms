@@ -47,6 +47,5 @@ Namespace Microsoft.VisualBasic
             End Sub
 
         End Class
-
     End Module
 End Namespace
