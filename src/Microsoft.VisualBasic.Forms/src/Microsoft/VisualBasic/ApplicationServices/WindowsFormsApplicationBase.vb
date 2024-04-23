@@ -732,7 +732,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Hide the splash screen.  The splash screen was created on another thread
         '''  thread (main thread) than the one it was run on (secondary thread for the
-        '''  splash screen so it doesn't block app startup. We need to invoke the close.
+        '''  Splash screen so it doesn't block app startup. We need to invoke the close.
         '''  This function gets called from the main thread by the app fx.
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -931,6 +931,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
+
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions
