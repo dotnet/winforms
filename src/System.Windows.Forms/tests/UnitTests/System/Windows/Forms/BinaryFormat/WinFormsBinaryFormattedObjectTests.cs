@@ -37,7 +37,7 @@ public class WinFormsBinaryFormattedObjectTests
         WinFormsBinaryFormatWriter.WriteBitmap(stream, bitmap);
 
         stream.Position = 0;
-        BinaryFormattedObject binary = new(stream, leaveOpen: true);
+        BinaryFormattedObject binary = new(stream);
 
         binary.TryGetBitmap(out object? result).Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
@@ -99,7 +99,7 @@ public class WinFormsBinaryFormattedObjectTests
         using MemoryStream memoryStream = new();
         WinFormsBinaryFormatWriter.WriteImageListStreamer(memoryStream, stream);
         memoryStream.Position = 0;
-        BinaryFormattedObject binary = new(memoryStream, leaveOpen: true);
+        BinaryFormattedObject binary = new(memoryStream);
 
         binary.TryGetImageListStreamer(out object? result).Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;

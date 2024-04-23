@@ -22,7 +22,7 @@ public partial class Control
 
             internal void Read(IStream* istream)
             {
-                Stream stream = new DataStreamFromComStream(istream);
+                using DataStreamFromComStream stream = new(istream);
                 bool success = false;
 
                 try

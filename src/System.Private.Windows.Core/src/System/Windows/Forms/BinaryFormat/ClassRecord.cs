@@ -17,7 +17,8 @@ namespace System.Windows.Forms.BinaryFormat;
 internal abstract class ClassRecord : ObjectRecord
 {
     internal ClassInfo ClassInfo { get; }
-    public IReadOnlyList<object> MemberValues { get; }
+    public IReadOnlyList<object?> MemberValues { get; }
+    public MemberTypeInfo MemberTypeInfo { get; }
 
     public string Name => ClassInfo.Name;
     public override Id ObjectId => ClassInfo.ObjectId;
@@ -25,7 +26,7 @@ internal abstract class ClassRecord : ObjectRecord
 
     public IReadOnlyList<string> MemberNames => ClassInfo.MemberNames;
 
-    public object this[string memberName]
+    public object? this[string memberName]
     {
         get
         {
@@ -42,15 +43,10 @@ internal abstract class ClassRecord : ObjectRecord
         }
     }
 
-    private protected ClassRecord(ClassInfo classInfo, IReadOnlyList<object> memberValues)
+    private protected ClassRecord(ClassInfo classInfo, MemberTypeInfo memberTypeInfo, IReadOnlyList<object?> memberValues)
     {
         ClassInfo = classInfo;
         MemberValues = memberValues;
-    }
-
-    private protected static List<object> ReadDataFromClassInfo(BinaryReader reader, RecordMap recordMap, ClassInfo info)
-    {
-        // Not sure what gets us into this state yet.
-        return ReadRecords(reader, recordMap, info.MemberNames.Count);
+        MemberTypeInfo = memberTypeInfo;
     }
 }

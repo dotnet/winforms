@@ -36,7 +36,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     }
 
     [ActiveIssue("https://github.com/dotnet/winforms/issues/10244")]
-    [WinFormsFact]
+    [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/10244")]
     [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
         "InvokePattern.Invoke blocks on a menu item")]
     public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_WithPopUpDialog()

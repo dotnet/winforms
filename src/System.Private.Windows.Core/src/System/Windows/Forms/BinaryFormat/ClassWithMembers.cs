@@ -13,12 +13,12 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>
+internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>, IBinaryFormatParseable<ClassWithMembers>
 {
     public override Id LibraryId { get; }
 
-    public ClassWithMembers(ClassInfo classInfo, Id libraryId, IReadOnlyList<object> memberValues)
-        : base(classInfo, memberValues)
+    private ClassWithMembers(ClassInfo classInfo, Id libraryId, MemberTypeInfo memberTypeInfo, IReadOnlyList<object?> memberValues)
+        : base(classInfo, memberTypeInfo, memberValues)
     {
         LibraryId = libraryId;
     }
@@ -26,24 +26,26 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>
     public static RecordType RecordType => RecordType.ClassWithMembers;
 
     static ClassWithMembers IBinaryFormatParseable<ClassWithMembers>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
-        ClassInfo classInfo = ClassInfo.Parse(reader, out _);
+        ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
+        Id libraryId = state.Reader.ReadInt32();
+        MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, libraryId);
         ClassWithMembers record = new(
             classInfo,
-            reader.ReadInt32(),
-            ReadDataFromClassInfo(reader, recordMap, classInfo));
+            libraryId,
+            memberTypeInfo,
+            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
-        recordMap[classInfo.ObjectId] = record;
+        state.RecordMap[classInfo.ObjectId] = record;
         return record;
     }
 
     public override void Write(BinaryWriter writer)
     {
-        writer.Write((byte)RecordType);
-        ClassInfo.Write(writer);
-        writer.Write(LibraryId);
+        // Really shouldn't be writing this record type. It isn't as safe as the typed variant
+        // and saves very little space.
+        throw new NotSupportedException();
     }
 }

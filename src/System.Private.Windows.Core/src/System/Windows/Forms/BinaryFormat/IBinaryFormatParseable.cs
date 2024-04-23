@@ -11,8 +11,5 @@ internal interface IBinaryFormatParseable<T> where T : IRecord
     /// <summary>
     ///  Creates the type utilizaing the given <see cref="BinaryReader"/>.
     /// </summary>
-    /// <param name="recordMap">
-    ///  Record map for looking up referenced records. If this record has an id it will be added to the map.
-    /// </param>
-    static abstract T Parse(BinaryReader reader, RecordMap recordMap);
+    static abstract T Parse(BinaryFormattedObject.ParseState state);
 }

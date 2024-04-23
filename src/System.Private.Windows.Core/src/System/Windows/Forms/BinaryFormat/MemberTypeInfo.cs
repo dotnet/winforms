@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
@@ -16,7 +17,7 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, object? Info)>
+internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, object? Info)>
 {
     private readonly IList<(BinaryType Type, object? Info)> _info;
 
@@ -24,8 +25,8 @@ internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryT
 
     public MemberTypeInfo(params (BinaryType Type, object? Info)[] info) => _info = info;
 
-    public readonly (BinaryType Type, object? Info) this[int index] => _info[index];
-    public readonly int Count => _info.Count;
+    public (BinaryType Type, object? Info) this[int index] => _info[index];
+    public int Count => _info.Count;
 
     public static MemberTypeInfo Parse(BinaryReader reader, Count expectedCount)
     {
@@ -68,7 +69,43 @@ internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryT
         return new MemberTypeInfo(info);
     }
 
-    public readonly void Write(BinaryWriter writer)
+    internal static MemberTypeInfo CreateFromClassInfoAndLibrary(BinaryFormattedObject.ParseState state, ClassInfo classInfo, Id libraryId)
+    {
+        Type type = state.GetType(classInfo.Name, libraryId);
+
+        if (typeof(ISerializable).IsAssignableFrom(type))
+        {
+            throw new SerializationException("Cannot intuit type information for ISerializable types.");
+        }
+
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+        MemberInfo[] memberInfo = FormatterServices.GetSerializableMembers(type);
+#pragma warning restore SYSLIB0050
+        IReadOnlyList<string> memberNames = classInfo.MemberNames;
+        var info = new (BinaryType Type, object? Info)[memberInfo.Length];
+
+        for (int i = 0; i < memberNames.Count; i++)
+        {
+            // FormatterServices never returns anything other than FieldInfo.
+            FieldInfo? field = (FieldInfo?)memberInfo.FirstOrDefault(m => m.Name == memberNames[i])
+                ?? throw new SerializationException($"Could not find member '{memberNames[i]}' on type '{classInfo.Name}'.");
+
+            BinaryType binaryType = TypeInfo.GetBinaryType(field.FieldType);
+
+            info[i] = (binaryType, binaryType switch
+            {
+                BinaryType.PrimitiveArray => TypeInfo.GetPrimitiveArrayType(field.FieldType),
+                BinaryType.Primitive => TypeInfo.GetPrimitiveType(field.FieldType),
+                BinaryType.SystemClass => field.FieldType,
+                BinaryType.Class => field.FieldType,
+                _ => null
+            });
+        }
+
+        return new(info);
+    }
+
+    public void Write(BinaryWriter writer)
     {
         foreach ((BinaryType type, _) in this)
         {

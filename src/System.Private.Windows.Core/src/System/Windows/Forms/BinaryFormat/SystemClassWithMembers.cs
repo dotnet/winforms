@@ -13,30 +13,32 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class SystemClassWithMembers : ClassRecord, IRecord<SystemClassWithMembers>
+internal sealed class SystemClassWithMembers : ClassRecord, IRecord<SystemClassWithMembers>, IBinaryFormatParseable<SystemClassWithMembers>
 {
-    public SystemClassWithMembers(ClassInfo classInfo, IReadOnlyList<object> memberValues)
-        : base(classInfo, memberValues) { }
+    private SystemClassWithMembers(ClassInfo classInfo, MemberTypeInfo memberTypeInfo, IReadOnlyList<object?> memberValues)
+        : base(classInfo, memberTypeInfo, memberValues) { }
 
     public static RecordType RecordType => RecordType.SystemClassWithMembers;
 
     static SystemClassWithMembers IBinaryFormatParseable<SystemClassWithMembers>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
-        ClassInfo classInfo = ClassInfo.Parse(reader, out _);
+        ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
+        MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, Id.Null);
         SystemClassWithMembers record = new(
             classInfo,
-            ReadDataFromClassInfo(reader, recordMap, classInfo));
+            memberTypeInfo,
+            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
-        recordMap[record.ClassInfo.ObjectId] = record;
+        state.RecordMap[record.ClassInfo.ObjectId] = record;
         return record;
     }
 
     public override void Write(BinaryWriter writer)
     {
-        writer.Write((byte)RecordType);
-        ClassInfo.Write(writer);
+        // Really shouldn't be writing this record type. It isn't as safe as the typed variant
+        // and saves very little space.
+        throw new NotSupportedException();
     }
 }

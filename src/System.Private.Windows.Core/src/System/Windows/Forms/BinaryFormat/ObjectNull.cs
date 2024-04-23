@@ -13,19 +13,18 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>
+internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>, IBinaryFormatParseable<ObjectNull>
 {
     public static ObjectNull Instance { get; } = new();
 
     private ObjectNull() { }
 
-    public override Count NullCount => Count.One;
+    public override Count NullCount => 1;
 
     public static RecordType RecordType => RecordType.ObjectNull;
 
     static ObjectNull IBinaryFormatParseable<ObjectNull>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap) => Instance;
+        BinaryFormattedObject.ParseState state) => Instance;
 
     public void Write(BinaryWriter writer) => writer.Write((byte)RecordType);
 

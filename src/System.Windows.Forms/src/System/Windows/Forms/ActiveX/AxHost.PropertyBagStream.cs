@@ -23,7 +23,7 @@ public abstract unsafe partial class AxHost
             long position = stream.Position;
             try
             {
-                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                BinaryFormattedObject format = new(stream);
                 if (format.TryGetPrimitiveHashtable(out _bag!))
                 {
                     return;

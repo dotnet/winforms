@@ -35,78 +35,30 @@ internal abstract class Record : IRecord
         _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
     };
 
-    /// <summary>
-    ///  Reads <paramref name="count"/> primitives of <paramref name="primitiveType"/> from the given <paramref name="reader"/>.
-    /// </summary>
-    private protected static IReadOnlyList<object> ReadPrimitiveTypes(BinaryReader reader, PrimitiveType primitiveType, int count)
-    {
-        List<object> values = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
-        for (int i = 0; i < count; i++)
-        {
-            values.Add(ReadPrimitiveType(reader, primitiveType));
-        }
-
-        return values;
-    }
-
     private protected static IReadOnlyList<T> ReadPrimitiveTypes<T>(BinaryReader reader, int count)
         where T : unmanaged
     {
-        // Special casing byte for performance.
-        if (typeof(T) == typeof(byte))
+        // Special casing simple primitives for performance.
+        if (typeof(T) == typeof(bool)
+            || typeof(T) == typeof(byte)
+            || typeof(T) == typeof(sbyte)
+            || typeof(T) == typeof(char)
+            || typeof(T) == typeof(short)
+            || typeof(T) == typeof(ushort)
+            || typeof(T) == typeof(int)
+            || typeof(T) == typeof(uint)
+            || typeof(T) == typeof(long)
+            || typeof(T) == typeof(ulong)
+            || typeof(T) == typeof(float)
+            || typeof(T) == typeof(double))
         {
-            byte[] bytes = reader.ReadBytes(count);
-            return (IReadOnlyList<T>)(object)bytes;
+            return reader.ReadPrimitiveArray<T>(count);
         }
 
         List<T> values = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
         for (int i = 0; i < count; i++)
         {
-            if (typeof(T) == typeof(bool))
-            {
-                values.Add((T)(object)reader.ReadBoolean());
-            }
-            else if (typeof(T) == typeof(sbyte))
-            {
-                values.Add((T)(object)reader.ReadSByte());
-            }
-            else if (typeof(T) == typeof(char))
-            {
-                values.Add((T)(object)reader.ReadChar());
-            }
-            else if (typeof(T) == typeof(short))
-            {
-                values.Add((T)(object)reader.ReadInt16());
-            }
-            else if (typeof(T) == typeof(ushort))
-            {
-                values.Add((T)(object)reader.ReadUInt16());
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                values.Add((T)(object)reader.ReadInt32());
-            }
-            else if (typeof(T) == typeof(uint))
-            {
-                values.Add((T)(object)reader.ReadUInt32());
-            }
-            else if (typeof(T) == typeof(long))
-            {
-                values.Add((T)(object)reader.ReadInt64());
-            }
-            else if (typeof(T) == typeof(ulong))
-            {
-                values.Add((T)(object)reader.ReadUInt64());
-            }
-            else if (typeof(T) == typeof(float))
-            {
-                values.Add((T)(object)reader.ReadSingle());
-            }
-            else if (typeof(T) == typeof(double))
-            {
-                values.Add((T)(object)reader.ReadDouble());
-            }
-            else if (typeof(T) == typeof(decimal))
+            if (typeof(T) == typeof(decimal))
             {
                 values.Add((T)(object)decimal.Parse(reader.ReadString(), CultureInfo.InvariantCulture));
             }
@@ -120,11 +72,12 @@ internal abstract class Record : IRecord
             }
             else
             {
-                throw new SerializationException($"Failure trying to read primitive '{typeof(T)}'");
+                throw new SerializationException($"Invalid primitive type '{typeof(T)}'");
             }
         }
 
-        return values;
+        // For simplicity in the deserialization model we'll always return an array.
+        return [.. values];
     }
 
     /// <summary>
@@ -184,17 +137,6 @@ internal abstract class Record : IRecord
             case PrimitiveType.String:
             default:
                 throw new ArgumentException("Invalid primitive type.", nameof(primitiveType));
-        }
-    }
-
-    /// <summary>
-    ///  Writes <paramref name="values"/> as <paramref name="primitiveType"/> to the given <paramref name="writer"/>.
-    /// </summary>
-    private protected static void WritePrimitiveTypes(BinaryWriter writer, PrimitiveType primitiveType, IReadOnlyList<object> values)
-    {
-        for (int i = 0; i < values.Count; i++)
-        {
-            WritePrimitiveType(writer, primitiveType, values[i]);
         }
     }
 
@@ -286,87 +228,86 @@ internal abstract class Record : IRecord
     }
 
     /// <summary>
-    ///  Reads the next record from the given <paramref name="reader"/>.
+    ///  Reads the next record.
     /// </summary>
     /// <exception cref="NotImplementedException">Found a multidimensional array.</exception>
     /// <exception cref="NotSupportedException">Found a remote method invocation record.</exception>
     /// <exception cref="SerializationException">Unknown or corrupted data.</exception>
-    internal static IRecord ReadBinaryFormatRecord(BinaryReader reader, RecordMap recordMap)
+    internal static IRecord ReadBinaryFormatRecord(BinaryFormattedObject.ParseState state)
     {
-        RecordType recordType = (RecordType)reader.ReadByte();
+        RecordType recordType = (RecordType)state.Reader.ReadByte();
 
         return recordType switch
         {
-            RecordType.SerializedStreamHeader => ReadSpecificRecord<SerializationHeader>(recordMap),
-            RecordType.ClassWithId => ReadSpecificRecord<ClassWithId>(recordMap),
-            RecordType.SystemClassWithMembers => ReadSpecificRecord<SystemClassWithMembers>(recordMap),
-            RecordType.ClassWithMembers => ReadSpecificRecord<ClassWithMembers>(recordMap),
-            RecordType.SystemClassWithMembersAndTypes => ReadSpecificRecord<SystemClassWithMembersAndTypes>(recordMap),
-            RecordType.ClassWithMembersAndTypes => ReadSpecificRecord<ClassWithMembersAndTypes>(recordMap),
-            RecordType.BinaryObjectString => ReadSpecificRecord<BinaryObjectString>(recordMap),
-            // The BinaryArray record is used for all types of arrays, but we currently only support single dimension.
-            RecordType.BinaryArray => ReadSpecificRecord<BinaryArray>(recordMap),
-            RecordType.MemberPrimitiveTyped => ReadSpecificRecord<MemberPrimitiveTyped>(recordMap),
-            RecordType.MemberReference => ReadSpecificRecord<MemberReference>(recordMap),
-            RecordType.ObjectNull => ReadSpecificRecord<ObjectNull>(recordMap),
-            RecordType.MessageEnd => ReadSpecificRecord<MessageEnd>(recordMap),
-            RecordType.BinaryLibrary => ReadSpecificRecord<BinaryLibrary>(recordMap),
-            RecordType.ObjectNullMultiple256 => ReadSpecificRecord<NullRecord.ObjectNullMultiple256>(recordMap),
-            RecordType.ObjectNullMultiple => ReadSpecificRecord<NullRecord.ObjectNullMultiple>(recordMap),
-            RecordType.ArraySinglePrimitive => ReadArraySinglePrimitive(recordMap),
-            RecordType.ArraySingleObject => ReadSpecificRecord<ArraySingleObject>(recordMap),
-            RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(recordMap),
+            RecordType.SerializedStreamHeader => ReadSpecificRecord<SerializationHeader>(state),
+            RecordType.ClassWithId => ReadSpecificRecord<ClassWithId>(state),
+            RecordType.SystemClassWithMembers => ReadSpecificRecord<SystemClassWithMembers>(state),
+            RecordType.ClassWithMembers => ReadSpecificRecord<ClassWithMembers>(state),
+            RecordType.SystemClassWithMembersAndTypes => ReadSpecificRecord<SystemClassWithMembersAndTypes>(state),
+            RecordType.ClassWithMembersAndTypes => ReadSpecificRecord<ClassWithMembersAndTypes>(state),
+            RecordType.BinaryObjectString => ReadSpecificRecord<BinaryObjectString>(state),
+            RecordType.BinaryArray => BinaryArray.Parse(state),
+            RecordType.MemberPrimitiveTyped => ReadSpecificRecord<MemberPrimitiveTyped>(state),
+            RecordType.MemberReference => ReadSpecificRecord<MemberReference>(state),
+            RecordType.ObjectNull => ReadSpecificRecord<ObjectNull>(state),
+            RecordType.MessageEnd => ReadSpecificRecord<MessageEnd>(state),
+            RecordType.BinaryLibrary => ReadSpecificRecord<BinaryLibrary>(state),
+            RecordType.ObjectNullMultiple256 => ReadSpecificRecord<NullRecord.ObjectNullMultiple256>(state),
+            RecordType.ObjectNullMultiple => ReadSpecificRecord<NullRecord.ObjectNullMultiple>(state),
+            RecordType.ArraySinglePrimitive => ReadArraySinglePrimitive(state),
+            RecordType.ArraySingleObject => ReadSpecificRecord<ArraySingleObject>(state),
+            RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(state),
             RecordType.MethodCall => throw new NotSupportedException(),
             RecordType.MethodReturn => throw new NotSupportedException(),
             _ => throw new SerializationException("Invalid record type."),
         };
 
-        IRecord ReadArraySinglePrimitive(RecordMap recordMap)
+        static IRecord ReadArraySinglePrimitive(BinaryFormattedObject.ParseState state)
         {
             // Special casing to avoid excessive boxing/unboxing.
-            Id id = ArrayInfo.Parse(reader, out Count length);
-            PrimitiveType primitiveType = (PrimitiveType)reader.ReadByte();
+            Id id = ArrayInfo.Parse(state.Reader, out Count length);
+            PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
 
             IRecord record = primitiveType switch
             {
-                PrimitiveType.Boolean => new ArraySinglePrimitive<bool>(id, ReadPrimitiveTypes<bool>(reader, length)),
-                PrimitiveType.Byte => new ArraySinglePrimitive<byte>(id, ReadPrimitiveTypes<byte>(reader, length)),
-                PrimitiveType.SByte => new ArraySinglePrimitive<sbyte>(id, ReadPrimitiveTypes<sbyte>(reader, length)),
-                PrimitiveType.Char => new ArraySinglePrimitive<char>(id, ReadPrimitiveTypes<char>(reader, length)),
-                PrimitiveType.Int16 => new ArraySinglePrimitive<short>(id, ReadPrimitiveTypes<short>(reader, length)),
-                PrimitiveType.UInt16 => new ArraySinglePrimitive<ushort>(id, ReadPrimitiveTypes<ushort>(reader, length)),
-                PrimitiveType.Int32 => new ArraySinglePrimitive<int>(id, ReadPrimitiveTypes<int>(reader, length)),
-                PrimitiveType.UInt32 => new ArraySinglePrimitive<uint>(id, ReadPrimitiveTypes<uint>(reader, length)),
-                PrimitiveType.Int64 => new ArraySinglePrimitive<long>(id, ReadPrimitiveTypes<long>(reader, length)),
-                PrimitiveType.UInt64 => new ArraySinglePrimitive<ulong>(id, ReadPrimitiveTypes<ulong>(reader, length)),
-                PrimitiveType.Single => new ArraySinglePrimitive<float>(id, ReadPrimitiveTypes<float>(reader, length)),
-                PrimitiveType.Double => new ArraySinglePrimitive<double>(id, ReadPrimitiveTypes<double>(reader, length)),
-                PrimitiveType.Decimal => new ArraySinglePrimitive<decimal>(id, ReadPrimitiveTypes<decimal>(reader, length)),
-                PrimitiveType.DateTime => new ArraySinglePrimitive<DateTime>(id, ReadPrimitiveTypes<DateTime>(reader, length)),
-                PrimitiveType.TimeSpan => new ArraySinglePrimitive<TimeSpan>(id, ReadPrimitiveTypes<TimeSpan>(reader, length)),
-                _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
+                PrimitiveType.Boolean => new ArraySinglePrimitive<bool>(id, ReadPrimitiveTypes<bool>(state.Reader, length)),
+                PrimitiveType.Byte => new ArraySinglePrimitive<byte>(id, ReadPrimitiveTypes<byte>(state.Reader, length)),
+                PrimitiveType.SByte => new ArraySinglePrimitive<sbyte>(id, ReadPrimitiveTypes<sbyte>(state.Reader, length)),
+                PrimitiveType.Char => new ArraySinglePrimitive<char>(id, ReadPrimitiveTypes<char>(state.Reader, length)),
+                PrimitiveType.Int16 => new ArraySinglePrimitive<short>(id, ReadPrimitiveTypes<short>(state.Reader, length)),
+                PrimitiveType.UInt16 => new ArraySinglePrimitive<ushort>(id, ReadPrimitiveTypes<ushort>(state.Reader, length)),
+                PrimitiveType.Int32 => new ArraySinglePrimitive<int>(id, ReadPrimitiveTypes<int>(state.Reader, length)),
+                PrimitiveType.UInt32 => new ArraySinglePrimitive<uint>(id, ReadPrimitiveTypes<uint>(state.Reader, length)),
+                PrimitiveType.Int64 => new ArraySinglePrimitive<long>(id, ReadPrimitiveTypes<long>(state.Reader, length)),
+                PrimitiveType.UInt64 => new ArraySinglePrimitive<ulong>(id, ReadPrimitiveTypes<ulong>(state.Reader, length)),
+                PrimitiveType.Single => new ArraySinglePrimitive<float>(id, ReadPrimitiveTypes<float>(state.Reader, length)),
+                PrimitiveType.Double => new ArraySinglePrimitive<double>(id, ReadPrimitiveTypes<double>(state.Reader, length)),
+                PrimitiveType.Decimal => new ArraySinglePrimitive<decimal>(id, ReadPrimitiveTypes<decimal>(state.Reader, length)),
+                PrimitiveType.DateTime => new ArraySinglePrimitive<DateTime>(id, ReadPrimitiveTypes<DateTime>(state.Reader, length)),
+                PrimitiveType.TimeSpan => new ArraySinglePrimitive<TimeSpan>(id, ReadPrimitiveTypes<TimeSpan>(state.Reader, length)),
+                _ => throw new SerializationException($"Invalid primitive type '{primitiveType}'"),
             };
 
-            recordMap[id] = record;
+            state.RecordMap[id] = record;
             return record;
         }
 
-        unsafe TRecord ReadSpecificRecord<TRecord>(RecordMap recordMap) where TRecord : class, IRecord<TRecord>
+        unsafe static TRecord ReadSpecificRecord<TRecord>(BinaryFormattedObject.ParseState state) where TRecord : class, IRecord<TRecord>, IBinaryFormatParseable<TRecord>
         {
-            return TRecord.Parse(reader, recordMap);
+            return TRecord.Parse(state);
         }
     }
 
     /// <summary>
     ///  Reads records, expanding null records into individual entries.
     /// </summary>
-    private protected static List<object> ReadRecords(BinaryReader reader, RecordMap recordMap, Count count)
+    private protected static List<object> ReadRecords(BinaryFormattedObject.ParseState state, Count count)
     {
         List<object> objects = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
 
         for (int i = 0; i < count; i++)
         {
-            var record = ReadBinaryFormatRecord(reader, recordMap);
+            IRecord record = ReadBinaryFormatRecord(state);
             if (record is not NullRecord nullRecord)
             {
                 objects.Add(record);
@@ -395,7 +336,7 @@ internal abstract class Record : IRecord
     /// <exception cref="InvalidOperationException">
     ///  <paramref name="objects"/> contained an object that isn't a record.
     /// </exception>
-    private protected static void WriteRecords(BinaryWriter writer, IReadOnlyList<object> objects)
+    private protected static void WriteRecords(BinaryWriter writer, IReadOnlyList<object?> objects)
     {
         int nullCount = 0;
 
@@ -407,7 +348,7 @@ internal abstract class Record : IRecord
             }
 
             // Aggregate consecutive null records.
-            if (record is NullRecord)
+            if (record is NullRecord or null)
             {
                 nullCount++;
                 continue;
@@ -432,14 +373,49 @@ internal abstract class Record : IRecord
     ///  Reads object member values using <paramref name="memberTypeInfo"/>.
     /// </summary>
     private protected static IReadOnlyList<object> ReadValuesFromMemberTypeInfo(
-        BinaryReader reader,
-        RecordMap recordMap,
+        BinaryFormattedObject.ParseState state,
         MemberTypeInfo memberTypeInfo)
     {
-        List<object> memberValues = new(memberTypeInfo.Count);
+        List<object> memberValues = new(Math.Min(memberTypeInfo.Count, BinaryFormattedObject.MaxNewCollectionSize));
         foreach ((BinaryType type, object? info) in memberTypeInfo)
         {
-            memberValues.Add(ReadValue(reader, recordMap, type, info));
+            memberValues.Add(ReadValue(state, type, info));
+        }
+
+        return memberValues;
+    }
+
+    /// <summary>
+    ///  Reads a count of object member values of <paramref name="type"/> with optional clarifying <paramref name="typeInfo"/>.
+    /// </summary>
+    /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
+    private protected static IReadOnlyList<object?> ReadValues(
+        BinaryFormattedObject.ParseState state,
+        BinaryType type,
+        object? typeInfo,
+        int count)
+    {
+        List<object?> memberValues = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
+        for (int i = 0; i < count; i++)
+        {
+            object value = ReadValue(state, type, typeInfo);
+            if (value is not NullRecord nullRecord)
+            {
+                memberValues.Add(value);
+            }
+            else
+            {
+                i += nullRecord.NullCount - 1;
+                if (i >= count)
+                {
+                    throw new SerializationException();
+                }
+
+                for (int j = 0; j < nullRecord.NullCount; j++)
+                {
+                    memberValues.Add(null);
+                }
+            }
         }
 
         return memberValues;
@@ -450,19 +426,18 @@ internal abstract class Record : IRecord
     /// </summary>
     /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
     private protected static object ReadValue(
-        BinaryReader reader,
-        RecordMap recordMap,
+        BinaryFormattedObject.ParseState state,
         BinaryType type,
         object? typeInfo)
     {
         if (type == BinaryType.Primitive)
         {
-            return ReadPrimitiveType(reader, (PrimitiveType)typeInfo!);
+            return ReadPrimitiveType(state.Reader, (PrimitiveType)typeInfo!);
         }
 
         if (type == BinaryType.String)
         {
-            return ReadBinaryFormatRecord(reader, recordMap);
+            return ReadBinaryFormatRecord(state);
         }
 
         // BinaryLibrary records can be dumped in front of any member reference.
@@ -480,7 +455,7 @@ internal abstract class Record : IRecord
                 or BinaryType.PrimitiveArray
                 or BinaryType.Class
                 or BinaryType.SystemClass
-                or BinaryType.ObjectArray => ReadBinaryFormatRecord(reader, recordMap),
+                or BinaryType.ObjectArray => ReadBinaryFormatRecord(state),
             _ => throw new SerializationException("Invalid binary type."),
         };
     }
@@ -491,7 +466,7 @@ internal abstract class Record : IRecord
     private protected static void WriteValuesFromMemberTypeInfo(
         BinaryWriter writer,
         MemberTypeInfo memberTypeInfo,
-        IReadOnlyList<object> memberValues)
+        IReadOnlyList<object?> memberValues)
     {
         for (int i = 0; i < memberTypeInfo.Count; i++)
         {
@@ -499,7 +474,7 @@ internal abstract class Record : IRecord
             switch (type)
             {
                 case BinaryType.Primitive:
-                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValues[i]);
+                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValues[i]!);
                     break;
                 case BinaryType.String:
                 case BinaryType.Object:
@@ -508,7 +483,7 @@ internal abstract class Record : IRecord
                 case BinaryType.Class:
                 case BinaryType.SystemClass:
                 case BinaryType.ObjectArray:
-                    ((IRecord)memberValues[i]).Write(writer);
+                    ((IRecord)memberValues[i]!).Write(writer);
                     break;
                 default:
                     throw new ArgumentException("Invalid binary type.", nameof(memberTypeInfo));

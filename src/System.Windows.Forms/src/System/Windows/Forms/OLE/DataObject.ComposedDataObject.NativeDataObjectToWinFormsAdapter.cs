@@ -183,7 +183,7 @@ public unsafe partial class DataObject
                         long startPosition = stream.Position;
                         try
                         {
-                            if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetObject(out object? value))
+                            if (new BinaryFormattedObject(stream).TryGetObject(out object? value))
                             {
                                 return value;
                             }

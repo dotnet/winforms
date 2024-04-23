@@ -13,7 +13,7 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
+internal sealed class BinaryLibrary : IRecord<BinaryLibrary>, IBinaryFormatParseable<BinaryLibrary>
 {
     public Id LibraryId { get; }
     public string LibraryName { get; }
@@ -27,14 +27,13 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
     public static RecordType RecordType => RecordType.BinaryLibrary;
 
     static BinaryLibrary IBinaryFormatParseable<BinaryLibrary>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
         BinaryLibrary record = new(
-            reader.ReadInt32(),
-            reader.ReadString());
+            state.Reader.ReadInt32(),
+            state.Reader.ReadString());
 
-        recordMap[record.LibraryId] = record;
+        state.RecordMap[record.LibraryId] = record;
         return record;
     }
 

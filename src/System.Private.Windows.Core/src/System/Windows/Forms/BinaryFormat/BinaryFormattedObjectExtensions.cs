@@ -68,7 +68,7 @@ internal static class BinaryFormattedObjectExtensions
                 return false;
             }
 
-            value = new PointF((float)classInfo["x"], (float)classInfo["y"]);
+            value = new PointF((float)classInfo["x"]!, (float)classInfo["y"]!);
 
             return true;
         }
@@ -96,10 +96,10 @@ internal static class BinaryFormattedObjectExtensions
             }
 
             value = new RectangleF(
-            (float)classInfo["x"],
-            (float)classInfo["y"],
-            (float)classInfo["width"],
-            (float)classInfo["height"]);
+                (float)classInfo["x"]!,
+                (float)classInfo["y"]!,
+                (float)classInfo["width"]!,
+                (float)classInfo["height"]!);
 
             return true;
         }
@@ -134,42 +134,42 @@ internal static class BinaryFormattedObjectExtensions
 
             if (IsPrimitiveTypeClassName(systemClass.Name) && systemClass.MemberTypeInfo[0].Type == BinaryType.Primitive)
             {
-                value = systemClass.MemberValues[0];
+                value = systemClass.MemberValues[0]!;
                 return true;
             }
 
             if (systemClass.Name == typeof(TimeSpan).FullName)
             {
-                value = new TimeSpan((long)systemClass.MemberValues[0]);
+                value = new TimeSpan((long)systemClass.MemberValues[0]!);
                 return true;
             }
 
             switch (systemClass.Name)
             {
                 case TypeInfo.TimeSpanType:
-                    value = new TimeSpan((long)systemClass.MemberValues[0]);
+                    value = new TimeSpan((long)systemClass.MemberValues[0]!);
                     return true;
                 case TypeInfo.DateTimeType:
-                    ulong ulongValue = (ulong)systemClass["dateData"];
+                    ulong ulongValue = (ulong)systemClass["dateData"]!;
                     value = Unsafe.As<ulong, DateTime>(ref ulongValue);
                     return true;
                 case TypeInfo.DecimalType:
                     ReadOnlySpan<int> bits =
                     [
-                        (int)systemClass["lo"],
-                        (int)systemClass["mid"],
-                        (int)systemClass["hi"],
-                        (int)systemClass["flags"]
+                        (int)systemClass["lo"]!,
+                        (int)systemClass["mid"]!,
+                        (int)systemClass["hi"]!,
+                        (int)systemClass["flags"]!
                     ];
 
                     value = new decimal(bits);
                     return true;
                 case TypeInfo.IntPtrType:
                     // Rehydrating still throws even though casting doesn't any more
-                    value = checked((nint)(long)systemClass.MemberValues[0]);
+                    value = checked((nint)(long)systemClass.MemberValues[0]!);
                     return true;
                 case TypeInfo.UIntPtrType:
-                    value = checked((nuint)(ulong)systemClass.MemberValues[0]);
+                    value = checked((nuint)(ulong)systemClass.MemberValues[0]!);
                     return true;
                 default:
                     return false;
@@ -211,7 +211,7 @@ internal static class BinaryFormattedObjectExtensions
             try
             {
                 // Lists serialize the entire backing array.
-                if ((size = (int)classInfo["_size"]) > array.Length)
+                if ((size = (int)classInfo["_size"]!) > array.Length)
                 {
                     return false;
                 }
@@ -290,7 +290,7 @@ internal static class BinaryFormattedObjectExtensions
             try
             {
                 // Lists serialize the entire backing array.
-                if ((size = (int)classInfo["_size"]) > array.Length)
+                if ((size = (int)classInfo["_size"]!) > array.Length)
                 {
                     return false;
                 }
@@ -303,7 +303,7 @@ internal static class BinaryFormattedObjectExtensions
             ArrayList arrayList = new(size);
             for (int i = 0; i < size; i++)
             {
-                if (!format.TryGetPrimitiveRecordValueOrNull((IRecord)array[i], out object? item))
+                if (!format.TryGetPrimitiveRecordValueOrNull((IRecord)array[i]!, out object? item))
                 {
                     return false;
                 }
@@ -402,8 +402,8 @@ internal static class BinaryFormattedObjectExtensions
             Hashtable temp = new(keys.Length);
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i], out object? key)
-                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i], out object? value))
+                if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i]!, out object? key)
+                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i]!, out object? value))
                 {
                     return false;
                 }
@@ -473,7 +473,7 @@ internal static class BinaryFormattedObjectExtensions
                 return false;
             }
 
-            exception = new NotSupportedException(classInfo["Message"].ToString());
+            exception = new NotSupportedException(classInfo["Message"]!.ToString());
             return true;
         }
     }
@@ -507,7 +507,7 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static IEnumerable<string?> GetStringValues(this BinaryFormattedObject format, ArraySingleString array, int count)
         => array.ArrayObjects.Take(count).Select(record =>
-            format.Dereference((IRecord)record) switch
+            format.Dereference((IRecord)record!) switch
             {
                 BinaryObjectString stringRecord => stringRecord.Value,
                 _ => null

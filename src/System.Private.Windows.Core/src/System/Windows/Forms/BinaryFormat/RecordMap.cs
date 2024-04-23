@@ -6,7 +6,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// <summary>
 ///  Map of records that ensures that IDs are only entered once.
 /// </summary>
-internal class RecordMap
+internal class RecordMap : IReadOnlyRecordMap
 {
     private readonly Dictionary<int, IRecord> _records = [];
 
