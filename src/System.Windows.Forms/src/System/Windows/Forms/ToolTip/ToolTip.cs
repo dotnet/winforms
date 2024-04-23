@@ -1498,20 +1498,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             pointY = optimalPoint.Y;
 
             // Update TipInfo for the tool with optimal position.
-            if (tool is Control toolAsControl)
+            if ((tool is Control toolAsControl && _tools.TryGetValue(toolAsControl, out TipInfo? tipInfo)) ||
+                (ownerWindow is Control ownerWindowAsControl && _tools.TryGetValue(ownerWindowAsControl, out tipInfo)))
             {
-                if (!_tools.TryGetValue(toolAsControl, out TipInfo? tipInfo))
-                {
-                    if (ownerWindow is Control ownerWindowAsControl
-                        && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
-                    {
-                        tipInfo.Position = new Point(pointX, pointY);
-                    }
-                }
-                else
-                {
-                    tipInfo.Position = new Point(pointX, pointY);
-                }
+                tipInfo.Position = new Point(pointX, pointY);
             }
 
             // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip.
