@@ -216,7 +216,7 @@ public class TreeNodeCollection : IList
 
         for (int i = 0; i < nodes.Length; i++)
         {
-            AddInternal(nodes[i], 0);
+            AddInternal(nodes[i]);
         }
 
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
@@ -279,9 +279,9 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Adds a new child node to this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual int Add(TreeNode node) => AddInternal(node, 0);
+    public virtual int Add(TreeNode node) => AddInternal(node);
 
-    private int AddInternal(TreeNode node, int delta)
+    private int AddInternal(TreeNode node)
     {
         ArgumentNullException.ThrowIfNull(node);
 
