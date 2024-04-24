@@ -1,0 +1,98 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Runtime.Serialization;
+
+namespace System.Windows.Forms.BinaryFormat.Deserializer;
+
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+
+/// <summary>
+///  Deserializer for <see cref="ClassRecord"/>s that use <see cref="SerializationInfo"/> to initialize class state.
+/// </summary>
+/// <remarks>
+///  <para>
+///   This is used either because the class implements <see cref="ISerializable"/> or because a surrogate was used.
+///  </para>
+/// </remarks>
+internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDeserializer
+{
+    private readonly ClassRecord _classRecord;
+    private readonly SerializationInfo _serializationInfo;
+    private readonly ISerializationSurrogate? _surrogate;
+    private int _currentField;
+    private bool _hasAnyReferences;
+
+    internal ClassRecordSerializationInfoDeserializer(
+        ClassRecord classRecord,
+        Type type,
+        ISerializationSurrogate? surrogate,
+        IDeserializer deserializer) : base(classRecord, deserializer)
+    {
+        _classRecord = classRecord;
+        _surrogate = surrogate;
+        _serializationInfo = new(type, BinaryFormattedObject.DefaultConverter);
+    }
+
+    internal override Id Continue()
+    {
+        // There is no benefit to changing order here so we can keep the same order as the serialized data.
+        while (_currentField < _classRecord.MemberNames.Count)
+        {
+            string memberName = _classRecord.MemberNames[_currentField];
+            (object? memberValue, Id reference) = GetMemberValue(_classRecord.MemberValues[_currentField]);
+
+            if (s_missingValueSentinel == memberValue)
+            {
+                // Record has not been encountered yet, need to pend iteration.
+                return reference;
+            }
+
+            // We know that primitive types are not going to have any fields that possibly have
+            // incomplete indirect references so we can do a simple optimization here.
+
+            if (!reference.IsNull
+                && memberValue!.GetType() is { } memberType
+                && !(memberType.IsPrimitive || memberType.IsEnum))
+            {
+                _hasAnyReferences = true;
+
+                if (memberType.IsValueType && Deserializer.IncompleteObjects.Contains(reference))
+                {
+                    // All missing value types we assign will need to be reassigned to get the final value.
+                    Deserializer.PendValueUpdater(new SerializationInfoValueUpdater(
+                        _classRecord.ObjectId,
+                        reference,
+                        _serializationInfo,
+                        memberName));
+                }
+            }
+
+            _serializationInfo.AddValue(memberName, memberValue);
+            _currentField++;
+        }
+
+        // If we were confident that there were no cycles in the graph to this point we could apply directly
+        // if there were no pending value types (which should also not happen if there are no cycles).
+
+        PendingSerializationInfo pending = new(_classRecord.ObjectId, _serializationInfo, _surrogate);
+
+        if (_hasAnyReferences && Deserializer.IncompleteObjects.Count > 1)
+        {
+            // If there is only one incomplete object, it would be us and we won't need to pend even if
+            // we have references to other types.
+            Deserializer.PendSerializationInfo(pending);
+        }
+        else
+        {
+            pending.Populate(Deserializer.DeserializedObjects, Deserializer.Options.StreamingContext);
+            Deserializer.CompleteObject(_classRecord.ObjectId);
+        }
+
+        // No more missing member refs.
+        IsParsingComplete = true;
+        return Id.Null;
+    }
+}
+
+#pragma warning restore SYSLIB0050 // Type or member is obsolete

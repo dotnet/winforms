@@ -20,6 +20,7 @@ internal sealed partial class BinaryFormattedObject
 
         public BinaryReader Reader { get; }
         public RecordMap RecordMap => _format._recordMap;
+        public Options Options => _format._options;
 
         [UnconditionalSuppressMessage(
             "Trimming",

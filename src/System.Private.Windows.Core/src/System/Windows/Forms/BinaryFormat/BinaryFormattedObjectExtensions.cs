@@ -229,7 +229,7 @@ internal static class BinaryFormattedObjectExtensions
                     if (array is ArraySingleString stringArray)
                     {
                         List<string> stringList = new(size);
-                        stringList.AddRange((IEnumerable<string>)format.GetStringValues(stringArray, size));
+                        stringList.AddRange((IEnumerable<string>)stringArray.GetStringValues(format.RecordMap));
                         list = stringList;
                         return true;
                     }
@@ -333,7 +333,7 @@ internal static class BinaryFormattedObjectExtensions
 
             if (format[1] is ArraySingleString stringArray)
             {
-                value = format.GetStringValues(stringArray, stringArray.Length).ToArray();
+                value = stringArray.GetStringValues(format.RecordMap).ToArray();
                 return true;
             }
 
@@ -443,7 +443,7 @@ internal static class BinaryFormattedObjectExtensions
             return true;
         }
 
-        value = format.Dereference(record) switch
+        value = format.RecordMap.Dereference(record) switch
         {
             BinaryObjectString valueString => valueString.Value,
             MemberPrimitiveTyped primitive => primitive.Value,
@@ -496,18 +496,18 @@ internal static class BinaryFormattedObjectExtensions
     /// <summary>
     ///  Dereferences <see cref="MemberReference"/> records.
     /// </summary>
-    public static IRecord Dereference(this BinaryFormattedObject format, IRecord record) => record switch
+    public static IRecord Dereference(this IReadOnlyRecordMap recordMap, IRecord record) => record switch
     {
-        MemberReference reference => format[reference.IdRef],
+        MemberReference reference => recordMap[reference.IdRef],
         _ => record
     };
 
     /// <summary>
-    ///  Gets <paramref name="count"/> number of strings from a <see cref="ArraySingleString"/>.
+    ///  Gets strings from a <see cref="ArraySingleString"/>.
     /// </summary>
-    public static IEnumerable<string?> GetStringValues(this BinaryFormattedObject format, ArraySingleString array, int count)
-        => array.ArrayObjects.Take(count).Select(record =>
-            format.Dereference((IRecord)record!) switch
+    public static IEnumerable<string?> GetStringValues(this ArraySingleString array, IReadOnlyRecordMap recordMap)
+        => array.ArrayObjects.Select(record =>
+            record is null ? null : recordMap.Dereference((IRecord)record) switch
             {
                 BinaryObjectString stringRecord => stringRecord.Value,
                 _ => null

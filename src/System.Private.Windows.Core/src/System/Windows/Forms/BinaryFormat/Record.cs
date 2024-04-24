@@ -292,10 +292,8 @@ internal abstract class Record : IRecord
             return record;
         }
 
-        unsafe static TRecord ReadSpecificRecord<TRecord>(BinaryFormattedObject.ParseState state) where TRecord : class, IRecord<TRecord>, IBinaryFormatParseable<TRecord>
-        {
-            return TRecord.Parse(state);
-        }
+        static TRecord ReadSpecificRecord<TRecord>(BinaryFormattedObject.ParseState state)
+            where TRecord : class, IRecord<TRecord>, IBinaryFormatParseable<TRecord> => TRecord.Parse(state);
     }
 
     /// <summary>

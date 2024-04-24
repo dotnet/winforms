@@ -73,7 +73,8 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
     {
         Type type = state.GetType(classInfo.Name, libraryId);
 
-        if (typeof(ISerializable).IsAssignableFrom(type))
+        if (typeof(ISerializable).IsAssignableFrom(type)
+            || state.Options.SurrogateSelector?.GetSurrogate(type, state.Options.StreamingContext, out _) is not null)
         {
             throw new SerializationException("Cannot intuit type information for ISerializable types.");
         }
