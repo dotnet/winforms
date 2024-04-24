@@ -19,7 +19,8 @@ public class WindowsFormsApplicationBaseTests
     public void GetApplicationInstanceID()
     {
         var assembly = typeof(WindowsFormsApplicationBaseTests).Assembly;
-        string expectedId = assembly.ManifestModule.ModuleVersionId.ToString();
+        string currentUserSID = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+        string expectedId = $"{assembly.ManifestModule.ModuleVersionId}-{currentUserSID}";
         Assert.Equal(expectedId, GetAppID(assembly));
     }
 
@@ -39,20 +40,23 @@ public class WindowsFormsApplicationBaseTests
     public void GetApplicationInstanceID_GuidAttribute()
     {
         string guid = Guid.NewGuid().ToString();
-        Assert.Equal($"{guid}1.2", GetUniqueIDFromAssembly(guid, new Version(1, 2, 3, 4)));
+        string currentUserSID = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+        Assert.Equal($"{guid}1.2-{currentUserSID}", GetUniqueIDFromAssembly(guid, new Version(1, 2, 3, 4)));
     }
 
     [Fact]
     public void GetApplicationInstanceID_GuidAttributeNewVersion()
     {
         string guid = Guid.NewGuid().ToString();
-        Assert.Equal($"{guid}0.0", GetUniqueIDFromAssembly(guid, new Version()));
+        string currentUserSID = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+        Assert.Equal($"{guid}0.0-{currentUserSID}", GetUniqueIDFromAssembly(guid, new Version()));
     }
 
     [Fact]
     public void GetApplicationInstanceID_GuidAttributeNullVersion()
     {
         string guid = Guid.NewGuid().ToString();
-        Assert.Equal($"{guid}0.0", GetUniqueIDFromAssembly(guid, version: null));
+        string currentUserSID = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+        Assert.Equal($"{guid}0.0-{currentUserSID}", GetUniqueIDFromAssembly(guid, version: null));
     }
 }
