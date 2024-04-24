@@ -115,14 +115,14 @@ public class BinaryFormattedObjectTests
         ArraySingleObject array = (ArraySingleObject)format[2];
         array.ArrayInfo.ObjectId.Should().Be(2);
         array.ArrayInfo.Length.Should().Be(1);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0];
+        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
         value.ObjectId.Should().Be(4);
         value.Value.Should().Be("This");
 
         array = (ArraySingleObject)format[3];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(1);
-        value = (BinaryObjectString)array.ArrayObjects[0];
+        value = (BinaryObjectString)array.ArrayObjects[0]!;
         value.ObjectId.Should().Be(5);
         value.Value.Should().Be("That");
     }
@@ -169,7 +169,7 @@ public class BinaryFormattedObjectTests
             new MemberReference(3)
         });
 
-        ArrayRecord<object> array = (ArrayRecord<object>)format[(MemberReference)systemClass.MemberValues[5]];
+        ArrayRecord<object> array = (ArrayRecord<object>)format[(MemberReference)systemClass.MemberValues[5]!];
 
         array.ArrayInfo.ObjectId.Should().Be(2);
         array.ArrayInfo.Length.Should().Be(3);
@@ -177,7 +177,7 @@ public class BinaryFormattedObjectTests
         value.ObjectId.Should().Be(4);
         value.Value.Should().BeOneOf("Yowza", "Youza", "Meeza");
 
-        array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]];
+        array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]!];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(3);
         array.ArrayObjects[0].Should().BeOfType<ObjectNull>();
@@ -309,7 +309,7 @@ public class BinaryFormattedObjectTests
         ArraySingleString array = (ArraySingleString)format[1];
         array.ArrayInfo.ObjectId.Should().Be(1);
         array.ArrayInfo.Length.Should().Be(3);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0];
+        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
     }
 
     [Fact]
@@ -328,7 +328,7 @@ public class BinaryFormattedObjectTests
             ObjectNull.Instance,
             ObjectNull.Instance
         });
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0];
+        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
     }
 
     [Fact]
@@ -338,8 +338,8 @@ public class BinaryFormattedObjectTests
         ArraySingleString array = (ArraySingleString)format[1];
         array.ArrayInfo.ObjectId.Should().Be(1);
         array.ArrayInfo.Length.Should().Be(3);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0];
-        MemberReference reference = (MemberReference)array.ArrayObjects[2];
+        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
+        MemberReference reference = (MemberReference)array.ArrayObjects[2]!;
         reference.IdRef.Should().Be(value.ObjectId);
     }
 
