@@ -51,7 +51,7 @@ public class ArrayTests
         BinaryFormattedObject format = strings.SerializeAndParse();
         format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
         ArraySingleString array = (ArraySingleString)format[1];
-        format.GetStringValues(array, strings.Length).Should().BeEquivalentTo(strings);
+        array.GetStringValues(format.RecordMap).Should().BeEquivalentTo(strings);
     }
 
     public static TheoryData<string?[]> StringArray_Parse_Data => new()
