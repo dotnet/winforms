@@ -1012,12 +1012,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  the application that have the same Major and Minor Version Number
         ''' </returns>
         ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
-        Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
-            Dim guidAttribute As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
+        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
+            Dim guidAttribute As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
             Dim currentUserSID As String = Principal.WindowsIdentity.GetCurrent().User.Value
 
             If guidAttribute IsNot Nothing Then
-                Dim version As Version = Entry.GetName.Version
+                Dim version As Version = entry.GetName.Version
                 If version IsNot Nothing Then
                     Return $"{guidAttribute.Value}{version.Major}.{version.Minor}-{currentUserSID}"
                 Else
@@ -1025,7 +1025,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End If
 
-            Return $"{Entry.ManifestModule.ModuleVersionId}-{currentUserSID}"
+            Return $"{entry.ManifestModule.ModuleVersionId}-{currentUserSID}"
         End Function
     End Class
 End Namespace
