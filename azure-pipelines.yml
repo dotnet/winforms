@@ -74,7 +74,7 @@ extends:
     featureFlags:
       autoBaseline: true
     pool:
-      name: NetCore1ESPool-Internal
+      name: NetCore1ESPool-Svc-Internal
       image: 1es-windows-2022
       os: windows
     customBuildTags:
