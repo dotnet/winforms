@@ -34,15 +34,6 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void CheckBoxAccessibleObject_DefaultAction_IfHandleIsNotCreated_ReturnsNull()
-    {
-        using CheckBox checkBox = new();
-
-        checkBox.AccessibilityObject.DefaultAction.Should().Be("Check");
-        checkBox.IsHandleCreated.Should().BeFalse();
-    }
-
-    [WinFormsFact]
     public void CheckBoxAccessibleObject_DefaultAction_ReturnsExpected()
     {
         using CheckBox checkBox = new()
@@ -59,15 +50,15 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void CheckBoxAccessibleObject_DefaultAction_IfHandleIsCreatedAndCheckedIsTrue_ReturnsExpected()
+    public void CheckBoxAccessibleObject_DefaultAction_CheckedIsTrue_ReturnsExpected()
     {
-        using CheckBox checkBox = new()
-        {
-            Checked = true
-        };
-        checkBox.CreateControl();
+        using CheckBox checkBox = new();
 
-        checkBox.IsHandleCreated.Should().BeTrue();
+        checkBox.IsHandleCreated.Should().BeFalse();
+        checkBox.AccessibilityObject.DefaultAction.Should().Be("Check");       
+
+        checkBox.Checked = true;
+
         checkBox.AccessibilityObject.DefaultAction.Should().Be("Uncheck");
     }
 
