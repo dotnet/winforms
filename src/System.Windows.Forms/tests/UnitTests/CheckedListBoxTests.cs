@@ -837,7 +837,7 @@ public class CheckedListBoxTests
             e.Should().NotBeNull();
         };
 
-        Bitmap image = new(10, 10);
+        using Bitmap image = new(10, 10);
         Font font = new("Arial", 8.25f);
         Rectangle rect = new(1, 2, 3, 4);
         DrawItemEventArgs eventArgs = new DrawItemEventArgs(Graphics.FromImage(image), font, rect, 1, DrawItemState.None, Color.Red, Color.Blue);
@@ -861,7 +861,7 @@ public class CheckedListBoxTests
             e.Should().NotBeNull();
         };
 
-        Bitmap image = new(10, 10);
+        using Bitmap image = new(10, 10);
         MeasureItemEventArgs eventArgs = new MeasureItemEventArgs(Graphics.FromImage(image), 1);
 
         // Add and remove.
@@ -869,6 +869,27 @@ public class CheckedListBoxTests
         checkedListBox.MeasureItem -= handler;
         checkedListBox.OnMeasureItem(eventArgs);
         callCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_ValueMemberChanged_AddRemove_Success()
+    {
+        using CheckedListBox checkedListBox = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        checkedListBox.ValueMemberChanged += handler;
+        checkedListBox.ValueMember = "Value";
+        callCount.Should().Be(1);
+
+        checkedListBox.ValueMemberChanged -= handler;
+        checkedListBox.ValueMember = "NewValue";
+        callCount.Should().Be(1);
     }
 
     private class SubCheckedListBox : CheckedListBox
