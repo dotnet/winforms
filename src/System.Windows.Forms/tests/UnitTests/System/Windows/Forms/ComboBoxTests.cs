@@ -225,10 +225,10 @@ public class ComboBoxTests
     [InlineData(int.MaxValue, int.MaxValue)]
     public void ComboBox_MaxLength_Set_GetReturnsExpected(int value, int expected)
     {
-        using var control = new ComboBox();
+        using ComboBox control = new();
         control.MaxLength = value;
-        Assert.Equal(expected, control.MaxLength);
-        Assert.False(control.IsHandleCreated);
+        control.MaxLength.Should().Be(expected);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -238,21 +238,20 @@ public class ComboBoxTests
     [InlineData(int.MaxValue, int.MaxValue)]
     public void ComboBox_MaxLength_SetWithHandle_GetReturnsExpected(int value, int expected)
     {
-        using var control = new ComboBox();
+        using ComboBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.MaxLength = value;
-        Assert.Equal(expected, control.MaxLength);
-        Assert.True(control.IsHandleCreated);
+        control.MaxLength.Should().Be(expected);
+        control.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void ComboBox_MaxLength_SetNegative_SetsToZero()
     {
-        using var control = new ComboBox();
+        using ComboBox control = new();
         control.MaxLength = -1;
-        Console.WriteLine($"MaxLength after setting to -1: {control.MaxLength}");
-        Assert.Equal(0, control.MaxLength);
-        Assert.False(control.IsHandleCreated);
+        control.MaxLength.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
