@@ -13,19 +13,20 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithMembersAndTypes>
+internal sealed class ClassWithMembersAndTypes :
+    ClassRecord,
+    IRecord<ClassWithMembersAndTypes>,
+    IBinaryFormatParseable<ClassWithMembersAndTypes>
 {
-    public MemberTypeInfo MemberTypeInfo { get; }
     public override Id LibraryId { get; }
 
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
         Id libraryId,
         MemberTypeInfo memberTypeInfo,
-        IReadOnlyList<object> memberValues)
-        : base(classInfo, memberValues)
+        IReadOnlyList<object?> memberValues)
+        : base(classInfo, memberTypeInfo, memberValues)
     {
-        MemberTypeInfo = memberTypeInfo;
         LibraryId = libraryId;
     }
 
@@ -41,20 +42,19 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
     public static RecordType RecordType => RecordType.ClassWithMembersAndTypes;
 
     static ClassWithMembersAndTypes IBinaryFormatParseable<ClassWithMembersAndTypes>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
-        ClassInfo classInfo = ClassInfo.Parse(reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(reader, memberCount);
+        ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
+        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(state.Reader, memberCount);
 
         ClassWithMembersAndTypes record = new(
             classInfo,
-            reader.ReadInt32(),
+            state.Reader.ReadInt32(),
             memberTypeInfo,
-            ReadValuesFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
+            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
-        recordMap[record.ClassInfo.ObjectId] = record;
+        state.RecordMap[record.ClassInfo.ObjectId] = record;
         return record;
     }
 

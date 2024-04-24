@@ -6,7 +6,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// <summary>
 ///  Record that marks the end of the binary format stream.
 /// </summary>
-internal sealed class MessageEnd : IRecord<MessageEnd>
+internal sealed class MessageEnd : IRecord<MessageEnd>, IBinaryFormatParseable<MessageEnd>
 {
     public static MessageEnd Instance { get; } = new();
 
@@ -15,8 +15,7 @@ internal sealed class MessageEnd : IRecord<MessageEnd>
     public static RecordType RecordType => RecordType.MessageEnd;
 
     static MessageEnd IBinaryFormatParseable<MessageEnd>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap) => Instance;
+        BinaryFormattedObject.ParseState state) => Instance;
 
     public void Write(BinaryWriter writer) => writer.Write((byte)RecordType);
 }

@@ -15,11 +15,12 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
+internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFormatParseable<ClassWithId>
 {
     private readonly ClassRecord _metadataClass;
 
     public override Id ObjectId { get; }
+    public override Id LibraryId { get; }
 
     /// <summary>
     ///  The ObjectId of a prior <see cref="SystemClassWithMembers"/>, <see cref="SystemClassWithMembersAndTypes"/>,
@@ -27,24 +28,29 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
     /// </summary>
     public Id MetadataId { get; }
 
-    public ClassWithId(Id id, ClassRecord metadataClass, IReadOnlyList<object> memberValues)
-        : base(metadataClass.ClassInfo, memberValues)
+    public ClassWithId(Id id, ClassRecord metadataClass, IReadOnlyList<object?> memberValues)
+        : base(metadataClass.ClassInfo, metadataClass.MemberTypeInfo, memberValues)
     {
         ObjectId = id;
         MetadataId = metadataClass.ObjectId;
+        LibraryId = metadataClass.LibraryId;
         _metadataClass = metadataClass;
+    }
+
+    public ClassWithId(Id id, ClassRecord metadataClass, params object?[] memberValues)
+        : this(id, metadataClass, (IReadOnlyList<object?>)memberValues)
+    {
     }
 
     public static RecordType RecordType => RecordType.ClassWithId;
 
     static ClassWithId IBinaryFormatParseable<ClassWithId>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
-        Id objectId = reader.ReadInt32();
-        Id metadataId = reader.ReadInt32();
+        Id objectId = state.Reader.ReadInt32();
+        Id metadataId = state.Reader.ReadInt32();
 
-        if (recordMap[metadataId] is not ClassRecord referencedRecord)
+        if (state.RecordMap[metadataId] is not ClassRecord referencedRecord)
         {
             throw new SerializationException();
         }
@@ -52,23 +58,10 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
         ClassWithId record = new(
             objectId,
             referencedRecord,
-            ReadDataFromRefId(reader, recordMap, referencedRecord));
-        recordMap[record.ObjectId] = record;
+            ReadValuesFromMemberTypeInfo(state, referencedRecord.MemberTypeInfo));
 
+        state.RecordMap[record.ObjectId] = record;
         return record;
-
-        static IReadOnlyList<object> ReadDataFromRefId(BinaryReader reader, RecordMap recordMap, ClassRecord record) => record switch
-        {
-            ClassWithMembersAndTypes classWithMembersAndTypes
-                => ReadValuesFromMemberTypeInfo(reader, recordMap, classWithMembersAndTypes.MemberTypeInfo),
-            SystemClassWithMembersAndTypes systemClassWithMembersAndTypes
-                => ReadValuesFromMemberTypeInfo(reader, recordMap, systemClassWithMembersAndTypes.MemberTypeInfo),
-            ClassWithMembers classWithMembers
-                => ReadRecords(reader, recordMap, classWithMembers.MemberValues.Count),
-            SystemClassWithMembers systemClassWithMembers
-                => ReadRecords(reader, recordMap, systemClassWithMembers.MemberValues.Count),
-            _ => throw new SerializationException(),
-        };
     }
 
     public override void Write(BinaryWriter writer)

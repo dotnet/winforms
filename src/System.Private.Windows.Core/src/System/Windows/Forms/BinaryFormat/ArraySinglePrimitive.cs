@@ -13,7 +13,11 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ArraySinglePrimitive<T> : ArrayRecord<T>, IRecord<ArraySinglePrimitive<T>>, IPrimitiveTypeRecord
+internal sealed class ArraySinglePrimitive<T> :
+    ArrayRecord<T>,
+    IBinaryFormatParseable<ArrayRecord>,
+    IRecord<ArraySinglePrimitive<T>>,
+    IPrimitiveTypeRecord
     where T : unmanaged
 {
     public PrimitiveType PrimitiveType { get; }
@@ -26,16 +30,15 @@ internal sealed class ArraySinglePrimitive<T> : ArrayRecord<T>, IRecord<ArraySin
         PrimitiveType = TypeInfo.GetPrimitiveType(typeof(T));
     }
 
-    static ArraySinglePrimitive<T> IBinaryFormatParseable<ArraySinglePrimitive<T>>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+    static ArrayRecord IBinaryFormatParseable<ArrayRecord>.Parse(
+        BinaryFormattedObject.ParseState state)
     {
-        Id id = ArrayInfo.Parse(reader, out Count length);
-        PrimitiveType primitiveType = (PrimitiveType)reader.ReadByte();
+        Id id = ArrayInfo.Parse(state.Reader, out Count length);
+        PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
         Debug.Assert(typeof(T) == primitiveType.GetPrimitiveTypeType());
 
-        ArraySinglePrimitive<T> record = new(id, ReadPrimitiveTypes<T>(reader, length));
-        recordMap[record.ObjectId] = record;
+        ArraySinglePrimitive<T> record = new(id, ReadPrimitiveTypes<T>(state.Reader, length));
+        state.RecordMap[record.ObjectId] = record;
         return record;
     }
 

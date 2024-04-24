@@ -13,23 +13,25 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ArraySingleObject : ArrayRecord<object>, IRecord<ArraySingleObject>
+internal sealed class ArraySingleObject :
+    ArrayRecord<object?>,
+    IRecord<ArraySingleObject>,
+    IBinaryFormatParseable<ArraySingleObject>
 {
     public static RecordType RecordType => RecordType.ArraySingleObject;
 
-    public ArraySingleObject(Id objectId, IReadOnlyList<object> arrayObjects)
+    public ArraySingleObject(Id objectId, IReadOnlyList<object?> arrayObjects)
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     { }
 
     static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(
-        BinaryReader reader,
-        RecordMap recordMap)
+        BinaryFormattedObject.ParseState state)
     {
         ArraySingleObject record = new(
-            ArrayInfo.Parse(reader, out Count length),
-            ReadRecords(reader, recordMap, length));
+            ArrayInfo.Parse(state.Reader, out Count length),
+            ReadRecords(state, length));
 
-        recordMap[record.ObjectId] = record;
+        state.RecordMap[record.ObjectId] = record;
         return record;
     }
 
