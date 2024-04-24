@@ -810,14 +810,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return null;
             }
 
-            // fixedIndex is used for perf. optimization in case of adding big ranges of nodes
             int currentInd = _index;
-            int fixedInd = _parent.Nodes.FixedIndex;
-
-            if (fixedInd > 0)
-            {
-                currentInd = fixedInd;
-            }
 
             if (currentInd > 0 && currentInd <= _parent.Nodes.Count)
             {

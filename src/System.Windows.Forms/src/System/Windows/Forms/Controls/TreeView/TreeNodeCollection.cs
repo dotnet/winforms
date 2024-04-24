@@ -22,11 +22,6 @@ public class TreeNodeCollection : IList
         _owner = owner;
     }
 
-    // This index is used to optimize performance of AddRange
-    // items are added from last to first after this index
-    // (to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
-    internal int FixedIndex { get; set; } = -1;
-
     public virtual TreeNode this[int index]
     {
         get
@@ -219,14 +214,11 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        _owner.Nodes.FixedIndex = _owner._childNodes.Count;
-        _owner._childNodes.EnsureCapacity(nodes.Length);
         for (int i = 0; i < nodes.Length; i++)
         {
-            AddInternal(nodes[i], i);
+            AddInternal(nodes[i], 0);
         }
 
-        _owner.Nodes.FixedIndex = -1;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.EndUpdate();
@@ -318,18 +310,8 @@ public class TreeNodeCollection : IList
         }
 
         node._parent = _owner;
-        int fixedIndex = _owner.Nodes.FixedIndex;
-        if (fixedIndex != -1)
-        {
-            node._index = fixedIndex + delta;
-        }
-        else
-        {
-            // if fixedIndex != -1 capacity was ensured by AddRange
-            Debug.Assert(delta == 0, "delta should be 0");
-            node._index = _owner._childNodes.Count;
-        }
 
+        node._index = _owner._childNodes.Count;
         _owner._childNodes.Add(node);
         node.Realize(false);
 
