@@ -239,7 +239,7 @@ public class ComboBoxTests
     public void ComboBox_MaxLength_SetWithHandle_GetReturnsExpected(int value, int expected)
     {
         using ComboBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Handle.Should().NotBe(IntPtr.Zero);
         control.MaxLength = value;
         control.MaxLength.Should().Be(expected);
         control.IsHandleCreated.Should().BeTrue();
