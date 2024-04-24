@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 
@@ -105,6 +106,21 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         Assert.Null(header.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Null(header.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void CalendarHeaderAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar control = new();
+        control.CreateControl();
+        control.PerformLayout();
+        CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
+
+        Rectangle actual = headerAccessibleObject.Bounds;
+        actual.IsEmpty.Should().BeFalse();
+
+        Rectangle actualInClientCoordinates = control.RectangleToClient(actual);
+        control.ClientRectangle.Contains(actualInClientCoordinates).Should().BeTrue();
     }
 
     private CalendarHeaderAccessibleObject CreateCalendarHeaderAccessibleObject(MonthCalendar control, int calendarIndex = 0)
