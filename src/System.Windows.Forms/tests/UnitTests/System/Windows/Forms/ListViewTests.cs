@@ -5919,4 +5919,51 @@ public class ListViewTests
 
         return listView;
     }
+
+    public class TestListView : ListView
+    {
+        public void InvokeOnRightToLeftLayoutChanged(EventArgs e)
+        {
+            base.OnRightToLeftLayoutChanged(e);
+        }
+    }
+
+    [WinFormsFact]
+    public void ListView_RightToLeftLayoutChanged_AddRemove_Success()
+    {
+        var listView = new TestListView();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(listView, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        listView.RightToLeftLayoutChanged += handler;
+        listView.RightToLeftLayoutChanged -= handler;
+        Assert.Equal(0, callCount);
+    }
+
+    [WinFormsFact]
+    public void ListView_RightToLeftLayoutChanged_Invoke_Success()
+    {
+        var listView = new TestListView();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(listView, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        listView.RightToLeftLayoutChanged += handler;
+        listView.InvokeOnRightToLeftLayoutChanged(EventArgs.Empty);
+        Assert.Equal(1, callCount);
+
+        listView.RightToLeftLayoutChanged -= handler;
+        listView.InvokeOnRightToLeftLayoutChanged(EventArgs.Empty);
+        Assert.Equal(1, callCount);
+    }
+
 }
