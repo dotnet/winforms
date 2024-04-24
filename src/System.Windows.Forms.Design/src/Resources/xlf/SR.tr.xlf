@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="BaseNodeName">
         <source>Node</source>
-        <target state="new">Node</target>
+        <target state="translated">Düğüm</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -663,7 +663,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">&amp;Sütun Ekle...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
@@ -678,7 +678,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">{0} DataSource değiştirildi</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
@@ -723,7 +723,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">&amp;Sütunları Düzenle...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">
