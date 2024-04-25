@@ -4,6 +4,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Forms.Tests

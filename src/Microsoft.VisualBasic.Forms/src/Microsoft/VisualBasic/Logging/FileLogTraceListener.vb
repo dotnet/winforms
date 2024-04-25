@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Logging
