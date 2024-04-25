@@ -28,8 +28,8 @@ internal static class TypeConverterHelper
             return false;
         }
 
-        TypeDescriptor.AddKnownReflectedType<T>();
-        TypeConverter converter = TypeDescriptor.GetConverterFromKnownType(typeof(T));
+        TypeDescriptor.RegisterType<T>();
+        TypeConverter converter = TypeDescriptor.GetConverterFromRegisteredType(typeof(T));
         for (int i = 0; i < output.Length; i++)
         {
             // Note: ConvertFromString will raise exception if value cannot be converted.

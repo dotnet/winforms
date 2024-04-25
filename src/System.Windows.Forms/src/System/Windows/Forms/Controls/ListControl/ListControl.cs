@@ -143,7 +143,7 @@ public abstract class ListControl : Control
                     PropertyDescriptor? displayMemberProperty = props.Find(_displayMember.BindingField, true);
                     if (displayMemberProperty is not null)
                     {
-                        _displayMemberConverter = displayMemberProperty.ConverterFromKnownType;
+                        _displayMemberConverter = displayMemberProperty.ConverterFromRegisteredType;
                     }
                 }
             }
@@ -527,8 +527,8 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        TypeDescriptor.AddKnownReflectedType<string>();
-        s_stringTypeConverter ??= TypeDescriptor.GetConverterFromKnownType(typeof(string));
+        TypeDescriptor.RegisterType<string>();
+        s_stringTypeConverter ??= TypeDescriptor.GetConverterFromRegisteredType(typeof(string));
 
         try
         {

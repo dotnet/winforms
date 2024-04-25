@@ -45,8 +45,8 @@ public class OpacityConverter : TypeConverter
             double percent;
             try
             {
-                TypeDescriptor.AddKnownReflectedType<double>();
-                percent = (double)TypeDescriptor.GetConverterFromKnownType(typeof(double)).ConvertFrom(context, culture, text)!;
+                TypeDescriptor.RegisterType<double>();
+                percent = (double)TypeDescriptor.GetConverterFromRegisteredType(typeof(double)).ConvertFrom(context, culture, text)!;
 
                 // Assume they meant a percentage if it is > 1.0, else they actually
                 // typed the correct double.

@@ -13006,9 +13006,9 @@ public unsafe partial class Control :
 
         if (site is not null && site.DesignMode && site.TryGetService(out changeService))
         {
-            TypeDescriptor.AddKnownReflectedType<Control>();
-            sizeProperty = TypeDescriptor.GetPropertiesFromKnownType(this)[PropertyNames.Size];
-            locationProperty = TypeDescriptor.GetPropertiesFromKnownType(this)[PropertyNames.Location];
+            TypeDescriptor.RegisterType<Control>();
+            sizeProperty = TypeDescriptor.GetPropertiesFromRegisteredType(this)[PropertyNames.Size];
+            locationProperty = TypeDescriptor.GetPropertiesFromRegisteredType(this)[PropertyNames.Location];
             Debug.Assert(sizeProperty is not null && locationProperty is not null, "Error retrieving Size/Location properties on Control.");
 
             try

@@ -136,15 +136,16 @@ internal static class Formatter
         // type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
         Type sourceType = value.GetType();
         // @TODO - needs a more derived type here
-        TypeDescriptor.AddKnownReflectedType<object>();
-        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverterFromKnownType(sourceType);
+        TypeDescriptor.RegisterType<object>();
+        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
         if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
         {
             return sourceConverter.ConvertTo(context: null, GetFormatterCulture(formatInfo), value, targetType);
         }
 
+        // @TODO - needs a more derived type here
         // TypeDescriptor.AddKnownReflectedType<Type>();
-        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromKnownType(targetType);
+        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
         if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
         {
             return targetConverter.ConvertFrom(context: null, GetFormatterCulture(formatInfo), value);
