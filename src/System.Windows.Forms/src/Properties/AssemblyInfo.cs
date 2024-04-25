@@ -10,13 +10,6 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Interop.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.UI.IntegrationTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiImageListTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiListViewTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiMonthCalendarTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiPropertyGridViewTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiTabControlTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiScrollBarTests, PublicKey=00000000000000000400000000000000")]
-[assembly: InternalsVisibleTo("MauiToolStripTests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("ScratchProjectWithInternals, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("ComDisabled.Tests, PublicKey=00000000000000000400000000000000")]
 

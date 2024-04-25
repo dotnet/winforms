@@ -27,6 +27,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeNodeCollectionEditor))]
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]

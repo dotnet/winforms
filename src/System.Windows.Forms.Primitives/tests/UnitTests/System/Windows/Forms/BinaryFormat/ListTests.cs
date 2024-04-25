@@ -38,7 +38,7 @@ public class ListTests
         systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
-        MemberPrimitiveTyped primitve = (MemberPrimitiveTyped)array[0];
+        MemberPrimitiveTyped primitve = (MemberPrimitiveTyped)array[0]!;
         primitve.Value.Should().Be(value);
     }
 
@@ -57,7 +57,7 @@ public class ListTests
         systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
-        BinaryObjectString binaryString = (BinaryObjectString)array[0];
+        BinaryObjectString binaryString = (BinaryObjectString)array[0]!;
         binaryString.Value.Should().Be("JarJar");
     }
 

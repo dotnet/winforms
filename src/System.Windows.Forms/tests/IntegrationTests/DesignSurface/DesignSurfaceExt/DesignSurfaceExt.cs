@@ -3,6 +3,7 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.ComponentModel.Design.Serialization;
+using System.Windows.Forms.Design;
 
 namespace DesignSurfaceExt;
 
@@ -365,6 +366,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
                 "COPY" => StandardCommands.Copy,
                 "PASTE" => StandardCommands.Paste,
                 "DELETE" => StandardCommands.Delete,
+                "INVOKESMARTTAG" => MenuCommands.KeyInvokeSmartTag,
                 _ => null,
             };
 

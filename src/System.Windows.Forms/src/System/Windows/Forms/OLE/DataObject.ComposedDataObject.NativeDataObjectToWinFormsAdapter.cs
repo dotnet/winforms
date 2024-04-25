@@ -16,6 +16,11 @@ public unsafe partial class DataObject
 {
     internal unsafe partial class ComposedDataObject
     {
+        [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+        private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : true;
+#pragma warning restore IDE0075
+
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
         /// </summary>
@@ -178,7 +183,7 @@ public unsafe partial class DataObject
                         long startPosition = stream.Position;
                         try
                         {
-                            if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetObject(out object? value))
+                            if (new BinaryFormattedObject(stream).TryGetObject(out object? value))
                             {
                                 return value;
                             }
@@ -186,6 +191,14 @@ public unsafe partial class DataObject
                         catch (Exception ex) when (!ex.IsCriticalException())
                         {
                             // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
+                        }
+
+                        // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(), which has a RequiresUnreferencedCode annotation.
+                        // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
+                        // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
+                        if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }
 
                         stream.Position = startPosition;

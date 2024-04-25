@@ -287,6 +287,11 @@
         <target state="translated">Strukturovaný objekt DataBinding přijímá jako zdroj dat objekt IList nebo IListSource.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>Using the BinaryFormatter is not supported.</source>
+        <target state="new">Using the BinaryFormatter is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Vyvolá se při změně kontextu vazby.</target>
