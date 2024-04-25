@@ -13,6 +13,17 @@ internal class RecordMap : IReadOnlyRecordMap
     public IRecord this[Id id]
     {
         get => _records[id];
-        set => _records.Add(id, value);
+        set
+        {
+            if ((int)id < 0)
+            {
+                // Negative record Ids should never be referenced. Duplicate negative ids can be
+                // exported by the writer. The root object Id can be negative.
+                _records.TryAdd(id, value);
+                return;
+            }
+
+            _records.Add(id, value);
+        }
     }
 }

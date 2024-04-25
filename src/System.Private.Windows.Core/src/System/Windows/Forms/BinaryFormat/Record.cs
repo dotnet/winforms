@@ -35,7 +35,7 @@ internal abstract class Record : IRecord
         _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
     };
 
-    private protected static IReadOnlyList<T> ReadPrimitiveTypes<T>(BinaryReader reader, int count)
+    private protected static T[] ReadPrimitiveTypes<T>(BinaryReader reader, int count)
         where T : unmanaged
     {
         // Special casing simple primitives for performance.

@@ -43,12 +43,14 @@ internal sealed class PendingSerializationInfo
                 return;
             }
 
-            // Don't use == on refernce types as we are dependent on the instance in the objects
-            // dictionary never changing. Overloaded operators can invalidate this. Value types can
-            // be modified via Unsafe.Unbox, but this is ok as any usages of this object will have
-            // a pending fixup that will reapply the value.
-            if ((type.IsValueType && populated != @object)
-                || (!type.IsValueType && !ReferenceEquals(populated, @object)))
+            // Don't use == on reference types as we are dependent on the instance in the objects
+            // dictionary never changing. Value types can be modified but this is ok as any usages
+            // of this object will have a pending fixup that will reapply the value.
+            //
+            // BinaryFormatter would allow this to change as long as you didn't wrap the surrogate
+            // in FormaterServices.GetSurrogateForCyclicalReference. We break here on value types
+            // as they can never be observed in an unfinished state.
+            if (!type.IsValueType && !ReferenceEquals(populated, @object))
             {
                 throw new SerializationException("Surrogate must return an object that matches.");
             }

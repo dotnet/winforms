@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -43,6 +44,17 @@ internal static class TypeInfo
 
     internal static Assembly CorelibAssembly { get; } = typeof(string).Assembly;
     internal static string CorelibAssemblyString { get; } = CorelibAssembly.FullName!;
+
+    private static Type? s_surrogateForCyclicalReferenceType;
+
+    internal static bool IsSurrogateForCyclicalReference(Type type)
+    {
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+        s_surrogateForCyclicalReferenceType ??= FormatterServices.GetSurrogateForCyclicalReference(null!).GetType();
+#pragma warning restore SYSLIB0050
+
+        return type == s_surrogateForCyclicalReferenceType;
+    }
 
     /// <summary>
     ///  Returns the <see cref="PrimitiveType"/> for the given <paramref name="typeName"/>.
