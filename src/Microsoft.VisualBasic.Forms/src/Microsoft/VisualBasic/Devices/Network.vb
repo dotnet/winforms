@@ -8,8 +8,9 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
-Imports NetInfoAlias = System.Net.NetworkInformation
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
 

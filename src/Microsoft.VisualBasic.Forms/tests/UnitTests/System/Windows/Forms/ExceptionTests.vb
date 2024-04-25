@@ -3,8 +3,9 @@
 
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
+
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
@@ -14,7 +15,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub CantStartSingleInstanceExceptionTest()
             Dim ex As Exception = New CantStartSingleInstanceException()
             Assert.IsType(Of CantStartSingleInstanceException)(ex)
-            Dim expected As String = ExceptionUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect)
+            Dim expected As String = ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect)
             Assert.Equal(expected, ex.Message)
             ex = New CantStartSingleInstanceException("Test")
             Assert.IsType(Of CantStartSingleInstanceException)(ex)
@@ -29,7 +30,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub NoStartupFormExceptionTest()
             Dim ex As Exception = New NoStartupFormException()
             Assert.IsType(Of NoStartupFormException)(ex)
-            Dim expected As String = ExceptionUtils.GetResourceString(SR.AppModel_NoStartupForm)
+            Dim expected As String = ExUtils.GetResourceString(SR.AppModel_NoStartupForm)
             Assert.Equal(expected, ex.Message)
             ex = New NoStartupFormException("Test")
             Assert.IsType(Of NoStartupFormException)(ex)
