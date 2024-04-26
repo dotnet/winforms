@@ -86,27 +86,31 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // _itemList
         //
-        resources.ApplyResources(_itemList, "itemList");
+        // TypeDescriptor.RegisterType<ListBox>();
+        resources.ApplyResourcesToRegisteredType(_itemList, "itemList", null);
         _itemList.FormattingEnabled = true;
         _itemList.Name = "itemList";
         //
         // _okButton
         //
-        resources.ApplyResources(_okButton, "okButton");
+        // TypeDescriptor.RegisterType<Button>();
+        resources.ApplyResourcesToRegisteredType(_okButton, "okButton", null);
         _okButton.DialogResult = DialogResult.OK;
         _okButton.Margin = new Padding(0, 0, 3, 0);
         _okButton.Name = "okButton";
         //
         // _cancelButton
         //
-        resources.ApplyResources(_cancelButton, "cancelButton");
+        // TypeDescriptor.RegisterType<Button>();
+        resources.ApplyResourcesToRegisteredType(_cancelButton, "cancelButton", null);
         _cancelButton.DialogResult = DialogResult.Cancel;
         _cancelButton.Margin = new Padding(3, 0, 0, 0);
         _cancelButton.Name = "cancelButton";
         //
         // _okCancelTableLayoutPanel
         //
-        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+        // TypeDescriptor.RegisterType<TableLayoutPanel>();
+        resources.ApplyResourcesToRegisteredType(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel", null);
         _okCancelTableLayoutPanel.ColumnCount = 2;
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -118,7 +122,8 @@ internal sealed partial class MdiWindowDialog : Form
         //
         // MdiWindowDialog
         //
-        resources.ApplyResources(this, "$this");
+        // TypeDescriptor.RegisterType<MdiWindowDialog>();
+        resources.ApplyResourcesToRegisteredType(this, "$this", null);
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(_okCancelTableLayoutPanel);
         Controls.Add(_itemList);

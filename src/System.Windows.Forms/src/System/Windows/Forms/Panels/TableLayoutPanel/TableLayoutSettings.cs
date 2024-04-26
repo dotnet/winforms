@@ -466,7 +466,8 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        TypeConverter converter = TypeDescriptor.GetConverter(this);
+        TypeDescriptor.RegisterType<TableLayoutSettings>();
+        TypeConverter converter = TypeDescriptor.GetConverterFromRegisteredType(this);
         string? stringVal = converter.ConvertToInvariantString(this);
 
         if (!string.IsNullOrEmpty(stringVal))
