@@ -5772,6 +5772,31 @@ public class ListViewTests
         Assert.True(listView.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ListView_RightToLeftLayoutChanged_AddRemove_Invoke_Success()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(listView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        listView.RightToLeftLayoutChanged += handler;
+        listView.RightToLeftLayoutChanged -= handler;
+        callCount.Should().Be(0);
+
+        listView.RightToLeftLayoutChanged += handler;
+        listView.OnRightToLeftLayoutChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        listView.RightToLeftLayoutChanged -= handler;
+        listView.OnRightToLeftLayoutChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
     private class SubListViewItem : ListViewItem
     {
         public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5867,6 +5892,7 @@ public class ListViewTests
         public new void OnGroupCollapsedStateChanged(ListViewGroupEventArgs e) => base.OnGroupCollapsedStateChanged(e);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
     }
 
     private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)
@@ -5918,52 +5944,5 @@ public class ListViewTests
         }
 
         return listView;
-    }
-
-    public class TestListView : ListView
-    {
-        public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
-        public void InvokeOnRightToLeftLayoutChanged(EventArgs e)
-        {
-            base.OnRightToLeftLayoutChanged(e);
-        }
-    }
-
-    [WinFormsFact]
-    public void ListView_RightToLeftLayoutChanged_AddRemove_Success()
-    {
-        using TestListView listView = new();
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(listView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
-
-        listView.RightToLeftLayoutChanged += handler;
-        listView.RightToLeftLayoutChanged -= handler;
-        callCount.Should().Be(0);
-    }
-
-    [WinFormsFact]
-    public void ListView_RightToLeftLayoutChanged_Invoke_Success()
-    {
-        using TestListView listView = new();
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(listView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
-
-        listView.RightToLeftLayoutChanged += handler;
-        listView.InvokeOnRightToLeftLayoutChanged(EventArgs.Empty);
-        callCount.Should().Be(1);
-
-        listView.RightToLeftLayoutChanged -= handler;
-        listView.InvokeOnRightToLeftLayoutChanged(EventArgs.Empty);
-        callCount.Should().Be(1);
     }
 }
