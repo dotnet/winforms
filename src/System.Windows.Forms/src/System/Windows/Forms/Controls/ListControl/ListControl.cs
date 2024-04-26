@@ -143,6 +143,7 @@ public abstract class ListControl : Control
                     PropertyDescriptor? displayMemberProperty = props.Find(_displayMember.BindingField, true);
                     if (displayMemberProperty is not null)
                     {
+                        // TypeDescriptor.RegisterType<displayMemberProperty.PropertyType>();
                         _displayMemberConverter = displayMemberProperty.ConverterFromRegisteredType;
                     }
                 }
