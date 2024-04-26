@@ -16,7 +16,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 {
     private readonly ClassRecord _classRecord;
     private readonly MemberInfo[] _fieldInfo;
-    private int _currentField;
+    private int _currentFieldIndex;
     private readonly bool _isValueType;
     private bool _hasFixups;
 
@@ -43,10 +43,10 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
         Debug.Assert(_fieldInfo is not null);
 
-        while (_currentField < _fieldInfo.Length)
+        while (_currentFieldIndex < _fieldInfo.Length)
         {
             // FormatterServices *never* returns anything but fields.
-            FieldInfo field = (FieldInfo)_fieldInfo[_currentField];
+            FieldInfo field = (FieldInfo)_fieldInfo[_currentFieldIndex];
             object? rawValue;
             try
             {
@@ -57,7 +57,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 if (Deserializer.Options.AssemblyMatching == FormatterAssemblyStyle.Simple
                     || field.GetCustomAttribute<OptionalFieldAttribute>() is not null)
                 {
-                    _currentField++;
+                    _currentFieldIndex++;
                     continue;
                 }
 
@@ -80,7 +80,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 Deserializer.PendValueUpdater(new FieldValueUpdater(_classRecord.ObjectId, reference, field));
             }
 
-            _currentField++;
+            _currentFieldIndex++;
         }
 
         if (!_hasFixups || !_isValueType)

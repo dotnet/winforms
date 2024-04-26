@@ -20,7 +20,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     private readonly ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
-    private int _currentField;
+    private int _currentMemberIndex;
     private bool _hasAnyReferences;
 
     internal ClassRecordSerializationInfoDeserializer(
@@ -37,10 +37,10 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     internal override Id Continue()
     {
         // There is no benefit to changing order here so we can keep the same order as the serialized data.
-        while (_currentField < _classRecord.MemberNames.Count)
+        while (_currentMemberIndex < _classRecord.MemberNames.Count)
         {
-            string memberName = _classRecord.MemberNames[_currentField];
-            (object? memberValue, Id reference) = GetMemberValue(_classRecord.MemberValues[_currentField]);
+            string memberName = _classRecord.MemberNames[_currentMemberIndex];
+            (object? memberValue, Id reference) = GetMemberValue(_classRecord.MemberValues[_currentMemberIndex]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -69,7 +69,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
             }
 
             _serializationInfo.AddValue(memberName, memberValue);
-            _currentField++;
+            _currentMemberIndex++;
         }
 
         // If we were confident that there were no cycles in the graph to this point we could apply directly

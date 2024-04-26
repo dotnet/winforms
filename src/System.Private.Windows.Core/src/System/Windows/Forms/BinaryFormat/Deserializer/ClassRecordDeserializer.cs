@@ -67,7 +67,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
             // System.UnitySerializationHolder is the only .NET system type that implements this and is
             // used to encapsulate DBNull, so we'll special case it.
             if (type != deserializer.TypeResolver.GetType("System.UnitySerializationHolder", Id.Null)
-                || !0x0002.Equals(classRecord["UnityType"]))
+                || (int)classRecord["UnityType"]! != 0x0002)
             {
                 throw new SerializationException($"Type '{type}' is not allowed to implement IObjectReference.");
             }

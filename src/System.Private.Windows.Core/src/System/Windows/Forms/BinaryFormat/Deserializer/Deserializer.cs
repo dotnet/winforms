@@ -215,7 +215,7 @@ internal sealed partial class Deserializer : IDeserializer
         object DeserializeNew(Id id)
         {
             // Strings, string arrays, and primitive arrays can be completed without creating a
-            // parser object. Single rimitives don't normally show up as records unless they are top
+            // parser object. Single primitives don't normally show up as records unless they are top
             // level or are boxed into an interface reference. Checking for these requires costly
             // string matches and as such we'll just create the parser object.
 
