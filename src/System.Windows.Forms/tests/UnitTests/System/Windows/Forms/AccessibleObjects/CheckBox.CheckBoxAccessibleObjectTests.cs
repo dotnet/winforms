@@ -34,7 +34,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void CheckBoxAccessibleObject_CustomDoDefaultAction_ReturnsExpected()
+    public void CheckBoxAccessibleObject_DefaultAction_ReturnsExpected()
     {
         using CheckBox checkBox = new()
         {
@@ -42,11 +42,24 @@ public class CheckBox_CheckBoxAccessibleObjectTests
             AccessibleDefaultActionDescription = "TestActionDescription"
         };
 
-        Assert.False(checkBox.IsHandleCreated);
+        checkBox.IsHandleCreated.Should().BeFalse();
         CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
-        Assert.Equal("TestActionDescription", checkBoxAccessibleObject.DefaultAction);
-        Assert.False(checkBox.IsHandleCreated);
+        checkBox.AccessibilityObject.DefaultAction.Should().Be("TestActionDescription");
+        checkBox.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void CheckBoxAccessibleObject_DefaultAction_CheckedIsTrue_ReturnsExpected()
+    {
+        using CheckBox checkBox = new();
+
+        checkBox.IsHandleCreated.Should().BeFalse();
+        checkBox.AccessibilityObject.DefaultAction.Should().Be("Check");       
+
+        checkBox.Checked = true;
+
+        checkBox.AccessibilityObject.DefaultAction.Should().Be("Uncheck");
     }
 
     [WinFormsFact]
@@ -76,9 +89,9 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, AccessibleStates.Focusable)]
-    [InlineData(false, AccessibleStates.None)]
-    public void CheckBoxAccessibleObject_State_ReturnsExpected(bool createControl, AccessibleStates accessibleStates)
+    [InlineData(true, AccessibleStates.Focusable, AccessibleStates.Focusable | AccessibleStates.Checked)]
+    [InlineData(false, AccessibleStates.None, AccessibleStates.None)]
+    public void CheckBoxAccessibleObject_State_ReturnsExpected(bool createControl, AccessibleStates accessibleStatesFirstStage, AccessibleStates accessibleStatesSecondStage)
     {
         using CheckBox checkBox = new();
 
@@ -88,9 +101,12 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         }
 
         CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
+        checkBoxAccessibleObject.State.Should().Be(accessibleStatesFirstStage);
 
-        Assert.Equal(accessibleStates, checkBoxAccessibleObject.State);
-        Assert.Equal(createControl, checkBox.IsHandleCreated);
+        checkBoxAccessibleObject.DoDefaultAction();
+
+        checkBoxAccessibleObject.State.Should().Be(accessibleStatesSecondStage);
+        checkBox.IsHandleCreated.Should().Be(createControl);
     }
 
     [WinFormsTheory]

@@ -74,7 +74,10 @@ extends:
     featureFlags:
       autoBaseline: true
     pool:
-      name: NetCore1ESPool-Internal
+      ${{ if eq(contains(coalesce(variables['System.PullRequest.TargetBranch'], variables['Build.SourceBranch'], 'refs/heads/main'), 'release'), 'true') }}:
+        name: NetCore1ESPool-Svc-Internal
+      ${{ else }}:
+        name: NetCore1ESPool-Internal
       image: 1es-windows-2022
       os: windows
     customBuildTags:
