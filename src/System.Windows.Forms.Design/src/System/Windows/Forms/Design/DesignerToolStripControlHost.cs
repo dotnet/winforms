@@ -33,12 +33,12 @@ internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
     {
         if (_behaviorService is null)
         {
-            if (!parent.Site.TryGetService(out BehaviorService? behaviorService))
+            if (parent.Site is not ISite site)
             {
                 throw new InvalidOperationException();
             }
 
-            _behaviorService = behaviorService;
+            _behaviorService = site.GetRequiredService<BehaviorService>();
         }
 
         if (Parent is null)
