@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
 {
-    private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace!;
     private static readonly ToolboxItem s_invalidToolboxItem = new();
     private readonly Type _itemType;
     private bool _convertTo;
@@ -19,8 +18,6 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     private Image? _image;
 
     public ItemTypeToolStripMenuItem(Type t) => _itemType = t;
-
-    public static string SystemWindowsFormsNamespace => s_systemWindowsFormsNamespace;
 
     public Type ItemType
     {
