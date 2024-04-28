@@ -13,24 +13,43 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
     public void CalendarHeaderAccessibleObject_ctor_default()
     {
         using MonthCalendar control = new();
-        control.CreateControl();
-        control.PerformLayout();
-        control.SetSelectionRange(new DateTime(2020, 8, 19), new DateTime(2020, 8, 19));
         CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
 
         headerAccessibleObject.RuntimeId.Length.Should().Be(4);
         headerAccessibleObject.GetChildId().Should().Be(1);
-        headerAccessibleObject.Name.Should().Be("August 2020");
+        headerAccessibleObject.Name.Should().BeEmpty();
         headerAccessibleObject.Parent.Should().BeOfType<CalendarAccessibleObject>();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent).Should().BeOfType<CalendarAccessibleObject>();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling).Should().BeOfType<CalendarBodyAccessibleObject>();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling).Should().BeNull();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild).Should().BeNull();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild).Should().BeNull();
+    }
 
+    [WinFormsFact]
+    public void CalendarHeaderAccessibleObject_Name_ReturnsExpected()
+    {
+        using MonthCalendar control = new();
+
+        control.CreateControl();
+        control.SetSelectionRange(new DateTime(2020, 8, 19), new DateTime(2020, 8, 19));
+        CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
+        string actual = headerAccessibleObject.Name;
+
+        actual.Should().Be("August 2020");
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CalendarHeaderAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar control = new();
+        control.CreateControl();
+        control.PerformLayout();
+        CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
         Rectangle actual = headerAccessibleObject.Bounds;
-        Rectangle actualInClientCoordinates = control.RectangleToClient(actual);
 
+        Rectangle actualInClientCoordinates = control.RectangleToClient(actual);
         control.ClientRectangle.Contains(actualInClientCoordinates).Should().BeTrue();
     }
 
