@@ -22,6 +22,10 @@ public class MaskedTextBoxTests
         mtb.AcceptsTab.Should().BeFalse();
         mtb.CanUndo.Should().BeFalse();
         mtb.WordWrap.Should().BeFalse();
+        mtb.Multiline.Should().BeFalse();
+        mtb.ResetOnSpace.Should().BeTrue();
+        mtb.SkipLiterals.Should().BeTrue();
+        mtb.ValidatingType.Should().BeNull();
 
         mtb.IsHandleCreated.Should().BeFalse();
     }
@@ -464,5 +468,219 @@ public class MaskedTextBoxTests
         control.MaskChanged -= handler;
         control.Mask = "00-00";
         callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData("en-US")]
+    [InlineData("fr-FR")]
+    [InlineData("es-ES")]
+    public void MaskedTextBox_FormatProvider_Set_GetReturnsExpected(string cultureName)
+    {
+        using MaskedTextBox control = new();
+        CultureInfo culture = new CultureInfo(cultureName);
+        control.FormatProvider = culture;
+        control.FormatProvider.Should().Be(culture);
+        control.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_Lines_Get_ReturnsExpected()
+    {
+        using MaskedTextBox control = new();
+        control.Text = "Line1\nLine2\nLine3";
+        control.Lines.Should().Equal(["Line1", "Line2", "Line3"]);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_MaskedTextProvider_Get_ReturnsExpected()
+    {
+        using MaskedTextBox control = new();
+        control.Mask = "000-000";
+        MaskedTextProvider provider = control.MaskedTextProvider;
+        provider.Should().NotBeNull();
+        provider.Mask.Should().Be("000-000");
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_MaskInputRejectedEvent_AddRemove_Success()
+    {
+        using MaskedTextBox control = new();
+        int callCount = 0;
+        MaskInputRejectedEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        // Add and remove the event handler and verify that it was called the correct number of times.
+        control.MaskInputRejected += handler;
+        control.MaskInputRejected -= handler;
+        callCount.Should().Be(0);
+
+        // Add the event handler and set the mask
+        control.MaskInputRejected += handler;
+        control.Mask = "000-000";
+
+        // Test rejected input
+        control.Text = "1234567";
+        callCount.Should().Be(1); // Assuming the event is raised once when input is rejected
+
+        // Test accepted input
+        control.Text = "123-45";
+        callCount.Should().Be(1); // Assuming the event count remains unchanged when input is accepted
+
+        // Remove the event handler
+        control.MaskInputRejected -= handler;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_MaxLength_GetSet_ReturnsExpected()
+    {
+        using MaskedTextBox control = new();
+        int originalMaxLength = control.MaxLength;
+
+        // Try to set MaxLength to a new value
+        control.MaxLength = 500;
+
+        // Verify that MaxLength did not change
+        control.MaxLength.Should().Be(originalMaxLength);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_ReadOnly_GetSet_ReturnsExpected()
+    {
+        using MaskedTextBox control = new();
+        bool originalValue = control.ReadOnly;
+
+        // Verify that ReadOnly did change
+        control.ReadOnly = !originalValue;
+        control.ReadOnly.Should().Be(!originalValue);
+
+        // Verify that ReadOnly did change back to the original value
+        control.ReadOnly = originalValue;
+        control.ReadOnly.Should().Be(originalValue);
+
+        // Try to set ReadOnly to the same value
+        control.ReadOnly = originalValue;
+        control.ReadOnly.Should().Be(originalValue);
+
+        // Check that setting ReadOnly does not affect other properties
+        control.Modified.Should().BeFalse();
+        control.SelectionStart.Should().Be(0);
+        control.SelectionLength.Should().Be(0);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MaskedTextBox_ResetOnSpace_GetSet_ReturnsExpected(bool value)
+    {
+        using MaskedTextBox control = new();
+
+        // Set the ResetOnSpace property
+        control.ResetOnSpace = value;
+        control.ResetOnSpace.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
+
+        // Set the same value again and verify
+        control.ResetOnSpace = value;
+        control.ResetOnSpace.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
+
+        // Set a different value and verify
+        control.ResetOnSpace = !value;
+        control.ResetOnSpace.Should().Be(!value);
+        control.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MaskedTextBox_SkipLiterals_GetSet_ReturnsExpected(bool value)
+    {
+        using MaskedTextBox control = new();
+        control.SkipLiterals = value;
+        control.SkipLiterals.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
+
+        // Set same.
+        control.SkipLiterals = value;
+        control.SkipLiterals.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
+
+        // Set different.
+        control.SkipLiterals = !value;
+        control.SkipLiterals.Should().Be(!value);
+        control.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData("", "")]
+    [InlineData("12345", "12345")]
+    [InlineData("12345", "123")]
+    public void MaskedTextBox_SelectedText_GetSet_ReturnsExpected(string mask, string value)
+    {
+        // Arrange
+        using MaskedTextBox control = new()
+        {
+            Mask = mask,
+        };
+        control.CreateControl();
+
+        // Act
+        control.Text = value;
+        control.SelectionStart = 0;
+        control.SelectionLength = value.Length;
+        string selectedText = control.SelectedText;
+
+        // Assert
+        selectedText.Should().Be(value);
+    }
+
+    [WinFormsTheory]
+    [InlineData(HorizontalAlignment.Left)]
+    [InlineData(HorizontalAlignment.Center)]
+    [InlineData(HorizontalAlignment.Right)]
+    public void MaskedTextBox_TextAlign_Set_GetReturnsExpected(HorizontalAlignment alignment)
+    {
+        // Arrange
+        using MaskedTextBox control = new();
+        control.CreateControl();
+        bool handleCreated = control.IsHandleCreated;
+        HorizontalAlignment originalAlignment = control.TextAlign;
+
+        // Act
+        control.TextAlign = alignment;
+        HorizontalAlignment actualAlignment = control.TextAlign;
+
+        // Assert
+        actualAlignment.Should().Be(alignment);
+
+        // If the alignment is changed, the handle should be recreated
+        bool expectedHandleCreated = handleCreated || alignment != originalAlignment;
+        control.IsHandleCreated.Should().Be(expectedHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_TextAlignChangedEvent_AddRemove_Success()
+    {
+        using MaskedTextBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        // Add the event handler and change TextAlign property.
+        control.TextAlignChanged += handler;
+        control.TextAlign = HorizontalAlignment.Center;
+        callCount.Should().Be(1);
+
+        // Remove the event handler and change TextAlign property.
+        control.TextAlignChanged -= handler;
+        control.TextAlign = HorizontalAlignment.Right;
+        callCount.Should().Be(1); // callCount should not change because the handler has been removed.
     }
 }
