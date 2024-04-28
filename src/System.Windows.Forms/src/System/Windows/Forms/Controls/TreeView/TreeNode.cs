@@ -89,7 +89,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal int _index;                  // our index into our parents child array
     internal int _childCount;
-    internal TreeNode[] _children;
+    internal TreeNode[] _children = [];
     internal TreeNode? _parent;
     internal TreeView? _treeView;
     private bool _expandOnRealization;
@@ -1315,7 +1315,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 _children[^1].Remove(true);
             }
 
-            _children = null;
+            _children = [];
 
             if (tv is not null && isBulkOperation)
             {
@@ -1602,7 +1602,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             size = 4;
         }
 
-        if (_children is null)
+        if (_children is null || _children.Length == 0)
         {
             _children = new TreeNode[size];
         }
