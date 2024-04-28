@@ -1198,8 +1198,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             CompareInfo compare = Application.CurrentCulture.CompareInfo;
             for (int i = 0; i < _childCount; i++)
             {
-                // newOrder.Add(children[i]);
-
                 int min = -1;
                 for (int j = 0; j < _childCount; j++)
                 {
@@ -1234,8 +1232,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             IComparer sorter = parentTreeView.TreeViewNodeSorter;
             for (int i = 0; i < _childCount; i++)
             {
-                // newOrder.Add(children[i]);
-
                 int min = -1;
                 for (int j = 0; j < _childCount; j++)
                 {
@@ -1595,7 +1591,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     /// <summary>
-    ///  Makes sure there is enough room to add n children
+    ///  Makes sure there is enough room to add <paramref name="num" /> children.
     /// </summary>
     internal void EnsureCapacity(int num)
     {

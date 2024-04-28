@@ -223,7 +223,7 @@ public class TreeNodeCollection : IList
         _owner.EnsureCapacity(nodes.Length);
         for (int i = nodes.Length - 1; i >= 0; i--)
         {
-            AddInternal(nodes[i], i);
+            AddInternal(nodes[i], delta: i);
         }
 
         _owner.Nodes.FixedIndex = -1;
@@ -287,7 +287,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Adds a new child node to this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual int Add(TreeNode node) => AddInternal(node, 0);
+    public virtual int Add(TreeNode node) => AddInternal(node, delta: 0);
 
     private int AddInternal(TreeNode node, int delta)
     {
