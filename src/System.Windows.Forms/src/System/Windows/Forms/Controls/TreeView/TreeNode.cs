@@ -1312,7 +1312,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             while (_childCount > 0)
             {
-                _children[^1].Remove(true);
+                _children[_childCount - 1].Remove(true);
             }
 
             _children = [];
