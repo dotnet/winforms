@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported.</source>
-        <target state="new">Using the BinaryFormatter is not supported.</target>
+        <target state="translated">No se admite el uso de BinaryFormatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
