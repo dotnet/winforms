@@ -108,9 +108,16 @@ public partial class CollectionEditor : UITypeEditor
             }
         }
 
-        return itemType.UnderlyingSystemType == typeof(string)
-            ? string.Empty
-            : TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null)!;
+        if (itemType.UnderlyingSystemType == typeof(string))
+        {
+            return string.Empty;
+        }
+
+        object? o = TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null);
+
+        return o is null
+            ? throw new InvalidOperationException($"Neither {nameof(IDesignerHost)} nor {nameof(TypeDescriptor)} can create an instance of {itemType.FullName}.")
+            : o;
     }
 
     /// <summary>
