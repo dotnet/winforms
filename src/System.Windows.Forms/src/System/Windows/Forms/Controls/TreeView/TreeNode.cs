@@ -1955,7 +1955,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 (_parent._children[i] = _parent._children[i + 1])._index = i;
             }
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             _parent._children[_parent._childCount - 1] = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             _parent._childCount--;
 
             _parent = null;
