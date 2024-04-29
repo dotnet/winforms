@@ -14,7 +14,6 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     private static readonly ToolboxItem s_invalidToolboxItem = new();
     private readonly Type _itemType;
     private bool _convertTo;
-    private ToolboxItem _tbxItem = s_invalidToolboxItem;
     private Image? _image;
 
     public ItemTypeToolStripMenuItem(Type t) => _itemType = t;
@@ -51,11 +50,7 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
         }
     }
 
-    public ToolboxItem TbxItem
-    {
-        get => _tbxItem;
-        set => _tbxItem = value;
-    }
+    public ToolboxItem TbxItem { get; set; } = s_invalidToolboxItem;
 
     protected override void Dispose(bool disposing)
     {
