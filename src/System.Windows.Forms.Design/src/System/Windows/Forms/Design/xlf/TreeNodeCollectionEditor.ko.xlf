@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="btnAddChild.Text">
         <source>Add &amp;Child</source>
-        <target state="new">Add &amp;Child</target>
+        <target state="translated">자식 추가(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddRoot.Text">
