@@ -144,7 +144,8 @@ public abstract class ListControl : Control
                     if (displayMemberProperty is not null)
                     {
                         // TypeDescriptor.RegisterType<displayMemberProperty.PropertyType>();
-                        _displayMemberConverter = displayMemberProperty.ConverterFromRegisteredType;
+                        // _displayMemberConverter = displayMemberProperty.ConverterFromRegisteredType;
+                        _displayMemberConverter = displayMemberProperty.Converter;
                     }
                 }
             }
