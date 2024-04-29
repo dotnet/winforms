@@ -644,7 +644,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return null;
             }
 
-            return _children[^1];
+            return _children[_childCount - 1];
         }
     }
 
