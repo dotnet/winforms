@@ -1134,6 +1134,11 @@ public partial class Control
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     if (!success)
                     {
+                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
+
                         stream.Position = 0;
                         deserialized = new BinaryFormatter().Deserialize(stream);
                     }
@@ -1420,6 +1425,11 @@ public partial class Control
             {
                 Type? eventInterface = null;
 
+                if (!Control.EnableFeaturesNotSupportedWithTrimming)
+                {
+                    throw new NotSupportedException(SR.BindingNotSupported);
+                }
+
                 // Get the first declared interface, if any.
                 if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
                     is { } comSourceInterfaces)
@@ -1502,6 +1512,11 @@ public partial class Control
                     if (!success)
                     {
                         stream.SetLength(0);
+
+                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         new BinaryFormatter().Serialize(stream, sourceValue);

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace System.Drawing.Design;
 
@@ -42,6 +43,11 @@ public class UITypeEditor
             [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {AssemblyRef.SystemDrawingDesign}",
             [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
         };
+
+        if (!Control.EnableFeaturesNotSupportedWithTrimming)
+        {
+            throw new NotSupportedException(SR.BindingNotSupported);
+        }
 
         // Add our intrinsic editors to TypeDescriptor.
         TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);

@@ -74,6 +74,11 @@ internal sealed partial class MdiWindowDialog : Form
     [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
     private void InitializeComponent()
     {
+        if (!Control.EnableFeaturesNotSupportedWithTrimming)
+        {
+            throw new NotSupportedException(SR.BindingNotSupported);
+        }
+
         System.ComponentModel.ComponentResourceManager resources = new(typeof(MdiWindowDialog));
         _itemList = new ListBox();
         _okButton = new Button();

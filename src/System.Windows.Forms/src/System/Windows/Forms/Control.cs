@@ -56,6 +56,11 @@ public unsafe partial class Control :
         "Makes double buffered controls non-double buffered");
 #endif
 
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    internal static bool EnableFeaturesNotSupportedWithTrimming { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming", out bool isEnabled) ? isEnabled : true;
+#pragma warning restore IDE0075
+
     private static readonly uint WM_GETCONTROLNAME = PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
     private static readonly uint WM_GETCONTROLTYPE = PInvoke.RegisterWindowMessage("WM_GETCONTROLTYPE");
 
@@ -977,6 +982,11 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void ResetBindings()
     {
+        if (!Binding.IsSupported)
+        {
+            throw new NotSupportedException(SR.BindingNotSupported);
+        }
+
         ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
         bindings?.Clear();
     }
@@ -1029,7 +1039,6 @@ public unsafe partial class Control :
     public virtual BindingContext? BindingContext
     {
         get => BindingContextInternal;
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => BindingContextInternal = value;
     }
 
@@ -1670,6 +1679,11 @@ public unsafe partial class Control :
     {
         get
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
             if (bindings is null)
             {

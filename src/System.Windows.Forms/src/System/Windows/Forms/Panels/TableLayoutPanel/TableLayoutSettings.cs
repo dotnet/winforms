@@ -486,6 +486,8 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         {
             List<ControlInformation> controlsInfo = new(Owner!.Children.Count);
 
+            TypeDescriptor.RegisterType<Control>();
+
             foreach (IArrangedElement element in Owner.Children)
             {
                 if (element is Control c)
@@ -494,7 +496,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
                     // We need to go through the PropertyDescriptor for the Name property
                     // since it is shadowed.
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(c)["Name"];
+                    PropertyDescriptor? prop = TypeDescriptor.GetPropertiesFromRegisteredType(c)["Name"];
                     if (prop is not null && prop.PropertyType == typeof(string))
                     {
                         controlInfo.Name = prop.GetValue(c);

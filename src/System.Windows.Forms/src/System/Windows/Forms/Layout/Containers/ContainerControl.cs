@@ -266,7 +266,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
             return bm;
         }
 
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => base.BindingContext = value;
     }
 
