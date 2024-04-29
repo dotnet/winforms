@@ -4,52 +4,52 @@
     <body>
       <trans-unit id="$this.Text">
         <source>TreeNode Editor</source>
-        <target state="new">TreeNode Editor</target>
+        <target state="translated">TreeNode 编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddChild.Text">
         <source>Add &amp;Child</source>
-        <target state="new">Add &amp;Child</target>
+        <target state="translated">添加子级(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddRoot.Text">
         <source>Add &amp;Root</source>
-        <target state="new">Add &amp;Root</target>
+        <target state="translated">添加根(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="btnCancel.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
         <note />
       </trans-unit>
       <trans-unit id="btnDelete.AccessibleName">
         <source>Delete Node</source>
-        <target state="new">Delete Node</target>
+        <target state="translated">删除节点</target>
         <note />
       </trans-unit>
       <trans-unit id="label1.Text">
         <source>Select a &amp;node to edit:</source>
-        <target state="new">Select a &amp;node to edit:</target>
+        <target state="translated">选择要编辑的节点(&amp;N):</target>
         <note />
       </trans-unit>
       <trans-unit id="label2.Text">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">属性(&amp;P):</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDownButton.AccessibleName">
         <source>Move Down</source>
-        <target state="new">Move Down</target>
+        <target state="translated">下移</target>
         <note />
       </trans-unit>
       <trans-unit id="moveUpButton.AccessibleName">
         <source>Move Up</source>
-        <target state="new">Move Up</target>
+        <target state="translated">上移</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">确定</target>
         <note />
       </trans-unit>
     </body>
