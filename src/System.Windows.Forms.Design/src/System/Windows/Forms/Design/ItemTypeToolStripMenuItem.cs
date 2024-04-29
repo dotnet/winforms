@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Design;
 
@@ -13,16 +11,12 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
 {
-    private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
     private static readonly ToolboxItem s_invalidToolboxItem = new();
     private readonly Type _itemType;
     private bool _convertTo;
-    private ToolboxItem _tbxItem = s_invalidToolboxItem;
-    private Image _image;
+    private Image? _image;
 
     public ItemTypeToolStripMenuItem(Type t) => _itemType = t;
-
-    public static string SystemWindowsFormsNamespace => s_systemWindowsFormsNamespace;
 
     public Type ItemType
     {
@@ -35,7 +29,7 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
         set => _convertTo = value;
     }
 
-    public override Image Image
+    public override Image? Image
     {
         get
         {
@@ -48,7 +42,7 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
         }
     }
 
-    public override string Text
+    public override string? Text
     {
         get => ToolStripDesignerUtils.GetToolboxDescription(ItemType);
         set
@@ -56,13 +50,13 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
         }
     }
 
-    public ToolboxItem TbxItem { get => _tbxItem; set => _tbxItem = value; }
+    public ToolboxItem TbxItem { get; set; } = s_invalidToolboxItem;
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            TbxItem = null;
+            TbxItem = null!;
         }
 
         base.Dispose(disposing);
