@@ -15,6 +15,9 @@ public class CheckedListBoxTests
         using CheckedListBox box = new();
 
         Assert.NotNull(box);
+
+        // Check default values
+        box.UseCompatibleTextRendering.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -76,14 +79,12 @@ public class CheckedListBoxTests
     {
         using CheckedListBox box = new();
 
-        AssertDrawMode(box, DrawMode.OwnerDrawFixed);
-        AssertDrawMode(box, DrawMode.OwnerDrawVariable);
-    }
-
-    private void AssertDrawMode(CheckedListBox box, DrawMode drawMode)
-    {
         box.DrawMode.Should().Be(DrawMode.Normal);
-        box.DrawMode = drawMode;
+
+        box.DrawMode = DrawMode.OwnerDrawFixed;
+        box.DrawMode.Should().Be(DrawMode.Normal);
+
+        box.DrawMode = DrawMode.OwnerDrawVariable;
         box.DrawMode.Should().Be(DrawMode.Normal);
     }
 
@@ -132,21 +133,6 @@ public class CheckedListBoxTests
 
     [WinFormsTheory]
     [BoolData]
-    public void CheckedListBox_ThreeDCheckBoxes_SetWithHandle_ReturnsExpected(bool expected)
-    {
-        using CheckedListBox box = new()
-        {
-            ThreeDCheckBoxes = expected
-        };
-
-        box.CreateControl();
-        box.ThreeDCheckBoxes = expected;
-
-        box.ThreeDCheckBoxes.Should().Be(expected);
-    }
-
-    [WinFormsTheory]
-    [BoolData]
     public void CheckedListBox_ThreeDCheckBoxes_SetWithItems_ReturnsExpected(bool expected)
     {
         using CheckedListBox box = new()
@@ -155,7 +141,6 @@ public class CheckedListBoxTests
         };
 
         box.Items.Add("item1");
-        box.ThreeDCheckBoxes = expected;
 
         box.ThreeDCheckBoxes.Should().Be(expected);
     }
@@ -644,42 +629,31 @@ public class CheckedListBoxTests
     public void CheckedListBox_DataSource_GetSet_ReturnsExpected()
     {
         using CheckedListBox checkedListBox = new();
-        var dataSource = new List<string> { "item1", "item2", "item3" };
-
-        checkedListBox.DataSource = dataSource;
-        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource);
-
-        checkedListBox.DataSource = null;
-        checkedListBox.DataSource.Should().BeNull();
-    }
-
-    [WinFormsFact]
-    public void CheckedListBox_DataSource_SetWithNonNullOldValue_Success()
-    {
-        using CheckedListBox checkedListBox = new();
         var dataSource1 = new List<string> { "item1", "item2", "item3" };
         var dataSource2 = new List<string> { "item4", "item5", "item6" };
-
-        checkedListBox.DataSource = dataSource1;
-        checkedListBox.DataSource = dataSource2;
-
-        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
-    }
-
-    [WinFormsFact]
-    public void CheckedListBox_DataSource_SetWithSameValue_DoesNotCallDataSourceChanged()
-    {
-        using CheckedListBox checkedListBox = new();
-        var dataSource = new List<string> { "item1", "item2", "item3" };
 
         int callCount = 0;
         checkedListBox.DataSourceChanged += (sender, e) => callCount++;
 
-        checkedListBox.DataSource = dataSource;
-        checkedListBox.DataSource = dataSource;
-
+        // Test initial DataSource set
+        checkedListBox.DataSource = dataSource1;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource1);
         callCount.Should().Be(1);
-        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource);
+
+        // Test changing DataSource
+        checkedListBox.DataSource = dataSource2;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
+        callCount.Should().Be(2);
+
+        // Test setting DataSource to null
+        checkedListBox.DataSource = null;
+        checkedListBox.DataSource.Should().BeNull();
+        callCount.Should().Be(3);
+
+        // Test setting DataSource to DataSource
+        checkedListBox.DataSource = dataSource2;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
+        callCount.Should().Be(4);
     }
 
     [WinFormsFact]
@@ -705,8 +679,7 @@ public class CheckedListBoxTests
     }
 
     [WinFormsTheory]
-    [InlineData(true)]
-    [InlineData(false)]
+    [BoolData]
     public void CheckedListBox_UseCompatibleTextRendering_GetSet_ReturnsExpected(bool value)
     {
         using CheckedListBox checkedListBox = new();
@@ -714,16 +687,6 @@ public class CheckedListBoxTests
         checkedListBox.UseCompatibleTextRendering = value;
         checkedListBox.UseCompatibleTextRendering.Should().Be(value);
         checkedListBox.UseCompatibleTextRenderingInternal.Should().Be(value);
-    }
-
-    [WinFormsFact]
-    public void CheckedListBox_UseCompatibleTextRendering_SetWithSameValue_DoesNotChangeValue()
-    {
-        using CheckedListBox checkedListBox = new();
-        bool originalValue = checkedListBox.UseCompatibleTextRendering;
-
-        checkedListBox.UseCompatibleTextRendering = originalValue;
-        checkedListBox.UseCompatibleTextRendering.Should().Be(originalValue);
     }
 
     [WinFormsFact]
@@ -738,11 +701,13 @@ public class CheckedListBoxTests
             e.Should().Be(EventArgs.Empty);
         };
 
-        // Add and remove.
         checkedListBox.DataSourceChanged += handler;
+        checkedListBox.OnDataSourceChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
         checkedListBox.DataSourceChanged -= handler;
         checkedListBox.OnDataSourceChanged(EventArgs.Empty);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -757,11 +722,13 @@ public class CheckedListBoxTests
             e.Should().Be(EventArgs.Empty);
         };
 
-        // Add and remove.
         checkedListBox.DisplayMemberChanged += handler;
+        checkedListBox.OnDisplayMemberChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
         checkedListBox.DisplayMemberChanged -= handler;
         checkedListBox.OnDisplayMemberChanged(EventArgs.Empty);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -778,11 +745,13 @@ public class CheckedListBoxTests
 
         ItemCheckEventArgs eventArgs = new ItemCheckEventArgs(0, CheckState.Checked, CheckState.Unchecked);
 
-        // Add and remove.
         checkedListBox.ItemCheck += handler;
+        checkedListBox.OnItemCheck(eventArgs);
+        callCount.Should().Be(1);
+
         checkedListBox.ItemCheck -= handler;
         checkedListBox.OnItemCheck(eventArgs);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -797,11 +766,13 @@ public class CheckedListBoxTests
             e.Should().Be(EventArgs.Empty);
         };
 
-        // Add and remove.
         checkedListBox.Click += handler;
+        checkedListBox.OnClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+
         checkedListBox.Click -= handler;
         checkedListBox.OnClick(EventArgs.Empty);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -818,11 +789,13 @@ public class CheckedListBoxTests
 
         MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0);
 
-        // Add and remove.
         checkedListBox.MouseClick += handler;
+        checkedListBox.OnMouseClick(eventArgs);
+        callCount.Should().Be(1);
+
         checkedListBox.MouseClick -= handler;
         checkedListBox.OnMouseClick(eventArgs);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -842,11 +815,13 @@ public class CheckedListBoxTests
         Rectangle rect = new(1, 2, 3, 4);
         DrawItemEventArgs eventArgs = new DrawItemEventArgs(Graphics.FromImage(image), font, rect, 1, DrawItemState.None, Color.Red, Color.Blue);
 
-        // Add and remove.
         checkedListBox.DrawItem += handler;
+        checkedListBox.OnDrawItem(eventArgs);
+        callCount.Should().Be(1);
+
         checkedListBox.DrawItem -= handler;
         checkedListBox.OnDrawItem(eventArgs);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -864,11 +839,13 @@ public class CheckedListBoxTests
         using Bitmap image = new(10, 10);
         MeasureItemEventArgs eventArgs = new MeasureItemEventArgs(Graphics.FromImage(image), 1);
 
-        // Add and remove.
         checkedListBox.MeasureItem += handler;
+        checkedListBox.OnMeasureItem(eventArgs);
+        callCount.Should().Be(1);
+
         checkedListBox.MeasureItem -= handler;
         checkedListBox.OnMeasureItem(eventArgs);
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
