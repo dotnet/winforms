@@ -30,7 +30,7 @@
      SYSLIB0050: Obsolete attribute
      SYSLIB0051: Formatters obsolete
     -->
-    <NoWarn>$(NoWarn);CS1574;CS1580;CA1036;CA1051;CA1066;SYSLIB0011;SYSLIB0050;SYSLIB0051</NoWarn>
+    <NoWarn>$(NoWarn);CS1574;CS1580;CA1036;CA1051;CA1066;SYSLIB0011;SYSLIB0050;SYSLIB0051;xUnit1013</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>

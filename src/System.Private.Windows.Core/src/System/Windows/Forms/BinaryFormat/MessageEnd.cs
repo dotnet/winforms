@@ -15,7 +15,7 @@ internal sealed class MessageEnd : IRecord<MessageEnd>, IBinaryFormatParseable<M
     public static RecordType RecordType => RecordType.MessageEnd;
 
     static MessageEnd IBinaryFormatParseable<MessageEnd>.Parse(
-        BinaryFormattedObject.ParseState state) => Instance;
+        BinaryFormattedObject.IParseState state) => Instance;
 
     public void Write(BinaryWriter writer) => writer.Write((byte)RecordType);
 }

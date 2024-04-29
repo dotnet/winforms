@@ -3,10 +3,13 @@
 
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Windows.Forms.BinaryFormat;
+using FormatTests.Common;
+using Record = System.Windows.Forms.BinaryFormat.Record;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
-public class PrimitiveTypeTests
+public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
 {
     [Theory]
     [MemberData(nameof(RoundTrip_Data))]
@@ -83,7 +86,7 @@ public class PrimitiveTypeTests
     [MemberData(nameof(Primitive_Data))]
     public void PrimitiveTypeMemberName(object value)
     {
-        BinaryFormattedObject format = value.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(value));
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.MemberNames[0].Should().Be("m_value");
         systemClass.MemberValues.Count.Should().Be(1);
@@ -98,13 +101,8 @@ public class PrimitiveTypeTests
         BinaryFormatWriter.WritePrimitive(stream, value);
         stream.Position = 0;
 
-        using BinaryFormatterScope formatterScope = new(enable: true);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-
         // cs/binary-formatter-without-binder
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
-
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
         // cs/dangerous-binary-deserialization
         object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
@@ -116,7 +114,7 @@ public class PrimitiveTypeTests
     [MemberData(nameof(Primitive_ExtendedData))]
     public void BinaryFormattedObject_ReadPrimitive(object value)
     {
-        BinaryFormattedObject formattedObject = value.SerializeAndParse();
+        BinaryFormattedObject formattedObject = new(Serialize(value));
         formattedObject.TryGetPrimitiveType(out object? deserialized).Should().BeTrue();
         deserialized.Should().Be(value);
     }

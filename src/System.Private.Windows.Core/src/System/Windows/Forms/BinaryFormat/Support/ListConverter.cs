@@ -7,13 +7,13 @@ namespace System.Windows.Forms.BinaryFormat;
 
 internal static class ListConverter
 {
-    public static ListConverter<object?, object> GetPrimitiveConverter(
+    public static ListConverter<object?, object?> GetPrimitiveConverter(
         IList values,
         StringRecordsCollection strings) => new(
             values,
             (object? value) => value switch
             {
-                null => ObjectNull.Instance,
+                null => null,
                 string stringValue => strings.GetStringRecord(stringValue),
                 _ => new MemberPrimitiveTyped(value)
             });

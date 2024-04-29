@@ -4,15 +4,17 @@
 using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms.BinaryFormat;
+using FormatTests.Common;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
-public class ListTests
+public class ListTests : SerializationTest<FormattedObjectSerializer>
 {
     [Fact]
     public void BinaryFormattedObject_ParseEmptyArrayList()
     {
-        BinaryFormattedObject format = new ArrayList().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new ArrayList()));
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
@@ -26,10 +28,10 @@ public class ListTests
     [MemberData(nameof(ArrayList_Primitive_Data))]
     public void BinaryFormattedObject_ParsePrimitivesArrayList(object value)
     {
-        BinaryFormattedObject format = new ArrayList()
+        BinaryFormattedObject format = new(Serialize(new ArrayList()
         {
             value
-        }.SerializeAndParse();
+        }));
 
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
@@ -45,10 +47,10 @@ public class ListTests
     [Fact]
     public void BinaryFormattedObject_ParseStringArrayList()
     {
-        BinaryFormattedObject format = new ArrayList()
+        BinaryFormattedObject format = new(Serialize(new ArrayList()
         {
             "JarJar"
-        }.SerializeAndParse();
+        }));
 
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
@@ -121,7 +123,7 @@ public class ListTests
     [Fact]
     public void BinaryFormattedObject_ParseEmptyIntList()
     {
-        BinaryFormattedObject format = new List<int>().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new List<int>()));
         SystemClassWithMembersAndTypes classInfo = (SystemClassWithMembersAndTypes)format[1];
 
         // Note that T types are serialized as the mscorlib type.
@@ -153,7 +155,7 @@ public class ListTests
     [Fact]
     public void BinaryFormattedObject_ParseEmptyStringList()
     {
-        BinaryFormattedObject format = new List<string>().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new List<string>()));
         SystemClassWithMembersAndTypes classInfo = (SystemClassWithMembersAndTypes)format[1];
         classInfo.ClassInfo.Name.Should().StartWith("System.Collections.Generic.List`1[[System.String,");
         classInfo.MemberTypeInfo[0].Should().Be((BinaryType.StringArray, null));
@@ -171,13 +173,10 @@ public class ListTests
         BinaryFormatWriter.TryWritePrimitiveList(stream, list).Should().BeTrue();
         stream.Position = 0;
 
-        using BinaryFormatterScope formatterScope = new(enable: true);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
         // cs/binary-formatter-without-binder
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         // cs/dangerous-binary-deserialization
         IList deserialized = (IList)formatter.Deserialize(stream); // CodeQL[SM02229] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
-#pragma warning restore SYSLIB0011
 
         deserialized.Should().BeEquivalentTo(list);
     }
@@ -195,7 +194,7 @@ public class ListTests
     [MemberData(nameof(PrimitiveLists_TestData))]
     public void BinaryFormattedObjectExtensions_TryGetPrimitiveList(IList list)
     {
-        BinaryFormattedObject format = list.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(list));
         format.TryGetPrimitiveList(out object? deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(list);
     }

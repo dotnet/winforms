@@ -11,7 +11,7 @@ namespace System.Windows.Forms.BinaryFormat;
 
 internal sealed partial class BinaryFormattedObject
 {
-    internal sealed class TypeResolver
+    internal sealed class DefaultTypeResolver : ITypeResolver
     {
         private readonly FormatterAssemblyStyle _assemblyMatching;
         private readonly SerializationBinder? _binder;
@@ -27,7 +27,7 @@ internal sealed partial class BinaryFormattedObject
         [AllowNull]
         private Type _lastType;
 
-        public TypeResolver(Options options, IReadOnlyRecordMap recordMap)
+        internal DefaultTypeResolver(Options options, IReadOnlyRecordMap recordMap)
         {
             _assemblyMatching = options.AssemblyMatching;
             _binder = options.Binder;
@@ -41,7 +41,7 @@ internal sealed partial class BinaryFormattedObject
         /// <param name="libraryId">The library id, or <see cref="Id.Null"/> for the "system" assembly.</param>
         [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
         [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-        internal Type GetType(string typeName, Id libraryId)
+        Type ITypeResolver.GetType(string typeName, Id libraryId)
         {
             if (libraryId == _lastLibraryId && string.Equals(typeName, _lastTypeName))
             {

@@ -27,7 +27,7 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>, IBinaryFormatParse
     public static RecordType RecordType => RecordType.BinaryLibrary;
 
     static BinaryLibrary IBinaryFormatParseable<BinaryLibrary>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         BinaryLibrary record = new(
             state.Reader.ReadInt32(),

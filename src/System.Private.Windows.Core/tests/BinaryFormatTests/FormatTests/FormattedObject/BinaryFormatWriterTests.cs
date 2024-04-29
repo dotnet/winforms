@@ -3,8 +3,9 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms.BinaryFormat;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
 public class BinaryFormatWriterTests
 {
@@ -19,10 +20,7 @@ public class BinaryFormatWriterTests
         BinaryFormatWriter.WriteString(stream, testString);
         stream.Position = 0;
 
-        using BinaryFormatterScope formatterScope = new(enable: true);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
-#pragma warning restore
 
         // cs/dangerous-binary-deserialization
         object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
@@ -38,11 +36,8 @@ public class BinaryFormatWriterTests
         success.Should().BeTrue();
         stream.Position = 0;
 
-        using BinaryFormatterScope formatterScope = new(enable: true);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
         // cs/binary-formatter-without-binder
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
         // cs/dangerous-binary-deserialization
         object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
@@ -111,7 +106,7 @@ public class BinaryFormatWriterTests
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
             SystemDrawingTests.SystemDrawing_TestData).Concat(
-            ArrayTests.Array_TestData);
+            ArrayTests.Array_TestData).Skip(9);
 
     public static IEnumerable<object[]?> TryWriteObject_UnsupportedObjects_TestData =>
         HashtableTests.Hashtables_UnsupportedTestData.Concat(

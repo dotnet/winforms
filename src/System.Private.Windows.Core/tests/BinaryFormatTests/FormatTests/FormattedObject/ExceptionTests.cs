@@ -2,15 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Windows.Forms.BinaryFormat;
+using FormatTests.Common;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
-public class ExceptionTests
+public class ExceptionTests : SerializationTest<FormattedObjectSerializer>
 {
     [Fact]
     public void NotSupportedException_Parse()
     {
-        BinaryFormattedObject format = new NotSupportedException().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new NotSupportedException()));
         format.RecordCount.Should().Be(3);
         var systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.Name.Should().Be(typeof(NotSupportedException).FullName);
@@ -46,20 +48,20 @@ public class ExceptionTests
             (BinaryType.PrimitiveArray, PrimitiveType.Byte)
         });
 
-        systemClass.MemberValues.Should().BeEquivalentTo(new object[]
+        systemClass.MemberValues.Should().BeEquivalentTo(new object?[]
         {
             new BinaryObjectString(2, "System.NotSupportedException"),
             new BinaryObjectString(3, "Specified method is not supported."),
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
+            null,
+            null,
+            null,
             0,
-            ObjectNull.Instance,
+            null,
             unchecked((int)0x80131515),
-            ObjectNull.Instance,
-            ObjectNull.Instance
+            null,
+            null
         });
     }
 }

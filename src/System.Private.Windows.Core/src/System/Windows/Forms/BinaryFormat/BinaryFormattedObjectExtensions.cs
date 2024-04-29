@@ -402,8 +402,8 @@ internal static class BinaryFormattedObjectExtensions
             Hashtable temp = new(keys.Length);
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i]!, out object? key)
-                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i]!, out object? value))
+                if (!format.TryGetPrimitiveRecordValue((IRecord?)keys[i], out object? key)
+                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord?)values[i], out object? value))
                 {
                     return false;
                 }
@@ -422,7 +422,7 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveRecordValue(
         this BinaryFormattedObject format,
-        IRecord record,
+        IRecord? record,
         [NotNullWhen(true)] out object? value)
     {
         format.TryGetPrimitiveRecordValueOrNull(record, out value);
@@ -434,11 +434,11 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveRecordValueOrNull(
         this BinaryFormattedObject format,
-        IRecord record,
+        IRecord? record,
         out object? value)
     {
         value = null;
-        if (record is ObjectNull)
+        if (record is ObjectNull or null)
         {
             return true;
         }

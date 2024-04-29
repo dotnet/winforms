@@ -2,15 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Windows.Forms.BinaryFormat;
+using FormatTests.Common;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
-public class BinaryFormattedObjectTests
+public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSerializer>
 {
     [Fact]
     public void ReadHeader()
     {
-        BinaryFormattedObject format = "Hello World.".SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize("Hello World."));
         SerializationHeader header = (SerializationHeader)format[0];
         header.MajorVersion.Should().Be(1);
         header.MinorVersion.Should().Be(0);
@@ -24,7 +26,7 @@ public class BinaryFormattedObjectTests
     [InlineData("Embedded\0 Null.")]
     public void ReadBinaryObjectString(string testString)
     {
-        BinaryFormattedObject format = testString.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(testString));
         BinaryObjectString stringRecord = (BinaryObjectString)format[1];
         stringRecord.ObjectId.Should().Be(1);
         stringRecord.Value.Should().Be(testString);
@@ -33,7 +35,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadEmptyHashTable()
     {
-        BinaryFormattedObject format = new Hashtable().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new Hashtable()));
 
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
         systemClass.ObjectId.Should().Be(1);
@@ -64,8 +66,8 @@ public class BinaryFormattedObjectTests
         {
             0.72f,
             0,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
             3,
             new MemberReference(2),
             new MemberReference(3)
@@ -83,10 +85,10 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadHashTableWithStringPair()
     {
-        BinaryFormattedObject format = new Hashtable()
+        BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "This", "That" }
-        }.SerializeAndParse();
+        }));
 
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
@@ -105,8 +107,8 @@ public class BinaryFormattedObjectTests
         {
             0.72f,
             1,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
             3,
             new MemberReference(2),
             new MemberReference(3)
@@ -130,12 +132,12 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadHashTableWithRepeatedStrings()
     {
-        BinaryFormattedObject format = new Hashtable()
+        BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "This", "That" },
             { "TheOther", "This" },
             { "That", "This" }
-        }.SerializeAndParse();
+        }));
 
         // The collections themselves get ids first before the strings do.
         // Everything in the second array is a string reference.
@@ -149,12 +151,12 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadHashTableWithNullValues()
     {
-        BinaryFormattedObject format = new Hashtable()
+        BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "Yowza", null },
             { "Youza", null },
             { "Meeza", null }
-        }.SerializeAndParse();
+        }));
 
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
 
@@ -162,8 +164,8 @@ public class BinaryFormattedObjectTests
         {
             0.72f,
             4,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
             7,
             new MemberReference(2),
             new MemberReference(3)
@@ -180,13 +182,13 @@ public class BinaryFormattedObjectTests
         array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]!];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(3);
-        array.ArrayObjects[0].Should().BeOfType<ObjectNull>();
+        array.ArrayObjects[0].Should().BeNull();
     }
 
     [Fact]
     public void ReadObject()
     {
-        BinaryFormattedObject format = new object().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new object()));
         format[1].Should().BeOfType<SystemClassWithMembersAndTypes>();
     }
 
@@ -194,14 +196,14 @@ public class BinaryFormattedObjectTests
     public void ReadStruct()
     {
         ValueTuple<int> tuple = new(355);
-        BinaryFormattedObject format = tuple.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(tuple));
         format[1].Should().BeOfType<SystemClassWithMembersAndTypes>();
     }
 
     [Fact]
     public void ReadSimpleSerializableObject()
     {
-        BinaryFormattedObject format = new SimpleSerializableObject().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new SimpleSerializableObject()));
 
         BinaryLibrary library = (BinaryLibrary)format[1];
         library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
@@ -220,7 +222,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadNestedSerializableObject()
     {
-        BinaryFormattedObject format = new NestedSerializableObject().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new NestedSerializableObject()));
 
         BinaryLibrary library = (BinaryLibrary)format[1];
         library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
@@ -255,7 +257,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadTwoIntObject()
     {
-        BinaryFormattedObject format = new TwoIntSerializableObject().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new TwoIntSerializableObject()));
 
         BinaryLibrary library = (BinaryLibrary)format[1];
         library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
@@ -284,7 +286,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadRepeatedNestedObject()
     {
-        BinaryFormattedObject format = new RepeatedNestedSerializableObject().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new RepeatedNestedSerializableObject()));
         ClassWithMembersAndTypes firstClass = (ClassWithMembersAndTypes)format[3];
         ClassWithId classWithId = (ClassWithId)format[4];
         classWithId.MetadataId.Should().Be(firstClass.ObjectId);
@@ -294,7 +296,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadPrimitiveArray()
     {
-        BinaryFormattedObject format = new int[] { 10, 9, 8, 7 }.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new int[] { 10, 9, 8, 7 }));
 
         ArraySinglePrimitive<int> array = (ArraySinglePrimitive<int>)format[1];
         array.ArrayInfo.Length.Should().Be(4);
@@ -305,7 +307,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadStringArray()
     {
-        BinaryFormattedObject format = new string[] { "Monday", "Tuesday", "Wednesday" }.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new string[] { "Monday", "Tuesday", "Wednesday" }));
         ArraySingleString array = (ArraySingleString)format[1];
         array.ArrayInfo.ObjectId.Should().Be(1);
         array.ArrayInfo.Length.Should().Be(3);
@@ -315,18 +317,18 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadStringArrayWithNulls()
     {
-        BinaryFormattedObject format = new string?[] { "Monday", null, "Wednesday", null, null, null }.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new string?[] { "Monday", null, "Wednesday", null, null, null }));
         ArraySingleString array = (ArraySingleString)format[1];
         array.ArrayInfo.ObjectId.Should().Be(1);
         array.ArrayInfo.Length.Should().Be(6);
         array.ArrayObjects.Should().BeEquivalentTo(new object?[]
         {
             new BinaryObjectString(2, "Monday"),
-            ObjectNull.Instance,
+            null,
             new BinaryObjectString(3, "Wednesday"),
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance
+            null,
+            null,
+            null
         });
         BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
     }
@@ -334,7 +336,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadDuplicatedStringArray()
     {
-        BinaryFormattedObject format = new string[] { "Monday", "Tuesday", "Monday" }.SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new string[] { "Monday", "Tuesday", "Monday" }));
         ArraySingleString array = (ArraySingleString)format[1];
         array.ArrayInfo.ObjectId.Should().Be(1);
         array.ArrayInfo.Length.Should().Be(3);
@@ -346,7 +348,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadObjectWithNullableObjects()
     {
-        BinaryFormattedObject format = new ObjectWithNullableObjects().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new ObjectWithNullableObjects()));
         ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format[2];
         BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
     }
@@ -354,7 +356,7 @@ public class BinaryFormattedObjectTests
     [Fact]
     public void ReadNestedObjectWithNullableObjects()
     {
-        BinaryFormattedObject format = new NestedObjectWithNullableObjects().SerializeAndParse();
+        BinaryFormattedObject format = new(Serialize(new NestedObjectWithNullableObjects()));
         ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format[2];
         BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
     }

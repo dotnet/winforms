@@ -42,8 +42,8 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 internal sealed partial class Deserializer : IDeserializer
 {
     private readonly IReadOnlyRecordMap _recordMap;
-    private readonly BinaryFormattedObject.TypeResolver _typeResolver;
-    BinaryFormattedObject.TypeResolver IDeserializer.TypeResolver => _typeResolver;
+    private readonly BinaryFormattedObject.ITypeResolver _typeResolver;
+    BinaryFormattedObject.ITypeResolver IDeserializer.TypeResolver => _typeResolver;
 
     /// <inheritdoc cref="IDeserializer.Options"/>
     private BinaryFormattedObject.Options Options { get; }
@@ -86,7 +86,7 @@ internal sealed partial class Deserializer : IDeserializer
     private Deserializer(
         Id rootId,
         IReadOnlyRecordMap recordMap,
-        BinaryFormattedObject.TypeResolver typeResolver,
+        BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
         _rootId = rootId;
@@ -107,7 +107,7 @@ internal sealed partial class Deserializer : IDeserializer
     internal static object Deserialize(
         Id rootId,
         IReadOnlyRecordMap recordMap,
-        BinaryFormattedObject.TypeResolver typeResolver,
+        BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
         var deserializer = new Deserializer(rootId, recordMap, typeResolver, options);

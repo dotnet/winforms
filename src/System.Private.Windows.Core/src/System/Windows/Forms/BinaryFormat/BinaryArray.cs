@@ -21,7 +21,7 @@ internal static partial class BinaryArray
 
     public static RecordType RecordType => RecordType.BinaryArray;
 
-    internal static IBinaryArray Parse(BinaryFormattedObject.ParseState state)
+    internal static IBinaryArray Parse(BinaryFormattedObject.IParseState state)
     {
         Id objectId = state.Reader.ReadInt32();
         BinaryArrayType arrayType = (BinaryArrayType)state.Reader.ReadByte();

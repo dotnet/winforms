@@ -35,7 +35,8 @@ internal sealed partial class BinaryFormattedObject
     private readonly RecordMap _recordMap = new();
 
     private readonly Options _options;
-    private TypeResolver? _typeResolver;
+    private ITypeResolver? _typeResolver;
+    private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
 
     /// <summary>
     ///  Creates <see cref="BinaryFormattedObject"/> by parsing <paramref name="stream"/>.
@@ -79,9 +80,8 @@ internal sealed partial class BinaryFormattedObject
     {
         try
         {
-            _typeResolver ??= new(_options, _recordMap);
             Id rootId = ((SerializationHeader)_records[0]).RootId;
-            return Deserializer.Deserializer.Deserialize(rootId, _recordMap, _typeResolver, _options);
+            return Deserializer.Deserializer.Deserialize(rootId, _recordMap, TypeResolver, _options);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
@@ -111,16 +111,4 @@ internal sealed partial class BinaryFormattedObject
     public IRecord this[Id id] => _recordMap[id];
 
     public IReadOnlyRecordMap RecordMap => _recordMap;
-
-    /// <summary>
-    ///  Resolves the given type name against the specified library.
-    /// </summary>
-    /// <param name="libraryId">The library id, or <see cref="Id.Null"/> for the "system" assembly.</param>
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
-    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    internal Type GetType(string typeName, Id libraryId)
-    {
-        _typeResolver ??= new(_options, _recordMap);
-        return _typeResolver.GetType(typeName, libraryId);
-    }
 }

@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Tests;
+namespace FormatTests.FormattedObject;
 
 public class BinaryFormattedTypes
 {
@@ -15,9 +15,7 @@ public class BinaryFormattedTypes
     public void Types_UseBinaryFormatter(Type type)
     {
         bool iSerializable = type.IsAssignableTo(typeof(ISerializable));
-#pragma warning disable SYSLIB0050 // Type or member is obsolete
         bool serializable = type.IsSerializable;
-#pragma warning restore SYSLIB0050
 
         Assert.True(iSerializable || serializable, "Type should either implement ISerializable or be marked as [Serializable]");
 

@@ -11,5 +11,5 @@ internal interface IBinaryFormatParseable<T> where T : IRecord
     /// <summary>
     ///  Creates the type utilizaing the given <see cref="BinaryReader"/>.
     /// </summary>
-    static abstract T Parse(BinaryFormattedObject.ParseState state);
+    static abstract T Parse(BinaryFormattedObject.IParseState state);
 }

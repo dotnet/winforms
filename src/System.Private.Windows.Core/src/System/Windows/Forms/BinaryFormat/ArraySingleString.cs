@@ -22,11 +22,11 @@ internal sealed class ArraySingleString : ArrayRecord<object?>, IRecord<ArraySin
     { }
 
     static ArraySingleString IBinaryFormatParseable<ArraySingleString>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ArraySingleString record = new(
             ArrayInfo.Parse(state.Reader, out Count length),
-            ReadRecords(state, length));
+            ReadObjectArrayValues(state, length));
 
         state.RecordMap[record.ObjectId] = record;
         return record;

@@ -22,8 +22,8 @@ internal static partial class BinaryArray
             IReadOnlyList<int> lengths,
             ArrayInfo arrayInfo,
             MemberTypeInfo typeInfo,
-            BinaryFormattedObject.ParseState state)
-            : base(arrayInfo, ReadValues(state, typeInfo[0].Type, typeInfo[0].Info, arrayInfo.Length))
+            BinaryFormattedObject.IParseState state)
+            : base(arrayInfo, ReadObjectArrayValues(state, typeInfo[0].Type, typeInfo[0].Info, arrayInfo.Length))
         {
             Rank = rank;
             ArrayType = type;

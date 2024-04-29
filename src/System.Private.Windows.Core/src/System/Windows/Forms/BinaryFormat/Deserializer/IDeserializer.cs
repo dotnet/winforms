@@ -46,7 +46,7 @@ internal interface IDeserializer
     /// <summary>
     ///  Resolver for types.
     /// </summary>
-    BinaryFormattedObject.TypeResolver TypeResolver { get; }
+    BinaryFormattedObject.ITypeResolver TypeResolver { get; }
 
     /// <summary>
     ///  Pend the given value updater to be run when it's value type dependency is complete.
