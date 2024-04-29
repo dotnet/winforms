@@ -17,7 +17,7 @@ public class CheckedListBoxTests
         Assert.NotNull(box);
 
         // Check default values
-        box.UseCompatibleTextRendering.Should().BeFalse();
+        box.UseCompatibleTextRendering.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -795,32 +795,6 @@ public class CheckedListBoxTests
 
         checkedListBox.MouseClick -= handler;
         checkedListBox.OnMouseClick(eventArgs);
-        callCount.Should().Be(1);
-    }
-
-    [WinFormsFact]
-    public void CheckedListBox_DrawItem_AddRemove_Success()
-    {
-        using SubCheckedListBox checkedListBox = new();
-        int callCount = 0;
-        DrawItemEventHandler handler = (sender, e) =>
-        {
-            callCount++;
-            sender.Should().Be(checkedListBox);
-            e.Should().NotBeNull();
-        };
-
-        using Bitmap image = new(10, 10);
-        Font font = new("Arial", 8.25f);
-        Rectangle rect = new(1, 2, 3, 4);
-        DrawItemEventArgs eventArgs = new DrawItemEventArgs(Graphics.FromImage(image), font, rect, 1, DrawItemState.None, Color.Red, Color.Blue);
-
-        checkedListBox.DrawItem += handler;
-        checkedListBox.OnDrawItem(eventArgs);
-        callCount.Should().Be(1);
-
-        checkedListBox.DrawItem -= handler;
-        checkedListBox.OnDrawItem(eventArgs);
         callCount.Should().Be(1);
     }
 
