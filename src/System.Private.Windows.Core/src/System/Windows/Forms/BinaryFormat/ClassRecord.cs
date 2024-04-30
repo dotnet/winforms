@@ -62,7 +62,7 @@ internal abstract class ClassRecord : ObjectRecord
         List<object?> memberValues = new(Math.Min(memberTypeInfo.Count, BinaryFormattedObject.MaxNewCollectionSize));
         foreach ((BinaryType type, object? info) in memberTypeInfo)
         {
-            object? value = ReadValue(state, type, info);
+            object value = ReadValue(state, type, info);
             if (value is not ObjectNull nullValue)
             {
                 memberValues.Add(value);

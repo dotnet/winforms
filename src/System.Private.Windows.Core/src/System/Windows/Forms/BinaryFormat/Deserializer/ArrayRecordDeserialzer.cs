@@ -59,8 +59,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
                 : Array.CreateInstance(_elementType, arrayRecord.Length);
         }
 
-        deserializer.DeserializedObjects.Add(arrayRecord.ObjectId, _array);
-        IsParsingComplete = Continue().IsNull;
+        Object = _array;
     }
 
     internal override Id Continue()
@@ -105,7 +104,6 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
         }
 
         // No more missing member refs.
-        IsParsingComplete = true;
 
         if (!_hasFixups)
         {

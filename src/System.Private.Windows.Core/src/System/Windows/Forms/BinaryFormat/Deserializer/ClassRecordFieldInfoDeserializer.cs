@@ -22,10 +22,11 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
     internal ClassRecordFieldInfoDeserializer(
         ClassRecord classRecord,
+        object @object,
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields | DynamicallyAccessedMemberTypes.PublicFields)]
         Type type,
         IDeserializer deserializer)
-        : base(classRecord, deserializer)
+        : base(classRecord, @object, deserializer)
     {
         _classRecord = classRecord;
 #pragma warning disable IL2067 // GetSerializableMembers is not attributed correctly. Should just be fields.
@@ -71,7 +72,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 return reference;
             }
 
-            field.SetValue(Deserializer.DeserializedObjects[_classRecord.ObjectId], memberValue);
+            field.SetValue(Object, memberValue);
 
             if (!reference.IsNull && field.FieldType.IsValueType && Deserializer.IncompleteObjects.Contains(reference))
             {
@@ -91,7 +92,6 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
         }
 
         // No more missing member refs.
-        IsParsingComplete = true;
         return Id.Null;
     }
 }

@@ -166,7 +166,7 @@ internal sealed partial class Deserializer : IDeserializer
     private void DeserializeRoot(Id rootId)
     {
         object root = DeserializeNew(rootId);
-        if (root is not ObjectRecordDeserializer parser || parser.IsParsingComplete)
+        if (root is not ObjectRecordDeserializer parser)
         {
             return;
         }
@@ -178,7 +178,6 @@ internal sealed partial class Deserializer : IDeserializer
         {
             int currentId = _parseStack.Pop();
             Debug.Assert(currentId == currentParser.ObjectRecord.ObjectId);
-            Debug.Assert(!currentParser.IsParsingComplete);
 
             Id requiredId;
             while (!(requiredId = currentParser.Continue()).IsNull)
@@ -186,8 +185,7 @@ internal sealed partial class Deserializer : IDeserializer
                 // A record is required to complete the current parser. Get it.
                 object? requiredObject = DeserializeNew(requiredId);
 
-                if (requiredObject is ObjectRecordDeserializer requiredParser
-                    && !requiredParser.IsParsingComplete)
+                if (requiredObject is ObjectRecordDeserializer requiredParser)
                 {
                     // The required object is not complete.
 
@@ -244,7 +242,12 @@ internal sealed partial class Deserializer : IDeserializer
 
             // Not a simple case, need to do a full deserialization of the record.
             _incompleteObjects.Add(id);
-            return ObjectRecordDeserializer.Create(id, record, this);
+
+            var deserializer = ObjectRecordDeserializer.Create(id, record, this);
+
+            // Add the object as soon as possible to support circular references.
+            _deserializedObjects.Add(id, deserializer.Object);
+            return deserializer;
         }
     }
 

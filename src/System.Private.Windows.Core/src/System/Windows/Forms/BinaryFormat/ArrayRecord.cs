@@ -54,14 +54,14 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
         List<object?> memberValues = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
         for (int i = 0; i < count; i++)
         {
-            object? value = ReadValue(state, type, typeInfo);
+            object value = ReadValue(state, type, typeInfo);
             if (value is not NullRecord nullRecord)
             {
                 memberValues.Add(value);
                 continue;
             }
 
-            i += nullRecord.NullCount - 1;
+            i = checked(i + nullRecord.NullCount - 1);
             if (i >= count)
             {
                 throw new SerializationException();

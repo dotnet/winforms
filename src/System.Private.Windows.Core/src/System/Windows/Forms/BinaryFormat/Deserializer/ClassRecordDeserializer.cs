@@ -13,9 +13,10 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </summary>
 internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
 {
-    private protected ClassRecordDeserializer(ClassRecord classRecord, IDeserializer deserializer)
+    private protected ClassRecordDeserializer(ClassRecord classRecord, object @object, IDeserializer deserializer)
         : base(classRecord, deserializer)
     {
+        Object = @object;
     }
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
@@ -43,22 +44,18 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
         // Invoke any OnDeserializing methods.
         SerializationEvents.GetSerializationEventsForType(type).InvokeOnDeserializing(@object, deserializer.Options.StreamingContext);
 
-        // Add the object as soon as possible to support circular references.
-        deserializer.DeserializedObjects.Add(id, @object);
-
         ObjectRecordDeserializer? recordDeserializer;
 
         if (surrogate is not null || typeof(ISerializable).IsAssignableFrom(type))
         {
-            recordDeserializer = new ClassRecordSerializationInfoDeserializer(classRecord, type, surrogate, deserializer);
+            recordDeserializer = new ClassRecordSerializationInfoDeserializer(classRecord, @object, type, surrogate, deserializer);
         }
         else
         {
             // Directly set fields for non-ISerializable types.
-            recordDeserializer = new ClassRecordFieldInfoDeserializer(classRecord, type, deserializer);
+            recordDeserializer = new ClassRecordFieldInfoDeserializer(classRecord, @object, type, deserializer);
         }
 
-        recordDeserializer.Continue();
         return recordDeserializer;
 
         static ObjectRecordDeserializer HandleObjectReference(Type type, ClassRecord classRecord, IDeserializer deserializer)
@@ -72,18 +69,23 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
                 throw new SerializationException($"Type '{type}' is not allowed to implement IObjectReference.");
             }
 
-            deserializer.DeserializedObjects.Add(classRecord.ObjectId, DBNull.Value);
-            deserializer.CompleteObject(classRecord.ObjectId);
-            return new NoOpRecordDeserializer(classRecord, deserializer);
+            return new NoOpRecordDeserializer(classRecord, DBNull.Value, deserializer);
         }
     }
 
     private class NoOpRecordDeserializer : ObjectRecordDeserializer
     {
-        internal NoOpRecordDeserializer(ObjectRecord objectRecord, IDeserializer deserializer)
-            : base(objectRecord, deserializer) => IsParsingComplete = true;
+        internal NoOpRecordDeserializer(ObjectRecord objectRecord, object @object, IDeserializer deserializer)
+            : base(objectRecord, deserializer)
+        {
+            Object = @object;
+        }
 
-        internal override Id Continue() => Id.Null;
+        internal override Id Continue()
+        {
+            Deserializer.CompleteObject(ObjectRecord.ObjectId);
+            return Id.Null;
+        }
     }
 }
 

@@ -25,9 +25,10 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
 
     internal ClassRecordSerializationInfoDeserializer(
         ClassRecord classRecord,
+        object @object,
         Type type,
         ISerializationSurrogate? surrogate,
-        IDeserializer deserializer) : base(classRecord, deserializer)
+        IDeserializer deserializer) : base(classRecord, @object, deserializer)
     {
         _classRecord = classRecord;
         _surrogate = surrogate;
@@ -90,7 +91,6 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
         }
 
         // No more missing member refs.
-        IsParsingComplete = true;
         return Id.Null;
     }
 }

@@ -210,7 +210,7 @@ internal abstract class Record : IRecord
     ///  Reads an object member value of <paramref name="type"/> with optional clarifying <paramref name="typeInfo"/>.
     /// </summary>
     /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
-    private protected static object? ReadValue(
+    private protected static object ReadValue(
         BinaryFormattedObject.IParseState state,
         BinaryType type,
         object? typeInfo)
@@ -233,14 +233,14 @@ internal abstract class Record : IRecord
         }
 
         // BinaryLibrary records can be dumped in front of any member reference.
-        object? record;
+        IRecord record;
         while ((record = ReadReference()) is BinaryLibrary)
         {
         }
 
         return record;
 
-        object? ReadReference() => type switch
+        IRecord ReadReference() => type switch
         {
             BinaryType.Object
                 or BinaryType.StringArray

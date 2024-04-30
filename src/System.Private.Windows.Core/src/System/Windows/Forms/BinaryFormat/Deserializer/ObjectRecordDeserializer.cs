@@ -14,21 +14,10 @@ internal abstract partial class ObjectRecordDeserializer
     // Used to indicate that the value is missing from the deserialized objects.
     private protected static object s_missingValueSentinel = new();
 
-    /// <summary>
-    ///  When <see langword="true"/>, <see cref="Continue"/> no longer needs to be called. The object may not
-    ///  be complete, but the members have all been parsed.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   Objects are considered incomplete if they contain references to value types that need completed or if
-    ///   they have not yet finished evaluating all of their member data. They are also considered incomplete if
-    ///   they have <see cref="ISerializable"/> or a surrogate that has not yet been called with their
-    ///   <see cref="SerializationInfo"/>.
-    ///  </para>
-    /// </remarks>
-    internal bool IsParsingComplete { get; private protected set; }
-
     internal ObjectRecord ObjectRecord { get; }
+
+    [AllowNull]
+    internal object Object { get; private protected set; }
 
     private protected IDeserializer Deserializer { get; }
 

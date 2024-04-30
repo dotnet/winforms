@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.IO;
 
@@ -15,14 +16,14 @@ internal static class BinaryReaderExtensions
     ///  Reads a binary formatted <see cref="DateTime"/> from the given <paramref name="reader"/>.
     /// </summary>
     /// <exception cref="SerializationException">The data was invalid.</exception>
-    public static unsafe DateTime ReadDateTime(this BinaryReader reader)
+    internal static unsafe DateTime ReadDateTime(this BinaryReader reader)
         => CreateDateTimeFromData(reader.ReadInt64());
 
     /// <summary>
     ///  Creates a <see cref="DateTime"/> object from raw data with validation.
     /// </summary>
     /// <exception cref="SerializationException"><paramref name="data"/> was invalid.</exception>
-    private static DateTime CreateDateTimeFromData(long data)
+    internal static DateTime CreateDateTimeFromData(long data)
     {
         // Copied from System.Runtime.Serialization.Formatters.Binary.BinaryParser
 
@@ -48,7 +49,7 @@ internal static class BinaryReaderExtensions
     /// <summary>
     ///  Returns the remaining amount of bytes in the given <paramref name="reader"/>.
     /// </summary>
-    public static long Remaining(this BinaryReader reader)
+    internal static long Remaining(this BinaryReader reader)
     {
         Stream stream = reader.BaseStream;
         return stream.Length - stream.Position;
@@ -58,7 +59,7 @@ internal static class BinaryReaderExtensions
     ///  Reads an array of primitives.
     /// </summary>
     /// <inheritdoc cref="WritePrimitives{T}(BinaryWriter, IReadOnlyList{T})"/>
-    public static unsafe T[] ReadPrimitiveArray<T>(this BinaryReader reader, int count)
+    internal static unsafe T[] ReadPrimitiveArray<T>(this BinaryReader reader, int count)
         where T : unmanaged
     {
         ArgumentOutOfRangeException.ThrowIfNegative(count);
@@ -67,8 +68,10 @@ internal static class BinaryReaderExtensions
         {
             // Decimal is persisted as a UTF-8 string. It has a 7-bit encoded length so it could be, in theory just
             // a few bytes. Picking 2 bytes- once the minimum string length (and termination if applicable) are
-            // evaluated, this could be made more aggressive.
-            if (count > 0 && reader.Remaining() < count * (typeof(T) == typeof(decimal) ? 2 : sizeof(T)))
+            // evaluated, this could be made more aggressive. DateTime and TimeSpan match their stored sizes.
+            //
+            // Note that we also have a hard cap on the initial collection size in these cases.
+            if (count > 0 && reader.Remaining() < checked(count * (typeof(T) == typeof(decimal) ? 2 : sizeof(T))))
             {
                 throw new SerializationException("Not enough data to fill array.");
             }
@@ -92,7 +95,7 @@ internal static class BinaryReaderExtensions
             throw new ArgumentException($"Cannot read primitives of {typeof(T).Name}.", nameof(T));
         }
 
-        if (count > 0 && reader.Remaining() < count * (typeof(T) == typeof(char) ? 1 : sizeof(T)))
+        if (count > 0 && reader.Remaining() < checked(count * (typeof(T) == typeof(char) ? 1 : sizeof(T))))
         {
             throw new SerializationException("Not enough data to fill array.");
         }
@@ -152,7 +155,7 @@ internal static class BinaryReaderExtensions
             // untrusted data claiming a huge number of decimal strings. Worst case is that roughly 4x what the remaining
             // data could contain at the smallest string size, but we'll still guard.
 
-            List<T> values = new(Math.Min(count, 1024 * 10));
+            List<T> values = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
 
             for (int i = 0; i < count; i++)
             {
@@ -179,7 +182,7 @@ internal static class BinaryReaderExtensions
     }
 
     /// <summary>
-    ///  Writes a collection of primitves, optimizing for arrays and <see cref="ArraySegment{T}"/>.
+    ///  Writes a collection of primitives.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -189,7 +192,7 @@ internal static class BinaryReaderExtensions
     ///   <see langword="decimal"/>, <see cref="DateTime"/>, and <see cref="TimeSpan"/>.
     ///  </para>
     /// </remarks>
-    public static unsafe void WritePrimitives<T>(this BinaryWriter writer, IReadOnlyList<T> values)
+    internal static unsafe void WritePrimitives<T>(this BinaryWriter writer, IReadOnlyList<T> values)
         where T : unmanaged
     {
         if (values.Count == 0)
@@ -229,6 +232,10 @@ internal static class BinaryReaderExtensions
         else if (values is ArraySegment<T> arraySegment)
         {
             span = arraySegment;
+        }
+        else if (values is List<T> list)
+        {
+            span = CollectionsMarshal.AsSpan(list);
         }
         else
         {
