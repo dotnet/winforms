@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design;
@@ -15,12 +13,12 @@ internal partial class PbrsForward : IWindowTarget
     // We save the last key down so we can recreate the last message if we need to activate
     // the properties window.
     private Message _lastKeyDown;
-    private List<BufferedKey> _bufferedChars;
+    private List<BufferedKey>? _bufferedChars;
 
     private const int WM_PRIVATE_POSTCHAR = (int)PInvoke.WM_USER + 0x1598;
     private bool _postCharMessage;
 
-    private IMenuCommandService _menuCommandSvc;
+    private IMenuCommandService? _menuCommandSvc;
 
     private readonly IServiceProvider _sp;
 
@@ -34,21 +32,21 @@ internal partial class PbrsForward : IWindowTarget
         target.WindowTarget = this;
     }
 
-    private IMenuCommandService MenuCommandService
+    private IMenuCommandService? MenuCommandService
     {
         get
         {
             if (_menuCommandSvc is null && _sp is not null)
             {
-                _menuCommandSvc = (IMenuCommandService)_sp.GetService(typeof(IMenuCommandService));
+                _menuCommandSvc = _sp.GetService<IMenuCommandService>();
             }
 
             return _menuCommandSvc;
         }
     }
 
-    private ISupportInSituService InSituSupportService
-        => (ISupportInSituService)_sp.GetService(typeof(ISupportInSituService));
+    private ISupportInSituService? InSituSupportService
+        => _sp.GetService<ISupportInSituService>();
 
     public void Dispose() => _target.WindowTarget = _oldTarget;
 
@@ -75,9 +73,9 @@ internal partial class PbrsForward : IWindowTarget
             and <= ((int)PInvoke.WM_KEYLAST) or >= ((int)PInvoke.WM_IME_STARTCOMPOSITION)
             and <= ((int)PInvoke.WM_IME_COMPOSITION))
         {
-            if (InSituSupportService is not null)
+            if (InSituSupportService is ISupportInSituService supportInSituService)
             {
-                _ignoreMessages = InSituSupportService.IgnoreMessages;
+                _ignoreMessages = supportInSituService.IgnoreMessages;
             }
         }
 
@@ -92,9 +90,9 @@ internal partial class PbrsForward : IWindowTarget
 
                 // recreate the keystroke to the newly activated window
                 HWND hwnd;
-                hwnd = !_ignoreMessages || InSituSupportService is null
+                hwnd = !_ignoreMessages || InSituSupportService is not ISupportInSituService supportInSituService
                     ? PInvoke.GetFocus()
-                    : (HWND)InSituSupportService.GetEditWindow();
+                    : (HWND)supportInSituService.GetEditWindow();
 
                 if (hwnd != m.HWnd)
                 {
@@ -152,10 +150,10 @@ internal partial class PbrsForward : IWindowTarget
                 }
                 else if (_ignoreMessages && m.Msg != (int)PInvoke.WM_IME_COMPOSITION)
                 {
-                    if (InSituSupportService is not null)
+                    if (InSituSupportService is ISupportInSituService anotherSupportInSituService)
                     {
                         _postCharMessage = true;
-                        InSituSupportService.HandleKeyChar();
+                        anotherSupportInSituService.HandleKeyChar();
                     }
                 }
 
