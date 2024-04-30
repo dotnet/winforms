@@ -4451,6 +4451,60 @@ public class MonthCalendarTests
         cellAccessibleObject.Role.Should().Be(AccessibleRole.Cell);
     }
 
+    private MonthCalendar InitializeCalendarWithDates()
+    {
+        MonthCalendar calendar = new();
+
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 2, 2));
+
+        return calendar;
+    }
+
+    [WinFormsTheory]
+    [InlineData("RemoveAllAnnuallyBoldedDates", 0, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAnnuallyBoldedDate", 1, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAllBoldedDates", 0, "BoldedDates")]
+    [InlineData("RemoveBoldedDate", 1, "BoldedDates")]
+    [InlineData("RemoveAllMonthlyBoldedDates", 0, "MonthlyBoldedDates")]
+    [InlineData("RemoveMonthlyBoldedDate", 1, "MonthlyBoldedDates")]
+    public void MonthCalendar_RemoveBoldedDates_Invoke_Success(string methodName, int expectedCount, string propertyName)
+    {
+        using MonthCalendar calendar = InitializeCalendarWithDates();
+
+        typeof(MonthCalendar).GetMethod(methodName).Invoke(calendar, methodName.Contains("All") ? null : new object[] { new DateTime(2022, 1, 1) });
+        ((DateTime[])typeof(MonthCalendar).GetProperty(propertyName).GetValue(calendar)).Length.Should().Be(expectedCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    [InlineData(100, 100, HitArea.Date, null)]
+    [InlineData(-100, -100, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    public void MonthCalendar_HitTest_ReturnsExpected(int x, int y, HitArea expectedHitArea, string expectedTimeString)
+    {
+        using MonthCalendar calendar = new();
+        HitTestInfo hitTestInfo = calendar.HitTest(new Point(x, y));
+
+        hitTestInfo.Point.X.Should().Be(x);
+        hitTestInfo.Point.Y.Should().Be(y);
+        hitTestInfo.HitArea.Should().Be(expectedHitArea);
+
+        DateTime? expectedTime = expectedTimeString is null ? null : DateTime.Parse(expectedTimeString);
+
+        if (expectedTime is null)
+        {
+            hitTestInfo.Time.Should().NotBe(DateTime.MinValue);
+        }
+        else
+        {
+            hitTestInfo.Time.Should().Be(expectedTime.Value);
+        }
+    }
+
     private class SubMonthCalendar : MonthCalendar
     {
         public new bool CanEnableIme => base.CanEnableIme;
