@@ -629,8 +629,8 @@ public class CheckedListBoxTests
     public void CheckedListBox_DataSource_GetSet_ReturnsExpected()
     {
         using CheckedListBox checkedListBox = new();
-        var dataSource1 = new List<string> { "item1", "item2", "item3" };
-        var dataSource2 = new List<string> { "item4", "item5", "item6" };
+        List<string> dataSource1 = ["item1", "item2", "item3"];
+        List<string> dataSource2 = ["item4", "item5", "item6"];
 
         int callCount = 0;
         checkedListBox.DataSourceChanged += (sender, e) => callCount++;
@@ -743,7 +743,7 @@ public class CheckedListBoxTests
             e.Should().NotBeNull();
         };
 
-        ItemCheckEventArgs eventArgs = new ItemCheckEventArgs(0, CheckState.Checked, CheckState.Unchecked);
+        ItemCheckEventArgs eventArgs = new(0, CheckState.Checked, CheckState.Unchecked);
 
         checkedListBox.ItemCheck += handler;
         checkedListBox.OnItemCheck(eventArgs);
@@ -787,7 +787,7 @@ public class CheckedListBoxTests
             e.Should().NotBeNull();
         };
 
-        MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0);
+        MouseEventArgs eventArgs = new(MouseButtons.Left, 1, 0, 0, 0);
 
         checkedListBox.MouseClick += handler;
         checkedListBox.OnMouseClick(eventArgs);
@@ -811,7 +811,7 @@ public class CheckedListBoxTests
         };
 
         using Bitmap image = new(10, 10);
-        MeasureItemEventArgs eventArgs = new MeasureItemEventArgs(Graphics.FromImage(image), 1);
+        MeasureItemEventArgs eventArgs = new(Graphics.FromImage(image), 1);
 
         checkedListBox.MeasureItem += handler;
         checkedListBox.OnMeasureItem(eventArgs);
