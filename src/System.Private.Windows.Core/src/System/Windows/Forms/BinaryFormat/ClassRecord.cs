@@ -59,7 +59,13 @@ internal abstract class ClassRecord : ObjectRecord
         BinaryFormattedObject.IParseState state,
         MemberTypeInfo memberTypeInfo)
     {
-        CappedArray<object?> memberValues = new(memberTypeInfo.Count);
+        int count = memberTypeInfo.Count;
+        if (count == 0)
+        {
+            return [];
+        }
+
+        ArrayBuilder<object?> memberValues = new(count);
         foreach ((BinaryType type, object? info) in memberTypeInfo)
         {
             object value = ReadValue(state, type, info);
@@ -77,7 +83,7 @@ internal abstract class ClassRecord : ObjectRecord
             memberValues.Add(null);
         }
 
-        return memberValues;
+        return (object?[])memberValues;
     }
 
     /// <summary>

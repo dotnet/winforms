@@ -13,7 +13,7 @@ namespace System.Collections.Generic;
 ///   To mitigate corrupted length attacks, the backing array has an initial allocation size cap.
 ///  </para>
 /// </remarks>
-internal class CappedArray<T> : IReadOnlyList<T>, ICollection<T>
+internal class ArrayBuilder<T>
 {
     private const int DefaultCapacity = 4;
 
@@ -26,7 +26,7 @@ internal class CappedArray<T> : IReadOnlyList<T>, ICollection<T>
     ///  The <see cref="Count"/> cannot grow past this value and is expected to be this value
     ///  when the collection is "finished".
     /// </param>
-    internal CappedArray(int expectedCount)
+    internal ArrayBuilder(int expectedCount)
     {
         _items = new T[Math.Min(expectedCount, MaxInitialArrayLength)];
         _maxCount = expectedCount;
@@ -77,25 +77,12 @@ internal class CappedArray<T> : IReadOnlyList<T>, ICollection<T>
         Debug.Assert(Count == _items.Length);
         int size = Count;
 
-        int newCapacity = _items.Length == 0 ? DefaultCapacity : 2 * _items.Length;
-
-        if ((uint)newCapacity > _maxCount)
-        {
-            newCapacity = _maxCount;
-        }
+        int newCapacity = _items.Length == 0 ? DefaultCapacity : Math.Min(_maxCount, 2 * _items.Length);
 
         Array.Resize(ref _items, newCapacity);
         Count = size + 1;
         _items[size] = item;
     }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        Debug.Assert(Count == _maxCount);
-        return new ArraySegment<T>(_items, 0, Count).GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public T[] ToArray()
     {
@@ -110,15 +97,6 @@ internal class CappedArray<T> : IReadOnlyList<T>, ICollection<T>
         return [.. segment];
     }
 
-    public void Clear() => Count = 0;
-    public bool Contains(T item) => Array.IndexOf(_items, item, 0, Count) != -1;
-    public void CopyTo(T[] array, int arrayIndex) => Array.Copy(_items, 0, array, arrayIndex, Count);
-    bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
-
-#pragma warning disable IDE0305 // Simplify collection initialization
     // We deliberately don't want to use a collection expression here because it would allocate a new array.
-    public static implicit operator T[](CappedArray<T> list) => list.ToArray();
-#pragma warning restore IDE0305
-
-    public static explicit operator ArraySegment<T>(CappedArray<T> list) => new(list._items, 0, list.Count);
+    public static implicit operator T[](ArrayBuilder<T> list) => list.ToArray();
 }

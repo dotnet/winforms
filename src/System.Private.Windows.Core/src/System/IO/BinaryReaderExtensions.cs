@@ -65,6 +65,11 @@ internal static class BinaryReaderExtensions
 
         if (typeof(T) == typeof(decimal) || typeof(T) == typeof(DateTime) || typeof(T) == typeof(TimeSpan))
         {
+            if (count == 0)
+            {
+                return [];
+            }
+
             // Decimal is persisted as a UTF-8 string. It has a 7-bit encoded length so it could be, in theory just
             // a few bytes. Picking 2 bytes- once the minimum string length (and termination if applicable) are
             // evaluated, this could be made more aggressive. DateTime and TimeSpan match their stored sizes.
@@ -154,7 +159,7 @@ internal static class BinaryReaderExtensions
             // untrusted data claiming a huge number of decimal strings. Worst case is that roughly 4x what the remaining
             // data could contain at the smallest string size, but we'll still guard.
 
-            CappedArray<T> values = new(count);
+            ArrayBuilder<T> values = new(count);
 
             for (int i = 0; i < count; i++)
             {

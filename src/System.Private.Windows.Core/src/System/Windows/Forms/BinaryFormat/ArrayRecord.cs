@@ -51,7 +51,12 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
         object? typeInfo,
         int count)
     {
-        CappedArray<object?> memberValues = new(count);
+        if (count == 0)
+        {
+            return [];
+        }
+
+        ArrayBuilder<object?> memberValues = new(count);
         for (int i = 0; i < count; i++)
         {
             object value = ReadValue(state, type, typeInfo);
@@ -73,7 +78,7 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
             }
         }
 
-        return memberValues;
+        return (object?[])memberValues;
     }
 }
 
