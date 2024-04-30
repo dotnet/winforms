@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.TestUtilities;
+using static System.Windows.Forms.MonthCalendar;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -4157,7 +4158,7 @@ public class MonthCalendarTests
 
     public static IEnumerable<object[]> MonthCalendar_FillMonthDayStates_ReturnsExpected_TestData()
     {
-        // This test set of dates is designed for a specifict test case:
+        // This test set of dates is designed for a specific test case:
         // when a calendar has 12 fully visible months + 2 not fully visible.
         // This test calendar has (08/29/2021 - 09/10/2022) dates range.
 
@@ -4239,6 +4240,269 @@ public class MonthCalendarTests
         int actualIndex = calendar.TestAccessor().Dynamic.GetIndexInMonths(startDate, currentDate);
 
         Assert.Equal(expectedIndex, actualIndex);
+    }
+
+    [WinFormsFact]
+    public void SelectionRange_CopyConstructor_CopiesStartAndEndDatesCorrectly()
+    {
+        DateTime startDate = new(2023, 1, 1);
+        DateTime endDate = new(2023, 12, 31);
+        SelectionRange originalRange = new(startDate, endDate);
+        SelectionRange copiedRange = new(originalRange);
+
+        copiedRange.Start.Should().Be(startDate);
+        copiedRange.End.Should().Be(endDate);
+    }
+
+    [WinFormsFact]
+    public void GetFocused_Returns_FocusedCellAccessibleObject()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+        var result = accessibleObject.GetFocused();
+
+        result.Should().Be(accessibleObject.FocusedCell);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_Help_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+        string expectedHelp = "MonthCalendar(Control)";
+
+        accessibleObject.Help.Should().Be(expectedHelp);
+    }
+
+    [WinFormsTheory]
+    [InlineData("42")]
+    public void CalendarWeekNumberCellAccessibleObject_Name_ReturnsExpected(string weekNumber)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        MonthCalendarAccessibleObject monthCalendarAccessibleObject = new(monthCalendar);
+        CalendarAccessibleObject calendarAccessibleObject = new(monthCalendarAccessibleObject, 1, "Main Calendar");
+        CalendarBodyAccessibleObject calendarBodyAccessibleObject = new(calendarAccessibleObject, monthCalendarAccessibleObject, 1);
+        CalendarRowAccessibleObject calendarRowAccessibleObject = new(calendarBodyAccessibleObject, monthCalendarAccessibleObject, 1, 1);
+
+        CalendarWeekNumberCellAccessibleObject accessibleObject = new(
+            calendarRowAccessibleObject,
+            calendarBodyAccessibleObject,
+            monthCalendarAccessibleObject,
+            calendarIndex: 0,
+            rowIndex: 0,
+            columnIndex: 0,
+            weekNumber);
+
+        string name = accessibleObject.Name;
+
+        name.Should().Be($"Week {weekNumber}");
+    }
+
+    [WinFormsFact]
+    public void CalendarTodayLinkAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+        Rectangle actual = todayLinkAccessibleObject.Bounds;
+        Rectangle expected = controlAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_FOOTER);
+
+        actual.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void CalendarPreviousButtonAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
+        Rectangle bounds = previousButtonAccessibleObject.Bounds;
+        Rectangle expectedBounds = new(13, 42, 16, 16);
+
+        bounds.Should().Be(expectedBounds);
+    }
+
+    private (CalendarRowAccessibleObject, CalendarCellAccessibleObject) CreateCalendarObjects(MonthCalendar control, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+    {
+        MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, calendarIndex, "Main Calendar");
+        CalendarBodyAccessibleObject bodyAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, calendarIndex);
+        CalendarRowAccessibleObject rowAccessibleObject = new(bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex);
+        CalendarCellAccessibleObject cellAccessibleObject = new(rowAccessibleObject, bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex, columnIndex);
+
+        return (rowAccessibleObject, cellAccessibleObject);
+    }
+
+    [WinFormsFact]
+    public void CalendarRowAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (rowAccessibleObject, _) = CreateCalendarObjects(monthCalendar);
+        Rectangle actual = rowAccessibleObject.Bounds;
+        Rectangle expected = controlAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDARROW, 0, 0);
+
+        actual.Should().Be(expected);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, "Week 23, Monday")]
+    [InlineData(1, null)]
+    public void CalendarCellAccessibleObject_Description_ReturnsExpected(int view, string expected)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        monthCalendar.FirstDayOfWeek = Day.Monday;
+        monthCalendar.SelectionStart = new DateTime(2021, 6, 16);
+        PInvoke.SendMessage(monthCalendar, PInvoke.MCM_SETCURRENTVIEW, 0, view);
+
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        cellAccessibleObject.Description.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_Select_SetsSelectionRange()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        DateTime startDate = new(2022, 10, 1);
+        DateTime endDate = new(2022, 10, 7);
+        cellAccessibleObject.TestAccessor().Dynamic._dateRange = new SelectionRange(startDate, endDate);
+
+        cellAccessibleObject.Select(AccessibleSelection.TakeSelection);
+
+        monthCalendar.SelectionStart.Should().Be(startDate);
+        monthCalendar.SelectionEnd.Should().Be(endDate);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleStates.Focusable | AccessibleStates.Selectable | AccessibleStates.Selected)]
+    public void CalendarCellAccessibleObject_State_ReturnsExpected(AccessibleStates expectedState)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        bool shouldFocus = expectedState.HasFlag(AccessibleStates.Focused);
+        bool selectExactRange = expectedState.HasFlag(AccessibleStates.Selected);
+
+        if (shouldFocus)
+        {
+            monthCalendar.Focus();
+        }
+
+        if (selectExactRange)
+        {
+            monthCalendar.SetSelectionRange(cellAccessibleObject.DateRange.Start, cellAccessibleObject.DateRange.End);
+        }
+        else
+        {
+            monthCalendar.SetSelectionRange(cellAccessibleObject.DateRange.Start.AddDays(-1), cellAccessibleObject.DateRange.End.AddDays(1));
+        }
+
+        cellAccessibleObject.State.Should().Be(expectedState);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleSelection.AddSelection)]
+    [InlineData(AccessibleSelection.RemoveSelection)]
+    [InlineData(AccessibleSelection.TakeSelection)]
+    public void CalendarCellAccessibleObject_Select_Invoke_SetsSelectionRange(AccessibleSelection selectionFlag)
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.CreateControl();
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        DateTime expectedStart = cellAccessibleObject.DateRange.Start;
+        DateTime expectedEnd = cellAccessibleObject.DateRange.End;
+
+        cellAccessibleObject.Select(selectionFlag);
+        monthCalendar.SelectionStart.Should().Be(expectedStart);
+        monthCalendar.SelectionEnd.Should().Be(expectedEnd);
+    }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_Role_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        cellAccessibleObject.Role.Should().Be(AccessibleRole.Cell);
+    }
+
+    private MonthCalendar InitializeCalendarWithDates()
+    {
+        MonthCalendar calendar = new();
+
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 2, 2));
+
+        return calendar;
+    }
+
+    [WinFormsTheory]
+    [InlineData("RemoveAllAnnuallyBoldedDates", 0, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAnnuallyBoldedDate", 1, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAllBoldedDates", 0, "BoldedDates")]
+    [InlineData("RemoveBoldedDate", 1, "BoldedDates")]
+    [InlineData("RemoveAllMonthlyBoldedDates", 0, "MonthlyBoldedDates")]
+    [InlineData("RemoveMonthlyBoldedDate", 1, "MonthlyBoldedDates")]
+    public void MonthCalendar_RemoveBoldedDates_Invoke_Success(string methodName, int expectedCount, string propertyName)
+    {
+        using MonthCalendar calendar = InitializeCalendarWithDates();
+
+        typeof(MonthCalendar).GetMethod(methodName).Invoke(calendar, methodName.Contains("All") ? null : new object[] { new DateTime(2022, 1, 1) });
+        ((DateTime[])typeof(MonthCalendar).GetProperty(propertyName).GetValue(calendar)).Length.Should().Be(expectedCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    [InlineData(100, 100, HitArea.Date, null)]
+    [InlineData(-100, -100, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    public void MonthCalendar_HitTest_ReturnsExpected(int x, int y, HitArea expectedHitArea, string expectedTimeString)
+    {
+        using MonthCalendar calendar = new();
+        HitTestInfo hitTestInfo = calendar.HitTest(new Point(x, y));
+
+        hitTestInfo.Point.X.Should().Be(x);
+        hitTestInfo.Point.Y.Should().Be(y);
+        hitTestInfo.HitArea.Should().Be(expectedHitArea);
+
+        DateTime? expectedTime = expectedTimeString is null ? null : DateTime.Parse(expectedTimeString);
+
+        if (expectedTime is null)
+        {
+            hitTestInfo.Time.Should().NotBe(DateTime.MinValue);
+        }
+        else
+        {
+            hitTestInfo.Time.Should().Be(expectedTime.Value);
+        }
     }
 
     private class SubMonthCalendar : MonthCalendar

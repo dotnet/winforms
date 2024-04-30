@@ -427,7 +427,7 @@ public sealed class ResXDataNode : ISerializable
 
         try
         {
-            BinaryFormattedObject format = new(stream, leaveOpen: true);
+            BinaryFormattedObject format = new(stream);
             if (format.TryGetObject(out object? value))
             {
                 return value;

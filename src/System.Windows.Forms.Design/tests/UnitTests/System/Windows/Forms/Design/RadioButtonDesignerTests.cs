@@ -26,14 +26,18 @@ public sealed class RadioButtonDesignerTests
     }
 
     [Fact]
-    public void SelectionRules_WithDefaultRadioButton_ShouldThrowNullReferenceException()
+    public void SelectionRules_WithDefaultRadioButton_ShouldReturnExpectedValue()
     {
         using RadioButtonDesigner radioButtonDesigner = new();
         using RadioButton radioButton = new();
         radioButtonDesigner.Initialize(radioButton);
 
-        Action action = () => _ = radioButtonDesigner.SelectionRules;
+        SelectionRules selectionRules;
+        using (new NoAssertContext())
+        {
+            selectionRules = radioButtonDesigner.SelectionRules;
+        }
 
-        action.Should().ThrowExactly<NullReferenceException>();
+        selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
 }

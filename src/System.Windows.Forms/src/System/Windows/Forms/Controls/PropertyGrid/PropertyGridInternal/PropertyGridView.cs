@@ -1084,7 +1084,13 @@ internal sealed partial class PropertyGridView :
         return length > _location.X + LabelWidth;
     }
 
-    private void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool longLabelrequest, Rectangle clipRect)
+    private void DrawLabel(
+        Graphics g,
+        int row,
+        Rectangle rect,
+        bool selected,
+        bool longLabelrequest,
+        Rectangle clipRect)
     {
         GridEntry? gridEntry = GetGridEntryFromRow(row);
 
@@ -1118,7 +1124,12 @@ internal sealed partial class PropertyGridView :
                     fLongLabel = IsEntryLabelLong(g, gridEntry);
                 }
 
-                gridEntry.PaintLabel(g, rect, clipRect, selected, fLongLabel);
+                gridEntry.PaintLabel(
+                    g,
+                    rect,
+                    clipRect,
+                    selected,
+                    fLongLabel);
             }
             catch (Exception ex)
             {
@@ -5086,7 +5097,11 @@ internal sealed partial class PropertyGridView :
         {
             while (temp is not null)
             {
-                _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                if (temp.HelpKeyword is not null)
+                {
+                    _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                }
+
                 temp = temp.ParentGridEntry;
             }
         }
@@ -5107,7 +5122,7 @@ internal sealed partial class PropertyGridView :
         }
 
         UpdateHelpAttributes(helpService, entry.ParentGridEntry, false);
-        string helpKeyword = entry.HelpKeyword;
+        string? helpKeyword = entry.HelpKeyword;
         if (helpKeyword is not null)
         {
             helpService.AddContextAttribute("Keyword", helpKeyword, addAsF1 ? HelpKeywordType.F1Keyword : HelpKeywordType.GeneralKeyword);

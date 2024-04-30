@@ -19,6 +19,9 @@ public class MaskedTextBoxTests
         mtb.BeepOnError.Should().BeFalse();
         mtb.AsciiOnly.Should().BeFalse();
         mtb.Culture.Should().Be(CultureInfo.CurrentCulture);
+        mtb.AcceptsTab.Should().BeFalse();
+        mtb.CanUndo.Should().BeFalse();
+        mtb.WordWrap.Should().BeFalse();
 
         mtb.IsHandleCreated.Should().BeFalse();
     }
@@ -224,5 +227,242 @@ public class MaskedTextBoxTests
                 createdCallCount.Should().Be(0);
             }
         }
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MaskedTextBox_AllowPromptAsInput_Set_GetReturnsExpected(bool createHandle)
+    {
+        using MaskedTextBox control = new();
+
+        if (createHandle)
+        {
+            control.Handle.Should().NotBe(IntPtr.Zero);
+        }
+
+        bool value = true;
+
+        control.AllowPromptAsInput = value;
+        control.AllowPromptAsInput.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+
+        // Set same.
+        control.AllowPromptAsInput = value;
+        control.AllowPromptAsInput.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+
+        // Set different.
+        control.AllowPromptAsInput = !value;
+        control.AllowPromptAsInput.Should().Be(!value);
+        control.IsHandleCreated.Should().Be(createHandle);
+
+        if (createHandle)
+        {
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(MaskFormat.IncludeLiterals)]
+    [InlineData(MaskFormat.IncludePrompt)]
+    [InlineData(MaskFormat.IncludePromptAndLiterals)]
+    [InlineData(MaskFormat.ExcludePromptAndLiterals)]
+    public void MaskedTextBox_CutCopyAndTextMaskFormat_Set_GetReturnsExpected(MaskFormat value)
+    {
+        using MaskedTextBox control = new();
+
+        control.CutCopyMaskFormat = value;
+        control.TextMaskFormat = value;
+        control.CutCopyMaskFormat.Should().Be(value);
+        control.TextMaskFormat.Should().Be(value);
+
+        // Set same.
+        control.CutCopyMaskFormat = value;
+        control.TextMaskFormat = value;
+        control.CutCopyMaskFormat.Should().Be(value);
+        control.TextMaskFormat.Should().Be(value);
+
+        // Test invalid value
+        control.Invoking(c => c.CutCopyMaskFormat = (MaskFormat)4)
+        .Should().Throw<InvalidEnumArgumentException>()
+        .WithMessage("The value of argument 'value' (4) is invalid for Enum type 'MaskFormat'.*");
+
+        control.Invoking(c => c.TextMaskFormat = (MaskFormat)4)
+            .Should().Throw<InvalidEnumArgumentException>()
+            .WithMessage("The value of argument 'value' (4) is invalid for Enum type 'MaskFormat'.*");
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, false)]
+    [InlineData(false, false)]
+    [InlineData(true, true)]
+    [InlineData(false, true)]
+    public void MaskedTextBox_HidePromptOnLeave_Set_GetReturnsExpected(bool value, bool createHandle)
+    {
+        using MaskedTextBox control = new();
+        if (createHandle)
+        {
+            control.Handle.Should().NotBe(IntPtr.Zero);
+        }
+
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        control.HandleCreated += (sender, e) => createdCallCount++;
+
+        control.HidePromptOnLeave = value;
+        control.HidePromptOnLeave.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+
+        // Set same.
+        control.HidePromptOnLeave = value;
+        control.HidePromptOnLeave.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+
+        // Set different.
+        control.HidePromptOnLeave = !value;
+        control.HidePromptOnLeave.Should().Be(!value);
+        control.IsHandleCreated.Should().Be(createHandle);
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+    }
+
+    [WinFormsTheory]
+    [InlineData(InsertKeyMode.Default)]
+    [InlineData(InsertKeyMode.Insert)]
+    [InlineData(InsertKeyMode.Overwrite)]
+    public void MaskedTextBox_InsertKeyMode_Set_GetReturnsExpected(InsertKeyMode value)
+    {
+        using MaskedTextBox control = new();
+        control.InsertKeyMode = value;
+        control.CreateControl();
+
+        control.IsHandleCreated.Should().BeTrue();
+        control.InsertKeyMode.Should().Be(value);
+
+        // Set same.
+        control.InsertKeyMode = value;
+        control.IsHandleCreated.Should().BeTrue();
+
+        // Set different.
+        if (value != InsertKeyMode.Default)
+        {
+            control.InsertKeyMode = InsertKeyMode.Default;
+            control.IsHandleCreated.Should().BeTrue();
+            control.InsertKeyMode.Should().Be(InsertKeyMode.Default);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData("", "", true, true)]
+    [InlineData("00000", "12345", true, true)]
+    [InlineData("00000", "123", false, false)]
+    [InlineData("00-00", "12-34", true, true)]
+    [InlineData("00-00", "12-", false, false)]
+    [InlineData("(000) 000-0000", "(123) 456-7890", true, true)]
+    [InlineData("(000) 000-0000", "(123) 456", false, false)]
+    public void MaskedTextBox_MaskCompletedAndMaskFull_Get_ReturnsExpected(string mask, string text, bool expectedMaskCompleted, bool expectedMaskFull)
+    {
+        using MaskedTextBox control = new();
+        control.Mask = mask;
+        control.Text = text;
+        control.MaskCompleted.Should().Be(expectedMaskCompleted);
+        control.MaskFull.Should().Be(expectedMaskFull);
+    }
+
+    [WinFormsTheory]
+    [InlineData(InsertKeyMode.Overwrite, "00000", true)]
+    [InlineData(InsertKeyMode.Insert, "00000", false)]
+    [InlineData(InsertKeyMode.Default, "00000", false)]
+    public void MaskedTextBox_IsOverwriteMode_Get_ReturnsExpected(InsertKeyMode insertMode, string mask, bool expected)
+    {
+        using MaskedTextBox control = new();
+        control.Mask = mask;
+        control.InsertKeyMode = insertMode;
+        control.IsOverwriteMode.Should().Be(expected);
+
+        // Exception Handling
+        if (!Enum.IsDefined(typeof(InsertKeyMode), insertMode))
+        {
+            control.Invoking(c => c.InsertKeyMode = insertMode)
+                   .Should().Throw<InvalidEnumArgumentException>();
+        }
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_IsOverwriteModeChangedEvent_AddRemove_Success()
+    {
+        using MaskedTextBox control = new();
+        control.Mask = "00000"; // Add a mask
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        // Add and remove the event handler and assert the event does not get fired.
+        control.IsOverwriteModeChanged += handler;
+        control.IsOverwriteModeChanged -= handler;
+        control.InsertKeyMode = InsertKeyMode.Insert;
+        callCount.Should().Be(0);
+
+        // Add the event handler and assert the event gets fired exactly once.
+        control.IsOverwriteModeChanged += handler;
+        control.InsertKeyMode = InsertKeyMode.Overwrite;
+        callCount.Should().Be(1);
+
+        // Remove the event handler and assert the event does not get fired.
+        control.IsOverwriteModeChanged -= handler;
+        control.InsertKeyMode = InsertKeyMode.Insert;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_MaskChangedEvent_AddRemove_Success()
+    {
+        using MaskedTextBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        // Add and remove the event handler and assert the event does not get fired.
+        control.MaskChanged += handler;
+        control.MaskChanged -= handler;
+        control.Mask = "00000";
+        callCount.Should().Be(0);
+
+        // Add the event handler and assert the event gets fired exactly once.
+        control.MaskChanged += handler;
+        control.Mask = "(000) 000-0000";
+        callCount.Should().Be(1);
+
+        // Remove the event handler and assert the event does not get fired.
+        control.MaskChanged -= handler;
+        control.Mask = "00-00";
+        callCount.Should().Be(1);
     }
 }

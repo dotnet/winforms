@@ -10,6 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// <summary>
 ///  Browsing handler for <see cref="IVsPerPropertyBrowsing"/>.
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IDispatchConverter which is not trim-compatible.")]
 internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IVsPerPropertyBrowsing>
 {
     public static unsafe bool AllowChildProperties(Com2PropertyDescriptor property)

@@ -9,6 +9,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///  This class is responsible for managing a set of properties for a native object. It determines
 ///  when the properties need to be refreshed, and owns the extended handlers for those properties.
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2TypeInfoProcessor which is not trim-compatible.")]
 internal sealed class Com2Properties
 {
     // This is the interval that we'll hold properties for. If someone doesn't touch an object for this amount of time,

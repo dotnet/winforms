@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
@@ -14,9 +12,10 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
 {
-    private BehaviorService _behaviorService;
+    private BehaviorService? _behaviorService;
 
-    public DesignerToolStripControlHost(Control c) : base(c)
+    public DesignerToolStripControlHost(Control c)
+        : base(c)
     {
         // this ToolStripItem should not have defaultPadding.
         Margin = Padding.Empty;
@@ -32,7 +31,20 @@ internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
 
     internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, Behavior.Behavior standardBehavior)
     {
-        _behaviorService ??= (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
+        if (_behaviorService is null)
+        {
+            if (parent.Site is not ISite site)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _behaviorService = site.GetRequiredService<BehaviorService>();
+        }
+
+        if (Parent is null)
+        {
+            throw new InvalidOperationException();
+        }
 
         Point loc = _behaviorService.ControlToAdornerWindow(Parent);
         Rectangle r = Bounds;
@@ -42,6 +54,7 @@ internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
         glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Bottom, standardBehavior));
         glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Left, standardBehavior));
         glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Right, standardBehavior));
+
         return glyphs;
     }
 

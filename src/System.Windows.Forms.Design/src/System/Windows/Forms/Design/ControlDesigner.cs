@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,7 +20,7 @@ public partial class ControlDesigner : ComponentDesigner
     protected static readonly Point InvalidPoint = new(int.MinValue, int.MinValue);
 
     private static uint s_currentProcessId;
-    private IDesignerHost _host;                        // the host for our designer
+    private IDesignerHost? _host;                       // the host for our designer
 
     private bool _liveRegion;                           // is the mouse is over a live region of the control?
     private bool _inHitTest;                            // A popular way to implement GetHitTest is by WM_NCHITTEST
@@ -33,16 +31,16 @@ public partial class ControlDesigner : ComponentDesigner
     private bool _enabledchangerecursionguard;
 
     // Behavior work
-    private BehaviorService _behaviorService;           // we cache this 'cause we use it so often
-    private ResizeBehavior _resizeBehavior;             // the standard behavior for our selection glyphs - demand created
-    private ContainerSelectorBehavior _moveBehavior;    // the behavior for non-resize glyphs - demand created
+    private BehaviorService? _behaviorService;          // we cache this 'cause we use it so often
+    private ResizeBehavior? _resizeBehavior;            // the standard behavior for our selection glyphs - demand created
+    private ContainerSelectorBehavior? _moveBehavior;   // the behavior for non-resize glyphs - demand created
 
     // Services that we use enough to cache
-    private ISelectionUIService _selectionUIService;
-    private IEventHandlerService _eventService;
-    private IToolboxService _toolboxService;
-    private InheritanceUI _inheritanceUI;
-    private IOverlayService _overlayService;
+    private ISelectionUIService? _selectionUIService;
+    private IEventHandlerService? _eventService;
+    private IToolboxService? _toolboxService;
+    private InheritanceUI? _inheritanceUI;
+    private IOverlayService? _overlayService;
 
     // Transient values that are used during mouse drags
     private Point _mouseDragLast = InvalidPoint;        // the last position of the mouse during a drag.
@@ -55,9 +53,9 @@ public partial class ControlDesigner : ComponentDesigner
     private int _lastClickMessagePositionX;
     private int _lastClickMessagePositionY;
 
-    private event EventHandler DisposingHandler;
-    private CollectionChangeEventHandler _dataBindingsCollectionChanged;
-    private Exception _thrownException;
+    private event EventHandler? DisposingHandler;
+    private CollectionChangeEventHandler? _dataBindingsCollectionChanged;
+    private Exception? _thrownException;
 
     private bool _ctrlSelect;                           // if the CTRL key was down at the mouse down
     private bool _toolPassThrough;                      // a tool is selected, allow the parent to draw a rect for it.
@@ -65,14 +63,14 @@ public partial class ControlDesigner : ComponentDesigner
     private bool _revokeDragDrop = true;
     private bool _hadDragDrop;
 
-    private DesignerControlCollection _controls;
+    private DesignerControlCollection? _controls;
 
     private static bool s_inContextMenu;
 
-    private DockingActionList _dockingAction;
-    private Dictionary<IntPtr, bool> _subclassedChildren;
+    private DockingActionList? _dockingAction;
+    private Dictionary<IntPtr, bool>? _subclassedChildren;
 
-    protected BehaviorService BehaviorService => _behaviorService ??= GetService<BehaviorService>();
+    protected BehaviorService? BehaviorService => _behaviorService ??= GetService<BehaviorService>();
 
     internal bool ForceVisible { get; set; } = true;
 
@@ -85,10 +83,9 @@ public partial class ControlDesigner : ComponentDesigner
         {
             Point loc = Control.Location;
 
-            ScrollableControl p = Control.Parent as ScrollableControl;
-            if (p is not null)
+            if (Control.Parent is ScrollableControl parent)
             {
-                Point pt = p.AutoScrollPosition;
+                Point pt = parent.AutoScrollPosition;
                 loc.Offset(-pt.X, -pt.Y);
             }
 
@@ -96,10 +93,9 @@ public partial class ControlDesigner : ComponentDesigner
         }
         set
         {
-            ScrollableControl p = Control.Parent as ScrollableControl;
-            if (p is not null)
+            if (Control.Parent is ScrollableControl parent)
             {
-                Point pt = p.AutoScrollPosition;
+                Point pt = parent.AutoScrollPosition;
                 value.Offset(pt.X, pt.Y);
             }
 
@@ -115,7 +111,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         get
         {
-            List<IComponent> sitedChildren = null;
+            List<IComponent>? sitedChildren = null;
             foreach (Control control in Control.Controls)
             {
                 if (control.Site is not null)
@@ -129,7 +125,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    protected AccessibleObject accessibilityObj;
+    protected AccessibleObject? accessibilityObj;
 
     public virtual AccessibleObject AccessibilityObject
         => accessibilityObj ??= new ControlDesignerAccessibleObject(this, Control);
@@ -159,13 +155,14 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private string Name
+    private string? Name
     {
-        get => Component.Site.Name;
+        get => Component.Site?.Name;
         set
         {
             // Don't do anything here during loading, if a refactor changed it we don't want to do anything.
-            if (GetService(typeof(IDesignerHost)) is not IDesignerHost host || (host is not null && !host.Loading))
+            if ((!TryGetService(out IDesignerHost? host) || (host is not null && !host.Loading))
+                && Component.Site is not null)
             {
                 Component.Site.Name = value;
             }
@@ -177,7 +174,7 @@ public partial class ControlDesigner : ComponentDesigner
     ///  the component being designed is a control, and if it is it returns its parent.  This property can return
     ///  null if there is no parent component.
     /// </summary>
-    protected override IComponent ParentComponent =>
+    protected override IComponent? ParentComponent =>
         Component is Control c && c.Parent is not null ? c.Parent : base.ParentComponent;
 
     /// <summary>
@@ -189,7 +186,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     public bool AutoResizeHandles { get; set; }
 
-    private IDesignerTarget DesignerTarget { get; set; }
+    private IDesignerTarget? DesignerTarget { get; set; }
 
     private Dictionary<IntPtr, bool> SubclassedChildWindows => _subclassedChildren ??= [];
 
@@ -204,10 +201,10 @@ public partial class ControlDesigner : ComponentDesigner
         {
             object component = Component;
             SelectionRules rules = SelectionRules.Visible;
-            PropertyDescriptor prop;
+            PropertyDescriptor? prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component);
-            PropertyDescriptor autoSizeProp = props["AutoSize"];
-            PropertyDescriptor autoSizeModeProp = props["AutoSizeMode"];
+            PropertyDescriptor? autoSizeProp = props["AutoSize"];
+            PropertyDescriptor? autoSizeModeProp = props["AutoSizeMode"];
 
             if ((prop = props["Location"]) is not null && !prop.IsReadOnly)
             {
@@ -216,7 +213,8 @@ public partial class ControlDesigner : ComponentDesigner
 
             if ((prop = props["Size"]) is not null && !prop.IsReadOnly)
             {
-                if (AutoResizeHandles && Component != _host.RootComponent)
+                Debug.Assert(_host is not null);
+                if (AutoResizeHandles && Component != _host?.RootComponent)
                 {
                     rules = IsResizableConsiderAutoSize(autoSizeProp, autoSizeModeProp)
                         ? rules | SelectionRules.AllSizeable
@@ -228,10 +226,9 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            PropertyDescriptor propDock = props["Dock"];
-            if (propDock is not null)
+            if (props["Dock"] is PropertyDescriptor propDock)
             {
-                DockStyle dock = (DockStyle)(int)propDock.GetValue(component);
+                DockStyle dock = (DockStyle)(int)propDock.GetValue(component)!;
 
                 // gotta adjust if the control's parent is mirrored... this is just such that we add the right
                 // resize handles. We need to do it this way, since resize glyphs are added in  AdornerWindow
@@ -268,10 +265,9 @@ public partial class ControlDesigner : ComponentDesigner
                 }
             }
 
-            PropertyDescriptor pd = props["Locked"];
-            if (pd is not null)
+            if (props["Locked"] is PropertyDescriptor pd)
             {
-                object value = pd.GetValue(component);
+                object? value = pd.GetValue(component);
 
                 // Make sure that value is a boolean, in case someone else added this property
                 if (value is bool boolean && boolean)
@@ -289,11 +285,15 @@ public partial class ControlDesigner : ComponentDesigner
     internal Point GetOffsetToClientArea()
     {
         Point nativeOffset = default;
-        PInvoke.MapWindowPoints(Control, Control.Parent, ref nativeOffset);
+        if (Control.Parent is { } parent)
+        {
+            PInvoke.MapWindowPoints(Control, parent, ref nativeOffset);
+        }
+
         Point offset = Control.Location;
 
         // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
-        if (Control.IsMirrored != Control.Parent.IsMirrored)
+        if (Control.IsMirrored != Control.Parent?.IsMirrored)
         {
             offset.Offset(Control.Width, 0);
         }
@@ -304,23 +304,23 @@ public partial class ControlDesigner : ComponentDesigner
     /// <summary>
     ///  Per AutoSize spec, determines if a control is resizable.
     /// </summary>
-    private bool IsResizableConsiderAutoSize(PropertyDescriptor autoSizeProp, PropertyDescriptor autoSizeModeProp)
+    private bool IsResizableConsiderAutoSize(PropertyDescriptor? autoSizeProp, PropertyDescriptor? autoSizeModeProp)
     {
         object component = Component;
         bool resizable = true;
         bool autoSize = false;
         bool growOnly = false;
 
-        AttributeCollection attributes = autoSizeProp?.Attributes;
-        if (attributes is not null && !(attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
+        if (autoSizeProp?.Attributes is AttributeCollection attributes
+            && !(attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
                 || attributes.Contains(BrowsableAttribute.No)))
         {
-            autoSize = (bool)autoSizeProp.GetValue(component);
+            autoSize = (bool)autoSizeProp!.GetValue(component)!;
         }
 
         if (autoSizeModeProp is not null)
         {
-            AutoSizeMode mode = (AutoSizeMode)autoSizeModeProp.GetValue(component);
+            AutoSizeMode mode = (AutoSizeMode)autoSizeModeProp.GetValue(component)!;
             growOnly = mode == AutoSizeMode.GrowOnly;
         }
 
@@ -364,7 +364,7 @@ public partial class ControlDesigner : ComponentDesigner
         return snapLines;
     }
 
-    protected override InheritanceAttribute InheritanceAttribute
+    protected override InheritanceAttribute? InheritanceAttribute
         => IsRootDesigner ? InheritanceAttribute.Inherited : base.InheritanceAttribute;
 
     internal new bool IsRootDesigner
@@ -372,7 +372,7 @@ public partial class ControlDesigner : ComponentDesigner
         get
         {
             Debug.Assert(Component is not null, "this.component needs to be set before this method is valid.");
-            return TryGetService(out IDesignerHost host) && Component == host.RootComponent;
+            return TryGetService(out IDesignerHost? host) && Component == host.RootComponent;
         }
     }
 
@@ -388,7 +388,7 @@ public partial class ControlDesigner : ComponentDesigner
     ///  is a control that is not in the IDesignerHost.Container.Components collection. SplitterPanel is an example
     ///  of one such control. internalControlIndex is zero-based.
     /// </summary>
-    public virtual ControlDesigner InternalControlDesigner(int internalControlIndex) => null;
+    public virtual ControlDesigner? InternalControlDesigner(int internalControlIndex) => null;
 
     /// <summary>
     ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the
@@ -397,6 +397,8 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     protected void BaseWndProc(ref Message m)
         => m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
+
+    internal override bool CanBeAssociatedWith(IDesigner parentDesigner) => CanBeParentedTo(parentDesigner);
 
     /// <summary>
     ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
@@ -409,14 +411,14 @@ public partial class ControlDesigner : ComponentDesigner
     ///  Default processing for messages. This method causes the message to get processed by the control, rather
     ///  than the designer.
     /// </summary>
-    protected void DefWndProc(ref Message m) => DesignerTarget.DefWndProc(ref m);
+    protected void DefWndProc(ref Message m) => DesignerTarget?.DefWndProc(ref m);
 
     /// <summary>
     ///  Displays the given exception to the user.
     /// </summary>
     protected void DisplayError(Exception e)
     {
-        if (TryGetService(out IUIService uis))
+        if (TryGetService(out IUIService? uis))
         {
             uis.ShowError(e);
         }
@@ -460,7 +462,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 if (_removalNotificationHooked)
                 {
-                    if (TryGetService(out IComponentChangeService csc))
+                    if (TryGetService(out IComponentChangeService? csc))
                     {
                         csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -488,7 +490,7 @@ public partial class ControlDesigner : ComponentDesigner
         base.Dispose(disposing);
     }
 
-    private void OnControlAdded(object sender, ControlEventArgs e)
+    private void OnControlAdded(object? sender, ControlEventArgs e)
     {
         if (e.Control is null || _host is null || _host.GetDesigner(e.Control) is ControlDesigner)
         {
@@ -522,7 +524,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
+    private void DataSource_ComponentRemoved(object? sender, ComponentEventArgs e)
     {
         // It is possible to use the control designer with NON CONTROl types.
         if (Component is not Control ctl)
@@ -549,7 +551,7 @@ public partial class ControlDesigner : ComponentDesigner
         // if after removing those bindings the collection is empty, then unhook the changeNotificationService
         if (ctl.DataBindings.Count == 0)
         {
-            if (TryGetService(out IComponentChangeService csc))
+            if (TryGetService(out IComponentChangeService? csc))
             {
                 csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
             }
@@ -579,7 +581,7 @@ public partial class ControlDesigner : ComponentDesigner
         ArgumentNullException.ThrowIfNull(child);
         ArgumentNullException.ThrowIfNull(name);
 
-        if (!TryGetService(out INestedContainer nc))
+        if (!TryGetService(out INestedContainer? nc))
         {
             return false;
         }
@@ -587,7 +589,7 @@ public partial class ControlDesigner : ComponentDesigner
         // Only add the child if it doesn't already exist. VSWhidbey #408041.
         for (int i = 0; i < nc.Components.Count; i++)
         {
-            if (nc.Components[i].Equals(child))
+            if (child.Equals(nc.Components[i]))
             {
                 return true;
             }
@@ -641,11 +643,11 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void OnGiveFeedback(object s, GiveFeedbackEventArgs e) => OnGiveFeedback(e);
+    private void OnGiveFeedback(object? s, GiveFeedbackEventArgs e) => OnGiveFeedback(e);
 
-    private void OnDragLeave(object s, EventArgs e) => OnDragLeave(e);
+    private void OnDragLeave(object? s, EventArgs e) => OnDragLeave(e);
 
-    private void OnDragEnter(object s, DragEventArgs e)
+    private void OnDragEnter(object? s, DragEventArgs e)
     {
         // Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
         BehaviorService?.StartDragNotification();
@@ -653,9 +655,9 @@ public partial class ControlDesigner : ComponentDesigner
         OnDragEnter(e);
     }
 
-    private void OnDragOver(object s, DragEventArgs e) => OnDragOver(e);
+    private void OnDragOver(object? s, DragEventArgs e) => OnDragOver(e);
 
-    private void OnDragDrop(object s, DragEventArgs e)
+    private void OnDragDrop(object? s, DragEventArgs e)
     {
         // This will cause the Behavior Service to return from 'drag mode'
         BehaviorService?.EndDragNotification();
@@ -674,14 +676,14 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // get the right cursor for this component
         OnSetCursor();
-        Cursor cursor = Cursor.Current;
+        Cursor? cursor = Cursor.Current;
 
         // get the correctly translated bounds
-        Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(Control);
+        Rectangle translatedBounds = BehaviorService?.ControlRectInAdornerWindow(Control) ?? Rectangle.Empty;
 
         // create our glyph, and set its cursor appropriately
-        ControlBodyGlyph g = null;
-        Control parent = Control.Parent;
+        ControlBodyGlyph? g = null;
+        Control? parent = Control.Parent;
 
         if (parent is not null && _host is not null && _host.RootComponent != Component)
         {
@@ -695,7 +697,7 @@ public partial class ControlDesigner : ComponentDesigner
                 // a MoveBehavior. If we didn't we wouldn't be able to move the control, since it won't get any
                 // mouse messages.
 
-                if (TryGetService(out ISelectionService sel) && sel.GetComponentSelected(Control))
+                if (TryGetService(out ISelectionService? sel) && sel.GetComponentSelected(Control))
                 {
                     g = new ControlBodyGlyph(translatedBounds, cursor, Control, MoveBehavior);
                 }
@@ -716,7 +718,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     internal ControlBodyGlyph GetControlGlyphInternal(GlyphSelectionType selectionType) => GetControlGlyph(selectionType);
-
+#nullable disable
     /// <summary>
     ///  Returns a collection of Glyph objects representing the selection borders and grab handles for a standard
     ///  control.  Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable
@@ -2123,10 +2125,10 @@ public partial class ControlDesigner : ComponentDesigner
                 // RDW_ERASENOW | RDW_UPDATENOW.
                 if (OverlayService is not null)
                 {
-                    if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is not null)
+                    if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is { } parent)
                     {
                         // we have a non-client region to invalidate
-                        Rectangle controlScreenBounds = new(Control.Parent.PointToScreen(Control.Location), Control.Size);
+                        Rectangle controlScreenBounds = new(parent.PointToScreen(Control.Location), Control.Size);
                         Rectangle clientAreaScreenBounds = new(Control.PointToScreen(Point.Empty), Control.ClientSize);
 
                         using Region nonClient = new(controlScreenBounds);
