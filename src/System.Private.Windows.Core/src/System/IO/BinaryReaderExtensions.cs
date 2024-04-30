@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Windows.Forms.BinaryFormat;
 
 namespace System.IO;
 
@@ -155,7 +154,7 @@ internal static class BinaryReaderExtensions
             // untrusted data claiming a huge number of decimal strings. Worst case is that roughly 4x what the remaining
             // data could contain at the smallest string size, but we'll still guard.
 
-            List<T> values = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
+            CappedArray<T> values = new(count);
 
             for (int i = 0; i < count; i++)
             {
@@ -177,7 +176,7 @@ internal static class BinaryReaderExtensions
                 }
             }
 
-            return [.. values];
+            return values;
         }
     }
 

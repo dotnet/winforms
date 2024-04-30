@@ -51,7 +51,7 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
         object? typeInfo,
         int count)
     {
-        List<object?> memberValues = new(Math.Min(count, BinaryFormattedObject.MaxNewCollectionSize));
+        CappedArray<object?> memberValues = new(count);
         for (int i = 0; i < count; i++)
         {
             object value = ReadValue(state, type, typeInfo);

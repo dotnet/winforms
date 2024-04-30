@@ -26,9 +26,6 @@ internal sealed partial class BinaryFormattedObject
     internal static FormatterConverter DefaultConverter { get; } = new();
 #pragma warning restore SYSLIB0050
 
-    // Don't reserve space in collections based on read lengths for more than this size to defend against corrupted lengths.
-    internal const int MaxNewCollectionSize = 1024 * 10;
-
     private static readonly Options s_defaultOptions = new();
 
     private readonly List<IRecord> _records = [];

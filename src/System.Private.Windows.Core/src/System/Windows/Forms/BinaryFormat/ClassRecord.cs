@@ -59,7 +59,7 @@ internal abstract class ClassRecord : ObjectRecord
         BinaryFormattedObject.IParseState state,
         MemberTypeInfo memberTypeInfo)
     {
-        List<object?> memberValues = new(Math.Min(memberTypeInfo.Count, BinaryFormattedObject.MaxNewCollectionSize));
+        CappedArray<object?> memberValues = new(memberTypeInfo.Count);
         foreach ((BinaryType type, object? info) in memberTypeInfo)
         {
             object value = ReadValue(state, type, info);
