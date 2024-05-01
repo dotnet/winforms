@@ -83,7 +83,7 @@ internal abstract class ClassRecord : ObjectRecord
             memberValues.Add(null);
         }
 
-        return (object?[])memberValues;
+        return memberValues.ToArray();
     }
 
     /// <summary>

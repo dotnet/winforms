@@ -44,6 +44,8 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
         Debug.Assert(_fieldInfo is not null);
 
+        // Note that while fields must have member data, fields are not required for all member data.
+
         while (_currentFieldIndex < _fieldInfo.Length)
         {
             // FormatterServices *never* returns anything but fields.

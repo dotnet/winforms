@@ -181,7 +181,7 @@ internal static class BinaryReaderExtensions
                 }
             }
 
-            return values;
+            return values.ToArray();
         }
     }
 

@@ -73,15 +73,21 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
             _currentMemberIndex++;
         }
 
+        // We can't complete these in the same way we do with direct field sets as user code can dereference the
+        // reference type members from the SerializationInfo that aren't fully completed (due to cycles). With direct
+        // field sets it doesn't matter if the referenced object isn't fully completed. Waiting until the graph is
+        // fully parsed to allow cycles the best chance to resolve as much as possible without having to walk the
+        // entire graph from this point to make a determination.
+        //
+        // The same issue applies to "complete" events, which is why we pend them as well.
+        //
         // If we were confident that there were no cycles in the graph to this point we could apply directly
         // if there were no pending value types (which should also not happen if there are no cycles).
 
         PendingSerializationInfo pending = new(_classRecord.ObjectId, _serializationInfo, _surrogate);
 
-        if (_hasAnyReferences && Deserializer.IncompleteObjects.Count > 1)
+        if (_hasAnyReferences)
         {
-            // If there is only one incomplete object, it would be us and we won't need to pend even if
-            // we have references to other types.
             Deserializer.PendSerializationInfo(pending);
         }
         else

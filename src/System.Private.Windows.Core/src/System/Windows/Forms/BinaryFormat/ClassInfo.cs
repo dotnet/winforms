@@ -37,7 +37,7 @@ internal class ClassInfo : IBinaryWriteable
             memberNames.Add(reader.ReadString());
         }
 
-        return new(objectId, name, (string[])memberNames);
+        return new(objectId, name, memberNames.ToArray());
     }
 
     public void Write(BinaryWriter writer)

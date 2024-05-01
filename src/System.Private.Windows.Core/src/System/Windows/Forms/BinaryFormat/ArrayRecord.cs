@@ -78,7 +78,7 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
             }
         }
 
-        return (object?[])memberValues;
+        return memberValues.ToArray();
     }
 }
 
