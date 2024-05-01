@@ -66,8 +66,7 @@ internal static class SerializationExtensions
             if (ranks == 2)
             {
                 int length = array.GetLength(1);
-                int index1 = flattenedIndex / length;
-                int index2 = flattenedIndex - (index1 * length);
+                (int index1, int index2) = int.DivRem(flattenedIndex, length);
                 array.SetValue(value, index1, index2);
                 return;
             }

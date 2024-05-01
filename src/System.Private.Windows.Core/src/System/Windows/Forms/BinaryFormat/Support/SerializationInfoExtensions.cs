@@ -13,6 +13,7 @@ internal static class SerializationInfoExtensions
         .GetMethod("UpdateValue", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)!
         .CreateDelegate<Action<SerializationInfo, string, object, Type>>();
 
+    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicMethods, typeof(SerializationInfo))]
     internal static void UpdateValue(this SerializationInfo si, string name, object value, Type type) =>
         s_updateValue(si, name, value, type);
 }

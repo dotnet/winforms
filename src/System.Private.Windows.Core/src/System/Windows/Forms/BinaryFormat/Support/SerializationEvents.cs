@@ -49,15 +49,13 @@ internal sealed class SerializationEvents
     {
         List<MethodInfo>? attributedMethods = null;
 
-        // Traverse the hierarchy to find all methods with the particular attribute
+        // Traverse the hierarchy to find all methods with the specified attribute.
         Type? baseType = type;
         while (baseType is not null && baseType != typeof(object))
         {
-            // Get all methods which are declared on this type, instance and public or nonpublic
             MethodInfo[] methods = baseType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach (MethodInfo method in methods)
             {
-                // For each method find if attribute is present, the return type is void and the method is not virtual
                 if (method.IsDefined(attribute, inherit: false))
                 {
                     attributedMethods ??= [];
@@ -68,7 +66,7 @@ internal sealed class SerializationEvents
             baseType = baseType.BaseType;
         }
 
-        // We should invoke the methods starting from base
+        // We should invoke the methods starting from base.
         attributedMethods?.Reverse();
 
         return attributedMethods;

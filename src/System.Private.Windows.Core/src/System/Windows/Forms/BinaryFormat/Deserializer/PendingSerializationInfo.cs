@@ -52,7 +52,7 @@ internal sealed class PendingSerializationInfo
             // as they can never be observed in an unfinished state.
             if (!type.IsValueType && !ReferenceEquals(populated, @object))
             {
-                throw new SerializationException("Surrogate must return an object that matches.");
+                throw new SerializationException("Surrogate must return the same object that was provided in the 'obj' parameter.");
             }
 
             objects[ObjectId] = populated;
@@ -79,22 +79,6 @@ internal sealed class PendingSerializationInfo
 
         throw new SerializationException($"The constructor to deserialize an object of type '{type.FullName}' was not found.");
     }
-
-#if false
-    // Leaving this stubbed in should we find we need to check when processing surrogates (see above).
-
-    private static Type? s_surrogateForCyclicalReferenceType;
-
-    internal static bool IsSurrogateForCyclicalReference(Type type)
-    {
-#pragma warning disable SYSLIB0050 // Type or member is obsolete
-        // Would need to create an actual surrogate instance to create this (can't pass null).
-        s_surrogateForCyclicalReferenceType ??= FormatterServices.GetSurrogateForCyclicalReference(null!).GetType();
-#pragma warning restore SYSLIB0050
-
-        return type == s_surrogateForCyclicalReferenceType;
-    }
-#endif
 }
 
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
