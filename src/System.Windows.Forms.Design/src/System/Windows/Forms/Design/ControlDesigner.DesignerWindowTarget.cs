@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 public partial class ControlDesigner
@@ -30,7 +28,7 @@ public partial class ControlDesigner
             if (_designer is not null)
             {
                 _designer.Control.WindowTarget = _oldTarget;
-                _designer = null;
+                _designer = null!;
             }
         }
 
@@ -51,7 +49,7 @@ public partial class ControlDesigner
             ControlDesigner currentDesigner = _designer;
             if (currentDesigner is not null)
             {
-                IDesignerTarget designerTarget = currentDesigner.DesignerTarget;
+                IDesignerTarget? designerTarget = currentDesigner.DesignerTarget;
                 currentDesigner.DesignerTarget = this;
                 try
                 {
