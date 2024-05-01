@@ -15,6 +15,9 @@ public class CheckedListBoxTests
         using CheckedListBox box = new();
 
         Assert.NotNull(box);
+
+        // Check default values
+        box.UseCompatibleTextRendering.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -71,6 +74,20 @@ public class CheckedListBoxTests
         Assert.Equal(DrawMode.Normal, result);
     }
 
+    [WinFormsFact]
+    public void CheckedListBox_DrawMode_GetSet_ReturnsExpected()
+    {
+        using CheckedListBox box = new();
+
+        box.DrawMode.Should().Be(DrawMode.Normal);
+
+        box.DrawMode = DrawMode.OwnerDrawFixed;
+        box.DrawMode.Should().Be(DrawMode.Normal);
+
+        box.DrawMode = DrawMode.OwnerDrawVariable;
+        box.DrawMode.Should().Be(DrawMode.Normal);
+    }
+
     [WinFormsTheory]
     [InlineData(SelectionMode.None)]
     [InlineData(SelectionMode.One)]
@@ -112,6 +129,20 @@ public class CheckedListBoxTests
         };
 
         Assert.Equal(expected, box.ThreeDCheckBoxes);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void CheckedListBox_ThreeDCheckBoxes_SetWithItems_ReturnsExpected(bool expected)
+    {
+        using CheckedListBox box = new()
+        {
+            ThreeDCheckBoxes = expected
+        };
+
+        box.Items.Add("item1");
+
+        box.ThreeDCheckBoxes.Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -594,10 +625,242 @@ public class CheckedListBoxTests
         }
     }
 
+    [WinFormsFact]
+    public void CheckedListBox_DataSource_GetSet_ReturnsExpected()
+    {
+        using CheckedListBox checkedListBox = new();
+        List<string> dataSource1 = ["item1", "item2", "item3"];
+        List<string> dataSource2 = ["item4", "item5", "item6"];
+
+        int callCount = 0;
+        checkedListBox.DataSourceChanged += (sender, e) => callCount++;
+
+        // Test initial DataSource set
+        checkedListBox.DataSource = dataSource1;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource1);
+        callCount.Should().Be(1);
+
+        // Test changing DataSource
+        checkedListBox.DataSource = dataSource2;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
+        callCount.Should().Be(2);
+
+        // Test setting DataSource to null
+        checkedListBox.DataSource = null;
+        checkedListBox.DataSource.Should().BeNull();
+        callCount.Should().Be(3);
+
+        // Test setting DataSource to DataSource
+        checkedListBox.DataSource = dataSource2;
+        checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
+        callCount.Should().Be(4);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_ItemHeight_Get_ReturnsExpected()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int expectedHeight = checkedListBox.Font.Height + checkedListBox._listItemBordersHeight;
+
+        checkedListBox.ItemHeight.Should().Be(expectedHeight);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_ItemHeight_Set_DoesNotChangeValue()
+    {
+        using CheckedListBox checkedListBox = new();
+        int originalHeight = checkedListBox.ItemHeight;
+
+        checkedListBox.ItemHeight = 50;
+        checkedListBox.ItemHeight.Should().Be(originalHeight);
+
+        checkedListBox.ItemHeight = -1;
+        checkedListBox.ItemHeight.Should().Be(originalHeight);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void CheckedListBox_UseCompatibleTextRendering_GetSet_ReturnsExpected(bool value)
+    {
+        using CheckedListBox checkedListBox = new();
+
+        checkedListBox.UseCompatibleTextRendering = value;
+        checkedListBox.UseCompatibleTextRendering.Should().Be(value);
+        checkedListBox.UseCompatibleTextRenderingInternal.Should().Be(value);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_DataSourceChanged_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        checkedListBox.DataSourceChanged += handler;
+        checkedListBox.OnDataSourceChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        checkedListBox.DataSourceChanged -= handler;
+        checkedListBox.OnDataSourceChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_DisplayMemberChanged_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        checkedListBox.DisplayMemberChanged += handler;
+        checkedListBox.OnDisplayMemberChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        checkedListBox.DisplayMemberChanged -= handler;
+        checkedListBox.OnDisplayMemberChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_ItemCheck_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        ItemCheckEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().NotBeNull();
+        };
+
+        ItemCheckEventArgs eventArgs = new(0, CheckState.Checked, CheckState.Unchecked);
+
+        checkedListBox.ItemCheck += handler;
+        checkedListBox.OnItemCheck(eventArgs);
+        callCount.Should().Be(1);
+
+        checkedListBox.ItemCheck -= handler;
+        checkedListBox.OnItemCheck(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_Click_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        checkedListBox.Click += handler;
+        checkedListBox.OnClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        checkedListBox.Click -= handler;
+        checkedListBox.OnClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_MouseClick_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        MouseEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().NotBeNull();
+        };
+
+        MouseEventArgs eventArgs = new(MouseButtons.Left, 1, 0, 0, 0);
+
+        checkedListBox.MouseClick += handler;
+        checkedListBox.OnMouseClick(eventArgs);
+        callCount.Should().Be(1);
+
+        checkedListBox.MouseClick -= handler;
+        checkedListBox.OnMouseClick(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_MeasureItem_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        int callCount = 0;
+        MeasureItemEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().NotBeNull();
+        };
+
+        using Bitmap image = new(10, 10);
+        MeasureItemEventArgs eventArgs = new(Graphics.FromImage(image), 1);
+
+        checkedListBox.MeasureItem += handler;
+        checkedListBox.OnMeasureItem(eventArgs);
+        callCount.Should().Be(1);
+
+        checkedListBox.MeasureItem -= handler;
+        checkedListBox.OnMeasureItem(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_ValueMemberChanged_AddRemove_Success()
+    {
+        using CheckedListBox checkedListBox = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(checkedListBox);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        checkedListBox.ValueMemberChanged += handler;
+        checkedListBox.ValueMember = "Value";
+        callCount.Should().Be(1);
+
+        checkedListBox.ValueMemberChanged -= handler;
+        checkedListBox.ValueMember = "NewValue";
+        callCount.Should().Be(1);
+    }
+
     private class SubCheckedListBox : CheckedListBox
     {
+        public new int _listItemBordersHeight => base._listItemBordersHeight;
+
         public new void RefreshItems() => base.RefreshItems();
 
         public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
+
+        public new void OnDataSourceChanged(EventArgs e) => base.OnDataSourceChanged(e);
+
+        public new void OnDisplayMemberChanged(EventArgs e) => base.OnDisplayMemberChanged(e);
+
+        public new void OnItemCheck(ItemCheckEventArgs e) => base.OnItemCheck(e);
+
+        public new void OnClick(EventArgs e) => base.OnClick(e);
+
+        public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
+
+        public new void OnMeasureItem(MeasureItemEventArgs e) => base.OnMeasureItem(e);
     }
 }
