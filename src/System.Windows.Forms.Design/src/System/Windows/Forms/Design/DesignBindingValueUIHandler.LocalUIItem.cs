@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -12,7 +10,10 @@ internal partial class DesignBindingValueUIHandler
 {
     private class LocalUIItem : PropertyValueUIItem
     {
-        internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
+        internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding)
+            : base(
+                  handler.DataBitmap,
+                  new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
         {
             Binding = binding;
         }
@@ -21,12 +22,12 @@ internal partial class DesignBindingValueUIHandler
 
         private static string GetToolTip(Binding binding)
         {
-            string name = "";
+            string name = string.Empty;
             if (binding.DataSource is IComponent comp)
             {
                 if (comp.Site is not null)
                 {
-                    name = comp.Site.Name;
+                    name = comp.Site.Name ?? string.Empty;
                 }
             }
 
