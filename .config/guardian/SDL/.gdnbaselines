@@ -1,0 +1,76 @@
+{
+  "hydrated": false,
+  "properties": {
+    "helpUri": "https://eng.ms/docs/microsoft-security/security/azure-security/cloudai-security-fundamentals-engineering/security-integration/guardian-wiki/microsoft-guardian/general/baselines"
+  },
+  "version": "1.0.0",
+  "baselines": {
+    "default": {
+      "name": "default",
+      "createdDate": "2024-04-16 19:37:17Z",
+      "lastUpdatedDate": "2024-04-16 19:37:17Z"
+    }
+  },
+  "results": {
+    "ba0471859d450ec79c26ee0b0d23c9621221198818859cbc2720541dd8c124c0": {
+      "signature": "ba0471859d450ec79c26ee0b0d23c9621221198818859cbc2720541dd8c124c0",
+      "alternativeSignatures": [
+        "934351a1e382a03c6621cdd8bd48827fc4ab856d0d950e81b4c71e1d516e7240"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    },
+    "89fef1f24987d99ee2db5093f28cc2f8c9b2994cde59e35b9b9287018565d6c1": {
+      "signature": "89fef1f24987d99ee2db5093f28cc2f8c9b2994cde59e35b9b9287018565d6c1",
+      "alternativeSignatures": [
+        "9fc9b1594f07af1d6322a295f2c18e15cc5872a528049bcdaa8ca4335189cddd"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    },
+    "5033934d8d4871e1246ce84cde316b137b4348c0e6f08cd0356065d8208bea32": {
+      "signature": "5033934d8d4871e1246ce84cde316b137b4348c0e6f08cd0356065d8208bea32",
+      "alternativeSignatures": [
+        "d76c0213df1ace805efbff5f893b30b3f15312959ef989811db77d532d5cfb7c"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    },
+    "6eb6c9e924335f8e1ac68c50334bd1806f45245547cf645c3c5440be29e1ec56": {
+      "signature": "6eb6c9e924335f8e1ac68c50334bd1806f45245547cf645c3c5440be29e1ec56",
+      "alternativeSignatures": [
+        "6744b14f7d518b2228574fc46bbd0b9091ae18fadc13d6f2991f6143a136fd70"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    },
+    "b8a656523a4ed292fe08a65218f9b9915101078caf0843bceb053709f8a69afa": {
+      "signature": "b8a656523a4ed292fe08a65218f9b9915101078caf0843bceb053709f8a69afa",
+      "alternativeSignatures": [
+        "c2d6df217560cfc660733044df577a4c5f769105f63a8c06f7ac9370c5b85eda"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    },
+    "cb9eee18829d968879f7d6bbb7f9972be2e5b997e01c34cf4b3fb3907bced38c": {
+      "signature": "cb9eee18829d968879f7d6bbb7f9972be2e5b997e01c34cf4b3fb3907bced38c",
+      "alternativeSignatures": [
+        "fa368f2ac056891c23f8200457db1092ecd6b3e721c05e71b4a1b1728d183ce9"
+      ],
+      "memberOf": [
+        "default"
+      ],
+      "createdDate": "2024-04-16 19:37:17Z"
+    }
+  }
+}

@@ -54,11 +54,14 @@ extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
     featureFlags:
-      autoBaseline: true
+      autoBaseline: false
     pool:
       name: NetCore1ESPool-Svc-Internal
-      image: 1es-windows-2022-pt
+      image: 1es-windows-2022
       os: windows
+    sdl:
+      baseline:
+        baselineFile: $(Build.SourcesDirectory)\.config\guardian\SDL\.gdnbaselines
     customBuildTags:
     - ES365AIMigrationTooling
     stages:
