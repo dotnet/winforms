@@ -42,7 +42,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
         }
 
         // Invoke any OnDeserializing methods.
-        SerializationEvents.GetSerializationEventsForType(type).InvokeOnDeserializing(@object, deserializer.Options.StreamingContext);
+        SerializationEvents.GetOnDeserializingForType(type, @object)?.Invoke(deserializer.Options.StreamingContext);
 
         ObjectRecordDeserializer? recordDeserializer;
 

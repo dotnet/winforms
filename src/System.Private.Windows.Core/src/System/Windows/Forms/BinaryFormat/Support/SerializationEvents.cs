@@ -28,7 +28,7 @@ internal sealed class SerializationEvents
 
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2111:UnrecognizedReflectionPattern",
         Justification = "The Type is annotated correctly, it just can't pass through the lambda method.")]
-    internal static SerializationEvents GetSerializationEventsForType(
+    private static SerializationEvents GetSerializationEventsForType(
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type t) =>
         s_cache.GetOrAdd(t, CreateSerializationEvents);
 
@@ -74,25 +74,27 @@ internal sealed class SerializationEvents
         return attributedMethods;
     }
 
-    internal void InvokeOnDeserializing(object obj, StreamingContext context) =>
-        InvokeOnDelegate(obj, context, _onDeserializingMethods);
+    internal static Action<StreamingContext>? GetOnDeserializingForType(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        object obj) =>
+        GetSerializationEventsForType(type).GetOnDeserializing(obj);
 
-    internal void InvokeOnDeserialized(object obj, StreamingContext context) =>
-        InvokeOnDelegate(obj, context, _onDeserializedMethods);
+    internal static Action<StreamingContext>? GetOnDeserializedForType(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        object obj) =>
+        GetSerializationEventsForType(type).GetOnDeserialized(obj);
 
-    internal Action<StreamingContext>? AddOnDeserialized(object obj, Action<StreamingContext>? handler) =>
-        AddOnDelegate(obj, handler, _onDeserializedMethods);
+    private Action<StreamingContext>? GetOnDeserialized(object obj) =>
+        AddOnDelegate(obj, _onDeserializedMethods);
 
-    /// <summary>Invoke all methods.</summary>
-    private static void InvokeOnDelegate(object obj, StreamingContext context, List<MethodInfo>? methods)
-    {
-        Debug.Assert(obj is not null, "object should have been initialized");
-        AddOnDelegate(obj, null, methods)?.Invoke(context);
-    }
+    private Action<StreamingContext>? GetOnDeserializing(object obj) =>
+        AddOnDelegate(obj, _onDeserializingMethods);
 
     /// <summary>Add all methods to a delegate.</summary>
-    private static Action<StreamingContext>? AddOnDelegate(object obj, Action<StreamingContext>? handler, List<MethodInfo>? methods)
+    private static Action<StreamingContext>? AddOnDelegate(object obj, List<MethodInfo>? methods)
     {
+        Action<StreamingContext>? handler = null;
+
         if (methods is not null)
         {
             foreach (MethodInfo method in methods)

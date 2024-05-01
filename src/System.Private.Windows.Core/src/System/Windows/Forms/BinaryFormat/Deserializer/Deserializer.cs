@@ -183,7 +183,8 @@ internal sealed partial class Deserializer : IDeserializer
             while (!(requiredId = currentParser.Continue()).IsNull)
             {
                 // A record is required to complete the current parser. Get it.
-                object? requiredObject = DeserializeNew(requiredId);
+                object requiredObject = DeserializeNew(requiredId);
+                Debug.Assert(requiredObject is not IRecord);
 
                 if (requiredObject is ObjectRecordDeserializer requiredParser)
                 {
@@ -319,8 +320,7 @@ internal sealed partial class Deserializer : IDeserializer
                 Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
                 object @object = _deserializedObjects[completedId];
 
-                OnDeserialized += SerializationEvents.GetSerializationEventsForType(type)
-                    .AddOnDeserialized(@object, OnDeserialized);
+                OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
 
                 if (@object is IDeserializationCallback callback)
                 {
