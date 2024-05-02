@@ -24,21 +24,13 @@ internal sealed class ArraySingleObject :
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     { }
 
-    static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        ArraySingleObject record = new(
-            ArrayInfo.Parse(state.Reader, out Count length),
-            ReadObjectArrayValues(state, length));
-
-        state.RecordMap[record.ObjectId] = record;
-        return record;
-    }
+    static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(BinaryFormattedObject.IParseState state) =>
+        new(ArrayInfo.Parse(state.Reader, out Count length), ReadObjectArrayValues(state, length));
 
     public override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
         ArrayInfo.Write(writer);
-        WriteRecords(writer, ArrayObjects);
+        WriteRecords(writer, ArrayObjects, coalesceNulls: true);
     }
 }

@@ -17,6 +17,7 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>, IBinaryF
 {
     public Id ObjectId { get; }
     public string Value { get; }
+    Id IRecord.Id => ObjectId;
 
     public static RecordType RecordType => RecordType.BinaryObjectString;
 
@@ -26,14 +27,8 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>, IBinaryF
         Value = value;
     }
 
-    static BinaryObjectString IBinaryFormatParseable<BinaryObjectString>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        BinaryObjectString record = new(state.Reader.ReadInt32(), state.Reader.ReadString());
-
-        state.RecordMap[record.ObjectId] = record;
-        return record;
-    }
+    static BinaryObjectString IBinaryFormatParseable<BinaryObjectString>.Parse(BinaryFormattedObject.IParseState state) =>
+        new(state.Reader.ReadInt32(), state.Reader.ReadString());
 
     public void Write(BinaryWriter writer)
     {

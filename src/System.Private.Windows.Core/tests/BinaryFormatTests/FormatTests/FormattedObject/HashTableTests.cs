@@ -67,12 +67,12 @@ public class HashtableTests : SerializationTest<FormattedObjectSerializer>
         };
 
         BinaryFormattedObject format = new(Serialize(hashtable));
-        format[1].Should().BeOfType<BinaryLibrary>();
-        format[2].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.Collections.Hashtable");
-        format[3].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.OrdinalComparer");
-        format[4].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be("FormatTests.FormattedObject.HashtableTests+CustomHashCodeProvider");
-        format[5].Should().BeOfType<ArraySingleObject>();
-        format[6].Should().BeOfType<ArraySingleObject>();
+        SystemClassWithMembersAndTypes systemClass = format.RootRecord.Should().BeOfType<SystemClassWithMembersAndTypes>().Subject;
+        systemClass.Name.Should().Be("System.Collections.Hashtable");
+        format[(MemberReference)systemClass["Comparer"]!].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.OrdinalComparer");
+        format[(MemberReference)systemClass["HashCodeProvider"]!].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be("FormatTests.FormattedObject.HashtableTests+CustomHashCodeProvider");
+        format[(MemberReference)systemClass["Keys"]!].Should().BeOfType<ArraySingleObject>();
+        format[(MemberReference)systemClass["Values"]!].Should().BeOfType<ArraySingleObject>();
     }
 
     [Fact]

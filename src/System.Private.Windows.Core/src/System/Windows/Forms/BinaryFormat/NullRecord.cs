@@ -30,6 +30,8 @@ internal abstract partial class NullRecord
     {
         switch (nullCount)
         {
+            case 0:
+                throw new ArgumentOutOfRangeException(nameof(nullCount));
             case 1:
                 ObjectNull.Instance.Write(writer);
                 break;

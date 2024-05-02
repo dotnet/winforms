@@ -17,6 +17,7 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>, IBinaryFormatParse
 {
     public Id LibraryId { get; }
     public string LibraryName { get; }
+    Id IRecord.Id => LibraryId;
 
     public BinaryLibrary(Id libraryId, string libraryName)
     {
@@ -26,16 +27,8 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>, IBinaryFormatParse
 
     public static RecordType RecordType => RecordType.BinaryLibrary;
 
-    static BinaryLibrary IBinaryFormatParseable<BinaryLibrary>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        BinaryLibrary record = new(
-            state.Reader.ReadInt32(),
-            state.Reader.ReadString());
-
-        state.RecordMap[record.LibraryId] = record;
-        return record;
-    }
+    static BinaryLibrary IBinaryFormatParseable<BinaryLibrary>.Parse(BinaryFormattedObject.IParseState state) =>
+        new(state.Reader.ReadInt32(), state.Reader.ReadString());
 
     public void Write(BinaryWriter writer)
     {

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms;
 using System.Windows.Forms.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
@@ -9,6 +10,8 @@ public class RecordMapTests
 {
     private class Record : IRecord
     {
+        public Id Id => 1;
+
         void IBinaryWriteable.Write(BinaryWriter writer) { }
     }
 
@@ -16,7 +19,7 @@ public class RecordMapTests
     public void RecordMap_CannotAddSameIndexTwice()
     {
         RecordMap map = new();
-        Action action = () => map[1] = new Record();
+        Action action = () => map.AddRecord(new Record());
         action();
         action.Should().Throw<ArgumentException>();
     }
@@ -25,7 +28,7 @@ public class RecordMapTests
     public void RecordMap_GetMissingThrowsKeyNotFound()
     {
         RecordMap map = new();
-        Func<object> func = () => map[0];
+        Func<object> func = () => map[(Id)0];
         func.Should().Throw<KeyNotFoundException>();
     }
 }

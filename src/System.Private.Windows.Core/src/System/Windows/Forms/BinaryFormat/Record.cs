@@ -11,6 +11,10 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal abstract class Record : IRecord
 {
+    Id IRecord.Id => Id;
+
+    private protected virtual Id Id => Id.Null;
+
     /// <summary>
     ///  Reads a primitive of <paramref name="primitiveType"/> from the given <paramref name="reader"/>.
     /// </summary>
@@ -105,7 +109,7 @@ internal abstract class Record : IRecord
     {
         RecordType recordType = (RecordType)state.Reader.ReadByte();
 
-        return recordType switch
+        IRecord record = recordType switch
         {
             RecordType.SerializedStreamHeader => ReadSpecificRecord<SerializationHeader>(state),
             RecordType.ClassWithId => ReadSpecificRecord<ClassWithId>(state),
@@ -129,6 +133,22 @@ internal abstract class Record : IRecord
             RecordType.MethodReturn => throw new NotSupportedException(),
             _ => throw new SerializationException("Invalid record type."),
         };
+
+        // BinaryLibrary records can be dumped in front of most records, add them and continue.
+        if (record is BinaryLibrary library)
+        {
+            do
+            {
+                state.RecordMap.AddRecord(library);
+                record = ReadBinaryFormatRecord(state);
+            }
+            while (record is BinaryLibrary);
+
+            return record;
+        }
+
+        state.RecordMap.AddRecord(record);
+        return record;
 
         static IRecord ReadArraySinglePrimitive(BinaryFormattedObject.IParseState state)
         {
@@ -156,7 +176,6 @@ internal abstract class Record : IRecord
                 _ => throw new SerializationException($"Invalid primitive type '{primitiveType}'"),
             };
 
-            state.RecordMap[id] = record;
             return record;
         }
 
@@ -170,7 +189,7 @@ internal abstract class Record : IRecord
     /// <exception cref="InvalidOperationException">
     ///  <paramref name="objects"/> contained an object that isn't a record.
     /// </exception>
-    private protected static void WriteRecords(BinaryWriter writer, IReadOnlyList<object?> objects)
+    private protected static void WriteRecords(BinaryWriter writer, IReadOnlyList<object?> objects, bool coalesceNulls)
     {
         int nullCount = 0;
 
@@ -183,7 +202,10 @@ internal abstract class Record : IRecord
             if (@object is null)
             {
                 nullCount++;
-                continue;
+                if (coalesceNulls)
+                {
+                    continue;
+                }
             }
 
             if (nullCount > 0)
@@ -224,23 +246,12 @@ internal abstract class Record : IRecord
         {
             IRecord stringRecord = ReadBinaryFormatRecord(state);
 
-            if (stringRecord is not (BinaryObjectString or ObjectNull or MemberReference))
-            {
-                throw new SerializationException($"Expected string record, found {stringRecord.GetType().Name}");
-            }
-
-            return stringRecord;
+            return stringRecord is not (BinaryObjectString or ObjectNull or MemberReference)
+                ? throw new SerializationException($"Expected string record, found {stringRecord.GetType().Name}")
+                : (object)stringRecord;
         }
 
-        // BinaryLibrary records can be dumped in front of any member reference.
-        IRecord record;
-        while ((record = ReadReference()) is BinaryLibrary)
-        {
-        }
-
-        return record;
-
-        IRecord ReadReference() => type switch
+        return type switch
         {
             BinaryType.Object
                 or BinaryType.StringArray

@@ -13,8 +13,7 @@ public class ExceptionTests : SerializationTest<FormattedObjectSerializer>
     public void NotSupportedException_Parse()
     {
         BinaryFormattedObject format = new(Serialize(new NotSupportedException()));
-        format.RecordCount.Should().Be(3);
-        var systemClass = (SystemClassWithMembersAndTypes)format[1];
+        var systemClass = (SystemClassWithMembersAndTypes)format.RootRecord;
         systemClass.Name.Should().Be(typeof(NotSupportedException).FullName);
         systemClass.MemberNames.Should().BeEquivalentTo(
         [

@@ -31,15 +31,11 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
         Id libraryId = state.Reader.ReadInt32();
         MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, libraryId);
-        ClassWithMembers record = new(
+        return new(
             classInfo,
             libraryId,
             memberTypeInfo,
             ReadObjectMemberValues(state, memberTypeInfo));
-
-        // Index this record by the id of the embedded ClassInfo's object id.
-        state.RecordMap[classInfo.ObjectId] = record;
-        return record;
     }
 
     public override void Write(BinaryWriter writer)

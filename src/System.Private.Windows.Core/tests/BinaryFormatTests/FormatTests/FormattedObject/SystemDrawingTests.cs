@@ -13,11 +13,7 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
     {
         BinaryFormattedObject format = new(Serialize(new PointF()));
 
-        BinaryLibrary binaryLibrary = (BinaryLibrary)format[1];
-        binaryLibrary.LibraryId.Should().Be(2);
-        binaryLibrary.LibraryName.ToString().Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-
-        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format.RootRecord;
         classInfo.ObjectId.Should().Be(1);
         classInfo.Name.Should().Be("System.Drawing.PointF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
@@ -27,6 +23,9 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
             (BinaryType.Primitive, PrimitiveType.Single),
             (BinaryType.Primitive, PrimitiveType.Single)
         });
+
+        format[classInfo.LibraryId].Should().BeOfType<BinaryLibrary>()
+            .Which.LibraryName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
     }
 
     [Fact]
@@ -34,11 +33,7 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
     {
         BinaryFormattedObject format = new(Serialize(new RectangleF()));
 
-        BinaryLibrary binaryLibrary = (BinaryLibrary)format[1];
-        binaryLibrary.LibraryId.Should().Be(2);
-        binaryLibrary.LibraryName.ToString().Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-
-        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format.RootRecord;
         classInfo.ObjectId.Should().Be(1);
         classInfo.Name.Should().Be("System.Drawing.RectangleF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y", "width", "height"]);
