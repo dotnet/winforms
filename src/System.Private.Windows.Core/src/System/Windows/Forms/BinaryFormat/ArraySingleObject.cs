@@ -25,11 +25,11 @@ internal sealed class ArraySingleObject :
     { }
 
     static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ArraySingleObject record = new(
             ArrayInfo.Parse(state.Reader, out Count length),
-            ReadRecords(state, length));
+            ReadObjectArrayValues(state, length));
 
         state.RecordMap[record.ObjectId] = record;
         return record;

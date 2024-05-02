@@ -42,4 +42,50 @@ internal static class SerializationExtensions
 
         return data;
     }
+
+    /// <summary>
+    ///  Sets a value in an array by its flattened index.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SetArrayValueByFlattenedIndex(this Array array, object? value, int flattenedIndex)
+    {
+        // Fast path
+        int ranks = array.Rank;
+        if (ranks == 1)
+        {
+            array.SetValue(value, flattenedIndex);
+            return;
+        }
+
+        SetArrayValueByFlattenedIndex(array, flattenedIndex, value);
+
+        static void SetArrayValueByFlattenedIndex(Array array, int flattenedIndex, object? value)
+        {
+            int ranks = array.Rank;
+
+            if (ranks == 2)
+            {
+                int length = array.GetLength(1);
+                (int index1, int index2) = int.DivRem(flattenedIndex, length);
+                array.SetValue(value, index1, index2);
+                return;
+            }
+
+            Span<int> rankProducts = stackalloc int[ranks];
+            rankProducts[ranks - 1] = 1;
+            for (int i = ranks - 2; i >= 0; i--)
+            {
+                rankProducts[i] = array.GetLength(i + 1) * rankProducts[i + 1];
+            }
+
+            Span<int> indices = stackalloc int[ranks];
+            for (int i = 0; i < ranks; i++)
+            {
+                indices[i] = flattenedIndex / rankProducts[i];
+                flattenedIndex -= indices[i] * rankProducts[i];
+            }
+
+            array.SetValue(value, indices.ToArray());
+        }
+    }
 }

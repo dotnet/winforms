@@ -27,7 +27,7 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>, IBinaryF
     }
 
     static BinaryObjectString IBinaryFormatParseable<BinaryObjectString>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         BinaryObjectString record = new(state.Reader.ReadInt32(), state.Reader.ReadString());
 

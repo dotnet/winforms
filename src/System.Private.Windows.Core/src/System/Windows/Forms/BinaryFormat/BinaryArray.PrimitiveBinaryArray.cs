@@ -24,7 +24,7 @@ internal static partial class BinaryArray
             ArrayInfo arrayInfo,
             MemberTypeInfo typeInfo,
             BinaryReader reader)
-            : base(arrayInfo, ReadPrimitiveTypes<T>(reader, arrayInfo.Length))
+            : base(arrayInfo, reader.ReadPrimitiveArray<T>(arrayInfo.Length))
         {
             Rank = rank;
             ArrayType = arrayType;

@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.Serialization;
+
 namespace System.Windows.Forms.BinaryFormat;
 
 /// <summary>
@@ -48,5 +50,84 @@ internal abstract class ClassRecord : ObjectRecord
         ClassInfo = classInfo;
         MemberValues = memberValues;
         MemberTypeInfo = memberTypeInfo;
+    }
+
+    /// <summary>
+    ///  Reads object member values using <paramref name="memberTypeInfo"/>.
+    /// </summary>
+    private protected static IReadOnlyList<object?> ReadObjectMemberValues(
+        BinaryFormattedObject.IParseState state,
+        MemberTypeInfo memberTypeInfo)
+    {
+        int count = memberTypeInfo.Count;
+        if (count == 0)
+        {
+            return [];
+        }
+
+        ArrayBuilder<object?> memberValues = new(count);
+        foreach ((BinaryType type, object? info) in memberTypeInfo)
+        {
+            object value = ReadValue(state, type, info);
+            if (value is not ObjectNull nullValue)
+            {
+                memberValues.Add(value);
+                continue;
+            }
+
+            if (nullValue.NullCount != 1)
+            {
+                throw new SerializationException("Member values can only have one null assigned.");
+            }
+
+            memberValues.Add(null);
+        }
+
+        return memberValues.ToArray();
+    }
+
+    /// <summary>
+    ///  Writes <paramref name="memberValues"/> as specified by the <paramref name="memberTypeInfo"/>
+    /// </summary>
+    private protected static void WriteValuesFromMemberTypeInfo(
+        BinaryWriter writer,
+        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<object?> memberValues)
+    {
+        for (int i = 0; i < memberTypeInfo.Count; i++)
+        {
+            (BinaryType type, object? info) = memberTypeInfo[i];
+            object? memberValue = memberValues[i];
+
+            switch (type)
+            {
+                case BinaryType.Primitive:
+                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValue!);
+                    break;
+                case BinaryType.String:
+                case BinaryType.Object:
+                case BinaryType.StringArray:
+                case BinaryType.PrimitiveArray:
+                case BinaryType.Class:
+                case BinaryType.SystemClass:
+                case BinaryType.ObjectArray:
+                    if (memberValue is IRecord record)
+                    {
+                        record.Write(writer);
+                    }
+                    else if (memberValue is null)
+                    {
+                        NullRecord.Write(writer, 1);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Not an IRecord or null.");
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentException("Invalid binary type.", nameof(memberTypeInfo));
+            }
+        }
     }
 }

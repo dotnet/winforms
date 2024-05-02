@@ -26,7 +26,7 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
     public static RecordType RecordType => RecordType.ClassWithMembers;
 
     static ClassWithMembers IBinaryFormatParseable<ClassWithMembers>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
         Id libraryId = state.Reader.ReadInt32();
@@ -35,7 +35,7 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
             classInfo,
             libraryId,
             memberTypeInfo,
-            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
+            ReadObjectMemberValues(state, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
         state.RecordMap[classInfo.ObjectId] = record;

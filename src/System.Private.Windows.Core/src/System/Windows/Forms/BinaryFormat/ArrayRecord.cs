@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -33,6 +34,52 @@ internal abstract class ArrayRecord : ObjectRecord, IEnumerable
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private protected abstract IEnumerator GetEnumerator();
+
+    /// <summary>
+    ///  Reads records, expanding null records into individual entries.
+    /// </summary>
+    private protected static IReadOnlyList<object?> ReadObjectArrayValues(BinaryFormattedObject.IParseState state, Count count)
+        => ReadObjectArrayValues(state, BinaryType.Object, null, count);
+
+    /// <summary>
+    ///  Reads a count of object member values of <paramref name="type"/> with optional clarifying <paramref name="typeInfo"/>.
+    /// </summary>
+    /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
+    private protected static IReadOnlyList<object?> ReadObjectArrayValues(
+        BinaryFormattedObject.IParseState state,
+        BinaryType type,
+        object? typeInfo,
+        int count)
+    {
+        if (count == 0)
+        {
+            return [];
+        }
+
+        ArrayBuilder<object?> memberValues = new(count);
+        for (int i = 0; i < count; i++)
+        {
+            object value = ReadValue(state, type, typeInfo);
+            if (value is not NullRecord nullRecord)
+            {
+                memberValues.Add(value);
+                continue;
+            }
+
+            i = checked(i + nullRecord.NullCount - 1);
+            if (i >= count)
+            {
+                throw new SerializationException();
+            }
+
+            for (int j = 0; j < nullRecord.NullCount; j++)
+            {
+                memberValues.Add(null);
+            }
+        }
+
+        return memberValues.ToArray();
+    }
 }
 
 /// <summary>

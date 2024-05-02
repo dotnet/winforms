@@ -22,7 +22,7 @@ internal sealed class MemberReference : IRecord<MemberReference>, IBinaryFormatP
     public static RecordType RecordType => RecordType.MemberReference;
 
     static MemberReference IBinaryFormatParseable<MemberReference>.Parse(
-        BinaryFormattedObject.ParseState state) => new(state.Reader.ReadInt32());
+        BinaryFormattedObject.IParseState state) => new(state.Reader.ReadInt32());
 
     public void Write(BinaryWriter writer)
     {

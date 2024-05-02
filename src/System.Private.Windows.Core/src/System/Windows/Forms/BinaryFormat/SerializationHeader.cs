@@ -45,7 +45,7 @@ internal sealed class SerializationHeader : IRecord<SerializationHeader>, IBinar
     };
 
     static SerializationHeader IBinaryFormatParseable<SerializationHeader>.Parse(
-        BinaryFormattedObject.ParseState state) => new()
+        BinaryFormattedObject.IParseState state) => new()
         {
             RootId = state.Reader.ReadInt32(),
             HeaderId = state.Reader.ReadInt32(),
