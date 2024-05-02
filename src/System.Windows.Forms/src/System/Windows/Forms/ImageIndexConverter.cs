@@ -83,6 +83,11 @@ public class ImageIndexConverter : Int32Converter
     /// </returns>
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
+        if (!Control.EnableFeaturesNotSupportedWithTrimming)
+        {
+            throw new NotSupportedException(SR.BindingNotSupported);
+        }
+
         if (context is not null && context.Instance is not null)
         {
             object? instance = context.Instance;

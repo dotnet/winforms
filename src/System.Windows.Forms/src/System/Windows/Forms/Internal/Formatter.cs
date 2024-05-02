@@ -135,19 +135,18 @@ internal static class Formatter
         // The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
         // type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
         Type sourceType = value.GetType();
-        // @TODO - needs a more derived type here
-        // TypeDescriptor.RegisterType<object>();
-        // TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
-        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
+
+        // @TODO - We will register basic primitive types here but it would be optimal to move the registration to a start up path.
+        TypeDescriptor.RegisterType<string>();
+        TypeDescriptor.RegisterType<int>();
+        TypeDescriptor.RegisterType<bool>();
+        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
         if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
         {
             return sourceConverter.ConvertTo(context: null, GetFormatterCulture(formatInfo), value, targetType);
         }
 
-        // @TODO - needs a more derived type here
-        // TypeDescriptor.AddKnownReflectedType<Type>();
-        // TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
-        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
+        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
         if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
         {
             return targetConverter.ConvertFrom(context: null, GetFormatterCulture(formatInfo), value);

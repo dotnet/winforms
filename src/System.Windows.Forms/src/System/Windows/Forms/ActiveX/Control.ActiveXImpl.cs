@@ -1035,6 +1035,11 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
+            if (!EnableFeaturesNotSupportedWithTrimming)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 [DesignerSerializationVisibilityAttribute.Visible]);
@@ -1479,6 +1484,11 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
+            if (!EnableFeaturesNotSupportedWithTrimming)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 [DesignerSerializationVisibilityAttribute.Visible]);

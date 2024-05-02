@@ -135,6 +135,11 @@ public abstract class ListControl : Control
     {
         get
         {
+            if (!EnableFeaturesNotSupportedWithTrimming)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             if (_displayMemberConverter is null)
             {
                 PropertyDescriptorCollection? props = DataManager?.GetItemProperties();
@@ -143,8 +148,6 @@ public abstract class ListControl : Control
                     PropertyDescriptor? displayMemberProperty = props.Find(_displayMember.BindingField, true);
                     if (displayMemberProperty is not null)
                     {
-                        // TypeDescriptor.RegisterType<displayMemberProperty.PropertyType>();
-                        // _displayMemberConverter = displayMemberProperty.ConverterFromRegisteredType;
                         _displayMemberConverter = displayMemberProperty.Converter;
                     }
                 }
@@ -424,6 +427,11 @@ public abstract class ListControl : Control
     {
         if (item is not null && !string.IsNullOrEmpty(field))
         {
+            if (!EnableFeaturesNotSupportedWithTrimming)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             try
             {
                 // if we have a dataSource, then use that to display the string

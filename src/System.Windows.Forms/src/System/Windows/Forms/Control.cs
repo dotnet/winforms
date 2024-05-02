@@ -984,7 +984,8 @@ public unsafe partial class Control :
     {
         if (!Binding.IsSupported)
         {
-            throw new NotSupportedException(SR.BindingNotSupported);
+            // This gets called with Dispose that needs to be handled, a throwing is not appropriate in this case.
+            return;
         }
 
         ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
