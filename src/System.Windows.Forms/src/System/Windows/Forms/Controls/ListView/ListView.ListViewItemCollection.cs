@@ -12,7 +12,7 @@ public partial class ListView
     ///  Represents the collection of items in a ListView or ListViewGroup
     /// </summary>
     [ListBindable(false)]
-    public partial class ListViewItemCollection : IList
+    public partial class ListViewItemCollection : IList, IList<ListViewItem>
     {
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
@@ -75,10 +75,7 @@ public partial class ListView
 
         object? IList.this[int index]
         {
-            get
-            {
-                return this[index];
-            }
+            get => this[index];
             set
             {
                 this[index] = value is ListViewItem item
@@ -116,10 +113,7 @@ public partial class ListView
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
-        public virtual ListViewItem Add(string? text)
-        {
-            return Add(text, -1);
-        }
+        public virtual ListViewItem Add(string? text) => Add(text, -1);
 
         int IList.Add(object? item)
         {
@@ -158,8 +152,6 @@ public partial class ListView
             InnerList.Add(value);
             return value;
         }
-
-        // <-- NEW ADD OVERLOADS IN WHIDBEY
 
         /// <summary>
         ///  Add an item to the ListView.  The item will be inserted either in
@@ -203,8 +195,6 @@ public partial class ListView
             return item;
         }
 
-        // END - NEW ADD OVERLOADS IN WHIDBEY  -->
-
         public void AddRange(params ListViewItem[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
@@ -224,10 +214,7 @@ public partial class ListView
         /// <summary>
         ///  Removes all items from the list view.
         /// </summary>
-        public virtual void Clear()
-        {
-            InnerList.Clear();
-        }
+        public virtual void Clear() => InnerList.Clear();
 
         public bool Contains(ListViewItem item)
         {
@@ -335,7 +322,7 @@ public partial class ListView
             // step 1 - check the last cached item
             if (IsValidIndex(_lastAccessedIndex))
             {
-                if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, ignoreCase: true))
                 {
                     return _lastAccessedIndex;
                 }
@@ -344,7 +331,7 @@ public partial class ListView
             // step 2 - search for the item
             for (int i = 0; i < Count; i++)
             {
-                if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, ignoreCase: true))
                 {
                     _lastAccessedIndex = i;
                     return i;
@@ -395,8 +382,6 @@ public partial class ListView
             }
         }
 
-        // <-- NEW INSERT OVERLOADS IN WHIDBEY
-
         public ListViewItem Insert(int index, string? text, string? imageKey)
             => Insert(index, new ListViewItem(text, imageKey));
 
@@ -411,8 +396,6 @@ public partial class ListView
             {
                 Name = key
             });
-
-        // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
         /// <summary>
         ///  Removes an item from the ListView
@@ -450,6 +433,43 @@ public partial class ListView
             if (item is ListViewItem listViewItem)
             {
                 Remove(listViewItem);
+            }
+        }
+
+        void IList<ListViewItem>.Insert(int index, ListViewItem item) => Insert(index, item);
+
+        void ICollection<ListViewItem>.Add(ListViewItem item) => Add(item);
+
+        public void CopyTo(ListViewItem[] array, int arrayIndex) => CopyTo((Array)array, arrayIndex);
+
+        bool ICollection<ListViewItem>.Remove(ListViewItem item)
+        {
+            if (Contains(item))
+            {
+                Remove(item);
+                return true;
+            }
+
+            return false;
+        }
+
+        IEnumerator<ListViewItem> IEnumerable<ListViewItem>.GetEnumerator()
+        {
+            var enumerator = GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current is ListViewItem item)
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        public void AddRange(IEnumerable<ListViewItem> collection)
+        {
+            foreach (ListViewItem item in collection)
+            {
+                Add(item);
             }
         }
     }
