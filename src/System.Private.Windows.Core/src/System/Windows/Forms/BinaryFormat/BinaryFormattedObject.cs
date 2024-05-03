@@ -27,13 +27,14 @@ internal sealed partial class BinaryFormattedObject
 #pragma warning restore SYSLIB0050
 
     private static readonly Options s_defaultOptions = new();
+    private readonly Options _options;
 
-    private readonly List<IRecord> _records = [];
     private readonly RecordMap _recordMap = new();
 
-    private readonly Options _options;
     private ITypeResolver? _typeResolver;
     private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
+
+    private readonly Id _rootRecord;
 
     /// <summary>
     ///  Creates <see cref="BinaryFormattedObject"/> by parsing <paramref name="stream"/>.
@@ -48,37 +49,22 @@ internal sealed partial class BinaryFormattedObject
         ParseState state = new(reader, this);
 
         IRecord? currentRecord;
-        do
+
+        try
         {
-            try
+            currentRecord = Record.ReadBinaryFormatRecord(state);
+            if (currentRecord is not SerializationHeader header)
+            {
+                throw new SerializationException("Did not find serialization header.");
+            }
+
+            _rootRecord = header.RootId;
+
+            do
             {
                 currentRecord = Record.ReadBinaryFormatRecord(state);
             }
-            catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
-            {
-                // Make the exception easier to catch, but retain the original stack trace.
-                throw ex.ConvertToSerializationException();
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
-            }
-
-            _records.Add(currentRecord);
-        }
-        while (currentRecord is not MessageEnd);
-    }
-
-    /// <summary>
-    ///  Deserializes the <see cref="BinaryFormattedObject"/> back to an object.
-    /// </summary>
-    [RequiresUnreferencedCode("Ultimately calls Assembly.GetType for type names in the data.")]
-    public object Deserialize()
-    {
-        try
-        {
-            Id rootId = ((SerializationHeader)_records[0]).RootId;
-            return Deserializer.Deserializer.Deserialize(rootId, _recordMap, TypeResolver, _options);
+            while (currentRecord is not MessageEnd);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
@@ -92,14 +78,30 @@ internal sealed partial class BinaryFormattedObject
     }
 
     /// <summary>
-    ///  Total count of top-level records.
+    ///  Deserializes the <see cref="BinaryFormattedObject"/> back to an object.
     /// </summary>
-    public int RecordCount => _records.Count;
+    [RequiresUnreferencedCode("Ultimately calls Assembly.GetType for type names in the data.")]
+    public object Deserialize()
+    {
+        try
+        {
+            return Deserializer.Deserializer.Deserialize(RootRecord.Id, _recordMap, TypeResolver, _options);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
+        {
+            // Make the exception easier to catch, but retain the original stack trace.
+            throw ex.ConvertToSerializationException();
+        }
+        catch (TargetInvocationException ex)
+        {
+            throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
+        }
+    }
 
     /// <summary>
-    ///  Gets a record by it's index.
+    ///  The Id of the root record of the object graph.
     /// </summary>
-    public IRecord this[int index] => _records[index];
+    public IRecord RootRecord => _recordMap[_rootRecord];
 
     /// <summary>
     ///  Gets a record by it's identifier. Not all records have identifiers, only ones that

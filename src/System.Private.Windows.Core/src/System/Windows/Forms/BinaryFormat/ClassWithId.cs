@@ -52,16 +52,13 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
 
         if (state.RecordMap[metadataId] is not ClassRecord referencedRecord)
         {
-            throw new SerializationException();
+            throw new SerializationException("Invalid referenced record type.");
         }
 
-        ClassWithId record = new(
+        return new(
             objectId,
             referencedRecord,
             ReadObjectMemberValues(state, referencedRecord.MemberTypeInfo));
-
-        state.RecordMap[record.ObjectId] = record;
-        return record;
     }
 
     public override void Write(BinaryWriter writer)
@@ -79,7 +76,7 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
                 WriteValuesFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
                 break;
             case ClassWithMembers or SystemClassWithMembers:
-                WriteRecords(writer, MemberValues);
+                WriteRecords(writer, MemberValues, coalesceNulls: false);
                 break;
             default:
                 throw new SerializationException();

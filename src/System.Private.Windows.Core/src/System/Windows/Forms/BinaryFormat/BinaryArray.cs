@@ -117,7 +117,6 @@ internal static partial class BinaryArray
                 _ => throw new SerializationException($"Invalid primitive type '{(PrimitiveType)info}'"),
             };
 
-        state.RecordMap[objectId] = array;
         return array;
     }
 }

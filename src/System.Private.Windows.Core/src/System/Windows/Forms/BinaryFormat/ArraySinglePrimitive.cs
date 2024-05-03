@@ -37,9 +37,7 @@ internal sealed class ArraySinglePrimitive<T> :
         PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
         Debug.Assert(typeof(T) == primitiveType.GetPrimitiveTypeType());
 
-        ArraySinglePrimitive<T> record = new(id, state.Reader.ReadPrimitiveArray<T>(length));
-        state.RecordMap[record.ObjectId] = record;
-        return record;
+        return new ArraySinglePrimitive<T>(id, state.Reader.ReadPrimitiveArray<T>(length));
     }
 
     public override void Write(BinaryWriter writer)

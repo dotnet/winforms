@@ -20,9 +20,7 @@ internal static class WinFormsBinaryFormattedObjectExtensions
         {
             imageListStreamer = null;
 
-            if (format.RecordCount != 5
-                || format[1] is not BinaryLibrary library
-                || format[2] is not ClassWithMembersAndTypes types
+            if (format.RootRecord is not ClassWithMembersAndTypes types
                 || types.ClassInfo.Name != typeof(ImageListStreamer).FullName
                 || format[3] is not ArraySinglePrimitive<byte> data)
             {
@@ -42,9 +40,7 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     {
         bitmap = null;
 
-        if (format.RecordCount != 5
-            || format[1] is not BinaryLibrary library
-            || format[2] is not ClassWithMembersAndTypes types
+        if (format.RootRecord is not ClassWithMembersAndTypes types
             || types.ClassInfo.Name != typeof(Bitmap).FullName
             || format[3] is not ArraySinglePrimitive<byte> data)
         {

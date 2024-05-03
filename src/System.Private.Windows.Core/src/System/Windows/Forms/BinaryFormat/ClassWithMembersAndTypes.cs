@@ -47,15 +47,11 @@ internal sealed class ClassWithMembersAndTypes :
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
         MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(state.Reader, memberCount);
 
-        ClassWithMembersAndTypes record = new(
+        return new(
             classInfo,
             state.Reader.ReadInt32(),
             memberTypeInfo,
             ReadObjectMemberValues(state, memberTypeInfo));
-
-        // Index this record by the id of the embedded ClassInfo's object id.
-        state.RecordMap[record.ClassInfo.ObjectId] = record;
-        return record;
     }
 
     public override void Write(BinaryWriter writer)

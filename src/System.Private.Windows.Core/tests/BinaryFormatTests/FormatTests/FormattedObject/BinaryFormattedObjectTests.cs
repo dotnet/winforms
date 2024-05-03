@@ -13,11 +13,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     public void ReadHeader()
     {
         BinaryFormattedObject format = new(Serialize("Hello World."));
-        SerializationHeader header = (SerializationHeader)format[0];
-        header.MajorVersion.Should().Be(1);
-        header.MinorVersion.Should().Be(0);
-        header.RootId.Should().Be(1);
-        header.HeaderId.Should().Be(-1);
+        format.RootRecord.Id.Should().Be(1);
     }
 
     [Theory]
@@ -205,18 +201,15 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     {
         BinaryFormattedObject format = new(Serialize(new SimpleSerializableObject()));
 
-        BinaryLibrary library = (BinaryLibrary)format[1];
-        library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
-        library.LibraryId.Should().Be(2);
-
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(SimpleSerializableObject).FullName);
         @class.MemberNames.Should().BeEmpty();
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEmpty();
 
-        format[3].Should().BeOfType<MessageEnd>();
+        format[@class.LibraryId].Should().BeOfType<BinaryLibrary>()
+            .Which.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
     }
 
     [Fact]
@@ -224,11 +217,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     {
         BinaryFormattedObject format = new(Serialize(new NestedSerializableObject()));
 
-        BinaryLibrary library = (BinaryLibrary)format[1];
-        library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
-        library.LibraryId.Should().Be(2);
-
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(NestedSerializableObject).FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_object", "_meaning"]);
@@ -238,6 +227,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
             (BinaryType.Class, new ClassTypeInfo(typeof(SimpleSerializableObject).FullName!, 2)),
             (BinaryType.Primitive, PrimitiveType.Int32)
         });
+
         @class.MemberValues.Should().BeEquivalentTo(new object?[]
         {
             new MemberReference(3),
@@ -250,8 +240,6 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
         @class.MemberNames.Should().BeEmpty();
         @class.LibraryId.Should().Be(2);
         @class.MemberTypeInfo.Should().BeEmpty();
-
-        format[4].Should().BeOfType<MessageEnd>();
     }
 
     [Fact]
@@ -259,11 +247,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     {
         BinaryFormattedObject format = new(Serialize(new TwoIntSerializableObject()));
 
-        BinaryLibrary library = (BinaryLibrary)format[1];
-        library.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
-        library.LibraryId.Should().Be(2);
-
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
         @class.ObjectId.Should().Be(1);
         @class.Name.Should().Be(typeof(TwoIntSerializableObject).FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_value", "_meaning"]);
@@ -279,8 +263,6 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
             1970,
             42
         });
-
-        format[3].Should().BeOfType<MessageEnd>();
     }
 
     [Fact]
@@ -349,7 +331,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     public void ReadObjectWithNullableObjects()
     {
         BinaryFormattedObject format = new(Serialize(new ObjectWithNullableObjects()));
-        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format.RootRecord;
         BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
     }
 
@@ -357,7 +339,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     public void ReadNestedObjectWithNullableObjects()
     {
         BinaryFormattedObject format = new(Serialize(new NestedObjectWithNullableObjects()));
-        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format[2];
+        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format.RootRecord;
         BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
     }
 

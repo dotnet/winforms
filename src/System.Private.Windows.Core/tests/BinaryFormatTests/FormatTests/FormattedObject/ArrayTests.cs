@@ -57,8 +57,7 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     public void StringArray_Parse(string?[] strings)
     {
         BinaryFormattedObject format = new(Serialize(strings));
-        format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
-        ArraySingleString array = (ArraySingleString)format[1];
+        ArraySingleString array = (ArraySingleString)format.RootRecord;
         array.GetStringValues(format.RecordMap).Should().BeEquivalentTo(strings);
     }
 
@@ -74,8 +73,7 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     public void PrimitiveArray_Parse(Array array)
     {
         BinaryFormattedObject format = new(Serialize(array));
-        format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
-        ArrayRecord arrayRecord = (ArrayRecord)format[1];
+        ArrayRecord arrayRecord = (ArrayRecord)format.RootRecord;
         arrayRecord.Should().BeEquivalentTo((IEnumerable)array);
     }
 

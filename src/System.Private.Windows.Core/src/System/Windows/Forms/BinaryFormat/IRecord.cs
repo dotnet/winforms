@@ -8,6 +8,11 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal interface IRecord : IBinaryWriteable
 {
+    /// <summary>
+    ///  Id for the record, or null if the record has no id.
+    /// </summary>
+    Id Id => Id.Null;
+
     static virtual RecordType RecordType { get; }
 }
 
