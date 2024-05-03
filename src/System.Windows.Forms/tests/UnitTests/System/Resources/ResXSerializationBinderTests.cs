@@ -27,8 +27,7 @@ public  class ResXSerializationBinderTests
     {
         CustomTypeResolutionService typeResolutionService = new();
         ResXSerializationBinder binder = new(typeResolutionService);
-        string assemblyName = typeof(MyClass).Assembly.FullName!;
-        binder.BindToType(assemblyName, typeof(MyClass).FullName!).Should().Be(typeof(MyClass));
+        binder.BindToType(typeof(MyClass).Assembly.FullName!, typeof(MyClass).FullName!).Should().Be(typeof(MyClass));
         typeResolutionService.FullNamePath.Should().BeTrue();
         typeResolutionService.FullyQualifiedAssemblyNameNoVersionPath.Should().BeFalse();
     }
@@ -38,8 +37,7 @@ public  class ResXSerializationBinderTests
     {
         CustomTypeResolutionService typeResolutionService = new();
         ResXSerializationBinder binder = new(typeResolutionService);
-        string assemblyName = typeof(Form).Assembly.FullName!;
-        binder.BindToType(assemblyName, typeof(Form).FullName!).Should().Be(typeof(Form));
+        binder.BindToType(typeof(Form).Assembly.FullName!, typeof(Form).FullName!).Should().Be(typeof(Form));
         typeResolutionService.FullyQualifiedAssemblyNameNoVersionPath.Should().BeTrue();
         typeResolutionService.FullNamePath.Should().BeFalse();
     }
