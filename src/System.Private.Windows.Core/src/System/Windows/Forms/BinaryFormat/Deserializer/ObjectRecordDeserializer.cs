@@ -92,7 +92,7 @@ internal abstract partial class ObjectRecordDeserializer
     internal static ObjectRecordDeserializer Create(Id id, IRecord record, IDeserializer deserializer) => record switch
     {
         ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
-        ArrayRecord<object?> arrayRecord => new ArrayRecordDeserialzer(arrayRecord, deserializer),
+        ArrayRecord<object?> arrayRecord => new ArrayRecordDeserializer(arrayRecord, deserializer),
         _ => throw new SerializationException($"Unexpected record type for {id}.")
     };
 }

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
-internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
+internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
 {
     private readonly ArrayRecord<object?> _arrayRecord;
     private readonly BinaryArrayType _arrayType;
@@ -15,7 +15,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
     private bool _hasFixups;
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
-    internal ArrayRecordDeserialzer(ArrayRecord<object?> arrayRecord, IDeserializer deserializer)
+    internal ArrayRecordDeserializer(ArrayRecord<object?> arrayRecord, IDeserializer deserializer)
         : base(arrayRecord, deserializer)
     {
         _arrayRecord = arrayRecord;

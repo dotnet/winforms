@@ -326,6 +326,22 @@ internal sealed partial class Deserializer : IDeserializer
         {
             _incompleteObjects.Remove(completedId);
 
+            // When we've recursed, we've done so because there are no more dependencies for the current id, so we can
+            // remove it from the dictionary. We have to pend as we can't remove while we're iterating the dictionary.
+            if (!completed.IsNull)
+            {
+                _incompleteDependencies?.Remove(completed);
+
+                if (_pendingSerializationInfoIds is not null && _pendingSerializationInfoIds.Contains(completed))
+                {
+                    // We came back for an object that has no remaining direct dependencies, but still has
+                    // PendingSerializationInfo. As such it cannot be considered completed yet.
+                    continue;
+                }
+
+                completed = Id.Null;
+            }
+
             if (_recordMap[completedId] is ClassRecord classRecord)
             {
                 // Hook any finished events for this object. Doing at the end of deserialization for simplicity.
@@ -353,22 +369,6 @@ internal sealed partial class Deserializer : IDeserializer
             }
 
             Debug.Assert(_pendingUpdates is not null);
-
-            // When we've recursed, we've done so because there are no more dependencies for the current id, so we can
-            // remove it from the dictionary. We have to pend as we can't remove while we're iterating the dictionary.
-            if (!completed.IsNull)
-            {
-                _incompleteDependencies.Remove(completed);
-
-                if (_pendingSerializationInfoIds is not null && _pendingSerializationInfoIds.Contains(completed))
-                {
-                    // We came back for an object that has no remaining direct dependencies, but still has
-                    // PendingSerializationInfo. As such it cannot be considered completed yet.
-                    continue;
-                }
-
-                completed = Id.Null;
-            }
 
             foreach ((int incompleteId, HashSet<int> dependencies) in _incompleteDependencies)
             {
