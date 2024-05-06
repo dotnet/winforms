@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel.Design;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
 namespace System.Resources;
@@ -36,44 +37,33 @@ internal class ResXSerializationBinder : SerializationBinder
         string assemblyName,
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] string typeName)
     {
-        if (_typeResolver is null)
+        if (_typeResolver is null || !TypeName.TryParse($"{typeName}, {assemblyName}".AsSpan(), out TypeName? parsed))
         {
             // cs/deserialization/nullbindtotype
             return null; // CodeQL [SM04225] : This class is meant to redirect to .NET Framework type names. If this cannot be done, the default binder should be used.
         }
 
-        // Try the fully-qualified name first.
-        typeName = $"{typeName}, {assemblyName}";
-
-        Type? type = _typeResolver.GetType(typeName);
+        Type? type = _typeResolver.GetType(parsed.AssemblyQualifiedName);
         if (type is not null)
         {
             return type;
         }
 
-        string[] typeParts = typeName.Split(',', StringSplitOptions.TrimEntries);
-
-        if (typeParts.Length > 2)
+        if (parsed.AssemblyName is { } assemblyNameInfo)
         {
-            string partialName = typeParts[0];
-
-            // Strip out the version.
-            for (int i = 1; i < typeParts.Length; ++i)
-            {
-                string typePart = typeParts[i];
-                if (!typePart.StartsWith("Version=", StringComparison.Ordinal)
-                    && !typePart.StartsWith("version=", StringComparison.Ordinal))
-                {
-                    partialName = $"{partialName}, {typePart}";
-                }
-            }
-
             // Try the name without the version.
-            type = _typeResolver.GetType(partialName);
-
-            // If that didn't work, try the simple name.
-            type ??= _typeResolver.GetType(typeParts[0]);
+            string fullyQualifiedNameWithoutVersion =
+                $"{typeName}, {new AssemblyNameInfo(
+                    assemblyNameInfo.Name,
+                    version: null,
+                    assemblyNameInfo.CultureName,
+                    assemblyNameInfo.Flags,
+                    assemblyNameInfo.PublicKeyOrToken).FullName}";
+            type = _typeResolver.GetType(fullyQualifiedNameWithoutVersion);
         }
+
+        // If that didn't work, try the simple name.
+        type ??= _typeResolver.GetType(parsed.FullName);
 
         // Hand back what we found or null to let the default loader take over.
         return type;
@@ -88,23 +78,19 @@ internal class ResXSerializationBinder : SerializationBinder
         {
             // Allow the specified type name converter to modify the type name.
             string? assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, _typeNameConverter);
-            if (!string.IsNullOrEmpty(assemblyQualifiedTypeName))
+            if (!string.IsNullOrEmpty(assemblyQualifiedTypeName)
+                && TypeName.TryParse(assemblyQualifiedTypeName.AsSpan(), out TypeName? parsed)
+                && parsed.AssemblyName is { } assemblyInfo)
             {
-                // Split the assembly name from the type name.
-                int pos = assemblyQualifiedTypeName.IndexOf(',');
-                if (pos > 0 && pos < assemblyQualifiedTypeName.Length - 1)
-                {
-                    // Set the custom assembly name.
-                    assemblyName = assemblyQualifiedTypeName[(pos + 1)..].TrimStart();
+                // Set the custom assembly name.
+                assemblyName = assemblyInfo.FullName;
 
-                    // Customize the type name only if it changed.
-                    string newTypeName = assemblyQualifiedTypeName[..pos];
-                    typeName = string.Equals(newTypeName, serializedType.FullName, StringComparison.Ordinal)
-                        ? null
-                        : newTypeName;
+                // Customize the type name only if it changed.
+                typeName = string.Equals(parsed.FullName, serializedType.FullName, StringComparison.Ordinal)
+                    ? null
+                    : parsed.FullName;
 
-                    return;
-                }
+                return;
             }
         }
 
