@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         Friend Function GetResourceString(resourceId As vbErrors) As String
-            Dim id As String = "ID" & CStr(resourceId)
+            Dim id As String = $"ID{CStr(resourceId)}"
             Return SR.GetResourceString(id, id)
         End Function
 
