@@ -66,7 +66,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
     {
         while (_index < _arrayRecord.Length)
         {
-            (object? memberValue, Id reference) = GetMemberValue(_arrayRecord.ArrayObjects[_index]);
+            (object? memberValue, Id reference) = UnwrapMemberValue(_arrayRecord.ArrayObjects[_index]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -74,9 +74,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
                 return reference;
             }
 
-            if (!reference.IsNull
-                && Deserializer.IncompleteObjects.Contains(reference)
-                && memberValue!.GetType().IsValueType)
+            if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
             {
                 // Need to track a fixup for this index.
                 _hasFixups = true;

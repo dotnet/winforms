@@ -8,7 +8,7 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 
-internal sealed class PendingSerializationInfo
+internal sealed class PendingSerializationInfo : IEquatable<PendingSerializationInfo>
 {
     internal int ObjectId { get; }
     private readonly ISerializationSurrogate? _surrogate;
@@ -79,6 +79,10 @@ internal sealed class PendingSerializationInfo
 
         throw new SerializationException($"The constructor to deserialize an object of type '{type.FullName}' was not found.");
     }
+
+    public override bool Equals(object? obj) => Equals(obj as PendingSerializationInfo);
+    public bool Equals(PendingSerializationInfo? other) => other is not null && other.ObjectId == ObjectId;
+    public override int GetHashCode() => ObjectId;
 }
 
 #pragma warning restore SYSLIB0050 // Type or member is obsolete

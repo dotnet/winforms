@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Windows.Forms.BinaryFormat;
 
@@ -92,4 +93,11 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
         new Point[] { new() },
         new object[] { new() },
     };
+
+    public override void BinaryArray_InvalidRank_Positive(int rank, byte arrayType)
+    {
+        // BinaryFormatter doesn't throw on these.
+        Action action = () => base.BinaryArray_InvalidRank_Positive(rank, arrayType);
+        action.Should().Throw<SerializationException>();
+    }
 }
