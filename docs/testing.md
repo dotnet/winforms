@@ -199,7 +199,7 @@ Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/t
 ##### Unit tests should be part of the same PR as code changes
 
 * Unit tests must be added for any change to public APIs. 
-* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
+* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/Common/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
 
 ##### Code Coverage
 
