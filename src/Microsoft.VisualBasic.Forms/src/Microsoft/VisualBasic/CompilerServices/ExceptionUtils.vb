@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetResourceString(resourceId As Integer) As String
             Dim id As String = $"ID{resourceId}"
             ' always return a string
-            Return $"{SR.GetResourceString(id, id)}"
+            Return SR.GetResourceString(id, id)
         End Function
 
         Friend Function VbMakeException(resourceId As Integer) As Exception
