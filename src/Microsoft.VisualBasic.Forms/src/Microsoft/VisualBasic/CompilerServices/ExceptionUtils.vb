@@ -19,8 +19,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
         End Function
 
-        Friend Function GetResourceString(resourceId As Integer) As String
-            Dim id As String = $"ID{resourceId}"
+        Friend Function GetResourceString(resourceId As vbErrors) As String
+            Dim id As String = $"ID{CStr(resourceId)}"
             ' always return a string
             Return SR.GetResourceString(id, id)
         End Function
@@ -29,7 +29,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Dim description As String = ""
 
             If resourceId > 0 AndAlso resourceId <= &HFFFFI Then
-                description = GetResourceString(resourceId)
+                description = GetResourceString(DirectCast(resourceId, vbErrors))
             End If
 
             Select Case resourceId
