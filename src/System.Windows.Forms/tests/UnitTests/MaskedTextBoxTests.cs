@@ -27,6 +27,7 @@ public class MaskedTextBoxTests
         mtb.SkipLiterals.Should().BeTrue();
         mtb.ValidatingType.Should().BeNull();
         mtb.TextAlign.Should().Be(HorizontalAlignment.Left);
+        mtb.FormatProvider.Should().Be(null);
 
         mtb.IsHandleCreated.Should().BeFalse();
     }
@@ -478,7 +479,7 @@ public class MaskedTextBoxTests
     public void MaskedTextBox_FormatProvider_Set_GetReturnsExpected(string cultureName)
     {
         using MaskedTextBox control = new();
-        CultureInfo culture = new CultureInfo(cultureName);
+        CultureInfo culture = new(cultureName);
         control.FormatProvider = culture;
         control.FormatProvider.Should().Be(culture);
         control.IsHandleCreated.Should().BeFalse();
