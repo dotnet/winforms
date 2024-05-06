@@ -58,10 +58,9 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = default;
 
-            if (format.RecordCount < 4
-                || format[1] is not BinaryLibrary binaryLibrary
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
                 || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-                || format[2] is not ClassWithMembersAndTypes classInfo
                 || classInfo.Name != typeof(PointF).FullName
                 || classInfo.MemberValues.Count != 2)
             {
@@ -85,10 +84,9 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = default;
 
-            if (format.RecordCount < 4
-                || format[1] is not BinaryLibrary binaryLibrary
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
                 || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-                || format[2] is not ClassWithMembersAndTypes classInfo
                 || classInfo.Name != typeof(RectangleF).FullName
                 || classInfo.MemberValues.Count != 4)
             {
@@ -116,18 +114,14 @@ internal static class BinaryFormattedObjectExtensions
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
             value = default;
-            if (format.RecordCount < 3)
-            {
-                return false;
-            }
 
-            if (format[1] is BinaryObjectString binaryString)
+            if (format.RootRecord is BinaryObjectString binaryString)
             {
                 value = binaryString.Value;
                 return true;
             }
 
-            if (format[1] is not SystemClassWithMembersAndTypes systemClass)
+            if (format.RootRecord is not SystemClassWithMembersAndTypes systemClass)
             {
                 return false;
             }
@@ -190,10 +184,10 @@ internal static class BinaryFormattedObjectExtensions
 
             const string ListTypeName = "System.Collections.Generic.List`1[[";
 
-            if (format.RecordCount != 4
-                || format[1] is not SystemClassWithMembersAndTypes classInfo
+            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
                 || !classInfo.Name.StartsWith(ListTypeName, StringComparison.Ordinal)
-                || format[2] is not ArrayRecord array)
+                || classInfo["_items"] is not MemberReference reference
+                || format[reference] is not ArrayRecord array)
             {
                 return false;
             }
@@ -229,7 +223,7 @@ internal static class BinaryFormattedObjectExtensions
                     if (array is ArraySingleString stringArray)
                     {
                         List<string> stringList = new(size);
-                        stringList.AddRange((IEnumerable<string>)format.GetStringValues(stringArray, size));
+                        stringList.AddRange((IEnumerable<string>)stringArray.GetStringValues(format.RecordMap));
                         list = stringList;
                         return true;
                     }
@@ -278,8 +272,7 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = null;
 
-            if (format.RecordCount != 4
-                || format[1] is not SystemClassWithMembersAndTypes classInfo
+            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
                 || classInfo.Name != typeof(ArrayList).FullName
                 || format[2] is not ArraySingleObject array)
             {
@@ -326,18 +319,18 @@ internal static class BinaryFormattedObjectExtensions
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
             value = null;
-            if (format.RecordCount != 3 || format[1] is not ArrayRecord)
+            if (format.RootRecord is not ArrayRecord array)
             {
                 return false;
             }
 
-            if (format[1] is ArraySingleString stringArray)
+            if (array is ArraySingleString stringArray)
             {
-                value = format.GetStringValues(stringArray, stringArray.Length).ToArray();
+                value = stringArray.GetStringValues(format.RecordMap).ToArray();
                 return true;
             }
 
-            if (format[1] is not IPrimitiveTypeRecord primitiveArray)
+            if (array is not IPrimitiveTypeRecord primitiveArray)
             {
                 return false;
             }
@@ -389,8 +382,7 @@ internal static class BinaryFormattedObjectExtensions
 
             // Note that hashtables with custom comparers and/or hash code providers will have that information before
             // the value pair arrays.
-            if (format.RecordCount != 5
-                || format[1] is not SystemClassWithMembersAndTypes classInfo
+            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
                 || classInfo.Name != TypeInfo.HashtableType
                 || format[2] is not ArraySingleObject keys
                 || format[3] is not ArraySingleObject values
@@ -402,8 +394,8 @@ internal static class BinaryFormattedObjectExtensions
             Hashtable temp = new(keys.Length);
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i]!, out object? key)
-                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i]!, out object? value))
+                if (!format.TryGetPrimitiveRecordValue((IRecord?)keys[i], out object? key)
+                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord?)values[i], out object? value))
                 {
                     return false;
                 }
@@ -422,7 +414,7 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveRecordValue(
         this BinaryFormattedObject format,
-        IRecord record,
+        IRecord? record,
         [NotNullWhen(true)] out object? value)
     {
         format.TryGetPrimitiveRecordValueOrNull(record, out value);
@@ -434,16 +426,16 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveRecordValueOrNull(
         this BinaryFormattedObject format,
-        IRecord record,
+        IRecord? record,
         out object? value)
     {
         value = null;
-        if (record is ObjectNull)
+        if (record is ObjectNull or null)
         {
             return true;
         }
 
-        value = format.Dereference(record) switch
+        value = format.RecordMap.Dereference(record) switch
         {
             BinaryObjectString valueString => valueString.Value,
             MemberPrimitiveTyped primitive => primitive.Value,
@@ -466,8 +458,7 @@ internal static class BinaryFormattedObjectExtensions
         {
             exception = null;
 
-            if (format.RecordCount < 3
-                || format[1] is not SystemClassWithMembersAndTypes classInfo
+            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
                 || classInfo.Name != TypeInfo.NotSupportedExceptionType)
             {
                 return false;
@@ -496,18 +487,18 @@ internal static class BinaryFormattedObjectExtensions
     /// <summary>
     ///  Dereferences <see cref="MemberReference"/> records.
     /// </summary>
-    public static IRecord Dereference(this BinaryFormattedObject format, IRecord record) => record switch
+    public static IRecord Dereference(this IReadOnlyRecordMap recordMap, IRecord record) => record switch
     {
-        MemberReference reference => format[reference.IdRef],
+        MemberReference reference => recordMap[reference.IdRef],
         _ => record
     };
 
     /// <summary>
-    ///  Gets <paramref name="count"/> number of strings from a <see cref="ArraySingleString"/>.
+    ///  Gets strings from a <see cref="ArraySingleString"/>.
     /// </summary>
-    public static IEnumerable<string?> GetStringValues(this BinaryFormattedObject format, ArraySingleString array, int count)
-        => array.ArrayObjects.Take(count).Select(record =>
-            format.Dereference((IRecord)record!) switch
+    public static IEnumerable<string?> GetStringValues(this ArraySingleString array, IReadOnlyRecordMap recordMap)
+        => array.ArrayObjects.Select(record =>
+            record is null ? null : recordMap.Dereference((IRecord)record) switch
             {
                 BinaryObjectString stringRecord => stringRecord.Value,
                 _ => null

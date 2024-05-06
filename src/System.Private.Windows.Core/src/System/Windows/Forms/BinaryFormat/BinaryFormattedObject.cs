@@ -3,6 +3,7 @@
 
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace System.Windows.Forms.BinaryFormat;
@@ -13,8 +14,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   This is useful for explicitly controlling the rehydration of binary formatted data. BinaryFormatter is
-///   depreciated for security concerns (it has no way to constrain what it hydrates from an incoming stream).
+///   This is useful for explicitly controlling the rehydration of binary formatted data.
 ///  </para>
 ///  <para>
 ///   NOTE: Multidimensional and jagged arrays are not yet implemented.
@@ -22,16 +22,19 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed partial class BinaryFormattedObject
 {
-    // Don't reserve space in collections based on read lengths for more than this size to defend against corrupted lengths.
-    internal const int MaxNewCollectionSize = 1024 * 10;
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+    internal static FormatterConverter DefaultConverter { get; } = new();
+#pragma warning restore SYSLIB0050
 
     private static readonly Options s_defaultOptions = new();
+    private readonly Options _options;
 
-    private readonly List<IRecord> _records = [];
     private readonly RecordMap _recordMap = new();
 
-    private readonly Options _options;
-    private TypeResolver? _typeResolver;
+    private ITypeResolver? _typeResolver;
+    private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
+
+    private readonly Id _rootRecord;
 
     /// <summary>
     ///  Creates <see cref="BinaryFormattedObject"/> by parsing <paramref name="stream"/>.
@@ -46,36 +49,59 @@ internal sealed partial class BinaryFormattedObject
         ParseState state = new(reader, this);
 
         IRecord? currentRecord;
-        do
+
+        try
         {
-            try
+            currentRecord = Record.ReadBinaryFormatRecord(state);
+            if (currentRecord is not SerializationHeader header)
+            {
+                throw new SerializationException("Did not find serialization header.");
+            }
+
+            _rootRecord = header.RootId;
+
+            do
             {
                 currentRecord = Record.ReadBinaryFormatRecord(state);
             }
-            catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
-            {
-                // Make the exception easier to catch, but retain the original stack trace.
-                throw ex.ConvertToSerializationException();
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
-            }
-
-            _records.Add(currentRecord);
+            while (currentRecord is not MessageEnd);
         }
-        while (currentRecord is not MessageEnd);
+        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
+        {
+            // Make the exception easier to catch, but retain the original stack trace.
+            throw ex.ConvertToSerializationException();
+        }
+        catch (TargetInvocationException ex)
+        {
+            throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
+        }
     }
 
     /// <summary>
-    ///  Total count of top-level records.
+    ///  Deserializes the <see cref="BinaryFormattedObject"/> back to an object.
     /// </summary>
-    public int RecordCount => _records.Count;
+    [RequiresUnreferencedCode("Ultimately calls Assembly.GetType for type names in the data.")]
+    public object Deserialize()
+    {
+        try
+        {
+            return Deserializer.Deserializer.Deserialize(RootRecord.Id, _recordMap, TypeResolver, _options);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
+        {
+            // Make the exception easier to catch, but retain the original stack trace.
+            throw ex.ConvertToSerializationException();
+        }
+        catch (TargetInvocationException ex)
+        {
+            throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
+        }
+    }
 
     /// <summary>
-    ///  Gets a record by it's index.
+    ///  The Id of the root record of the object graph.
     /// </summary>
-    public IRecord this[int index] => _records[index];
+    public IRecord RootRecord => _recordMap[_rootRecord];
 
     /// <summary>
     ///  Gets a record by it's identifier. Not all records have identifiers, only ones that
@@ -83,15 +109,5 @@ internal sealed partial class BinaryFormattedObject
     /// </summary>
     public IRecord this[Id id] => _recordMap[id];
 
-    /// <summary>
-    ///  Resolves the given type name against the specified library.
-    /// </summary>
-    /// <param name="libraryId">The library id, or <see cref="Id.Null"/> for the "system" assembly.</param>
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
-    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    internal Type GetType(string typeName, Id libraryId)
-    {
-        _typeResolver ??= new(_options, _recordMap);
-        return _typeResolver.GetType(typeName, libraryId);
-    }
+    public IReadOnlyRecordMap RecordMap => _recordMap;
 }

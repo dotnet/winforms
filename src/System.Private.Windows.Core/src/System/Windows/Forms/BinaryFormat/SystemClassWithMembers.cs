@@ -21,18 +21,14 @@ internal sealed class SystemClassWithMembers : ClassRecord, IRecord<SystemClassW
     public static RecordType RecordType => RecordType.SystemClassWithMembers;
 
     static SystemClassWithMembers IBinaryFormatParseable<SystemClassWithMembers>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
         MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, Id.Null);
-        SystemClassWithMembers record = new(
+        return new(
             classInfo,
             memberTypeInfo,
-            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
-
-        // Index this record by the id of the embedded ClassInfo's object id.
-        state.RecordMap[record.ClassInfo.ObjectId] = record;
-        return record;
+            ReadObjectMemberValues(state, memberTypeInfo));
     }
 
     public override void Write(BinaryWriter writer)

@@ -24,7 +24,7 @@ internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>, IBinaryForma
     public static RecordType RecordType => RecordType.ObjectNull;
 
     static ObjectNull IBinaryFormatParseable<ObjectNull>.Parse(
-        BinaryFormattedObject.ParseState state) => Instance;
+        BinaryFormattedObject.IParseState state) => Instance;
 
     public void Write(BinaryWriter writer) => writer.Write((byte)RecordType);
 

@@ -31,13 +31,13 @@ internal class ClassInfo : IBinaryWriteable
         Id objectId = reader.ReadInt32();
         string name = reader.ReadString();
         memberCount = reader.ReadInt32();
-        List<string> memberNames = new(Math.Min(BinaryFormattedObject.MaxNewCollectionSize, memberCount));
+        ArrayBuilder<string> memberNames = new(memberCount);
         for (int i = 0; i < memberCount; i++)
         {
             memberNames.Add(reader.ReadString());
         }
 
-        return new(objectId, name, memberNames);
+        return new(objectId, name, memberNames.ToArray());
     }
 
     public void Write(BinaryWriter writer)

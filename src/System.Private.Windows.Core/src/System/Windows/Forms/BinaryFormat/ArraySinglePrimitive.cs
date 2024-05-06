@@ -31,15 +31,13 @@ internal sealed class ArraySinglePrimitive<T> :
     }
 
     static ArrayRecord IBinaryFormatParseable<ArrayRecord>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         Id id = ArrayInfo.Parse(state.Reader, out Count length);
         PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
         Debug.Assert(typeof(T) == primitiveType.GetPrimitiveTypeType());
 
-        ArraySinglePrimitive<T> record = new(id, ReadPrimitiveTypes<T>(state.Reader, length));
-        state.RecordMap[record.ObjectId] = record;
-        return record;
+        return new ArraySinglePrimitive<T>(id, state.Reader.ReadPrimitiveArray<T>(length));
     }
 
     public override void Write(BinaryWriter writer)
@@ -47,6 +45,6 @@ internal sealed class ArraySinglePrimitive<T> :
         writer.Write((byte)RecordType);
         ArrayInfo.Write(writer);
         writer.Write((byte)PrimitiveType);
-        WritePrimitiveTypes(writer, ArrayObjects);
+        writer.WritePrimitives(ArrayObjects);
     }
 }
