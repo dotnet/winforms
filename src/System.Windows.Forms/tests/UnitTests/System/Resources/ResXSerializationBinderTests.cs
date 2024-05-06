@@ -15,7 +15,7 @@ public  class ResXSerializationBinderTests
     [Fact]
     public void ResXSerializationBinder_BindToType_FullyQualifiedName()
     {
-        CustomTypeResolutionService typeResolutionService = new();
+        TrackGetTypePathTypeResolutionService typeResolutionService = new();
         ResXSerializationBinder binder = new(typeResolutionService);
         binder.BindToType(typeof(Button).Assembly.FullName!, typeof(Button).FullName!).Should().Be(typeof(Button));
         typeResolutionService.FullyQualifiedAssemblyNamePath.Should().BeTrue();
@@ -25,7 +25,7 @@ public  class ResXSerializationBinderTests
     [Fact]
     public void ResXSerializationBinder_BindToType_FullName()
     {
-        CustomTypeResolutionService typeResolutionService = new();
+        TrackGetTypePathTypeResolutionService typeResolutionService = new();
         ResXSerializationBinder binder = new(typeResolutionService);
         binder.BindToType(typeof(MyClass).Assembly.FullName!, typeof(MyClass).FullName!).Should().Be(typeof(MyClass));
         typeResolutionService.FullNamePath.Should().BeTrue();
@@ -35,7 +35,7 @@ public  class ResXSerializationBinderTests
     [Fact]
     public void ResXSerializationBinder_BindToType_FullyQualifiedNameNoVersion()
     {
-        CustomTypeResolutionService typeResolutionService = new();
+        TrackGetTypePathTypeResolutionService typeResolutionService = new();
         ResXSerializationBinder binder = new(typeResolutionService);
         binder.BindToType(typeof(Form).Assembly.FullName!, typeof(Form).FullName!).Should().Be(typeof(Form));
         typeResolutionService.FullyQualifiedAssemblyNameNoVersionPath.Should().BeTrue();
@@ -62,24 +62,11 @@ public  class ResXSerializationBinderTests
         typeName.Should().Be(typeName);
     }
 
-    private class CustomTypeResolutionService : ITypeResolutionService
+    private class TrackGetTypePathTypeResolutionService : ITypeResolutionService
     {
         public bool FullNamePath { get; private set; }
         public bool FullyQualifiedAssemblyNamePath { get; private set; }
         public bool FullyQualifiedAssemblyNameNoVersionPath { get; private set; }
-        private readonly string _formNoVersionFullyQualifiedName;
-
-        public CustomTypeResolutionService()
-        {
-            TypeName parsed = TypeName.Parse($"{typeof(Form).FullName}, {typeof(Form).Assembly.FullName}");
-            AssemblyNameInfo? assemblyNameInfo = parsed.AssemblyName;
-            _formNoVersionFullyQualifiedName = $"{typeof(Form).FullName}, {new AssemblyNameInfo(
-                assemblyNameInfo!.Name,
-                version: null,
-                assemblyNameInfo.CultureName,
-                assemblyNameInfo.Flags,
-                assemblyNameInfo.PublicKeyOrToken).FullName}";
-        }
 
         public Assembly? GetAssembly(AssemblyName name) => throw new NotImplementedException();
         public Assembly? GetAssembly(AssemblyName name, bool throwOnError) => throw new NotImplementedException();
@@ -96,10 +83,21 @@ public  class ResXSerializationBinderTests
                 FullNamePath = true;
                 return typeof(MyClass);
             }
-            else if (typeName == _formNoVersionFullyQualifiedName)
+            else
             {
-                FullyQualifiedAssemblyNameNoVersionPath = true;
-                return typeof(Form);
+                TypeName parsed = TypeName.Parse($"{typeof(Form).FullName}, {typeof(Form).Assembly.FullName}");
+                AssemblyNameInfo? assemblyNameInfo = parsed.AssemblyName;
+                string formNoVersionFullyQualifiedName = $"{typeof(Form).FullName}, {new AssemblyNameInfo(
+                    assemblyNameInfo!.Name,
+                    version: null,
+                    assemblyNameInfo.CultureName,
+                    assemblyNameInfo.Flags,
+                    assemblyNameInfo.PublicKeyOrToken).FullName}";
+                if (typeName == formNoVersionFullyQualifiedName)
+                {
+                    FullyQualifiedAssemblyNameNoVersionPath = true;
+                    return typeof(Form);
+                }
             }
 
             return null;
