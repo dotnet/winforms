@@ -69,11 +69,21 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
         return new MemberTypeInfo(info);
     }
 
-    internal static MemberTypeInfo CreateFromClassInfoAndLibrary(BinaryFormattedObject.ParseState state, ClassInfo classInfo, Id libraryId)
+    [UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+        Justification = """
+                Incoming type names are coming off of the formatted stream. There is no way for user code to pass compile
+                time context for preserialized data. If a type can't be found on deserialization it won't matter any more
+                than any other case where the type can't be found (e.g. a missing assembly). The deserializer will fail
+                with information on the missing type that can be used to attribute to keep said type.
+                """)]
+    internal static MemberTypeInfo CreateFromClassInfoAndLibrary(BinaryFormattedObject.IParseState state, ClassInfo classInfo, Id libraryId)
     {
-        Type type = state.GetType(classInfo.Name, libraryId);
+        Type type = state.TypeResolver.GetType(classInfo.Name, libraryId);
 
-        if (typeof(ISerializable).IsAssignableFrom(type))
+        if (typeof(ISerializable).IsAssignableFrom(type)
+            || state.Options.SurrogateSelector?.GetSurrogate(type, state.Options.StreamingContext, out _) is not null)
         {
             throw new SerializationException("Cannot intuit type information for ISerializable types.");
         }

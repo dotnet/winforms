@@ -8,11 +8,26 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal class RecordMap : IReadOnlyRecordMap
 {
-    private readonly Dictionary<int, IRecord> _records = [];
+    private readonly Dictionary<int, IRecord> _recordMap = [];
 
-    public IRecord this[Id id]
+    public IRecord this[Id id] => _recordMap[id];
+
+    public void AddRecord(IRecord record)
     {
-        get => _records[id];
-        set => _records.Add(id, value);
+        Id id = record.Id;
+        if (id.IsNull)
+        {
+            return;
+        }
+
+        if ((int)id < 0)
+        {
+            // Negative record Ids should never be referenced. Duplicate negative ids can be
+            // exported by the writer. The root object Id can be negative.
+            _recordMap.TryAdd(id, record);
+            return;
+        }
+
+        _recordMap.Add(id, record);
     }
 }

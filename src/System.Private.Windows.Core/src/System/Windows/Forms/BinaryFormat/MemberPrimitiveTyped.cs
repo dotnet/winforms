@@ -44,7 +44,7 @@ internal sealed class MemberPrimitiveTyped :
     public static RecordType RecordType => RecordType.MemberPrimitiveTyped;
 
     static MemberPrimitiveTyped IBinaryFormatParseable<MemberPrimitiveTyped>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
         return new(

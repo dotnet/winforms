@@ -6,4 +6,6 @@ namespace System.Windows.Forms.BinaryFormat;
 internal abstract class ObjectRecord : Record
 {
     public abstract Id ObjectId { get; }
+
+    private protected override Id Id => ObjectId;
 }

@@ -45,23 +45,20 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
     public static RecordType RecordType => RecordType.ClassWithId;
 
     static ClassWithId IBinaryFormatParseable<ClassWithId>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         Id objectId = state.Reader.ReadInt32();
         Id metadataId = state.Reader.ReadInt32();
 
         if (state.RecordMap[metadataId] is not ClassRecord referencedRecord)
         {
-            throw new SerializationException();
+            throw new SerializationException("Invalid referenced record type.");
         }
 
-        ClassWithId record = new(
+        return new(
             objectId,
             referencedRecord,
-            ReadValuesFromMemberTypeInfo(state, referencedRecord.MemberTypeInfo));
-
-        state.RecordMap[record.ObjectId] = record;
-        return record;
+            ReadObjectMemberValues(state, referencedRecord.MemberTypeInfo));
     }
 
     public override void Write(BinaryWriter writer)
@@ -79,7 +76,7 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
                 WriteValuesFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
                 break;
             case ClassWithMembers or SystemClassWithMembers:
-                WriteRecords(writer, MemberValues);
+                WriteRecords(writer, MemberValues, coalesceNulls: false);
                 break;
             default:
                 throw new SerializationException();
