@@ -21,7 +21,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         Friend Function GetResourceString(resourceId As vbErrors) As String
             Dim id As String = $"ID{CStr(resourceId)}"
-            ' always return a string
             Return SR.GetResourceString(id, id)
         End Function
 
