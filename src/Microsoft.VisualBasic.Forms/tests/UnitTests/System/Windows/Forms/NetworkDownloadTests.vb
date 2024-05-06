@@ -206,7 +206,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The ConnectionTimeout must be greater than 0. (Parameter 'connectionTimeout')", ex.Message)
+                Assert.Equal("The ConnectionTimeout must be greater than 0. (Parameter 'connectionTimeOut')", ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)

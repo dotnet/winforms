@@ -350,7 +350,8 @@ Namespace Microsoft.VisualBasic.Devices
                     overwrite As Boolean,
                     onUserCancel As UICancelOption)
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                ' DO NOT USE NameOf(connectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
