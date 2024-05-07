@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
-internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
+internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
 {
     private readonly ArrayRecord<object?> _arrayRecord;
     private readonly BinaryArrayType _arrayType;
@@ -15,7 +15,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
     private bool _hasFixups;
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
-    internal ArrayRecordDeserialzer(ArrayRecord<object?> arrayRecord, IDeserializer deserializer)
+    internal ArrayRecordDeserializer(ArrayRecord<object?> arrayRecord, IDeserializer deserializer)
         : base(arrayRecord, deserializer)
     {
         _arrayRecord = arrayRecord;
@@ -66,7 +66,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
     {
         while (_index < _arrayRecord.Length)
         {
-            (object? memberValue, Id reference) = GetMemberValue(_arrayRecord.ArrayObjects[_index]);
+            (object? memberValue, Id reference) = UnwrapMemberValue(_arrayRecord.ArrayObjects[_index]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -74,9 +74,7 @@ internal sealed class ArrayRecordDeserialzer : ObjectRecordDeserializer
                 return reference;
             }
 
-            if (!reference.IsNull
-                && Deserializer.IncompleteObjects.Contains(reference)
-                && memberValue!.GetType().IsValueType)
+            if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
             {
                 // Need to track a fixup for this index.
                 _hasFixups = true;

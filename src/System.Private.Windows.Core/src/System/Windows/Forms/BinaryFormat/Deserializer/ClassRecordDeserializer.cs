@@ -13,10 +13,16 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </summary>
 internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
 {
+    private readonly bool _onlyAllowPrimitives;
+
     private protected ClassRecordDeserializer(ClassRecord classRecord, object @object, IDeserializer deserializer)
         : base(classRecord, deserializer)
     {
         Object = @object;
+
+        // We want to be able to complete IObjectReference without having to evaluate their dependencies
+        // for circular references. See ValidateNewMemberObjectValue below for more.
+        _onlyAllowPrimitives = @object is IObjectReference;
     }
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
@@ -35,12 +41,6 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
 
         object @object = RuntimeHelpers.GetUninitializedObject(type);
 
-        if (@object is IObjectReference)
-        {
-            // Special case for DBNull. Normally we don't allow IObjectReference
-            return HandleObjectReference(type, classRecord, deserializer);
-        }
-
         // Invoke any OnDeserializing methods.
         SerializationEvents.GetOnDeserializingForType(type, @object)?.Invoke(deserializer.Options.StreamingContext);
 
@@ -57,34 +57,35 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
         }
 
         return recordDeserializer;
-
-        static ObjectRecordDeserializer HandleObjectReference(Type type, ClassRecord classRecord, IDeserializer deserializer)
-        {
-            // Arbitrary IObjectReference handling is complicated and at risk of denial of service attacks.
-            // System.UnitySerializationHolder is the only .NET system type that implements this and is
-            // used to encapsulate DBNull, so we'll special case it.
-            if (type != deserializer.TypeResolver.GetType("System.UnitySerializationHolder", Id.Null)
-                || (int)classRecord["UnityType"]! != 0x0002)
-            {
-                throw new SerializationException($"Type '{type}' is not allowed to implement IObjectReference.");
-            }
-
-            return new NoOpRecordDeserializer(classRecord, DBNull.Value, deserializer);
-        }
     }
 
-    private class NoOpRecordDeserializer : ObjectRecordDeserializer
+    private protected override void ValidateNewMemberObjectValue(object value)
     {
-        internal NoOpRecordDeserializer(ObjectRecord objectRecord, object @object, IDeserializer deserializer)
-            : base(objectRecord, deserializer)
+        if (!_onlyAllowPrimitives)
         {
-            Object = @object;
+            return;
         }
 
-        internal override Id Continue()
+        // The goal with this restriction is to know definitively that we can complete the contianing object when we
+        // finish with it's members, even if it is going to be replaced with another instance (as IObjectReference does).
+        // If there are no reference types we know that there is no way for references to this object getting it in an
+        // in an unconverted state or converted with uncompleted state (due to some direct or indirect reference from
+        // this object).
+        //
+        // If we wanted support to be fully open-ended we would have queue completion along with pending SerializationInfo
+        // objects to rehydrate in the proper order (depth-first) and reject any case where the object is involved in
+        // a cycle.
+
+        Type type = value.GetType();
+        if (type.IsArray)
         {
-            Deserializer.CompleteObject(ObjectRecord.ObjectId);
-            return Id.Null;
+            type = type.GetElementType()!;
+        }
+
+        bool primitive = type.IsPrimitive || type.IsEnum || type == typeof(string);
+        if (!primitive)
+        {
+            throw new SerializationException($"IObjectReference type '{type}' can only have primitive member data.");
         }
     }
 }

@@ -19,23 +19,23 @@ public abstract class BasicObjectTests<T> : SerializationTest<T> where T : ISeri
 
         int platformIndex = serializedData.GetPlatformIndex();
         for (int i = 0; i < serializedData.Length; i++)
-        for (FormatterAssemblyStyle assemblyMatching = 0; assemblyMatching <= FormatterAssemblyStyle.Full; assemblyMatching++)
-        {
-            object deserialized = DeserializeFromBase64Chars(serializedData[i].Base64Blob, assemblyMatching: assemblyMatching);
-
-            if (deserialized is StringComparer)
+            for (FormatterAssemblyStyle assemblyMatching = 0; assemblyMatching <= FormatterAssemblyStyle.Full; assemblyMatching++)
             {
-                // StringComparer derived classes are not public and they don't serialize the actual type.
-                value.Should().BeAssignableTo<StringComparer>();
-            }
-            else
-            {
-                deserialized.Should().BeOfType(value.GetType());
-            }
+                object deserialized = DeserializeFromBase64Chars(serializedData[i].Base64Blob, assemblyMatching: assemblyMatching);
 
-            bool isSamePlatform = i == platformIndex;
-            EqualityExtensions.CheckEquals(value, deserialized, isSamePlatform);
-        }
+                if (deserialized is StringComparer)
+                {
+                    // StringComparer derived classes are not public and they don't serialize the actual type.
+                    value.Should().BeAssignableTo<StringComparer>();
+                }
+                else
+                {
+                    deserialized.Should().BeOfType(value.GetType());
+                }
+
+                bool isSamePlatform = i == platformIndex;
+                EqualityExtensions.CheckEquals(value, deserialized, isSamePlatform);
+            }
     }
 
     [Theory]

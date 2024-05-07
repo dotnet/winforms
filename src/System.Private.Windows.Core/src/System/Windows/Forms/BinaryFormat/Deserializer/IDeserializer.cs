@@ -23,10 +23,10 @@ internal interface IDeserializer
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Objects are considered incomplete if they contain references to value types that need completed or if
-    ///   they have not yet finished evaluating all of their member data. They are also considered incomplete if
-    ///   they have <see cref="ISerializable"/> or a surrogate that has not yet been called with their
-    ///   <see cref="SerializationInfo"/>.
+    ///   Objects are considered incomplete if they contain references to value or <see cref="IObjectReference"/> types
+    ///   that need completed or if they have not yet finished evaluating all of their member data. They are also
+    ///   considered incomplete if they implement <see cref="ISerializable"/> or have a surrogate and the
+    ///   <see cref="SerializationInfo"/> has not yet been applied.
     ///  </para>
     /// </remarks>
     IReadOnlySet<int> IncompleteObjects { get; }
