@@ -18,34 +18,51 @@ using System.Security;
 using System.Runtime.Serialization;
 using FormatTests.Common.TestTypes;
 using System.Text.Json;
+using System.Collections.Concurrent;
 
 namespace BinaryFormatTests.FormatterTests;
 
 public static class EqualityExtensions
 {
+    private static readonly ConcurrentDictionary<Type, MethodInfo?> s_extensionMethods = new();
+
+    private static readonly (MethodInfo Method, string FirstParameterName)[] s_equalityMethods =
+    (
+        from method in typeof(EqualityExtensions).GetMethods()!
+         where method.Name == "IsEqual" && method.IsGenericMethodDefinition
+         let parameters = method.GetParameters()
+         where parameters.Length == 3
+         select (method, parameters[0].ParameterType.Name)
+    ).ToArray();
+
     private static MethodInfo? GetExtensionMethod(Type extendedType)
     {
+        if (s_extensionMethods.TryGetValue(extendedType, out MethodInfo? existing))
+        {
+            return existing;
+        }
+
         if (extendedType.IsGenericType)
         {
-            IEnumerable<MethodInfo>? x = typeof(EqualityExtensions).GetMethods()
-                ?.Where(m =>
-                    m.Name == "IsEqual" &&
-                    m.GetParameters().Length == 3 &&
-                    m.IsGenericMethodDefinition);
-
-            MethodInfo? method = typeof(EqualityExtensions).GetMethods()
-                ?.SingleOrDefault(m =>
-                    m.Name == "IsEqual" &&
-                    m.GetParameters().Length == 3 &&
-                    m.GetParameters()[0].ParameterType.Name == extendedType.Name &&
-                    m.IsGenericMethodDefinition);
+            MethodInfo? method =
+            (
+                from m in s_equalityMethods
+                where m.FirstParameterName == extendedType.Name
+                select m.Method
+            ).SingleOrDefault();
 
             // If extension method found, make it generic and return
             if (method is not null)
-                return method.MakeGenericMethod(extendedType.GenericTypeArguments[0]);
+            {
+                return s_extensionMethods.GetOrAdd(
+                    extendedType,
+                    method.MakeGenericMethod(extendedType.GenericTypeArguments[0]));
+            }
         }
 
-        return typeof(EqualityExtensions).GetMethod("IsEqual", [extendedType, extendedType, typeof(bool)]);
+        return s_extensionMethods.GetOrAdd(
+            extendedType,
+            typeof(EqualityExtensions).GetMethod("IsEqual", [extendedType, extendedType, typeof(bool)]));
     }
 
     public static void CheckEquals(object? objA, object? objB, bool isSamePlatform = true)

@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.Serialization.Formatters;
 using BinaryFormatTests;
 using BinaryFormatTests.FormatterTests;
-using System.Runtime.Serialization.Formatters;
 
 namespace FormatTests.Common;
 
@@ -59,55 +59,24 @@ public abstract class BasicObjectTests<T> : SerializationTest<T> where T : ISeri
         EqualityExtensions.CheckEquals(value, deserialized, isSamePlatform: true);
     }
 
-    public static TheoryData<object, TypeSerializableValue[]> SerializableObjects()
+    public static EnumerableTupleTheoryData<object, TypeSerializableValue[]> SerializableObjects()
     {
-        List<(object Object, TypeSerializableValue[] Serialized)> data = [];
-
-        foreach (var value in BinaryFormatterTests.RawSerializableObjects())
-        {
+        // Can add a .Skip() to get to the failing scenario easier when debugging.
+        return new((
             // Explicitly not supporting offset arrays
-            if (value.Item1 is Array array && (array.GetLowerBound(0) != 0))
-            {
-                continue;
-            }
-
-            data.Add(value);
-        }
-
-        // Doing two steps for debugging purposes. Can add a .Skip() to get to the failing scenario.
-
-        TheoryData<object, TypeSerializableValue[]> theoryData = [];
-
-        foreach (var item in data.Skip(0))
-        {
-            theoryData.Add(item.Object, item.Serialized);
-        }
-
-        return theoryData;
+            from value in BinaryFormatterTests.RawSerializableObjects()
+            where value.Item1 is not Array array || array.GetLowerBound(0) == 0
+            select value).ToArray());
     }
 
-    public static TheoryData<object, FormatterAssemblyStyle, FormatterTypeStyle> BasicObjectsRoundtrip_MemberData()
+    public static EnumerableTupleTheoryData<object, FormatterAssemblyStyle, FormatterTypeStyle> BasicObjectsRoundtrip_MemberData()
     {
-        List<(object Object, FormatterAssemblyStyle AssemblyStyle, FormatterTypeStyle TypeStyle)> data = new(7000);
-
-        foreach (object[]? record in SerializableObjects())
-        {
-            foreach (FormatterAssemblyStyle assemblyFormat in new[] { FormatterAssemblyStyle.Full, FormatterAssemblyStyle.Simple })
-            {
-                foreach (FormatterTypeStyle typeFormat in new[] { FormatterTypeStyle.TypesAlways, FormatterTypeStyle.TypesWhenNeeded, FormatterTypeStyle.XsdString })
-                {
-                    data.Add((record[0], assemblyFormat, typeFormat));
-                }
-            }
-        }
-
-        TheoryData<object, FormatterAssemblyStyle, FormatterTypeStyle> theoryData = [];
-
-        foreach (var item in data.Skip(0))
-        {
-            theoryData.Add(item.Object, item.AssemblyStyle, item.TypeStyle);
-        }
-
-        return theoryData;
+        return new((
+            // Explicitly not supporting offset arrays
+            from value in BinaryFormatterTests.RawSerializableObjects()
+            from FormatterAssemblyStyle assemblyFormat in new[] { FormatterAssemblyStyle.Full, FormatterAssemblyStyle.Simple }
+            from FormatterTypeStyle typeFormat in new[] { FormatterTypeStyle.TypesAlways, FormatterTypeStyle.TypesWhenNeeded, FormatterTypeStyle.XsdString }
+            where value.Item1 is not Array array || array.GetLowerBound(0) == 0
+            select (value.Item1, assemblyFormat, typeFormat)).ToArray());
     }
 }
