@@ -7305,6 +7305,55 @@ public class TreeViewTests
         Assert.Equal(treeNode2, parent.Nodes[0]);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/11243
+    [WinFormsFact]
+    public void TreeView_TreeNodeAddRangeSequence()
+    {
+        using TreeView treeView = new()
+        {
+            Dock = DockStyle.Fill,
+        };
+
+        using Form form = new()
+        {
+            Width = 200,
+            Height = 200,
+        };
+
+        TreeNode treeNode1 = new("a1");
+        TreeNode treeNode2 = new("b1");
+        TreeNode treeNode3 = new("c1");
+        TreeNode rootNode = new("Root", [new TreeNode("child")]);
+
+        treeView.Nodes.Add(rootNode);
+        form.Controls.Add(treeView);
+
+        form.Load += (s, e) =>
+        {
+            treeView.Nodes[0].Nodes.AddRange(treeNode1, treeNode2, treeNode3);
+            treeView.Nodes[0].ExpandAll();
+        };
+        form.Show();
+
+        TreeNode childNode1 = treeView.Nodes[0].Nodes[0];
+        TreeNode childNode2 = treeView.Nodes[0].Nodes[1];
+        TreeNode childNode3 = treeView.Nodes[0].Nodes[2];
+        TreeNode childNode4 = treeView.Nodes[0].Nodes[3];
+
+        childNode1.Text.Should().Be("child");
+
+        childNode1.NextVisibleNode.Should().NotBeNull();
+        childNode1.NextVisibleNode.Text.Should().Be("a1");
+
+        childNode2.NextVisibleNode.Should().NotBeNull();
+        childNode2.NextVisibleNode.Text.Should().Be("b1");
+
+        childNode3.NextVisibleNode.Should().NotBeNull();
+        childNode3.NextVisibleNode.Text.Should().Be("c1");
+
+        childNode4.NextVisibleNode.Should().BeNull();
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
