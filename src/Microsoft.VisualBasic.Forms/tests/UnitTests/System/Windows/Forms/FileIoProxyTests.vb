@@ -186,11 +186,21 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub FileNormalizePathTest_Fail()
-            Assert.Throws(Of ArgumentException)(
+        Public Sub FileNormalizePathEmptyStringTest_Fail()
+            Dim ex As Exception = Assert.Throws(Of ArgumentException)(
                 Sub()
                     FileSystemUtils.NormalizePath("")
                 End Sub)
+            Assert.Equal("The path is empty. (Parameter 'path')", ex.Message)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub FileNormalizePathNullTest_Fail()
+            Dim ex As Exception = Assert.Throws(Of ArgumentNullException)(
+                Sub()
+                    FileSystemUtils.NormalizePath(Nothing)
+                End Sub)
+            Assert.Equal("Value cannot be null. (Parameter 'path')", ex.Message)
         End Sub
 
         <WinFormsFact>

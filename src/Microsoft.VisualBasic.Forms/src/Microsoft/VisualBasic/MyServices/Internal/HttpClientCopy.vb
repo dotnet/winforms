@@ -163,7 +163,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     End If
 
                 Case HttpStatusCode.Unauthorized
-                    ' REVIEWER Please check following two web exceptions
                     Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
                 Case Else
                     Throw New WebException()

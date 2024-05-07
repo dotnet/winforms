@@ -7,6 +7,8 @@ Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
 Namespace Microsoft.VisualBasic.Devices
 
     Partial Public Class Network
@@ -122,11 +124,12 @@ Namespace Microsoft.VisualBasic.Devices
                                         overwrite As Boolean,
                                         onUserCancel As UICancelOption) As Task
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                ' DO NOT USE NameOf(connectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
 
             If addressUri Is Nothing Then
-                Throw GetArgumentNullException(NameOf(addressUri))
+                Throw ExUtils.GetArgumentNullException(NameOf(addressUri))
             End If
 
             Dim client As HttpClient = If(clientHandler Is Nothing,
@@ -142,12 +145,12 @@ Namespace Microsoft.VisualBasic.Devices
             ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
             ' have a file and path
             If IO.Directory.Exists(normalizedFilePath) Then
-                Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
             End If
 
             'Throw if the file exists and the user doesn't want to overwrite
             If Not overwrite AndAlso IO.File.Exists(normalizedFilePath) Then
-                Throw New IO.IOException(Utils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                Throw New IO.IOException(ExUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
             End If
 
             'Check to see if the target directory exists. If it doesn't, create it
@@ -155,7 +158,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
             If String.IsNullOrEmpty(targetDirectory) Then
-                Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
             End If
 
             If Not IO.Directory.Exists(targetDirectory) Then
@@ -226,7 +229,7 @@ Namespace Microsoft.VisualBasic.Devices
                                         onUserCancel As UICancelOption) As Task
 
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
