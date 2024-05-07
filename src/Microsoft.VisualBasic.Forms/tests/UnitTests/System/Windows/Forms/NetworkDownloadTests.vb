@@ -179,7 +179,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(New Uri(webListener.Address),
                                   destinationFileName)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -317,7 +317,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
-            Assert.Equal(ValidateDownload(destinationFileName), DownloadSmallFileSize)
+            Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
 
             CleanUp(listener, testDirectory)
         End Sub
@@ -339,7 +339,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               overwrite:=True)
 
             Assert.True(Directory.Exists(testDirectory))
-            Assert.Equal(ValidateDownload(destinationFileName), DownloadSmallFileSize)
+            Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
 
             CleanUp(listener, testDirectory)
         End Sub
@@ -361,7 +361,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=True)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -385,7 +385,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
-            Assert.Equal(ValidateDownload(destinationFileName), DownloadSmallFileSize)
+            Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
 
             CleanUp(listener, testDirectory)
         End Sub
@@ -407,7 +407,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=True)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadLargeFileSize)
+                Assert.Equal(DownloadLargeFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -425,7 +425,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(New Uri(webListener.Address),
                                   destinationFileName)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -445,7 +445,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultUserName,
                                   DefaultPassword)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -612,7 +612,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(webListener.Address,
                                   destinationFileName)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -822,7 +822,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   TestingConnectionTimeout,
                                   overwrite:=False)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -846,7 +846,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                               onUserCancel:=UICancelOption.DoNothing)
 
             Assert.True(Directory.Exists(testDirectory))
-            Assert.Equal(ValidateDownload(destinationFileName), DownloadSmallFileSize)
+            Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
 
             CleanUp(listener, testDirectory)
         End Sub
@@ -869,7 +869,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   overwrite:=True)
 
                 Assert.True(Directory.Exists(testDirectory))
-                Assert.Equal(ValidateDownload(destinationFileName), DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -889,7 +889,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                   DefaultUserName,
                                   DefaultPassword)
 
-                Assert.Equal(ValidateDownload(destinationFileName), actual:=DownloadSmallFileSize)
+                Assert.Equal(DownloadSmallFileSize, ValidateDownload(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
             End Try
