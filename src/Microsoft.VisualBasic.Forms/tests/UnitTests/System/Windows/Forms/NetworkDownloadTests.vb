@@ -67,7 +67,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("destinationFileName needs to include a file name.", ex.Message)
+                Assert.Equal(SR.Network_DownloadNeedsFilename, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -98,7 +98,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The given file path ends with a directory separator character. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.IO_FilePathException, ex.Message)
+                Assert.Contains(NameOf(destinationFileName), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -129,7 +130,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The given file path ends with a directory separator character. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.IO_FilePathException, ex.Message)
+                Assert.Contains(NameOf(destinationFileName), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -160,7 +162,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("destinationFileName needs to include a file name.", ex.Message)
+                Assert.Equal(SR.Network_DownloadNeedsFilename, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -206,7 +208,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The ConnectionTimeout must be greater than 0. (Parameter 'connectionTimeOut')", ex.Message)
+                Assert.StartsWith(SR.Network_BadConnectionTimeout, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -234,7 +236,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -263,7 +265,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -292,7 +294,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -500,7 +502,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("destinationFileName needs to include a file name.", ex.Message)
+                Assert.Equal(SR.Network_DownloadNeedsFilename, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -531,7 +533,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The given file path ends with a directory separator character. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.IO_FilePathException, ex.Message)
+                Assert.Contains(NameOf(destinationFileName), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -562,7 +565,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("The given file path ends with a directory separator character. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.IO_FilePathException, ex.Message)
+                Assert.Contains(NameOf(destinationFileName), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -593,7 +597,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-                Assert.Equal("destinationFileName needs to include a file name.", ex.Message)
+                Assert.Equal(SR.Network_DownloadNeedsFilename, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -636,7 +640,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -660,7 +664,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -688,7 +692,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
             Finally
                 CleanUp(listener)
             End Try
@@ -716,7 +720,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("Argument cannot be Nothing. (Parameter 'destinationFileName')", ex.Message)
+                Assert.StartsWith(SR.General_ArgumentNullException, ex.Message)
             Finally
                 CleanUp(listener)
             End Try
@@ -742,7 +746,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 End Sub)
 
-            Assert.Equal($"Could not complete operation since a file already exists in this path '{destinationFileName}'.", ex.Message)
+            Assert.Equal(SR.IO_FileExists_Path.Replace("{0}", destinationFileName), ex.Message)
             Assert.True(Directory.Exists(testDirectory))
             Assert.Equal(ValidateDownload(destinationFileName), 1)
 
@@ -770,7 +774,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("'invalidURL' is not a valid remote file address. A valid address should include a protocol, a path and a file name. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.Network_InvalidUriString.Replace("{0}", "invalidURL"), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
@@ -798,7 +802,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                     End Sub)
 
-                Assert.Equal("'invalidURL' is not a valid remote file address. A valid address should include a protocol, a path and a file name. (Parameter 'address')", ex.Message)
+                Assert.StartsWith(SR.Network_InvalidUriString.Replace("{0}", InvalidUrlAddress), ex.Message)
                 Assert.False(File.Exists(destinationFileName))
             Finally
                 CleanUp(listener, testDirectory)
