@@ -18,13 +18,21 @@ using System.Security;
 using System.Runtime.Serialization;
 using FormatTests.Common.TestTypes;
 using System.Text.Json;
+using System.Collections.Concurrent;
 
 namespace BinaryFormatTests.FormatterTests;
 
 public static class EqualityExtensions
 {
+    private static readonly ConcurrentDictionary<Type, MethodInfo?> s_extensionMethods = new();
+
     private static MethodInfo? GetExtensionMethod(Type extendedType)
     {
+        if (s_extensionMethods.TryGetValue(extendedType, out MethodInfo? existing))
+        {
+            return existing;
+        }
+
         if (extendedType.IsGenericType)
         {
             IEnumerable<MethodInfo>? x = typeof(EqualityExtensions).GetMethods()
@@ -42,10 +50,16 @@ public static class EqualityExtensions
 
             // If extension method found, make it generic and return
             if (method is not null)
-                return method.MakeGenericMethod(extendedType.GenericTypeArguments[0]);
+            {
+                return s_extensionMethods.GetOrAdd(
+                    extendedType,
+                    method.MakeGenericMethod(extendedType.GenericTypeArguments[0]));
+            }
         }
 
-        return typeof(EqualityExtensions).GetMethod("IsEqual", [extendedType, extendedType, typeof(bool)]);
+        return s_extensionMethods.GetOrAdd(
+            extendedType,
+            typeof(EqualityExtensions).GetMethod("IsEqual", [extendedType, extendedType, typeof(bool)]));
     }
 
     public static void CheckEquals(object? objA, object? objB, bool isSamePlatform = true)

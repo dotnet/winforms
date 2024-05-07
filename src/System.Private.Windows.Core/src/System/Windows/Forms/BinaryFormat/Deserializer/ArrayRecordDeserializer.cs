@@ -88,7 +88,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
                 continue;
             }
 
-            if (_arrayType is not BinaryArrayType.Rectangular || _elementType.IsValueType)
+            if (_elementType.IsValueType)
             {
                 _array.SetArrayValueByFlattenedIndex(memberValue, _index);
             }
