@@ -264,13 +264,24 @@ public class TreeNodeCollectionTests
     }
 
     [WinFormsTheory]
-    [InlineData("key1", "text1", 1)]
-    public void TreeNodeCollection_Add_KeyTextImageIndex_Success(string key, string text, int imageIndex)
+    [InlineData("key1", "text1", 1, null)]
+    [InlineData("key1", "text1", 1, 2)]
+    public void TreeNodeCollection_Add_KeyTextImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
     {
         using TreeView treeView = new();
 
         TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Add(key, text, imageIndex);
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Add(key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Add(key, text, imageIndex);
+        }
 
         treeNode.Should().Be(collection[0]);
         treeNode.Name.Should().Be(key);
@@ -294,22 +305,6 @@ public class TreeNodeCollectionTests
     }
 
     [WinFormsTheory]
-    [InlineData("key1", "text1", 1, 2)]
-    public void TreeNodeCollection_Add_KeyTextImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int selectedImageIndex)
-    {
-        using TreeView treeView = new();
-
-        TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Add(key, text, imageIndex, selectedImageIndex);
-
-        treeNode.Should().Be(collection[0]);
-        treeNode.Name.Should().Be(key);
-        treeNode.Text.Should().Be(text);
-        treeNode.ImageIndex.Should().Be(imageIndex);
-        treeNode.SelectedImageIndex.Should().Be(selectedImageIndex);
-    }
-
-    [WinFormsTheory]
     [InlineData("key1", "text1", "imageKey1", "selectedImageKey1")]
     public void TreeNodeCollection_Add_KeyTextImageKeySelectedImageKey_Success(string key, string text, string imageKey, string selectedImageKey)
     {
@@ -326,82 +321,70 @@ public class TreeNodeCollectionTests
     }
 
     [WinFormsTheory]
-    [InlineData("Node 0")]
-    public void TreeNodeCollection_Insert_String_Success(string text)
+    [InlineData("Node 0", null, null, null)]
+    [InlineData("Node 0", "key", null, null)]
+    [InlineData("Node 0", "key", "imageKey", null)]
+    [InlineData("Node 0", "key", "imageKey", "selectedImageKey")]
+    public void TreeNodeCollection_Insert_StringKeyImageKeySelectedImageKey_Success(string text, string key, string imageKey, string selectedImageKey)
     {
         using TreeView treeView = new();
 
         TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, text);
+        TreeNode treeNode;
+
+        if (key is not null)
+        {
+            if (imageKey is not null)
+            {
+                if (selectedImageKey is not null)
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey, selectedImageKey);
+                    treeNode.SelectedImageKey.Should().Be(selectedImageKey);
+                }
+                else
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey);
+                }
+
+                treeNode.ImageKey.Should().Be(imageKey);
+            }
+            else
+            {
+                treeNode = collection.Insert(0, key, text);
+            }
+
+            treeNode.Name.Should().Be(key);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, text);
+        }
 
         treeNode.Should().Be(collection[0]);
         treeNode.Text.Should().Be(text);
     }
 
     [WinFormsTheory]
-    [InlineData("key", "Node 0")]
-    public void TreeNodeCollection_Insert_StringKey_Success(string key, string text)
-    {
-        using TreeView treeView = new();
-
-        TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, key, text);
-
-        treeNode.Text.Should().Be(text);
-        treeNode.Name.Should().Be(key);
-    }
-
-    [WinFormsTheory]
-    [InlineData("key", "Node 0", 0)]
-    public void TreeNodeCollection_Insert_StringKeyImageIndex_Success(string key, string text, int imageIndex)
-    {
-        using TreeView treeView = new();
-
-        TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, key, text, imageIndex);
-
-        treeNode.Should().Be(collection[0]);
-        treeNode.ImageIndex.Should().Be(imageIndex);
-    }
-
-    [WinFormsTheory]
-    [InlineData("key", "Node 0", "imageKey")]
-    public void TreeNodeCollection_Insert_StringKeyImageKey_Success(string key, string text, string imageKey)
-    {
-        using TreeView treeView = new();
-
-        TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, key, text, imageKey);
-
-        treeNode.Should().Be(collection[0]);
-        treeNode.ImageKey.Should().Be(imageKey);
-    }
-
-    [WinFormsTheory]
+    [InlineData("key", "Node 0", 0, null)]
     [InlineData("key", "Node 0", 0, 1)]
-    public void TreeNodeCollection_Insert_StringKeyImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int selectedImageIndex)
+    public void TreeNodeCollection_Insert_StringKeyImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
     {
         using TreeView treeView = new();
 
         TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, key, text, imageIndex, selectedImageIndex);
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex);
+        }
 
         treeNode.Should().Be(collection[0]);
         treeNode.ImageIndex.Should().Be(imageIndex);
-        treeNode.SelectedImageIndex.Should().Be(selectedImageIndex);
-    }
-
-    [WinFormsTheory]
-    [InlineData("key", "Node 0", "imageKey", "selectedImageKey")]
-    public void TreeNodeCollection_Insert_StringKeyImageKeySelectedImageKey_Success(string key, string text, string imageKey, string selectedImageKey)
-    {
-        using TreeView treeView = new();
-
-        TreeNodeCollection collection = treeView.Nodes;
-        TreeNode treeNode = collection.Insert(0, key, text, imageKey, selectedImageKey);
-
-        treeNode.Should().Be(collection[0]);
-        treeNode.ImageKey.Should().Be(imageKey);
-        treeNode.SelectedImageKey.Should().Be(selectedImageKey);
     }
 }

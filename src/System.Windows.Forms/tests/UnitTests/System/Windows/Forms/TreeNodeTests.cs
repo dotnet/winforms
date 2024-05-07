@@ -4733,24 +4733,6 @@ public class TreeNodeTests
 
     [WinFormsTheory]
     [BoolData]
-    public void TreeNode_Collapse_ReturnsExpected(bool initiallyExpanded)
-    {
-        TreeNode treeNode = new();
-        treeNode.Nodes.Add(new TreeNode("childNode1"));
-        treeNode.Nodes.Add(new TreeNode("childNode2"));
-
-        if (initiallyExpanded)
-        {
-            treeNode.ExpandAll();
-            treeNode.IsExpanded.Should().BeTrue();
-        }
-
-        treeNode.Collapse();
-        treeNode.IsExpanded.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [BoolData]
     public void TreeNode_EnsureVisible_InvokeWithTreeView_CallsExpected(bool initiallyVisible)
     {
         using TreeView treeView = new();
@@ -4815,16 +4797,27 @@ public class TreeNodeTests
     }
 
     [WinFormsTheory]
-    [InlineData(0, false)]
-    [InlineData(1, false)]
-    [InlineData(1, true)]
-    public void TreeNode_ExpandAll_Invoke_Success(int depth, bool initiallyExpanded)
+    [InlineData(0, false, true)]
+    [InlineData(1, false, false)]
+    [InlineData(1, true, false)]
+    public void TreeNode_ExpandCollapse_Invoke_Success(int depth, bool initiallyExpanded, bool collapse)
     {
         var node = CreateTreeNodeStructure(depth, 2, initiallyExpanded);
         CheckExpandedState(node, initiallyExpanded);
-        node.ExpandAll();
 
-        CheckExpandedState(node, true);
+        if (collapse)
+        {
+            node.ExpandAll();
+            CheckExpandedState(node, true);
+
+            node.Collapse();
+            CheckExpandedState(node, false);
+        }
+        else
+        {
+            node.ExpandAll();
+            CheckExpandedState(node, true);
+        }
     }
 
     [WinFormsTheory]
