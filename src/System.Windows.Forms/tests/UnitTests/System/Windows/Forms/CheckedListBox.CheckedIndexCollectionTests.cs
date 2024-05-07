@@ -73,4 +73,43 @@ public class CheckedListBox_CheckedIndexCollectionTests
         ((IList)collection).IndexOf(1).Should().Be(-1);
         ((IList)collection).IndexOf("invalid").Should().Be(-1);
     }
+
+    [WinFormsFact]
+    public void CheckedIndexCollection_CopyTo_CopiesExpectedValues()
+    {
+        using CheckedListBox checkedListBox = new();
+        CheckedListBox.CheckedIndexCollection collection = new(checkedListBox);
+        checkedListBox.Items.Add("item1", true);
+        checkedListBox.Items.Add("item2", false);
+        checkedListBox.Items.Add("item3", true);
+
+        // Create an array to copy to
+        int[] array = new int[3];
+
+        // Copy the collection to the array
+        collection.CopyTo(array, 0);
+
+        // Test that the copied values are correct
+        array[0].Should().Be(0); // Index of first checked item
+        array[1].Should().Be(2); // Index of second checked item
+        array[2].Should().Be(0); // Should remain 0 as there are only two checked items
+    }
+
+    [WinFormsFact]
+    public void CheckedIndexCollection_GetEnumerator_ReturnsExpected()
+    {
+        using CheckedListBox checkedListBox = new();
+        CheckedListBox.CheckedIndexCollection collection = new(checkedListBox);
+        checkedListBox.Items.Add("item1", true);
+        checkedListBox.Items.Add("item2", false);
+        checkedListBox.Items.Add("item3", true);
+
+        // Test GetEnumerator method
+        IEnumerator enumerator = collection.GetEnumerator();
+        enumerator.MoveNext().Should().BeTrue();
+        enumerator.Current.Should().Be(0);
+        enumerator.MoveNext().Should().BeTrue();
+        enumerator.Current.Should().Be(2);
+        enumerator.MoveNext().Should().BeFalse();
+    }
 }
