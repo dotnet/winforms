@@ -89,6 +89,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal int _index;                  // our index into our parents child array
     internal int _childCount;
+    // this array should not be optimized as a list because we are inserting into the middle of it, not appending.
     internal TreeNode[] _children = [];
     internal TreeNode? _parent;
     internal TreeView? _treeView;
