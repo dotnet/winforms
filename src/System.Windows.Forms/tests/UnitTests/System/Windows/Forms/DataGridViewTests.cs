@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1900,9 +1901,11 @@ public partial class DataGridViewTests
         {
             foreach (bool columnHeadersVisible in new bool[] { true, false })
             {
-                // Skip verification of DataGridViewColumnHeadersHeightSizeMode=DisableResizing and columnHeadersVisible=true
-                // due to the active issue "https://github.com/dotnet/winforms/issues/11322"
-                if (columnHeadersWidthSizeMode== DataGridViewColumnHeadersHeightSizeMode.DisableResizing && columnHeadersVisible is true)
+                // Skip verification of DataGridViewColumnHeadersHeightSizeMode = DisableResizing and columnHeadersVisible = true
+                // in X86 due to the active issue "https://github.com/dotnet/winforms/issues/11322"
+                if (columnHeadersWidthSizeMode== DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                    && columnHeadersVisible is true
+                    && RuntimeInformation.ProcessArchitecture == Architecture.X86)
                   continue;
 
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, null };
