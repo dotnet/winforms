@@ -7309,16 +7309,7 @@ public class TreeViewTests
     [WinFormsFact]
     public void TreeView_TreeNodeAddRangeSequence()
     {
-        using TreeView treeView = new()
-        {
-            Dock = DockStyle.Fill,
-        };
-
-        using Form form = new()
-        {
-            Width = 200,
-            Height = 200,
-        };
+        using TreeView treeView = new();
 
         TreeNode treeNode1 = new("a1");
         TreeNode treeNode2 = new("b1");
@@ -7326,19 +7317,15 @@ public class TreeViewTests
         TreeNode rootNode = new("Root", [new TreeNode("child")]);
 
         treeView.Nodes.Add(rootNode);
-        form.Controls.Add(treeView);
+        treeView.CreateControl();
 
-        form.Load += (s, e) =>
-        {
-            treeView.Nodes[0].Nodes.AddRange(treeNode1, treeNode2, treeNode3);
-            treeView.Nodes[0].ExpandAll();
-        };
-        form.Show();
+        rootNode.Nodes.AddRange(treeNode1, treeNode2, treeNode3);
+        rootNode.ExpandAll();
 
-        TreeNode childNode1 = treeView.Nodes[0].Nodes[0];
-        TreeNode childNode2 = treeView.Nodes[0].Nodes[1];
-        TreeNode childNode3 = treeView.Nodes[0].Nodes[2];
-        TreeNode childNode4 = treeView.Nodes[0].Nodes[3];
+        TreeNode childNode1 = rootNode.Nodes[0];
+        TreeNode childNode2 = rootNode.Nodes[1];
+        TreeNode childNode3 = rootNode.Nodes[2];
+        TreeNode childNode4 = rootNode.Nodes[3];
 
         childNode1.Text.Should().Be("child");
 
