@@ -168,8 +168,8 @@ internal sealed partial class Deserializer : IDeserializer
 
         // Notify [OnDeserialized] instance methods for all relevant deserialized objects,
         // then callback IDeserializationCallback on all objects that implement it.
-        OnDeserialization?.Invoke(null);
         OnDeserialized?.Invoke(Options.StreamingContext);
+        OnDeserialization?.Invoke(null);
 
         return _deserializedObjects[_rootId];
     }
@@ -342,10 +342,11 @@ internal sealed partial class Deserializer : IDeserializer
                 completed = Id.Null;
             }
 
-            if (_recordMap[completedId] is ClassRecord classRecord)
+            if (_recordMap[completedId] is ClassRecord classRecord
+                && (_incompleteDependencies is null || !_incompleteDependencies.ContainsKey(completedId)))
             {
-                // Hook any finished events for this object. Doing at the end of deserialization for simplicity.
-                // (If we knew there were no cycles in the graph we could fire these as we go.)
+                // There are no remaining dependencies. Hook any finished events for this object.
+                // Doing at the end of deserialization for simplicity.
 
                 Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
                 object @object = _deserializedObjects[completedId];

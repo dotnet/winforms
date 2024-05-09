@@ -4,6 +4,7 @@
 using System.Buffers;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
+using FormatTests.Formatter;
 
 namespace FormatTests.Common;
 
@@ -83,4 +84,6 @@ public abstract class SerializationTest<TSerializer> where TSerializer : ISerial
 
         return selector;
     }
+
+    public static bool IsBinaryFormatterDeserializer => typeof(TSerializer) == typeof(BinaryFormatterSerializer);
 }
