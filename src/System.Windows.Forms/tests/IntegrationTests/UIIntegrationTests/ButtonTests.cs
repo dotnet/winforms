@@ -54,7 +54,7 @@ public class ButtonTests : ControlTestBase
     [ActiveIssue("https://github.com/dotnet/winforms/issues/11324")]
     [WinFormsFact]
     [SkipOnArchitecture(TestArchitectures.X64,
-    "Flaky tests, see: https://github.com/dotnet/winforms/issues/11324")]
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11324")]
     public async Task Button_DialogResult_SpaceToClickFocusedButtonAsync()
     {
         await RunTestAsync(async (form, button) =>
