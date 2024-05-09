@@ -25,7 +25,6 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 

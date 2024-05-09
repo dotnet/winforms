@@ -1,11 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Analyzers.Resources;
 using Microsoft.CodeAnalysis;
 
 namespace System.Windows.Forms.Analyzers;
 
-internal static class DiagnosticDescriptors
+internal static partial class DiagnosticDescriptors
 {
     private const string Category = "ApplicationConfiguration";
 
@@ -23,6 +24,7 @@ internal static class DiagnosticDescriptors
              category: Category,
              defaultSeverity: DiagnosticSeverity.Warning,
              isEnabledByDefault: true);
+
     internal static readonly DiagnosticDescriptor s_migrateHighDpiSettings_VB
        = new(id: "WFAC010",
              title: s_localizableWFAC010Title,

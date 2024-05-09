@@ -10,12 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.cs" Link="System\Windows\Forms\ApplicationConfig.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.FontDescriptor.cs" Link="System\Windows\Forms\ApplicationConfig.FontDescriptor.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.FontStyle.cs" Link="System\Windows\Forms\ApplicationConfig.FontStyle.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.GraphicsUnit.cs" Link="System\Windows\Forms\ApplicationConfig.GraphicsUnit.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\AnalyzerConfigOptionsProviderExtensions.cs" Link="System\Windows\Forms\AnalyzerConfigOptionsProviderExtensions.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\HighDpiMode.cs" />
     <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
     <None Include="..\ApplicationConfigurationGenerator.Help.md" Link="ApplicationConfigurationGenerator.Help.md" />
   </ItemGroup>
@@ -26,6 +20,10 @@
 
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
