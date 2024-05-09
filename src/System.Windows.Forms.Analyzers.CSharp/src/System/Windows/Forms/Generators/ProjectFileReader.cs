@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers;
+using System.Windows.Forms.Analyzers.CSharp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
@@ -45,7 +46,7 @@ internal static partial class ProjectFileReader
 
         if (!bool.TryParse(rawValue, out value))
         {
-            diagnostic = Diagnostic.Create(DiagnosticDescriptors.s_propertyCantBeSetToValue,
+            diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue,
                                            Location.None,
                                            propertyName,
                                            rawValue);
@@ -80,7 +81,7 @@ internal static partial class ProjectFileReader
         }
         catch (Exception ex)
         {
-            diagnostic = Diagnostic.Create(DiagnosticDescriptors.s_propertyCantBeSetToValueWithReason,
+            diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValueWithReason,
                                            Location.None,
                                            PropertyNameCSharp.DefaultFont,
                                            rawValue,
@@ -105,7 +106,7 @@ internal static partial class ProjectFileReader
         if (!Enum.TryParse(rawValue, true, out highDpiMode) ||
             !Enum.IsDefined(typeof(HighDpiMode), highDpiMode))
         {
-            diagnostic = Diagnostic.Create(DiagnosticDescriptors.s_propertyCantBeSetToValue,
+            diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue,
                                            Location.None,
                                            PropertyNameCSharp.HighDpiMode,
                                            rawValue);

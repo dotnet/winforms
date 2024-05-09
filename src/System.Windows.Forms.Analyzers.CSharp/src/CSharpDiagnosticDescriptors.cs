@@ -3,9 +3,9 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace System.Windows.Forms.Analyzers;
+namespace System.Windows.Forms.Analyzers.CSharp;
 
-internal static class DiagnosticDescriptors
+internal static class CSharpDiagnosticDescriptors
 {
     private const string Category = "ApplicationConfiguration";
 

@@ -4,6 +4,7 @@
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows.Forms.Analyzers;
+using System.Windows.Forms.Analyzers.CSharp;
 using System.Windows.Forms.Analyzers.Tests;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -54,7 +55,7 @@ public partial class ProjectFileReaderTests
         Assert.False(result);
         Assert.False(returnedValue);
         Assert.NotNull(diagnostic);
-        Assert.Equal(DiagnosticDescriptors.s_propertyCantBeSetToValue, diagnostic!.Descriptor);
+        Assert.Equal(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue, diagnostic!.Descriptor);
         _output.WriteLine(diagnostic.ToString());
     }
 
@@ -118,7 +119,7 @@ public partial class ProjectFileReaderTests
         Assert.False(result);
         Assert.Null(returnedValue);
         Assert.NotNull(diagnostic);
-        Assert.Equal(DiagnosticDescriptors.s_propertyCantBeSetToValueWithReason, diagnostic!.Descriptor);
+        Assert.Equal(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValueWithReason, diagnostic!.Descriptor);
         _output.WriteLine(diagnostic.ToString());
     }
 
@@ -177,7 +178,7 @@ public partial class ProjectFileReaderTests
         Assert.False(result);
         Assert.Equal(PropertyDefaultValue.DpiMode, returnedValue);
         Assert.NotNull(diagnostic);
-        Assert.Equal(DiagnosticDescriptors.s_propertyCantBeSetToValue, diagnostic!.Descriptor);
+        Assert.Equal(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue, diagnostic!.Descriptor);
         _output.WriteLine(diagnostic.ToString());
     }
 
