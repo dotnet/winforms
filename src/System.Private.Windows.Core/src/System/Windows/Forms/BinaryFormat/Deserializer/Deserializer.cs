@@ -315,6 +315,18 @@ internal sealed partial class Deserializer : IDeserializer
         "Trimming",
         "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
         Justification = "The type is already in the cache of the TypeResolver, no need to mark this one again.")]
+    void IDeserializer.RegisterCompleteEvents(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        object @object)
+    {
+        OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
+
+        if (@object is IDeserializationCallback callback)
+        {
+            OnDeserialization += callback.OnDeserialization;
+        }
+    }
+
     void IDeserializer.CompleteObject(Id id)
     {
         // Need to use a queue as Completion is recursive.
@@ -345,20 +357,8 @@ internal sealed partial class Deserializer : IDeserializer
             if (_recordMap[completedId] is ClassRecord classRecord
                 && (_incompleteDependencies is null || !_incompleteDependencies.ContainsKey(completedId)))
             {
-                // There are no remaining dependencies. Hook any finished events for this object.
-                // Doing at the end of deserialization for simplicity.
-
-                Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
-                object @object = _deserializedObjects[completedId];
-
-                OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
-
-                if (@object is IDeserializationCallback callback)
-                {
-                    OnDeserialization += callback.OnDeserialization;
-                }
-
-                if (@object is IObjectReference objectReference)
+                // There are no remaining dependencies. Get the real object if it's an IObjectReference.
+                if (_deserializedObjects[completedId] is IObjectReference objectReference)
                 {
                     _deserializedObjects[completedId] = objectReference.GetRealObject(Options.StreamingContext);
                 }

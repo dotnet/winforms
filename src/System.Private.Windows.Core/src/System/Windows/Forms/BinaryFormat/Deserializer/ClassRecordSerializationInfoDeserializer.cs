@@ -25,9 +25,9 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     internal ClassRecordSerializationInfoDeserializer(
         ClassRecord classRecord,
         object @object,
-        Type type,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
         ISerializationSurrogate? surrogate,
-        IDeserializer deserializer) : base(classRecord, @object, deserializer)
+        IDeserializer deserializer) : base(classRecord, @object, type, deserializer)
     {
         _classRecord = classRecord;
         _surrogate = surrogate;
@@ -60,6 +60,9 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
             _serializationInfo.AddValue(memberName, memberValue);
             _currentMemberIndex++;
         }
+
+        // Register after all members are parsed, to ensure that completion events are triggered in depth-first order.
+        RegisterCompleteEvents();
 
         // We can't complete these in the same way we do with direct field sets as user code can dereference the
         // reference type members from the SerializationInfo that aren't fully completed (due to cycles). With direct

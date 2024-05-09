@@ -23,15 +23,13 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
     internal ClassRecordFieldInfoDeserializer(
         ClassRecord classRecord,
         object @object,
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields | DynamicallyAccessedMemberTypes.PublicFields)]
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         Type type,
         IDeserializer deserializer)
-        : base(classRecord, @object, deserializer)
+        : base(classRecord, @object, type, deserializer)
     {
         _classRecord = classRecord;
-#pragma warning disable IL2067 // GetSerializableMembers is not attributed correctly. Should just be fields.
         _fieldInfo = FormatterServices.GetSerializableMembers(type);
-#pragma warning restore IL2067
         _isValueType = type.IsValueType;
     }
 
@@ -85,6 +83,9 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
             _currentFieldIndex++;
         }
+
+        // Register after all members are parsed, to ensure that completion events are triggered in depth-first order.
+        RegisterCompleteEvents();
 
         if (!_hasFixups || !_isValueType)
         {
