@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
@@ -47,7 +48,7 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </devdoc>
 internal sealed partial class Deserializer : IDeserializer
 {
-    private readonly IReadOnlyRecordMap _recordMap;
+    private readonly IReadOnlyDictionary<int, SerializationRecord> _recordMap;
     private readonly BinaryFormattedObject.ITypeResolver _typeResolver;
     BinaryFormattedObject.ITypeResolver IDeserializer.TypeResolver => _typeResolver;
 
@@ -98,7 +99,7 @@ internal sealed partial class Deserializer : IDeserializer
 
     private Deserializer(
         Id rootId,
-        IReadOnlyRecordMap recordMap,
+        IReadOnlyDictionary<int, SerializationRecord> recordMap,
         BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
@@ -119,7 +120,7 @@ internal sealed partial class Deserializer : IDeserializer
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.Deserializer.Deserialize()")]
     internal static object Deserialize(
         Id rootId,
-        IReadOnlyRecordMap recordMap,
+        IReadOnlyDictionary<int, SerializationRecord> recordMap,
         BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
@@ -230,27 +231,39 @@ internal sealed partial class Deserializer : IDeserializer
             // level or are boxed into an interface reference. Checking for these requires costly
             // string matches and as such we'll just create the parser object.
 
-            IRecord record = _recordMap[id];
-            if (record is BinaryObjectString binaryString)
+            SerializationRecord record = _recordMap[id];
+            if (record is BinaryObjectStringRecord binaryString)
             {
                 _deserializedObjects.Add(id, binaryString.Value);
                 return binaryString.Value;
             }
 
-            if (record is ArrayRecord arrayRecord)
+            if (record.RecordType is Runtime.Serialization.BinaryFormat.RecordType.ArraySingleString or Runtime.Serialization.BinaryFormat.RecordType.ArraySinglePrimitive)
             {
-                Array? values = arrayRecord switch
+                Array? values = record switch
                 {
-                    ArraySingleString stringArray => stringArray.GetStringValues(_recordMap).ToArray(),
-                    IPrimitiveTypeRecord primitiveArray => primitiveArray.GetPrimitiveArray(),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<string> stringArray => stringArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<bool> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<byte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<sbyte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<char> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<short> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<ushort> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<int> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<uint> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<long> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<ulong> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<float> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<double> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<decimal> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<DateTime> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    Runtime.Serialization.BinaryFormat.ArrayRecord<TimeSpan> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
                     _ => null
                 };
 
-                if (values is not null)
-                {
-                    _deserializedObjects.Add(arrayRecord.ObjectId, values);
-                    return values;
-                }
+                Debug.Assert(values is not null);
+                _deserializedObjects.Add(record.ObjectId, values);
+                return values;
             }
 
             // Not a simple case, need to do a full deserialization of the record.
@@ -342,13 +355,13 @@ internal sealed partial class Deserializer : IDeserializer
                 completed = Id.Null;
             }
 
-            if (_recordMap[completedId] is ClassRecord classRecord
+            if (_recordMap[completedId] is Runtime.Serialization.BinaryFormat.ClassRecord classRecord
                 && (_incompleteDependencies is null || !_incompleteDependencies.ContainsKey(completedId)))
             {
                 // There are no remaining dependencies. Hook any finished events for this object.
                 // Doing at the end of deserialization for simplicity.
 
-                Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
+                Type type = _typeResolver.GetType(classRecord.TypeName, classRecord.LibraryName);
                 object @object = _deserializedObjects[completedId];
 
                 OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
