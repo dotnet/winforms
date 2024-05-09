@@ -12,6 +12,7 @@ public class BinaryTreeNodeWithEvents : IDeserializationCallback, BinaryTreeNode
     public BinaryTreeNodeWithEvents? Left { get; set; }
     public BinaryTreeNodeWithEvents? Right { get; set; }
     public ValueTypeBase? Value { get; set; }
+    public object? ObjectReference { get; set; }
 
     public BinaryTreeNodeWithEvents() { }
 
@@ -24,6 +25,7 @@ public class BinaryTreeNodeWithEvents : IDeserializationCallback, BinaryTreeNode
         info.AddValue(nameof(Left), Left);
         info.AddValue(nameof(Right), Right);
         info.AddValue(nameof(Value), Value);
+        info.AddValue(nameof(ObjectReference), ObjectReference);
     }
 
     public void OnDeserialization(object? sender) => BinaryTreeNodeWithEventsTracker.DeserializationOrder.Add($"{Name}i");
@@ -39,6 +41,7 @@ public class BinaryTreeNodeWithEventsSurrogate : ISerializationSurrogate
         node.Left = (BinaryTreeNodeWithEvents)info.GetValue("<Left>k__BackingField", typeof(BinaryTreeNodeWithEvents))!;
         node.Right = (BinaryTreeNodeWithEvents)info.GetValue("<Right>k__BackingField", typeof(BinaryTreeNodeWithEvents))!;
         node.Value = (ValueTypeBase)info.GetValue("<Value>k__BackingField", typeof(ValueTypeBase))!;
+        node.ObjectReference = info.GetValue("<ObjectReference>k__BackingField", typeof(object))!;
         BinaryTreeNodeWithEventsTracker.DeserializationOrder.Add($"{node.Name}s");
 
         return node;

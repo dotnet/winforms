@@ -13,6 +13,63 @@ public abstract class EventOrderTests<T> : SerializationTest<T> where T : ISeria
     #region Depth0
     #region NoCycle
     [Fact]
+    public void Depth0_NoCycle_ObjectReference_AsRoot()
+    {
+        ObjectReferenceISerializable root = new();
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal("objects", "objectp", "objecti");
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
+    [Fact]
+    public void Depth0_NoCycle_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "rootp", "rooti", "objecti"]
+            : ["objects", "objectp", "rootp", "objecti", "rooti"];
+        BinaryTreeNodeWithEvents root = new() { Name = "root", ObjectReference = new ObjectReferenceISerializable() };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
+    [Fact]
+    public void Depth0_NoCycle_ISerializable_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "roots", "rootp", "rooti", "objecti"]
+            : ["objects", "roots", "objectp", "rootp", "objecti", "rooti"];
+        BinaryTreeNodeWithEventsISerializable root = new() { Name = "root", ObjectReference = new ObjectReferenceISerializable() };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
+    [Fact]
     public void Depth0_NoCycle_ISerializable()
     {
         BinaryTreeNodeWithEventsISerializable root = new() { Name = "root" };
@@ -328,6 +385,48 @@ public abstract class EventOrderTests<T> : SerializationTest<T> where T : ISeria
 
     #region Depth1
     #region NoCycle
+    [Fact]
+    public void Depth1_NoCycle_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "rootp", "childp", "rooti", "childi", "objecti"]
+            : ["objects", "objectp", "childp", "rootp", "objecti", "childi", "rooti"];
+        BinaryTreeNodeWithEvents child = new() { Name = "child", ObjectReference = new ObjectReferenceISerializable() };
+        BinaryTreeNodeWithEvents root = new() { Name = "root", Left = child };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
+    [Fact]
+    public void Depth1_NoCycle_ISerializable_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "childs", "roots", "rootp", "childp", "rooti", "childi", "objecti"]
+            : ["objects", "childs", "roots", "objectp", "childp", "rootp", "objecti", "childi", "rooti"];
+        BinaryTreeNodeWithEventsISerializable child = new() { Name = "child", ObjectReference = new ObjectReferenceISerializable() };
+        BinaryTreeNodeWithEventsISerializable root = new() { Name = "root", Left = child };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
     [Fact]
     public void Depth1_NoCycle_ISerializable()
     {
@@ -668,6 +767,50 @@ public abstract class EventOrderTests<T> : SerializationTest<T> where T : ISeria
 
     #region Depth2
     #region NoCycle
+    [Fact]
+    public void Depth2_NoCycle_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "rootp", "child1p", "child2p", "rooti", "child1i", "child2i", "objecti"]
+            : ["objects", "objectp", "child2p", "child1p", "rootp", "objecti", "child2i", "child1i", "rooti"];
+        BinaryTreeNodeWithEvents child2 = new() { Name = "child2", ObjectReference = new ObjectReferenceISerializable() };
+        BinaryTreeNodeWithEvents child1 = new() { Name = "child1", Left = child2 };
+        BinaryTreeNodeWithEvents root = new() { Name = "root", Left = child1 };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
+    [Fact]
+    public void Depth2_NoCycle_ISerializable_ObjectReference()
+    {
+        string[] expected = IsBinaryFormatterDeserializer
+            ? ["objectp", "objects", "child2s", "child1s", "roots", "rootp", "child1p", "child2p", "rooti", "child1i", "child2i", "objecti"]
+            : ["objects", "child2s", "child1s", "roots", "objectp", "child2p", "child1p", "rootp", "objecti", "child2i", "child1i", "rooti"];
+        BinaryTreeNodeWithEventsISerializable child2 = new() { Name = "child2", ObjectReference = new ObjectReferenceISerializable() };
+        BinaryTreeNodeWithEventsISerializable child1 = new() { Name = "child1", Left = child2 };
+        BinaryTreeNodeWithEventsISerializable root = new() { Name = "root", Left = child1 };
+
+        try
+        {
+            Deserialize(Serialize(root));
+            List<string> deserializeOrder = BinaryTreeNodeWithEventsTracker.DeserializationOrder;
+            deserializeOrder.Should().Equal(expected);
+        }
+        finally
+        {
+            BinaryTreeNodeWithEventsTracker.DeserializationOrder.Clear();
+        }
+    }
+
     [Fact]
     public void Depth2_NoCycle_ISerializable()
     {
