@@ -67,6 +67,15 @@ internal interface IDeserializer
     ///  Check for a surrogate for the given type. If none exists, returns <see langword="null"/>.
     /// </summary>
     ISerializationSurrogate? GetSurrogate(Type type);
+
+    /// <summary>
+    ///  Register the deserialization complete events for the given object.
+    /// </summary>
+    void RegisterCompleteEvents(
+        // The only way to preserve base, non-public methods is to use All.
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+        Type type,
+        object @object);
 }
 
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
