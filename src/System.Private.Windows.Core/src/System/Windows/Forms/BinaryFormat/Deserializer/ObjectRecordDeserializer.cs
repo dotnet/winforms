@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.BinaryFormat;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
@@ -17,14 +16,14 @@ internal abstract partial class ObjectRecordDeserializer
     // Used to indicate that the value is missing from the deserialized objects.
     private protected static object s_missingValueSentinel = new();
 
-    internal SerializationRecord ObjectRecord { get; }
+    internal ObjectRecord ObjectRecord { get; }
 
     [AllowNull]
     internal object Object { get; private protected set; }
 
     private protected IDeserializer Deserializer { get; }
 
-    private protected ObjectRecordDeserializer(SerializationRecord objectRecord, IDeserializer deserializer)
+    private protected ObjectRecordDeserializer(ObjectRecord objectRecord, IDeserializer deserializer)
     {
         Deserializer = deserializer;
         ObjectRecord = objectRecord;
@@ -46,30 +45,15 @@ internal abstract partial class ObjectRecordDeserializer
         return memberValue switch
         {
             // String
-            PrimitiveTypeRecord<string> primitive => (primitive.Value, primitive.ObjectId),
+            BinaryObjectString binaryString => (binaryString.Value, Id.Null),
             // Inline record
-            // adsitnik: find out what it is and handle it properly
             ObjectRecord objectRecord => TryGetObject(objectRecord.ObjectId),
             // Record reference
-            MemberReferenceRecord memberReference => TryGetObject(memberReference.Reference),
-            // Primitive type record
-            PrimitiveTypeRecord<bool> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<byte> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<sbyte> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<char> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<short> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<ushort> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<int> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<uint> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<long> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<ulong> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<float> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<double> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<decimal> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<TimeSpan> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<DateTime> primitive => (primitive.Value, primitive.ObjectId),
+            MemberReference memberReference => TryGetObject(memberReference.IdRef),
+            // Prmitive type record
+            MemberPrimitiveTyped memberPrimitiveTyped => (memberPrimitiveTyped.Value, Id.Null),
             // Null
-            null => (null, Id.Null),
+            ObjectNull or null => (null, Id.Null),
             // At this point should be an inline primitive
             _ => TypeInfo.GetPrimitiveType(memberValue.GetType()) != default
                 ? (memberValue, Id.Null)
@@ -105,10 +89,10 @@ internal abstract partial class ObjectRecordDeserializer
                 || (Deserializer.IncompleteObjects.Contains(valueRecord) && value.GetType().IsValueType));
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.ClassRecordParser.Create(ClassRecord, IDeserializer)")]
-    internal static ObjectRecordDeserializer Create(Id id, SerializationRecord record, IDeserializer deserializer) => record switch
+    internal static ObjectRecordDeserializer Create(Id id, IRecord record, IDeserializer deserializer) => record switch
     {
-        Runtime.Serialization.BinaryFormat.ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
-        Runtime.Serialization.BinaryFormat.ArrayRecord arrayRecord => new ArrayRecordDeserializer(arrayRecord, deserializer),
+        ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
+        ArrayRecord<object?> arrayRecord => new ArrayRecordDeserializer(arrayRecord, deserializer),
         _ => throw new SerializationException($"Unexpected record type for {id}.")
     };
 }

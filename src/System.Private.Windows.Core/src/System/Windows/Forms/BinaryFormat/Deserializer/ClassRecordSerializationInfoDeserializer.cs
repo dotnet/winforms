@@ -17,13 +17,13 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </remarks>
 internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
+    private readonly ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
     private int _currentMemberIndex;
 
     internal ClassRecordSerializationInfoDeserializer(
-        Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
+        ClassRecord classRecord,
         object @object,
         Type type,
         ISerializationSurrogate? surrogate,

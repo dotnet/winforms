@@ -4,7 +4,7 @@
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.BinaryFormat;
+using System.Text;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -29,20 +29,42 @@ internal sealed partial class BinaryFormattedObject
     private static readonly Options s_defaultOptions = new();
     private readonly Options _options;
 
+    private readonly RecordMap _recordMap = new();
+
     private ITypeResolver? _typeResolver;
-    private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options);
+    private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
+
+    private readonly Id _rootRecord;
 
     /// <summary>
     ///  Creates <see cref="BinaryFormattedObject"/> by parsing <paramref name="stream"/>.
     /// </summary>
     public BinaryFormattedObject(Stream stream, Options? options = null)
     {
+        ArgumentNullException.ThrowIfNull(stream);
+        using BinaryReader reader = new(stream, Encoding.UTF8, leaveOpen: true);
+
         _options = options ?? s_defaultOptions;
+
+        ParseState state = new(reader, this);
+
+        IRecord? currentRecord;
 
         try
         {
-            RootRecord = PayloadReader.Read(stream, out var readonlyRecordMap, leaveOpen: true);
-            RecordMap = readonlyRecordMap;
+            currentRecord = Record.ReadBinaryFormatRecord(state);
+            if (currentRecord is not SerializationHeader header)
+            {
+                throw new SerializationException("Did not find serialization header.");
+            }
+
+            _rootRecord = header.RootId;
+
+            do
+            {
+                currentRecord = Record.ReadBinaryFormatRecord(state);
+            }
+            while (currentRecord is not MessageEnd);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
@@ -63,7 +85,7 @@ internal sealed partial class BinaryFormattedObject
     {
         try
         {
-            return Deserializer.Deserializer.Deserialize(RootRecord.ObjectId, RecordMap, TypeResolver, _options);
+            return Deserializer.Deserializer.Deserialize(RootRecord.Id, _recordMap, TypeResolver, _options);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
@@ -79,14 +101,13 @@ internal sealed partial class BinaryFormattedObject
     /// <summary>
     ///  The Id of the root record of the object graph.
     /// </summary>
-    public SerializationRecord RootRecord { get; }
+    public IRecord RootRecord => _recordMap[_rootRecord];
 
     /// <summary>
     ///  Gets a record by it's identifier. Not all records have identifiers, only ones that
     ///  can be referenced by other records.
     /// </summary>
-    public SerializationRecord this[Id id] => RecordMap[id];
+    public IRecord this[Id id] => _recordMap[id];
 
-    // adsitnik: do we need to expose both the map and the indexer?
-    public IReadOnlyDictionary<int, SerializationRecord> RecordMap { get; }
+    public IReadOnlyRecordMap RecordMap => _recordMap;
 }
