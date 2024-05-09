@@ -33,7 +33,7 @@ public abstract class ClassRecord : SerializationRecord
     // Currently we don't expose raw values, so we are not preserving the order here.
     public IEnumerable<string> MemberNames => ClassInfo.MemberNames.Keys;
 
-    internal override int ObjectId => ClassInfo.ObjectId;
+    public override int ObjectId => ClassInfo.ObjectId;
 
     internal abstract int ExpectedValuesCount { get; }
 

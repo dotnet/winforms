@@ -27,7 +27,7 @@ internal sealed class BinaryLibraryRecord : SerializationRecord
 
     internal AssemblyNameInfo LibraryName { get; }
 
-    internal override int ObjectId { get; }
+    public override int ObjectId { get; }
 
     internal static BinaryLibraryRecord Parse(BinaryReader reader)
         => new(reader.ReadInt32(), reader.ReadLibraryName());

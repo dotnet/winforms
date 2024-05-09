@@ -28,7 +28,7 @@ public abstract class ArrayRecord : SerializationRecord
     /// </summary>
     public ArrayType ArrayType => ArrayInfo.ArrayType;
 
-    internal override int ObjectId => ArrayInfo.ObjectId;
+    public override int ObjectId => ArrayInfo.ObjectId;
 
     internal long ValuesToRead { get; private protected set; }
 
