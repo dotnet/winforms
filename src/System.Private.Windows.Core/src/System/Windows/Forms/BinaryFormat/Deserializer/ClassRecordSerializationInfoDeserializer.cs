@@ -17,13 +17,13 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </remarks>
 internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly ClassRecord _classRecord;
+    private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
     private int _currentMemberIndex;
 
     internal ClassRecordSerializationInfoDeserializer(
-        ClassRecord classRecord,
+        Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
         object @object,
         Type type,
         ISerializationSurrogate? surrogate,
@@ -36,10 +36,9 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
 
     internal override Id Continue()
     {
-        // There is no benefit to changing order here so we can keep the same order as the serialized data.
-        while (_currentMemberIndex < _classRecord.MemberNames.Count)
+        // adsitnik: the order is no longer guaranteed to be preserved
+        foreach (string memberName in _classRecord.MemberNames)
         {
-            string memberName = _classRecord.MemberNames[_currentMemberIndex];
             (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.MemberValues[_currentMemberIndex]);
 
             if (s_missingValueSentinel == memberValue)

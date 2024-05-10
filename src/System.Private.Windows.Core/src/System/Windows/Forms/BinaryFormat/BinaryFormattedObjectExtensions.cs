@@ -3,33 +3,12 @@
 
 using System.Collections;
 using System.Drawing;
-using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace System.Windows.Forms.BinaryFormat;
 
 internal static class BinaryFormattedObjectExtensions
 {
-    /// <summary>
-    ///  Type names for <see cref="SystemClassWithMembersAndTypes"/> that are raw primitives.
-    /// </summary>
-    private static bool IsPrimitiveTypeClassName(ReadOnlySpan<char> typeName)
-        => TypeInfo.GetPrimitiveType(typeName) switch
-        {
-            PrimitiveType.Boolean => true,
-            PrimitiveType.Byte => true,
-            PrimitiveType.Char => true,
-            PrimitiveType.Double => true,
-            PrimitiveType.Int32 => true,
-            PrimitiveType.Int64 => true,
-            PrimitiveType.SByte => true,
-            PrimitiveType.Single => true,
-            PrimitiveType.Int16 => true,
-            PrimitiveType.UInt16 => true,
-            PrimitiveType.UInt32 => true,
-            PrimitiveType.UInt64 => true,
-            _ => false,
-        };
-
     internal delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
 
     internal static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
@@ -58,16 +37,15 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = default;
 
-            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
-                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
-                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-                || classInfo.Name != typeof(PointF).FullName
-                || classInfo.MemberValues.Count != 2)
+            if (format.RootRecord is not ClassRecord classInfo
+                || !classInfo.IsTypeNameMatching(typeof(PointF))
+                || !classInfo.HasMember("x")
+                || !classInfo.HasMember("y"))
             {
                 return false;
             }
 
-            value = new PointF((float)classInfo["x"]!, (float)classInfo["y"]!);
+            value = new PointF(classInfo.GetSingle("x"), classInfo.GetSingle("y"));
 
             return true;
         }
@@ -84,27 +62,28 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = default;
 
-            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
-                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
-                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-                || classInfo.Name != typeof(RectangleF).FullName
-                || classInfo.MemberValues.Count != 4)
+            if (format.RootRecord is not ClassRecord classInfo
+                || !classInfo.IsTypeNameMatching(typeof(RectangleF))
+                || !classInfo.HasMember("x")
+                || !classInfo.HasMember("y")
+                || !classInfo.HasMember("width")
+                || !classInfo.HasMember("height"))
             {
                 return false;
             }
 
             value = new RectangleF(
-                (float)classInfo["x"]!,
-                (float)classInfo["y"]!,
-                (float)classInfo["width"]!,
-                (float)classInfo["height"]!);
+                classInfo.GetSingle("x"),
+                classInfo.GetSingle("y"),
+                classInfo.GetSingle("width"),
+                classInfo.GetSingle("height"));
 
             return true;
         }
     }
 
     /// <summary>
-    ///  Trys to get this object as a primitive type or string.
+    ///  Tries to get this object as a primitive type or string.
     /// </summary>
     /// <returns><see langword="true"/> if this represented a primitive type or string.</returns>
     public static bool TryGetPrimitiveType(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
@@ -113,61 +92,37 @@ internal static class BinaryFormattedObjectExtensions
 
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            value = default;
-
-            if (format.RootRecord is BinaryObjectString binaryString)
+            if (format.RootRecord.RecordType is not (RecordType.BinaryObjectString or RecordType.MemberPrimitiveTyped or RecordType.SystemClassWithMembersAndTypes))
             {
-                value = binaryString.Value;
-                return true;
-            }
-
-            if (format.RootRecord is not SystemClassWithMembersAndTypes systemClass)
-            {
+                value = null;
                 return false;
             }
 
-            if (IsPrimitiveTypeClassName(systemClass.Name) && systemClass.MemberTypeInfo[0].Type == BinaryType.Primitive)
+            value = format.RootRecord switch
             {
-                value = systemClass.MemberValues[0]!;
-                return true;
-            }
+                PrimitiveTypeRecord<string> primitive => primitive.Value,
+                PrimitiveTypeRecord<bool> primitive => primitive.Value,
+                PrimitiveTypeRecord<byte> primitive => primitive.Value,
+                PrimitiveTypeRecord<sbyte> primitive => primitive.Value,
+                PrimitiveTypeRecord<char> primitive => primitive.Value,
+                PrimitiveTypeRecord<short> primitive => primitive.Value,
+                PrimitiveTypeRecord<ushort> primitive => primitive.Value,
+                PrimitiveTypeRecord<int> primitive => primitive.Value,
+                PrimitiveTypeRecord<uint> primitive => primitive.Value,
+                PrimitiveTypeRecord<long> primitive => primitive.Value,
+                PrimitiveTypeRecord<ulong> primitive => primitive.Value,
+                PrimitiveTypeRecord<float> primitive => primitive.Value,
+                PrimitiveTypeRecord<double> primitive => primitive.Value,
+                PrimitiveTypeRecord<decimal> primitive => primitive.Value,
+                PrimitiveTypeRecord<TimeSpan> primitive => primitive.Value,
+                PrimitiveTypeRecord<DateTime> primitive => primitive.Value,
+                PrimitiveTypeRecord<IntPtr> primitive => primitive.Value,
+                PrimitiveTypeRecord<UIntPtr> primitive => primitive.Value,
+                _ => null
+            };
 
-            if (systemClass.Name == typeof(TimeSpan).FullName)
-            {
-                value = new TimeSpan((long)systemClass.MemberValues[0]!);
-                return true;
-            }
-
-            switch (systemClass.Name)
-            {
-                case TypeInfo.TimeSpanType:
-                    value = new TimeSpan((long)systemClass.MemberValues[0]!);
-                    return true;
-                case TypeInfo.DateTimeType:
-                    ulong ulongValue = (ulong)systemClass["dateData"]!;
-                    value = Unsafe.As<ulong, DateTime>(ref ulongValue);
-                    return true;
-                case TypeInfo.DecimalType:
-                    ReadOnlySpan<int> bits =
-                    [
-                        (int)systemClass["lo"]!,
-                        (int)systemClass["mid"]!,
-                        (int)systemClass["hi"]!,
-                        (int)systemClass["flags"]!
-                    ];
-
-                    value = new decimal(bits);
-                    return true;
-                case TypeInfo.IntPtrType:
-                    // Rehydrating still throws even though casting doesn't any more
-                    value = checked((nint)(long)systemClass.MemberValues[0]!);
-                    return true;
-                case TypeInfo.UIntPtrType:
-                    value = checked((nuint)(ulong)systemClass.MemberValues[0]!);
-                    return true;
-                default:
-                    return false;
-            }
+            return value is not null
+                || format.RootRecord is PrimitiveTypeRecord<string>; // null string value
         }
     }
 
@@ -182,78 +137,38 @@ internal static class BinaryFormattedObjectExtensions
         {
             list = null;
 
-            const string ListTypeName = "System.Collections.Generic.List`1[[";
-
-            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
-                || !classInfo.Name.StartsWith(ListTypeName, StringComparison.Ordinal)
-                || classInfo["_items"] is not MemberReference reference
-                || format[reference] is not ArrayRecord array)
-            {
-                return false;
-            }
-
-            int commaIndex = classInfo.Name.IndexOf(',');
-            if (commaIndex == -1)
-            {
-                return false;
-            }
-
-            ReadOnlySpan<char> typeName = classInfo.Name.AsSpan()[ListTypeName.Length..commaIndex];
-            PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(typeName);
-
-            int size;
-            try
-            {
-                // Lists serialize the entire backing array.
-                if ((size = (int)classInfo["_size"]!) > array.Length)
-                {
-                    return false;
-                }
-            }
-            catch (KeyNotFoundException)
-            {
-                return false;
-            }
-
-            switch (primitiveType)
-            {
-                case default(PrimitiveType):
-                    return false;
-                case PrimitiveType.String:
-                    if (array is ArraySingleString stringArray)
-                    {
-                        List<string> stringList = new(size);
-                        stringList.AddRange((IEnumerable<string>)stringArray.GetStringValues(format.RecordMap));
-                        list = stringList;
-                        return true;
-                    }
-
-                    return false;
-            }
-
-            if (array is not IPrimitiveTypeRecord primitiveArray || primitiveArray.PrimitiveType != primitiveType)
+            if (format.RootRecord is not ClassRecord classInfo
+                || !classInfo.HasMember("_items")
+                || !classInfo.HasMember("_size")
+                || classInfo.GetObject("_size") is not int size
+                || !classInfo.TypeName.IsConstructedGenericType
+                || classInfo.TypeName.GetGenericTypeDefinition().Name != typeof(List<>).Name
+                || classInfo.TypeName.GetGenericArguments().Length != 1
+                || classInfo.GetObject("_items") is not ArrayRecord arrayRecord
+                || !IsPrimitiveArrayRecord(arrayRecord))
             {
                 return false;
             }
 
             // BinaryFormatter serializes the entire backing array, so we need to trim it down to the size of the list.
-            list = primitiveType switch
+            list = arrayRecord switch
             {
-                PrimitiveType.Boolean => ((ArrayRecord<bool>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Byte => ((ArrayRecord<byte>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Char => ((ArrayRecord<char>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Decimal => ((ArrayRecord<decimal>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Double => ((ArrayRecord<double>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Int16 => ((ArrayRecord<short>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Int32 => ((ArrayRecord<int>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Int64 => ((ArrayRecord<long>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.SByte => ((ArrayRecord<sbyte>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.Single => ((ArrayRecord<float>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.TimeSpan => ((ArrayRecord<TimeSpan>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.DateTime => ((ArrayRecord<DateTime>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.UInt16 => ((ArrayRecord<ushort>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.UInt32 => ((ArrayRecord<uint>)array).ArrayObjects.CreateTrimmedList(size),
-                PrimitiveType.UInt64 => ((ArrayRecord<ulong>)array).ArrayObjects.CreateTrimmedList(size),
+                ArrayRecord<string> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<bool> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<byte> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<sbyte> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<char> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<short> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<ushort> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<int> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<uint> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<long> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<ulong> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<float> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<double> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<decimal> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<TimeSpan> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                ArrayRecord<DateTime> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
                 _ => throw new InvalidOperationException()
             };
 
@@ -272,36 +187,27 @@ internal static class BinaryFormattedObjectExtensions
         {
             value = null;
 
-            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
-                || classInfo.Name != typeof(ArrayList).FullName
-                || format[2] is not ArraySingleObject array)
-            {
-                return false;
-            }
-
-            int size;
-            try
-            {
-                // Lists serialize the entire backing array.
-                if ((size = (int)classInfo["_size"]!) > array.Length)
-                {
-                    return false;
-                }
-            }
-            catch (KeyNotFoundException)
+            if (format.RootRecord is not ClassRecord classInfo
+                || !classInfo.IsTypeNameMatching(typeof(ArrayList))
+                || !classInfo.HasMember("_items")
+                || !classInfo.HasMember("_size")
+                || classInfo.GetObject("_size") is not int size
+                || classInfo.GetObject("_items") is not ArrayRecord<object> arrayRecord
+                || size > arrayRecord.Length)
             {
                 return false;
             }
 
             ArrayList arrayList = new(size);
+            object?[] array = arrayRecord.ToArray(maxLength: size);
             for (int i = 0; i < size; i++)
             {
-                if (!format.TryGetPrimitiveRecordValueOrNull((IRecord)array[i]!, out object? item))
+                if (array[i] is SerializationRecord)
                 {
                     return false;
                 }
 
-                arrayList.Add(item);
+                arrayList.Add(array[i]);
             }
 
             value = arrayList;
@@ -318,41 +224,31 @@ internal static class BinaryFormattedObjectExtensions
 
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            value = null;
-            if (format.RootRecord is not ArrayRecord array)
+            if (!IsPrimitiveArrayRecord(format.RootRecord))
             {
+                value = null;
                 return false;
             }
 
-            if (array is ArraySingleString stringArray)
+            value = format.RootRecord switch
             {
-                value = stringArray.GetStringValues(format.RecordMap).ToArray();
-                return true;
-            }
-
-            if (array is not IPrimitiveTypeRecord primitiveArray)
-            {
-                return false;
-            }
-
-            value = primitiveArray.PrimitiveType switch
-            {
-                PrimitiveType.Boolean => ((ArrayRecord<bool>)primitiveArray).ArrayObjects,
-                PrimitiveType.Byte => ((ArrayRecord<byte>)primitiveArray).ArrayObjects,
-                PrimitiveType.Char => ((ArrayRecord<char>)primitiveArray).ArrayObjects,
-                PrimitiveType.Decimal => ((ArrayRecord<decimal>)primitiveArray).ArrayObjects,
-                PrimitiveType.Double => ((ArrayRecord<double>)primitiveArray).ArrayObjects,
-                PrimitiveType.Int16 => ((ArrayRecord<short>)primitiveArray).ArrayObjects,
-                PrimitiveType.Int32 => ((ArrayRecord<int>)primitiveArray).ArrayObjects,
-                PrimitiveType.Int64 => ((ArrayRecord<long>)primitiveArray).ArrayObjects,
-                PrimitiveType.SByte => ((ArrayRecord<sbyte>)primitiveArray).ArrayObjects,
-                PrimitiveType.Single => ((ArrayRecord<float>)primitiveArray).ArrayObjects,
-                PrimitiveType.TimeSpan => ((ArrayRecord<TimeSpan>)primitiveArray).ArrayObjects,
-                PrimitiveType.DateTime => ((ArrayRecord<DateTime>)primitiveArray).ArrayObjects,
-                PrimitiveType.UInt16 => ((ArrayRecord<ushort>)primitiveArray).ArrayObjects,
-                PrimitiveType.UInt32 => ((ArrayRecord<uint>)primitiveArray).ArrayObjects,
-                PrimitiveType.UInt64 => ((ArrayRecord<ulong>)primitiveArray).ArrayObjects,
-                _ => null
+                ArrayRecord<string> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<bool> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<byte> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<sbyte> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<char> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<short> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<ushort> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<int> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<uint> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<long> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<ulong> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<float> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<double> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<decimal> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<TimeSpan> ar => ar.ToArray(maxLength: Array.MaxLength),
+                ArrayRecord<DateTime> ar => ar.ToArray(maxLength: Array.MaxLength),
+                _ => throw new InvalidOperationException()
             };
 
             return value is not null;
@@ -382,20 +278,26 @@ internal static class BinaryFormattedObjectExtensions
 
             // Note that hashtables with custom comparers and/or hash code providers will have that information before
             // the value pair arrays.
-            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
-                || classInfo.Name != TypeInfo.HashtableType
-                || format[2] is not ArraySingleObject keys
-                || format[3] is not ArraySingleObject values
-                || keys.Length != values.Length)
+            if (format.RootRecord is not SystemClassWithMembersAndTypesRecord classInfo
+                || !classInfo.IsTypeNameMatching(typeof(Hashtable))
+                || !classInfo.HasMember("Keys")
+                || !classInfo.HasMember("Values")
+                || classInfo.GetObject("Keys") is not ArrayRecord<object?> keysRecord
+                || classInfo.GetObject("Values") is not ArrayRecord<object?> valuesRecord
+                || keysRecord.Length != valuesRecord.Length)
             {
                 return false;
             }
 
-            Hashtable temp = new(keys.Length);
+            Hashtable temp = new((int)keysRecord.Length);
+            object?[] keys = keysRecord.ToArray(maxLength: Array.MaxLength);
+            object?[] values = valuesRecord.ToArray(maxLength: Array.MaxLength);
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!format.TryGetPrimitiveRecordValue((IRecord?)keys[i], out object? key)
-                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord?)values[i], out object? value))
+                object? key = keys[i];
+                object? value = values[i];
+
+                if (key is null or SerializationRecord || value is SerializationRecord)
                 {
                     return false;
                 }
@@ -406,43 +308,6 @@ internal static class BinaryFormattedObjectExtensions
             hashtable = temp;
             return true;
         }
-    }
-
-    /// <summary>
-    ///  Tries to get the value for the given <paramref name="record"/> if it represents a <see cref="PrimitiveType"/>
-    ///  that isn't <see cref="PrimitiveType.Null"/>.
-    /// </summary>
-    public static bool TryGetPrimitiveRecordValue(
-        this BinaryFormattedObject format,
-        IRecord? record,
-        [NotNullWhen(true)] out object? value)
-    {
-        format.TryGetPrimitiveRecordValueOrNull(record, out value);
-        return value is not null;
-    }
-
-    /// <summary>
-    ///  Tries to get the value for the given <paramref name="record"/> if it represents a <see cref="PrimitiveType"/>.
-    /// </summary>
-    public static bool TryGetPrimitiveRecordValueOrNull(
-        this BinaryFormattedObject format,
-        IRecord? record,
-        out object? value)
-    {
-        value = null;
-        if (record is ObjectNull or null)
-        {
-            return true;
-        }
-
-        value = format.RecordMap.Dereference(record) switch
-        {
-            BinaryObjectString valueString => valueString.Value,
-            MemberPrimitiveTyped primitive => primitive.Value,
-            _ => null,
-        };
-
-        return value is not null;
     }
 
     /// <summary>
@@ -458,13 +323,13 @@ internal static class BinaryFormattedObjectExtensions
         {
             exception = null;
 
-            if (format.RootRecord is not SystemClassWithMembersAndTypes classInfo
-                || classInfo.Name != TypeInfo.NotSupportedExceptionType)
+            if (format.RootRecord is not ClassRecord classInfo
+                || classInfo.IsTypeNameMatching(typeof(NotSupportedException)))
             {
                 return false;
             }
 
-            exception = new NotSupportedException(classInfo["Message"]!.ToString());
+            exception = new NotSupportedException(classInfo.GetString("Message"));
             return true;
         }
     }
@@ -484,23 +349,6 @@ internal static class BinaryFormattedObjectExtensions
             || format.TryGetPointF(out value)
             || format.TryGetNotSupportedException(out value);
 
-    /// <summary>
-    ///  Dereferences <see cref="MemberReference"/> records.
-    /// </summary>
-    public static IRecord Dereference(this IReadOnlyRecordMap recordMap, IRecord record) => record switch
-    {
-        MemberReference reference => recordMap[reference.IdRef],
-        _ => record
-    };
-
-    /// <summary>
-    ///  Gets strings from a <see cref="ArraySingleString"/>.
-    /// </summary>
-    public static IEnumerable<string?> GetStringValues(this ArraySingleString array, IReadOnlyRecordMap recordMap)
-        => array.ArrayObjects.Select(record =>
-            record is null ? null : recordMap.Dereference((IRecord)record) switch
-            {
-                BinaryObjectString stringRecord => stringRecord.Value,
-                _ => null
-            });
+    private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord)
+        => serializationRecord.RecordType is RecordType.ArraySingleString or RecordType.ArraySinglePrimitive;
 }

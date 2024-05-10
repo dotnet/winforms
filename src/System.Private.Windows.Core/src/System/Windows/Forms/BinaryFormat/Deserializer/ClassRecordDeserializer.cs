@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
@@ -28,7 +29,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
     internal static ObjectRecordDeserializer Create(ClassRecord classRecord, IDeserializer deserializer)
     {
-        Type type = deserializer.TypeResolver.GetType(classRecord.Name, classRecord.LibraryId);
+        Type type = deserializer.TypeResolver.GetType(classRecord.TypeName, classRecord.LibraryName);
         Id id = classRecord.ObjectId;
 
         ISerializationSurrogate? surrogate = deserializer.GetSurrogate(type);

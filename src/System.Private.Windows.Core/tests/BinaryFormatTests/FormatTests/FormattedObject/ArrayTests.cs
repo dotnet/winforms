@@ -1,11 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Windows.Forms.BinaryFormat;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 
@@ -18,48 +17,12 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     }
 
     [Theory]
-    [MemberData(nameof(ArrayInfo_ParseSuccessData))]
-    public void ArrayInfo_Parse_Success(Stream stream, int expectedId, int expectedLength)
-    {
-        using BinaryReader reader = new(stream);
-        Id id = ArrayInfo.Parse(reader, out Count length);
-        id.Should().Be((Id)expectedId);
-        length.Should().Be(expectedLength);
-        length.Should().Be(expectedLength);
-    }
-
-    public static TheoryData<Stream, int, int> ArrayInfo_ParseSuccessData => new()
-    {
-        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]), 0, 0 },
-        { new MemoryStream([0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]), 1, 1 },
-        { new MemoryStream([0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]), 2, 1 },
-        { new MemoryStream([0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF, 0x7F]), int.MaxValue, int.MaxValue }
-    };
-
-    [Theory]
-    [MemberData(nameof(ArrayInfo_ParseNegativeData))]
-    public void ArrayInfo_Parse_Negative(Stream stream, Type expectedException)
-    {
-        using BinaryReader reader = new(stream);
-        Assert.Throws(expectedException, () => ArrayInfo.Parse(reader, out Count length));
-    }
-
-    public static TheoryData<Stream, Type> ArrayInfo_ParseNegativeData => new()
-    {
-        // Not enough data
-        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]), typeof(EndOfStreamException) },
-        { new MemoryStream([0x00, 0x00, 0x00]), typeof(EndOfStreamException) },
-        // Negative numbers
-        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF]), typeof(ArgumentOutOfRangeException) }
-    };
-
-    [Theory]
     [MemberData(nameof(StringArray_Parse_Data))]
     public void StringArray_Parse(string?[] strings)
     {
         BinaryFormattedObject format = new(Serialize(strings));
-        ArraySingleString array = (ArraySingleString)format.RootRecord;
-        array.GetStringValues(format.RecordMap).Should().BeEquivalentTo(strings);
+        var arrayRecord = (ArrayRecord<string>)format.RootRecord;
+        arrayRecord.ToArray().Should().BeEquivalentTo(strings);
     }
 
     public static TheoryData<string?[]> StringArray_Parse_Data => new()
@@ -74,8 +37,8 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     public void PrimitiveArray_Parse(Array array)
     {
         BinaryFormattedObject format = new(Serialize(array));
-        ArrayRecord arrayRecord = (ArrayRecord)format.RootRecord;
-        arrayRecord.Should().BeEquivalentTo((IEnumerable)array);
+        var arrayRecord = (ArrayRecord<string>)format.RootRecord;
+        arrayRecord.Should().BeEquivalentTo(arrayRecord.ToArray());
     }
 
     public static TheoryData<Array> PrimitiveArray_Parse_Data => new()

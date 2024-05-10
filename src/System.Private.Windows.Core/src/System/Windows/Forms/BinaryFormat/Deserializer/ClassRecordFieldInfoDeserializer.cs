@@ -14,14 +14,14 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </summary>
 internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly ClassRecord _classRecord;
+    private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
     private readonly MemberInfo[] _fieldInfo;
     private int _currentFieldIndex;
     private readonly bool _isValueType;
     private bool _hasFixups;
 
     internal ClassRecordFieldInfoDeserializer(
-        ClassRecord classRecord,
+        Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
         object @object,
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields | DynamicallyAccessedMemberTypes.PublicFields)]
         Type type,
@@ -53,7 +53,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
             object? rawValue;
             try
             {
-                rawValue = _classRecord[field.Name];
+                rawValue = _classRecord.GetObject(field.Name);
             }
             catch (KeyNotFoundException)
             {

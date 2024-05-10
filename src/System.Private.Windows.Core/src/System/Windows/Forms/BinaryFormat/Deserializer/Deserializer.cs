@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
@@ -47,7 +48,7 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </devdoc>
 internal sealed partial class Deserializer : IDeserializer
 {
-    private readonly IReadOnlyRecordMap _recordMap;
+    private readonly IReadOnlyDictionary<int, SerializationRecord> _recordMap;
     private readonly BinaryFormattedObject.ITypeResolver _typeResolver;
     BinaryFormattedObject.ITypeResolver IDeserializer.TypeResolver => _typeResolver;
 
@@ -98,7 +99,7 @@ internal sealed partial class Deserializer : IDeserializer
 
     private Deserializer(
         Id rootId,
-        IReadOnlyRecordMap recordMap,
+        IReadOnlyDictionary<int, SerializationRecord> recordMap,
         BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
@@ -119,7 +120,7 @@ internal sealed partial class Deserializer : IDeserializer
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.Deserializer.Deserialize()")]
     internal static object Deserialize(
         Id rootId,
-        IReadOnlyRecordMap recordMap,
+        IReadOnlyDictionary<int, SerializationRecord> recordMap,
         BinaryFormattedObject.ITypeResolver typeResolver,
         BinaryFormattedObject.Options options)
     {
@@ -196,7 +197,7 @@ internal sealed partial class Deserializer : IDeserializer
             {
                 // A record is required to complete the current parser. Get it.
                 object requiredObject = DeserializeNew(requiredId);
-                Debug.Assert(requiredObject is not IRecord);
+                Debug.Assert(requiredObject is not SerializationRecord);
 
                 if (requiredObject is ObjectRecordDeserializer requiredParser)
                 {
@@ -230,27 +231,39 @@ internal sealed partial class Deserializer : IDeserializer
             // level or are boxed into an interface reference. Checking for these requires costly
             // string matches and as such we'll just create the parser object.
 
-            IRecord record = _recordMap[id];
-            if (record is BinaryObjectString binaryString)
+            SerializationRecord record = _recordMap[id];
+            if (record is BinaryObjectStringRecord binaryString)
             {
                 _deserializedObjects.Add(id, binaryString.Value);
                 return binaryString.Value;
             }
 
-            if (record is ArrayRecord arrayRecord)
+            if (record.RecordType is RecordType.ArraySingleString or RecordType.ArraySinglePrimitive)
             {
-                Array? values = arrayRecord switch
+                Array? values = record switch
                 {
-                    ArraySingleString stringArray => stringArray.GetStringValues(_recordMap).ToArray(),
-                    IPrimitiveTypeRecord primitiveArray => primitiveArray.GetPrimitiveArray(),
+                    ArrayRecord<string> stringArray => stringArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<bool> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<byte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<sbyte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<char> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<short> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<ushort> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<int> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<uint> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<long> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<ulong> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<float> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<double> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<decimal> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<DateTime> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+                    ArrayRecord<TimeSpan> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
                     _ => null
                 };
 
-                if (values is not null)
-                {
-                    _deserializedObjects.Add(arrayRecord.ObjectId, values);
-                    return values;
-                }
+                Debug.Assert(values is not null);
+                _deserializedObjects.Add(record.ObjectId, values);
+                return values;
             }
 
             // Not a simple case, need to do a full deserialization of the record.
@@ -348,7 +361,7 @@ internal sealed partial class Deserializer : IDeserializer
                 // There are no remaining dependencies. Hook any finished events for this object.
                 // Doing at the end of deserialization for simplicity.
 
-                Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
+                Type type = _typeResolver.GetType(classRecord.TypeName, classRecord.LibraryName);
                 object @object = _deserializedObjects[completedId];
 
                 OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
