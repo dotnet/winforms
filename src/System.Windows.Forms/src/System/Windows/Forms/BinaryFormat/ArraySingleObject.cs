@@ -15,17 +15,13 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class ArraySingleObject :
     ArrayRecord<object?>,
-    IRecord<ArraySingleObject>,
-    IBinaryFormatParseable<ArraySingleObject>
+    IRecord<ArraySingleObject>
 {
     public static RecordType RecordType => RecordType.ArraySingleObject;
 
     public ArraySingleObject(Id objectId, IReadOnlyList<object?> arrayObjects)
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     { }
-
-    static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(BinaryFormattedObject.IParseState state) =>
-        new(ArrayInfo.Parse(state.Reader, out Count length), ReadObjectArrayValues(state, length));
 
     public override void Write(BinaryWriter writer)
     {

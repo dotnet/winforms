@@ -15,8 +15,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class SystemClassWithMembersAndTypes :
     ClassRecord,
-    IRecord<SystemClassWithMembersAndTypes>,
-    IBinaryFormatParseable<SystemClassWithMembersAndTypes>
+    IRecord<SystemClassWithMembersAndTypes>
 {
     public SystemClassWithMembersAndTypes(
         ClassInfo classInfo,
@@ -35,18 +34,6 @@ internal sealed class SystemClassWithMembersAndTypes :
     }
 
     public static RecordType RecordType => RecordType.SystemClassWithMembersAndTypes;
-
-    static SystemClassWithMembersAndTypes IBinaryFormatParseable<SystemClassWithMembersAndTypes>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(state.Reader, memberCount);
-
-        return new(
-            classInfo,
-            memberTypeInfo,
-            ReadObjectMemberValues(state, memberTypeInfo));
-    }
 
     public override void Write(BinaryWriter writer)
     {

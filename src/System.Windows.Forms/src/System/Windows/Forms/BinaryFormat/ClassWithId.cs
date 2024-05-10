@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.Serialization;
-
 namespace System.Windows.Forms.BinaryFormat;
 
 /// <summary>
@@ -15,7 +13,7 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFormatParseable<ClassWithId>
+internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
 {
     private readonly ClassRecord _metadataClass;
 
@@ -44,23 +42,6 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
 
     public static RecordType RecordType => RecordType.ClassWithId;
 
-    static ClassWithId IBinaryFormatParseable<ClassWithId>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        Id objectId = state.Reader.ReadInt32();
-        Id metadataId = state.Reader.ReadInt32();
-
-        if (state.RecordMap[metadataId] is not ClassRecord referencedRecord)
-        {
-            throw new SerializationException("Invalid referenced record type.");
-        }
-
-        return new(
-            objectId,
-            referencedRecord,
-            ReadObjectMemberValues(state, referencedRecord.MemberTypeInfo));
-    }
-
     public override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
@@ -75,11 +56,10 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
             case SystemClassWithMembersAndTypes systemClassWithMembersAndTypes:
                 WriteValuesFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
                 break;
-            case ClassWithMembers or SystemClassWithMembers:
-                WriteRecords(writer, MemberValues, coalesceNulls: false);
-                break;
             default:
-                throw new SerializationException();
+                // Really shouldn't be writing this record type. It isn't as safe as the typed variant
+                // and saves very little space.
+                throw new NotSupportedException();
         }
     }
 

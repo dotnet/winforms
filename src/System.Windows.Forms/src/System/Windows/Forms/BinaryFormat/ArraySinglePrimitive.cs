@@ -15,9 +15,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class ArraySinglePrimitive<T> :
     ArrayRecord<T>,
-    IBinaryFormatParseable<ArrayRecord>,
-    IRecord<ArraySinglePrimitive<T>>,
-    IPrimitiveTypeRecord
+    IRecord<ArraySinglePrimitive<T>>
     where T : unmanaged
 {
     public PrimitiveType PrimitiveType { get; }
@@ -28,16 +26,6 @@ internal sealed class ArraySinglePrimitive<T> :
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     {
         PrimitiveType = TypeInfo.GetPrimitiveType(typeof(T));
-    }
-
-    static ArrayRecord IBinaryFormatParseable<ArrayRecord>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        Id id = ArrayInfo.Parse(state.Reader, out Count length);
-        PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
-        Debug.Assert(typeof(T) == primitiveType.GetPrimitiveTypeType());
-
-        return new ArraySinglePrimitive<T>(id, state.Reader.ReadPrimitiveArray<T>(length));
     }
 
     public override void Write(BinaryWriter writer)

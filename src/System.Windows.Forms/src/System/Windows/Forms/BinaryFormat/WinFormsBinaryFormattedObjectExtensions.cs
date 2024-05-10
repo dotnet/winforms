@@ -20,15 +20,15 @@ internal static class WinFormsBinaryFormattedObjectExtensions
         {
             imageListStreamer = null;
 
-            if (format.RootRecord is not ClassWithMembersAndTypes types
-                || types.ClassInfo.Name != typeof(ImageListStreamer).FullName
-                || format[3] is not ArraySinglePrimitive<byte> data)
+            if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
+                || !types.IsTypeNameMatching(typeof(ImageListStreamer))
+                || !types.HasMember("Data")
+                || types.GetObject("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
             {
                 return false;
             }
 
-            Debug.Assert(data.ArrayObjects is byte[]);
-            imageListStreamer = new ImageListStreamer((byte[])data.ArrayObjects);
+            imageListStreamer = new ImageListStreamer(data.ToArray(maxLength: Array.MaxLength));
             return true;
         }
     }
@@ -40,15 +40,15 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     {
         bitmap = null;
 
-        if (format.RootRecord is not ClassWithMembersAndTypes types
-            || types.ClassInfo.Name != typeof(Bitmap).FullName
-            || format[3] is not ArraySinglePrimitive<byte> data)
+        if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
+            || !types.IsTypeNameMatching(typeof(Bitmap))
+            || !types.HasMember("Data")
+            || types.GetObject("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
         {
             return false;
         }
 
-        Debug.Assert(data.ArrayObjects is byte[]);
-        bitmap = new Bitmap(new MemoryStream((byte[])data.ArrayObjects));
+        bitmap = new Bitmap(new MemoryStream(data.ToArray(maxLength: Array.MaxLength)));
         return true;
     }
 

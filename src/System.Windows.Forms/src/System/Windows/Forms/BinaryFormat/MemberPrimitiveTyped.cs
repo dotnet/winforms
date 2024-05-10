@@ -15,9 +15,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class MemberPrimitiveTyped :
     Record,
-    IRecord<MemberPrimitiveTyped>,
-    IPrimitiveTypeRecord,
-    IBinaryFormatParseable<MemberPrimitiveTyped>
+    IRecord<MemberPrimitiveTyped>
 {
     public PrimitiveType PrimitiveType { get; }
     public object Value { get; }
@@ -42,15 +40,6 @@ internal sealed class MemberPrimitiveTyped :
     }
 
     public static RecordType RecordType => RecordType.MemberPrimitiveTyped;
-
-    static MemberPrimitiveTyped IBinaryFormatParseable<MemberPrimitiveTyped>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        PrimitiveType primitiveType = (PrimitiveType)state.Reader.ReadByte();
-        return new(
-            primitiveType,
-            ReadPrimitiveType(state.Reader, primitiveType));
-    }
 
     public override void Write(BinaryWriter writer)
     {
