@@ -37,19 +37,15 @@ internal sealed class SystemClassWithMembersAndTypes :
     public static RecordType RecordType => RecordType.SystemClassWithMembersAndTypes;
 
     static SystemClassWithMembersAndTypes IBinaryFormatParseable<SystemClassWithMembersAndTypes>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
         MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(state.Reader, memberCount);
 
-        SystemClassWithMembersAndTypes record = new(
+        return new(
             classInfo,
             memberTypeInfo,
-            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
-
-        // Index this record by the id of the embedded ClassInfo's object id.
-        state.RecordMap[record.ClassInfo.ObjectId] = record;
-        return record;
+            ReadObjectMemberValues(state, memberTypeInfo));
     }
 
     public override void Write(BinaryWriter writer)

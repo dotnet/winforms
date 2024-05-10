@@ -17,14 +17,14 @@ public class WinFormsBinaryFormattedObjectTests
     public void BinaryFormattedObject_Bitmap_FromBinaryFormatter()
     {
         using Bitmap bitmap = new(10, 10);
-        BinaryFormattedObject binary = bitmap.SerializeAndParse();
-        binary.RecordCount.Should().Be(5);
-        binary[1].Should().BeOfType<BinaryLibrary>().Which
+        BinaryFormattedObject format = bitmap.SerializeAndParse();
+        ClassWithMembersAndTypes root = format.RootRecord.Should().BeOfType<ClassWithMembersAndTypes>().Subject;
+        root.Name.Should().Be(typeof(Bitmap).FullName);
+        format[root.LibraryId].Should().BeOfType<BinaryLibrary>().Which
             .LibraryName.Should().Be(AssemblyRef.SystemDrawing);
-        binary[2].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be(typeof(Bitmap).FullName);
-        binary[3].Should().BeOfType<ArraySinglePrimitive<byte>>();
-
-        binary.TryGetBitmap(out object? result).Should().BeTrue();
+        MemberReference reference = root["Data"].Should().BeOfType<MemberReference>().Subject;
+        format[reference].Should().BeOfType<ArraySinglePrimitive<byte>>();
+        format.TryGetBitmap(out object? result).Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
     }
@@ -72,14 +72,15 @@ public class WinFormsBinaryFormattedObjectTests
         sourceList.Images.Add(image);
         using ImageListStreamer stream = sourceList.ImageStream!;
 
-        BinaryFormattedObject binary = stream.SerializeAndParse();
-        binary.RecordCount.Should().Be(5);
-        binary[1].Should().BeOfType<BinaryLibrary>().Which
+        BinaryFormattedObject format = stream.SerializeAndParse();
+        ClassWithMembersAndTypes root = format.RootRecord.Should().BeOfType<ClassWithMembersAndTypes>().Subject;
+        root.Name.Should().Be(typeof(ImageListStreamer).FullName);
+        format[root.LibraryId].Should().BeOfType<BinaryLibrary>().Which
             .LibraryName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
-        binary[2].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be(typeof(ImageListStreamer).FullName);
-        binary[3].Should().BeOfType<ArraySinglePrimitive<byte>>();
+        MemberReference reference = root["Data"].Should().BeOfType<MemberReference>().Subject;
+        format[reference].Should().BeOfType<ArraySinglePrimitive<byte>>();
 
-        binary.TryGetImageListStreamer(out object? result).Should().BeTrue();
+        format.TryGetImageListStreamer(out object? result).Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
         using ImageList newList = new();
         newList.ImageStream = deserialized;

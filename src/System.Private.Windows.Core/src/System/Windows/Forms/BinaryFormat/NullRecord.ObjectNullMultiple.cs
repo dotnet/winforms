@@ -25,7 +25,7 @@ internal abstract partial class NullRecord
         public ObjectNullMultiple(Count count) => NullCount = count;
 
         static ObjectNullMultiple IBinaryFormatParseable<ObjectNullMultiple>.Parse(
-            BinaryFormattedObject.ParseState state)
+            BinaryFormattedObject.IParseState state)
             => new(state.Reader.ReadInt32());
 
         public void Write(BinaryWriter writer)

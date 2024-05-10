@@ -218,6 +218,26 @@ public class ComboBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 0)]
+    [InlineData(5, 5)]
+    [InlineData(-1, 0)]
+    [InlineData(int.MaxValue, int.MaxValue)]
+    public void ComboBox_MaxLength_Set_GetReturnsExpected(int value, int expected)
+    {
+        using ComboBox control = new();
+        control.MaxLength = value;
+        control.MaxLength.Should().Be(expected);
+        control.IsHandleCreated.Should().BeFalse();
+
+        if (control.Handle != IntPtr.Zero)
+        {
+            control.MaxLength = value;
+            control.MaxLength.Should().Be(expected);
+            control.IsHandleCreated.Should().BeTrue();
+        }
+    }
+
     [WinFormsFact]
     public void ComboBox_BackColor_SetWithHandler_CallsBackColorChanged()
     {

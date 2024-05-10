@@ -4,52 +4,52 @@
     <body>
       <trans-unit id="$this.Text">
         <source>TreeNode Editor</source>
-        <target state="new">TreeNode Editor</target>
+        <target state="translated">Editor objektu TreeNode</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddChild.Text">
         <source>Add &amp;Child</source>
-        <target state="new">Add &amp;Child</target>
+        <target state="translated">Přidat &amp;podřízený</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddRoot.Text">
         <source>Add &amp;Root</source>
-        <target state="new">Add &amp;Root</target>
+        <target state="translated">Přidat &amp;kořen</target>
         <note />
       </trans-unit>
       <trans-unit id="btnCancel.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Zrušit</target>
         <note />
       </trans-unit>
       <trans-unit id="btnDelete.AccessibleName">
         <source>Delete Node</source>
-        <target state="new">Delete Node</target>
+        <target state="translated">Odstranit uzel</target>
         <note />
       </trans-unit>
       <trans-unit id="label1.Text">
         <source>Select a &amp;node to edit:</source>
-        <target state="new">Select a &amp;node to edit:</target>
+        <target state="translated">Vyberte &amp;uzel, který chcete upravit:</target>
         <note />
       </trans-unit>
       <trans-unit id="label2.Text">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">&amp;Vlastnosti:</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDownButton.AccessibleName">
         <source>Move Down</source>
-        <target state="new">Move Down</target>
+        <target state="translated">Přesunout dolů</target>
         <note />
       </trans-unit>
       <trans-unit id="moveUpButton.AccessibleName">
         <source>Move Up</source>
-        <target state="new">Move Up</target>
+        <target state="translated">Přesunout nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
     </body>

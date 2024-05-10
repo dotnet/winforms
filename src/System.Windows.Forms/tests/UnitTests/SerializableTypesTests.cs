@@ -368,7 +368,7 @@ public class SerializableTypesTests
             Assert.Equal("node1", result.Text);
             Assert.Equal(-1, result.ImageIndex); // No image list
             Assert.Equal("key", result.SelectedImageKey);
-            Assert.Equal(2, result._childNodes.Count);
+            Assert.Equal(2, result._childCount);
             Assert.Equal("node2", result.FirstNode.Text);
             Assert.Equal("node3", result.LastNode.Text);
             Assert.Equal("tool tip text", result.ToolTipText);

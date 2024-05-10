@@ -7,19 +7,19 @@ namespace System.Windows.Forms.BinaryFormat;
 
 internal readonly ref struct BinaryFormatWriterScope
 {
-    private readonly BinaryWriter _writer;
+    internal BinaryWriter Writer { get; }
 
     public BinaryFormatWriterScope(Stream stream)
     {
-        _writer = new BinaryWriter(stream, Encoding.UTF8, leaveOpen: true);
-        SerializationHeader.Default.Write(_writer);
+        Writer = new BinaryWriter(stream, Encoding.UTF8, leaveOpen: true);
+        SerializationHeader.Default.Write(Writer);
     }
 
-    public static implicit operator BinaryWriter(in BinaryFormatWriterScope scope) => scope._writer;
+    public static implicit operator BinaryWriter(in BinaryFormatWriterScope scope) => scope.Writer;
 
     public void Dispose()
     {
-        MessageEnd.Instance.Write(_writer);
-        _writer.Dispose();
+        MessageEnd.Instance.Write(Writer);
+        Writer.Dispose();
     }
 }

@@ -239,7 +239,7 @@ internal static class BinaryFormatWriter
 
         StringRecordsCollection strings = new(currentId: 3);
 
-        new ArraySingleString(2, new ListConverter<string, object>(list, strings.GetStringRecord)).Write(writer);
+        new ArraySingleString(2, new ListConverter<string, object?>(list, strings.GetStringRecord)).Write(writer);
     }
 
     /// <summary>
@@ -488,8 +488,8 @@ internal static class BinaryFormatWriter
             info.GetValue<float>("LoadFactor"),
             info.GetValue<int>("Version"),
             // No need to persist the comparer and hashcode provider
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
             info.GetValue<int>("HashSize"),
             // MemberReference to Arrays here
             new MemberReference(2),
@@ -527,16 +527,16 @@ internal static class BinaryFormatWriter
                 (BinaryType.PrimitiveArray, PrimitiveType.Byte)),
             new BinaryObjectString(2, TypeInfo.NotSupportedExceptionType),
             new BinaryObjectString(3, exception.Message),
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
-            ObjectNull.Instance,
+            null,
+            null,
+            null,
+            null,
+            null,
             0,
-            ObjectNull.Instance,
+            null,
             exception.HResult,
-            ObjectNull.Instance,
-            ObjectNull.Instance).Write(writer);
+            null,
+            null).Write(writer);
     }
 
     /// <summary>

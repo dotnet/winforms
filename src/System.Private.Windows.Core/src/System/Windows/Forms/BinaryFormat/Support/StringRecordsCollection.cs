@@ -19,11 +19,11 @@ internal class StringRecordsCollection
     /// <summary>
     ///  Returns the appropriate record for the given string.
     /// </summary>
-    public IRecord GetStringRecord(string? value)
+    public IRecord? GetStringRecord(string? value)
     {
         if (value is null)
         {
-            return ObjectNull.Instance;
+            return null;
         }
 
         if (_strings.TryGetValue(value, out int id))

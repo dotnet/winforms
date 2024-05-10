@@ -26,20 +26,16 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
     public static RecordType RecordType => RecordType.ClassWithMembers;
 
     static ClassWithMembers IBinaryFormatParseable<ClassWithMembers>.Parse(
-        BinaryFormattedObject.ParseState state)
+        BinaryFormattedObject.IParseState state)
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
         Id libraryId = state.Reader.ReadInt32();
         MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, libraryId);
-        ClassWithMembers record = new(
+        return new(
             classInfo,
             libraryId,
             memberTypeInfo,
-            ReadValuesFromMemberTypeInfo(state, memberTypeInfo));
-
-        // Index this record by the id of the embedded ClassInfo's object id.
-        state.RecordMap[classInfo.ObjectId] = record;
-        return record;
+            ReadObjectMemberValues(state, memberTypeInfo));
     }
 
     public override void Write(BinaryWriter writer)
