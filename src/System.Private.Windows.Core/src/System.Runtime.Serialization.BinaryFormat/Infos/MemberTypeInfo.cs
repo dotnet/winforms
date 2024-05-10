@@ -182,16 +182,74 @@ internal readonly struct MemberTypeInfo
     {
         (BinaryType binaryType, object? additionalInfo) = Infos[0];
 
+        return binaryType switch
+        {
+            BinaryType.SystemClass => !((TypeName)additionalInfo!).IsSZArray,
+            BinaryType.Class => !((ClassTypeInfo)additionalInfo!).TypeName.IsSZArray,
+            _ => false
+        };
+    }
+
+    internal TypeName GetElementTypeName()
+    {
+        (BinaryType binaryType, object? additionalInfo) = Infos[0];
+
         switch (binaryType)
         {
+            case BinaryType.String:
+                return TypeName.Parse(typeof(string).FullName.AsSpan());
+            case BinaryType.StringArray:
+                return TypeName.Parse(typeof(string[]).FullName.AsSpan());
+            case BinaryType.Object:
+                return TypeName.Parse(typeof(object).FullName.AsSpan());
+            case BinaryType.ObjectArray:
+                return TypeName.Parse(typeof(object[]).FullName.AsSpan());
+            case BinaryType.Primitive:
+            case BinaryType.PrimitiveArray:
+                string? name = ((PrimitiveType)additionalInfo!) switch
+                {
+                    PrimitiveType.Boolean => typeof(bool).FullName,
+                    PrimitiveType.Byte => typeof(byte).FullName,
+                    PrimitiveType.Char => typeof(char).FullName,
+                    PrimitiveType.Decimal => typeof(decimal).FullName,
+                    PrimitiveType.Double => typeof(double).FullName,
+                    PrimitiveType.Int16 => typeof(short).FullName,
+                    PrimitiveType.Int32 => typeof(int).FullName,
+                    PrimitiveType.Int64 => typeof(long).FullName,
+                    PrimitiveType.SByte => typeof(sbyte).FullName,
+                    PrimitiveType.Single => typeof(float).FullName,
+                    PrimitiveType.TimeSpan => typeof(TimeSpan).FullName,
+                    PrimitiveType.DateTime => typeof(DateTime).FullName,
+                    PrimitiveType.UInt16 => typeof(ushort).FullName,
+                    PrimitiveType.UInt32 => typeof(uint).FullName,
+                    PrimitiveType.UInt64 => typeof(ulong).FullName,
+                    _ => throw new NotSupportedException()
+                };
+
+                return binaryType is BinaryType.PrimitiveArray
+                    ? TypeName.Parse($"{name}[]".AsSpan())
+                    : TypeName.Parse(name.AsSpan());
+
             case BinaryType.SystemClass:
-                TypeName typeName = (TypeName)additionalInfo!;
-                return !typeName.IsSZArray;
+                return (TypeName)additionalInfo!;
             case BinaryType.Class:
                 ClassTypeInfo typeInfo = (ClassTypeInfo)additionalInfo!;
-                return !typeInfo.TypeName.IsSZArray;
+                return typeInfo.TypeName;
             default:
-                return false;
+                throw new NotSupportedException();
         }
+    }
+
+    internal AssemblyNameInfo GetElementLibraryName(RecordMap recordMap)
+    {
+        (BinaryType binaryType, object? additionalInfo) = Infos[0];
+
+        if (binaryType is BinaryType.Class)
+        {
+            ClassTypeInfo typeInfo = (ClassTypeInfo)additionalInfo!;
+            return ((BinaryLibraryRecord)recordMap[typeInfo.LibraryId]).LibraryName;
+        }
+
+        return FormatterServices.CoreLibAssemblyName;
     }
 }

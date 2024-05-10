@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection.Metadata;
+
 namespace System.Runtime.Serialization.BinaryFormat;
 
 /// <summary>
@@ -15,9 +17,15 @@ namespace System.Runtime.Serialization.BinaryFormat;
 /// </remarks>
 internal sealed class ArraySingleObjectRecord : ArrayRecord<object?>
 {
+    private static TypeName? s_elementTypeName;
+
     private ArraySingleObjectRecord(ArrayInfo arrayInfo) : base(arrayInfo) => Records = [];
 
     public override RecordType RecordType => RecordType.ArraySingleObject;
+
+    public override TypeName ElementTypeName => s_elementTypeName ??= TypeName.Parse(typeof(object).FullName.AsSpan());
+
+    public override AssemblyNameInfo ElementTypeLibraryName => FormatterServices.CoreLibAssemblyName;
 
     private List<SerializationRecord> Records { get; }
 

@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection.Metadata;
+
 namespace System.Runtime.Serialization.BinaryFormat;
 
 public abstract class ArrayRecord : SerializationRecord
@@ -27,6 +29,10 @@ public abstract class ArrayRecord : SerializationRecord
     /// Type of the array.
     /// </summary>
     public ArrayType ArrayType => ArrayInfo.ArrayType;
+
+    public abstract TypeName ElementTypeName { get; }
+
+    public abstract AssemblyNameInfo ElementTypeLibraryName { get; }
 
     public override int ObjectId => ArrayInfo.ObjectId;
 

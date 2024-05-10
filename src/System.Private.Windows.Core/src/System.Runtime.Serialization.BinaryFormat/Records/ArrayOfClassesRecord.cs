@@ -1,15 +1,20 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection.Metadata;
+
 namespace System.Runtime.Serialization.BinaryFormat;
 
 internal sealed class ArrayOfClassesRecord : ArrayRecord<ClassRecord>
 {
+    private AssemblyNameInfo? _elementTypeLibraryName;
+
     internal ArrayOfClassesRecord(ArrayInfo arrayInfo, MemberTypeInfo memberTypeInfo, RecordMap recordMap)
         : base(arrayInfo)
     {
         MemberTypeInfo = memberTypeInfo;
         RecordMap = recordMap;
+        ElementTypeName = MemberTypeInfo.GetElementTypeName();
         Records = [];
     }
 
@@ -20,6 +25,10 @@ internal sealed class ArrayOfClassesRecord : ArrayRecord<ClassRecord>
     private MemberTypeInfo MemberTypeInfo { get; }
 
     private RecordMap RecordMap { get; }
+
+    public override TypeName ElementTypeName { get; }
+
+    public override AssemblyNameInfo ElementTypeLibraryName => _elementTypeLibraryName ??= MemberTypeInfo.GetElementLibraryName(RecordMap);
 
     protected override ClassRecord?[] ToArrayOfT(bool allowNulls)
     {

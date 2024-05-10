@@ -31,8 +31,11 @@ public static class PayloadReader
     /// <remarks><para>It does not modify the position of the stream.</para></remarks>
     public static bool ContainsBinaryFormatterPayload(Stream stream)
     {
+#if NETCOREAPP
         ArgumentNullException.ThrowIfNull(stream);
-
+#else
+        if (stream is null) throw new ArgumentNullException(nameof(stream));
+#endif
         // TODO: discuss an alternative approach, where we would parse SerializedStreamHeaderRecord
         // here and return false on failure
 
@@ -82,7 +85,11 @@ public static class PayloadReader
     /// <inheritdoc cref="Read(Stream, PayloadOptions?, bool)"/>
     public static SerializationRecord Read(Stream payload, out IReadOnlyDictionary<int, SerializationRecord> recordMap, PayloadOptions? options = default, bool leaveOpen = false)
     {
+#if NETCOREAPP
         ArgumentNullException.ThrowIfNull(payload);
+#else
+        if (payload is null) throw new ArgumentNullException(nameof(payload));
+#endif
 
         using BinaryReader reader = new(payload, ThrowOnInvalidUtf8Encoding, leaveOpen: leaveOpen);
         return Read(reader, options ?? new(), out recordMap);

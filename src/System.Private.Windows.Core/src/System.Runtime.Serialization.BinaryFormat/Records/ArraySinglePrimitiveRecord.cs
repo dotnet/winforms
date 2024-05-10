@@ -3,6 +3,7 @@
 
 using System.Buffers;
 using System.Globalization;
+using System.Reflection.Metadata;
 
 namespace System.Runtime.Serialization.BinaryFormat;
 
@@ -19,6 +20,9 @@ namespace System.Runtime.Serialization.BinaryFormat;
 internal class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
     where T : unmanaged
 {
+    private static TypeName? s_elementTypeName;
+    private static AssemblyNameInfo? s_elementTypeLibraryName;
+
     internal ArraySinglePrimitiveRecord(ArrayInfo arrayInfo, IReadOnlyList<T> values) : base(arrayInfo)
     {
         Values = values;
@@ -26,6 +30,10 @@ internal class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
     }
 
     public override RecordType RecordType => RecordType.ArraySinglePrimitive;
+
+    public override TypeName ElementTypeName => s_elementTypeName ??= TypeName.Parse(typeof(T).FullName.AsSpan());
+
+    public override AssemblyNameInfo ElementTypeLibraryName => s_elementTypeLibraryName ??= AssemblyNameInfo.Parse(FormatterServices.GetAssemblyNameIncludingTypeForwards(typeof(T)).AsSpan());
 
     internal IReadOnlyList<T> Values { get; }
 

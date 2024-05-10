@@ -21,7 +21,11 @@ internal sealed class RecordMap : IReadOnlyDictionary<int, SerializationRecord>
 
     public bool ContainsKey(int key) => _map.ContainsKey(key);
 
-    public bool TryGetValue(int key, [MaybeNullWhen(false)] out SerializationRecord value) => _map.TryGetValue(key, out value);
+    public bool TryGetValue(int key,
+#if NETCOREAPP
+        [MaybeNullWhen(false)]
+#endif
+        out SerializationRecord value) => _map.TryGetValue(key, out value);
 
     public IEnumerator<KeyValuePair<int, SerializationRecord>> GetEnumerator() => _map.GetEnumerator();
 
