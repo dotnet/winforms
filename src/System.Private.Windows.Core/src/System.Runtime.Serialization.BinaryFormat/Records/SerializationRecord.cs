@@ -23,7 +23,7 @@ public abstract class SerializationRecord
 
     public abstract RecordType RecordType { get; }
 
-    internal virtual int ObjectId => NoId;
+    public virtual int ObjectId => NoId;
 
     /// <summary>
     /// Compares the type and assembly name read from the payload against the specified type.

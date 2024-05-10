@@ -23,7 +23,7 @@ internal sealed class BinaryObjectStringRecord : PrimitiveTypeRecord<string>
 
     public override RecordType RecordType => RecordType.BinaryObjectString;
 
-    internal override int ObjectId { get; }
+    public override int ObjectId { get; }
 
     internal static BinaryObjectStringRecord Parse(BinaryReader reader)
         => new(reader.ReadInt32(), reader.ReadString());
