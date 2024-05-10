@@ -1395,126 +1395,120 @@ public class DomainUpDownTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [WinFormsTheory]
-    [InlineData(0, 1, false)]
-    [InlineData(1, 2, false)]
-    [InlineData(2, 2, false)] 
-    [InlineData(2, 0, true)] 
-    public void DomainUpDown_DownButton_InvokeWithItems_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
-    {
-        using DomainUpDown control = new();
-        control.Items.Add("Item1");
-        control.Items.Add("Item2");
-        control.Items.Add("Item3");
-        control.SelectedIndex = initialIndex;
-        control.Wrap = wrap;
+     public class DomainUpDownTests1 : IDisposable
+     {
+        private readonly DomainUpDown _control;
 
-        control.DownButton();
-
-        control.SelectedIndex.Should().Be(expectedIndex);
-    }
-
-    [WinFormsTheory]
-    [InlineData(0, 2, false)]
-    [InlineData(1, 2, false)]
-    [InlineData(2, 2, false)] 
-    [InlineData(2, 1, true)] 
-    public void DomainUpDown_DownButton_InvokeMultipleTimes_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
-    {
-        using DomainUpDown control = new();
-        control.Items.Add("Item1");
-        control.Items.Add("Item2");
-        control.Items.Add("Item3");
-        control.SelectedIndex = initialIndex;
-        control.Wrap = wrap;
-
-        control.DownButton();
-        control.DownButton(); 
-
-        control.SelectedIndex.Should().Be(expectedIndex);
-    }
-
-    [WinFormsTheory]
-    [InlineData(new string[] { "Item1", "Item2", "Item3" }, 1)]
-    [InlineData(new string[] { "ItemA", "ItemB", "ItemC", "ItemD" }, 3)]
-    public void DomainUpDown_ToString_Invoke_ReturnsExpected(string[] items, int selectedIndex)
-    {
-        using DomainUpDown control = new();
-        for (int i = 0; i < items.Length; i++)
+        public DomainUpDownTests1()
         {
-            string item = items[i];
-            control.Items.Add(item);
+            _control = new DomainUpDown();
+            _control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
         }
 
-        control.SelectedIndex = selectedIndex;
+        public void Dispose()
+        {
+            _control.Items.Clear();
+            _control.Dispose();
+        }
 
-        string s = control.ToString();
+        [WinFormsTheory]
+        [InlineData(0, 1, false)]
+        [InlineData(1, 2, false)]
+        [InlineData(2, 2, false)] 
+        [InlineData(2, 0, true)] 
+        public void DomainUpDown_DownButton_InvokeWithItems_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
+        {
+            _control.SelectedIndex = initialIndex;
+            _control.Wrap = wrap;
 
-        s.Should().Contain($"Items.Count: {items.Length}");
-        s.Should().Contain($"SelectedIndex: {selectedIndex}");
-    }
+            _control.DownButton();
 
-    [WinFormsTheory]
-    [InlineData("Item1", 0)]
-    [InlineData("Item2", 1)]
-    public void DomainUpDown_UpButton_MatchFound(string text, int expectedIndex)
-    {
-        using DomainUpDown control = new();
-        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
-        control.Text = text;
-        control.UpButton();
-        control.SelectedIndex.Should().Be(expectedIndex);
-    }
+            _control.SelectedIndex.Should().Be(expectedIndex);
+        }
 
-    [WinFormsFact]
-    public void DomainUpDown_UpButton_NoMatchFound()
-    {
-        using DomainUpDown control = new();;
-        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
-        control.Text = "NoSuchItem";
-        control.UpButton();
-        control.SelectedIndex.Should().Be(-1);
-    }
+        [WinFormsTheory]
+        [InlineData(0, 2, false)]
+        [InlineData(1, 2, false)]
+        [InlineData(2, 2, false)] 
+        [InlineData(2, 1, true)] 
+        public void DomainUpDown_DownButton_InvokeMultipleTimes_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
+        {
+            _control.SelectedIndex = initialIndex;
+            _control.Wrap = wrap;
 
-    [WinFormsFact]
-    public void DomainUpDown_UpButton_DecrementSelectedIndex()
-    {
-        using DomainUpDown control = new();
-        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
-        control.SelectedIndex = 2;
-        control.UpButton();
-        control.SelectedIndex.Should().Be(1);
-    }
+            _control.DownButton();
+            _control.DownButton(); 
 
-    [WinFormsFact]
-    public void DomainUpDown_UpButton_SelectedIndexAtStart_NoWrap()
-    {
-        using DomainUpDown control = new();
-        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
-        control.SelectedIndex = 0;
-        control.Wrap = false;
-        control.UpButton();
-        control.SelectedIndex.Should().Be(0);
-    }
+            _control.SelectedIndex.Should().Be(expectedIndex);
+        }
 
-    [WinFormsFact]
-    public void DomainUpDown_UpButton_SelectedIndexAtStart_Wrap()
-    {
-        using DomainUpDown control = new();
-        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
-        control.SelectedIndex = 0;
-        control.Wrap = true;
-        control.UpButton();
-        control.SelectedIndex.Should().Be(2);
-    }
+        [WinFormsTheory]
+        [InlineData(new string[] { "Item1", "Item2", "Item3" }, 1)]
+        [InlineData(new string[] { "ItemA", "ItemB", "ItemC", "ItemD" }, 3)]
+        public void DomainUpDown_ToString_Invoke_ReturnsExpected(string[] items, int selectedIndex)
+        {
+            _control.Items.Clear();
+            _control.Items.AddRange(items);
+            _control.SelectedIndex = selectedIndex;
 
-    [WinFormsFact]
-    public void DomainUpDown_UpButton_EmptyItems()
-    {
-        using DomainUpDown control = new();
-        control.UpButton();
-        control.SelectedIndex.Should().Be(-1);
-    }
+            string s = _control.ToString();
+
+            s.Should().Contain($"Items.Count: {items.Length}");
+            s.Should().Contain($"SelectedIndex: {selectedIndex}");
+        }
+
+        [WinFormsTheory]
+        [InlineData("Item1", 0)]
+        [InlineData("Item2", 1)]
+        public void DomainUpDown_UpButton_MatchFound(string text, int expectedIndex)
+        {
+            _control.Text = text;
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(expectedIndex);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDown_UpButton_NoMatchFound()
+        {
+            _control.Text = "NoSuchItem";
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(-1);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDown_UpButton_DecrementSelectedIndex()
+        {
+            _control.SelectedIndex = 2;
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(1);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDown_UpButton_SelectedIndexAtStart_NoWrap()
+        {
+            _control.SelectedIndex = 0;
+            _control.Wrap = false;
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(0);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDown_UpButton_SelectedIndexAtStart_Wrap()
+        {
+            _control.SelectedIndex = 0;
+            _control.Wrap = true;
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(2);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDown_UpButton_EmptyItems()
+        {
+            _control.Items.Clear();
+            _control.UpButton();
+            _control.SelectedIndex.Should().Be(-1);
+        }
+     }
 
     public class SubDomainUpDown : DomainUpDown
     {
