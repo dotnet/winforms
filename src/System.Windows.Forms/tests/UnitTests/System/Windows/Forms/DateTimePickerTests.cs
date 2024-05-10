@@ -321,6 +321,132 @@ public class DateTimePickerTests
         callCount.Should().Be(1);
     }
 
+    [WinFormsFact]
+    public void DateTimePicker_BackgroundImageLayoutChangedEvent_Raised_Success()
+    {
+        using DateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.BackgroundImageLayoutChanged += handler;
+        control.BackgroundImageLayout = ImageLayout.Center;
+        callCount.Should().Be(1);
+
+        control.BackgroundImageLayoutChanged -= handler;
+        control.BackgroundImageLayout = ImageLayout.Stretch;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ClickEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.Click += handler;
+        control.OnClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        control.Click -= handler;
+        control.OnClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_DoubleClickEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.DoubleClick += handler;
+        control.OnDoubleClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        control.DoubleClick -= handler;
+        control.OnDoubleClick(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ForeColorChangedEvent_Raised_Success()
+    {
+        using DateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.ForeColorChanged += handler;
+        control.ForeColor = Color.Red;
+        callCount.Should().Be(1);
+
+        control.ForeColorChanged -= handler;
+        control.ForeColor = Color.Blue;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_PaddingChangedEvent_Raised_Success()
+    {
+        using DateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.PaddingChanged += handler;
+        control.Padding = new(10);
+        callCount.Should().Be(1);
+
+        control.PaddingChanged -= handler;
+        control.Padding = new(20);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_TextChangedEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.TextChanged += handler;
+        control.OnTextChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        control.TextChanged -= handler;
+        control.OnTextChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
     [WinFormsTheory]
     [InlineData(ControlStyles.ContainerControl, false)]
     [InlineData(ControlStyles.UserPaint, false)]
@@ -526,5 +652,11 @@ public class DateTimePickerTests
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
         public new bool GetTopLevel() => base.GetTopLevel();
+
+        public new void OnClick(EventArgs e) => base.OnClick(e);
+
+        public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
+        public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
     }
 }

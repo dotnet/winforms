@@ -223,4 +223,168 @@ public class TreeNodeCollectionTests
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
     }
+
+    private TreeNodeCollection CreateCollectionWithNodes()
+    {
+        using TreeView treeView = new();
+
+        TreeNode child1 = new() { Name = "name1" };
+        TreeNode child2 = new() { Name = "name2" };
+        TreeNodeCollection collection = treeView.Nodes;
+        collection.Add(child1);
+        collection.Add(child2);
+
+        return collection;
+    }
+
+    public static TheoryData<string, string> KeyAndExpectedNodeNameData => new()
+    {
+        { "name1", "name1" },
+        { "NAME1", "name1" },
+        { "NoSuchName", null },
+        { null, null },
+        { string.Empty, null }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(KeyAndExpectedNodeNameData))]
+    public void TreeNodeCollection_Item_GetKey_ReturnsExpected(string key, string expectedNodeName)
+    {
+        TreeNodeCollection collection = CreateCollectionWithNodes();
+        collection[key]?.Name.Should().Be(expectedNodeName);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_IsReadOnly_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        collection.IsReadOnly.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", 1, null)]
+    [InlineData("key1", "text1", 1, 2)]
+    public void TreeNodeCollection_Add_KeyTextImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Add(key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Add(key, text, imageIndex);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageIndex.Should().Be(imageIndex);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", "imageKey1")]
+    public void TreeNodeCollection_Add_KeyTextImageKey_Success(string key, string text, string imageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode = collection.Add(key, text, imageKey);
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageKey.Should().Be(imageKey);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", "imageKey1", "selectedImageKey1")]
+    public void TreeNodeCollection_Add_KeyTextImageKeySelectedImageKey_Success(string key, string text, string imageKey, string selectedImageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode = collection.Add(key, text, imageKey, selectedImageKey);
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageKey.Should().Be(imageKey);
+        treeNode.SelectedImageKey.Should().Be(selectedImageKey);
+    }
+
+    [WinFormsTheory]
+    [InlineData("Node 0", null, null, null)]
+    [InlineData("Node 0", "key", null, null)]
+    [InlineData("Node 0", "key", "imageKey", null)]
+    [InlineData("Node 0", "key", "imageKey", "selectedImageKey")]
+    public void TreeNodeCollection_Insert_StringKeyImageKeySelectedImageKey_Success(string text, string key, string imageKey, string selectedImageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (key is not null)
+        {
+            if (imageKey is not null)
+            {
+                if (selectedImageKey is not null)
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey, selectedImageKey);
+                    treeNode.SelectedImageKey.Should().Be(selectedImageKey);
+                }
+                else
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey);
+                }
+
+                treeNode.ImageKey.Should().Be(imageKey);
+            }
+            else
+            {
+                treeNode = collection.Insert(0, key, text);
+            }
+
+            treeNode.Name.Should().Be(key);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, text);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Text.Should().Be(text);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key", "Node 0", 0, null)]
+    [InlineData("key", "Node 0", 0, 1)]
+    public void TreeNodeCollection_Insert_StringKeyImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.ImageIndex.Should().Be(imageIndex);
+    }
 }
