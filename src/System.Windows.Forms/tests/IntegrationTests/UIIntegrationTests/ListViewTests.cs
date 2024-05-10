@@ -39,7 +39,10 @@ public class ListViewTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11328")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11328")]
     public async Task ListView_Group_NavigateKeyboard_SucceedsAsync()
     {
         await RunTestAsync(async (form, listView) =>
