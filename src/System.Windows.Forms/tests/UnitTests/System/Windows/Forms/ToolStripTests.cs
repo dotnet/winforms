@@ -7286,6 +7286,39 @@ public partial class ToolStripTests
         Assert.False(toolStrip.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public async Task ToolStrip_MouseHoverTimerStartSuccess()
+    {
+        using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        using MenuStrip menuStrip = new();
+        using ToolStripItem toolStripItem = menuStrip.Items.Add("toolStripItem");
+        toolStripItem.MouseHover += (sender, e) => cancellationTokenSource.Cancel();
+        ((MouseHoverTimer)menuStrip.TestAccessor().Dynamic.MouseHoverTimer).Start(toolStripItem);
+        await Assert.ThrowsAsync<TaskCanceledException>(() => Task.Delay(SystemInformation.MouseHoverTime * 2, cancellationTokenSource.Token));
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_MouseHoverTimer_ItemDispose()
+    {
+        WeakReference<ToolStripItem> currentItemWR;
+        using MenuStrip menuStrip = new();
+        MouseHoverTimer mouseHoverTimer = (MouseHoverTimer)menuStrip.TestAccessor().Dynamic.MouseHoverTimer;
+        TimerStartAndItemDispose();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        Assert.False(currentItemWR.TryGetTarget(out _));
+
+        void TimerStartAndItemDispose()
+        {
+            using ToolStripItem toolStripItem = menuStrip.Items.Add("toolStripItem");
+            mouseHoverTimer.Start(toolStripItem);
+            currentItemWR = mouseHoverTimer.TestAccessor().Dynamic._currentItem;
+            Assert.True(currentItemWR.TryGetTarget(out _));
+        }
+    }
+
     private class SubAxHost : AxHost
     {
         public SubAxHost(string clsid) : base(clsid)
