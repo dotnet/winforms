@@ -95,7 +95,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     internal int index;                  // our index into our parents child array
     internal int childCount;
     // this array should not be optimized as a list because we are inserting into the middle of it, not appending.
-    internal TreeNode[] children = [];
+    internal TreeNode[] children;
     internal TreeNode parent;
     internal TreeView treeView;
     private bool expandOnRealization;
@@ -1379,7 +1379,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 children[childCount - 1].Remove(true);
             }
 
-            children = [];
+            children = null;
 
             if (tv is not null && isBulkOperation)
             {
@@ -1672,7 +1672,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             size = 4;
         }
 
-        if (children is null || children.Length == 0)
+        if (children is null)
         {
             children = new TreeNode[size];
         }
