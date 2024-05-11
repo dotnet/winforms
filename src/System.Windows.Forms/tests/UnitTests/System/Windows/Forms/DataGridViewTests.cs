@@ -1903,7 +1903,7 @@ public partial class DataGridViewTests
             {
                 // Skip verification of DataGridViewColumnHeadersHeightSizeMode = DisableResizing and columnHeadersVisible = true
                 // in X86 due to the active issue "https://github.com/dotnet/winforms/issues/11322"
-                if (columnHeadersWidthSizeMode== DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                if (columnHeadersWidthSizeMode == DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     && columnHeadersVisible is true
                     && RuntimeInformation.ProcessArchitecture == Architecture.X86)
                   continue;
