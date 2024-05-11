@@ -7169,6 +7169,64 @@ public class TreeViewTests
         parent.Nodes.Remove(secondNode);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/11243
+    [WinFormsFact]
+    public void TreeView_TreeNodeAddRangeSequence()
+    {
+        using TreeView treeView = new();
+
+        TreeNode treeNode1 = new("a0");
+        TreeNode treeNode2 = new("b0");
+        TreeNode treeNode3 = new("c0");
+        TreeNode treeNode4 = new("a1");
+        TreeNode treeNode5 = new("b1");
+        TreeNode treeNode6 = new("c1");
+        TreeNode treeNode7 = new("a2");
+        TreeNode rootNode = new("Root", [new TreeNode("child")]);
+
+        treeView.Nodes.Add(rootNode);
+        treeView.CreateControl();
+
+        rootNode.Nodes.AddRange([treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode6, treeNode7]);
+        rootNode.ExpandAll();
+
+        Assert.Equal(rootNode, treeView.Nodes[0]);
+
+        TreeNode childNode1 = rootNode.Nodes[0];
+        TreeNode childNode2 = rootNode.Nodes[1];
+        TreeNode childNode3 = rootNode.Nodes[2];
+        TreeNode childNode4 = rootNode.Nodes[3];
+        TreeNode childNode5 = rootNode.Nodes[4];
+        TreeNode childNode6 = rootNode.Nodes[5];
+        TreeNode childNode7 = rootNode.Nodes[6];
+        TreeNode childNode8 = rootNode.Nodes[7];
+
+        Assert.Equal("child", childNode1.Text);
+
+        Assert.NotNull(childNode1.NextVisibleNode);
+        Assert.Equal("a0", childNode1.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode2.NextVisibleNode);
+        Assert.Equal("b0", childNode2.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode3.NextVisibleNode);
+        Assert.Equal("c0", childNode3.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode4.NextVisibleNode);
+        Assert.Equal("a1", childNode4.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode5.NextVisibleNode);
+        Assert.Equal("b1", childNode5.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode6.NextVisibleNode);
+        Assert.Equal("c1", childNode6.NextVisibleNode.Text);
+
+        Assert.NotNull(childNode7.NextVisibleNode);
+        Assert.Equal("a2", childNode7.NextVisibleNode.Text);
+
+        Assert.Null(childNode8.NextVisibleNode);
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
