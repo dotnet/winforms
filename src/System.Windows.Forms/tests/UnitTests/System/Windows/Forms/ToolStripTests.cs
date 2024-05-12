@@ -7319,6 +7319,37 @@ public partial class ToolStripTests
         }
     }
 
+    [WinFormsFact]
+    public void ToolStrip_displayedItems_Clear()
+    {
+        using ToolStripMenuItem toolStripMenuItem = new(nameof(toolStripMenuItem));
+        using ToolStripMenuItem listToolStripMenuItem = new(nameof(listToolStripMenuItem));
+        toolStripMenuItem.DropDownItems.Add(listToolStripMenuItem);
+        toolStripMenuItem.DropDownOpened += (sender, e) =>
+        {
+            for (int i = 0; i < 4; i++)
+                listToolStripMenuItem.DropDownItems.Add("MenuItem" + i);
+
+            listToolStripMenuItem.DropDown.PerformLayout(); // needed to populate DisplayedItems collection
+        };
+
+        toolStripMenuItem.DropDownClosed += (sender, e) =>
+        {
+            while (listToolStripMenuItem.DropDownItems.Count > 0)
+                listToolStripMenuItem.DropDownItems[listToolStripMenuItem.DropDownItems.Count - 1].Dispose();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        };
+
+        toolStripMenuItem.ShowDropDown();
+        Assert.Equal(4, listToolStripMenuItem.DropDown.DisplayedItems.Count);
+        toolStripMenuItem.HideDropDown();
+        Assert.Equal(0, listToolStripMenuItem.DropDown.DisplayedItems.Count);
+    }
+
     private class SubAxHost : AxHost
     {
         public SubAxHost(string clsid) : base(clsid)
