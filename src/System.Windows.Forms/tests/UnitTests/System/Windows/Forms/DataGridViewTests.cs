@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1900,12 +1901,20 @@ public partial class DataGridViewTests
         {
             foreach (bool columnHeadersVisible in new bool[] { true, false })
             {
+                // Skip verification of DataGridViewColumnHeadersHeightSizeMode = DisableResizing and columnHeadersVisible = true
+                // in X86 due to the active issue "https://github.com/dotnet/winforms/issues/11322"
+                if (columnHeadersWidthSizeMode == DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                    && columnHeadersVisible is true
+                    && RuntimeInformation.ProcessArchitecture == Architecture.X86)
+                  continue;
+
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, null };
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, new EventArgs() };
             }
         }
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11322")]
     [WinFormsTheory]
     [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
     public void DataGridView_OnColumnHeadersHeightChanged_Invoke_CallsColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)

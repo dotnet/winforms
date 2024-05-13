@@ -866,15 +866,15 @@ public class ComponentEditorPageTests
 
     private class SubComponentEditorPage : ComponentEditorPage
     {
-        public new const int ScrollStateAutoScrolling = ComponentEditorPage.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = ComponentEditorPage.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = ComponentEditorPage.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = ComponentEditorPage.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = ComponentEditorPage.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

@@ -35,7 +35,7 @@ public abstract class CorruptedTests<T> : SerializationTest<T> where T : ISerial
     }
 
     [Fact]
-    public void ValueTypeReferencesSelf2()
+    public virtual void ValueTypeReferencesSelf2()
     {
         MemoryStream stream = new();
 
@@ -56,7 +56,7 @@ public abstract class CorruptedTests<T> : SerializationTest<T> where T : ISerial
     }
 
     [Fact]
-    public void ValueTypeReferencesSelf3()
+    public virtual void ValueTypeReferencesSelf3()
     {
         MemoryStream stream = new();
 
