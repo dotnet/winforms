@@ -4,6 +4,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 
@@ -7361,6 +7362,167 @@ public class TreeViewTests
         childNode7.NextVisibleNode.Text.Should().Be("a2");
 
         childNode8.NextVisibleNode.Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, null)]
+    [InlineData(true, null)]
+    [InlineData(false, "node")]
+    [InlineData(true, "node")]
+    public void TreeView_TopNode_Test(bool createHandle, string nodeName)
+    {
+        using TreeView treeView = new();
+        TreeNode node = nodeName is null ? null : new TreeNode(nodeName);
+
+        if (node is not null)
+        {
+            treeView.Nodes.Add(node);
+        }
+
+        if (createHandle)
+        {
+            _ = treeView.Handle;
+        }
+
+        treeView.TopNode = node;
+
+        treeView.TopNode.Should().Be(node);
+        treeView.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsFact]
+    public void TreeViewLabelEditNativeWindow_AccessibilityObject_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        TreeViewLabelEditNativeWindow nativeWindow = new(treeView);
+        var accessibilityObject = nativeWindow.AccessibilityObject;
+
+        accessibilityObject.Should().NotBeNull();
+        accessibilityObject.Should().BeOfType<TreeViewLabelEditAccessibleObject>();
+    }
+
+    private void AddNodes(TreeView control, string rootNodeName, string childNodeName = null)
+    {
+        TreeNode rootNode = new(rootNodeName);
+        if (childNodeName is not null)
+        {
+            rootNode.Nodes.Add(new TreeNode(childNodeName));
+        }
+
+        control.Nodes.Add(rootNode);
+    }
+
+    private TreeView InitializeTreeViewWithNodes()
+    {
+        TreeView treeView = new();
+        AddNodes(treeView, "Root1", "Child1");
+        AddNodes(treeView, "Root2");
+
+        return treeView;
+    }
+
+    [WinFormsFact]
+    public void TreeView_CollapseAll_Invoke_CollapsesAllNodes()
+    {
+        using TreeView treeView = InitializeTreeViewWithNodes();
+
+        treeView.CollapseAll();
+
+        treeView.Nodes[0].IsExpanded.Should().BeFalse();
+        treeView.Nodes[1].IsExpanded.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void TreeView_ExpandAll_Invoke_UpdatesAllNodes()
+    {
+        using TreeView treeView = InitializeTreeViewWithNodes();
+
+        treeView.ExpandAll();
+
+        treeView.Nodes[0].IsExpanded.Should().BeTrue();
+        treeView.Nodes[1].IsExpanded.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void TreeView_GetNodeCount_Invoke_ReturnsExpected()
+    {
+        using TreeView treeView = InitializeTreeViewWithNodes();
+
+        int countWithoutSubTrees = treeView.GetNodeCount(false);
+        countWithoutSubTrees.Should().Be(2);
+
+        int countWithSubTrees = treeView.GetNodeCount(true);
+        countWithSubTrees.Should().Be(3);
+    }
+
+    [WinFormsFact]
+    public void TreeView_ResetIndent_Invoke_Success()
+    {
+        using TreeView treeView = new();
+
+        treeView.Indent = 10;
+        var resetIndentMethod = treeView.GetType().GetMethod("ResetIndent", BindingFlags.NonPublic | BindingFlags.Instance);
+        resetIndentMethod.Invoke(treeView, null);
+
+        treeView.Indent.Should().Be(19);
+    }
+
+    [WinFormsFact]
+    public void TreeView_ResetItemHeight_Invoke_Success()
+    {
+        using TreeView treeView = new();
+
+        treeView.ItemHeight = 10;
+        var resetItemHeightMethod = treeView.GetType().GetMethod("ResetItemHeight", BindingFlags.NonPublic | BindingFlags.Instance);
+        resetItemHeightMethod.Invoke(treeView, null);
+
+        treeView.ItemHeight.Should().Be(19);
+    }
+
+    [WinFormsFact]
+    public void TreeView_ShouldSerializeIndent_Invoke_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        var shouldSerializeIndentMethod = treeView.GetType().GetMethod("ShouldSerializeIndent", BindingFlags.NonPublic | BindingFlags.Instance);
+        bool result = (bool)shouldSerializeIndentMethod.Invoke(treeView, null);
+
+        result.Should().BeFalse();
+
+        treeView.Indent = 10;
+        result = (bool)shouldSerializeIndentMethod.Invoke(treeView, null);
+
+        result.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void TreeView_ShouldSerializeItemHeight_Invoke_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        var shouldSerializeItemHeightMethod = treeView.GetType().GetMethod("ShouldSerializeItemHeight", BindingFlags.NonPublic | BindingFlags.Instance);
+        bool result = (bool)shouldSerializeItemHeightMethod.Invoke(treeView, null);
+
+        result.Should().BeFalse();
+
+        treeView.ItemHeight = 10;
+        result = (bool)shouldSerializeItemHeightMethod.Invoke(treeView, null);
+
+        result.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void TreeView_ToString_Invoke_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        treeView.ToString().Should().Be("System.Windows.Forms.TreeView, Nodes.Count: 0");
+
+        treeView.Nodes.Add(new TreeNode("Node1"));
+        treeView.Nodes.Add(new TreeNode("Node2"));
+
+        treeView.ToString().Should().Be($"System.Windows.Forms.TreeView, Nodes.Count: 2, Nodes[0]: {treeView.Nodes[0]}");
     }
 
     private class SubTreeView : TreeView
