@@ -44,30 +44,42 @@ internal sealed class SystemClassWithMembersAndTypesRecord : ClassRecord
         // It could be implemented with way fewer ifs, but perf is important
         // and we want to bail out as soon as possible, but also don't convert something
         // that is not an exact match.
-        if (MemberValues.Count == 1 && HasMember("m_value"))
+        if (MemberValues.Count == 1)
         {
-            return MemberValues[0] switch
+            if (HasMember("m_value"))
             {
-                // there can be a value match, but no TypeName match
-                bool value when IsTypeNameMatching(typeof(bool)) => Create(value),
-                byte value when IsTypeNameMatching(typeof(byte)) => Create(value),
-                sbyte value when IsTypeNameMatching(typeof(sbyte)) => Create(value),
-                char value when IsTypeNameMatching(typeof(char)) => Create(value),
-                short value when IsTypeNameMatching(typeof(short)) => Create(value),
-                ushort value when IsTypeNameMatching(typeof(ushort)) => Create(value),
-                int value when IsTypeNameMatching(typeof(int)) => Create(value),
-                uint value when IsTypeNameMatching(typeof(uint)) => Create(value),
-                long value when IsTypeNameMatching(typeof(long)) => Create(value),
-                ulong value when IsTypeNameMatching(typeof(ulong)) => Create(value),
-                float value when IsTypeNameMatching(typeof(float)) => Create(value),
-                double value when IsTypeNameMatching(typeof(double)) => Create(value),
-                _ => this
-            };
-        }
-        else if (MemberValues.Count == 1 && HasMember("_ticks") && MemberValues[0] is long ticks
-            && IsTypeNameMatching(typeof(TimeSpan)))
-        {
-            return Create(new TimeSpan(ticks));
+                return MemberValues[0] switch
+                {
+                    // there can be a value match, but no TypeName match
+                    bool value when TypeName.FullName == typeof(bool).FullName => Create(value),
+                    byte value when TypeName.FullName == typeof(byte).FullName => Create(value),
+                    sbyte value when TypeName.FullName == typeof(sbyte).FullName => Create(value),
+                    char value when TypeName.FullName == typeof(char).FullName => Create(value),
+                    short value when TypeName.FullName == typeof(short).FullName => Create(value),
+                    ushort value when TypeName.FullName == typeof(ushort).FullName => Create(value),
+                    int value when TypeName.FullName == typeof(int).FullName => Create(value),
+                    uint value when TypeName.FullName == typeof(uint).FullName => Create(value),
+                    long value when TypeName.FullName == typeof(long).FullName => Create(value),
+                    ulong value when TypeName.FullName == typeof(ulong).FullName => Create(value),
+                    float value when TypeName.FullName == typeof(float).FullName => Create(value),
+                    double value when TypeName.FullName == typeof(double).FullName => Create(value),
+                    _ => this
+                };
+            }
+            else if (HasMember("value"))
+            {
+                return MemberValues[0] switch
+                {
+                    // there can be a value match, but no TypeName match
+                    long value when TypeName.FullName == typeof(IntPtr).FullName => Create(new IntPtr(value)),
+                    ulong value when TypeName.FullName == typeof(UIntPtr).FullName => Create(new UIntPtr(value)),
+                    _ => this
+                };
+            }
+            else if (HasMember("_ticks") && MemberValues[0] is long ticks && TypeName.FullName == typeof(TimeSpan).FullName)
+            {
+                return Create(new TimeSpan(ticks));
+            }
         }
         else if (MemberValues.Count == 2
             && HasMember("ticks") && HasMember("dateData")
@@ -76,7 +88,7 @@ internal sealed class SystemClassWithMembersAndTypesRecord : ClassRecord
         {
             return Create(BinaryReaderExtensions.CreateDateTimeFromData(value));
         }
-        else if(MemberValues.Count == 4
+        else if (MemberValues.Count == 4
             && HasMember("lo") && HasMember("mid") && HasMember("hi") && HasMember("flags")
             && MemberValues[0] is int && MemberValues[1] is int && MemberValues[2] is int && MemberValues[3] is int
             && IsTypeNameMatching(typeof(decimal)))

@@ -50,12 +50,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
         {
             // FormatterServices *never* returns anything but fields.
             FieldInfo field = (FieldInfo)_fieldInfo[_currentFieldIndex];
-            object? rawValue;
-            try
-            {
-                rawValue = _classRecord.GetObject(field.Name);
-            }
-            catch (KeyNotFoundException)
+            if (!_classRecord.HasMember(field.Name))
             {
                 if (Deserializer.Options.AssemblyMatching == FormatterAssemblyStyle.Simple
                     || field.GetCustomAttribute<OptionalFieldAttribute>() is not null)
@@ -67,6 +62,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 throw new SerializationException($"Could not find field '{field.Name}' data for type '{field.DeclaringType!.Name}'.");
             }
 
+            var rawValue = _classRecord.GetSerializationRecord(field.Name);
             (object? memberValue, Id reference) = UnwrapMemberValue(rawValue);
             if (s_missingValueSentinel == memberValue)
             {

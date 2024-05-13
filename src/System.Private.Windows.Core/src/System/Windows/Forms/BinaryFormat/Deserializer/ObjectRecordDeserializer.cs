@@ -41,34 +41,36 @@ internal abstract partial class ObjectRecordDeserializer
     ///  the object record has not been encountered yet.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private protected (object? value, Id id) UnwrapMemberValue(object? memberValue)
+    private protected (object? value, Id id) UnwrapMemberValue(SerializationRecord? memberValue)
     {
+        // NullRecord is expressed via the public API by just returning a null
+        if (memberValue is null)
+        {
+            return (null, Id.Null);
+        }
+
         return memberValue switch
         {
             // String
-            PrimitiveTypeRecord<string> primitive => (primitive.Value, primitive.ObjectId),
+            PrimitiveTypeRecord<string> primitive => (primitive.Value, Id.Null),
             // Class record
-            ClassRecord classRecord => (classRecord, classRecord.ObjectId),
-            // Record reference
-            MemberReferenceRecord memberReference => TryGetObject(memberReference.Reference),
+            ClassRecord classRecord => TryGetObject(classRecord.ObjectId),
             // Primitive type record
-            PrimitiveTypeRecord<bool> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<byte> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<sbyte> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<char> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<short> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<ushort> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<int> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<uint> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<long> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<ulong> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<float> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<double> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<decimal> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<TimeSpan> primitive => (primitive.Value, primitive.ObjectId),
-            PrimitiveTypeRecord<DateTime> primitive => (primitive.Value, primitive.ObjectId),
-            // Null
-            null => (null, Id.Null),
+            PrimitiveTypeRecord<bool> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<byte> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<sbyte> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<char> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<short> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<ushort> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<int> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<uint> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<long> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<ulong> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<float> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<double> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<decimal> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<TimeSpan> primitive => (primitive.Value, Id.Null),
+            PrimitiveTypeRecord<DateTime> primitive => (primitive.Value, Id.Null),
             // At this point should be an inline primitive
             _ => throw new SerializationException($"Unexpected member type '{memberValue.GetType()}'."),
         };

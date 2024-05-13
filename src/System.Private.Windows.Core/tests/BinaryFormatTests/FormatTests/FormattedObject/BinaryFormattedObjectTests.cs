@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Windows.Forms.BinaryFormat;
+using System.Runtime.Serialization.BinaryFormat;
 using FormatTests.Common;
 
 namespace FormatTests.FormattedObject;
@@ -12,8 +12,8 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     [Fact]
     public void ReadHeader()
     {
-        BinaryFormattedObject format = new(Serialize("Hello World."));
-        format.RootRecord.Id.Should().Be(1);
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize("Hello World."));
+        format.RootRecord.ObjectId.Should().Be(1);
     }
 
     [Theory]
@@ -22,8 +22,8 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     [InlineData("Embedded\0 Null.")]
     public void ReadBinaryObjectString(string testString)
     {
-        BinaryFormattedObject format = new(Serialize(testString));
-        BinaryObjectString stringRecord = (BinaryObjectString)format[1];
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(testString));
+        PrimitiveTypeRecord<string> stringRecord = (PrimitiveTypeRecord<string>)format[1];
         stringRecord.ObjectId.Should().Be(1);
         stringRecord.Value.Should().Be(testString);
     }
@@ -31,11 +31,24 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
     [Fact]
     public void ReadEmptyHashTable()
     {
-        BinaryFormattedObject format = new(Serialize(new Hashtable()));
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new Hashtable()));
 
-        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+        ClassRecord systemClass = (ClassRecord)format[1];
+        VerifyHashTable(systemClass, expectedVersion: 0, expectedHashSize: 3);
+
+        ArrayRecord<object> keys = (ArrayRecord<object>)systemClass.GetSerializationRecord("Keys")!;
+        keys.ObjectId.Should().Be(2);
+        keys.Length.Should().Be(0);
+        ArrayRecord<object> values = (ArrayRecord<object>)systemClass.GetSerializationRecord("Values")!;
+        values.ObjectId.Should().Be(3);
+        values.Length.Should().Be(0);
+    }
+
+    private static void VerifyHashTable(ClassRecord systemClass, int expectedVersion, int expectedHashSize)
+    {
+        systemClass.RecordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
         systemClass.ObjectId.Should().Be(1);
-        systemClass.Name.Should().Be("System.Collections.Hashtable");
+        systemClass.TypeName.FullName.Should().Be("System.Collections.Hashtable");
         systemClass.MemberNames.Should().BeEquivalentTo(
         [
             "LoadFactor",
@@ -47,300 +60,217 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
             "Values"
         ]);
 
-        systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
-        {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.SystemClass, "System.Collections.IComparer"),
-            (BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.ObjectArray, null),
-            (BinaryType.ObjectArray, null)
-        });
-
-        systemClass.MemberValues.Should().BeEquivalentTo(new object?[]
-        {
-            0.72f,
-            0,
-            null,
-            null,
-            3,
-            new MemberReference(2),
-            new MemberReference(3)
-        });
-
-        ArraySingleObject array = (ArraySingleObject)format[2];
-        array.ArrayInfo.ObjectId.Should().Be(2);
-        array.ArrayInfo.Length.Should().Be(0);
-
-        array = (ArraySingleObject)format[3];
-        array.ArrayInfo.ObjectId.Should().Be(3);
-        array.ArrayInfo.Length.Should().Be(0);
+        systemClass.GetSingle("LoadFactor").Should().Be(0.72f);
+        systemClass.GetInt32("Version").Should().Be(expectedVersion);
+        systemClass.GetObject("Comparer").Should().BeNull();
+        systemClass.GetObject("HashCodeProvider").Should().BeNull();
+        systemClass.GetInt32("HashSize").Should().Be(expectedHashSize);
     }
 
     [Fact]
     public void ReadHashTableWithStringPair()
     {
-        BinaryFormattedObject format = new(Serialize(new Hashtable()
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "This", "That" }
         }));
 
-        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+        ClassRecord systemClass = (ClassRecord)format[1];
+        VerifyHashTable(systemClass, expectedVersion: 1, expectedHashSize: 3);
 
-        systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
-        {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.SystemClass, "System.Collections.IComparer"),
-            (BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.ObjectArray, null),
-            (BinaryType.ObjectArray, null)
-        });
-
-        systemClass.MemberValues.Should().BeEquivalentTo(new object?[]
-        {
-            0.72f,
-            1,
-            null,
-            null,
-            3,
-            new MemberReference(2),
-            new MemberReference(3)
-        });
-
-        ArraySingleObject array = (ArraySingleObject)format[2];
-        array.ArrayInfo.ObjectId.Should().Be(2);
-        array.ArrayInfo.Length.Should().Be(1);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
-        value.ObjectId.Should().Be(4);
-        value.Value.Should().Be("This");
-
-        array = (ArraySingleObject)format[3];
-        array.ArrayInfo.ObjectId.Should().Be(3);
-        array.ArrayInfo.Length.Should().Be(1);
-        value = (BinaryObjectString)array.ArrayObjects[0]!;
-        value.ObjectId.Should().Be(5);
-        value.Value.Should().Be("That");
+        ArrayRecord<object> keys = (ArrayRecord<object>)format[2];
+        keys.ObjectId.Should().Be(2);
+        keys.Length.Should().Be(1);
+        keys.ToArray().Single().Should().Be("This");
+        ArrayRecord<object> values = (ArrayRecord<object>)format[3];
+        values.ObjectId.Should().Be(3);
+        values.Length.Should().Be(1);
+        values.ToArray().Single().Should().Be("That");
     }
 
     [Fact]
     public void ReadHashTableWithRepeatedStrings()
     {
-        BinaryFormattedObject format = new(Serialize(new Hashtable()
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "This", "That" },
             { "TheOther", "This" },
             { "That", "This" }
         }));
 
+        ClassRecord systemClass = (ClassRecord)format[1];
+        VerifyHashTable(systemClass, expectedVersion: 4, expectedHashSize: 7);
+
         // The collections themselves get ids first before the strings do.
-        // Everything in the second array is a string reference.
-        ArraySingleObject array = (ArraySingleObject)format[3];
-        array.ObjectId.Should().Be(3);
-        array[0].Should().BeOfType<MemberReference>();
-        array[1].Should().BeOfType<MemberReference>();
-        array[2].Should().BeOfType<MemberReference>();
+        // Everything in the second keys is a string reference.
+        ArrayRecord<object> array = (ArrayRecord<object>)systemClass.GetSerializationRecord("Keys")!;
+        array.ObjectId.Should().Be(2);
+        array.ToArray().Should().BeEquivalentTo(["This", "TheOther", "That"]);
     }
 
     [Fact]
     public void ReadHashTableWithNullValues()
     {
-        BinaryFormattedObject format = new(Serialize(new Hashtable()
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new Hashtable()
         {
             { "Yowza", null },
             { "Youza", null },
             { "Meeza", null }
         }));
 
-        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+        ClassRecord systemClass = (ClassRecord)format[1];
+        VerifyHashTable(systemClass, expectedVersion: 4, expectedHashSize: 7);
 
-        systemClass.MemberValues.Should().BeEquivalentTo(new object?[]
-        {
-            0.72f,
-            4,
-            null,
-            null,
-            7,
-            new MemberReference(2),
-            new MemberReference(3)
-        });
+        // The collections themselves get ids first before the strings do.
+        // Everything in the second keys is a string reference.
+        ArrayRecord<object> keys = (ArrayRecord<object>)systemClass.GetSerializationRecord("Keys")!;
+        keys.ObjectId.Should().Be(2);
+        keys.ToArray().Should().BeEquivalentTo(new object[] { "Yowza", "Youza", "Meeza" });
 
-        ArrayRecord<object> array = (ArrayRecord<object>)format[(MemberReference)systemClass.MemberValues[5]!];
-
-        array.ArrayInfo.ObjectId.Should().Be(2);
-        array.ArrayInfo.Length.Should().Be(3);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0];
-        value.ObjectId.Should().Be(4);
-        value.Value.Should().BeOneOf("Yowza", "Youza", "Meeza");
-
-        array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]!];
-        array.ArrayInfo.ObjectId.Should().Be(3);
-        array.ArrayInfo.Length.Should().Be(3);
-        array.ArrayObjects[0].Should().BeNull();
+        ArrayRecord<object?> values = (ArrayRecord<object?>)systemClass.GetSerializationRecord("Values")!;
+        values.ObjectId.Should().Be(3);
+        values.ToArray().Should().BeEquivalentTo(new object?[] { null, null, null });
     }
 
     [Fact]
     public void ReadObject()
     {
-        BinaryFormattedObject format = new(Serialize(new object()));
-        format[1].Should().BeOfType<SystemClassWithMembersAndTypes>();
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new object()));
+        format[1].RecordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
     }
 
     [Fact]
     public void ReadStruct()
     {
         ValueTuple<int> tuple = new(355);
-        BinaryFormattedObject format = new(Serialize(tuple));
-        format[1].Should().BeOfType<SystemClassWithMembersAndTypes>();
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(tuple));
+        format[1].RecordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
     }
 
     [Fact]
     public void ReadSimpleSerializableObject()
     {
-        BinaryFormattedObject format = new(Serialize(new SimpleSerializableObject()));
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new SimpleSerializableObject()));
 
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
+        ClassRecord @class = (ClassRecord)format.RootRecord;
+        @class.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         @class.ObjectId.Should().Be(1);
-        @class.Name.Should().Be(typeof(SimpleSerializableObject).FullName);
+        @class.TypeName.FullName.Should().Be(typeof(SimpleSerializableObject).FullName);
+        @class.LibraryName.FullName.Should().Be(typeof(SimpleSerializableObject).Assembly.FullName);
         @class.MemberNames.Should().BeEmpty();
-        @class.LibraryId.Should().Be(2);
-        @class.MemberTypeInfo.Should().BeEmpty();
-
-        format[@class.LibraryId].Should().BeOfType<BinaryLibrary>()
-            .Which.LibraryName.Should().Be(typeof(BinaryFormattedObjectTests).Assembly.FullName);
     }
 
     [Fact]
     public void ReadNestedSerializableObject()
     {
-        BinaryFormattedObject format = new(Serialize(new NestedSerializableObject()));
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new NestedSerializableObject()));
 
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
+        ClassRecord @class = (ClassRecord)format.RootRecord;
+        @class.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         @class.ObjectId.Should().Be(1);
-        @class.Name.Should().Be(typeof(NestedSerializableObject).FullName);
+        @class.TypeName.FullName.Should().Be(typeof(NestedSerializableObject).FullName);
+        @class.LibraryName.FullName.Should().Be(typeof(NestedSerializableObject).Assembly.FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_object", "_meaning"]);
-        @class.LibraryId.Should().Be(2);
-        @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
-        {
-            (BinaryType.Class, new ClassTypeInfo(typeof(SimpleSerializableObject).FullName!, 2)),
-            (BinaryType.Primitive, PrimitiveType.Int32)
-        });
-
-        @class.MemberValues.Should().BeEquivalentTo(new object?[]
-        {
-            new MemberReference(3),
-            42
-        });
-
-        @class = (ClassWithMembersAndTypes)format[3];
-        @class.ObjectId.Should().Be(3);
-        @class.Name.Should().Be(typeof(SimpleSerializableObject).FullName);
-        @class.MemberNames.Should().BeEmpty();
-        @class.LibraryId.Should().Be(2);
-        @class.MemberTypeInfo.Should().BeEmpty();
+        @class.GetObject("_object").Should().NotBeNull();
+        @class.GetInt32("_meaning").Should().Be(42);
     }
 
     [Fact]
     public void ReadTwoIntObject()
     {
-        BinaryFormattedObject format = new(Serialize(new TwoIntSerializableObject()));
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new TwoIntSerializableObject()));
 
-        ClassWithMembersAndTypes @class = (ClassWithMembersAndTypes)format.RootRecord;
+        ClassRecord @class = (ClassRecord)format.RootRecord;
+        @class.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         @class.ObjectId.Should().Be(1);
-        @class.Name.Should().Be(typeof(TwoIntSerializableObject).FullName);
+        @class.TypeName.FullName.Should().Be(typeof(TwoIntSerializableObject).FullName);
+        @class.LibraryName.FullName.Should().Be(typeof(TwoIntSerializableObject).Assembly.FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_value", "_meaning"]);
-        @class.LibraryId.Should().Be(2);
-        @class.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
-        {
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.Primitive, PrimitiveType.Int32)
-        });
-
-        @class.MemberValues.Should().BeEquivalentTo(new object?[]
-        {
-            1970,
-            42
-        });
+        @class.GetObject("_value").Should().Be(1970);
+        @class.GetInt32("_meaning").Should().Be(42);
     }
 
     [Fact]
     public void ReadRepeatedNestedObject()
     {
-        BinaryFormattedObject format = new(Serialize(new RepeatedNestedSerializableObject()));
-        ClassWithMembersAndTypes firstClass = (ClassWithMembersAndTypes)format[3];
-        ClassWithId classWithId = (ClassWithId)format[4];
-        classWithId.MetadataId.Should().Be(firstClass.ObjectId);
-        classWithId.MemberValues.Should().BeEquivalentTo(new object[] { 1970, 42 });
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new RepeatedNestedSerializableObject()));
+        ClassRecord firstClass = (ClassRecord)format[3];
+        firstClass.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
+        ClassRecord classWithId = (ClassRecord)format[4];
+        classWithId.RecordType.Should().Be(RecordType.ClassWithId);
+        classWithId.GetObject("_value").Should().Be(1970);
+        classWithId.GetInt32("_meaning").Should().Be(42);
     }
 
     [Fact]
     public void ReadPrimitiveArray()
     {
-        BinaryFormattedObject format = new(Serialize(new int[] { 10, 9, 8, 7 }));
+        int[] input = [10, 9, 8, 7];
 
-        ArraySinglePrimitive<int> array = (ArraySinglePrimitive<int>)format[1];
-        array.ArrayInfo.Length.Should().Be(4);
-        array.PrimitiveType.Should().Be(PrimitiveType.Int32);
-        array.ArrayObjects.Should().BeEquivalentTo(new object[] { 10, 9, 8, 7 });
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
+
+        ArrayRecord<int> array = (ArrayRecord<int>)format[1];
+        array.Length.Should().Be(4);
+        array.ToArray().Should().BeEquivalentTo(input);
     }
 
     [Fact]
     public void ReadStringArray()
     {
-        BinaryFormattedObject format = new(Serialize(new string[] { "Monday", "Tuesday", "Wednesday" }));
-        ArraySingleString array = (ArraySingleString)format[1];
-        array.ArrayInfo.ObjectId.Should().Be(1);
-        array.ArrayInfo.Length.Should().Be(3);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
+        string[] input = ["Monday", "Tuesday", "Wednesday"];
+
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
+
+        ArrayRecord<string> array = (ArrayRecord<string>)format[1];
+        array.ObjectId.Should().Be(1);
+        array.Length.Should().Be(3);
+        array.ToArray().Should().BeEquivalentTo(input);
+        format.RecordMap.Count.Should().Be(4);
     }
 
     [Fact]
     public void ReadStringArrayWithNulls()
     {
-        BinaryFormattedObject format = new(Serialize(new string?[] { "Monday", null, "Wednesday", null, null, null }));
-        ArraySingleString array = (ArraySingleString)format[1];
-        array.ArrayInfo.ObjectId.Should().Be(1);
-        array.ArrayInfo.Length.Should().Be(6);
-        array.ArrayObjects.Should().BeEquivalentTo(new object?[]
-        {
-            new BinaryObjectString(2, "Monday"),
-            null,
-            new BinaryObjectString(3, "Wednesday"),
-            null,
-            null,
-            null
-        });
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
+        string?[] input = ["Monday", null, "Wednesday", null, null, null];
+
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
+
+        ArrayRecord<string?> array = (ArrayRecord<string?>)format[1];
+        array.ObjectId.Should().Be(1);
+        array.Length.Should().Be(6);
+        array.ToArray().Should().BeEquivalentTo(input);
     }
 
     [Fact]
     public void ReadDuplicatedStringArray()
     {
-        BinaryFormattedObject format = new(Serialize(new string[] { "Monday", "Tuesday", "Monday" }));
-        ArraySingleString array = (ArraySingleString)format[1];
-        array.ArrayInfo.ObjectId.Should().Be(1);
-        array.ArrayInfo.Length.Should().Be(3);
-        BinaryObjectString value = (BinaryObjectString)array.ArrayObjects[0]!;
-        MemberReference reference = (MemberReference)array.ArrayObjects[2]!;
-        reference.IdRef.Should().Be(value.ObjectId);
+        string[] input = ["Monday", "Tuesday", "Monday"];
+
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
+
+        ArrayRecord<string> array = (ArrayRecord<string>)format[1];
+        array.ObjectId.Should().Be(1);
+        array.Length.Should().Be(3);
+        array.ToArray().Should().BeEquivalentTo(input);
+        format.RecordMap.Count.Should().Be(3);
     }
 
     [Fact]
     public void ReadObjectWithNullableObjects()
     {
-        BinaryFormattedObject format = new(Serialize(new ObjectWithNullableObjects()));
-        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format.RootRecord;
-        BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new ObjectWithNullableObjects()));
+        ClassRecord classRecord = (ClassRecord)format.RootRecord;
+        classRecord.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
+        classRecord.LibraryName.FullName.Should().Be(typeof(ObjectWithNullableObjects).Assembly.FullName);
     }
 
     [Fact]
     public void ReadNestedObjectWithNullableObjects()
     {
-        BinaryFormattedObject format = new(Serialize(new NestedObjectWithNullableObjects()));
-        ClassWithMembersAndTypes classRecord = (ClassWithMembersAndTypes)format.RootRecord;
-        BinaryLibrary library = (BinaryLibrary)format[classRecord.LibraryId];
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(new NestedObjectWithNullableObjects()));
+        ClassRecord classRecord = (ClassRecord)format.RootRecord;
+        classRecord.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
+        classRecord.LibraryName.FullName.Should().Be(typeof(NestedObjectWithNullableObjects).Assembly.FullName);
     }
 
     [Serializable]

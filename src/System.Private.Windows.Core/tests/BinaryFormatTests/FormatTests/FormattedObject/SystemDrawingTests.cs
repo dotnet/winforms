@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.BinaryFormat;
+using System.Runtime.Serialization.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 
@@ -11,40 +11,34 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
     [Fact]
     public void PointF_Parse()
     {
-        BinaryFormattedObject format = new(Serialize(new PointF()));
+        PointF input = new() { X = 123.5f, Y = 456.1f };
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
 
-        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format.RootRecord;
+        ClassRecord classInfo = (ClassRecord)format.RootRecord;
+        classInfo.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         classInfo.ObjectId.Should().Be(1);
-        classInfo.Name.Should().Be("System.Drawing.PointF");
+        classInfo.TypeName.FullName.Should().Be("System.Drawing.PointF");
+        classInfo.LibraryName.FullName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
-        classInfo.MemberValues.Should().BeEquivalentTo(new object[] { 0.0f, 0.0f });
-        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new[]
-        {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single)
-        });
-
-        format[classInfo.LibraryId].Should().BeOfType<BinaryLibrary>()
-            .Which.LibraryName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+        classInfo.GetSingle("x").Should().Be(input.X);
+        classInfo.GetSingle("y").Should().Be(input.Y);
     }
 
     [Fact]
     public void RectangleF_Parse()
     {
-        BinaryFormattedObject format = new(Serialize(new RectangleF()));
+        RectangleF input = new(x: 123.5f, y: 456.1f, width: 100.25f, height: 200.75f);
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
 
-        ClassWithMembersAndTypes classInfo = (ClassWithMembersAndTypes)format.RootRecord;
+        ClassRecord classInfo = (ClassRecord)format.RootRecord;
+        classInfo.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         classInfo.ObjectId.Should().Be(1);
-        classInfo.Name.Should().Be("System.Drawing.RectangleF");
+        classInfo.TypeName.FullName.Should().Be("System.Drawing.RectangleF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y", "width", "height"]);
-        classInfo.MemberValues.Should().BeEquivalentTo(new object[] { 0.0f, 0.0f, 0.0f, 0.0f });
-        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new[]
-        {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single)
-        });
+        classInfo.GetSingle("x").Should().Be(input.X);
+        classInfo.GetSingle("y").Should().Be(input.Y);
+        classInfo.GetSingle("width").Should().Be(input.Width);
+        classInfo.GetSingle("height").Should().Be(input.Height);
     }
 
     public static TheoryData<object> SystemDrawing_TestData => new()

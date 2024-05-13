@@ -43,6 +43,18 @@ internal sealed class RecordMap : IReadOnlyDictionary<int, SerializationRecord>
         }
     }
 
+    internal SerializationRecord GetRootRecord(SerializedStreamHeaderRecord header)
+    {
+        SerializationRecord rootRecord = _map[header.RootId];
+        if (rootRecord is SystemClassWithMembersAndTypesRecord systemClass)
+        {
+            // update the record map, so it's visible also to those who access it via Id
+            _map[header.RootId] = rootRecord = systemClass.TryToMapToUserFriendly();
+        }
+
+        return rootRecord;
+    }
+
     // keys (32-bit integer ids) are adversary-provided so we need a collision-resistant comparer
     private sealed class CollisionResistantInt32Comparer : IEqualityComparer<int>
     {

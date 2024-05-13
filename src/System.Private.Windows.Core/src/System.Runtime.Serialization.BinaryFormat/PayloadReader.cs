@@ -157,10 +157,7 @@ public static class PayloadReader
         while (recordType != RecordType.MessageEnd);
 
         readOnlyRecordMap = recordMap;
-        SerializationRecord rootRecord = recordMap[header.RootId];
-        return rootRecord is SystemClassWithMembersAndTypesRecord systemClass
-            ? systemClass.TryToMapToUserFriendly()
-            : rootRecord;
+        return recordMap.GetRootRecord(header);
     }
 
     private static SerializationRecord ReadNext(BinaryReader reader, RecordMap recordMap,

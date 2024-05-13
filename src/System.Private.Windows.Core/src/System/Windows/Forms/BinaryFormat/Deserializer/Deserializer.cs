@@ -232,7 +232,7 @@ internal sealed partial class Deserializer : IDeserializer
             // string matches and as such we'll just create the parser object.
 
             SerializationRecord record = _recordMap[id];
-            if (record is BinaryObjectStringRecord binaryString)
+            if (record is PrimitiveTypeRecord<string> binaryString)
             {
                 _deserializedObjects.Add(id, binaryString.Value);
                 return binaryString.Value;

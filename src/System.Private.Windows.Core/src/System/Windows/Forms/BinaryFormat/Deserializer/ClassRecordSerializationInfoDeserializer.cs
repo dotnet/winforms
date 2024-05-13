@@ -20,7 +20,6 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
-    private int _currentMemberIndex;
 
     internal ClassRecordSerializationInfoDeserializer(
         Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
@@ -39,7 +38,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
         // adsitnik: the order is no longer guaranteed to be preserved
         foreach (string memberName in _classRecord.MemberNames)
         {
-            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.MemberValues[_currentMemberIndex]);
+            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetSerializationRecord(memberName));
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -57,7 +56,6 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
             }
 
             _serializationInfo.AddValue(memberName, memberValue);
-            _currentMemberIndex++;
         }
 
         // We can't complete these in the same way we do with direct field sets as user code can dereference the

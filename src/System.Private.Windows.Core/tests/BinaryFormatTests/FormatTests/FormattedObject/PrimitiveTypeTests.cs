@@ -1,33 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.Serialization.BinaryFormat;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Windows.Forms.BinaryFormat;
 using FormatTests.Common;
-using Record = System.Windows.Forms.BinaryFormat.Record;
+using PrimitiveType = System.Windows.Forms.BinaryFormat.PrimitiveType;
 
 namespace FormatTests.FormattedObject;
 
 public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
 {
-    [Theory]
-    [MemberData(nameof(RoundTrip_Data))]
-    public void WriteReadPrimitiveValue_RoundTrip(byte type, object value)
-    {
-        MemoryStream stream = new();
-        using (BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true))
-        {
-            TestRecord.WritePrimitiveValue(writer, (PrimitiveType)type, value);
-        }
-
-        stream.Position = 0;
-
-        using BinaryReader reader = new(stream);
-        object result = TestRecord.ReadPrimitiveValue(reader, (PrimitiveType)type);
-        result.Should().Be(value);
-    }
-
     public static TheoryData<byte, object> RoundTrip_Data => new()
     {
         { (byte)PrimitiveType.Int64, 0L },
@@ -87,9 +70,7 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
     public void PrimitiveTypeMemberName(object value)
     {
         BinaryFormattedObject format = new(Serialize(value));
-        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
-        systemClass.MemberNames[0].Should().Be("m_value");
-        systemClass.MemberValues.Count.Should().Be(1);
+        VerifyNonGeneric(value, format[1]);
     }
 
     [Theory]
@@ -145,17 +126,15 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
         "Roundabout"
     };
 
-    internal class TestRecord : Record
+    private static void VerifyNonGeneric(object value, SerializationRecord record)
     {
-        public static void WritePrimitiveValue(BinaryWriter writer, PrimitiveType type, object value)
-            => WritePrimitiveType(writer, type, value);
+        typeof(PrimitiveTypeTests)
+            .GetMethod(nameof(VerifyGeneric), System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!
+            .MakeGenericMethod(value.GetType()).Invoke(null, [value, record]);
+    }
 
-        public static object ReadPrimitiveValue(BinaryReader reader, PrimitiveType type)
-            => ReadPrimitiveType(reader, type);
-
-        public override void Write(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
+    private static void VerifyGeneric<T>(T value, SerializationRecord record) where T : unmanaged
+    {
+        record.As<PrimitiveTypeRecord<T>>().Value.Should().Be(value);
     }
 }

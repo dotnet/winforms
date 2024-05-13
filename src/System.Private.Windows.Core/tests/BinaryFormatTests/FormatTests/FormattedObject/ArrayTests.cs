@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Windows.Forms.BinaryFormat;
 using System.Runtime.Serialization.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
@@ -20,7 +19,7 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     [MemberData(nameof(StringArray_Parse_Data))]
     public void StringArray_Parse(string?[] strings)
     {
-        BinaryFormattedObject format = new(Serialize(strings));
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(strings));
         var arrayRecord = (ArrayRecord<string>)format.RootRecord;
         arrayRecord.ToArray().Should().BeEquivalentTo(strings);
     }
@@ -36,9 +35,9 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     [MemberData(nameof(PrimitiveArray_Parse_Data))]
     public void PrimitiveArray_Parse(Array array)
     {
-        BinaryFormattedObject format = new(Serialize(array));
-        var arrayRecord = (ArrayRecord<string>)format.RootRecord;
-        arrayRecord.Should().BeEquivalentTo(arrayRecord.ToArray());
+        System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(array));
+        var arrayRecord = (ArrayRecord)format.RootRecord;
+        arrayRecord.ToArray(expectedArrayType: array.GetType()).Should().BeEquivalentTo(array);
     }
 
     public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
