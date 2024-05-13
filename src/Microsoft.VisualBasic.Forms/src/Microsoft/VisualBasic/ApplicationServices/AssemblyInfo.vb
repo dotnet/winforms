@@ -18,6 +18,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  reduced to a number of relevant properties.
     ''' </remarks>
     Public Class AssemblyInfo
+        ' The assembly with the information.
+        Private ReadOnly _assembly As Assembly
+
+        ' Since these properties will not change during runtime, they're cached.
+        ' "" is not Nothing so use Nothing to mark an un-accessed property.
+        ' Cache the assembly's company name.
+        Private _companyName As String
+        ' Cache the assembly's copyright.
+        Private _copyright As String
+        ' Cache the assembly's description.
+        Private _description As String
+        ' Cache the assembly's product name.
+        Private _productName As String
+        ' Cache the assembly's title.
+        Private _title As String
+        ' Cache the assembly's trademark.
+        Private _trademark As String
 
         ''' <summary>
         '''  Creates an AssemblyInfo from an assembly
@@ -232,24 +249,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Return attributes(0)
             End If
         End Function
-
-        ' The assembly with the information.
-        Private ReadOnly _assembly As Assembly
-
-        ' Since these properties will not change during runtime, they're cached.
-        ' "" is not Nothing so use Nothing to mark an un-accessed property.
-        ' Cache the assembly's description.
-        Private _description As String
-        ' Cache the assembly's title.
-        Private _title As String
-        ' Cache the assembly's product name.
-        Private _productName As String
-        ' Cache the assembly's company name.
-        Private _companyName As String
-        ' Cache the assembly's trademark.
-        Private _trademark As String
-        ' Cache the assembly's copyright.
-        Private _copyright As String
 
     End Class
 End Namespace
