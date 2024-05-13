@@ -11,6 +11,8 @@ Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
+Imports System.Security.Cryptography
+Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
@@ -1015,17 +1017,28 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
             Dim guidAttribute As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
             Dim currentUserSID As String = Principal.WindowsIdentity.GetCurrent().User.Value
-
+            Dim location As String = entry.Location
+            Dim pathGuid As Guid = GetFilePathAsGuid(location)
             If guidAttribute IsNot Nothing Then
                 Dim version As Version = entry.GetName.Version
                 If version IsNot Nothing Then
-                    Return $"{guidAttribute.Value}{version.Major}.{version.Minor}-{currentUserSID}"
+                    Return $"{pathGuid}-{guidAttribute.Value}{version.Major}.{version.Minor}-{currentUserSID}"
                 Else
-                    Return $"{guidAttribute.Value}-{currentUserSID}"
+                    Return $"{pathGuid}-{guidAttribute.Value}-{currentUserSID}"
                 End If
             End If
 
-            Return $"{entry.ManifestModule.ModuleVersionId}-{currentUserSID}"
+            Return $"{pathGuid}-{entry.ManifestModule.ModuleVersionId}-{currentUserSID}"
         End Function
+
+#Disable Warning CA5351 ' We want speed over collision resistance.
+        Private Shared Function GetFilePathAsGuid(filePath As String) As Guid
+            Using md5 As MD5 = MD5.Create()
+                Dim filePathBytes As Byte() = Encoding.UTF8.GetBytes(filePath)
+                Dim hashBytes As Byte() = MD5.HashData(filePathBytes)
+                Return New Guid(hashBytes)
+            End Using
+        End Function
+#Enable Warning CA5351
     End Class
 End Namespace
