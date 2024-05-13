@@ -7462,8 +7462,8 @@ public class TreeViewTests
         using TreeView treeView = new();
 
         treeView.Indent = 10;
-        var resetIndentMethod = treeView.GetType().GetMethod("ResetIndent", BindingFlags.NonPublic | BindingFlags.Instance);
-        resetIndentMethod.Invoke(treeView, null);
+        var accessor = treeView.TestAccessor();
+        accessor.Dynamic.ResetIndent();
 
         treeView.Indent.Should().Be(19);
     }
@@ -7474,8 +7474,8 @@ public class TreeViewTests
         using TreeView treeView = new();
 
         treeView.ItemHeight = 10;
-        var resetItemHeightMethod = treeView.GetType().GetMethod("ResetItemHeight", BindingFlags.NonPublic | BindingFlags.Instance);
-        resetItemHeightMethod.Invoke(treeView, null);
+        var accessor = treeView.TestAccessor();
+        accessor.Dynamic.ResetItemHeight();
 
         treeView.ItemHeight.Should().Be(19);
     }
@@ -7485,13 +7485,13 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
 
-        var shouldSerializeIndentMethod = treeView.GetType().GetMethod("ShouldSerializeIndent", BindingFlags.NonPublic | BindingFlags.Instance);
-        bool result = (bool)shouldSerializeIndentMethod.Invoke(treeView, null);
+        var accessor = treeView.TestAccessor();
+        bool result = accessor.Dynamic.ShouldSerializeIndent();
 
         result.Should().BeFalse();
 
         treeView.Indent = 10;
-        result = (bool)shouldSerializeIndentMethod.Invoke(treeView, null);
+        result = accessor.Dynamic.ShouldSerializeIndent();
 
         result.Should().BeTrue();
     }
@@ -7501,13 +7501,13 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
 
-        var shouldSerializeItemHeightMethod = treeView.GetType().GetMethod("ShouldSerializeItemHeight", BindingFlags.NonPublic | BindingFlags.Instance);
-        bool result = (bool)shouldSerializeItemHeightMethod.Invoke(treeView, null);
+        var accessor = treeView.TestAccessor();
+        bool result = accessor.Dynamic.ShouldSerializeItemHeight();
 
         result.Should().BeFalse();
 
         treeView.ItemHeight = 10;
-        result = (bool)shouldSerializeItemHeightMethod.Invoke(treeView, null);
+        result = accessor.Dynamic.ShouldSerializeItemHeight();
 
         result.Should().BeTrue();
     }
