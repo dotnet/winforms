@@ -23,15 +23,13 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
     internal ClassRecordFieldInfoDeserializer(
         ClassRecord classRecord,
         object @object,
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields | DynamicallyAccessedMemberTypes.PublicFields)]
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         Type type,
         IDeserializer deserializer)
-        : base(classRecord, @object, deserializer)
+        : base(classRecord, @object, type, deserializer)
     {
         _classRecord = classRecord;
-#pragma warning disable IL2067 // GetSerializableMembers is not attributed correctly. Should just be fields.
         _fieldInfo = FormatterServices.GetSerializableMembers(type);
-#pragma warning restore IL2067
         _isValueType = type.IsValueType;
     }
 
@@ -67,7 +65,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 throw new SerializationException($"Could not find field '{field.Name}' data for type '{field.DeclaringType!.Name}'.");
             }
 
-            (object? memberValue, Id reference) = GetMemberValue(rawValue);
+            (object? memberValue, Id reference) = UnwrapMemberValue(rawValue);
             if (s_missingValueSentinel == memberValue)
             {
                 // Record has not been encountered yet, need to pend iteration.
@@ -76,7 +74,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
             field.SetValue(Object, memberValue);
 
-            if (!reference.IsNull && field.FieldType.IsValueType && Deserializer.IncompleteObjects.Contains(reference))
+            if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
             {
                 // Need to track a fixup for this field.
                 _hasFixups = true;
@@ -85,6 +83,9 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 
             _currentFieldIndex++;
         }
+
+        // Register after all members are parsed, to ensure that completion events are triggered in depth-first order.
+        RegisterCompleteEvents();
 
         if (!_hasFixups || !_isValueType)
         {

@@ -5214,15 +5214,15 @@ public class TabPageTests
 
     private class SubTabPage : TabPage
     {
-        public new const int ScrollStateAutoScrolling = TabPage.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = TabPage.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = TabPage.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = TabPage.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = TabPage.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public SubTabPage() : base()
         {

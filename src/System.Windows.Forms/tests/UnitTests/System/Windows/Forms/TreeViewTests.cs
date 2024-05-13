@@ -7305,6 +7305,64 @@ public class TreeViewTests
         Assert.Equal(treeNode2, parent.Nodes[0]);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/11243
+    [WinFormsFact]
+    public void TreeView_TreeNodeAddRangeSequence()
+    {
+        using TreeView treeView = new();
+
+        TreeNode treeNode1 = new("a0");
+        TreeNode treeNode2 = new("b0");
+        TreeNode treeNode3 = new("c0");
+        TreeNode treeNode4 = new("a1");
+        TreeNode treeNode5 = new("b1");
+        TreeNode treeNode6 = new("c1");
+        TreeNode treeNode7 = new("a2");
+        TreeNode rootNode = new("Root", [new TreeNode("child")]);
+
+        treeView.Nodes.Add(rootNode);
+        treeView.CreateControl();
+
+        rootNode.Nodes.AddRange(treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode6, treeNode7);
+        rootNode.ExpandAll();
+
+        rootNode.Should().Be(treeView.Nodes[0]);
+
+        TreeNode childNode1 = rootNode.Nodes[0];
+        TreeNode childNode2 = rootNode.Nodes[1];
+        TreeNode childNode3 = rootNode.Nodes[2];
+        TreeNode childNode4 = rootNode.Nodes[3];
+        TreeNode childNode5 = rootNode.Nodes[4];
+        TreeNode childNode6 = rootNode.Nodes[5];
+        TreeNode childNode7 = rootNode.Nodes[6];
+        TreeNode childNode8 = rootNode.Nodes[7];
+
+        childNode1.Text.Should().Be("child");
+
+        childNode1.NextVisibleNode.Should().NotBeNull();
+        childNode1.NextVisibleNode.Text.Should().Be("a0");
+
+        childNode2.NextVisibleNode.Should().NotBeNull();
+        childNode2.NextVisibleNode.Text.Should().Be("b0");
+
+        childNode3.NextVisibleNode.Should().NotBeNull();
+        childNode3.NextVisibleNode.Text.Should().Be("c0");
+
+        childNode4.NextVisibleNode.Should().NotBeNull();
+        childNode4.NextVisibleNode.Text.Should().Be("a1");
+
+        childNode5.NextVisibleNode.Should().NotBeNull();
+        childNode5.NextVisibleNode.Text.Should().Be("b1");
+
+        childNode6.NextVisibleNode.Should().NotBeNull();
+        childNode6.NextVisibleNode.Text.Should().Be("c1");
+
+        childNode7.NextVisibleNode.Should().NotBeNull();
+        childNode7.NextVisibleNode.Text.Should().Be("a2");
+
+        childNode8.NextVisibleNode.Should().BeNull();
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;

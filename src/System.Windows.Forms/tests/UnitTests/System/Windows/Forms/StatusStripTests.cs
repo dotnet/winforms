@@ -1257,15 +1257,15 @@ public partial class StatusStripTests
 
     private class SubStatusStrip : StatusStrip
     {
-        public new const int ScrollStateAutoScrolling = StatusStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = StatusStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = StatusStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = StatusStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = StatusStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

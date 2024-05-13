@@ -21,14 +21,13 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
     private int _currentMemberIndex;
-    private bool _hasAnyReferences;
 
     internal ClassRecordSerializationInfoDeserializer(
         ClassRecord classRecord,
         object @object,
-        Type type,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
         ISerializationSurrogate? surrogate,
-        IDeserializer deserializer) : base(classRecord, @object, deserializer)
+        IDeserializer deserializer) : base(classRecord, @object, type, deserializer)
     {
         _classRecord = classRecord;
         _surrogate = surrogate;
@@ -41,7 +40,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
         while (_currentMemberIndex < _classRecord.MemberNames.Count)
         {
             string memberName = _classRecord.MemberNames[_currentMemberIndex];
-            (object? memberValue, Id reference) = GetMemberValue(_classRecord.MemberValues[_currentMemberIndex]);
+            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.MemberValues[_currentMemberIndex]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -49,29 +48,21 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
                 return reference;
             }
 
-            // We know that primitive types are not going to have any fields that possibly have
-            // incomplete indirect references so we can do a simple optimization here.
-
-            if (!reference.IsNull
-                && memberValue!.GetType() is { } memberType
-                && !(memberType.IsPrimitive || memberType.IsEnum))
+            if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
             {
-                _hasAnyReferences = true;
-
-                if (memberType.IsValueType && Deserializer.IncompleteObjects.Contains(reference))
-                {
-                    // All missing value types we assign will need to be reassigned to get the final value.
-                    Deserializer.PendValueUpdater(new SerializationInfoValueUpdater(
-                        _classRecord.ObjectId,
-                        reference,
-                        _serializationInfo,
-                        memberName));
-                }
+                Deserializer.PendValueUpdater(new SerializationInfoValueUpdater(
+                    _classRecord.ObjectId,
+                    reference,
+                    _serializationInfo,
+                    memberName));
             }
 
             _serializationInfo.AddValue(memberName, memberValue);
             _currentMemberIndex++;
         }
+
+        // Register after all members are parsed, to ensure that completion events are triggered in depth-first order.
+        RegisterCompleteEvents();
 
         // We can't complete these in the same way we do with direct field sets as user code can dereference the
         // reference type members from the SerializationInfo that aren't fully completed (due to cycles). With direct
@@ -85,16 +76,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
         // if there were no pending value types (which should also not happen if there are no cycles).
 
         PendingSerializationInfo pending = new(_classRecord.ObjectId, _serializationInfo, _surrogate);
-
-        if (_hasAnyReferences)
-        {
-            Deserializer.PendSerializationInfo(pending);
-        }
-        else
-        {
-            pending.Populate(Deserializer.DeserializedObjects, Deserializer.Options.StreamingContext);
-            Deserializer.CompleteObject(_classRecord.ObjectId);
-        }
+        Deserializer.PendSerializationInfo(pending);
 
         // No more missing member refs.
         return Id.Null;

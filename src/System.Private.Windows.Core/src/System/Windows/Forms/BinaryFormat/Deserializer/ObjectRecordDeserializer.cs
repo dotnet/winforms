@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+
 /// <summary>
 ///  Base class for <see cref="BinaryFormat.ObjectRecord"/> deserialization.
 /// </summary>
@@ -34,29 +36,65 @@ internal abstract partial class ObjectRecordDeserializer
     internal abstract Id Continue();
 
     /// <summary>
-    ///  Gets the actual object for a member value record. Returns <see cref="s_missingValueSentinel"/> if
+    ///  Gets the actual object for a member value primitive or record. Returns <see cref="s_missingValueSentinel"/> if
     ///  the object record has not been encountered yet.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private protected (object? value, Id id) GetMemberValue(object? memberValueRecord) => memberValueRecord switch
+    private protected (object? value, Id id) UnwrapMemberValue(object? memberValue)
     {
-        BinaryObjectString binaryString => (binaryString.Value, Id.Null),
-        ObjectRecord objectRecord => Deserializer.DeserializedObjects.TryGetValue(objectRecord.ObjectId, out object? value)
-            ? (value, objectRecord.ObjectId) : (s_missingValueSentinel, objectRecord.ObjectId),
-        MemberReference memberReference => Deserializer.DeserializedObjects.TryGetValue(memberReference.IdRef, out object? value)
-            ? (value, memberReference.IdRef) : (s_missingValueSentinel, memberReference.IdRef),
-        MemberPrimitiveTyped memberPrimitiveTyped => (memberPrimitiveTyped.Value, Id.Null),
-        ObjectNull or null => (null, Id.Null),
-        _ => TypeInfo.GetPrimitiveType(memberValueRecord.GetType()) != default
-            ? (memberValueRecord, Id.Null)
-            : throw new SerializationException($"Unexpected member type '{memberValueRecord.GetType()}'."),
-    };
+        return memberValue switch
+        {
+            // String
+            BinaryObjectString binaryString => (binaryString.Value, Id.Null),
+            // Inline record
+            ObjectRecord objectRecord => TryGetObject(objectRecord.ObjectId),
+            // Record reference
+            MemberReference memberReference => TryGetObject(memberReference.IdRef),
+            // Prmitive type record
+            MemberPrimitiveTyped memberPrimitiveTyped => (memberPrimitiveTyped.Value, Id.Null),
+            // Null
+            ObjectNull or null => (null, Id.Null),
+            // At this point should be an inline primitive
+            _ => TypeInfo.GetPrimitiveType(memberValue.GetType()) != default
+                ? (memberValue, Id.Null)
+                : throw new SerializationException($"Unexpected member type '{memberValue.GetType()}'."),
+        };
+
+        (object? value, Id id) TryGetObject(Id id)
+        {
+            if (!Deserializer.DeserializedObjects.TryGetValue(id, out object? value))
+            {
+                return (s_missingValueSentinel, id);
+            }
+
+            ValidateNewMemberObjectValue(value);
+            return (value, id);
+        }
+    }
+
+    /// <summary>
+    ///  Called for new non-primitive reference types.
+    /// </summary>
+    private protected virtual void ValidateNewMemberObjectValue(object value) { }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if the given record's value needs an updater applied.
+    /// </summary>
+    private protected bool DoesValueNeedUpdated(object value, Id valueRecord) =>
+        // Null Id is a primitive of some sort.
+        !valueRecord.IsNull
+            // IObjectReference is going to have it's object replaced.
+            && (value is IObjectReference
+                // Value types that aren't "complete" need to be reapplied.
+                || (Deserializer.IncompleteObjects.Contains(valueRecord) && value.GetType().IsValueType));
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.ClassRecordParser.Create(ClassRecord, IDeserializer)")]
     internal static ObjectRecordDeserializer Create(Id id, IRecord record, IDeserializer deserializer) => record switch
     {
         ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
-        ArrayRecord<object?> arrayRecord => new ArrayRecordDeserialzer(arrayRecord, deserializer),
+        ArrayRecord<object?> arrayRecord => new ArrayRecordDeserializer(arrayRecord, deserializer),
         _ => throw new SerializationException($"Unexpected record type for {id}.")
     };
 }
+
+#pragma warning restore SYSLIB0050 // Type or member is obsolete

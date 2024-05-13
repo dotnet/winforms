@@ -13,31 +13,37 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   This has some constraints over the BinaryFormatter. Notably it does not support
-///   <see cref="IObjectReference"/>, which greatly simplifies the deserialization. It
-///   also does not allow offset arrays (arrays that have lower bounds other than zero).
+///   This has some constraints over the BinaryFormatter. Notably it does not support all <see cref="IObjectReference"/>
+///   usages or surrogates that replace object instances. This greatly simplifies the deserialization. It also does not
+///   allow offset arrays (arrays that have lower bounds other than zero) or multidimensional arrays that have more
+///   than <see cref="int.MaxValue"/> elements.
 ///  </para>
 ///  <para>
-///   This deserializer guarantees that all value types are observable in their final
-///   state. Object references (including within value types), may not be in their final
-///   state until the end of deserialization due to graph cycles. The instance will be
-///   the final instance, but it may directly or indirectly contain uncompleted value
-///   types. In general it is risky to dereference reference types in <see cref="ISerializable"/>
-///   constructors or in <see cref="ISerializationSurrogate"/> call backs.
+///   This deserializer ensures that all value types are assigned to fields or populated in <see cref="SerializationInfo"/>
+///   callbacks with their final state, throwing if that is impossible to attain due to graph cycles or data corruption.
+///   The value type instance may contain references to uncompleted reference types when there are cycles in the graph.
+///   In general it is risky to dereference reference types in <see cref="ISerializable"/> constructors or in
+///   <see cref="ISerializationSurrogate"/> call backs if there is any risk of the objects enabling a cycle.
 ///  </para>
 ///  <para>
-///   If you need to dereference reference types in <see cref="SerializationInfo"/> waiting
-///   for final state by implementing <see cref="IDeserializationCallback"/> or
-///   <see cref="OnDeserializedAttribute"/> is the safe way to do so. Surrogates are more
-///   complicated (<see cref="ISerializationSurrogate"/>). With surrogates you need to track
-///   the instances that need fixup and handle them after invoking the deserializer.
+///   If you need to dereference reference types in <see cref="SerializationInfo"/> waiting for final state by
+///   implementing <see cref="IDeserializationCallback"/> or <see cref="OnDeserializedAttribute"/> is the safer way to
+///   do so. This deserializer does not fire completed events until the entire graph has been deserialized. If a
+///   surrogate (<see cref="ISerializationSurrogate"/>) needs to dereference with potential cycles it would require
+///   tracking instances by stashing them in a provided <see cref="StreamingContext"/> to handle after invoking the
+///   deserializer.
 ///  </para>
 /// </remarks>
 /// <devdoc>
-///  <see cref="IObjectReference"/> makes deserializing difficult as you don't know the final
-///  type until you've finished populating the serialized type. If <see cref="SerializationInfo"/>
-///  is involved and you have a cycle you may never be able to complete the deserialization as
-///  the reference type values in the <see cref="SerializationInfo"/> can't get the final object.
+///  <see cref="IObjectReference"/> makes deserializing difficult as you don't know the final type until you've finished
+///  populating the serialized type. If <see cref="SerializationInfo"/> is involved and you have a cycle you may never
+///  be able to complete the deserialization as the reference type values in the <see cref="SerializationInfo"/> can't
+///  get the final object.
+///
+///  <see cref="IObjectReference"/> is really the only practical way to represent singletons. A common pattern is to
+///  nest an <see cref="IObjectReference"/> object in an <see cref="ISerializable"/> object. Specifying the nested
+///  type when <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/> is called by invoking
+///  <see cref="SerializationInfo.SetType(Type)"/> will get that type info serialized into the stream.
 /// </devdoc>
 internal sealed partial class Deserializer : IDeserializer
 {
@@ -56,11 +62,6 @@ internal sealed partial class Deserializer : IDeserializer
     // Surrogate cache.
     private readonly Dictionary<Type, ISerializationSurrogate?>? _surrogates;
 
-    // Queue of SerializationInfo objects that need to be applied.
-    // These are in depth first order, if there are no cycles in the graph this
-    // ensures that all objects are available when the SerializationInfo is applied.
-    private Queue<PendingSerializationInfo>? _pendingSerializationInfo;
-
     // Keeping a separate stack for ids for fast infinite loop checks.
     private readonly Stack<int> _parseStack = [];
     private readonly Stack<ObjectRecordDeserializer> _parserStack = [];
@@ -69,17 +70,14 @@ internal sealed partial class Deserializer : IDeserializer
     private readonly HashSet<int> _incompleteObjects = [];
     public IReadOnlySet<int> IncompleteObjects => _incompleteObjects;
 
-    // For a given object id, the set of ids that it is waiting on to complete.
-    private Dictionary<int, HashSet<int>>? _incompleteDependencies;
-
-    // The pending value updaters. Scanned each time an object is completed.
-    private HashSet<ValueUpdater>? _pendingUpdates;
+    private readonly PendingUpdates _pending;
 
     // Kept as a field to avoid allocating a new one every time we complete objects.
     private readonly Queue<int> _pendingCompletions = [];
 
     private readonly Id _rootId;
 
+    // We group individual object events here to fire them all when we complete the graph.
     private event Action<object?>? OnDeserialization;
     private event Action<StreamingContext>? OnDeserialized;
 
@@ -93,6 +91,7 @@ internal sealed partial class Deserializer : IDeserializer
         _recordMap = recordMap;
         _typeResolver = typeResolver;
         Options = options;
+        _pending = new(_deserializedObjects);
 
         if (Options.SurrogateSelector is not null)
         {
@@ -119,24 +118,21 @@ internal sealed partial class Deserializer : IDeserializer
     {
         DeserializeRoot(_rootId);
 
-        object root = _deserializedObjects[_rootId];
-
         // Complete all pending SerializationInfo objects.
-        int pendingCount = _pendingSerializationInfo?.Count ?? 0;
-        while (_pendingSerializationInfo is not null && _pendingSerializationInfo.TryDequeue(out PendingSerializationInfo? pending))
+        int pendingCount = _pending.PendingSerializationInfoCount;
+        while (_pending.TryDequeuePendingSerializationInfo(out PendingSerializationInfo? pending))
         {
             // Using pendingCount to only requeue on the first pass.
             if (--pendingCount >= 0
-                && _pendingSerializationInfo.Count != 0
-                && _incompleteDependencies is not null
-                && _incompleteDependencies.TryGetValue(pending.ObjectId, out HashSet<int>? dependencies))
+                && _pending.PendingSerializationInfoCount != 0
+                && _pending.TryGetIncompleteDependencies(pending.ObjectId, out HashSet<int>? dependencies))
             {
                 // We can get here with nested ISerializable value types.
 
                 // Hopefully another pass will complete this.
                 if (dependencies.Count > 0)
                 {
-                    _pendingSerializationInfo.Enqueue(pending);
+                    _pending.Enqueue(pending);
                     continue;
                 }
 
@@ -148,18 +144,18 @@ internal sealed partial class Deserializer : IDeserializer
             ((IDeserializer)this).CompleteObject(pending.ObjectId);
         }
 
-        if (_incompleteObjects.Count > 0 || (_pendingUpdates is not null && _pendingUpdates.Count > 0))
+        if (_incompleteObjects.Count > 0 || _pending.PendingValueUpdatesCount > 0)
         {
-            // This should never happen.
+            // This should never happen outside of corrupted data.
             throw new SerializationException("Objects could not be deserialized completely.");
         }
 
         // Notify [OnDeserialized] instance methods for all relevant deserialized objects,
         // then callback IDeserializationCallback on all objects that implement it.
-        OnDeserialization?.Invoke(null);
         OnDeserialized?.Invoke(Options.StreamingContext);
+        OnDeserialization?.Invoke(null);
 
-        return root;
+        return _deserializedObjects[_rootId];
     }
 
     [RequiresUnreferencedCode("Calls DeserializeNew(Id)")]
@@ -272,105 +268,66 @@ internal sealed partial class Deserializer : IDeserializer
         return surrogate;
     }
 
-    void IDeserializer.PendSerializationInfo(PendingSerializationInfo pending)
-    {
-        _pendingSerializationInfo ??= new();
-        _pendingSerializationInfo.Enqueue(pending);
-    }
+    void IDeserializer.PendSerializationInfo(PendingSerializationInfo pending) => _pending.Enqueue(pending);
 
-    void IDeserializer.PendValueUpdater(ValueUpdater updater)
-    {
-        // Add the pending update and update the dependencies list.
-
-        _pendingUpdates ??= [];
-        _pendingUpdates.Add(updater);
-
-        _incompleteDependencies ??= [];
-
-        if (_incompleteDependencies.TryGetValue(updater.ObjectId, out HashSet<int>? dependencies))
-        {
-            dependencies.Add(updater.ValueId);
-        }
-        else
-        {
-            _incompleteDependencies.Add(updater.ObjectId, [updater.ValueId]);
-        }
-    }
+    void IDeserializer.PendValueUpdater(ValueUpdater updater) => _pending.Add(updater);
 
     [UnconditionalSuppressMessage(
         "Trimming",
         "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
         Justification = "The type is already in the cache of the TypeResolver, no need to mark this one again.")]
+    void IDeserializer.RegisterCompleteEvents(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        object @object)
+    {
+        OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
+
+        if (@object is IDeserializationCallback callback)
+        {
+            OnDeserialization += callback.OnDeserialization;
+        }
+    }
+
     void IDeserializer.CompleteObject(Id id)
     {
         // Need to use a queue as Completion is recursive.
 
         _pendingCompletions.Enqueue(id);
-        Id completed = Id.Null;
+        bool recursed = false;
 
         while (_pendingCompletions.TryDequeue(out int completedId))
         {
             _incompleteObjects.Remove(completedId);
 
-            if (_recordMap[completedId] is ClassRecord classRecord)
+            // When we've recursed, we've done so because there are no more dependencies for the current id, so we can
+            // remove it from the dictionary. We have to pend as we can't remove while we're iterating the dictionary.
+            if (recursed)
             {
-                // Hook any finished events for this object. Doing at the end of deserialization for simplicity.
-                // (If we knew there were no cycles in the graph we could fire these as we go.)
+                _pending.RemoveIncompleteDependency(completedId);
 
-                Type type = _typeResolver.GetType(classRecord.Name, classRecord.LibraryId);
-                object @object = _deserializedObjects[completedId];
-
-                OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
-
-                if (@object is IDeserializationCallback callback)
+                if (_pending.ContainsPendingSerializationInfo(completedId))
                 {
-                    OnDeserialization += callback.OnDeserialization;
-                }
-            }
-
-            if (_incompleteDependencies is null)
-            {
-                continue;
-            }
-
-            Debug.Assert(_pendingUpdates is not null);
-
-            // When we've recursed, we've done so because there are no more dependencies for the current
-            // id, so we can remove it from the dictionary. We have to pend as we're iterating the dictionary.
-            if (!completed.IsNull)
-            {
-                _incompleteDependencies.Remove(completed);
-                completed = Id.Null;
-            }
-
-            foreach ((int incompleteId, HashSet<int> dependencies) in _incompleteDependencies)
-            {
-                if (!dependencies.Remove(completedId))
-                {
+                    // We came back for an object that has no remaining direct dependencies, but still has
+                    // PendingSerializationInfo. As such it cannot be considered completed yet.
                     continue;
                 }
-
-                // Search for fixups that need to be applied for this dependency.
-                int removals = _pendingUpdates.RemoveWhere((ValueUpdater updater) =>
-                {
-                    if (updater.ValueId != completedId)
-                    {
-                        return false;
-                    }
-
-                    updater.UpdateValue(_deserializedObjects);
-                    return true;
-                });
-
-                if (dependencies.Count != 0)
-                {
-                    continue;
-                }
-
-                // No more dependencies, enqueue for completion
-                completed = incompleteId;
-                _pendingCompletions.Enqueue(incompleteId);
             }
+
+            if (_recordMap[completedId] is ClassRecord classRecord && !_pending.HasIncompleteDependencies(completedId))
+            {
+                // There are no remaining dependencies. Get the real object if it's an IObjectReference.
+                if (_deserializedObjects[completedId] is IObjectReference objectReference)
+                {
+                    _deserializedObjects[completedId] = objectReference.GetRealObject(Options.StreamingContext);
+                }
+            }
+
+            foreach (int dependentCompletion in _pending.CompleteDependencies(completedId))
+            {
+                _pendingCompletions.Enqueue(dependentCompletion);
+            }
+
+            recursed = true;
         }
     }
 }
