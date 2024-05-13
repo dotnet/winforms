@@ -11,6 +11,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' </summary>
     Public Class ConsoleApplicationBase : Inherits ApplicationBase
 
+        ' Lazy-initialized and cached collection of command line arguments.
+        Private _commandLineArgs As ObjectModel.ReadOnlyCollection(Of String)
+
         ''' <summary>
         '''  Constructs the application Shutdown/Startup model object
         ''' </summary>
@@ -58,7 +61,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Set
         End Property
 
-        ' Lazy-initialized and cached collection of command line arguments.
-        Private _commandLineArgs As ObjectModel.ReadOnlyCollection(Of String)
     End Class 'ApplicationBase
 End Namespace
