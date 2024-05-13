@@ -8,6 +8,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Partial Public Class ControlTests
 
+        Public Shared Function FaultingFunc(a As Integer) As Integer
+            Return a \ 0
+        End Function
+
+        Public Shared Sub FaultingMethod()
+            Throw New DivideByZeroException()
+        End Sub
+
         <WinFormsFact>
         Public Sub Control_Invoke_Action_calls_correct_method()
             Using _control As New Control
@@ -91,14 +99,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Contains(" System.Windows.Forms.Control.Invoke[T](Func`1 method) ", exception.StackTrace)
             End Using
         End Sub
-
-        Public Shared Sub FaultingMethod()
-            Throw New DivideByZeroException()
-        End Sub
-
-        Public Shared Function FaultingFunc(a As Integer) As Integer
-            Return a \ 0
-        End Function
 
     End Class
 End Namespace
