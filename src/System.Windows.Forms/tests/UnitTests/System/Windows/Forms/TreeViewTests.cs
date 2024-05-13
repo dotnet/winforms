@@ -4,7 +4,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 
