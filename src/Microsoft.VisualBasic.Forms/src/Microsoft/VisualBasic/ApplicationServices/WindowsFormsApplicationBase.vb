@@ -1033,11 +1033,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
 #Disable Warning CA5351 ' We want speed over collision resistance.
         Private Shared Function GetFilePathAsGuid(filePath As String) As Guid
-            Using md5 As MD5 = MD5.Create()
-                Dim filePathBytes As Byte() = Encoding.UTF8.GetBytes(filePath)
-                Dim hashBytes As Byte() = MD5.HashData(filePathBytes)
-                Return New Guid(hashBytes)
-            End Using
+            Dim filePathBytes As Byte() = Encoding.UTF8.GetBytes(filePath)
+            Dim hashBytes As Byte() = MD5.HashData(filePathBytes)
+            Return New Guid(hashBytes)
         End Function
 #Enable Warning CA5351
     End Class
