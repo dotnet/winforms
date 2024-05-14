@@ -9,8 +9,8 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
 {
     private readonly ArrayRecord _arrayRecord;
     private readonly Type _elementType;
-    private readonly Array _array;
-    private readonly Array _result;
+    private readonly Array _arrayOfClassRecords;
+    private readonly Array _arrayOfT;
     private int _index;
     private bool _hasFixups;
 
@@ -31,9 +31,9 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
         };
         // Tricky part: for arrays of classes/structs the following record allocates and array of class records
         // (because the payload reader can not load types, instantiate objects and rehydrate them)
-        _array = arrayRecord.ToArray(expectedArrayType, maxLength: Array.MaxLength);
-
-        Type elementType = _array.GetType();
+        _arrayOfClassRecords = arrayRecord.ToArray(expectedArrayType, maxLength: Array.MaxLength);
+        // Now we need to create an array of the same length, but of a different, exact type
+        Type elementType = _arrayOfClassRecords.GetType();
         while (elementType.IsArray)
         {
             elementType = elementType.GetElementType()!;
@@ -42,19 +42,17 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
         int[] lengths = new int[arrayRecord.Rank];
         for (int dimension = 0; dimension < lengths.Length; dimension++)
         {
-            lengths[dimension] = _array.GetLength(dimension);
+            lengths[dimension] = _arrayOfClassRecords.GetLength(dimension);
         }
 
-        Object = _result = Array.CreateInstance(_elementType, lengths);
+        Object = _arrayOfT = Array.CreateInstance(_elementType, lengths);
     }
 
-    // adsitnik: it may compile, but most likely won't work without any changes
     internal override Id Continue()
     {
         while (_index < _arrayRecord.Length)
         {
-            // TODO: adsitnik: handle multi-dimensional arrays
-            (object? memberValue, Id reference) = UnwrapMemberValue(_array.GetArrayData<object?>()[_index]);
+            (object? memberValue, Id reference) = UnwrapMemberValue(_arrayOfClassRecords.GetArrayData<object?>()[_index]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -78,11 +76,11 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
 
             if (_elementType.IsValueType)
             {
-                _result.SetArrayValueByFlattenedIndex(memberValue, _index);
+                _arrayOfT.SetArrayValueByFlattenedIndex(memberValue, _index);
             }
             else
             {
-                Span<object?> flatSpan = _result.GetArrayData<object?>();
+                Span<object?> flatSpan = _arrayOfT.GetArrayData<object?>();
                 flatSpan[_index] = memberValue;
             }
 

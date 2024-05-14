@@ -39,7 +39,6 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
 
     internal override Id Continue()
     {
-        // adsitnik: the order is no longer guaranteed to be preserved
         if (_canIterate)
         {
             do
