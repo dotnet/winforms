@@ -209,7 +209,7 @@ internal sealed class BinaryArrayRecord : ArrayRecord
             arrayNestingDepth++;
         }
 
-        if (PrimitiveTypes.Contains(elementType))
+        if (PrimitiveTypes.Contains(elementType) || (Nullable.GetUnderlyingType(elementType) is Type nullable && PrimitiveTypes.Contains(nullable)))
         {
             return arrayNestingDepth == 1 ? elementType : arrayType.GetElementType()!;
         }

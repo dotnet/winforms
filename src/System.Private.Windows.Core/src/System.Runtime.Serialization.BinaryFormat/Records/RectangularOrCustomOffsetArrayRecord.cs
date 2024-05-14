@@ -152,14 +152,17 @@ internal sealed class RectangularOrCustomOffsetArrayRecord : ArrayRecord
     internal static RectangularOrCustomOffsetArrayRecord Create(ArrayInfo arrayInfo,
         MemberTypeInfo memberTypeInfo, int[] lengths, int[] offsets, RecordMap recordMap)
     {
-        return memberTypeInfo.Infos[0].BinaryType switch
+        Type elementType = memberTypeInfo.Infos[0].BinaryType switch
         {
-            BinaryType.Primitive => new(MapPrimitive((PrimitiveType)memberTypeInfo.Infos[0].AdditionalInfo!), arrayInfo, memberTypeInfo, lengths, offsets, recordMap),
-            BinaryType.String => new(typeof(string), arrayInfo, memberTypeInfo, lengths, offsets, recordMap),
-            BinaryType.Object => new(typeof(object), arrayInfo, memberTypeInfo, lengths, offsets, recordMap),
-            BinaryType.SystemClass or BinaryType.Class => new(typeof(ClassRecord), arrayInfo, memberTypeInfo, lengths, offsets, recordMap),
-            _ => throw ThrowHelper.InvalidBinaryType(memberTypeInfo.Infos[0].BinaryType),
+            BinaryType.Primitive => MapPrimitive((PrimitiveType)memberTypeInfo.Infos[0].AdditionalInfo!),
+            BinaryType.PrimitiveArray => MapPrimitive((PrimitiveType)memberTypeInfo.Infos[0].AdditionalInfo!).MakeArrayType(),
+            BinaryType.String => typeof(string),
+            BinaryType.Object => typeof(object),
+            BinaryType.SystemClass or BinaryType.Class => typeof(ClassRecord),
+            _ => throw ThrowHelper.InvalidBinaryType(memberTypeInfo.Infos[0].BinaryType)
         };
+
+        return new(elementType, arrayInfo, memberTypeInfo, lengths, offsets, recordMap);
     }
 
     private static Type MapPrimitive(PrimitiveType primitiveType)

@@ -232,38 +232,21 @@ internal sealed partial class Deserializer : IDeserializer
             // string matches and as such we'll just create the parser object.
 
             SerializationRecord record = _recordMap[id];
-            if (record is PrimitiveTypeRecord<string> binaryString)
-            {
-                _deserializedObjects.Add(id, binaryString.Value);
-                return binaryString.Value;
-            }
 
-            if (record.RecordType is RecordType.ArraySingleString or RecordType.ArraySinglePrimitive)
+            object? value = record.RecordType switch
             {
-                Array? values = record switch
-                {
-                    ArrayRecord<string> stringArray => stringArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<bool> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<byte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<sbyte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<char> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<short> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<ushort> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<int> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<uint> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<long> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<ulong> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<float> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<double> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<decimal> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<DateTime> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    ArrayRecord<TimeSpan> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
-                    _ => null
-                };
+                RecordType.BinaryObjectString => ((PrimitiveTypeRecord<string>)record).Value,
+                RecordType.MemberPrimitiveTyped => record.GetMemberPrimitiveTypedValue(),
+                RecordType.ArraySingleString => ((ArrayRecord<string>)record).ToArray(maxLength: Array.MaxLength),
+                RecordType.ArraySinglePrimitive => ArrayRecordDeserializer.GetArraySinglePrimitive(record),
+                RecordType.BinaryArray => ArrayRecordDeserializer.GetSimpleBinaryArray((ArrayRecord)record, _typeResolver),
+                _ => null
+            };
 
-                Debug.Assert(values is not null);
-                _deserializedObjects.Add(record.ObjectId, values);
-                return values;
+            if (value is not null)
+            {
+                _deserializedObjects.Add(record.ObjectId, value);
+                return value;
             }
 
             // Not a simple case, need to do a full deserialization of the record.

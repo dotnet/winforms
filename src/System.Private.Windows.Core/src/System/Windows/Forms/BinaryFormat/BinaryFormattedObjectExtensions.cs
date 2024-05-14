@@ -92,38 +92,47 @@ internal static class BinaryFormattedObjectExtensions
 
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            if (format.RootRecord.RecordType is not (RecordType.BinaryObjectString or RecordType.MemberPrimitiveTyped or RecordType.SystemClassWithMembersAndTypes))
+            if (format.RootRecord.RecordType is RecordType.BinaryObjectString)
             {
-                value = null;
-                return false;
+                value = ((PrimitiveTypeRecord<string>)format.RootRecord).Value;
+                return true;
+            }
+            else if (format.RootRecord.RecordType is RecordType.MemberPrimitiveTyped)
+            {
+                value = GetMemberPrimitiveTypedValue(format.RootRecord);
+                return true;
             }
 
-            value = format.RootRecord switch
-            {
-                PrimitiveTypeRecord<string> primitive => primitive.Value,
-                PrimitiveTypeRecord<bool> primitive => primitive.Value,
-                PrimitiveTypeRecord<byte> primitive => primitive.Value,
-                PrimitiveTypeRecord<sbyte> primitive => primitive.Value,
-                PrimitiveTypeRecord<char> primitive => primitive.Value,
-                PrimitiveTypeRecord<short> primitive => primitive.Value,
-                PrimitiveTypeRecord<ushort> primitive => primitive.Value,
-                PrimitiveTypeRecord<int> primitive => primitive.Value,
-                PrimitiveTypeRecord<uint> primitive => primitive.Value,
-                PrimitiveTypeRecord<long> primitive => primitive.Value,
-                PrimitiveTypeRecord<ulong> primitive => primitive.Value,
-                PrimitiveTypeRecord<float> primitive => primitive.Value,
-                PrimitiveTypeRecord<double> primitive => primitive.Value,
-                PrimitiveTypeRecord<decimal> primitive => primitive.Value,
-                PrimitiveTypeRecord<TimeSpan> primitive => primitive.Value,
-                PrimitiveTypeRecord<DateTime> primitive => primitive.Value,
-                PrimitiveTypeRecord<IntPtr> primitive => primitive.Value,
-                PrimitiveTypeRecord<UIntPtr> primitive => primitive.Value,
-                _ => null
-            };
-
-            return value is not null
-                || format.RootRecord is PrimitiveTypeRecord<string>; // null string value
+            value = null;
+            return false;
         }
+    }
+
+    internal static object GetMemberPrimitiveTypedValue(this SerializationRecord record)
+    {
+        Debug.Assert(record.RecordType is RecordType.MemberPrimitiveTyped);
+
+        return record switch
+        {
+            PrimitiveTypeRecord<string> primitive => primitive.Value,
+            PrimitiveTypeRecord<bool> primitive => primitive.Value,
+            PrimitiveTypeRecord<byte> primitive => primitive.Value,
+            PrimitiveTypeRecord<sbyte> primitive => primitive.Value,
+            PrimitiveTypeRecord<char> primitive => primitive.Value,
+            PrimitiveTypeRecord<short> primitive => primitive.Value,
+            PrimitiveTypeRecord<ushort> primitive => primitive.Value,
+            PrimitiveTypeRecord<int> primitive => primitive.Value,
+            PrimitiveTypeRecord<uint> primitive => primitive.Value,
+            PrimitiveTypeRecord<long> primitive => primitive.Value,
+            PrimitiveTypeRecord<ulong> primitive => primitive.Value,
+            PrimitiveTypeRecord<float> primitive => primitive.Value,
+            PrimitiveTypeRecord<double> primitive => primitive.Value,
+            PrimitiveTypeRecord<decimal> primitive => primitive.Value,
+            PrimitiveTypeRecord<TimeSpan> primitive => primitive.Value,
+            PrimitiveTypeRecord<DateTime> primitive => primitive.Value,
+            PrimitiveTypeRecord<IntPtr> primitive => primitive.Value,
+            _ => ((PrimitiveTypeRecord<UIntPtr>)record).Value
+        };
     }
 
     /// <summary>
@@ -278,12 +287,13 @@ internal static class BinaryFormattedObjectExtensions
 
             // Note that hashtables with custom comparers and/or hash code providers will have that information before
             // the value pair arrays.
-            if (format.RootRecord is not SystemClassWithMembersAndTypesRecord classInfo
+            if (format.RootRecord.RecordType != RecordType.SystemClassWithMembersAndTypes
+                || format.RootRecord is not ClassRecord classInfo
                 || !classInfo.IsTypeNameMatching(typeof(Hashtable))
                 || !classInfo.HasMember("Keys")
                 || !classInfo.HasMember("Values")
-                || classInfo.GetObject("Keys") is not ArrayRecord<object?> keysRecord
-                || classInfo.GetObject("Values") is not ArrayRecord<object?> valuesRecord
+                || format[2] is not ArrayRecord<object?> keysRecord
+                || format[3] is not ArrayRecord<object?> valuesRecord
                 || keysRecord.Length != valuesRecord.Length)
             {
                 return false;

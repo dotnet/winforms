@@ -16,10 +16,9 @@ namespace System.Runtime.Serialization.BinaryFormat;
 internal sealed class MemberPrimitiveTypedRecord<T> : PrimitiveTypeRecord<T>
     where T : unmanaged
 {
-    internal MemberPrimitiveTypedRecord(T value, bool pretend = false) : base(value)
-    {
-        RecordType = pretend ? RecordType.MemberPrimitiveTyped : RecordType.SystemClassWithMembersAndTypes;
-    }
+    internal MemberPrimitiveTypedRecord(T value, int objectId = 0) : base(value) => ObjectId = objectId;
 
-    public override RecordType RecordType { get; }
+    public override RecordType RecordType => RecordType.MemberPrimitiveTyped;
+
+    public override int ObjectId { get; }
 }

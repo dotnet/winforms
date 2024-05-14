@@ -10,7 +10,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
     private readonly ArrayRecord _arrayRecord;
     private readonly Type _elementType;
     private readonly Array _array;
-    private readonly Array? _result;
+    private readonly Array _result;
     private int _index;
     private bool _hasFixups;
 
@@ -18,13 +18,9 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
     internal ArrayRecordDeserializer(ArrayRecord arrayRecord, IDeserializer deserializer)
         : base(arrayRecord, deserializer)
     {
-        if (arrayRecord.ArrayType is not (ArrayType.Single or ArrayType.Jagged or ArrayType.Rectangular))
-        {
-            throw new NotSupportedException("Only arrays with zero offsets are supported.");
-        }
-
         // Other array types are handled directly (ArraySinglePrimitive and ArraySingleString).
         Debug.Assert(arrayRecord.RecordType is not (RecordType.ArraySingleString or RecordType.ArraySinglePrimitive));
+        Debug.Assert(arrayRecord.ArrayType is (ArrayType.Single or ArrayType.Jagged or ArrayType.Rectangular));
 
         _arrayRecord = arrayRecord;
         _elementType = deserializer.TypeResolver.GetType(arrayRecord.ElementTypeName, arrayRecord.ElementTypeLibraryName);
@@ -43,37 +39,22 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
             elementType = elementType.GetElementType()!;
         }
 
-        // If following is false, then it's an array or primitive types that has already been materialized properly
-        if (elementType == typeof(object) || elementType == typeof(ClassRecord))
+        int[] lengths = new int[arrayRecord.Rank];
+        for (int dimension = 0; dimension < lengths.Length; dimension++)
         {
-            int[] lengths = new int[arrayRecord.Rank];
-            for (int dimension = 0; dimension < lengths.Length; dimension++)
-            {
-                lengths[dimension] = _array.GetLength(dimension);
-            }
+            lengths[dimension] = _array.GetLength(dimension);
+        }
 
-            Object = _result = Array.CreateInstance(_elementType, lengths);
-        }
-        else
-        {
-            Object = _array;
-        }
+        Object = _result = Array.CreateInstance(_elementType, lengths);
     }
 
     // adsitnik: it may compile, but most likely won't work without any changes
     internal override Id Continue()
     {
-        if (_result is null)
-        {
-            return Id.Null;
-        }
-
         while (_index < _arrayRecord.Length)
         {
             // TODO: adsitnik: handle multi-dimensional arrays
-            object? memberValue = _array.GetValue(_index);
-            _result.SetValue(memberValue, _index);
-            Id reference = memberValue is ClassRecord classRecord ? classRecord.ObjectId : Id.Null;
+            (object? memberValue, Id reference) = UnwrapMemberValue(_array.GetArrayData<object?>()[_index]);
 
             if (s_missingValueSentinel == memberValue)
             {
@@ -116,5 +97,64 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
         }
 
         return Id.Null;
+    }
+
+    internal static Array GetArraySinglePrimitive(SerializationRecord record) => record switch
+    {
+        ArrayRecord<bool> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<byte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<sbyte> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<char> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<short> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<ushort> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<int> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<uint> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<long> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<ulong> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<float> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<double> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<decimal> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<DateTime> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        ArrayRecord<TimeSpan> primitiveArray => primitiveArray.ToArray(maxLength: Array.MaxLength),
+        _ => throw new NotSupportedException(),
+    };
+
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName, AssemblyNameInfo)")]
+    internal static Array? GetSimpleBinaryArray(ArrayRecord arrayRecord, BinaryFormattedObject.ITypeResolver typeResolver)
+    {
+        if (arrayRecord.ArrayType is not (ArrayType.Single or ArrayType.Jagged or ArrayType.Rectangular))
+        {
+            throw new NotSupportedException("Only arrays with zero offsets are supported.");
+        }
+
+        Type arrayRecordElementType = typeResolver.GetType(arrayRecord.ElementTypeName, arrayRecord.ElementTypeLibraryName);
+        Type elementType = arrayRecordElementType;
+        while (elementType.IsArray)
+        {
+            elementType = elementType.GetElementType()!;
+        }
+
+        if (!(HasBuiltInSupport(elementType)
+            || (Nullable.GetUnderlyingType(elementType) is Type nullable && HasBuiltInSupport(nullable))))
+        {
+            return null;
+        }
+
+        Type expectedArrayType = arrayRecord.ArrayType switch
+        {
+            ArrayType.Rectangular => arrayRecordElementType.MakeArrayType(arrayRecord.Rank),
+            _ => arrayRecordElementType.MakeArrayType()
+        };
+
+        return arrayRecord.ToArray(expectedArrayType, maxLength: Array.MaxLength);
+
+        static bool HasBuiltInSupport(Type elementType)
+            => elementType == typeof(string)
+            || elementType == typeof(bool) || elementType == typeof(byte) || elementType == typeof(sbyte)
+            || elementType == typeof(char) || elementType == typeof(short) || elementType == typeof(ushort)
+            || elementType == typeof(int) || elementType == typeof(uint)
+            || elementType == typeof(long) || elementType == typeof(ulong)
+            || elementType == typeof(float) || elementType == typeof(double) || elementType == typeof(decimal)
+            || elementType == typeof(DateTime) || elementType == typeof(TimeSpan);
     }
 }

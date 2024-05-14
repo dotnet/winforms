@@ -41,39 +41,30 @@ internal abstract partial class ObjectRecordDeserializer
     ///  the object record has not been encountered yet.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private protected (object? value, Id id) UnwrapMemberValue(SerializationRecord? memberValue)
+    private protected (object? value, Id id) UnwrapMemberValue(object? memberValue)
     {
-        // NullRecord is expressed via the public API by just returning a null
-        if (memberValue is null)
+        if (memberValue is null) // PayloadReader does not return NullRecord, just null
         {
             return (null, Id.Null);
         }
-
-        return memberValue switch
+        else if (memberValue is not SerializationRecord serializationRecord) // a primitive value
         {
-            // String
-            PrimitiveTypeRecord<string> primitive => (primitive.Value, Id.Null),
-            // Class record
-            ClassRecord classRecord => TryGetObject(classRecord.ObjectId),
-            // Primitive type record
-            PrimitiveTypeRecord<bool> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<byte> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<sbyte> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<char> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<short> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<ushort> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<int> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<uint> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<long> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<ulong> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<float> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<double> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<decimal> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<TimeSpan> primitive => (primitive.Value, Id.Null),
-            PrimitiveTypeRecord<DateTime> primitive => (primitive.Value, Id.Null),
-            // At this point should be an inline primitive
-            _ => throw new SerializationException($"Unexpected member type '{memberValue.GetType()}'."),
-        };
+            return (memberValue, Id.Null);
+        }
+        else if (serializationRecord.RecordType is RecordType.BinaryObjectString)
+        {
+            PrimitiveTypeRecord<string> stringRecord = (PrimitiveTypeRecord<string>)serializationRecord;
+            return (stringRecord.Value, stringRecord.ObjectId);
+        }
+        else if (serializationRecord.RecordType is RecordType.MemberPrimitiveTyped)
+        {
+            return (serializationRecord.GetMemberPrimitiveTypedValue(), Id.Null);
+        }
+        else
+        {
+            // ClassRecords & ArrayRecords
+            return TryGetObject(serializationRecord.ObjectId);
+        }
 
         (object? value, Id id) TryGetObject(Id id)
         {

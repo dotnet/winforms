@@ -20,6 +20,8 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
     private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
+    private readonly IEnumerator<string> _memberNamesIterator;
+    private bool _canIterate;
 
     internal ClassRecordSerializationInfoDeserializer(
         Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
@@ -31,31 +33,40 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
         _classRecord = classRecord;
         _surrogate = surrogate;
         _serializationInfo = new(type, BinaryFormattedObject.DefaultConverter);
+        _memberNamesIterator = _classRecord.MemberNames.GetEnumerator();
+        _canIterate = _memberNamesIterator.MoveNext(); // start the iterator
     }
 
     internal override Id Continue()
     {
         // adsitnik: the order is no longer guaranteed to be preserved
-        foreach (string memberName in _classRecord.MemberNames)
+        if (_canIterate)
         {
-            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetSerializationRecord(memberName));
-
-            if (s_missingValueSentinel == memberValue)
+            do
             {
-                // Record has not been encountered yet, need to pend iteration.
-                return reference;
-            }
+                string memberName = _memberNamesIterator.Current;
+                (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetObject(memberName));
 
-            if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
-            {
-                Deserializer.PendValueUpdater(new SerializationInfoValueUpdater(
-                    _classRecord.ObjectId,
-                    reference,
-                    _serializationInfo,
-                    memberName));
-            }
+                if (s_missingValueSentinel == memberValue)
+                {
+                    // Record has not been encountered yet, need to pend iteration.
+                    return reference;
+                }
 
-            _serializationInfo.AddValue(memberName, memberValue);
+                if (memberValue is not null && DoesValueNeedUpdated(memberValue, reference))
+                {
+                    Deserializer.PendValueUpdater(new SerializationInfoValueUpdater(
+                        _classRecord.ObjectId,
+                        reference,
+                        _serializationInfo,
+                        memberName));
+                }
+
+                _serializationInfo.AddValue(memberName, memberValue);
+            }
+            while (_memberNamesIterator.MoveNext());
+
+            _canIterate = false;
         }
 
         // We can't complete these in the same way we do with direct field sets as user code can dereference the

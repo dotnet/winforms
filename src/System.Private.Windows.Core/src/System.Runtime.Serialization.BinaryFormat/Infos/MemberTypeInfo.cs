@@ -182,12 +182,30 @@ internal readonly struct MemberTypeInfo
     {
         (BinaryType binaryType, object? additionalInfo) = Infos[0];
 
-        return binaryType switch
+        if (binaryType is BinaryType.Class)
         {
-            BinaryType.SystemClass => !((TypeName)additionalInfo!).IsSZArray,
-            BinaryType.Class => !((ClassTypeInfo)additionalInfo!).TypeName.IsSZArray,
-            _ => false
-        };
+            return !((ClassTypeInfo)additionalInfo!).TypeName.IsSZArray;
+        }
+        else if (binaryType is BinaryType.SystemClass)
+        {
+            TypeName typeName = (TypeName)additionalInfo!;
+
+            if (typeName.IsSZArray)
+            {
+                return false;
+            }
+
+            if (!typeName.IsConstructedGenericType)
+            {
+                return true;
+            }
+
+            // Can't use ArrayRecord<ClassRecord> for Nullable<T>[]
+            // as it consists of MemberPrimitiveTypedRecord and NullsRecord
+            return typeName.GetGenericTypeDefinition().FullName != typeof(Nullable<>).FullName;
+        }
+
+        return false;
     }
 
     internal TypeName GetElementTypeName()
