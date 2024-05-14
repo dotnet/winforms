@@ -135,6 +135,8 @@ configuration:
       - not:
           isAction:
             action: Closed
+      - isActivitySender:
+          issueAuthor: True
       - hasLabel:
           label: ':zzz: no-recent-activity'
       then:
