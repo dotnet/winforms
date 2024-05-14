@@ -17,7 +17,7 @@ internal sealed class SystemClassWithMembersAndTypesRecord : ClassRecord
 
     public override AssemblyNameInfo LibraryName => FormatterServices.CoreLibAssemblyName;
 
-    public MemberTypeInfo MemberTypeInfo { get; }
+    internal MemberTypeInfo MemberTypeInfo { get; }
 
     internal override int ExpectedValuesCount => MemberTypeInfo.Infos.Count;
 

@@ -13,7 +13,7 @@ namespace System.Runtime.Serialization.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-public sealed class MemberReferenceRecord : SerializationRecord
+internal sealed class MemberReferenceRecord : SerializationRecord
 {
     // This type has no ObjectId, so it's impossible to create a reference to a reference
     // and get into issues with cycles or unbounded recursion.
@@ -25,7 +25,7 @@ public sealed class MemberReferenceRecord : SerializationRecord
 
     public override RecordType RecordType => RecordType.MemberReference;
 
-    public int Reference { get; }
+    internal int Reference { get; }
 
     private RecordMap RecordMap { get; }
 
