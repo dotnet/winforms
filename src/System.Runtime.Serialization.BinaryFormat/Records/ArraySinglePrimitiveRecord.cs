@@ -17,7 +17,7 @@ namespace System.Runtime.Serialization.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
+internal sealed class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
     where T : unmanaged
 {
     private static TypeName? s_elementTypeName;

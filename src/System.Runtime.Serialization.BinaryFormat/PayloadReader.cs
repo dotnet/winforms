@@ -106,7 +106,7 @@ public static class PayloadReader
     private static SerializationRecord Read(BinaryReader reader, PayloadOptions options, out IReadOnlyDictionary<int, SerializationRecord> readOnlyRecordMap)
     {
         Stack<NextInfo> readStack = new();
-        RecordMap recordMap = [];
+        var recordMap = new RecordMap();
 
         // Everything has to start with a header
         var header = (SerializedStreamHeaderRecord)ReadNext(reader, recordMap, AllowedRecordTypes.SerializedStreamHeader, options, out _);
