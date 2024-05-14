@@ -7401,24 +7401,31 @@ public class TreeViewTests
         accessibilityObject.Should().BeOfType<TreeViewLabelEditAccessibleObject>();
     }
 
-    private void AddNodes(TreeView control, string rootNodeName, string childNodeName = null)
-    {
-        TreeNode rootNode = new(rootNodeName);
-        if (childNodeName is not null)
-        {
-            rootNode.Nodes.Add(new TreeNode(childNodeName));
-        }
-
-        control.Nodes.Add(rootNode);
-    }
-
     private TreeView InitializeTreeViewWithNodes()
     {
         TreeView treeView = new();
-        AddNodes(treeView, "Root1", "Child1");
+        AddNodes(treeView, "Root1", "Child1", "GrandChild1");
         AddNodes(treeView, "Root2");
 
         return treeView;
+    }
+
+    private void AddNodes(TreeView treeView, string root, string child = null, string grandChild = null)
+    {
+        TreeNode rootNode = new(root);
+        treeView.Nodes.Add(rootNode);
+
+        if (child is not null)
+        {
+            TreeNode childNode = new(child);
+            rootNode.Nodes.Add(childNode);
+
+            if (grandChild is not null)
+            {
+                TreeNode grandChildNode = new(grandChild);
+                childNode.Nodes.Add(grandChildNode);
+            }
+        }
     }
 
     [WinFormsFact]
@@ -7452,7 +7459,7 @@ public class TreeViewTests
         countWithoutSubTrees.Should().Be(2);
 
         int countWithSubTrees = treeView.GetNodeCount(true);
-        countWithSubTrees.Should().Be(3);
+        countWithSubTrees.Should().Be(4);
     }
 
     [WinFormsFact]
