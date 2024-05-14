@@ -149,11 +149,11 @@ internal static class BinaryFormattedObjectExtensions
             if (format.RootRecord is not ClassRecord classInfo
                 || !classInfo.HasMember("_items")
                 || !classInfo.HasMember("_size")
-                || classInfo.GetObject("_size") is not int size
+                || classInfo.GetRawValue("_size") is not int size
                 || !classInfo.TypeName.IsConstructedGenericType
                 || classInfo.TypeName.GetGenericTypeDefinition().Name != typeof(List<>).Name
                 || classInfo.TypeName.GetGenericArguments().Length != 1
-                || classInfo.GetObject("_items") is not ArrayRecord arrayRecord
+                || classInfo.GetRawValue("_items") is not ArrayRecord arrayRecord
                 || !IsPrimitiveArrayRecord(arrayRecord))
             {
                 return false;
@@ -200,8 +200,8 @@ internal static class BinaryFormattedObjectExtensions
                 || !classInfo.IsTypeNameMatching(typeof(ArrayList))
                 || !classInfo.HasMember("_items")
                 || !classInfo.HasMember("_size")
-                || classInfo.GetObject("_size") is not int size
-                || classInfo.GetObject("_items") is not ArrayRecord<object> arrayRecord
+                || classInfo.GetRawValue("_size") is not int size
+                || classInfo.GetRawValue("_items") is not ArrayRecord<object> arrayRecord
                 || size > arrayRecord.Length)
             {
                 return false;

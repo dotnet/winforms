@@ -23,7 +23,7 @@ internal static class WinFormsBinaryFormattedObjectExtensions
             if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
                 || !types.IsTypeNameMatching(typeof(ImageListStreamer))
                 || !types.HasMember("Data")
-                || types.GetObject("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
+                || types.GetRawValue("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
             {
                 return false;
             }
@@ -43,7 +43,7 @@ internal static class WinFormsBinaryFormattedObjectExtensions
         if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
             || !types.IsTypeNameMatching(typeof(Bitmap))
             || !types.HasMember("Data")
-            || types.GetObject("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
+            || types.GetRawValue("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
         {
             return false;
         }

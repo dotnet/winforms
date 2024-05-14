@@ -104,7 +104,7 @@ public abstract class ClassRecord : SerializationRecord
     /// <para>For jagged and multi-dimensional arrays, returns an instance of <seealso cref="ArrayRecord"/>.</para>
     /// </returns>
     /// <inheritdoc cref="GetClassRecord(string)"/>
-    public object? GetObject(string memberName) => GetMember<object>(memberName);
+    public object? GetRawValue(string memberName) => GetMember<object>(memberName);
 
     /// <summary>
     /// Retrieves an array for the provided <paramref name="memberName"/>.

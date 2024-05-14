@@ -32,15 +32,15 @@ public class ExceptionTests : SerializationTest<FormattedObjectSerializer>
 
         systemClass.GetString("ClassName").Should().Be("System.NotSupportedException");
         systemClass.GetString("Message").Should().Be("Specified method is not supported.");
-        systemClass.GetObject("Data").Should().BeNull();
-        systemClass.GetObject("InnerException").Should().BeNull();
-        systemClass.GetObject("HelpURL").Should().BeNull();
-        systemClass.GetObject("StackTraceString").Should().BeNull();
-        systemClass.GetObject("RemoteStackTraceString").Should().BeNull();
+        systemClass.GetRawValue("Data").Should().BeNull();
+        systemClass.GetRawValue("InnerException").Should().BeNull();
+        systemClass.GetRawValue("HelpURL").Should().BeNull();
+        systemClass.GetRawValue("StackTraceString").Should().BeNull();
+        systemClass.GetRawValue("RemoteStackTraceString").Should().BeNull();
         systemClass.GetInt32("RemoteStackIndex").Should().Be(0);
-        systemClass.GetObject("ExceptionMethod").Should().BeNull();
+        systemClass.GetRawValue("ExceptionMethod").Should().BeNull();
         systemClass.GetInt32("HResult").Should().Be(unchecked((int)0x80131515));
-        systemClass.GetObject("Source").Should().BeNull();
-        systemClass.GetObject("WatsonBuckets").Should().BeNull();
+        systemClass.GetRawValue("Source").Should().BeNull();
+        systemClass.GetRawValue("WatsonBuckets").Should().BeNull();
     }
 }

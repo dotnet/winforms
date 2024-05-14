@@ -62,8 +62,8 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
 
         systemClass.GetSingle("LoadFactor").Should().Be(0.72f);
         systemClass.GetInt32("Version").Should().Be(expectedVersion);
-        systemClass.GetObject("Comparer").Should().BeNull();
-        systemClass.GetObject("HashCodeProvider").Should().BeNull();
+        systemClass.GetRawValue("Comparer").Should().BeNull();
+        systemClass.GetRawValue("HashCodeProvider").Should().BeNull();
         systemClass.GetInt32("HashSize").Should().Be(expectedHashSize);
     }
 
@@ -171,7 +171,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
         @class.TypeName.FullName.Should().Be(typeof(NestedSerializableObject).FullName);
         @class.LibraryName.FullName.Should().Be(typeof(NestedSerializableObject).Assembly.FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_object", "_meaning"]);
-        @class.GetObject("_object").Should().NotBeNull();
+        @class.GetRawValue("_object").Should().NotBeNull();
         @class.GetInt32("_meaning").Should().Be(42);
     }
 
@@ -186,7 +186,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
         @class.TypeName.FullName.Should().Be(typeof(TwoIntSerializableObject).FullName);
         @class.LibraryName.FullName.Should().Be(typeof(TwoIntSerializableObject).Assembly.FullName);
         @class.MemberNames.Should().BeEquivalentTo(["_value", "_meaning"]);
-        @class.GetObject("_value").Should().Be(1970);
+        @class.GetRawValue("_value").Should().Be(1970);
         @class.GetInt32("_meaning").Should().Be(42);
     }
 
@@ -198,7 +198,7 @@ public class BinaryFormattedObjectTests : SerializationTest<FormattedObjectSeria
         firstClass.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         ClassRecord classWithId = (ClassRecord)format[4];
         classWithId.RecordType.Should().Be(RecordType.ClassWithId);
-        classWithId.GetObject("_value").Should().Be(1970);
+        classWithId.GetRawValue("_value").Should().Be(1970);
         classWithId.GetInt32("_meaning").Should().Be(42);
     }
 

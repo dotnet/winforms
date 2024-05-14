@@ -45,7 +45,7 @@ internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDese
             do
             {
                 string memberName = _memberNamesIterator.Current;
-                (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetObject(memberName));
+                (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetRawValue(memberName));
 
                 if (s_missingValueSentinel == memberValue)
                 {

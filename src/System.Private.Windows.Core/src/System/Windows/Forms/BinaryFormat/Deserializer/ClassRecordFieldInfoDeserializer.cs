@@ -62,7 +62,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 throw new SerializationException($"Could not find field '{field.Name}' data for type '{field.DeclaringType!.Name}'.");
             }
 
-            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetObject(field.Name));
+            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetRawValue(field.Name));
             if (s_missingValueSentinel == memberValue)
             {
                 // Record has not been encountered yet, need to pend iteration.
