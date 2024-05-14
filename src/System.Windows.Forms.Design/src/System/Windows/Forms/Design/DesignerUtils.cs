@@ -164,7 +164,7 @@ internal static class DesignerUtils
         s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
 
         s_selectionBorderBrush.Dispose();
-        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
         s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
