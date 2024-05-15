@@ -21,7 +21,6 @@ internal sealed class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
     where T : unmanaged
 {
     private static TypeName? s_elementTypeName;
-    private static AssemblyNameInfo? s_elementTypeLibraryName;
 
     internal ArraySinglePrimitiveRecord(ArrayInfo arrayInfo, IReadOnlyList<T> values) : base(arrayInfo)
     {
@@ -31,9 +30,8 @@ internal sealed class ArraySinglePrimitiveRecord<T> : ArrayRecord<T>
 
     public override RecordType RecordType => RecordType.ArraySinglePrimitive;
 
-    public override TypeName ElementTypeName => s_elementTypeName ??= TypeName.Parse(typeof(T).FullName.AsSpan());
-
-    public override AssemblyNameInfo ElementTypeLibraryName => s_elementTypeLibraryName ??= AssemblyNameInfo.Parse(FormatterServices.GetAssemblyNameIncludingTypeForwards(typeof(T)).AsSpan());
+    public override TypeName ElementTypeName
+        => s_elementTypeName ??= TypeName.Parse(typeof(T).FullName.AsSpan()).WithAssemblyName(FormatterServices.GetAssemblyNameIncludingTypeForwards(typeof(T)));
 
     internal IReadOnlyList<T> Values { get; }
 

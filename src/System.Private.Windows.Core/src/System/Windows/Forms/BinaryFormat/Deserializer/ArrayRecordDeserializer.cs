@@ -14,7 +14,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
     private int _index;
     private bool _hasFixups;
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName, AssemblyNameInfo)")]
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
     internal ArrayRecordDeserializer(ArrayRecord arrayRecord, IDeserializer deserializer)
         : base(arrayRecord, deserializer)
     {
@@ -23,7 +23,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
         Debug.Assert(arrayRecord.ArrayType is (ArrayType.Single or ArrayType.Jagged or ArrayType.Rectangular));
 
         _arrayRecord = arrayRecord;
-        _elementType = deserializer.TypeResolver.GetType(arrayRecord.ElementTypeName, arrayRecord.ElementTypeLibraryName);
+        _elementType = deserializer.TypeResolver.GetType(arrayRecord.ElementTypeName);
         Type expectedArrayType = arrayRecord.ArrayType switch
         {
             ArrayType.Rectangular => _elementType.MakeArrayType(arrayRecord.Rank),
@@ -117,7 +117,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
         _ => throw new NotSupportedException(),
     };
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName, AssemblyNameInfo)")]
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
     internal static Array? GetSimpleBinaryArray(ArrayRecord arrayRecord, BinaryFormattedObject.ITypeResolver typeResolver)
     {
         if (arrayRecord.ArrayType is not (ArrayType.Single or ArrayType.Jagged or ArrayType.Rectangular))
@@ -125,7 +125,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
             throw new NotSupportedException("Only arrays with zero offsets are supported.");
         }
 
-        Type arrayRecordElementType = typeResolver.GetType(arrayRecord.ElementTypeName, arrayRecord.ElementTypeLibraryName);
+        Type arrayRecordElementType = typeResolver.GetType(arrayRecord.ElementTypeName);
         Type elementType = arrayRecordElementType;
         while (elementType.IsArray)
         {

@@ -32,8 +32,6 @@ public abstract class ArrayRecord : SerializationRecord
 
     public abstract TypeName ElementTypeName { get; }
 
-    public abstract AssemblyNameInfo ElementTypeLibraryName { get; }
-
     public override int ObjectId => ArrayInfo.ObjectId;
 
     internal long ValuesToRead { get; private protected set; }

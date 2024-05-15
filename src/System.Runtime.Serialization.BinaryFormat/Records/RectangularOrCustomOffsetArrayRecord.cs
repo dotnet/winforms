@@ -9,7 +9,7 @@ namespace System.Runtime.Serialization.BinaryFormat;
 
 internal sealed class RectangularOrCustomOffsetArrayRecord : ArrayRecord
 {
-    private AssemblyNameInfo? _elementTypeLibraryName;
+    private TypeName? _elementTypeName;
 
     private RectangularOrCustomOffsetArrayRecord(Type elementType, ArrayInfo arrayInfo,
         MemberTypeInfo memberTypeInfo, int[] lengths, int[] offsets, RecordMap recordMap) : base(arrayInfo)
@@ -19,15 +19,13 @@ internal sealed class RectangularOrCustomOffsetArrayRecord : ArrayRecord
         Lengths = lengths;
         Offsets = offsets;
         RecordMap = recordMap;
-        ElementTypeName = memberTypeInfo.GetElementTypeName();
         Values = new();
     }
 
     public override RecordType RecordType => RecordType.BinaryArray;
 
-    public override TypeName ElementTypeName { get; }
-
-    public override AssemblyNameInfo ElementTypeLibraryName => _elementTypeLibraryName ??= MemberTypeInfo.GetElementLibraryName(RecordMap);
+    public override TypeName ElementTypeName
+        => _elementTypeName ??= MemberTypeInfo.GetElementTypeName(RecordMap);
 
     private Type ElementType { get; }
 

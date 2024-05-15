@@ -20,15 +20,17 @@ public abstract class ClassRecord : SerializationRecord
 {
     private const int MaxLength = ArrayRecord.DefaultMaxArrayLength;
 
+    private TypeName? _typeName;
+
     private protected ClassRecord(ClassInfo classInfo)
     {
         ClassInfo = classInfo;
         MemberValues = [];
     }
 
-    public TypeName TypeName => ClassInfo.Name;
+    public TypeName TypeName => _typeName ??= ClassInfo.Name.WithAssemblyName(LibraryName.FullName);
 
-    public abstract AssemblyNameInfo LibraryName { get; }
+    internal abstract AssemblyNameInfo LibraryName { get; }
 
     // Currently we don't expose raw values, so we are not preserving the order here.
     public IEnumerable<string> MemberNames => ClassInfo.MemberNames.Keys;

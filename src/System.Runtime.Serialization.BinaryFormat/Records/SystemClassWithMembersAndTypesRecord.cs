@@ -15,7 +15,7 @@ internal sealed class SystemClassWithMembersAndTypesRecord : ClassRecord
 
     public override RecordType RecordType => RecordType.SystemClassWithMembersAndTypes;
 
-    public override AssemblyNameInfo LibraryName => FormatterServices.CoreLibAssemblyName;
+    internal override AssemblyNameInfo LibraryName => FormatterServices.CoreLibAssemblyName;
 
     internal MemberTypeInfo MemberTypeInfo { get; }
 
@@ -88,7 +88,7 @@ internal sealed class SystemClassWithMembersAndTypesRecord : ClassRecord
         {
             return Create(BinaryReaderExtensions.CreateDateTimeFromData(value));
         }
-        else if (MemberValues.Count == 4
+        else if(MemberValues.Count == 4
             && HasMember("lo") && HasMember("mid") && HasMember("hi") && HasMember("flags")
             && MemberValues[0] is int && MemberValues[1] is int && MemberValues[2] is int && MemberValues[3] is int
             && IsTypeNameMatching(typeof(decimal)))

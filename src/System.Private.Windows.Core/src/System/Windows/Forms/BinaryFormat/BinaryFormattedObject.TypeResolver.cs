@@ -18,7 +18,7 @@ internal sealed partial class BinaryFormattedObject
         private readonly SerializationBinder? _binder;
 
         private readonly Dictionary<string, Assembly> _assemblies = [];
-        private readonly Dictionary<(string TypeName, string LibraryId), Type> _types = [];
+        private readonly Dictionary<string, Type> _types = [];
 
         internal DefaultTypeResolver(Options options)
         {
@@ -29,17 +29,18 @@ internal sealed partial class BinaryFormattedObject
         /// <summary>
         ///  Resolves the given type name against the specified library.
         /// </summary>
-        /// <param name="libraryName">The library id, or <see cref="Id.Null"/> for the "system" assembly.</param>
         [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
         [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-        Type ITypeResolver.GetType(TypeName typeName, AssemblyNameInfo libraryName)
+        Type ITypeResolver.GetType(TypeName typeName)
         {
-            if (_types.TryGetValue((typeName.FullName, libraryName.FullName), out Type? cachedType))
+            Debug.Assert(typeName.AssemblyName is not null);
+
+            if (_types.TryGetValue(typeName.AssemblyQualifiedName, out Type? cachedType))
             {
                 return cachedType;
             }
 
-            if (_binder?.BindToType(libraryName.FullName, typeName.FullName) is Type binderType)
+            if (_binder?.BindToType(typeName.AssemblyName.FullName, typeName.FullName) is Type binderType)
             {
                 // BinaryFormatter is inconsistent about what caching behavior you get with binders.
                 // It would always cache the last item from the binder, but wouldn't put the result
@@ -47,15 +48,13 @@ internal sealed partial class BinaryFormattedObject
                 // always return the same result for a given set of strings. Choosing to always cache
                 // for performance.
 
-                _types[(typeName.FullName, libraryName.FullName)] = binderType;
+                _types[typeName.AssemblyQualifiedName] = binderType;
                 return binderType;
             }
 
-            if (!_assemblies.TryGetValue(libraryName.FullName, out Assembly? assembly))
+            if (!_assemblies.TryGetValue(typeName.AssemblyName.FullName, out Assembly? assembly))
             {
-                Debug.Assert(libraryName.FullName != typeof(object).Assembly.FullName);
-
-                AssemblyName assemblyName = libraryName.ToAssemblyName();
+                AssemblyName assemblyName = typeName.AssemblyName.ToAssemblyName();
                 try
                 {
                     assembly = Assembly.Load(assemblyName);
@@ -70,14 +69,14 @@ internal sealed partial class BinaryFormattedObject
                     assembly = Assembly.Load(assemblyName.Name!);
                 }
 
-                _assemblies.Add(libraryName.FullName, assembly);
+                _assemblies.Add(typeName.AssemblyName.FullName, assembly);
             }
 
             Type? type = _assemblyMatching != FormatterAssemblyStyle.Simple
                 ? assembly.GetType(typeName.FullName)
                 : GetSimplyNamedTypeFromAssembly(assembly, typeName);
 
-            _types[(typeName.FullName, libraryName.FullName)] = type ?? throw new SerializationException($"Could not find type '{typeName}'.");
+            _types[typeName.AssemblyQualifiedName] = type ?? throw new SerializationException($"Could not find type '{typeName}'.");
             return type;
         }
 

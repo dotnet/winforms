@@ -26,10 +26,10 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
         _onlyAllowPrimitives = @object is IObjectReference;
     }
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
     internal static ObjectRecordDeserializer Create(ClassRecord classRecord, IDeserializer deserializer)
     {
-        Type type = deserializer.TypeResolver.GetType(classRecord.TypeName, classRecord.LibraryName);
+        Type type = deserializer.TypeResolver.GetType(classRecord.TypeName);
         Id id = classRecord.ObjectId;
 
         ISerializationSurrogate? surrogate = deserializer.GetSurrogate(type);

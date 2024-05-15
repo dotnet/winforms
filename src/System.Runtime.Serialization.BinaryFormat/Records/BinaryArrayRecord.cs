@@ -16,22 +16,20 @@ internal sealed class BinaryArrayRecord : ArrayRecord
         typeof(TimeSpan), typeof(string), typeof(object)
     ];
 
-    private AssemblyNameInfo? _elementTypeLibraryName;
+    private TypeName? _elementTypeName;
 
     private BinaryArrayRecord(ArrayInfo arrayInfo, MemberTypeInfo memberTypeInfo, RecordMap recordMap)
         : base(arrayInfo)
     {
         MemberTypeInfo = memberTypeInfo;
         RecordMap = recordMap;
-        ElementTypeName = memberTypeInfo.GetElementTypeName();
         Values = [];
     }
 
     public override RecordType RecordType => RecordType.BinaryArray;
 
-    public override TypeName ElementTypeName { get; }
-
-    public override AssemblyNameInfo ElementTypeLibraryName => _elementTypeLibraryName ??= MemberTypeInfo.GetElementLibraryName(RecordMap);
+    public override TypeName ElementTypeName
+        => _elementTypeName ??= MemberTypeInfo.GetElementTypeName(RecordMap);
 
     private MemberTypeInfo MemberTypeInfo { get; }
 

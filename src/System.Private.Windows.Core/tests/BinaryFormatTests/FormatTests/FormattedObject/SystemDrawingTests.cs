@@ -18,7 +18,7 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
         classInfo.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
         classInfo.ObjectId.Should().Be(1);
         classInfo.TypeName.FullName.Should().Be("System.Drawing.PointF");
-        classInfo.LibraryName.FullName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+        classInfo.TypeName.AssemblyName!.FullName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
         classInfo.GetSingle("x").Should().Be(input.X);
         classInfo.GetSingle("y").Should().Be(input.Y);

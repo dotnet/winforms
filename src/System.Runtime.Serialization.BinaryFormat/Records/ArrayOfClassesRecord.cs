@@ -7,14 +7,13 @@ namespace System.Runtime.Serialization.BinaryFormat;
 
 internal sealed class ArrayOfClassesRecord : ArrayRecord<ClassRecord>
 {
-    private AssemblyNameInfo? _elementTypeLibraryName;
+    private TypeName? _elementTypeName;
 
     internal ArrayOfClassesRecord(ArrayInfo arrayInfo, MemberTypeInfo memberTypeInfo, RecordMap recordMap)
         : base(arrayInfo)
     {
         MemberTypeInfo = memberTypeInfo;
         RecordMap = recordMap;
-        ElementTypeName = MemberTypeInfo.GetElementTypeName();
         Records = [];
     }
 
@@ -26,9 +25,7 @@ internal sealed class ArrayOfClassesRecord : ArrayRecord<ClassRecord>
 
     private RecordMap RecordMap { get; }
 
-    public override TypeName ElementTypeName { get; }
-
-    public override AssemblyNameInfo ElementTypeLibraryName => _elementTypeLibraryName ??= MemberTypeInfo.GetElementLibraryName(RecordMap);
+    public override TypeName ElementTypeName => _elementTypeName ??= MemberTypeInfo.GetElementTypeName(RecordMap);
 
     protected override ClassRecord?[] ToArrayOfT(bool allowNulls)
     {
