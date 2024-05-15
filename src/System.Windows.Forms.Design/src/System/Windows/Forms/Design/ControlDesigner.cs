@@ -766,9 +766,9 @@ public partial class ControlDesigner : ComponentDesigner
 
             // enable the designeractionpanel for this control if it needs one
             if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                && _behaviorService?.DesignerActionUI is not null)
+                && _behaviorService?.DesignerActionUI is { } designerActionUI)
             {
-                Glyph? dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                Glyph? dapGlyph = designerActionUI.GetDesignerActionGlyph(Component);
                 if (dapGlyph is not null)
                 {
                     glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
@@ -824,9 +824,9 @@ public partial class ControlDesigner : ComponentDesigner
 
             // enable the designeractionpanel for this control if it needs one
             if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                && _behaviorService?.DesignerActionUI is not null)
+                && _behaviorService?.DesignerActionUI is { } designerActionUI)
             {
-                Glyph? dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                Glyph? dapGlyph = designerActionUI.GetDesignerActionGlyph(Component);
                 if (dapGlyph is not null)
                 {
                     glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
@@ -1113,14 +1113,14 @@ public partial class ControlDesigner : ComponentDesigner
         base.InitializeExistingComponent(defaultValues);
 
         // unhook any sited children that got ChildWindowTargets
-        foreach (Control c in Control.Controls)
+        foreach (Control control in Control.Controls)
         {
-            if (c is not null)
+            if (control is not null)
             {
-                ISite? site = c.Site;
-                if (site is not null && c.WindowTarget is ChildWindowTarget target)
+                ISite? site = control.Site;
+                if (site is not null && control.WindowTarget is ChildWindowTarget target)
                 {
-                    c.WindowTarget = target.OldWindowTarget;
+                    control.WindowTarget = target.OldWindowTarget;
                 }
             }
         }
