@@ -116,7 +116,12 @@ public partial class CollectionEditor : UITypeEditor
         object? o = TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null);
 
         return o is null
-            ? throw new InvalidOperationException($"Neither {nameof(IDesignerHost)} nor {nameof(TypeDescriptor)} can create an instance of {itemType.FullName}.")
+            ? throw new InvalidOperationException(
+                string.Format(
+                    SR.CollectionEditorCreateInstanceError,
+                    nameof(IDesignerHost),
+                    nameof(TypeDescriptor),
+                    itemType.FullName))
             : o;
     }
 
