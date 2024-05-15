@@ -23,12 +23,9 @@ internal partial class DesignBindingValueUIHandler
         private static string GetToolTip(Binding binding)
         {
             string name = string.Empty;
-            if (binding.DataSource is IComponent comp)
+            if (binding.DataSource is IComponent comp && comp.Site is { } site)
             {
-                if (comp.Site is not null)
-                {
-                    name = comp.Site.Name ?? string.Empty;
-                }
+                name = site.Name ?? string.Empty;
             }
 
             if (name.Length == 0)
