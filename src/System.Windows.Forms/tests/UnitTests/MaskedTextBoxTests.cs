@@ -2,12 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
-public class MaskedTextBoxTests
+public class MaskedTextBoxTests : IDisposable
 {
+    private readonly MaskedTextBox _maskedTextBox;
+
+    public MaskedTextBoxTests()
+    {
+        _maskedTextBox = new();
+    }
+
+    public void Dispose()
+    {
+        _maskedTextBox.Dispose();
+    }
+
     [WinFormsFact]
     public void MaskedTextBox_Constructor()
     {
@@ -28,6 +41,16 @@ public class MaskedTextBoxTests
         mtb.ValidatingType.Should().BeNull();
         mtb.TextAlign.Should().Be(HorizontalAlignment.Left);
         mtb.FormatProvider.Should().Be(null);
+        mtb.ResetOnPrompt.Should().BeTrue();
+        mtb.ValidatingType.Should().BeNull();
+        mtb.PromptChar.Should().Be('_');
+        mtb.GetLineFromCharIndex(2).Should().Be(0);
+        mtb.GetFirstCharIndexFromLine(100).Should().Be(0);
+        mtb.GetFirstCharIndexOfCurrentLine().Should().Be(0);
+        mtb.PasswordChar.Should().Be('\0');
+        mtb.RejectInputOnFirstFailure.Should().BeFalse();
+        mtb.Text.Should().Be(string.Empty);
+        mtb.UseSystemPasswordChar.Should().BeFalse();
 
         mtb.IsHandleCreated.Should().BeFalse();
     }
@@ -669,5 +692,185 @@ public class MaskedTextBoxTests
         control.TextAlignChanged -= handler;
         control.TextAlign = HorizontalAlignment.Right;
         callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MaskedTextBox_RejectInputOnFirstFailure_GetSet_ReturnsExpected(bool value)
+    {
+        _maskedTextBox.RejectInputOnFirstFailure = value;
+        _maskedTextBox.RejectInputOnFirstFailure.Should().Be(value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+
+        _maskedTextBox.RejectInputOnFirstFailure = value;
+        _maskedTextBox.RejectInputOnFirstFailure.Should().Be(value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+
+        _maskedTextBox.RejectInputOnFirstFailure = !value;
+        _maskedTextBox.RejectInputOnFirstFailure.Should().Be(!value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MaskedTextBox_ResetOnPrompt_GetSet_ReturnsExpected(bool value)
+    {
+        _maskedTextBox.ResetOnPrompt = value;
+        _maskedTextBox.ResetOnPrompt.Should().Be(value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+
+        _maskedTextBox.ResetOnPrompt = value;
+        _maskedTextBox.ResetOnPrompt.Should().Be(value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+
+        _maskedTextBox.ResetOnPrompt = !value;
+        _maskedTextBox.ResetOnPrompt.Should().Be(!value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(int))]
+    [InlineData(typeof(string))]
+    [InlineData(null)]
+    public void MaskedTextBox_ValidatingType_Set_GetReturnsExpected(Type value)
+    {
+        _maskedTextBox.ValidatingType = value;
+        _maskedTextBox.ValidatingType.Should().Be(value);
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_TypeValidationCompletedEvent_AddRemove_Success()
+    {
+        int callCount = 0;
+        TypeValidationEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_maskedTextBox);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _maskedTextBox.ValidatingType = typeof(int);
+        _maskedTextBox.TypeValidationCompleted += handler;
+        _maskedTextBox.ValidateText();
+        callCount.Should().Be(1);
+
+        _maskedTextBox.TypeValidationCompleted -= handler;
+        _maskedTextBox.ValidateText();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData('A', 'B')]
+    [InlineData('1', '2')]
+    [InlineData('%', '&')]
+    public void MaskedTextBox_PromptChar_Set_GetReturnsExpected(char originalValue, char value)
+    {
+        _maskedTextBox.PromptChar = originalValue;
+        _maskedTextBox.PromptChar.Should().Be(originalValue);
+
+        _maskedTextBox.PromptChar = value;
+        _maskedTextBox.PromptChar.Should().Be(value);
+
+        _maskedTextBox.Handle.Should().NotBe(IntPtr.Zero);
+        _maskedTextBox.PromptChar = originalValue;
+        _maskedTextBox.PromptChar.Should().Be(originalValue);
+
+        Action act = () => _maskedTextBox.PromptChar = '\0';
+        act.Should().Throw<ArgumentException>();
+
+        _maskedTextBox.PasswordChar = '*';
+        Action act2 = () => _maskedTextBox.PromptChar = '*';
+        act2.Should().Throw<InvalidOperationException>();
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_GetCharFromPosition_ReturnsExpected()
+    {
+        _maskedTextBox.Text = "Hello, World!";
+        _maskedTextBox.CreateControl();
+
+        Point position = _maskedTextBox.GetPositionFromCharIndex(4);
+        char result = _maskedTextBox.GetCharFromPosition(position);
+
+        result.Should().Be('o');
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_GetCharIndexFromPosition_ReturnsExpected()
+    {
+        _maskedTextBox.Text = "Hello, World!";
+        _maskedTextBox.CreateControl();
+
+        Point position = _maskedTextBox.GetPositionFromCharIndex(4);
+        int result = _maskedTextBox.GetCharIndexFromPosition(position);
+
+        result.Should().Be(4);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_GetPositionFromCharIndex_ReturnsExpected()
+    {
+        _maskedTextBox.Text = "Hello, World!";
+        _maskedTextBox.CreateControl();
+
+        Point result = _maskedTextBox.GetPositionFromCharIndex(4);
+
+        result.Should().NotBe(Point.Empty);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_ValidateText_ReturnsExpected()
+    {
+        _maskedTextBox.ValidatingType = typeof(int);
+        _maskedTextBox.Text = "12345";
+        _maskedTextBox.CreateControl();
+
+        object result = _maskedTextBox.ValidateText();
+
+        result.Should().NotBeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData('A', 'B')]
+    [InlineData('1', '2')]
+    [InlineData('%', '&')]
+    public void MaskedTextBox_PasswordChar_Set_GetReturnsExpected(char originalValue, char value)
+    {
+        _maskedTextBox.PasswordChar = originalValue;
+        _maskedTextBox.PasswordChar.Should().Be(originalValue);
+
+        // Set different.
+        _maskedTextBox.PasswordChar = value;
+        _maskedTextBox.PasswordChar.Should().Be(value);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_PasswordChar_SetInvalid_ThrowsArgumentException()
+    {
+        Action act = () => _maskedTextBox.PasswordChar = '\t';
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_PasswordChar_SetSameAsPromptChar_ThrowsInvalidOperationException()
+    {
+        _maskedTextBox.PromptChar = 'A';
+        Action act = () => _maskedTextBox.PasswordChar = 'A';
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_PasswordChar_SetWithUseSystemPasswordChar_UpdatesMaskedTextProvider()
+    {
+        _maskedTextBox.Mask = "00000";
+        _maskedTextBox.UseSystemPasswordChar = true;
+        _maskedTextBox.PasswordChar = 'A';
+
+        if (_maskedTextBox.MaskedTextProvider is not null)
+        {
+            _maskedTextBox.PasswordChar.Should().Be('●');
+            _maskedTextBox.MaskedTextProvider.PasswordChar.Should().Be('●');
+        }
     }
 }
