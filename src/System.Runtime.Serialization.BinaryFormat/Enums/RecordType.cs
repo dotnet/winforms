@@ -14,22 +14,21 @@ namespace System.Runtime.Serialization.BinaryFormat;
 /// </remarks>
 public enum RecordType : byte
 {
-    SerializedStreamHeader,
-    ClassWithId,
-    SystemClassWithMembers,
-    ClassWithMembers,
-    SystemClassWithMembersAndTypes,
-    ClassWithMembersAndTypes,
-    BinaryObjectString,
-    BinaryArray,
-    MemberPrimitiveTyped,
-    MemberReference,
-    ObjectNull,
-    MessageEnd,
-    BinaryLibrary,
-    ObjectNullMultiple256,
-    ObjectNullMultiple,
-    ArraySinglePrimitive,
-    ArraySingleObject,
-    ArraySingleString
+    SerializedStreamHeader = 0,
+    ClassWithId = 1,
+    // SystemClassWithMembers and ClassWithMembers are not supported by design (require type loading)
+    SystemClassWithMembersAndTypes = 4,
+    ClassWithMembersAndTypes = 5,
+    BinaryObjectString = 6,
+    BinaryArray = 7,
+    MemberPrimitiveTyped = 8,
+    MemberReference = 9,
+    ObjectNull = 10,
+    MessageEnd = 11,
+    BinaryLibrary = 12,
+    ObjectNullMultiple256 = 13,
+    ObjectNullMultiple = 14,
+    ArraySinglePrimitive = 15,
+    ArraySingleObject = 16,
+    ArraySingleString = 17
 }

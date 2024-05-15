@@ -75,7 +75,7 @@ public abstract class BasicObjectTests<T> : SerializationTest<T> where T : ISeri
             // Explicitly not supporting offset arrays
             from value in BinaryFormatterTests.RawSerializableObjects()
             from FormatterAssemblyStyle assemblyFormat in new[] { FormatterAssemblyStyle.Full, FormatterAssemblyStyle.Simple }
-            from FormatterTypeStyle typeFormat in new[] { FormatterTypeStyle.TypesAlways/*, FormatterTypeStyle.TypesWhenNeeded, FormatterTypeStyle.XsdString*/ }
+            from FormatterTypeStyle typeFormat in new[] { FormatterTypeStyle.TypesAlways, FormatterTypeStyle.TypesAlways | FormatterTypeStyle.XsdString }
             where value.Item1 is not Array array || array.GetLowerBound(0) == 0
             select (value.Item1, assemblyFormat, typeFormat)).ToArray());
     }

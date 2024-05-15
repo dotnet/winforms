@@ -38,8 +38,17 @@ internal sealed class RecordMap : IReadOnlyDictionary<int, SerializationRecord>
         // then the ObjectId SHOULD be positive, but MAY be negative."
         if (record.ObjectId != SerializationRecord.NoId)
         {
-            // use Add on purpose, so in case of duplicate Ids we get an exception
-            _map.Add(record.ObjectId, record);
+            if (record.ObjectId < 0)
+            {
+                // Negative record Ids should never be referenced. Duplicate negative ids can be
+                // exported by the writer. The root object Id can be negative.
+                _map[record.ObjectId] = record;
+            }
+            else
+            {
+                // use Add on purpose, so in case of duplicate Ids we get an exception
+                _map.Add(record.ObjectId, record);
+            }
         }
     }
 

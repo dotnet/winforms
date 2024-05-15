@@ -9,8 +9,6 @@ internal enum AllowedRecordTypes : uint
     None = 0,
     SerializedStreamHeader = 1 << RecordType.SerializedStreamHeader,
     ClassWithId = 1 << RecordType.ClassWithId,
-    SystemClassWithMembers = 1 << RecordType.SystemClassWithMembers,
-    ClassWithMembers = 1 << RecordType.ClassWithMembers,
     SystemClassWithMembersAndTypes = 1 << RecordType.SystemClassWithMembersAndTypes,
     ClassWithMembersAndTypes = 1 << RecordType.ClassWithMembersAndTypes,
     BinaryObjectString = 1 << RecordType.BinaryObjectString,
@@ -33,7 +31,7 @@ internal enum AllowedRecordTypes : uint
     /// </summary>
     AnyObject = MemberPrimitiveTyped
         | ArraySingleObject | ArraySinglePrimitive | ArraySingleString | BinaryArray
-        | ClassWithId | ClassWithMembers | ClassWithMembersAndTypes | SystemClassWithMembers | SystemClassWithMembersAndTypes
+        | ClassWithId | ClassWithMembersAndTypes | SystemClassWithMembersAndTypes
         | BinaryObjectString
         | MemberReference
         | ObjectNull,

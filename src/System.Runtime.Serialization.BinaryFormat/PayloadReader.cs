@@ -167,17 +167,8 @@ public static class PayloadReader
 
         if (((uint)allowed & (1u << (int)recordType)) == 0)
         {
-            throw new SerializationException($"Unexpected type seen: {recordType}.");
+            ThrowHelper.ThrowForUnexpectedRecordType(recordType);
         }
-
-        // Following values are not part of the public API surface, as they are not supported
-        // and users don't need to handle these values.
-        // 18~20 are from the reference source but aren't in the OpenSpecs doc
-        const RecordType CrossAppDomainMap = (RecordType)18;
-        const RecordType CrossAppDomainString = (RecordType)19;
-        const RecordType CrossAppDomainAssembly = (RecordType)20;
-        const RecordType MethodCall = (RecordType)21;
-        const RecordType MethodReturn = (RecordType)22;
 
         SerializationRecord record = recordType switch
         {
@@ -188,7 +179,6 @@ public static class PayloadReader
             RecordType.BinaryLibrary => BinaryLibraryRecord.Parse(reader),
             RecordType.BinaryObjectString => BinaryObjectStringRecord.Parse(reader),
             RecordType.ClassWithId => ClassWithIdRecord.Parse(reader, recordMap),
-            RecordType.ClassWithMembers => ClassWithMembersRecord.Parse(reader, recordMap, options),
             RecordType.ClassWithMembersAndTypes => ClassWithMembersAndTypesRecord.Parse(reader, recordMap, options),
             RecordType.MemberPrimitiveTyped => ParseMemberPrimitiveTypedRecord(reader),
             RecordType.MemberReference => MemberReferenceRecord.Parse(reader, recordMap),
@@ -197,12 +187,7 @@ public static class PayloadReader
             RecordType.ObjectNullMultiple => ObjectNullMultipleRecord.Parse(reader),
             RecordType.ObjectNullMultiple256 => ObjectNullMultiple256Record.Parse(reader),
             RecordType.SerializedStreamHeader => SerializedStreamHeaderRecord.Parse(reader),
-            RecordType.SystemClassWithMembers => SystemClassWithMembersRecord.Parse(reader, options),
             RecordType.SystemClassWithMembersAndTypes => SystemClassWithMembersAndTypesRecord.Parse(reader, options),
-            CrossAppDomainAssembly or CrossAppDomainMap or CrossAppDomainString
-                => throw new NotSupportedException("Cross domain is not supported by design"),
-            MethodCall or MethodReturn
-                => throw new NotSupportedException("Remote invocation is not supported by design"),
             _ => throw new SerializationException($"Invalid RecordType value: {recordType}")
         };
 

@@ -89,10 +89,8 @@ internal readonly struct MemberTypeInfo
             | AllowedRecordTypes.MemberPrimitiveTyped
             | AllowedRecordTypes.BinaryLibrary; // classes may be preceded with a library record (System too!)
         // but System classes can be expressed only by System records
-        const AllowedRecordTypes systemClass = classes
-            | AllowedRecordTypes.SystemClassWithMembers | AllowedRecordTypes.SystemClassWithMembersAndTypes;
-        const AllowedRecordTypes nonSystemClass = classes
-            | AllowedRecordTypes.ClassWithMembers | AllowedRecordTypes.ClassWithMembersAndTypes;
+        const AllowedRecordTypes systemClass = classes | AllowedRecordTypes.SystemClassWithMembersAndTypes;
+        const AllowedRecordTypes nonSystemClass = classes |  AllowedRecordTypes.ClassWithMembersAndTypes;
 
         return binaryType switch
         {
