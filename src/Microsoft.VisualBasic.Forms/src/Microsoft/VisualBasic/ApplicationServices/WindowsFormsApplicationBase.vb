@@ -356,7 +356,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
-                        Throw New CantStartSingleInstanceException()
+                        Throw New CantStartSingleInstanceException($"{GetResourceString(SR.AppModel_SingleInstanceCantConnect)}: {ApplicationInstanceID}")
                     End Try
                 End If
             End If 'Single-Instance application
