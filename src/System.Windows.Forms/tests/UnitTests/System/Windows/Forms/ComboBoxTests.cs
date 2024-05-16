@@ -285,6 +285,115 @@ public class ComboBoxTests
         Assert.False(property.ShouldSerializeValue(control));
     }
 
+    [WinFormsFact]
+    public void TestAutoCompleteCustomSource()
+    {
+        AssertAutoCompleteCustomSource(new[] { "item1", "item2" }, false);
+        AssertAutoCompleteCustomSource(null, false);
+        AssertAutoCompleteCustomSource(new[] { "item3", "item4" }, false);
+    }
+
+    private void AssertAutoCompleteCustomSource(string[] items, bool isHandleCreated)
+    {
+        using ComboBox control = new();
+
+        if (items is object)
+        {
+            AutoCompleteStringCollection autoCompleteCustomSource = new();
+            autoCompleteCustomSource.AddRange(items);
+            control.AutoCompleteCustomSource = autoCompleteCustomSource;
+            control.AutoCompleteCustomSource.Should().BeEquivalentTo(autoCompleteCustomSource);
+        }
+        else
+        {
+            control.AutoCompleteCustomSource = null;
+            control.AutoCompleteCustomSource.Should().NotBeNull();
+            control.AutoCompleteCustomSource.Count.Should().Be(0);
+        }
+
+        control.IsHandleCreated.Should().Be(isHandleCreated);
+
+    }
+
+    [WinFormsFact]
+    public void SimplifiedComboBoxTests()
+    {
+        using ComboBox control1 = new();
+        control1.BeginUpdate();
+        control1.BeginUpdate();
+        control1.EndUpdate();
+        control1.EndUpdate();
+
+        using ComboBox control2 = new() { AutoCompleteSource = AutoCompleteSource.ListItems };
+        control2.BeginUpdate();
+        control2.EndUpdate();
+        control2.AutoCompleteMode.Should().Be(AutoCompleteMode.None);
+
+        using ComboBox control3 = new();
+        control3.BeginUpdate();
+        control3.CreateControl();
+        control3.EndUpdate();
+        control3.IsHandleCreated.Should().BeTrue();
+
+        using ComboBox control4 = new();
+        Exception exception = Record.Exception(() => control4.EndUpdate());
+        exception.Should().BeNull();
+
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectedTextTests()
+    {
+        using ComboBox control = new();
+
+        if (!control.IsHandleCreated)
+        {
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        control.CreateControl();
+        if (control.IsHandleCreated)
+        {
+            control.SelectedText.Should().BeEmpty();
+
+        }
+
+        control.DropDownStyle = ComboBoxStyle.DropDownList;
+        control.CreateControl();
+        if (control.DropDownStyle == ComboBoxStyle.DropDownList)
+        {
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        // Test SetWithoutHandle
+        if (!control.IsHandleCreated)
+        {
+            control.SelectedText = "Test";
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        // Test SetWithHandle
+        control.DropDownStyle = ComboBoxStyle.DropDown;
+        control.Text = "Initial";
+        control.SelectionStart = 0;
+        control.SelectionLength = 7;
+        control.CreateControl();
+        if (control.IsHandleCreated)
+        {
+            control.SelectedText = "Test";
+            control.Text.Should().Be("Test");
+        }
+
+        // Test SetWithDropDownListStyle
+        control.DropDownStyle = ComboBoxStyle.DropDownList;
+        control.CreateControl();
+        if (control.DropDownStyle == ComboBoxStyle.DropDownList)
+        {
+            control.SelectedText = "Test";
+            control.SelectedText.Should().BeEmpty();
+        }
+    }
+
     [WinFormsTheory]
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void ComboBox_BackgroundImage_Set_GetReturnsExpected(Image value)
