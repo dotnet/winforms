@@ -5797,6 +5797,92 @@ public class ListViewTests
         callCount.Should().Be(1);
     }
 
+    [WinFormsFact]
+    public void ListView_TextChanged_AddRemove_Success()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+        EventHandler handler = (_, _) => callCount++;
+
+        listView.TextChanged += handler;
+        listView.Text = "New Text";
+        callCount.Should().Be(1);
+        listView.Text.Should().Be("New Text");
+
+        listView.TextChanged -= handler;
+        listView.Text = "Another Text";
+        callCount.Should().Be(1);
+        listView.Text.Should().Be("Another Text");
+    }
+
+    [WinFormsFact]
+    public void ListView_AfterLabelEditEvent_AddRemoveEvent()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+
+        LabelEditEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+        };
+
+        listView.AfterLabelEdit += handler;
+        callCount.Should().Be(0);
+
+        listView.AfterLabelEdit -= handler;
+        callCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void ListView_BeforeLabelEditEvent_AddRemove_Invoke_CallsBeforeLabelEdit()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+
+        LabelEditEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(listView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        listView.BeforeLabelEdit += handler;
+
+        listView.OnBeforeLabelEdit(new LabelEditEventArgs(1));
+        callCount.Should().Be(1);
+
+        listView.BeforeLabelEdit -= handler;
+
+        listView.OnBeforeLabelEdit(new LabelEditEventArgs(1));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void ListView_CacheVirtualItemsEvent_Test()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+
+        CacheVirtualItemsEventHandler handler = (sender, e) =>
+        {
+            callCount.Should().Be(0);
+
+            sender.Should().BeSameAs(listView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        listView.CacheVirtualItems += handler;
+
+        listView.OnCacheVirtualItems(new CacheVirtualItemsEventArgs(1, 2));
+        callCount.Should().Be(1);
+
+        listView.CacheVirtualItems -= handler;
+
+        listView.OnCacheVirtualItems(new CacheVirtualItemsEventArgs(1, 2));
+        callCount.Should().Be(1);
+    }
+
     private class SubListViewItem : ListViewItem
     {
         public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5892,7 +5978,12 @@ public class ListViewTests
         public new void OnGroupCollapsedStateChanged(ListViewGroupEventArgs e) => base.OnGroupCollapsedStateChanged(e);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
         public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
+
+        public new void OnBeforeLabelEdit(LabelEditEventArgs e) => base.OnBeforeLabelEdit(e);
+
+        public new void OnCacheVirtualItems(CacheVirtualItemsEventArgs e) => base.OnCacheVirtualItems(e);
     }
 
     private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)
