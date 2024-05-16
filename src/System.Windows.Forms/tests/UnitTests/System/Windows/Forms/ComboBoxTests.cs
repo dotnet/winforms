@@ -312,7 +312,6 @@ public class ComboBoxTests
         }
 
         control.IsHandleCreated.Should().Be(isHandleCreated);
-
     }
 
     [WinFormsFact]
@@ -338,7 +337,6 @@ public class ComboBoxTests
         using ComboBox control4 = new();
         Exception exception = Record.Exception(() => control4.EndUpdate());
         exception.Should().BeNull();
-
     }
 
     [WinFormsFact]
@@ -355,7 +353,6 @@ public class ComboBoxTests
         if (control.IsHandleCreated)
         {
             control.SelectedText.Should().BeEmpty();
-
         }
 
         control.DropDownStyle = ComboBoxStyle.DropDownList;
