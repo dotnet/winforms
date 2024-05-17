@@ -311,10 +311,7 @@ public class ButtonTests : ControlTestBase
         });
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/11327")]
     [WinFormsFact]
-    [SkipOnArchitecture(TestArchitectures.X64,
-       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11327")]
     public async Task Button_PerformClick_Fires_OnClickAsync()
     {
         await RunTestAsync((form, button) =>
@@ -330,7 +327,10 @@ public class ButtonTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11327")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11327")]
     public async Task Button_Press_Enter_Fires_OnClickAsync()
     {
         await RunTestAsync(async (form, button) =>
