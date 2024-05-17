@@ -106,4 +106,22 @@ public class TrackBar_TrackBarChildAccessibleObjectTests
         public SubTrackBarChildAccessibleObject(TrackBar owningTrackBar) : base(owningTrackBar)
         { }
     }
+
+    [Fact]
+    public void TrackBarChildAccessibleObject_Role_ReturnsExpected()
+    {
+        using TrackBar control = new();
+        var accessibleObject = new SubTrackBarChildAccessibleObject(control);
+        accessibleObject.Role.Should().Be(AccessibleRole.None);
+    }
+
+    [Fact]
+    public void TrackBarChildAccessibleObject_State_ReturnsExpected()
+    {
+        using TrackBar control = new();
+        var accessibleObject = new SubTrackBarChildAccessibleObject(control);
+
+        accessibleObject.State.Should().Be(AccessibleStates.None);
+        control.IsHandleCreated.Should().BeFalse();
+    }
 }
