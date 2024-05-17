@@ -5816,45 +5816,39 @@ public class ListViewTests
     }
 
     [WinFormsFact]
-    public void ListView_AfterLabelEditEvent_AddRemoveEvent()
+    public void ListView_LabelEditEvents_AddRemove_Invoke()
     {
         using SubListView listView = new();
-        int callCount = 0;
+        int afterLabelEditCallCount = 0;
+        int beforeLabelEditCallCount = 0;
 
-        LabelEditEventHandler handler = (sender, e) =>
+        LabelEditEventHandler afterLabelEditHandler = (sender, e) =>
         {
-            callCount++;
+            afterLabelEditCallCount++;
         };
 
-        listView.AfterLabelEdit += handler;
-        callCount.Should().Be(0);
-
-        listView.AfterLabelEdit -= handler;
-        callCount.Should().Be(0);
-    }
-
-    [WinFormsFact]
-    public void ListView_BeforeLabelEditEvent_AddRemove_Invoke_CallsBeforeLabelEdit()
-    {
-        using SubListView listView = new();
-        int callCount = 0;
-
-        LabelEditEventHandler handler = (sender, e) =>
+        LabelEditEventHandler beforeLabelEditHandler = (sender, e) =>
         {
             sender.Should().BeSameAs(listView);
             e.Should().NotBeNull();
-            callCount++;
+            beforeLabelEditCallCount++;
         };
 
-        listView.BeforeLabelEdit += handler;
+        listView.AfterLabelEdit += afterLabelEditHandler;
+        afterLabelEditCallCount.Should().Be(0);
+
+        listView.AfterLabelEdit -= afterLabelEditHandler;
+        afterLabelEditCallCount.Should().Be(0);
+
+        listView.BeforeLabelEdit += beforeLabelEditHandler;
 
         listView.OnBeforeLabelEdit(new LabelEditEventArgs(1));
-        callCount.Should().Be(1);
+        beforeLabelEditCallCount.Should().Be(1);
 
-        listView.BeforeLabelEdit -= handler;
+        listView.BeforeLabelEdit -= beforeLabelEditHandler;
 
         listView.OnBeforeLabelEdit(new LabelEditEventArgs(1));
-        callCount.Should().Be(1);
+        beforeLabelEditCallCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -5865,8 +5859,6 @@ public class ListViewTests
 
         CacheVirtualItemsEventHandler handler = (sender, e) =>
         {
-            callCount.Should().Be(0);
-
             sender.Should().BeSameAs(listView);
             e.Should().NotBeNull();
             callCount++;
