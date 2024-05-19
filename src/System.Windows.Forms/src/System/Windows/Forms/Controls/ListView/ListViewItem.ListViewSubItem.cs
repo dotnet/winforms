@@ -206,7 +206,7 @@ public partial class ListViewItem
             set
             {
                 text = value;
-                _owner?.UpdateSubItems(-1);
+                _owner?.UpdateSubItems(_owner.SubItems.IndexOf(this));
             }
         }
 
