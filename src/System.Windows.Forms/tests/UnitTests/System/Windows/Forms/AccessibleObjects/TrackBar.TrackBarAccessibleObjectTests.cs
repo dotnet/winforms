@@ -494,7 +494,7 @@ public class TrackBarAccessibleObjectTests
         return trackBar;
     }
 
-    [Theory]
+    [WinFormsTheory]
     [InlineData(null)]
     [InlineData("Test Default Action")]
     public void TrackBarAccessibleObject_DefaultAction_ReturnsExpected(string accessibleDefaultActionDescription)
@@ -508,13 +508,13 @@ public class TrackBarAccessibleObjectTests
         accessibleObject.DefaultAction.Should().Be(accessibleDefaultActionDescription);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackBarAccessibleObject_DefaultAction_ThrowsArgumentNullException_IfOwnerNotSet()
     {
         Assert.Throws<ArgumentNullException>(() => new TrackBar.TrackBarAccessibleObject(null));
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackBarAccessibleObject_HitTest_ReturnsExpected()
     {
         using TrackBar trackBar = new();

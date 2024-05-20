@@ -107,7 +107,7 @@ public class TrackBar_TrackBarChildAccessibleObjectTests
         { }
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackBarChildAccessibleObject_Role_ReturnsExpected()
     {
         using TrackBar control = new();
@@ -115,7 +115,7 @@ public class TrackBar_TrackBarChildAccessibleObjectTests
         accessibleObject.Role.Should().Be(AccessibleRole.None);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackBarChildAccessibleObject_State_ReturnsExpected()
     {
         using TrackBar control = new();
