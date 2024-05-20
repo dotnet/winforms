@@ -286,7 +286,7 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
-    public void TestAutoCompleteCustomSource()
+    public void VerifyAutoCompleteEntries()
     {
         AssertAutoCompleteCustomSource(new[] { "item1", "item2" }, false);
         AssertAutoCompleteCustomSource(null, false);
@@ -319,8 +319,6 @@ public class ComboBoxTests
     {
         using ComboBox control1 = new();
         control1.BeginUpdate();
-        control1.BeginUpdate();
-        control1.EndUpdate();
         control1.EndUpdate();
 
         using ComboBox control2 = new() { AutoCompleteSource = AutoCompleteSource.ListItems };
