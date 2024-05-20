@@ -7148,16 +7148,21 @@ public partial class ToolStripTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11382")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
+    "Flaky tests, see: https://github.com/dotnet/winforms/issues/11382")]
     public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
         using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+
         int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
         int createdCallCount = 0;
+
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Message m = new()
@@ -7166,6 +7171,7 @@ public partial class ToolStripTests
             Result = 250
         };
         control.WndProc(ref m);
+
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -7178,25 +7184,28 @@ public partial class ToolStripTests
     {
         using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+
         int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
         int createdCallCount = 0;
+        int callCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        int callCount = 0;
         control.MouseHover += (sender, e) =>
         {
             Assert.Same(control, sender);
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
+
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = 250
         };
+
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.Equal(1, callCount);
