@@ -7,6 +7,11 @@ namespace System.ComponentModel;
 
 internal static class TypeConverterHelper
 {
+    [FeatureSwitchDefinition("System.ComponentModel.TypeConverterHelper.ComponentModelUseRegisterTypes")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    internal static bool UseComponentModelRegisterTypes { get; } = AppContext.TryGetSwitch("System.ComponentModel.TypeConverterHelper.ComponentModelUseRegisterTypes", out bool isEnabled) ? isEnabled : false;
+#pragma warning restore IDE0075
+
     /// <summary>
     /// Converts the given text to list of objects, using the specified context and culture information.
     /// </summary>
@@ -28,8 +33,18 @@ internal static class TypeConverterHelper
             return false;
         }
 
-        TypeDescriptor.RegisterType<T>();
-        TypeConverter converter = TypeDescriptor.GetConverterFromRegisteredType(typeof(T));
+        TypeConverter converter;
+        if (!UseComponentModelRegisterTypes)
+        {
+            converter = TypeDescriptor.GetConverter(typeof(T));
+        }
+        else
+        {
+            // Call the trim safe API
+            TypeDescriptor.RegisterType<T>();
+            converter = TypeDescriptor.GetConverterFromRegisteredType(typeof(T));
+        }
+
         for (int i = 0; i < output.Length; i++)
         {
             // Note: ConvertFromString will raise exception if value cannot be converted.

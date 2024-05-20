@@ -466,8 +466,18 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        TypeDescriptor.RegisterType<TableLayoutSettings>();
-        TypeConverter converter = TypeDescriptor.GetConverterFromRegisteredType(this);
+        TypeConverter converter;
+        if (!Control.UseComponentModelRegisterTypes)
+        {
+            converter = TypeDescriptor.GetConverter(this);
+        }
+        else
+        {
+            // Call the trim safe API
+            TypeDescriptor.RegisterType<TableLayoutSettings>();
+            converter = TypeDescriptor.GetConverterFromRegisteredType(this);
+        }
+
         string? stringVal = converter.ConvertToInvariantString(this);
 
         if (!string.IsNullOrEmpty(stringVal))
@@ -486,7 +496,10 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         {
             List<ControlInformation> controlsInfo = new(Owner!.Children.Count);
 
-            TypeDescriptor.RegisterType<Control>();
+            if (Control.UseComponentModelRegisterTypes)
+            {
+                TypeDescriptor.RegisterType<Control>();
+            }
 
             foreach (IArrangedElement element in Owner.Children)
             {
@@ -496,7 +509,17 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
                     // We need to go through the PropertyDescriptor for the Name property
                     // since it is shadowed.
-                    PropertyDescriptor? prop = TypeDescriptor.GetPropertiesFromRegisteredType(c)["Name"];
+                    PropertyDescriptor? prop;
+                    if (!Control.UseComponentModelRegisterTypes)
+                    {
+                        prop = TypeDescriptor.GetProperties(c)["Name"];
+                    }
+                    else
+                    {
+                        // Call the trim safe API
+                        prop = TypeDescriptor.GetPropertiesFromRegisteredType(c)["Name"];
+                    }
+
                     if (prop is not null && prop.PropertyType == typeof(string))
                     {
                         controlInfo.Name = prop.GetValue(c);

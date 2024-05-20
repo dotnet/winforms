@@ -227,6 +227,11 @@
         <target state="translated">{0} ne prend pas en charge {1} la propriété. Il doit être remplacé dans la classe dérivée.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ActiveXNotSupported">
+        <source>Using ActiveX is not supported.</source>
+        <target state="new">Using ActiveX is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Les contrôles créés sur un thread ne peuvent pas être parents d'un contrôle d'un autre thread.</target>
@@ -4639,6 +4644,11 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Permet à l'utilisateur de parcourir les pages web au sein de votre formulaire.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="new">Design time features are not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">L'opération {0} sur le composant a échoué avec le code d'erreur 0x{1:X}.</target>
@@ -5722,6 +5732,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="IllegalState">
         <source>Internal state of the {1} class is not valid.</source>
         <target state="translated">L'état interne de la classe {1} n'est pas valide.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageIndexConverterNotSupported">
+        <source>ImageIndexConverter is not supported.</source>
+        <target state="new">ImageIndexConverter is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListAddFailed">
@@ -7052,6 +7067,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Spécifie le Type de l'objet à utiliser pour l'analyse du texte d'entrée lorsque le contrôle perd le focus.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MdiWindowDialogNotSupported">
+        <source>MdiWindowDialog is not supported.</source>
+        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11002,6 +11022,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Les contrôles ajoutés à cette collection doivent être de type '{0}' ou '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UITypeEditorNotSupported">
+        <source>Using the UITypeEditor is not supported.</source>
+        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

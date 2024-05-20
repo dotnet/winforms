@@ -227,6 +227,11 @@
         <target state="translated">{0} nie obsługuje właściwości {1}. Musi zostać zastąpiona w klasie pochodnej.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ActiveXNotSupported">
+        <source>Using ActiveX is not supported.</source>
+        <target state="new">Using ActiveX is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Formanty utworzone w jednym wątku nie mogą być nadrzędne w stosunku do formantów w innym wątku.</target>
@@ -4639,6 +4644,11 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
         <target state="translated">Umożliwia użytkownikowi przeglądanie stron sieci Web w formularzu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="new">Design time features are not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">Niepowodzenie operacji {0} dla składnika, kod błędu 0x{1:X}.</target>
@@ -5722,6 +5732,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="IllegalState">
         <source>Internal state of the {1} class is not valid.</source>
         <target state="translated">Wewnętrzny stan klasy {1} jest nieprawidłowy.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageIndexConverterNotSupported">
+        <source>ImageIndexConverter is not supported.</source>
+        <target state="new">ImageIndexConverter is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListAddFailed">
@@ -7052,6 +7067,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Określa typ obiektu używanego do analizowania tekstu wejściowego, gdy formant utraci fokus.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MdiWindowDialogNotSupported">
+        <source>MdiWindowDialog is not supported.</source>
+        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11002,6 +11022,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Formanty dodane do tej kolekcji muszą być typu „{0}” lub „{1}”.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UITypeEditorNotSupported">
+        <source>Using the UITypeEditor is not supported.</source>
+        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

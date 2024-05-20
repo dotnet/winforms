@@ -11,6 +11,11 @@ internal sealed partial class MdiWindowDialog : Form
     private TableLayoutPanel _okCancelTableLayoutPanel;
     private Form? _active;
 
+    [FeatureSwitchDefinition("System.Windows.Forms.MdiWindowDialog.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.MdiWindowDialog.IsSupported", out bool isSupported) ? isSupported : true;
+#pragma warning restore IDE0075
+
     public MdiWindowDialog()
         : base()
     {
@@ -74,9 +79,9 @@ internal sealed partial class MdiWindowDialog : Form
     [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
     private void InitializeComponent()
     {
-        if (!Control.EnableFeaturesNotSupportedWithTrimming)
+        if (!IsSupported)
         {
-            throw new NotSupportedException(SR.BindingNotSupported);
+            throw new NotSupportedException(SR.MdiWindowDialogNotSupported);
         }
 
         System.ComponentModel.ComponentResourceManager resources = new(typeof(MdiWindowDialog));

@@ -136,17 +136,33 @@ internal static class Formatter
         // type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
         Type sourceType = value.GetType();
 
-        // @TODO - We will register basic primitive types here but it would be optimal to move the registration to a start up path.
-        TypeDescriptor.RegisterType<string>();
-        TypeDescriptor.RegisterType<int>();
-        TypeDescriptor.RegisterType<bool>();
-        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
+        TypeConverter sourceTypeTypeConverter;
+        if (!Control.UseComponentModelRegisterTypes)
+        {
+            sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
+        }
+        else
+        {
+            // Call the trim safe API
+            sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
+        }
+
         if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
         {
             return sourceConverter.ConvertTo(context: null, GetFormatterCulture(formatInfo), value, targetType);
         }
 
-        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
+        TypeConverter targetTypeTypeConverter;
+        if (!Control.UseComponentModelRegisterTypes)
+        {
+            targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
+        }
+        else
+        {
+            // Call the trim safe API
+            targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
+        }
+
         if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
         {
             return targetConverter.ConvertFrom(context: null, GetFormatterCulture(formatInfo), value);

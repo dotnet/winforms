@@ -227,6 +227,11 @@
         <target state="translated">{0} unterstützt {1} Eigenschaft nicht. Sie muss in der abgeleiteten Klasse überschrieben werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ActiveXNotSupported">
+        <source>Using ActiveX is not supported.</source>
+        <target state="new">Using ActiveX is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Steuerelemente, die für einen Thread erstellt wurden, können nicht einem Steuerelement in einem anderen Thread übergeordnet werden.</target>
@@ -4639,6 +4644,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Ermöglicht dem Benutzer das Besuchen von Webseiten im Formular.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="new">Design time features are not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">Fehler beim {0}-Vorgang für die Komponente. Fehlercode: 0x{1:X}.</target>
@@ -5722,6 +5732,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="IllegalState">
         <source>Internal state of the {1} class is not valid.</source>
         <target state="translated">Der interne Zustand der {1}-Klasse ist ungültig.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageIndexConverterNotSupported">
+        <source>ImageIndexConverter is not supported.</source>
+        <target state="new">ImageIndexConverter is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListAddFailed">
@@ -7052,6 +7067,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Gibt den Typ des für die Analyse des Eingabetexts zu verwendenden Objekts an, wenn das Steuerelement den Fokus verliert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MdiWindowDialogNotSupported">
+        <source>MdiWindowDialog is not supported.</source>
+        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11002,6 +11022,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Steuerelemente, die dieser Sammlung hinzugefügt werden, müssen den Typ {0} oder {1} haben.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UITypeEditorNotSupported">
+        <source>Using the UITypeEditor is not supported.</source>
+        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

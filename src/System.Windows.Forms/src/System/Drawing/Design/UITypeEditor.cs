@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
 
 namespace System.Drawing.Design;
 
@@ -15,6 +14,11 @@ namespace System.Drawing.Design;
 /// </summary>
 public class UITypeEditor
 {
+    [FeatureSwitchDefinition("System.Drawing.Design.UITypeEditor.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported => AppContext.TryGetSwitch("System.Drawing.Design.UITypeEditor.IsSupported", out bool isSupported) ? isSupported : true;
+#pragma warning restore IDE0075
+
     static UITypeEditor()
     {
         // Our set of intrinsic editors.
@@ -44,9 +48,9 @@ public class UITypeEditor
             [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
         };
 
-        if (!Control.EnableFeaturesNotSupportedWithTrimming)
+        if (!IsSupported)
         {
-            throw new NotSupportedException(SR.BindingNotSupported);
+            throw new NotSupportedException(SR.UITypeEditorNotSupported);
         }
 
         // Add our intrinsic editors to TypeDescriptor.

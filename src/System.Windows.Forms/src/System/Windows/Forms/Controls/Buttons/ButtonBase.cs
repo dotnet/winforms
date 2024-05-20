@@ -155,9 +155,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 if (value != Color.Empty)
                 {
-                    if (!EnableFeaturesNotSupportedWithTrimming)
+                    if (!EnableDesignTimeFeatures)
                     {
-                        throw new NotSupportedException(SR.BindingNotSupported);
+                        throw new NotSupportedException(SR.DesignTimeFeaturesNotSupported);
                     }
 
                     PropertyDescriptor? pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];

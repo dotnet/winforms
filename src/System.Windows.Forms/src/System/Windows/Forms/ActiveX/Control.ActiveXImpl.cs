@@ -136,6 +136,11 @@ public partial class Control
         private short _accelCount = -1;
         private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
+        [FeatureSwitchDefinition("System.Windows.Forms.ActiveXImpl.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+        private static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.ActiveXImpl.IsSupported", out bool isSupported) ? isSupported : true;
+#pragma warning restore IDE0075
+
         /// <summary>
         ///  Creates a new ActiveXImpl.
         /// </summary>
@@ -1035,9 +1040,9 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
-            if (!EnableFeaturesNotSupportedWithTrimming)
+            if (!IsSupported)
             {
-                throw new NotSupportedException(SR.BindingNotSupported);
+                throw new NotSupportedException(SR.ActiveXNotSupported);
             }
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
@@ -1430,9 +1435,9 @@ public partial class Control
             {
                 Type? eventInterface = null;
 
-                if (!Control.EnableFeaturesNotSupportedWithTrimming)
+                if (!IsSupported)
                 {
-                    throw new NotSupportedException(SR.BindingNotSupported);
+                    throw new NotSupportedException(SR.ActiveXNotSupported);
                 }
 
                 // Get the first declared interface, if any.
@@ -1484,9 +1489,9 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
-            if (!EnableFeaturesNotSupportedWithTrimming)
+            if (!IsSupported)
             {
-                throw new NotSupportedException(SR.BindingNotSupported);
+                throw new NotSupportedException(SR.ActiveXNotSupported);
             }
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(

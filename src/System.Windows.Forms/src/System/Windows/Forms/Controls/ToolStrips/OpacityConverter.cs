@@ -45,8 +45,15 @@ public class OpacityConverter : TypeConverter
             double percent;
             try
             {
-                TypeDescriptor.RegisterType<double>();
-                percent = (double)TypeDescriptor.GetConverterFromRegisteredType(typeof(double)).ConvertFrom(context, culture, text)!;
+                if (!Control.UseComponentModelRegisterTypes)
+                {
+                    percent = (double)TypeDescriptor.GetConverter(typeof(double)).ConvertFrom(context, culture, text)!;
+                }
+                else
+                {
+                    // Call the trim safe API
+                    percent = (double)TypeDescriptor.GetConverterFromRegisteredType(typeof(double)).ConvertFrom(context, culture, text)!;
+                }
 
                 // Assume they meant a percentage if it is > 1.0, else they actually
                 // typed the correct double.

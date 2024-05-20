@@ -56,9 +56,11 @@ public unsafe partial class Control :
         "Makes double buffered controls non-double buffered");
 #endif
 
-    [FeatureSwitchDefinition("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming")]
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.DesignTimeFeatures")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-    internal static bool EnableFeaturesNotSupportedWithTrimming { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming", out bool isEnabled) ? isEnabled : true;
+    internal static bool EnableDesignTimeFeatures { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming", out bool isEnabled) ? isEnabled : true;
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.ComponentModelUseRegisterTypes")]
+    internal static bool UseComponentModelRegisterTypes { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.ComponentModelUseRegisterTypes", out bool isEnabled) ? isEnabled : false;
 #pragma warning restore IDE0075
 
     private static readonly uint WM_GETCONTROLNAME = PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
@@ -13021,9 +13023,9 @@ public unsafe partial class Control :
 
         if (site is not null && site.DesignMode && site.TryGetService(out changeService))
         {
-            if (!EnableFeaturesNotSupportedWithTrimming)
+            if (!EnableDesignTimeFeatures)
             {
-                throw new NotSupportedException(SR.BindingNotSupported);
+                throw new NotSupportedException(SR.DesignTimeFeaturesNotSupported);
             }
 
             sizeProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Size];

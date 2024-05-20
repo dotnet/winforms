@@ -1108,8 +1108,16 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return string.Empty;
         }
 
-        TypeDescriptor.RegisterType<Keys>();
-        return TypeDescriptor.GetConverterFromRegisteredType(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
+        if (!Control.UseComponentModelRegisterTypes)
+        {
+            return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
+        }
+        else
+        {
+            // Call the trim safe API
+            TypeDescriptor.RegisterType<Keys>();
+            return TypeDescriptor.GetConverterFromRegisteredType(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
+        }
     }
 
     internal override bool IsBeingTabbedTo()

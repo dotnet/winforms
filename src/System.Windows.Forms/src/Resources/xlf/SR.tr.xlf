@@ -227,6 +227,11 @@
         <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ActiveXNotSupported">
+        <source>Using ActiveX is not supported.</source>
+        <target state="new">Using ActiveX is not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Bir iş parçacığında oluşturulan denetimler, farklı bir iş parçacığındaki denetimin üst öğesi yapılamaz.</target>
@@ -4639,6 +4644,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Kullanıcıların formunuzdaki Web sayfalarına gitmesine olanak tanır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="new">Design time features are not supported.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">Bileşen üzerindeki {0} işlemi başarılı olmadı, oluşturulan hata kodu 0x{1:X}.</target>
@@ -5722,6 +5732,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="IllegalState">
         <source>Internal state of the {1} class is not valid.</source>
         <target state="translated">{1} sınıfının iç durumu geçerli değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageIndexConverterNotSupported">
+        <source>ImageIndexConverter is not supported.</source>
+        <target state="new">ImageIndexConverter is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListAddFailed">
@@ -7052,6 +7067,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Denetim odağı kaybettiğinde giriş metnini ayrıştırmak için kullanılacak nesnenin türünü belirtir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MdiWindowDialogNotSupported">
+        <source>MdiWindowDialog is not supported.</source>
+        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11002,6 +11022,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Bu koleksiyona eklenen denetimlerin '{0}' veya '{1}' türünde olması gerekir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UITypeEditorNotSupported">
+        <source>Using the UITypeEditor is not supported.</source>
+        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

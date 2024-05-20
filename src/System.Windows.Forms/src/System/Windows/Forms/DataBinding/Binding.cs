@@ -15,7 +15,7 @@ public partial class Binding
     [FeatureSwitchDefinition("System.Windows.Forms.Binding.IsSupported")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
     internal static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.Binding.IsSupported", out bool isSupported) ? isSupported : true;
-#pragma warning restore IDE0075 //Simplify conditional expression
+#pragma warning restore IDE0075
 
     private BindingManagerBase? _bindingManagerBase;
 

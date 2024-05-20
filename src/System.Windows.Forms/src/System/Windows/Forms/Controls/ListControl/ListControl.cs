@@ -135,7 +135,7 @@ public abstract class ListControl : Control
     {
         get
         {
-            if (!EnableFeaturesNotSupportedWithTrimming)
+            if (!Binding.IsSupported)
             {
                 throw new NotSupportedException(SR.BindingNotSupported);
             }
@@ -427,7 +427,7 @@ public abstract class ListControl : Control
     {
         if (item is not null && !string.IsNullOrEmpty(field))
         {
-            if (!EnableFeaturesNotSupportedWithTrimming)
+            if (!Binding.IsSupported)
             {
                 throw new NotSupportedException(SR.BindingNotSupported);
             }
@@ -537,8 +537,15 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        TypeDescriptor.RegisterType<string>();
-        s_stringTypeConverter ??= TypeDescriptor.GetConverterFromRegisteredType(typeof(string));
+        if (!UseComponentModelRegisterTypes)
+        {
+            s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        }
+        else
+        {
+            // Call the trim safe API
+            s_stringTypeConverter ??= TypeDescriptor.GetConverterFromRegisteredType(typeof(string));
+        }
 
         try
         {
