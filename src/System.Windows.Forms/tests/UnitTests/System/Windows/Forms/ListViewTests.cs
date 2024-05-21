@@ -5824,6 +5824,8 @@ public class ListViewTests
 
         LabelEditEventHandler afterLabelEditHandler = (sender, e) =>
         {
+            sender.Should().BeSameAs(listView);
+            e.Should().NotBeNull();
             afterLabelEditCallCount++;
         };
 
