@@ -55,16 +55,21 @@ public class CheckedListBox_CheckedItemCollectionTests : IDisposable
         _collection[0].Should().Be("item1");
     }
 
+    private void AddItemsToCheckedListBox(string[] items, bool[] checkedStates)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            _checkedListBox.Items.Add(items[i], checkedStates[i]);
+        }
+    }
+
     [WinFormsTheory]
     [InlineData(new string[] { "item1", "item2" }, new bool[] { true, false }, "item1", true)]
     [InlineData(new string[] { "item1", "item2" }, new bool[] { false, true }, "item2", true)]
     [InlineData(new string[] { "item1", "item2" }, new bool[] { false, false }, "item1", false)]
     public void CheckedItemCollection_Contains_ReturnsExpected(string[] items, bool[] checkedStates, string item, bool expected)
     {
-        for (int i = 0; i < items.Length; i++)
-        {
-            _checkedListBox.Items.Add(items[i], checkedStates[i]);
-        }
+        AddItemsToCheckedListBox(items, checkedStates);
 
         _collection.Contains(item).Should().Be(expected);
     }
@@ -75,10 +80,7 @@ public class CheckedListBox_CheckedItemCollectionTests : IDisposable
     [InlineData(new string[] { "item1", "item2" }, new bool[] { false, false }, "item1", -1)]
     public void CheckedItemCollection_IndexOf_ReturnsExpected(string[] items, bool[] checkedStates, string item, int expected)
     {
-        for (int i = 0; i < items.Length; i++)
-        {
-            _checkedListBox.Items.Add(items[i], checkedStates[i]);
-        }
+        AddItemsToCheckedListBox(items, checkedStates);
 
         _collection.IndexOf(item).Should().Be(expected);
     }
@@ -89,10 +91,7 @@ public class CheckedListBox_CheckedItemCollectionTests : IDisposable
     [InlineData(new string[] { "item1", "item2" }, new bool[] { false, false }, new object[] { null, null })]
     public void CheckedItemCollection_CopyTo_CopiesExpectedValues(string[] items, bool[] checkedStates, object[] expected)
     {
-        for (int i = 0; i < items.Length; i++)
-        {
-            _checkedListBox.Items.Add(items[i], checkedStates[i]);
-        }
+        AddItemsToCheckedListBox(items, checkedStates);
 
         object[] array = new object[items.Length];
         ((ICollection)_collection).CopyTo(array, 0);
@@ -101,15 +100,12 @@ public class CheckedListBox_CheckedItemCollectionTests : IDisposable
     }
 
     [WinFormsTheory]
-    [InlineData(new object[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, new object[] { "item1", "item3" })]
-    [InlineData(new object[] { "item1", "item2", "item3" }, new bool[] { false, true, false }, new object[] { "item2" })]
-    [InlineData(new object[] { "item1", "item2", "item3" }, new bool[] { false, false, false }, new object[] { })]
-    public void CheckedItemCollection_GetEnumerator_ReturnsExpected(object[] items, bool[] checkedStates, object[] expected)
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, new object[] { "item1", "item3" })]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, true, false }, new object[] { "item2" })]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, false, false }, new object[] { })]
+    public void CheckedItemCollection_GetEnumerator_ReturnsExpected(string[] items, bool[] checkedStates, object[] expected)
     {
-        for (int i = 0; i < items.Length; i++)
-        {
-            _checkedListBox.Items.Add(items[i], checkedStates[i]);
-        }
+        AddItemsToCheckedListBox(items, checkedStates);
 
         IEnumerator enumerator = _collection.GetEnumerator();
         List<object> result = new List<object>();
