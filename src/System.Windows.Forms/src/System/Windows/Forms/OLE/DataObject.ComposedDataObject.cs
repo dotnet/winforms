@@ -74,12 +74,12 @@ public unsafe partial class DataObject
         public IDataObject? OriginalIDataObject { get; private set; }
 
         /// <summary>
-        ///  We are restricting serialization of formats that represent strings, bitmaps or OLE types.
+        ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
         /// </summary>
         /// <param name="format">format name</param>
-        /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
-        private static bool RestrictDeserializationToSafeTypes(string format)
-            => format is DataFormats.StringConstant
+        /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
+        private static bool RestrictDeserializationToSafeTypes(string format) =>
+            format is DataFormats.StringConstant
                 or BitmapFullName
                 or DataFormats.CsvConstant
                 or DataFormats.DibConstant
@@ -111,15 +111,15 @@ public unsafe partial class DataObject
         #endregion
 
         #region Com.IDataObject.Interface
-        HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetData(pformatetcIn, pmedium);
-        HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetDataHere(pformatetc, pmedium);
-        HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc) => _nativeDataObject.QueryGetData(pformatetc);
-        HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) => _nativeDataObject.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
-        HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease) => _nativeDataObject.SetData(pformatetc, pmedium, fRelease);
-        HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc) => _nativeDataObject.EnumFormatEtc(dwDirection, ppenumFormatEtc);
         HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection) => _nativeDataObject.DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
         HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection) => _nativeDataObject.DUnadvise(dwConnection);
         HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise) => _nativeDataObject.EnumDAdvise(ppenumAdvise);
+        HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc) => _nativeDataObject.EnumFormatEtc(dwDirection, ppenumFormatEtc);
+        HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) => _nativeDataObject.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
+        HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetData(pformatetcIn, pmedium);
+        HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetDataHere(pformatetc, pmedium);
+        HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc) => _nativeDataObject.QueryGetData(pformatetc);
+        HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease) => _nativeDataObject.SetData(pformatetc, pmedium, fRelease);
         #endregion
 
         #region ComTypes.IDataObject
