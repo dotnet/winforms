@@ -91,53 +91,34 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="ComposedDataObject.OriginalIDataObject"/>
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
-    /// <summary>
-    ///  Retrieves the data associated with the specified data format, using an automated conversion parameter to
-    ///  determine whether to convert the data to the format.
-    /// </summary>
+    #region IDataObject
     public virtual object? GetData(string format, bool autoConvert) =>
         ((IDataObject)_innerData).GetData(format, autoConvert);
 
-    /// <summary>
-    ///  Retrieves the data associated with the specified data format.
-    /// </summary>
     public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
-    /// <summary>
-    ///  Retrieves the data associated with the specified class type format.
-    /// </summary>
     public virtual object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
 
-    /// <summary>
-    ///  Determines whether data stored in this instance is associated with, or can be converted to,
-    ///  the specified format.
-    /// </summary>
-    public virtual bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
-
-    /// <summary>
-    ///  Determines whether data stored in this instance is associated with the specified format, using an
-    ///  automatic conversion parameter to determine whether to convert the data to the format.
-    /// </summary>
     public virtual bool GetDataPresent(string format, bool autoConvert) =>
         ((IDataObject)_innerData).GetDataPresent(format, autoConvert);
 
-    /// <summary>
-    ///  Determines whether data stored in this instance is associated with, or can be converted to,
-    ///  the specified format.
-    /// </summary>
     public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
-    /// <summary>
-    ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to,
-    ///  using an automatic conversion parameter <paramref name="autoConvert"/> to determine whether to retrieve
-    ///  all formats that the data can be converted to or only native data formats.
-    /// </summary>
+    public virtual bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
+
     public virtual string[] GetFormats(bool autoConvert) => ((IDataObject)_innerData).GetFormats(autoConvert);
 
-    /// <summary>
-    ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to.
-    /// </summary>
     public virtual string[] GetFormats() => GetFormats(autoConvert: true);
+
+    public virtual void SetData(string format, bool autoConvert, object? data) =>
+        ((IDataObject)_innerData).SetData(format, autoConvert, data);
+
+    public virtual void SetData(string format, object? data) => ((IDataObject)_innerData).SetData(format, data);
+
+    public virtual void SetData(Type format, object? data) => ((IDataObject)_innerData).SetData(format, data);
+
+    public virtual void SetData(object? data) => ((IDataObject)_innerData).SetData(data);
+    #endregion
 
     public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
 
@@ -180,8 +161,8 @@ public unsafe partial class DataObject :
 
     public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 
-    public virtual void SetAudio(Stream audioStream)
-        => SetData(DataFormats.WaveAudioConstant, autoConvert: false, audioStream.OrThrowIfNull());
+    public virtual void SetAudio(Stream audioStream) =>
+        SetData(DataFormats.WaveAudioConstant, autoConvert: false, audioStream.OrThrowIfNull());
 
     public virtual void SetFileDropList(StringCollection filePaths)
     {
@@ -239,78 +220,63 @@ public unsafe partial class DataObject :
         _ => [format]
     };
 
-    int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
-        => ((ComTypes.IDataObject)_innerData).DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
+    #region ComTypes.IDataObject
+    int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection) =>
+        ((ComTypes.IDataObject)_innerData).DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
 
     void ComTypes.IDataObject.DUnadvise(int dwConnection) => ((ComTypes.IDataObject)_innerData).DUnadvise(dwConnection);
 
-    int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
-        => ((ComTypes.IDataObject)_innerData).EnumDAdvise(out enumAdvise);
+    int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise) =>
+        ((ComTypes.IDataObject)_innerData).EnumDAdvise(out enumAdvise);
 
-    IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR dwDirection)
-        => ((ComTypes.IDataObject)_innerData).EnumFormatEtc(dwDirection);
+    IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR dwDirection) =>
+        ((ComTypes.IDataObject)_innerData).EnumFormatEtc(dwDirection);
 
-    int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
-        => ((ComTypes.IDataObject)_innerData).GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
+    int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut) =>
+        ((ComTypes.IDataObject)_innerData).GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
 
-    void ComTypes.IDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
-        => ((ComTypes.IDataObject)_innerData).GetData(ref formatetc, out medium);
+    void ComTypes.IDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium) =>
+        ((ComTypes.IDataObject)_innerData).GetData(ref formatetc, out medium);
 
-    void ComTypes.IDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
-        => ((ComTypes.IDataObject)_innerData).GetDataHere(ref formatetc, ref medium);
+    void ComTypes.IDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium) =>
+        ((ComTypes.IDataObject)_innerData).GetDataHere(ref formatetc, ref medium);
 
-    int ComTypes.IDataObject.QueryGetData(ref FORMATETC formatetc)
-        => ((ComTypes.IDataObject)_innerData).QueryGetData(ref formatetc);
+    int ComTypes.IDataObject.QueryGetData(ref FORMATETC formatetc) =>
+        ((ComTypes.IDataObject)_innerData).QueryGetData(ref formatetc);
 
-    void ComTypes.IDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
-        => ((ComTypes.IDataObject)_innerData).SetData(ref pFormatetcIn, ref pmedium, fRelease);
+    void ComTypes.IDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease) =>
+        ((ComTypes.IDataObject)_innerData).SetData(ref pFormatetcIn, ref pmedium, fRelease);
 
-    /// <summary>
-    ///  Stores the specified data and its associated format in this instance, using the automatic conversion
-    ///  parameter to specify whether the data can be converted to another format.
-    /// </summary>
-    public virtual void SetData(string format, bool autoConvert, object? data) =>
-        ((IDataObject)_innerData).SetData(format, autoConvert, data);
+    #endregion
 
-    /// <summary>
-    ///  Stores the specified data and its associated format in this instance.
-    /// </summary>
-    public virtual void SetData(string format, object? data) => ((IDataObject)_innerData).SetData(format, data);
+    #region Com.IDataObject
 
-    /// <summary>
-    ///  Stores the specified data and its associated class type in this instance.
-    /// </summary>
-    public virtual void SetData(Type format, object? data) => ((IDataObject)_innerData).SetData(format!, data);
+    HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection) =>
+        ((Com.IDataObject.Interface)_innerData).DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
 
-    /// <summary>
-    ///  Stores the specified data in this instance, using the class of the data for the format.
-    /// </summary>
-    public virtual void SetData(object? data) => ((IDataObject)_innerData).SetData(data);
+    HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection) =>
+        ((Com.IDataObject.Interface)_innerData).DUnadvise(dwConnection);
 
-    HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
-        => ((Com.IDataObject.Interface)_innerData).GetData(pformatetcIn, pmedium);
+    HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise) =>
+        ((Com.IDataObject.Interface)_innerData).EnumDAdvise(ppenumAdvise);
 
-    HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
-        => ((Com.IDataObject.Interface)_innerData).GetDataHere(pformatetc, pmedium);
+    HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc) =>
+        ((Com.IDataObject.Interface)_innerData).EnumFormatEtc(dwDirection, ppenumFormatEtc);
 
-    HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
-        => ((Com.IDataObject.Interface)_innerData).QueryGetData(pformatetc);
+    HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium) =>
+        ((Com.IDataObject.Interface)_innerData).GetData(pformatetcIn, pmedium);
 
-    HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
-        => ((Com.IDataObject.Interface)_innerData).GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
+    HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium) =>
+        ((Com.IDataObject.Interface)_innerData).GetDataHere(pformatetc, pmedium);
 
-    HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
-        => ((Com.IDataObject.Interface)_innerData).SetData(pformatetc, pmedium, fRelease);
+    HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc) =>
+        ((Com.IDataObject.Interface)_innerData).QueryGetData(pformatetc);
 
-    HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
-        => ((Com.IDataObject.Interface)_innerData).EnumFormatEtc(dwDirection, ppenumFormatEtc);
+    HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) =>
+        ((Com.IDataObject.Interface)_innerData).GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
 
-    HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
-        => ((Com.IDataObject.Interface)_innerData).DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
+    HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease) =>
+        ((Com.IDataObject.Interface)_innerData).SetData(pformatetc, pmedium, fRelease);
 
-    HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
-        => ((Com.IDataObject.Interface)_innerData).DUnadvise(dwConnection);
-
-    HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
-        => ((Com.IDataObject.Interface)_innerData).EnumDAdvise(ppenumAdvise);
+    #endregion
 }

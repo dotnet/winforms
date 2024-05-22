@@ -135,6 +135,8 @@ configuration:
       - not:
           isAction:
             action: Closed
+      - isActivitySender:
+          issueAuthor: True
       - hasLabel:
           label: ':zzz: no-recent-activity'
       then:
@@ -192,7 +194,7 @@ configuration:
               isRegex: False
       then:
       - addMilestone:
-          milestone: 9.0 Preview5
+          milestone: 9.0 Preview6
       description: Apply milestone to PRs on the main branch
       triggerOnOwnActions: true
     - if:

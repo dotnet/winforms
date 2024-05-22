@@ -74,7 +74,7 @@ internal class ComboBoxDesigner : ControlDesigner
     /// <summary>
     ///  We override this so we can clear the text field set by controldesigner.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 

@@ -22,7 +22,7 @@ internal static class DesignerUtils
     private static SolidBrush s_hoverBrush = new(Color.FromArgb(alpha: 50, SystemColors.Highlight));
     // brush used to draw the resizeable selection borders around controls/components
     private static HatchBrush s_selectionBorderBrush =
-        new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        new(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
     // Pens and Brushes used via GDI to render our grabhandles
     private static HBRUSH s_grabHandleFillBrushPrimary =
         PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
@@ -164,7 +164,7 @@ internal static class DesignerUtils
         s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
 
         s_selectionBorderBrush.Dispose();
-        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
         s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));

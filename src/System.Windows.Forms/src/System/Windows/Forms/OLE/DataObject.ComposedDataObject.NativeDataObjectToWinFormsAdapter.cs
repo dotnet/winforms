@@ -18,7 +18,10 @@ public unsafe partial class DataObject
     {
         [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-        private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } = AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) ? isEnabled : true;
+        private static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } =
+            AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled)
+                ? isEnabled
+                : true;
 #pragma warning restore IDE0075
 
         /// <summary>
@@ -35,6 +38,32 @@ public unsafe partial class DataObject
 #else
                 _nativeDataObject = new(dataObject, takeOwnership: true);
 #endif
+            }
+
+            #region Com.IDataObject.Interface
+
+            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
+            {
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                return nativeDataObject.Value->DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
+            }
+
+            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
+            {
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                return nativeDataObject.Value->DUnadvise(dwConnection);
+            }
+
+            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
+            {
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                return nativeDataObject.Value->EnumDAdvise(ppenumAdvise);
+            }
+
+            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
+            {
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                return nativeDataObject.Value->EnumFormatEtc(dwDirection, ppenumFormatEtc);
             }
 
             HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
@@ -67,32 +96,10 @@ public unsafe partial class DataObject
                 return nativeDataObject.Value->SetData(pformatetc, pmedium, fRelease);
             }
 
-            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
-            {
-                using var nativeDataObject = _nativeDataObject.GetInterface();
-                return nativeDataObject.Value->EnumFormatEtc(dwDirection, ppenumFormatEtc);
-            }
-
-            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
-            {
-                using var nativeDataObject = _nativeDataObject.GetInterface();
-                return nativeDataObject.Value->DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
-            }
-
-            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
-            {
-                using var nativeDataObject = _nativeDataObject.GetInterface();
-                return nativeDataObject.Value->DUnadvise(dwConnection);
-            }
-
-            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
-            {
-                using var nativeDataObject = _nativeDataObject.GetInterface();
-                return nativeDataObject.Value->EnumDAdvise(ppenumAdvise);
-            }
+            #endregion
 
             /// <summary>
-            ///  Retrieves the specified format from the specified hglobal.
+            ///  Retrieves the specified format from the specified <paramref name="hglobal"/>.
             /// </summary>
             private static object? GetDataFromHGLOBAL(HGLOBAL hglobal, string format)
             {
@@ -214,7 +221,7 @@ public unsafe partial class DataObject
 #pragma warning restore SYSLIB0011
                     }
 
-                    static unsafe Stream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
+                    static unsafe MemoryStream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
                     {
                         void* buffer = PInvokeCore.GlobalLock(hglobal);
                         if (buffer is null)
@@ -248,7 +255,7 @@ public unsafe partial class DataObject
             }
 
             /// <summary>
-            ///  Extracts a managed object from <see cref="IComDataObject"/> of the specified format.
+            ///  Extracts a managed object from <see cref="Com.IDataObject"/> of the specified format.
             /// </summary>
             /// <param name="doNotContinue">
             ///  A restricted type was encountered, do not continue trying to deserialize.
@@ -278,7 +285,7 @@ public unsafe partial class DataObject
 
                 return data;
 
-                static object? TryGetBitmapData(Com.IDataObject* dataObject, string format)
+                static Image? TryGetBitmapData(Com.IDataObject* dataObject, string format)
                 {
                     if (format != DataFormats.BitmapConstant)
                     {
@@ -305,7 +312,7 @@ public unsafe partial class DataObject
                         Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                     }
 
-                    object? data = null;
+                    Image? data = null;
 
                     try
                     {
@@ -313,7 +320,6 @@ public unsafe partial class DataObject
                         // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
                         if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
                             && !medium.hGlobal.IsNull
-                            && format.Equals(DataFormats.BitmapConstant)
                             && Image.FromHbitmap(medium.hGlobal) is Image clipboardImage)
                         {
                             data = (Image)clipboardImage.Clone();
@@ -431,6 +437,8 @@ public unsafe partial class DataObject
                 }
             }
 
+            #region IDataObject
+
             object? IDataObject.GetData(string format, bool autoConvert)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
@@ -471,29 +479,7 @@ public unsafe partial class DataObject
 
             object? IDataObject.GetData(Type format) => ((IDataObject)this).GetData(format.FullName!);
 
-            void IDataObject.SetData(string format, bool autoConvert, object? data) { }
-            void IDataObject.SetData(string format, object? data) { }
-
-            void IDataObject.SetData(Type format, object? data) { }
-
-            void IDataObject.SetData(object? data) { }
-
             bool IDataObject.GetDataPresent(Type format) => GetDataPresent(format.FullName!);
-
-            private bool GetDataPresentInner(string format)
-            {
-                Com.FORMATETC formatEtc = new()
-                {
-                    cfFormat = (ushort)(DataFormats.GetFormat(format).Id),
-                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    tymed = (uint)AllowedTymeds
-                };
-
-                using var nativeDataObject = _nativeDataObject.GetInterface();
-                HRESULT hr = nativeDataObject.Value->QueryGetData(formatEtc);
-                return hr.Succeeded;
-            }
 
             public bool GetDataPresent(string format, bool autoConvert)
             {
@@ -564,6 +550,28 @@ public unsafe partial class DataObject
             }
 
             public string[] GetFormats() => GetFormats(autoConvert: true);
+
+            void IDataObject.SetData(string format, bool autoConvert, object? data) { }
+            void IDataObject.SetData(string format, object? data) { }
+            void IDataObject.SetData(Type format, object? data) { }
+            void IDataObject.SetData(object? data) { }
+
+            #endregion
+
+            private bool GetDataPresentInner(string format)
+            {
+                Com.FORMATETC formatEtc = new()
+                {
+                    cfFormat = (ushort)(DataFormats.GetFormat(format).Id),
+                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = (uint)AllowedTymeds
+                };
+
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                HRESULT hr = nativeDataObject.Value->QueryGetData(formatEtc);
+                return hr.Succeeded;
+            }
         }
     }
 }

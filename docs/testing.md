@@ -106,9 +106,6 @@ Tests are built and executed by file name convention
 * Test files names should match the class they are testing followed by a "**Tests**" suffix.
   * For example, tests for the `Button` class should be in ButtonTests.cs.
   * For example, tests for the `Button.ButtonAccessibleObject` class should be in **Button.ButtonAccessibleObjectTests.cs**.
-* Test class names should match the class they are testing, followed by a "**Tests**" suffix.
-  * For example, tests for the `Button` class should in the `ButtonTests` class.
-  * For example, tests for the `Button.ButtonAccessibleObject` class should in the `Button_ButtonAccessibleObjectTests` class.
 * Test names should start with the class they are testing.
   * For example, all tests for the `Button` class should start with "Button".
 * Test names should end with a description of what the test does - this is very useful when viewing test results, and when browsing in the test explorer. As far as naming conventions are concerned we don't mandate a specific one, as long as a test name clearly communicates its purpose.
@@ -191,7 +188,7 @@ When writing theories note the following:
     ```
 
 
-Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
+Also be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
 
 
 #### Strategy
