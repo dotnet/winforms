@@ -20,7 +20,7 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
     ///  meaningful default values in the control.  The default implementation of this
     ///  sets the control's text to its name.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
