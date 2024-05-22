@@ -397,4 +397,30 @@ public class TrackBar_TrackBarFirstButtonAccessibleObjectTests
 
         return trackBarAccessibleObject.FirstButtonAccessibleObject;
     }
+
+    [WinFormsTheory]
+    [InlineData(Orientation.Horizontal, RightToLeft.No, false)]
+    [InlineData(Orientation.Horizontal, RightToLeft.Yes, true)]
+    public void TrackBarFirstButtonAccessibleObject_Name_ReturnsDecreaseName_IfHorizontalAndNotMirrored(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout)
+    {
+        using TrackBar control = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, true, 5, 0, 10);
+        var accessibleObject = GetTrackBarFirstButton(control);
+
+        accessibleObject.Name.Should().Be(SR.TrackBarLargeDecreaseButtonName);
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [InlineData(Orientation.Vertical, RightToLeft.Yes, true)]
+    [InlineData(Orientation.Vertical, RightToLeft.Yes, false)]
+    [InlineData(Orientation.Vertical, RightToLeft.No, true)]
+    [InlineData(Orientation.Vertical, RightToLeft.No, false)]
+    public void TrackBarFirstButtonAccessibleObject_Name_ReturnsIncreaseName_IfVertical(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout)
+    {
+        using TrackBar control = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, true, 5, 0, 10);
+        var accessibleObject = GetTrackBarFirstButton(control);
+
+        accessibleObject.Name.Should().Be(SR.TrackBarLargeIncreaseButtonName);
+        control.IsHandleCreated.Should().BeTrue();
+    }
 }
