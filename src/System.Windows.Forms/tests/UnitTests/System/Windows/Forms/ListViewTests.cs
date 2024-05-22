@@ -5819,15 +5819,8 @@ public class ListViewTests
     public void ListView_LabelEditEvents_AddRemove_Invoke()
     {
         using SubListView listView = new();
-        int afterLabelEditCallCount = 0;
         int beforeLabelEditCallCount = 0;
-
-        LabelEditEventHandler afterLabelEditHandler = (sender, e) =>
-        {
-            sender.Should().BeSameAs(listView);
-            e.Should().NotBeNull();
-            afterLabelEditCallCount++;
-        };
+        int afterLabelEditCallCount = 0;
 
         LabelEditEventHandler beforeLabelEditHandler = (sender, e) =>
         {
@@ -5836,11 +5829,12 @@ public class ListViewTests
             beforeLabelEditCallCount++;
         };
 
-        listView.AfterLabelEdit += afterLabelEditHandler;
-        afterLabelEditCallCount.Should().Be(0);
-
-        listView.AfterLabelEdit -= afterLabelEditHandler;
-        afterLabelEditCallCount.Should().Be(0);
+        LabelEditEventHandler afterLabelEditHandler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(listView);
+            e.Should().NotBeNull();
+            afterLabelEditCallCount++;
+        };
 
         listView.BeforeLabelEdit += beforeLabelEditHandler;
 
@@ -5851,6 +5845,16 @@ public class ListViewTests
 
         listView.OnBeforeLabelEdit(new LabelEditEventArgs(1));
         beforeLabelEditCallCount.Should().Be(1);
+
+        listView.AfterLabelEdit += afterLabelEditHandler;
+
+        listView.OnAfterLabelEdit(new LabelEditEventArgs(1));
+        afterLabelEditCallCount.Should().Be(1);
+
+        listView.AfterLabelEdit -= afterLabelEditHandler;
+
+        listView.OnAfterLabelEdit(new LabelEditEventArgs(1));
+        afterLabelEditCallCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -5976,6 +5980,8 @@ public class ListViewTests
         public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
 
         public new void OnBeforeLabelEdit(LabelEditEventArgs e) => base.OnBeforeLabelEdit(e);
+
+        public new void OnAfterLabelEdit(LabelEditEventArgs e) => base.OnAfterLabelEdit(e);
 
         public new void OnCacheVirtualItems(CacheVirtualItemsEventArgs e) => base.OnCacheVirtualItems(e);
     }
