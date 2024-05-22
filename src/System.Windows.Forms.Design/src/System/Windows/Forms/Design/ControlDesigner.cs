@@ -462,9 +462,9 @@ public partial class ControlDesigner : ComponentDesigner
 
                 if (_removalNotificationHooked)
                 {
-                    if (TryGetService(out IComponentChangeService? csc))
+                    if (TryGetService(out IComponentChangeService? componentChangeService))
                     {
-                        csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                        componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
 
                     _removalNotificationHooked = false;
@@ -551,9 +551,9 @@ public partial class ControlDesigner : ComponentDesigner
         // if after removing those bindings the collection is empty, then unhook the changeNotificationService
         if (ctl.DataBindings.Count == 0)
         {
-            if (TryGetService(out IComponentChangeService? csc))
+            if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
             }
 
             _removalNotificationHooked = false;
@@ -718,7 +718,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     internal ControlBodyGlyph GetControlGlyphInternal(GlyphSelectionType selectionType) => GetControlGlyph(selectionType);
-#nullable disable
+
     /// <summary>
     ///  Returns a collection of Glyph objects representing the selection borders and grab handles for a standard
     ///  control.  Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable
@@ -731,6 +731,11 @@ public partial class ControlDesigner : ComponentDesigner
         if (selectionType == GlyphSelectionType.NotSelected)
         {
             return glyphs;
+        }
+
+        if (BehaviorService is null)
+        {
+            throw new InvalidOperationException();
         }
 
         Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(Control);
@@ -761,9 +766,9 @@ public partial class ControlDesigner : ComponentDesigner
 
             // enable the designeractionpanel for this control if it needs one
             if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                && _behaviorService.DesignerActionUI is not null)
+                && _behaviorService?.DesignerActionUI is { } designerActionUI)
             {
-                Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                Glyph? dapGlyph = designerActionUI.GetDesignerActionGlyph(Component);
                 if (dapGlyph is not null)
                 {
                     glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
@@ -819,9 +824,9 @@ public partial class ControlDesigner : ComponentDesigner
 
             // enable the designeractionpanel for this control if it needs one
             if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                && _behaviorService.DesignerActionUI is not null)
+                && _behaviorService?.DesignerActionUI is { } designerActionUI)
             {
-                Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                Glyph? dapGlyph = designerActionUI.GetDesignerActionGlyph(Component);
                 if (dapGlyph is not null)
                 {
                     glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
@@ -886,9 +891,9 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void OnChildHandleCreated(object sender, EventArgs e)
+    private void OnChildHandleCreated(object? sender, EventArgs e)
     {
-        Control child = sender as Control;
+        Control? child = sender as Control;
 
         Debug.Assert(child is not null);
 
@@ -908,17 +913,17 @@ public partial class ControlDesigner : ComponentDesigner
         // Otherwise, grab the shadow value from the control directly and then set the control to be visible if it
         // is not the root component.  Root components will be set to visible = true in their own time by the view.
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component.GetType());
-        PropertyDescriptor visibleProp = props["Visible"];
+        PropertyDescriptor? visibleProp = props["Visible"];
         Visible = visibleProp is null
             || visibleProp.PropertyType != typeof(bool)
             || !visibleProp.ShouldSerializeValue(component)
-            || (bool)visibleProp.GetValue(component);
+            || (bool)visibleProp.GetValue(component)!;
 
-        PropertyDescriptor enabledProp = props["Enabled"];
+        PropertyDescriptor? enabledProp = props["Enabled"];
         Enabled = enabledProp is null
             || enabledProp.PropertyType != typeof(bool)
             || !enabledProp.ShouldSerializeValue(component)
-            || (bool)enabledProp.GetValue(component);
+            || (bool)enabledProp.GetValue(component)!;
 
         base.Initialize(component);
 
@@ -927,16 +932,16 @@ public partial class ControlDesigner : ComponentDesigner
 
         // This is to create the action in the DAP for this component if it requires docking/undocking logic
         AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
-        DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
+        DockingAttribute? dockingAttribute = (DockingAttribute?)attributes[typeof(DockingAttribute)];
         if (dockingAttribute is not null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
         {
             // Create the action for this control
             _dockingAction = new DockingActionList(this);
 
             // Add our 'dock in parent' or 'undock in parent' action
-            if (TryGetService(out DesignerActionService das))
+            if (TryGetService(out DesignerActionService? designerActionService))
             {
-                das.Add(Component, _dockingAction);
+                designerActionService.Add(Component, _dockingAction);
             }
         }
 
@@ -963,7 +968,9 @@ public partial class ControlDesigner : ComponentDesigner
         }
 
         // If we are an inherited control, notify our inheritance UI
-        if (Inherited && _host is not null && _host.RootComponent != component)
+        if (Inherited && _host is not null
+            && _host.RootComponent != component
+            && InheritanceAttribute is not null)
         {
             _inheritanceUI = GetService<InheritanceUI>();
             _inheritanceUI?.AddInheritedControl(Control, InheritanceAttribute.InheritanceLevel);
@@ -989,25 +996,25 @@ public partial class ControlDesigner : ComponentDesigner
 
     // This is a workaround to some problems with the ComponentCache that we should fix. When this is removed
     // remember to change ComponentCache's RemoveEntry method back to private (from internal).
-    private void OnSizeChanged(object sender, EventArgs e)
+    private void OnSizeChanged(object? sender, EventArgs e)
     {
         object component = Component;
-        if (TryGetService(out ComponentCache cache) && component is not null)
+        if (TryGetService(out ComponentCache? cache) && component is not null)
         {
             cache.RemoveEntry(component);
         }
     }
 
-    private void OnLocationChanged(object sender, EventArgs e)
+    private void OnLocationChanged(object? sender, EventArgs e)
     {
         object component = Component;
-        if (TryGetService(out ComponentCache cache) && component is not null)
+        if (TryGetService(out ComponentCache? cache) && component is not null)
         {
             cache.RemoveEntry(component);
         }
     }
 
-    private void OnParentChanged(object sender, EventArgs e)
+    private void OnParentChanged(object? sender, EventArgs e)
     {
         if (Control.IsHandleCreated)
         {
@@ -1015,7 +1022,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void OnControlRemoved(object sender, ControlEventArgs e)
+    private void OnControlRemoved(object? sender, ControlEventArgs e)
     {
         if (e.Control is not null)
         {
@@ -1029,7 +1036,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void DataBindingsCollectionChanged(object sender, CollectionChangeEventArgs e)
+    private void DataBindingsCollectionChanged(object? sender, CollectionChangeEventArgs e)
     {
         // It is possible to use the control designer with NON CONTROl types.
         if (Component is Control ctl)
@@ -1037,9 +1044,9 @@ public partial class ControlDesigner : ComponentDesigner
             if (ctl.DataBindings.Count == 0 && _removalNotificationHooked)
             {
                 // Remove the notification for the ComponentRemoved event
-                if (TryGetService(out IComponentChangeService csc))
+                if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                 }
 
                 _removalNotificationHooked = false;
@@ -1047,9 +1054,9 @@ public partial class ControlDesigner : ComponentDesigner
             else if (ctl.DataBindings.Count > 0 && !_removalNotificationHooked)
             {
                 // Add the notification for the ComponentRemoved event
-                if (TryGetService(out IComponentChangeService csc))
+                if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    csc.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
                 }
 
                 _removalNotificationHooked = true;
@@ -1057,7 +1064,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
     }
 
-    private void OnEnabledChanged(object sender, EventArgs e)
+    private void OnEnabledChanged(object? sender, EventArgs e)
     {
         if (!_enabledchangerecursionguard)
         {
@@ -1079,7 +1086,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     private bool AllowDrop
     {
-        get => (bool)ShadowProperties[nameof(AllowDrop)];
+        get => (bool)ShadowProperties[nameof(AllowDrop)]!;
         set => ShadowProperties[nameof(AllowDrop)] = value;
     }
 
@@ -1088,32 +1095,32 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     private bool Enabled
     {
-        get => (bool)ShadowProperties[nameof(Enabled)];
+        get => (bool)ShadowProperties[nameof(Enabled)]!;
         set => ShadowProperties[nameof(Enabled)] = value;
     }
 
     private bool Visible
     {
-        get => (bool)ShadowProperties[nameof(Visible)];
+        get => (bool)ShadowProperties[nameof(Visible)]!;
         set => ShadowProperties[nameof(Visible)] = value;
     }
 
     /// <summary>
     ///  ControlDesigner overrides this method to handle after-drop cases.
     /// </summary>
-    public override void InitializeExistingComponent(IDictionary defaultValues)
+    public override void InitializeExistingComponent(IDictionary? defaultValues)
     {
         base.InitializeExistingComponent(defaultValues);
 
         // unhook any sited children that got ChildWindowTargets
-        foreach (Control c in Control.Controls)
+        foreach (Control control in Control.Controls)
         {
-            if (c is not null)
+            if (control is not null)
             {
-                ISite site = c.Site;
-                if (site is not null && c.WindowTarget is ChildWindowTarget target)
+                ISite? site = control.Site;
+                if (site is not null && control.WindowTarget is ChildWindowTarget target)
                 {
-                    c.WindowTarget = target.OldWindowTarget;
+                    control.WindowTarget = target.OldWindowTarget;
                 }
             }
         }
@@ -1126,12 +1133,12 @@ public partial class ControlDesigner : ComponentDesigner
     ///  connects the control to its parent and positions it.  If you override this method, you should always
     ///  call base.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
-        ISite site = Component.Site;
+        ISite? site = Component.Site;
         if (site is not null)
         {
-            PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
+            PropertyDescriptor? textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
             {
                 textProp.SetValue(Component, site.Name);
@@ -1139,7 +1146,7 @@ public partial class ControlDesigner : ComponentDesigner
         }
 
         if (defaultValues is not null && defaultValues["Parent"] is IComponent parent
-            && TryGetService(out IDesignerHost host))
+            && TryGetService(out IDesignerHost? host))
         {
             if (host.GetDesigner(parent) is ParentControlDesigner parentDesigner)
             {
@@ -1150,7 +1157,7 @@ public partial class ControlDesigner : ComponentDesigner
             {
                 // Some containers are docked differently (instead of DockStyle.None) when they are added through the designer
                 AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
-                DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
+                DockingAttribute? dockingAttribute = (DockingAttribute?)attributes[typeof(DockingAttribute)];
 
                 if (dockingAttribute is not null && dockingAttribute.DockingBehavior != DockingBehavior.Never
                     && dockingAttribute.DockingBehavior == DockingBehavior.AutoDock)
@@ -1167,7 +1174,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                     if (onlyNonDockedChild)
                     {
-                        PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
+                        PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
                         if (dockProp is not null && dockProp.IsBrowsable)
                         {
                             dockProp.SetValue(Component, DockStyle.Fill);
@@ -1188,10 +1195,10 @@ public partial class ControlDesigner : ComponentDesigner
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     public override void OnSetComponentDefaults()
     {
-        ISite site = Component.Site;
+        ISite? site = Component.Site;
         if (site is not null)
         {
-            PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
+            PropertyDescriptor? textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.IsBrowsable)
             {
                 textProp.SetValue(Component, site.Name);
@@ -1284,7 +1291,7 @@ public partial class ControlDesigner : ComponentDesigner
     protected virtual void OnGiveFeedback(GiveFeedbackEventArgs e)
     {
     }
-
+#nullable disable
     /// <summary>
     ///  Called in response to the left mouse button being pressed on a component. It ensures that the component is selected.
     /// </summary>
