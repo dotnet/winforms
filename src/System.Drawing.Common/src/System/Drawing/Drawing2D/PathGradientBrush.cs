@@ -32,12 +32,24 @@ public sealed unsafe class PathGradientBrush : Brush
         }
     }
 
-    public PathGradientBrush(Point[] points) : this(points, WrapMode.Clamp) { }
+    public PathGradientBrush(params Point[] points) : this(points, WrapMode.Clamp) { }
 
-    public PathGradientBrush(Point[] points, WrapMode wrapMode)
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    PathGradientBrush(params ReadOnlySpan<Point> points) : this(points, WrapMode.Clamp) { }
+
+    public PathGradientBrush(Point[] points, WrapMode wrapMode) : this(points.OrThrowIfNull().AsSpan(), wrapMode) { }
+
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    PathGradientBrush(ReadOnlySpan<Point> points, WrapMode wrapMode)
     {
-        ArgumentNullException.ThrowIfNull(points);
-
         if (wrapMode is < WrapMode.Tile or > WrapMode.Clamp)
             throw new InvalidEnumArgumentException(nameof(wrapMode), (int)wrapMode, typeof(WrapMode));
 

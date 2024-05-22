@@ -329,7 +329,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddLines(ReadOnlySpan<PointF> points)
+    void AddLines(params ReadOnlySpan<PointF> points)
     {
         if (points.Length == 0)
         {
@@ -356,7 +356,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddLines(ReadOnlySpan<Point> points)
+    void AddLines(params ReadOnlySpan<Point> points)
     {
         if (points.Length == 0)
         {
@@ -406,7 +406,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     internal
 #endif
-    void AddBeziers(ReadOnlySpan<PointF> points)
+    void AddBeziers(params ReadOnlySpan<PointF> points)
     {
         fixed (PointF* p = points)
         {
@@ -430,7 +430,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     internal
 #endif
-    void AddBeziers(ReadOnlySpan<Point> points)
+    void AddBeziers(params ReadOnlySpan<Point> points)
     {
         if (points.Length == 0)
             return;
@@ -480,7 +480,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="AddCurve(PointF[], int, int, float)"/>
-    public void AddCurve(ReadOnlySpan<PointF> points) => AddCurve(points, 0.5f);
+    public void AddCurve(params ReadOnlySpan<PointF> points) => AddCurve(points, 0.5f);
 #endif
 
     /// <inheritdoc cref="AddCurve(PointF[], int, int, float)"/>
@@ -559,7 +559,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="AddClosedCurve(Point[], float)"/>
-    public void AddClosedCurve(ReadOnlySpan<PointF> points) => AddClosedCurve(points, 0.5f);
+    public void AddClosedCurve(params ReadOnlySpan<PointF> points) => AddClosedCurve(points, 0.5f);
 #endif
 
     /// <inheritdoc cref="AddClosedCurve(Point[], float)"/>
@@ -589,7 +589,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="AddClosedCurve(Point[], float)"/>
-    public void AddClosedCurve(ReadOnlySpan<Point> points) => AddClosedCurve(points, 0.5f);
+    public void AddClosedCurve(params ReadOnlySpan<Point> points) => AddClosedCurve(points, 0.5f);
 #endif
 
     /// <inheritdoc cref="AddClosedCurve(Point[], float)"/>
@@ -627,7 +627,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddRectangles(ReadOnlySpan<RectangleF> rects)
+    void AddRectangles(params ReadOnlySpan<RectangleF> rects)
     {
         fixed (RectangleF* r = rects)
         {
@@ -639,7 +639,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public void AddRectangle(Rectangle rect) => AddRectangle((RectangleF)rect);
 
     /// <inheritdoc cref="AddRectangles(RectangleF[])"/>
-    public void AddRectangles(Rectangle[] rects) => AddRectangles(rects.OrThrowIfNull().AsSpan());
+    public void AddRectangles(params Rectangle[] rects) => AddRectangles(rects.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="AddRectangles(RectangleF[])"/>
 #if NET9_0_OR_GREATER
@@ -647,7 +647,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddRectangles(ReadOnlySpan<Rectangle> rects)
+    void AddRectangles(params ReadOnlySpan<Rectangle> rects)
     {
         fixed (Rectangle* r = rects)
         {
@@ -728,7 +728,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         AddPie((float)x, y, width, height, startAngle, sweepAngle);
 
     /// <inheritdoc cref="AddPolygon(Point[])"/>
-    public void AddPolygon(PointF[] points) => AddPolygon(points.OrThrowIfNull().AsSpan());
+    public void AddPolygon(params PointF[] points) => AddPolygon(points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="AddPolygon(Point[])"/>
 #if NET9_0_OR_GREATER
@@ -736,7 +736,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddPolygon(ReadOnlySpan<PointF> points)
+    void AddPolygon(params ReadOnlySpan<PointF> points)
     {
         fixed (PointF* p = points)
         {
@@ -749,7 +749,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     ///  Adds a polygon to this path.
     /// </summary>
     /// <param name="points">The points that define the polygon.</param>
-    public void AddPolygon(Point[] points) => AddPolygon(points.OrThrowIfNull().AsSpan());
+    public void AddPolygon(params Point[] points) => AddPolygon(points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="AddPolygon(Point[])"/>
 #if NET9_0_OR_GREATER
@@ -757,7 +757,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #else
     private
 #endif
-    void AddPolygon(ReadOnlySpan<Point> points)
+    void AddPolygon(params ReadOnlySpan<Point> points)
     {
         fixed (Point* p = points)
         {
