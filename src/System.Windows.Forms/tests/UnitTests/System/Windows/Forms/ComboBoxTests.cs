@@ -315,7 +315,7 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
-    public void SimplifiedComboBoxTests()
+    public void ComboBox_BeginEndUpdate()
     {
         using ComboBox control1 = new();
         control1.BeginUpdate();
@@ -342,13 +342,13 @@ public class ComboBoxTests
     {
         using ComboBox control = new();
 
-        if (!control.IsHandleCreated)
+        control.IsHandleCreated.Should().BeFalse();
         {
             control.SelectedText.Should().BeEmpty();
         }
 
         control.CreateControl();
-        if (control.IsHandleCreated)
+        control.IsHandleCreated.Should().BeTrue();
         {
             control.SelectedText.Should().BeEmpty();
         }
@@ -361,7 +361,7 @@ public class ComboBoxTests
         }
 
         // Test SetWithoutHandle
-        if (!control.IsHandleCreated)
+        control.CreateControl();
         {
             control.SelectedText = "Test";
             control.SelectedText.Should().BeEmpty();
@@ -373,7 +373,6 @@ public class ComboBoxTests
         control.SelectionStart = 0;
         control.SelectionLength = 7;
         control.CreateControl();
-        if (control.IsHandleCreated)
         {
             control.SelectedText = "Test";
             control.Text.Should().Be("Test");
