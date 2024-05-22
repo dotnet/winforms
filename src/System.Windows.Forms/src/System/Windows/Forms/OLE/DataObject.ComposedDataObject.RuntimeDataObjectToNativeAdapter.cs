@@ -12,7 +12,7 @@ public unsafe partial class DataObject
     internal unsafe partial class ComposedDataObject
     {
         /// <summary>
-        ///  Maps <see cref="ComTypes.IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
+        ///  Maps the runtime <see cref="ComTypes.IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
         private class RuntimeDataObjectToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject, Com.IManagedWrapper<Com.IDataObject>
         {
@@ -29,6 +29,60 @@ public unsafe partial class DataObject
             void ComTypes.IDataObject.GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => _runtimeDataObject.GetDataHere(ref format, ref medium);
             int ComTypes.IDataObject.QueryGetData(ref FORMATETC format) => _runtimeDataObject.QueryGetData(ref format);
             void ComTypes.IDataObject.SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => _runtimeDataObject.SetData(ref formatIn, ref medium, release);
+
+            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
+            {
+                var adviseSink = (IAdviseSink)ComHelpers.GetObjectForIUnknown(pAdvSink);
+                return (HRESULT)((ComTypes.IDataObject)this).DAdvise(ref *(FORMATETC*)pformatetc, (ADVF)advf, adviseSink, out *(int*)pdwConnection);
+            }
+
+            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
+            {
+                try
+                {
+                    ((ComTypes.IDataObject)this).DUnadvise((int)dwConnection);
+                }
+                catch (Exception e)
+                {
+                    return (HRESULT)e.HResult;
+                }
+
+                return HRESULT.S_OK;
+            }
+
+            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
+            {
+                if (ppenumAdvise is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *ppenumAdvise = null;
+
+                HRESULT hr = (HRESULT)((ComTypes.IDataObject)this).EnumDAdvise(out var enumAdvice);
+                if (hr.Failed)
+                {
+                    return hr;
+                }
+
+                *ppenumAdvise = ComHelpers.TryGetComPointer<Com.IEnumSTATDATA>(enumAdvice, out hr);
+                return hr.Succeeded ? hr : HRESULT.E_NOINTERFACE;
+            }
+
+            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
+            {
+                if (ppenumFormatEtc is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
+                *ppenumFormatEtc = ComHelpers.TryGetComPointer<Com.IEnumFORMATETC>(comTypeFormatEtc, out HRESULT hr);
+                return hr.Succeeded ? HRESULT.S_OK : HRESULT.E_NOINTERFACE;
+            }
+
+            HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) =>
+                (HRESULT)((ComTypes.IDataObject)this).GetCanonicalFormatEtc(ref *(FORMATETC*)pformatectIn, out *(FORMATETC*)pformatetcOut);
 
             HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
             {
@@ -70,11 +124,8 @@ public unsafe partial class DataObject
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
-                => (HRESULT)((ComTypes.IDataObject)this).QueryGetData(ref *(FORMATETC*)pformatetc);
-
-            HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
-                => (HRESULT)((ComTypes.IDataObject)this).GetCanonicalFormatEtc(ref *(FORMATETC*)pformatectIn, out *(FORMATETC*)pformatetcOut);
+            HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc) =>
+                (HRESULT)((ComTypes.IDataObject)this).QueryGetData(ref *(FORMATETC*)pformatetc);
 
             HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
             {
@@ -94,57 +145,6 @@ public unsafe partial class DataObject
                 }
 
                 return HRESULT.S_OK;
-            }
-
-            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
-            {
-                if (ppenumFormatEtc is null)
-                {
-                    return HRESULT.E_POINTER;
-                }
-
-                var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
-                *ppenumFormatEtc = ComHelpers.TryGetComPointer<Com.IEnumFORMATETC>(comTypeFormatEtc, out HRESULT hr);
-                return hr.Succeeded ? HRESULT.S_OK : HRESULT.E_NOINTERFACE;
-            }
-
-            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
-            {
-                var adviseSink = (IAdviseSink)ComHelpers.GetObjectForIUnknown(pAdvSink);
-                return (HRESULT)((ComTypes.IDataObject)this).DAdvise(ref *(FORMATETC*)pformatetc, (ADVF)advf, adviseSink, out *(int*)pdwConnection);
-            }
-
-            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
-            {
-                try
-                {
-                    ((ComTypes.IDataObject)this).DUnadvise((int)dwConnection);
-                }
-                catch (Exception e)
-                {
-                    return (HRESULT)e.HResult;
-                }
-
-                return HRESULT.S_OK;
-            }
-
-            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
-            {
-                if (ppenumAdvise is null)
-                {
-                    return HRESULT.E_POINTER;
-                }
-
-                *ppenumAdvise = null;
-
-                HRESULT hr = (HRESULT)((ComTypes.IDataObject)this).EnumDAdvise(out var enumAdvice);
-                if (hr.Failed)
-                {
-                    return hr;
-                }
-
-                *ppenumAdvise = ComHelpers.TryGetComPointer<Com.IEnumSTATDATA>(enumAdvice, out hr);
-                return hr.Succeeded ? hr : HRESULT.E_NOINTERFACE;
             }
         }
     }
