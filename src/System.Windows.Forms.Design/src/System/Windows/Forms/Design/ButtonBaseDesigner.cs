@@ -22,7 +22,7 @@ internal class ButtonBaseDesigner : ControlDesigner
         AutoResizeHandles = true;
     }
 
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
