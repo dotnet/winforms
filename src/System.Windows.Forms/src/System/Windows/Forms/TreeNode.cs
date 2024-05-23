@@ -93,7 +93,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     internal int index;                  // our index into our parents child array
-    internal List<TreeNode> childNodes = new();
+    internal int childCount;
+    // this array should not be optimized as a list because we are inserting into the middle of it, not appending.
+    internal TreeNode[] children;
     internal TreeNode parent;
     internal TreeView treeView;
     private bool expandOnRealization;
@@ -381,7 +383,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  The first child node of this node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode FirstNode => childNodes.Count == 0 ? null : childNodes[0];
+    public TreeNode FirstNode => childCount == 0 ? null : children[0];
 
     private TreeNode FirstVisibleParent
     {
@@ -665,12 +667,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (childNodes.Count == 0)
+            if (childCount == 0)
             {
                 return null;
             }
 
-            return childNodes[childNodes.Count - 1];
+            return children[childCount - 1];
         }
     }
 
@@ -1181,25 +1183,24 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         string nodeText = node.Text;
         TreeView parentTreeView = TreeView;
 
-        var nodeCount = childNodes.Count;
-        if (nodeCount > 0)
+        if (childCount > 0)
         {
             if (parentTreeView.TreeViewNodeSorter is null)
             {
                 CompareInfo compare = Application.CurrentCulture.CompareInfo;
 
                 // Optimize for the case where they're already sorted
-                if (compare.Compare(childNodes[nodeCount - 1].Text, nodeText) <= 0)
+                if (compare.Compare(children[childCount - 1].Text, nodeText) <= 0)
                 {
-                    index = nodeCount;
+                    index = childCount;
                 }
                 else
                 {
                     // Insert at appropriate sorted spot
-                    for (iMin = 0, iLim = nodeCount; iMin < iLim;)
+                    for (iMin = 0, iLim = childCount; iMin < iLim;)
                     {
                         iT = (iMin + iLim) / 2;
-                        if (compare.Compare(childNodes[iT].Text, nodeText) <= 0)
+                        if (compare.Compare(children[iT].Text, nodeText) <= 0)
                         {
                             iMin = iT + 1;
                         }
@@ -1216,10 +1217,10 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             {
                 IComparer sorter = parentTreeView.TreeViewNodeSorter;
                 // Insert at appropriate sorted spot
-                for (iMin = 0, iLim = nodeCount; iMin < iLim;)
+                for (iMin = 0, iLim = childCount; iMin < iLim;)
                 {
                     iT = (iMin + iLim) / 2;
-                    if (sorter.Compare(childNodes[iT] /*previous*/, node/*current*/) <= 0)
+                    if (sorter.Compare(children[iT] /*previous*/, node/*current*/) <= 0)
                     {
                         iMin = iT + 1;
                     }
@@ -1249,23 +1250,21 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     private void SortChildren(TreeView parentTreeView)
     {
-        if (childNodes.Count <= 0)
+        if (childCount <= 0)
         {
             return;
         }
 
-        List<TreeNode> newOrder = new(childNodes.Count);
+        TreeNode[] newOrder = new TreeNode[childCount];
         if (parentTreeView is null || parentTreeView.TreeViewNodeSorter is null)
         {
             CompareInfo compare = Application.CurrentCulture.CompareInfo;
-            for (int i = 0; i < childNodes.Count; i++)
+            for (int i = 0; i < childCount; i++)
             {
-                newOrder.Add(childNodes[i]);
-
                 int min = -1;
-                for (int j = 0; j < childNodes.Count; j++)
+                for (int j = 0; j < childCount; j++)
                 {
-                    if (childNodes[j] is null)
+                    if (children[j] is null)
                     {
                         continue;
                     }
@@ -1276,32 +1275,30 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                         continue;
                     }
 
-                    if (compare.Compare(childNodes[j].Text, childNodes[min].Text) <= 0)
+                    if (compare.Compare(children[j].Text, children[min].Text) <= 0)
                     {
                         min = j;
                     }
                 }
 
                 Debug.Assert(min != -1, "Bad sorting");
-                newOrder[i] = childNodes[min];
-                childNodes[min] = null!;
+                newOrder[i] = children[min];
+                children[min] = null!;
                 newOrder[i].index = i;
                 newOrder[i].SortChildren(parentTreeView);
             }
 
-            childNodes = newOrder;
+            children = newOrder;
         }
         else
         {
             IComparer sorter = parentTreeView.TreeViewNodeSorter;
-            for (int i = 0; i < childNodes.Count; i++)
+            for (int i = 0; i < childCount; i++)
             {
-                newOrder.Add(childNodes[i]);
-
                 int min = -1;
-                for (int j = 0; j < childNodes.Count; j++)
+                for (int j = 0; j < childCount; j++)
                 {
-                    if (childNodes[j] is null)
+                    if (children[j] is null)
                     {
                         continue;
                     }
@@ -1312,20 +1309,20 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                         continue;
                     }
 
-                    if (sorter.Compare(childNodes[j] /*previous*/, childNodes[min] /*current*/) <= 0)
+                    if (sorter.Compare(children[j] /*previous*/, children[min] /*current*/) <= 0)
                     {
                         min = j;
                     }
                 }
 
                 Debug.Assert(min != -1, "Bad sorting");
-                newOrder[i] = childNodes[min];
-                childNodes[min] = null!;
+                newOrder[i] = children[min];
+                children[min] = null!;
                 newOrder[i].index = i;
                 newOrder[i].SortChildren(parentTreeView);
             }
 
-            childNodes = newOrder;
+            children = newOrder;
         }
     }
 
@@ -1370,19 +1367,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             {
                 tv.nodesCollectionClear = true;
 
-                if (childNodes.Count > MAX_TREENODES_OPS)
+                if (childCount > MAX_TREENODES_OPS)
                 {
                     isBulkOperation = true;
                     tv.BeginUpdate();
                 }
             }
 
-            while (childNodes.Count > 0)
+            while (childCount > 0)
             {
-                childNodes[^1].Remove(true);
+                children[childCount - 1].Remove(true);
             }
 
-            childNodes.Clear();
+            children = null;
 
             if (tv is not null && isBulkOperation)
             {
@@ -1444,12 +1441,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             node.StateImageIndexer.Key = StateImageIndexer.Key;
         }
 
-        var nodeCount = childNodes.Count;
-        if (nodeCount > 0)
+        if (childCount > 0)
         {
-            for (int i = 0; i < nodeCount; i++)
+            node.children = new TreeNode[childCount];
+            for (int i = 0; i < childCount; i++)
             {
-                node.Nodes.Add((TreeNode)childNodes[i].Clone());
+                node.Nodes.Add((TreeNode)children[i].Clone());
             }
         }
 
@@ -1487,19 +1484,18 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         else
         {
-            var nodeCount = childNodes.Count;
-            if (!ignoreChildren && nodeCount > 0)
+            if (!ignoreChildren && childCount > 0)
             {
                 // Virtual root should collapse all its children
-                for (int i = 0; i < nodeCount; i++)
+                for (int i = 0; i < childCount; i++)
                 {
-                    if (tv.SelectedNode == childNodes[i])
+                    if (tv.SelectedNode == children[i])
                     {
                         setSelection = true;
                     }
 
-                    childNodes[i].DoCollapse(tv);
-                    childNodes[i].Collapse();
+                    children[i].DoCollapse(tv);
+                    children[i].Collapse();
                 }
             }
 
@@ -1665,6 +1661,36 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     /// <summary>
+    ///  Makes sure there is enough room to add <paramref name="num" /> children.
+    /// </summary>
+    internal void EnsureCapacity(int num)
+    {
+        Debug.Assert(num > 0, "required capacity can not be less than 1");
+        int size = num;
+        if (size < 4)
+        {
+            size = 4;
+        }
+
+        if (children is null)
+        {
+            children = new TreeNode[size];
+        }
+        else if (childCount + num > children.Length)
+        {
+            int newSize = childCount + num;
+            if (num == 1)
+            {
+                newSize = childCount * 2;
+            }
+
+            TreeNode[] bigger = new TreeNode[newSize];
+            Array.Copy(children, 0, bigger, 0, childCount);
+            children = bigger;
+        }
+    }
+
+    /// <summary>
     ///  Ensures the node's StateImageIndex value is properly set.
     /// </summary>
     private void EnsureStateImageValue()
@@ -1730,9 +1756,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     public void ExpandAll()
     {
         Expand();
-        for (int i = 0; i < childNodes.Count; i++)
+        for (int i = 0; i < childCount; i++)
         {
-            childNodes[i].ExpandAll();
+            children[i].ExpandAll();
         }
     }
 
@@ -1790,12 +1816,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public int GetNodeCount(bool includeSubTrees)
     {
-        int total = childNodes.Count;
+        int total = childCount;
         if (includeSubTrees)
         {
-            for (int i = 0; i < childNodes.Count; i++)
+            for (int i = 0; i < childCount; i++)
             {
-                total += childNodes[i].GetNodeCount(true);
+                total += children[i].GetNodeCount(true);
             }
         }
 
@@ -1825,15 +1851,16 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     internal void InsertNodeAt(int index, TreeNode node)
     {
+        EnsureCapacity(1);
         node.parent = this;
         node.index = index;
-
-        childNodes.Insert(index, node);
-        for (int i = index + 1; i < childNodes.Count; i++)
+        for (int i = childCount; i > index; --i)
         {
-            childNodes[i].index = i;
+            (children[i] = children[i - 1]).index = i;
         }
 
+        children[index] = node;
+        childCount++;
         node.Realize(false);
 
         if (TreeView is not null && node == TreeView.selectedNode)
@@ -1957,9 +1984,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             }
         }
 
-        for (int i = childNodes.Count - 1; i >= 0; i--)
+        for (int i = childCount - 1; i >= 0; i--)
         {
-            childNodes[i].Realize(true);
+            children[i].Realize(true);
         }
 
         // If node expansion was requested before the handle was created,
@@ -1991,20 +2018,22 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         bool expanded = IsExpanded;
 
         // unlink our children
-        for (int i = 0; i < childNodes.Count; i++)
+        for (int i = 0; i < childCount; i++)
         {
-            childNodes[i].Remove(false);
+            children[i].Remove(false);
         }
 
         // children = null;
         // unlink ourself
         if (notify && parent is not null)
         {
-            parent.childNodes.RemoveAt(index);
-            for (int i = index; i < parent.childNodes.Count; i++)
+            for (int i = index; i < parent.childCount - 1; ++i)
             {
-                parent.childNodes[i].index = i;
+                (parent.children[i] = parent.children[i + 1]).index = i;
             }
+
+            parent.children[parent.childCount - 1] = null;
+            parent.childCount--;
 
             parent = null;
         }
@@ -2121,14 +2150,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             si.AddValue(nameof(StateImageKey), StateImageIndexer.Key);
         }
 
-        var nodeCount = childNodes.Count;
-        si.AddValue("ChildCount", nodeCount);
+        si.AddValue("ChildCount", childCount);
 
-        if (nodeCount > 0)
+        if (childCount > 0)
         {
-            for (int i = 0; i < nodeCount; i++)
+            for (int i = 0; i < childCount; i++)
             {
-                si.AddValue($"children{i}", childNodes[i], typeof(TreeNode));
+                si.AddValue($"children{i}", children[i], typeof(TreeNode));
             }
         }
 

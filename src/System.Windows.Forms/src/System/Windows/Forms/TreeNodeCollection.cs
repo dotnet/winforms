@@ -31,24 +31,19 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            if (index < 0 || index >= _owner.childNodes.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner.childCount);
 
-            return _owner.childNodes[index];
+            return _owner.children[index];
         }
         set
         {
-            if (index < 0 || index >= _owner.childNodes.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
-
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner.childCount);
             ArgumentNullException.ThrowIfNull(value);
 
             TreeView tv = _owner.treeView;
-            TreeNode actual = _owner.childNodes[index];
+            TreeNode actual = _owner.children[index];
 
             if (value.treeView is not null && value.treeView.Handle != tv.Handle)
             {
@@ -116,7 +111,7 @@ public class TreeNodeCollection : IList
 
     // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
     [Browsable(false)]
-    public int Count => _owner.childNodes.Count;
+    public int Count => _owner.childCount;
 
     object ICollection.SyncRoot => this;
 
@@ -224,11 +219,11 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        _owner.Nodes.FixedIndex = _owner.childNodes.Count;
-        _owner.childNodes.EnsureCapacity(nodes.Length);
-        for (int i = 0; i < nodes.Length; i++)
+        _owner.Nodes.FixedIndex = _owner.childCount;
+        _owner.EnsureCapacity(nodes.Length);
+        for (int i = nodes.Length - 1; i >= 0; i--)
         {
-            AddInternal(nodes[i], i);
+            AddInternal(nodes[i], delta: i);
         }
 
         _owner.Nodes.FixedIndex = -1;
@@ -292,7 +287,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Adds a new child node to this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual int Add(TreeNode node) => AddInternal(node, 0);
+    public virtual int Add(TreeNode node) => AddInternal(node, delta: 0);
 
     private int AddInternal(TreeNode node, int delta)
     {
@@ -332,10 +327,12 @@ public class TreeNodeCollection : IList
         {
             //if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
-            node.index = _owner.childNodes.Count;
+            _owner.EnsureCapacity(1);
+            node.index = _owner.childCount;
         }
 
-        _owner.childNodes.Add(node);
+        _owner.children[node.index] = node;
+        _owner.childCount++;
         node.Realize(false);
 
         if (tv is not null && node == tv.selectedNode)
@@ -465,9 +462,9 @@ public class TreeNodeCollection : IList
             index = 0;
         }
 
-        if (index > _owner.childNodes.Count)
+        if (index > _owner.childCount)
         {
-            index = _owner.childNodes.Count;
+            index = _owner.childCount;
         }
 
         _owner.InsertNodeAt(index, node);
@@ -583,9 +580,9 @@ public class TreeNodeCollection : IList
 
     public void CopyTo(Array dest, int index)
     {
-        if (_owner.childNodes.Count > 0)
+        if (_owner.childCount > 0)
         {
-            ((ICollection)_owner.childNodes).CopyTo(dest, index);
+            Array.Copy(_owner.children, 0, dest, index, _owner.childCount);
         }
     }
 
@@ -619,5 +616,15 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public IEnumerator GetEnumerator() => _owner.childNodes.GetEnumerator();
+    public IEnumerator GetEnumerator()
+    {
+        if (_owner.children is not null)
+        {
+            return new ArraySubsetEnumerator(_owner.children, _owner.childCount);
+        }
+        else
+        {
+            return Array.Empty<TreeNode>().GetEnumerator();
+        }
+    }
 }
