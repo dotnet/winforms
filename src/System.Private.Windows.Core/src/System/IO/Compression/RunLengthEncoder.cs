@@ -86,7 +86,7 @@ internal static class RunLengthEncoder
 
         while (reader.TryRead(out byte count))
         {
-            if (!reader.TryRead(out byte value) || !writer.TryWrite(count, value))
+            if (!reader.TryRead(out byte value) || !writer.TryWriteCount(count, value))
             {
                 written = writer.Position;
                 return false;
