@@ -124,5 +124,3 @@ public class LinkLabel_LinkCollectionTests : IDisposable
         _linkCollection.Contains(_link).Should().Be(expected);
     }
 }
-
-
