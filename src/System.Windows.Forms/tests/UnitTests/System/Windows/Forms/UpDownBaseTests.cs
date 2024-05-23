@@ -3032,6 +3032,13 @@ public class UpDownBaseTests
 
         Assert.Equal(text, actualEditToolTipText);
         Assert.Equal(text, actualButtonsToolTipText);
+
+        toolTip.SetToolTip(upDownBase, null); // Invokes UpDownBase's SetToolTip inside
+        actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+        actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+        Assert.Equal("", actualEditToolTipText);
+        Assert.Equal("", actualButtonsToolTipText);
     }
 
     private class CustomValidateUpDownBase : UpDownBase
