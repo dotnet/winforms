@@ -7134,7 +7134,10 @@ public partial class ToolStripTests
         Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11418")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11418")]
     public void ToolStrip_WndProc_InvokeMouseActivate_Success()
     {
         using SubToolStrip control = new();
@@ -7151,7 +7154,7 @@ public partial class ToolStripTests
     [ActiveIssue("https://github.com/dotnet/winforms/issues/11382")]
     [WinFormsFact]
     [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
-    "Flaky tests, see: https://github.com/dotnet/winforms/issues/11382")]
+       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11382")]
     public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
         using SubToolStrip control = new();
