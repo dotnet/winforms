@@ -983,4 +983,16 @@ public abstract partial class UpDownBase : ContainerControl
         toolTip.SetToolTip(_upDownEdit, caption);
         toolTip.SetToolTip(_upDownButtons, caption);
     }
+
+    internal override void RemoveToolTip(ToolTip toolTip)
+    {
+        if (toolTip is null)
+        {
+            return;
+        }
+
+        string? caption = toolTip.GetToolTip(this);
+        toolTip.SetToolTip(_upDownEdit, caption);
+        toolTip.SetToolTip(_upDownButtons, caption);
+    }
 }
