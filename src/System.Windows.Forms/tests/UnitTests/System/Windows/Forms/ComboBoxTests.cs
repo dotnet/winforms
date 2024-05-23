@@ -288,30 +288,30 @@ public class ComboBoxTests
     [WinFormsFact]
     public void VerifyAutoCompleteEntries()
     {
+        void AssertAutoCompleteCustomSource(string[] items, bool isHandleCreated)
+        {
+            using ComboBox control = new();
+
+            if (items is not null)
+            {
+                AutoCompleteStringCollection autoCompleteCustomSource = new();
+                autoCompleteCustomSource.AddRange(items);
+                control.AutoCompleteCustomSource = autoCompleteCustomSource;
+                control.AutoCompleteCustomSource.Should().BeEquivalentTo(autoCompleteCustomSource);
+            }
+            else
+            {
+                control.AutoCompleteCustomSource = null;
+                control.AutoCompleteCustomSource.Should().NotBeNull();
+                control.AutoCompleteCustomSource.Count.Should().Be(0);
+            }
+
+            control.IsHandleCreated.Should().Be(isHandleCreated);
+        }
+
         AssertAutoCompleteCustomSource(new[] { "item1", "item2" }, false);
         AssertAutoCompleteCustomSource(null, false);
         AssertAutoCompleteCustomSource(new[] { "item3", "item4" }, false);
-    }
-
-    private void AssertAutoCompleteCustomSource(string[] items, bool isHandleCreated)
-    {
-        using ComboBox control = new();
-
-        if (items is object)
-        {
-            AutoCompleteStringCollection autoCompleteCustomSource = new();
-            autoCompleteCustomSource.AddRange(items);
-            control.AutoCompleteCustomSource = autoCompleteCustomSource;
-            control.AutoCompleteCustomSource.Should().BeEquivalentTo(autoCompleteCustomSource);
-        }
-        else
-        {
-            control.AutoCompleteCustomSource = null;
-            control.AutoCompleteCustomSource.Should().NotBeNull();
-            control.AutoCompleteCustomSource.Count.Should().Be(0);
-        }
-
-        control.IsHandleCreated.Should().Be(isHandleCreated);
     }
 
     [WinFormsFact]
