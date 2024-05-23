@@ -65,9 +65,9 @@ public class CheckedListBox_CheckedIndexCollectionTests: IDisposable
         }
 
         // Test Contains(int index) method
-        if (index is int indexAsInt)
+        if (index is int @int)
         {
-            _collection.Contains(indexAsInt).Should().Be(expected);
+            _collection.Contains(@int).Should().Be(expected);
         }
 
         // Test IList.Contains(object? index) method
@@ -88,9 +88,9 @@ public class CheckedListBox_CheckedIndexCollectionTests: IDisposable
         }
 
         // Test IndexOf(int index) method
-        if (index is int indexAsInt)
+        if (index is int @int)
         {
-            _collection.IndexOf(indexAsInt).Should().Be(expected);
+            _collection.IndexOf(@int).Should().Be(expected);
         }
 
         // Test IList.IndexOf(object? index) method
