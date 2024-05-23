@@ -25,51 +25,51 @@ public class MaskedTextBoxTests : IDisposable
     [WinFormsFact]
     public void MaskedTextBox_Constructor()
     {
-        using MaskedTextBox mtb = new();
+        using MaskedTextBox maskedTextBox = new();
 
-        Assert.NotNull(mtb);
+        Assert.NotNull(maskedTextBox);
 
         // Check default values
-        mtb.BeepOnError.Should().BeFalse();
-        mtb.AsciiOnly.Should().BeFalse();
-        mtb.Culture.Should().Be(CultureInfo.CurrentCulture);
-        mtb.AcceptsTab.Should().BeFalse();
-        mtb.CanUndo.Should().BeFalse();
-        mtb.WordWrap.Should().BeFalse();
-        mtb.Multiline.Should().BeFalse();
-        mtb.ResetOnSpace.Should().BeTrue();
-        mtb.SkipLiterals.Should().BeTrue();
-        mtb.ValidatingType.Should().BeNull();
-        mtb.TextAlign.Should().Be(HorizontalAlignment.Left);
-        mtb.FormatProvider.Should().Be(null);
-        mtb.ResetOnPrompt.Should().BeTrue();
-        mtb.ValidatingType.Should().BeNull();
-        mtb.PromptChar.Should().Be('_');
-        mtb.GetLineFromCharIndex(2).Should().Be(0);
-        mtb.GetFirstCharIndexFromLine(100).Should().Be(0);
-        mtb.GetFirstCharIndexOfCurrentLine().Should().Be(0);
-        mtb.PasswordChar.Should().Be('\0');
-        mtb.RejectInputOnFirstFailure.Should().BeFalse();
-        mtb.Text.Should().Be(string.Empty);
-        mtb.UseSystemPasswordChar.Should().BeFalse();
+        maskedTextBox.BeepOnError.Should().BeFalse();
+        maskedTextBox.AsciiOnly.Should().BeFalse();
+        maskedTextBox.Culture.Should().Be(CultureInfo.CurrentCulture);
+        maskedTextBox.AcceptsTab.Should().BeFalse();
+        maskedTextBox.CanUndo.Should().BeFalse();
+        maskedTextBox.WordWrap.Should().BeFalse();
+        maskedTextBox.Multiline.Should().BeFalse();
+        maskedTextBox.ResetOnSpace.Should().BeTrue();
+        maskedTextBox.SkipLiterals.Should().BeTrue();
+        maskedTextBox.ValidatingType.Should().BeNull();
+        maskedTextBox.TextAlign.Should().Be(HorizontalAlignment.Left);
+        maskedTextBox.FormatProvider.Should().Be(null);
+        maskedTextBox.ResetOnPrompt.Should().BeTrue();
+        maskedTextBox.ValidatingType.Should().BeNull();
+        maskedTextBox.PromptChar.Should().Be('_');
+        maskedTextBox.GetLineFromCharIndex(2).Should().Be(0);
+        maskedTextBox.GetFirstCharIndexFromLine(100).Should().Be(0);
+        maskedTextBox.GetFirstCharIndexOfCurrentLine().Should().Be(0);
+        maskedTextBox.PasswordChar.Should().Be('\0');
+        maskedTextBox.RejectInputOnFirstFailure.Should().BeFalse();
+        maskedTextBox.Text.Should().Be(string.Empty);
+        maskedTextBox.UseSystemPasswordChar.Should().BeFalse();
 
-        mtb.IsHandleCreated.Should().BeFalse();
+        maskedTextBox.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void MaskedTextBox_ConstructorString()
     {
-        using MaskedTextBox mtb = new("Hello World!");
+        using MaskedTextBox maskedTextBox = new("Hello World!");
 
-        Assert.NotNull(mtb);
+        Assert.NotNull(maskedTextBox);
     }
 
     [WinFormsFact]
     public void MaskedTextBox_ConstructorMaskedTextProvider()
     {
-        using MaskedTextBox mtb = new(new MaskedTextProvider("Hello World!"));
+        using MaskedTextBox maskedTextBox = new(new MaskedTextProvider("Hello World!"));
 
-        Assert.NotNull(mtb);
+        Assert.NotNull(maskedTextBox);
     }
 
     [WinFormsTheory]
