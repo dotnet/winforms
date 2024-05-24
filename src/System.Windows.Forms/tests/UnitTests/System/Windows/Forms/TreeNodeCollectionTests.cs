@@ -244,7 +244,7 @@ public class TreeNodeCollectionTests
             new ("1")
         });
 
-        Assert.NotEmpty(treeView.Nodes.Find(key, searchAllChildren: true));
+        treeView.Nodes.Find(key, searchAllChildren: true).Should().NotBeNull();
     }
 
     [WinFormsTheory]
