@@ -25,35 +25,33 @@ public class MaskedTextBoxTests : IDisposable
     [WinFormsFact]
     public void MaskedTextBox_Constructor()
     {
-        using MaskedTextBox maskedTextBox = new();
-
-        Assert.NotNull(maskedTextBox);
+        Assert.NotNull(_maskedTextBox);
 
         // Check default values
-        maskedTextBox.BeepOnError.Should().BeFalse();
-        maskedTextBox.AsciiOnly.Should().BeFalse();
-        maskedTextBox.Culture.Should().Be(CultureInfo.CurrentCulture);
-        maskedTextBox.AcceptsTab.Should().BeFalse();
-        maskedTextBox.CanUndo.Should().BeFalse();
-        maskedTextBox.WordWrap.Should().BeFalse();
-        maskedTextBox.Multiline.Should().BeFalse();
-        maskedTextBox.ResetOnSpace.Should().BeTrue();
-        maskedTextBox.SkipLiterals.Should().BeTrue();
-        maskedTextBox.ValidatingType.Should().BeNull();
-        maskedTextBox.TextAlign.Should().Be(HorizontalAlignment.Left);
-        maskedTextBox.FormatProvider.Should().Be(null);
-        maskedTextBox.ResetOnPrompt.Should().BeTrue();
-        maskedTextBox.ValidatingType.Should().BeNull();
-        maskedTextBox.PromptChar.Should().Be('_');
-        maskedTextBox.GetLineFromCharIndex(2).Should().Be(0);
-        maskedTextBox.GetFirstCharIndexFromLine(100).Should().Be(0);
-        maskedTextBox.GetFirstCharIndexOfCurrentLine().Should().Be(0);
-        maskedTextBox.PasswordChar.Should().Be('\0');
-        maskedTextBox.RejectInputOnFirstFailure.Should().BeFalse();
-        maskedTextBox.Text.Should().Be(string.Empty);
-        maskedTextBox.UseSystemPasswordChar.Should().BeFalse();
+        _maskedTextBox.BeepOnError.Should().BeFalse();
+        _maskedTextBox.AsciiOnly.Should().BeFalse();
+        _maskedTextBox.Culture.Should().Be(CultureInfo.CurrentCulture);
+        _maskedTextBox.AcceptsTab.Should().BeFalse();
+        _maskedTextBox.CanUndo.Should().BeFalse();
+        _maskedTextBox.WordWrap.Should().BeFalse();
+        _maskedTextBox.Multiline.Should().BeFalse();
+        _maskedTextBox.ResetOnSpace.Should().BeTrue();
+        _maskedTextBox.SkipLiterals.Should().BeTrue();
+        _maskedTextBox.ValidatingType.Should().BeNull();
+        _maskedTextBox.TextAlign.Should().Be(HorizontalAlignment.Left);
+        _maskedTextBox.FormatProvider.Should().Be(null);
+        _maskedTextBox.ResetOnPrompt.Should().BeTrue();
+        _maskedTextBox.ValidatingType.Should().BeNull();
+        _maskedTextBox.PromptChar.Should().Be('_');
+        _maskedTextBox.GetLineFromCharIndex(2).Should().Be(0);
+        _maskedTextBox.GetFirstCharIndexFromLine(100).Should().Be(0);
+        _maskedTextBox.GetFirstCharIndexOfCurrentLine().Should().Be(0);
+        _maskedTextBox.PasswordChar.Should().Be('\0');
+        _maskedTextBox.RejectInputOnFirstFailure.Should().BeFalse();
+        _maskedTextBox.Text.Should().Be(string.Empty);
+        _maskedTextBox.UseSystemPasswordChar.Should().BeFalse();
 
-        maskedTextBox.IsHandleCreated.Should().BeFalse();
+        _maskedTextBox.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
