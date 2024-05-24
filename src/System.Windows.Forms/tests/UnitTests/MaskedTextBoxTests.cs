@@ -25,7 +25,7 @@ public class MaskedTextBoxTests : IDisposable
     [WinFormsFact]
     public void MaskedTextBox_Constructor()
     {
-        Assert.NotNull(_maskedTextBox);
+        _maskedTextBox.Should().NotBeNull();
 
         // Check default values
         _maskedTextBox.BeepOnError.Should().BeFalse();
@@ -59,7 +59,7 @@ public class MaskedTextBoxTests : IDisposable
     {
         using MaskedTextBox maskedTextBox = new("Hello World!");
 
-        Assert.NotNull(maskedTextBox);
+        maskedTextBox.Should().NotBeNull();
     }
 
     [WinFormsFact]
@@ -67,7 +67,7 @@ public class MaskedTextBoxTests : IDisposable
     {
         using MaskedTextBox maskedTextBox = new(new MaskedTextProvider("Hello World!"));
 
-        Assert.NotNull(maskedTextBox);
+        maskedTextBox.Should().NotBeNull();
     }
 
     [WinFormsTheory]
