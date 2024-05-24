@@ -219,7 +219,11 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        _owner.Nodes.FixedIndex = _owner._childCount;
+        if (tv is null || !tv.Sorted)
+        {
+            _owner.Nodes.FixedIndex = _owner._childCount;
+        }
+
         _owner.EnsureCapacity(nodes.Length);
         for (int i = nodes.Length - 1; i >= 0; i--)
         {

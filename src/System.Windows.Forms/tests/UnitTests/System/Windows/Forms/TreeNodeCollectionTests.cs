@@ -214,6 +214,39 @@ public class TreeNodeCollectionTests
         Assert.Empty(collection.Find(key, searchAllChildren: false));
     }
 
+    [WinFormsFact]
+    [InlineData("7")]
+    public void TreeNodeCollection_Sort_ShouldAfterAddingItems(string key)
+    {
+        using TreeView treeView = new();
+        TreeNode child1 = new()
+        {
+            Name = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7"
+        };
+
+        treeView.Nodes.Add(child1);
+        treeView.Nodes.Add(child2);
+        treeView.Nodes.Add(child3);
+
+        treeView.Sort();
+
+        treeView.Nodes.AddRange(new TreeNode[]
+        {
+            new ("2"),
+            new ("1")
+        });
+
+        Assert.NotEmpty(treeView.Nodes.Find(key, searchAllChildren: true));
+    }
+
     [WinFormsTheory]
     [NullAndEmptyStringData]
     public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
