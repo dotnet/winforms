@@ -227,11 +227,6 @@
         <target state="translated">{0} não dá suporte à propriedade {1}. Ele deve ser substituído na classe derivada.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ActiveXNotSupported">
-        <source>Using ActiveX is not supported.</source>
-        <target state="new">Using ActiveX is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Os controles criados em um thread não podem ser controles pai de um controle em um outro thread.</target>
@@ -293,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">Não há suporte para o uso do BinaryFormatter.</target>
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="needs-review-translation">Não há suporte para o uso do BinaryFormatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1665,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' não é um controle filho deste pai.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="new">'{0}' is not supported in trimmed applications.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -5734,11 +5734,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O estado interno da classe {1} é inválido.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageIndexConverterNotSupported">
-        <source>ImageIndexConverter is not supported.</source>
-        <target state="new">ImageIndexConverter is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListAddFailed">
         <source>Image cannot be added to the ImageList.</source>
         <target state="translated">A imagem não pode ser adicionada a ImageList.</target>
@@ -7067,11 +7062,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Especifica o Tipo de objeto a ser usado para análise do texto de entrada quando o controle perde o foco.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MdiWindowDialogNotSupported">
-        <source>MdiWindowDialog is not supported.</source>
-        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11022,11 +11012,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Os controles adicionados à coleção devem ser do tipo '{0}' ou '{1}'.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UITypeEditorNotSupported">
-        <source>Using the UITypeEditor is not supported.</source>
-        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

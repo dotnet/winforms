@@ -14,9 +14,13 @@ namespace System.Drawing.Design;
 /// </summary>
 public class UITypeEditor
 {
+    // Feature switch, when set to false, UITypeEditor is not supported in trimmed applications.
     [FeatureSwitchDefinition("System.Drawing.Design.UITypeEditor.IsSupported")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-    private static bool IsSupported => AppContext.TryGetSwitch("System.Drawing.Design.UITypeEditor.IsSupported", out bool isSupported) ? isSupported : true;
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Drawing.Design.UITypeEditor.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
 #pragma warning restore IDE0075
 
     static UITypeEditor()
@@ -50,11 +54,19 @@ public class UITypeEditor
 
         if (!IsSupported)
         {
-            throw new NotSupportedException(SR.UITypeEditorNotSupported);
+            return;
         }
 
         // Add our intrinsic editors to TypeDescriptor.
         TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);
+    }
+
+    public UITypeEditor()
+    {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(UITypeEditor)));
+        }
     }
 
     /// <summary>

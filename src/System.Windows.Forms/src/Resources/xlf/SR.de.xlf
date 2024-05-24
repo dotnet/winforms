@@ -227,11 +227,6 @@
         <target state="translated">{0} unterstützt {1} Eigenschaft nicht. Sie muss in der abgeleiteten Klasse überschrieben werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ActiveXNotSupported">
-        <source>Using ActiveX is not supported.</source>
-        <target state="new">Using ActiveX is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Steuerelemente, die für einen Thread erstellt wurden, können nicht einem Steuerelement in einem anderen Thread übergeordnet werden.</target>
@@ -293,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">Die Verwendung von BinaryFormatter wird nicht unterstützt.</target>
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="needs-review-translation">Die Verwendung von BinaryFormatter wird nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1665,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">"child" ist kein untergeordnetes Steuerelement dieses übergeordneten Elements.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="new">'{0}' is not supported in trimmed applications.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -5734,11 +5734,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der interne Zustand der {1}-Klasse ist ungültig.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageIndexConverterNotSupported">
-        <source>ImageIndexConverter is not supported.</source>
-        <target state="new">ImageIndexConverter is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListAddFailed">
         <source>Image cannot be added to the ImageList.</source>
         <target state="translated">Das Bild konnte nicht zur ImageList hinzugefügt werden.</target>
@@ -7067,11 +7062,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Gibt den Typ des für die Analyse des Eingabetexts zu verwendenden Objekts an, wenn das Steuerelement den Fokus verliert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MdiWindowDialogNotSupported">
-        <source>MdiWindowDialog is not supported.</source>
-        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11022,11 +11012,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Steuerelemente, die dieser Sammlung hinzugefügt werden, müssen den Typ {0} oder {1} haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UITypeEditorNotSupported">
-        <source>Using the UITypeEditor is not supported.</source>
-        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

@@ -227,11 +227,6 @@
         <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ActiveXNotSupported">
-        <source>Using ActiveX is not supported.</source>
-        <target state="new">Using ActiveX is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Bir iş parçacığında oluşturulan denetimler, farklı bir iş parçacığındaki denetimin üst öğesi yapılamaz.</target>
@@ -293,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">BinaryFormatter kullanımı desteklenmiyor.</target>
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="needs-review-translation">BinaryFormatter kullanımı desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1665,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'alt' bu üstün alt denetimi değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="new">'{0}' is not supported in trimmed applications.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -5734,11 +5734,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{1} sınıfının iç durumu geçerli değil.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageIndexConverterNotSupported">
-        <source>ImageIndexConverter is not supported.</source>
-        <target state="new">ImageIndexConverter is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListAddFailed">
         <source>Image cannot be added to the ImageList.</source>
         <target state="translated">Resim ImageList'e eklenemiyor.</target>
@@ -7067,11 +7062,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Denetim odağı kaybettiğinde giriş metnini ayrıştırmak için kullanılacak nesnenin türünü belirtir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MdiWindowDialogNotSupported">
-        <source>MdiWindowDialog is not supported.</source>
-        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11022,11 +11012,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Bu koleksiyona eklenen denetimlerin '{0}' veya '{1}' türünde olması gerekir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UITypeEditorNotSupported">
-        <source>Using the UITypeEditor is not supported.</source>
-        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

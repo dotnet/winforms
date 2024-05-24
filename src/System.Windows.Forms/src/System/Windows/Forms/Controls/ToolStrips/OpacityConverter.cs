@@ -45,7 +45,7 @@ public class OpacityConverter : TypeConverter
             double percent;
             try
             {
-                if (!Control.UseComponentModelRegisterTypes)
+                if (!Control.UseComponentModelRegisteredTypes)
                 {
                     percent = (double)TypeDescriptor.GetConverter(typeof(double)).ConvertFrom(context, culture, text)!;
                 }

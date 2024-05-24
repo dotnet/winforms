@@ -537,7 +537,7 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        if (!UseComponentModelRegisterTypes)
+        if (!UseComponentModelRegisteredTypes)
         {
             s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
         }

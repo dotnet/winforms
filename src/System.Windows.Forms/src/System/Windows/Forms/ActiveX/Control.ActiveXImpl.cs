@@ -136,9 +136,13 @@ public partial class Control
         private short _accelCount = -1;
         private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
+        // Feature switch, when set to false, ActiveX is not supported in trimmed applications.
         [FeatureSwitchDefinition("System.Windows.Forms.ActiveXImpl.IsSupported")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-        private static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.ActiveXImpl.IsSupported", out bool isSupported) ? isSupported : true;
+        private static bool IsSupported { get; } =
+            AppContext.TryGetSwitch("System.Windows.Forms.ActiveXImpl.IsSupported", out bool isSupported)
+                ? isSupported
+                : true;
 #pragma warning restore IDE0075
 
         /// <summary>
@@ -1042,7 +1046,7 @@ public partial class Control
         {
             if (!IsSupported)
             {
-                throw new NotSupportedException(SR.ActiveXNotSupported);
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
             }
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
@@ -1437,7 +1441,7 @@ public partial class Control
 
                 if (!IsSupported)
                 {
-                    throw new NotSupportedException(SR.ActiveXNotSupported);
+                    throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
                 }
 
                 // Get the first declared interface, if any.
@@ -1491,7 +1495,7 @@ public partial class Control
         {
             if (!IsSupported)
             {
-                throw new NotSupportedException(SR.ActiveXNotSupported);
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
             }
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(

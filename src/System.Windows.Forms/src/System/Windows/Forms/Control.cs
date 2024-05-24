@@ -56,11 +56,20 @@ public unsafe partial class Control :
         "Makes double buffered controls non-double buffered");
 #endif
 
-    [FeatureSwitchDefinition("System.Windows.Forms.Control.DesignTimeFeatures")]
+    // Feature switch, when set to false, design time features of controls are not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.AreDesignTimeFeaturesSupported")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-    internal static bool EnableDesignTimeFeatures { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.FeatureNotSupportedWithTrimming", out bool isEnabled) ? isEnabled : true;
-    [FeatureSwitchDefinition("System.Windows.Forms.Control.ComponentModelUseRegisterTypes")]
-    internal static bool UseComponentModelRegisterTypes { get; } = AppContext.TryGetSwitch("System.Windows.Forms.Control.ComponentModelUseRegisterTypes", out bool isEnabled) ? isEnabled : false;
+    internal static bool AreDesignTimeFeaturesSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.Control.AreDesignTimeFeaturesSupported", out bool isEnabled)
+            ? isEnabled
+            : true;
+
+    // Feature switch, when set to true, used for trimming to access ComponentModel in a trim safe manner
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.UseComponentModelRegisteredTypes")]
+    internal static bool UseComponentModelRegisteredTypes { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.Control.UseComponentModelRegisteredTypes", out bool isEnabled)
+            ? isEnabled
+            : false;
 #pragma warning restore IDE0075
 
     private static readonly uint WM_GETCONTROLNAME = PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
@@ -13023,7 +13032,7 @@ public unsafe partial class Control :
 
         if (site is not null && site.DesignMode && site.TryGetService(out changeService))
         {
-            if (!EnableDesignTimeFeatures)
+            if (!AreDesignTimeFeaturesSupported)
             {
                 throw new NotSupportedException(SR.DesignTimeFeaturesNotSupported);
             }

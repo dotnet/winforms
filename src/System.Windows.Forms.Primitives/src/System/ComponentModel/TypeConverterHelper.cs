@@ -7,9 +7,13 @@ namespace System.ComponentModel;
 
 internal static class TypeConverterHelper
 {
-    [FeatureSwitchDefinition("System.ComponentModel.TypeConverterHelper.ComponentModelUseRegisterTypes")]
+    // Feature switch, when set to true, used for trimming to access ComponentModel in a trim safe manner
+    [FeatureSwitchDefinition("System.ComponentModel.TypeConverterHelper.UseComponentModelRegisteredTypes")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-    internal static bool UseComponentModelRegisterTypes { get; } = AppContext.TryGetSwitch("System.ComponentModel.TypeConverterHelper.ComponentModelUseRegisterTypes", out bool isEnabled) ? isEnabled : false;
+    private static bool UseComponentModelRegisteredTypes { get; } =
+        AppContext.TryGetSwitch("System.ComponentModel.TypeConverterHelper.UseComponentModelRegisteredTypes", out bool isEnabled)
+            ? isEnabled
+            : false;
 #pragma warning restore IDE0075
 
     /// <summary>
@@ -34,7 +38,7 @@ internal static class TypeConverterHelper
         }
 
         TypeConverter converter;
-        if (!UseComponentModelRegisterTypes)
+        if (!UseComponentModelRegisteredTypes)
         {
             converter = TypeDescriptor.GetConverter(typeof(T));
         }

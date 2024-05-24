@@ -227,11 +227,6 @@
         <target state="translated">{0} nie obsługuje właściwości {1}. Musi zostać zastąpiona w klasie pochodnej.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ActiveXNotSupported">
-        <source>Using ActiveX is not supported.</source>
-        <target state="new">Using ActiveX is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Formanty utworzone w jednym wątku nie mogą być nadrzędne w stosunku do formantów w innym wątku.</target>
@@ -293,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">Używanie elementu BinaryFormatter nie jest obsługiwane.</target>
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="needs-review-translation">Używanie elementu BinaryFormatter nie jest obsługiwane.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1665,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">Element 'child' nie jest formantem podrzędnym dla tego formantu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="new">'{0}' is not supported in trimmed applications.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -5734,11 +5734,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wewnętrzny stan klasy {1} jest nieprawidłowy.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageIndexConverterNotSupported">
-        <source>ImageIndexConverter is not supported.</source>
-        <target state="new">ImageIndexConverter is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListAddFailed">
         <source>Image cannot be added to the ImageList.</source>
         <target state="translated">Nie można dodać obrazu do elementu ImageList.</target>
@@ -7067,11 +7062,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Określa typ obiektu używanego do analizowania tekstu wejściowego, gdy formant utraci fokus.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MdiWindowDialogNotSupported">
-        <source>MdiWindowDialog is not supported.</source>
-        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11022,11 +11012,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Formanty dodane do tej kolekcji muszą być typu „{0}” lub „{1}”.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UITypeEditorNotSupported">
-        <source>Using the UITypeEditor is not supported.</source>
-        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">

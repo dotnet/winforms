@@ -137,7 +137,7 @@ internal static class Formatter
         Type sourceType = value.GetType();
 
         TypeConverter sourceTypeTypeConverter;
-        if (!Control.UseComponentModelRegisterTypes)
+        if (!Control.UseComponentModelRegisteredTypes)
         {
             sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
         }
@@ -153,7 +153,7 @@ internal static class Formatter
         }
 
         TypeConverter targetTypeTypeConverter;
-        if (!Control.UseComponentModelRegisterTypes)
+        if (!Control.UseComponentModelRegisteredTypes)
         {
             targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
         }

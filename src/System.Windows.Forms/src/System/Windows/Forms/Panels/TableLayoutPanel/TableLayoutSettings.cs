@@ -467,7 +467,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
         TypeConverter converter;
-        if (!Control.UseComponentModelRegisterTypes)
+        if (!Control.UseComponentModelRegisteredTypes)
         {
             converter = TypeDescriptor.GetConverter(this);
         }
@@ -496,7 +496,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         {
             List<ControlInformation> controlsInfo = new(Owner!.Children.Count);
 
-            if (Control.UseComponentModelRegisterTypes)
+            if (Control.UseComponentModelRegisteredTypes)
             {
                 TypeDescriptor.RegisterType<Control>();
             }
@@ -510,7 +510,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                     // We need to go through the PropertyDescriptor for the Name property
                     // since it is shadowed.
                     PropertyDescriptor? prop;
-                    if (!Control.UseComponentModelRegisterTypes)
+                    if (!Control.UseComponentModelRegisteredTypes)
                     {
                         prop = TypeDescriptor.GetProperties(c)["Name"];
                     }

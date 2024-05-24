@@ -155,7 +155,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 if (value != Color.Empty)
                 {
-                    if (!EnableDesignTimeFeatures)
+                    if (!AreDesignTimeFeaturesSupported)
                     {
                         throw new NotSupportedException(SR.DesignTimeFeaturesNotSupported);
                     }

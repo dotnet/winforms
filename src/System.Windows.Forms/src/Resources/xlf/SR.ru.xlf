@@ -227,11 +227,6 @@
         <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ActiveXNotSupported">
-        <source>Using ActiveX is not supported.</source>
-        <target state="new">Using ActiveX is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Элементы управления, созданные в одном потоке, не могут быть родительскими для элемента управления в другом потоке.</target>
@@ -293,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">Использование BinaryFormatter не поддерживается.</target>
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="needs-review-translation">Использование BinaryFormatter не поддерживается.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1665,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' не является дочерним элементом управления этого родительского элемента.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="new">'{0}' is not supported in trimmed applications.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -5735,11 +5735,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Недопустимое внутреннее состояние класса {1}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageIndexConverterNotSupported">
-        <source>ImageIndexConverter is not supported.</source>
-        <target state="new">ImageIndexConverter is not supported.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListAddFailed">
         <source>Image cannot be added to the ImageList.</source>
         <target state="translated">Добавление изображения к ImageList невозможно.</target>
@@ -7068,11 +7063,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MaskedTextBoxValidatingTypeDescr">
         <source>Specifies the Type of the object to be used for parsing the input text when the control looses focus.</source>
         <target state="translated">Указывает Type для объекта, который будет использоваться для разбора вводимого текста при потере фокуса элементом управления.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MdiWindowDialogNotSupported">
-        <source>MdiWindowDialog is not supported.</source>
-        <target state="new">MdiWindowDialog is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
@@ -11023,11 +11013,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TypedControlCollectionShouldBeOfTypes">
         <source>Controls added to this collection must be of type '{0}' or '{1}'.</source>
         <target state="translated">Элементы управления, добавляемые к данной коллекции, должны иметь тип '{0}' или '{1}'.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UITypeEditorNotSupported">
-        <source>Using the UITypeEditor is not supported.</source>
-        <target state="new">Using the UITypeEditor is not supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnableToInitComponent">
