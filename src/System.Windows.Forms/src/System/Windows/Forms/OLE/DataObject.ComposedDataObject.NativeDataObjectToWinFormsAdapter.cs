@@ -120,66 +120,6 @@ public unsafe partial class DataObject
                     _ => ReadObjectFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format))
                 };
 
-                static unsafe string ReadStringFromHGLOBAL(HGLOBAL hglobal, bool unicode)
-                {
-                    string? stringData = null;
-
-                    void* buffer = PInvokeCore.GlobalLock(hglobal);
-                    try
-                    {
-                        stringData = unicode ? new string((char*)buffer) : new string((sbyte*)buffer);
-                    }
-                    finally
-                    {
-                        PInvokeCore.GlobalUnlock(hglobal);
-                    }
-
-                    return stringData;
-                }
-
-                static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
-                {
-                    void* buffer = PInvokeCore.GlobalLock(hglobal);
-                    try
-                    {
-                        int size = (int)PInvokeCore.GlobalSize(hglobal);
-                        return Encoding.UTF8.GetString((byte*)buffer, size - 1);
-                    }
-                    finally
-                    {
-                        PInvokeCore.GlobalUnlock(hglobal);
-                    }
-                }
-
-                static unsafe string[]? ReadFileListFromHDROP(HDROP hdrop)
-                {
-                    uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
-                    if (count == 0)
-                    {
-                        return null;
-                    }
-
-                    Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
-                    string[] files = new string[count];
-
-                    fixed (char* buffer = fileName)
-                    {
-                        for (uint i = 0; i < count; i++)
-                        {
-                            uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
-                            if (charactersCopied == 0)
-                            {
-                                continue;
-                            }
-
-                            string s = fileName[..(int)charactersCopied].ToString();
-                            files[i] = s;
-                        }
-                    }
-
-                    return files;
-                }
-
                 static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
                 {
                     Stream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
@@ -220,38 +160,98 @@ public unsafe partial class DataObject
 #pragma warning restore SYSLIB0050
 #pragma warning restore SYSLIB0011
                     }
+                }
+            }
 
-                    static unsafe MemoryStream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
+            private static unsafe MemoryStream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
+            {
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
+                if (buffer is null)
+                {
+                    throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
+                }
+
+                try
+                {
+                    int size = (int)PInvokeCore.GlobalSize(hglobal);
+                    byte[] bytes = new byte[size];
+                    Marshal.Copy((nint)buffer, bytes, 0, size);
+                    int index = 0;
+
+                    // The object here can either be a stream or a serialized object. We identify a serialized object
+                    // by writing the bytes for the guid serializedObjectID at the front of the stream.
+
+                    if (isSerializedObject = bytes.AsSpan().StartsWith(s_serializedObjectID))
                     {
-                        void* buffer = PInvokeCore.GlobalLock(hglobal);
-                        if (buffer is null)
+                        index = s_serializedObjectID.Length;
+                    }
+
+                    return new MemoryStream(bytes, index, bytes.Length - index);
+                }
+                finally
+                {
+                    PInvokeCore.GlobalUnlock(hglobal);
+                }
+            }
+
+            private static unsafe string ReadStringFromHGLOBAL(HGLOBAL hglobal, bool unicode)
+            {
+                string? stringData = null;
+
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
+                try
+                {
+                    stringData = unicode ? new string((char*)buffer) : new string((sbyte*)buffer);
+                }
+                finally
+                {
+                    PInvokeCore.GlobalUnlock(hglobal);
+                }
+
+                return stringData;
+            }
+
+            private static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
+            {
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
+                try
+                {
+                    int size = (int)PInvokeCore.GlobalSize(hglobal);
+                    return Encoding.UTF8.GetString((byte*)buffer, size - 1);
+                }
+                finally
+                {
+                    PInvokeCore.GlobalUnlock(hglobal);
+                }
+            }
+
+            private static unsafe string[]? ReadFileListFromHDROP(HDROP hdrop)
+            {
+                uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
+                if (count == 0)
+                {
+                    return null;
+                }
+
+                Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
+                string[] files = new string[count];
+
+                fixed (char* buffer = fileName)
+                {
+                    for (uint i = 0; i < count; i++)
+                    {
+                        uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        if (charactersCopied == 0)
                         {
-                            throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
+                            continue;
                         }
 
-                        try
-                        {
-                            int size = (int)PInvokeCore.GlobalSize(hglobal);
-                            byte[] bytes = new byte[size];
-                            Marshal.Copy((nint)buffer, bytes, 0, size);
-                            int index = 0;
-
-                            // The object here can either be a stream or a serialized object. We identify a serialized object
-                            // by writing the bytes for the guid serializedObjectID at the front of the stream.
-
-                            if (isSerializedObject = bytes.AsSpan().StartsWith(s_serializedObjectID))
-                            {
-                                index = s_serializedObjectID.Length;
-                            }
-
-                            return new MemoryStream(bytes, index, bytes.Length - index);
-                        }
-                        finally
-                        {
-                            PInvokeCore.GlobalUnlock(hglobal);
-                        }
+                        string s = fileName[..(int)charactersCopied].ToString();
+                        files[i] = s;
                     }
                 }
+
+                return files;
             }
 
             /// <summary>
@@ -284,55 +284,6 @@ public unsafe partial class DataObject
                 }
 
                 return data;
-
-                static Image? TryGetBitmapData(Com.IDataObject* dataObject, string format)
-                {
-                    if (format != DataFormats.BitmapConstant)
-                    {
-                        return null;
-                    }
-
-                    Com.FORMATETC formatEtc = new()
-                    {
-                        cfFormat = (ushort)DataFormats.GetFormat(format).Id,
-                        dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
-                        lindex = -1,
-                        tymed = (uint)Com.TYMED.TYMED_GDI
-                    };
-
-                    Com.STGMEDIUM medium = default;
-
-                    if (dataObject->QueryGetData(formatEtc).Succeeded)
-                    {
-                        HRESULT hr = dataObject->GetData(formatEtc, out medium);
-                        // One of the ways this can happen is when we attempt to put binary formatted data onto the
-                        // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
-                        // The data state, however, is not good, and this error will be returned by Windows when asking to
-                        // get the data out.
-                        Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
-                    }
-
-                    Image? data = null;
-
-                    try
-                    {
-                        // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
-                        // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-                        if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
-                            && !medium.hGlobal.IsNull
-                            && Image.FromHbitmap(medium.hGlobal) is Image clipboardImage)
-                        {
-                            data = (Image)clipboardImage.Clone();
-                            clipboardImage.Dispose();
-                        }
-                    }
-                    finally
-                    {
-                        PInvoke.ReleaseStgMedium(ref medium);
-                    }
-
-                    return data;
-                }
 
                 static object? TryGetHGLOBALData(Com.IDataObject* dataObject, string format, out bool doNotContinue)
                 {
@@ -435,6 +386,55 @@ public unsafe partial class DataObject
                         PInvoke.ReleaseStgMedium(ref medium);
                     }
                 }
+            }
+
+            private static Image? TryGetBitmapData(Com.IDataObject* dataObject, string format)
+            {
+                if (format != DataFormats.BitmapConstant)
+                {
+                    return null;
+                }
+
+                Com.FORMATETC formatEtc = new()
+                {
+                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = (uint)Com.TYMED.TYMED_GDI
+                };
+
+                Com.STGMEDIUM medium = default;
+
+                if (dataObject->QueryGetData(formatEtc).Succeeded)
+                {
+                    HRESULT hr = dataObject->GetData(formatEtc, out medium);
+                    // One of the ways this can happen is when we attempt to put binary formatted data onto the
+                    // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+                    // The data state, however, is not good, and this error will be returned by Windows when asking to
+                    // get the data out.
+                    Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+                }
+
+                Image? data = null;
+
+                try
+                {
+                    // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
+                    // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
+                    if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
+                        && !medium.hGlobal.IsNull
+                        && Image.FromHbitmap(medium.hGlobal) is Image clipboardImage)
+                    {
+                        data = (Image)clipboardImage.Clone();
+                        clipboardImage.Dispose();
+                    }
+                }
+                finally
+                {
+                    PInvoke.ReleaseStgMedium(ref medium);
+                }
+
+                return data;
             }
 
             #region IDataObject

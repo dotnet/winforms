@@ -110,8 +110,8 @@ public unsafe partial class DataObject :
 
     public virtual string[] GetFormats() => GetFormats(autoConvert: true);
 
-    public virtual void SetData(string format, bool autoConvert, object? data) =>
-        ((IDataObject)_innerData).SetData(format, autoConvert, data);
+    public virtual void SetData(string format, bool autoConvert, object? data)
+        => ((IDataObject)_innerData).SetData(format, autoConvert, data);
 
     public virtual void SetData(string format, object? data) => ((IDataObject)_innerData).SetData(format, data);
 
