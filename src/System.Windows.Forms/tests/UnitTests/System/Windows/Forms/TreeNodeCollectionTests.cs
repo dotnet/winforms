@@ -214,7 +214,7 @@ public class TreeNodeCollectionTests
         Assert.Empty(collection.Find(key, searchAllChildren: false));
     }
 
-    [WinFormsFact]
+    [WinFormsTheory]
     [InlineData("7")]
     public void TreeNodeCollection_Sort_ShouldAfterAddingItems(string key)
     {
