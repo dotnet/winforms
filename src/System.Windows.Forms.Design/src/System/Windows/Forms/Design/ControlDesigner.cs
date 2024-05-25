@@ -1291,7 +1291,7 @@ public partial class ControlDesigner : ComponentDesigner
     protected virtual void OnGiveFeedback(GiveFeedbackEventArgs e)
     {
     }
-#nullable disable
+
     /// <summary>
     ///  Called in response to the left mouse button being pressed on a component. It ensures that the component is selected.
     /// </summary>
@@ -1305,7 +1305,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         _mouseDragLast = new Point(x, y);
         _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
-        ISelectionService selectionService = GetService<ISelectionService>();
+        ISelectionService? selectionService = GetService<ISelectionService>();
 
         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
         if (!_ctrlSelect && selectionService is not null)
@@ -1329,7 +1329,7 @@ public partial class ControlDesigner : ComponentDesigner
             // ParentControlDesigner.Dispose depends on cancel having this behavior.
             if (!cancel)
             {
-                ISelectionService selectionService = GetService<ISelectionService>();
+                ISelectionService? selectionService = GetService<ISelectionService>();
                 bool shiftSelect = (Control.ModifierKeys & Keys.Shift) != 0;
                 if (!shiftSelect &&
                     (_ctrlSelect
@@ -1399,7 +1399,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // Make sure the component is selected
         // But only select it if it is not already the primary selection, and we want to toggle the current primary selection.
-        ISelectionService selectionService = GetService<ISelectionService>();
+        ISelectionService? selectionService = GetService<ISelectionService>();
         if (selectionService is not null && !Component.Equals(selectionService.PrimarySelection))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
@@ -1412,7 +1412,7 @@ public partial class ControlDesigner : ComponentDesigner
             ICollection selComps = selectionService.GetSelectedComponents();
 
             // must identify a required parent to avoid dragging mixes of children
-            Control requiredParent = null;
+            Control? requiredParent = null;
             foreach (IComponent comp in selComps)
             {
                 if (comp is Control control)
@@ -1426,7 +1426,7 @@ public partial class ControlDesigner : ComponentDesigner
                         continue; // mixed selection of different parents - don't add this
                     }
 
-                    if (_host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
+                    if (_host?.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
                     {
                         dragControls.Add(comp);
                     }
@@ -1453,15 +1453,15 @@ public partial class ControlDesigner : ComponentDesigner
     protected virtual void OnMouseEnter()
     {
         Control ctl = Control;
-        Control parent = ctl;
-        object parentDesigner = null;
+        Control? parent = ctl;
+        object? parentDesigner = null;
 
         while (parentDesigner is null && parent is not null)
         {
             parent = parent.Parent;
             if (parent is not null)
             {
-                object d = _host.GetDesigner(parent);
+                object? d = _host?.GetDesigner(parent);
                 if (d != this)
                 {
                     parentDesigner = d;
@@ -1482,15 +1482,15 @@ public partial class ControlDesigner : ComponentDesigner
     protected virtual void OnMouseHover()
     {
         Control ctl = Control;
-        Control parent = ctl;
-        object parentDesigner = null;
+        Control? parent = ctl;
+        object? parentDesigner = null;
 
         while (parentDesigner is null && parent is not null)
         {
             parent = parent.Parent;
             if (parent is not null)
             {
-                object d = _host.GetDesigner(parent);
+                object? d = _host?.GetDesigner(parent);
                 if (d != this)
                 {
                     parentDesigner = d;
@@ -1511,15 +1511,15 @@ public partial class ControlDesigner : ComponentDesigner
     protected virtual void OnMouseLeave()
     {
         Control ctl = Control;
-        Control parent = ctl;
-        object parentDesigner = null;
+        Control? parent = ctl;
+        object? parentDesigner = null;
 
         while (parentDesigner is null && parent is not null)
         {
             parent = parent.Parent;
             if (parent is not null)
             {
-                object d = _host.GetDesigner(parent);
+                object? d = _host?.GetDesigner(parent);
                 if (d != this)
                 {
                     parentDesigner = d;
@@ -1624,7 +1624,6 @@ public partial class ControlDesigner : ComponentDesigner
     protected override void PreFilterProperties(IDictionary properties)
     {
         base.PreFilterProperties(properties);
-        PropertyDescriptor prop;
 
         // Handle shadowed properties
         string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
@@ -1632,7 +1631,7 @@ public partial class ControlDesigner : ComponentDesigner
         Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
             if (prop is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ControlDesigner), prop, empty);
@@ -1641,7 +1640,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // replace this one separately because it is of a different type (DesignerControlCollection) than the
         // original property (ControlCollection)
-        PropertyDescriptor controlsProp = (PropertyDescriptor)properties["Controls"];
+        PropertyDescriptor? controlsProp = (PropertyDescriptor?)properties["Controls"];
 
         if (controlsProp is not null)
         {
@@ -1654,7 +1653,7 @@ public partial class ControlDesigner : ComponentDesigner
                 attrs);
         }
 
-        PropertyDescriptor sizeProp = (PropertyDescriptor)properties["Size"];
+        PropertyDescriptor? sizeProp = (PropertyDescriptor?)properties["Size"];
         if (sizeProp is not null)
         {
             properties["Size"] = new CanResetSizePropertyDescriptor(sizeProp);
@@ -1682,7 +1681,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         foreach (Control child in firstChild.Controls)
         {
-            IWindowTarget oldTarget = null;
+            IWindowTarget? oldTarget = null;
             if (child is not null)
             {
                 // No, no designer means we must replace the window target in this control.
@@ -1691,11 +1690,11 @@ public partial class ControlDesigner : ComponentDesigner
                 {
                     child.WindowTarget = target.OldWindowTarget;
                 }
-            }
 
-            if (oldTarget is not DesignerWindowTarget)
-            {
-                UnhookChildControls(child);
+                if (oldTarget is not DesignerWindowTarget)
+                {
+                    UnhookChildControls(child);
+                }
             }
         }
     }
@@ -1706,7 +1705,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     protected virtual unsafe void WndProc(ref Message m)
     {
-        IMouseHandler mouseHandler = null;
+        IMouseHandler? mouseHandler = null;
 
         // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
         if (m.MsgInternal == PInvoke.WM_NCHITTEST && !_inHitTest)
@@ -1779,7 +1778,7 @@ public partial class ControlDesigner : ComponentDesigner
 
             if (_eventService is not null)
             {
-                mouseHandler = (IMouseHandler)_eventService.GetHandler(typeof(IMouseHandler));
+                mouseHandler = (IMouseHandler?)_eventService.GetHandler(typeof(IMouseHandler));
             }
         }
 
@@ -1924,7 +1923,7 @@ public partial class ControlDesigner : ComponentDesigner
                         _toolPassThrough = false;
                     }
 
-                    if (_toolPassThrough)
+                    if (_toolPassThrough && Control.Parent is not null)
                     {
                         PInvoke.SendMessage(
                             Control.Parent,
@@ -1973,7 +1972,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 if (_lastMoveScreenX != location.X || _lastMoveScreenY != location.Y)
                 {
-                    if (_toolPassThrough)
+                    if (_toolPassThrough && Control.Parent is not null)
                     {
                         PInvoke.SendMessage(
                             Control.Parent,
@@ -2020,7 +2019,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
                 else
                 {
-                    if (_toolPassThrough)
+                    if (_toolPassThrough && Control.Parent is not null)
                     {
                         PInvoke.SendMessage(
                             Control.Parent,
@@ -2243,7 +2242,7 @@ public partial class ControlDesigner : ComponentDesigner
                 break;
         }
     }
-
+#nullable disable
     private void PaintException(PaintEventArgs e, Exception ex)
     {
         StringFormat stringFormat = new StringFormat
