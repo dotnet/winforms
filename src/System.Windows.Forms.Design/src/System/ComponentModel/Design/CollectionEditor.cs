@@ -113,16 +113,17 @@ public partial class CollectionEditor : UITypeEditor
             return string.Empty;
         }
 
-        object? o = TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null);
+        if (TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null) is { } obj)
+        {
+            return obj;
+        }
 
-        return o is null
-            ? throw new InvalidOperationException(
-                string.Format(
-                    SR.CollectionEditorCreateInstanceError,
-                    nameof(IDesignerHost),
-                    nameof(TypeDescriptor),
-                    itemType.FullName))
-            : o;
+        throw new InvalidOperationException(
+            string.Format(
+            SR.CollectionEditorCreateInstanceError,
+            nameof(IDesignerHost),
+            nameof(TypeDescriptor),
+            itemType.FullName));
     }
 
     /// <summary>
