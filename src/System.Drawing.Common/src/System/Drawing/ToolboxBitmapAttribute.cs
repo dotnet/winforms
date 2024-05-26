@@ -130,12 +130,20 @@ public class ToolboxBitmapAttribute : Attribute
             return null;
         }
 
-        Icon ico = new(stream);
-        Icon sizedico = new(ico, large ? s_largeSize : s_smallSize);
-        Bitmap? b = sizedico.ToBitmap();
-        if (DpiHelper.IsScalingRequired && scaled)
+        Bitmap? b = null;
+        try
         {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref b);
+            using Icon ico = new(stream);
+            using Icon sizedico = new(ico, large ? s_largeSize : s_smallSize);
+
+            b = sizedico.ToBitmap();
+            if (DpiHelper.IsScalingRequired && scaled)
+            {
+                DpiHelper.ScaleBitmapLogicalToDevice(ref b);
+            }
+        }
+        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        {
         }
 
         return b;
@@ -183,25 +191,30 @@ public class ToolboxBitmapAttribute : Attribute
         }
 
         Image? img = null;
-
-        // Load the image from the manifest resources.
-        Stream? stream = BitmapSelector.GetResourceStream(t, bitmapname);
-        if (stream is not null)
+        try
         {
-            Bitmap? b = new Bitmap(stream);
-            img = b;
-            MakeBackgroundAlphaZero(b);
-            if (large)
+            // Load the image from the manifest resources.
+            Stream? stream = BitmapSelector.GetResourceStream(t, bitmapname);
+            if (stream is not null)
             {
-                img = new Bitmap(b, s_largeSize.Width, s_largeSize.Height);
-            }
-
-            if (DpiHelper.IsScalingRequired && scaled)
-            {
-                b = (Bitmap)img;
-                DpiHelper.ScaleBitmapLogicalToDevice(ref b);
+                Bitmap? b = new Bitmap(stream);
                 img = b;
+                MakeBackgroundAlphaZero(b);
+                if (large)
+                {
+                    img = new Bitmap(b, s_largeSize.Width, s_largeSize.Height);
+                }
+
+                if (DpiHelper.IsScalingRequired && scaled)
+                {
+                    b = (Bitmap)img;
+                    DpiHelper.ScaleBitmapLogicalToDevice(ref b);
+                    img = b;
+                }
             }
+        }
+        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        {
         }
 
         return img;
@@ -245,8 +258,8 @@ public class ToolboxBitmapAttribute : Attribute
                 // All bitmap images from winforms runtime are changed to Icons
                 // and logical names, now, does not contain any extension.
                 rawbmpname = name;
-                iconname = name + ".ico";
-                bmpname = name + ".bmp";
+                iconname = $"{name}.ico";
+                bmpname = $"{name}.bmp";
             }
             else
             {
@@ -265,14 +278,19 @@ public class ToolboxBitmapAttribute : Attribute
                     // 2.  name+.bmp
                     // 3.  name+.ico
                     rawbmpname = name;
-                    bmpname = name + ".bmp";
-                    iconname = name + ".ico";
+                    bmpname = $"{name}.bmp";
+                    iconname = $"{name}.ico";
                 }
             }
 
             if (rawbmpname is not null)
             {
                 img = GetBitmapFromResource(t, rawbmpname, large, scaled);
+            }
+
+            if (img is null && rawbmpname is not null)
+            {
+                img = GetIconFromResource(t, rawbmpname, large, scaled);
             }
 
             if (img is null && bmpname is not null)
