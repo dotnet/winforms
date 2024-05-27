@@ -313,11 +313,15 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.CustomFormat.Should().BeNull();
 
-        _dateTimePicker.CustomFormat = "MM/dd/yyyy";
-        _dateTimePicker.CustomFormat.Should().Be("MM/dd/yyyy");
+        _dateTimePicker.Value = new DateTime(2021, 12, 31);
+        _dateTimePicker.CreateControl();
 
-        _dateTimePicker.CustomFormat = "dd/MM/yyyy";
-        _dateTimePicker.CustomFormat.Should().Be("dd/MM/yyyy");
+        _dateTimePicker.CustomFormat = "yyyy/MM/dd";
+        _dateTimePicker.Format = DateTimePickerFormat.Custom;
+        _dateTimePicker.Text.Should().Be("2021/12/31");
+
+        _dateTimePicker.CustomFormat = "MM/dd/yyyy";
+        _dateTimePicker.Text.Should().Be("12/31/2021");
 
         _dateTimePicker.CustomFormat = null;
         _dateTimePicker.CustomFormat.Should().BeNull();
@@ -338,10 +342,10 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_MaxDate_GetSet_ReturnsExpected()
     {
+        _dateTimePicker.MaxDate.ToString().Should().Be("12/31/9998 12:00:00 AM");
+
         var expectedDate = new DateTime(2022, 12, 31);
-
         _dateTimePicker.MaxDate = expectedDate;
-
         _dateTimePicker.MaxDate.Should().Be(expectedDate);
     }
 
@@ -351,7 +355,6 @@ public class DateTimePickerTests: IDisposable
     public void DateTimePicker_MaxDate_SetInvalid_ThrowsArgumentOutOfRangeException(string value)
     {
         Action act = () => _dateTimePicker.MaxDate = DateTime.Parse(value);
-
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -369,10 +372,10 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_MinDate_GetSet_ReturnsExpected()
     {
+        _dateTimePicker.MinDate.ToString().Should().Be("1/1/1753 12:00:00 AM");
+
         var expectedDate = new DateTime(2022, 1, 1);
-
         _dateTimePicker.MinDate = expectedDate;
-
         _dateTimePicker.MinDate.Should().Be(expectedDate);
     }
 
@@ -381,6 +384,8 @@ public class DateTimePickerTests: IDisposable
     {
         DateTime minSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime;
         DateTime expectedDate = minSupportedDateTime.Year < 1753 ? new(1753, 1, 1) : minSupportedDateTime;
+
+        DateTimePicker.MinimumDateTime.Should().BeOnOrAfter(new DateTime(1753, 1, 1, 0, 0, 0));
 
         DateTime result = DateTimePicker.MinimumDateTime;
 
@@ -415,20 +420,23 @@ public class DateTimePickerTests: IDisposable
     public void DateTimePicker_Text_GetSet_ReturnsExpected()
     {
         string validDateString = "2022-01-01";
+        _dateTimePicker.CreateControl();
+
         _dateTimePicker.Text = validDateString;
-        _dateTimePicker.Value.Should().Be(DateTime.Parse(validDateString, CultureInfo.CurrentCulture));
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(validDateString, CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
 
         _dateTimePicker.Text = null;
-        _dateTimePicker.Value.Date.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture));
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
 
         _dateTimePicker.Text = string.Empty;
-        _dateTimePicker.Value.Date.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture));
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
     }
 
     [WinFormsFact]
     public void DateTimePicker_Value_GetSet_ReturnsExpected()
     {
         var expectedDate = new DateTime(2022, 1, 1);
+
         _dateTimePicker.Value = expectedDate;
         _dateTimePicker.Value.Should().Be(expectedDate);
 
@@ -835,11 +843,5 @@ public class DateTimePickerTests: IDisposable
         public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
 
         public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
-
-        public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
-
-        public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
-
-        public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
     }
 }
