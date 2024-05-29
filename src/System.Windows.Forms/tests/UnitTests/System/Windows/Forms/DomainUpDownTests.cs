@@ -29,159 +29,158 @@ public class DomainUpDownTests : IDisposable
     [WinFormsFact]
     public void DomainUpDown_Ctor_Default()
     {
-        Assert.Null(_sub.ActiveControl);
-        Assert.False(_sub.AllowDrop);
-        Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, _sub.Anchor);
-        Assert.False(_sub.AutoScroll);
-        Assert.Equal(SizeF.Empty, _sub.AutoScaleDimensions);
-        Assert.Equal(new SizeF(1, 1), _sub.AutoScaleFactor);
-        Assert.Equal(Size.Empty, _sub.AutoScrollMargin);
-        Assert.Equal(AutoScaleMode.Inherit, _sub.AutoScaleMode);
-        Assert.Equal(Size.Empty, _sub.AutoScrollMinSize);
-        Assert.Equal(Point.Empty, _sub.AutoScrollPosition);
-        Assert.False(_sub.AutoSize);
-        Assert.Equal(SystemColors.Window, _sub.BackColor);
-        Assert.Null(_sub.BackgroundImage);
-        Assert.Equal(ImageLayout.Tile, _sub.BackgroundImageLayout);
-        Assert.NotNull(_sub.BindingContext);
-        Assert.Same(_sub.BindingContext, _sub.BindingContext);
-        Assert.Equal(BorderStyle.Fixed3D, _sub.BorderStyle);
-        Assert.Equal(_sub.PreferredHeight, _sub.Bottom);
-        Assert.Equal(new Rectangle(0, 0, 120, _sub.PreferredHeight), _sub.Bounds);
-        Assert.False(_sub.CanEnableIme);
-        Assert.False(_sub.CanFocus);
-        Assert.True(_sub.CanRaiseEvents);
-        Assert.True(_sub.CausesValidation);
-        Assert.False(_sub.ChangingText);
+        _sub.ActiveControl.Should().BeNull();
+        _sub.AllowDrop.Should().BeFalse();
+        _sub.Anchor.Should().Be(AnchorStyles.Top | AnchorStyles.Left);
+        _sub.AutoScroll.Should().BeFalse();
+        _sub.AutoScaleDimensions.Should().Be(SizeF.Empty);
+        _sub.AutoScaleFactor.Should().Be(new SizeF(1, 1));
+        _sub.AutoScrollMargin.Should().Be(Size.Empty);
+        _sub.AutoScaleMode.Should().Be(AutoScaleMode.Inherit);
+        _sub.AutoScrollMinSize.Should().Be(Size.Empty);
+        _sub.AutoScrollPosition.Should().Be(Point.Empty);
+        _sub.AutoSize.Should().BeFalse();
+        _sub.BackColor.Should().Be(SystemColors.Window);
+        _sub.BackgroundImage.Should().BeNull();
+        _sub.BackgroundImageLayout.Should().Be(ImageLayout.Tile);
+        _sub.BindingContext.Should().NotBeNull();
+        _sub.BorderStyle.Should().Be(BorderStyle.Fixed3D);
+        _sub.Bottom.Should().Be(_sub.PreferredHeight);
+        _sub.Bounds.Should().Be(new Rectangle(0, 0, 120, _sub.PreferredHeight));
+        _sub.CanEnableIme.Should().BeFalse();
+        _sub.CanFocus.Should().BeFalse();
+        _sub.CanRaiseEvents.Should().BeTrue();
+        _sub.CausesValidation.Should().BeTrue();
+        _sub.ChangingText.Should().BeFalse();
         if (Application.UseVisualStyles)
         {
-            Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), _sub.ClientRectangle);
-            Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), _sub.DisplayRectangle);
-            Assert.Equal(new Size(120, Control.DefaultFont.Height + 7), _sub.ClientSize);
-            Assert.Equal(new Size(16, _sub.PreferredHeight), _sub.PreferredSize);
+            _sub.ClientRectangle.Should().Be(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7));
+            _sub.DisplayRectangle.Should().Be(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7));
+            _sub.ClientSize.Should().Be(new Size(120, Control.DefaultFont.Height + 7));
+            _sub.PreferredSize.Should().Be(new Size(16, _sub.PreferredHeight));
         }
         else
         {
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), _sub.ClientRectangle);
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), _sub.DisplayRectangle);
-            Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), _sub.ClientSize);
-            Assert.Equal(new Size(20, _sub.PreferredHeight), _sub.PreferredSize);
+            _sub.ClientRectangle.Should().Be(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3));
+            _sub.DisplayRectangle.Should().Be(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3));
+            _sub.ClientSize.Should().Be(new Size(116, Control.DefaultFont.Height + 3));
+            _sub.PreferredSize.Should().Be(new Size(20, _sub.PreferredHeight));
         }
 
-        Assert.Null(_sub.Container);
-        Assert.False(_sub.ContainsFocus);
-        Assert.Null(_sub.ContextMenuStrip);
-        Assert.NotEmpty(_sub.Controls);
-        Assert.Same(_sub.Controls, _sub.Controls);
-        Assert.False(_sub.Created);
-        Assert.Equal(SizeF.Empty, _sub.CurrentAutoScaleDimensions);
-        Assert.Equal(Cursors.Default, _sub.Cursor);
-        Assert.Equal(Cursors.Default, _sub.DefaultCursor);
-        Assert.Equal(ImeMode.Inherit, _sub.DefaultImeMode);
-        Assert.Equal(new Padding(3), _sub.DefaultMargin);
-        Assert.Equal(Size.Empty, _sub.DefaultMaximumSize);
-        Assert.Equal(Size.Empty, _sub.DefaultMinimumSize);
-        Assert.Equal(Padding.Empty, _sub.DefaultPadding);
-        Assert.Equal(new Size(120, _sub.PreferredHeight), _sub.DefaultSize);
-        Assert.False(_sub.DesignMode);
-        Assert.Equal(DockStyle.None, _sub.Dock);
-        Assert.NotNull(_sub.DockPadding);
-        Assert.Same(_sub.DockPadding, _sub.DockPadding);
-        Assert.Equal(0, _sub.DockPadding.Top);
-        Assert.Equal(0, _sub.DockPadding.Bottom);
-        Assert.Equal(0, _sub.DockPadding.Left);
-        Assert.Equal(0, _sub.DockPadding.Right);
-        Assert.False(_sub.DoubleBuffered);
-        Assert.True(_sub.Enabled);
-        Assert.NotNull(_sub.Events);
-        Assert.Same(_sub.Events, _sub.Events);
-        Assert.False(_sub.Focused);
-        Assert.Equal(Control.DefaultFont, _sub.Font);
-        Assert.Equal(_sub.Font.Height, _sub.FontHeight);
-        Assert.Equal(SystemColors.WindowText, _sub.ForeColor);
-        Assert.True(_sub.HasChildren);
-        Assert.Equal(_sub.PreferredHeight, _sub.Height);
-        Assert.NotNull(_sub.HorizontalScroll);
-        Assert.Same(_sub.HorizontalScroll, _sub.HorizontalScroll);
-        Assert.False(_sub.HScroll);
-        Assert.Equal(ImeMode.NoControl, _sub.ImeMode);
-        Assert.Equal(ImeMode.NoControl, _sub.ImeModeBase);
-        Assert.True(_sub.InterceptArrowKeys);
-        Assert.False(_sub.InvokeRequired);
-        Assert.False(_sub.IsAccessible);
-        Assert.False(_sub.IsMirrored);
-        Assert.Empty(_sub.Items);
-        Assert.Same(_sub.Items, _sub.Items);
-        Assert.NotNull(_sub.LayoutEngine);
-        Assert.Same(_sub.LayoutEngine, _sub.LayoutEngine);
-        Assert.Equal(0, _sub.Left);
-        Assert.Equal(Point.Empty, _sub.Location);
-        Assert.Equal(new Padding(3), _sub.Margin);
-        Assert.Equal(Size.Empty, _sub.MaximumSize);
-        Assert.Equal(Size.Empty, _sub.MinimumSize);
-        Assert.Equal(Padding.Empty, _sub.Padding);
-        Assert.Null(_sub.Parent);
-        Assert.Equal(Control.DefaultFont.Height + 7, _sub.PreferredHeight);
-        Assert.Equal("Microsoft\u00AE .NET", _sub.ProductName);
-        Assert.False(_sub.ReadOnly);
-        Assert.False(_sub.RecreatingHandle);
-        Assert.Null(_sub.Region);
-        Assert.True(_sub.ResizeRedraw);
-        Assert.Equal(120, _sub.Right);
-        Assert.Equal(RightToLeft.No, _sub.RightToLeft);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.True(_sub.ShowFocusCues);
-        Assert.True(_sub.ShowKeyboardCues);
-        Assert.Null(_sub.Site);
-        Assert.Equal(new Size(120, _sub.PreferredHeight), _sub.Size);
-        Assert.Equal(0, _sub.TabIndex);
-        Assert.True(_sub.TabStop);
-        Assert.Empty(_sub.Text);
-        Assert.Equal(HorizontalAlignment.Left, _sub.TextAlign);
-        Assert.Equal(0, _sub.Top);
-        Assert.Null(_sub.TopLevelControl);
-        Assert.Equal(LeftRightAlignment.Right, _sub.UpDownAlign);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.UseWaitCursor);
-        Assert.True(_sub.Visible);
-        Assert.NotNull(_sub.VerticalScroll);
-        Assert.Same(_sub.VerticalScroll, _sub.VerticalScroll);
-        Assert.False(_sub.VScroll);
-        Assert.Equal(120, _sub.Width);
-        Assert.False(_sub.Wrap);
+        _sub.Container.Should().BeNull();
+        _sub.ContainsFocus.Should().BeFalse();
+        _sub.ContextMenuStrip.Should().BeNull();
+        _sub.Controls.Should().NotBeNull();
+        _sub.Controls.Should().BeSameAs(_sub.Controls);
+        _sub.Created.Should().BeFalse();
+        _sub.CurrentAutoScaleDimensions.Should().Be(SizeF.Empty);
+        _sub.Cursor.Should().Be(Cursors.Default);
+        _sub.DefaultCursor.Should().Be(Cursors.Default);
+        _sub.DefaultImeMode.Should().Be(ImeMode.Inherit);
+        _sub.DefaultMargin.Should().Be(new Padding(3));
+        _sub.DefaultMaximumSize.Should().Be(Size.Empty);
+        _sub.DefaultMinimumSize.Should().Be(Size.Empty);
+        _sub.DefaultPadding.Should().Be(Padding.Empty);
+        _sub.DefaultSize.Should().Be(new Size(120, _sub.PreferredHeight));
+        _sub.DesignMode.Should().BeFalse();
+        _sub.Dock.Should().Be(DockStyle.None);
+        _sub.DockPadding.Should().NotBeNull();
+        _sub.DockPadding.Should().BeSameAs(_sub.DockPadding);
+        _sub.DockPadding.Top.Should().Be(0);
+        _sub.DockPadding.Bottom.Should().Be(0);
+        _sub.DockPadding.Left.Should().Be(0);
+        _sub.DockPadding.Right.Should().Be(0);
+        _sub.DoubleBuffered.Should().BeFalse();
+        _sub.Enabled.Should().BeTrue();
+        _sub.Events.Should().NotBeNull();
+        _sub.Events.Should().BeSameAs(_sub.Events);
+        _sub.Focused.Should().BeFalse();
+        _sub.Font.Should().Be(Control.DefaultFont);
+        _sub.FontHeight.Should().Be(_sub.Font.Height);
+        _sub.ForeColor.Should().Be(SystemColors.WindowText);
+        _sub.HasChildren.Should().BeTrue();
+        _sub.Height.Should().Be(_sub.PreferredHeight);
+        _sub.HorizontalScroll.Should().NotBeNull();
+        _sub.HorizontalScroll.Should().BeSameAs(_sub.HorizontalScroll);
+        _sub.HScroll.Should().BeFalse();
+        _sub.ImeMode.Should().Be(ImeMode.NoControl);
+        _sub.ImeModeBase.Should().Be(ImeMode.NoControl);
+        _sub.InterceptArrowKeys.Should().BeTrue();
+        _sub.InvokeRequired.Should().BeFalse();
+        _sub.IsAccessible.Should().BeFalse();
+        _sub.IsMirrored.Should().BeFalse();
+        _sub.Items.Count.Should().Be(0);
+        _sub.Items.Should().BeSameAs(_sub.Items);
+        _sub.LayoutEngine.Should().NotBeNull();
+        _sub.LayoutEngine.Should().BeSameAs(_sub.LayoutEngine);
+        _sub.Left.Should().Be(0);
+        _sub.Location.Should().Be(Point.Empty);
+        _sub.Margin.Should().Be(new Padding(3));
+        _sub.MaximumSize.Should().Be(Size.Empty);
+        _sub.MinimumSize.Should().Be(Size.Empty);
+        _sub.Padding.Should().Be(Padding.Empty);
+        _sub.Parent.Should().BeNull();
+        _sub.PreferredHeight.Should().Be(Control.DefaultFont.Height + 7);
+        _sub.ProductName.Should().Be("Microsoft\u00AE .NET");
+        _sub.ReadOnly.Should().BeFalse();
+        _sub.RecreatingHandle.Should().BeFalse();
+        _sub.Region.Should().BeNull();
+        _sub.ResizeRedraw.Should().BeTrue();
+        _sub.Right.Should().Be(120);
+        _sub.RightToLeft.Should().Be(RightToLeft.No);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.ShowFocusCues.Should().BeTrue();
+        _sub.ShowKeyboardCues.Should().BeTrue();
+        _sub.Site.Should().BeNull();
+        _sub.Size.Should().Be(new Size(120, _sub.PreferredHeight));
+        _sub.TabIndex.Should().Be(0);
+        _sub.TabStop.Should().BeTrue();
+        _sub.Text.Should().BeEmpty();
+        _sub.TextAlign.Should().Be(HorizontalAlignment.Left);
+        _sub.Top.Should().Be(0);
+        _sub.TopLevelControl.Should().BeNull();
+        _sub.UpDownAlign.Should().Be(LeftRightAlignment.Right);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.UseWaitCursor.Should().BeFalse();
+        _sub.Visible.Should().BeTrue();
+        _sub.VerticalScroll.Should().NotBeNull();
+        _sub.VerticalScroll.Should().BeSameAs(_sub.VerticalScroll);
+        _sub.VScroll.Should().BeFalse();
+        _sub.Width.Should().Be(120);
+        _sub.Wrap.Should().BeFalse();
 
-        Assert.False(_sub.IsHandleCreated);
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void DomainUpDown_CreateParams_GetDefault_ReturnsExpected()
     {
         CreateParams createParams = _sub.CreateParams;
-        Assert.Null(createParams.Caption);
-        Assert.Null(createParams.ClassName);
+        createParams.Caption.Should().BeNull();
+        createParams.ClassName.Should().BeNull();
 
-        Assert.Equal(WNDCLASS_STYLES.CS_DBLCLKS, (WNDCLASS_STYLES)createParams.ClassStyle);
-        Assert.Equal(WINDOW_STYLE.WS_MAXIMIZEBOX | WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS
-            | WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD, (WINDOW_STYLE)createParams.Style);
+        ((WNDCLASS_STYLES)createParams.ClassStyle).Should().Be(WNDCLASS_STYLES.CS_DBLCLKS);
+        ((WINDOW_STYLE)createParams.Style).Should().Be(WINDOW_STYLE.WS_MAXIMIZEBOX | WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS
+            | WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD);
 
         if (Application.UseVisualStyles)
         {
-            Assert.Equal(WINDOW_EX_STYLE.WS_EX_CONTROLPARENT, (WINDOW_EX_STYLE)createParams.ExStyle);
+            ((WINDOW_EX_STYLE)createParams.ExStyle).Should().Be(WINDOW_EX_STYLE.WS_EX_CONTROLPARENT);
         }
         else
         {
-            Assert.Equal(WINDOW_EX_STYLE.WS_EX_CLIENTEDGE | WINDOW_EX_STYLE.WS_EX_CONTROLPARENT, (WINDOW_EX_STYLE)createParams.ExStyle);
+            ((WINDOW_EX_STYLE)createParams.ExStyle).Should().Be(WINDOW_EX_STYLE.WS_EX_CLIENTEDGE | WINDOW_EX_STYLE.WS_EX_CONTROLPARENT);
         }
 
-        Assert.Equal(_sub.PreferredHeight, createParams.Height);
-        Assert.Equal(IntPtr.Zero, createParams.Parent);
-        Assert.Null(createParams.Param);
-        Assert.Equal(120, createParams.Width);
-        Assert.Equal(0, createParams.X);
-        Assert.Equal(0, createParams.Y);
-        Assert.Same(createParams, _sub.CreateParams);
-        Assert.False(_sub.IsHandleCreated);
+        createParams.Height.Should().Be(_sub.PreferredHeight);
+        createParams.Parent.Should().Be(IntPtr.Zero);
+        createParams.Param.Should().BeNull();
+        createParams.Width.Should().Be(120);
+        createParams.X.Should().Be(0);
+        createParams.Y.Should().Be(0);
+        createParams.Should().BeSameAs(_sub.CreateParams);
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -190,20 +189,19 @@ public class DomainUpDownTests : IDisposable
     {
         _control.Padding = value;
 
-        Assert.Equal(expected, _control.Padding);
-        Assert.False(_control.IsHandleCreated);
+        _control.Padding.Should().Be(expected);
+        _control.IsHandleCreated.Should().BeFalse();
 
-        // Set same.
         _control.Padding = value;
-        Assert.Equal(expected, _control.Padding);
-        Assert.False(_control.IsHandleCreated);
+        _control.Padding.Should().Be(expected);
+        _control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void DomainUpDown_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        Assert.NotEqual(IntPtr.Zero, _control.Handle);
+        _control.Handle.Should().NotBe(IntPtr.Zero);
         int invalidatedCallCount = 0;
         _control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -212,19 +210,18 @@ public class DomainUpDownTests : IDisposable
         _control.HandleCreated += (sender, e) => createdCallCount++;
 
         _control.Padding = value;
-        Assert.Equal(expected, _control.Padding);
-        Assert.True(_control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _control.Padding.Should().Be(expected);
+        _control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
-        // Set same.
         _control.Padding = value;
-        Assert.Equal(expected, _control.Padding);
-        Assert.True(_control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _control.Padding.Should().Be(expected);
+        _control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
@@ -233,8 +230,8 @@ public class DomainUpDownTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
-            Assert.Equal(_control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().Be(_control);
+            e.Should().Be(EventArgs.Empty);
             callCount++;
         };
         _control.PaddingChanged += handler;
@@ -242,25 +239,25 @@ public class DomainUpDownTests : IDisposable
         // Set different.
         Padding padding1 = new(1);
         _control.Padding = padding1;
-        Assert.Equal(padding1, _control.Padding);
-        Assert.Equal(1, callCount);
+        _control.Padding.Should().Be(padding1);
+        callCount.Should().Be(1);
 
         // Set same.
         _control.Padding = padding1;
-        Assert.Equal(padding1, _control.Padding);
-        Assert.Equal(1, callCount);
+        _control.Padding.Should().Be(padding1);
+        callCount.Should().Be(1);
 
         // Set different.
         Padding padding2 = new(2);
         _control.Padding = padding2;
-        Assert.Equal(padding2, _control.Padding);
-        Assert.Equal(2, callCount);
+        _control.Padding.Should().Be(padding2);
+        callCount.Should().Be(2);
 
         // Remove handler.
         _control.PaddingChanged -= handler;
         _control.Padding = padding1;
-        Assert.Equal(padding1, _control.Padding);
-        Assert.Equal(2, callCount);
+        _control.Padding.Should().Be(padding1);
+        callCount.Should().Be(2);
     }
 
     [WinFormsFact]
@@ -268,21 +265,20 @@ public class DomainUpDownTests : IDisposable
     {
         _sub.SelectedIndex = -1;
 
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
-        // Set same.
         _sub.SelectedIndex = -1;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -295,30 +291,30 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("Item2");
 
         _sub.SelectedIndex = value;
-        Assert.Equal(value, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(value);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.SelectedIndex = value;
-        Assert.Equal(value, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(value);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set none.
         _sub.SelectedIndex = -1;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -332,33 +328,33 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("Item2");
 
         _sub.SelectedIndex = value;
-        Assert.Equal(value, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(!expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(value);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(!expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.SelectedIndex = value;
-        Assert.Equal(value, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(!expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(value);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(!expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set none.
         _sub.SelectedIndex = -1;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.True(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeTrue();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
-    [WinFormsFact]
+   [WinFormsFact]
     public void DomainUpDown_SelectedIndex_SetWithHandler_CallsSelectedItemChanged()
     {
         _control.Items.Add("Item1");
@@ -368,15 +364,15 @@ public class DomainUpDownTests : IDisposable
         int callCount = 0;
         EventHandler textChangedHandler = (sender, e) =>
         {
-            Assert.Same(_control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().Be(_control);
+            e.Should().Be(EventArgs.Empty);
             textChangedCallCount++;
         };
         EventHandler handler = (sender, e) =>
         {
-            Assert.Same(_control, sender);
-            Assert.Same(EventArgs.Empty, e);
-            Assert.Equal(textChangedCallCount - 1, callCount);
+            sender.Should().Be(_control);
+            e.Should().Be(EventArgs.Empty);
+            (textChangedCallCount - 1).Should().Be(callCount);
             callCount++;
         };
         _control.TextChanged += textChangedHandler;
@@ -384,35 +380,35 @@ public class DomainUpDownTests : IDisposable
 
         // Set different.
         _control.SelectedIndex = 0;
-        Assert.Equal(0, _control.SelectedIndex);
-        Assert.Equal(1, textChangedCallCount);
-        Assert.Equal(1, callCount);
+        _control.SelectedIndex.Should().Be(0);
+        textChangedCallCount.Should().Be(1);
+        callCount.Should().Be(1);
 
         // Set same.
         _control.SelectedIndex = 0;
-        Assert.Equal(0, _control.SelectedIndex);
-        Assert.Equal(1, textChangedCallCount);
-        Assert.Equal(1, callCount);
+        _control.SelectedIndex.Should().Be(0);
+        textChangedCallCount.Should().Be(1);
+        callCount.Should().Be(1);
 
         // Set different.
         _control.SelectedIndex = 1;
-        Assert.Equal(1, _control.SelectedIndex);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedIndex.Should().Be(1);
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
 
         // Set none.
         _control.SelectedIndex = -1;
-        Assert.Equal(-1, _control.SelectedIndex);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedIndex.Should().Be(-1);
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
 
         // Remove handler.
         _control.TextChanged -= textChangedHandler;
         _control.SelectedItemChanged -= handler;
         _control.SelectedIndex = 0;
-        Assert.Equal(0, _control.SelectedIndex);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedIndex.Should().Be(0);
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
     }
 
     [WinFormsTheory]
@@ -421,7 +417,7 @@ public class DomainUpDownTests : IDisposable
     [InlineData(1)]
     public void DomainUpDown_SelectedIndex_SetInvalidValueEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
-        Assert.Throws<ArgumentOutOfRangeException>("value", () => _control.SelectedIndex = value);
+        _control.Invoking(c => c.SelectedIndex = value).Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("value");
     }
 
     [WinFormsTheory]
@@ -431,7 +427,7 @@ public class DomainUpDownTests : IDisposable
     public void DomainUpDown_SelectedIndex_SetInvalidValueNotEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
         _control.Items.Add("Item");
-        Assert.Throws<ArgumentOutOfRangeException>("value", () => _control.SelectedIndex = value);
+        _control.Invoking(c => c.SelectedIndex = value).Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("value");
     }
 
     [WinFormsTheory]
@@ -440,21 +436,21 @@ public class DomainUpDownTests : IDisposable
     public void DomainUpDown_SelectedItem_SetEmpty_Nop(object value)
     {
         _sub.SelectedItem = value;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.SelectedItem = value;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -468,39 +464,39 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("Item2");
 
         _sub.SelectedItem = value;
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.SelectedItem = value;
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set no such item.
         _sub.SelectedItem = "NoSuchItem";
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set none.
         _sub.SelectedItem = null;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -515,39 +511,39 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("Item2");
 
         _sub.SelectedItem = value;
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(!expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(!expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.SelectedItem = value;
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(!expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(!expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set no such item.
         _sub.SelectedItem = "NoSuchItem";
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(expected, _sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.Equal(!expectedUserEdit, _sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.SelectedItem.Should().Be(expected);
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().Be(!expectedUserEdit);
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set none.
         _sub.SelectedItem = null;
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Null(_sub.SelectedItem);
-        Assert.Equal(expectedText, _sub.Text);
-        Assert.True(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.SelectedItem.Should().BeNull();
+        _sub.Text.Should().Be(expectedText);
+        _sub.UserEdit.Should().BeTrue();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -560,15 +556,15 @@ public class DomainUpDownTests : IDisposable
         int callCount = 0;
         EventHandler textChangedHandler = (sender, e) =>
         {
-            Assert.Same(_control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().Be(_control);
+            e.Should().Be(EventArgs.Empty);
             textChangedCallCount++;
         };
         EventHandler handler = (sender, e) =>
         {
-            Assert.Same(_control, sender);
-            Assert.Same(EventArgs.Empty, e);
-            Assert.Equal(textChangedCallCount - 1, callCount);
+            sender.Should().Be(_control);
+            e.Should().Be(EventArgs.Empty);
+            (textChangedCallCount - 1).Should().Be(callCount);
             callCount++;
         };
         _control.TextChanged += textChangedHandler;
@@ -576,35 +572,35 @@ public class DomainUpDownTests : IDisposable
 
         // Set different.
         _control.SelectedItem = "Item1";
-        Assert.Equal("Item1", _control.SelectedItem);
-        Assert.Equal(1, textChangedCallCount);
-        Assert.Equal(1, callCount);
+        _control.SelectedItem.Should().Be("Item1");
+        textChangedCallCount.Should().Be(1);
+        callCount.Should().Be(1);
 
         // Set same.
         _control.SelectedItem = "Item1";
-        Assert.Equal("Item1", _control.SelectedItem);
-        Assert.Equal(1, textChangedCallCount);
-        Assert.Equal(1, callCount);
+        _control.SelectedItem.Should().Be("Item1");
+        textChangedCallCount.Should().Be(1);
+        callCount.Should().Be(1);
 
         // Set different.
         _control.SelectedItem = "Item2";
-        Assert.Equal("Item2", _control.SelectedItem);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedItem.Should().Be("Item2");
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
 
         // Set none.
         _control.SelectedItem = null;
-        Assert.Null(_control.SelectedItem);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedItem.Should().BeNull();
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
 
         // Remove handler.
         _control.TextChanged -= textChangedHandler;
         _control.SelectedItemChanged -= handler;
         _control.SelectedItem = "Item1";
-        Assert.Equal("Item1", _control.SelectedItem);
-        Assert.Equal(2, textChangedCallCount);
-        Assert.Equal(2, callCount);
+        _control.SelectedItem.Should().Be("Item1");
+        textChangedCallCount.Should().Be(2);
+        callCount.Should().Be(2);
     }
 
     public static IEnumerable<object[]> Sorted_Set_TestData()
@@ -623,27 +619,27 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
         _sub.Sorted = value;
 
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> Sorted_WithItems_TestData()
@@ -667,26 +663,26 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
 
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Equal(new string[] { "a", "a", "B", "c", "d" }, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> Sorted_WithItemsWithSelection_TestData()
@@ -710,26 +706,26 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
 
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Equal(new string[] { "a", "a", "B", "c", "d" }, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -737,7 +733,7 @@ public class DomainUpDownTests : IDisposable
     public void DomainUpDown_Sorted_SetWithHandle_GetReturnsExpected(bool userEdit, bool value)
     {
         _sub.UserEdit = userEdit;
-        Assert.NotEqual(IntPtr.Zero, _sub.Handle);
+        _sub.Handle.Should().NotBe(IntPtr.Zero);
         int invalidatedCallCount = 0;
         _sub.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -746,36 +742,36 @@ public class DomainUpDownTests : IDisposable
         _sub.HandleCreated += (sender, e) => createdCallCount++;
 
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Empty(_sub.Items);
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Count.Should().Be(0);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -787,7 +783,7 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("a");
         _sub.Items.Add("a");
         _sub.Items.Add("d");
-        Assert.NotEqual(IntPtr.Zero, _sub.Handle);
+        _sub.Handle.Should().NotBe(IntPtr.Zero);
         int invalidatedCallCount = 0;
         _sub.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -797,35 +793,35 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
 
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Equal(new string[] { "a", "a", "B", "c", "d" }, _sub.Items.Cast<string>());
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -837,7 +833,7 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("a");
         _sub.Items.Add("a");
         _sub.Items.Add("d");
-        Assert.NotEqual(IntPtr.Zero, _sub.Handle);
+        _sub.Handle.Should().NotBe(IntPtr.Zero);
         int invalidatedCallCount = 0;
         _sub.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -848,35 +844,35 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
 
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         _sub.Sorted = value;
-        Assert.Equal(value, _sub.Sorted);
-        Assert.Equal(expectedItems, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(value);
+        _sub.Items.Cast<string>().Should().Equal(expectedItems);
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         _sub.Sorted = !value;
-        Assert.Equal(!value, _sub.Sorted);
-        Assert.Equal(new string[] { "a", "a", "B", "c", "d" }, _sub.Items.Cast<string>());
-        Assert.Equal(expectedSelectedIndex, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
-        Assert.True(_sub.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _sub.Sorted.Should().Be(!value);
+        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
+        _sub.UserEdit.Should().Be(userEdit);
+        _sub.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -885,25 +881,25 @@ public class DomainUpDownTests : IDisposable
     {
         _control.Wrap = value;
 
-        Assert.Equal(value, _control.Wrap);
-        Assert.False(_control.IsHandleCreated);
+        _control.Wrap.Should().Be(value);
+        _control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         _control.Wrap = value;
-        Assert.Equal(value, _control.Wrap);
-        Assert.False(_control.IsHandleCreated);
+        _control.Wrap.Should().Be(value);
+        _control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         _control.Wrap = !value;
-        Assert.Equal(!value, _control.Wrap);
-        Assert.False(_control.IsHandleCreated);
+        _control.Wrap.Should().Be(!value);
+        _control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
     [BoolData]
     public void DomainUpDown_Wrap_SetWithHandle_GetReturnsExpected(bool value)
     {
-        Assert.NotEqual(IntPtr.Zero, _control.Handle);
+        _control.Handle.Should().NotBe(IntPtr.Zero);
         int invalidatedCallCount = 0;
         _control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -912,50 +908,51 @@ public class DomainUpDownTests : IDisposable
         _control.HandleCreated += (sender, e) => createdCallCount++;
 
         _control.Wrap = value;
-        Assert.Equal(value, _control.Wrap);
-        Assert.True(_control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _control.Wrap.Should().Be(value);
+        _control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         _control.Wrap = value;
-        Assert.Equal(value, _control.Wrap);
-        Assert.True(_control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _control.Wrap.Should().Be(value);
+        _control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         _control.Wrap = !value;
-        Assert.Equal(!value, _control.Wrap);
-        Assert.True(_control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        _control.Wrap.Should().Be(!value);
+        _control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void DomainUpDown_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(_sub.CreateAccessibilityInstance());
-        Assert.NotNull(instance);
-        Assert.Same(_sub, instance.Owner);
-        Assert.Equal(AccessibleRole.SpinButton, instance.Role);
-        Assert.NotSame(_sub.CreateAccessibilityInstance(), instance);
-        Assert.NotSame(_sub.AccessibilityObject, instance);
+        UpDownBase.UpDownBaseAccessibleObject instance = _sub.CreateAccessibilityInstance() as UpDownBase.UpDownBaseAccessibleObject;
+        instance.Should().NotBeNull().And.BeOfType<UpDownBase.UpDownBaseAccessibleObject>();
+        instance.Owner.Should().Be(_sub);
+        instance.Role.Should().Be(AccessibleRole.SpinButton);
+        _sub.CreateAccessibilityInstance().Should().NotBeSameAs(instance);
+        _sub.AccessibilityObject.Should().NotBeSameAs(instance);
     }
 
     [WinFormsFact]
     public void DomainUpDown_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
         _sub.AccessibleRole = AccessibleRole.HelpBalloon;
-        Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(_sub.CreateAccessibilityInstance());
-        Assert.NotNull(instance);
-        Assert.Same(_sub, instance.Owner);
-        Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
-        Assert.NotSame(_sub.CreateAccessibilityInstance(), instance);
-        Assert.NotSame(_sub.AccessibilityObject, instance);
+        var instance = _sub.CreateAccessibilityInstance() as UpDownBase.UpDownBaseAccessibleObject;
+    
+        instance.Should().NotBeNull().And.BeOfType<UpDownBase.UpDownBaseAccessibleObject>();
+        instance.Owner.Should().Be(_sub);
+        instance.Role.Should().Be(AccessibleRole.HelpBalloon);
+        _sub.CreateAccessibilityInstance().Should().NotBeSameAs(instance);
+        _sub.AccessibilityObject.Should().NotBeSameAs(instance);
     }
 
     public static IEnumerable<object[]> DownButton_TestData()
@@ -977,13 +974,13 @@ public class DomainUpDownTests : IDisposable
         _sub.Wrap = wrap;
 
         _sub.DownButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
 
         // Call again.
         _sub.DownButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
     }
 
     [WinFormsTheory]
@@ -993,16 +990,16 @@ public class DomainUpDownTests : IDisposable
         _sub.UserEdit = userEdit;
         _sub.Wrap = wrap;
 
-        Assert.Empty(_sub.Items);
+        _sub.Items.Count.Should().Be(0);
 
         _sub.DownButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
 
         // Call again.
         _sub.DownButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
     }
 
     public static IEnumerable<object[]> DownButton_WithItems_TestData()
@@ -1024,29 +1021,29 @@ public class DomainUpDownTests : IDisposable
         _sub.Items.Add("c");
 
         _sub.DownButton();
-        Assert.Equal(0, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(0);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.DownButton();
-        Assert.Equal(1, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(1);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.DownButton();
-        Assert.Equal(2, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(2);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.DownButton();
-        Assert.Equal(expectedWrapSelectedIndex, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(expectedWrapSelectedIndex);
+        _sub.UserEdit.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void DomainUpDown_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        Assert.Equal(AutoSizeMode.GrowOnly, _sub.GetAutoSizeMode());
+        _sub.GetAutoSizeMode().Should().Be(AutoSizeMode.GrowOnly);
     }
 
     [WinFormsTheory]
@@ -1060,7 +1057,7 @@ public class DomainUpDownTests : IDisposable
     [InlineData((-1), false)]
     public void DomainUpDown_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        Assert.Equal(expected, _sub.GetScrollState(bit));
+        _sub.GetScrollState(bit).Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -1086,16 +1083,16 @@ public class DomainUpDownTests : IDisposable
     [InlineData((ControlStyles)(-1), false)]
     public void DomainUpDown_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        Assert.Equal(expected, _sub.GetStyle(flag));
+        _sub.GetStyle(flag).Should().Be(expected);
 
         // Call again to test caching.
-        Assert.Equal(expected, _sub.GetStyle(flag));
+        _sub.GetStyle(flag).Should().Be(expected);
     }
 
     [WinFormsFact]
     public void DomainUpDown_GetTopLevel_Invoke_ReturnsExpected()
     {
-        Assert.False(_sub.GetTopLevel());
+        _sub.GetTopLevel().Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -1119,14 +1116,15 @@ public class DomainUpDownTests : IDisposable
         _control.Items.Add("foo3");
         _control.Items.Add("Cowman");
         _control.Items.Add("foo4");
-        Assert.Equal(expected, _control.MatchIndex(text, false, start));
+        _control.MatchIndex(text, false, start).Should().Be(expected);
     }
 
     [WinFormsFact]
     public void DomainUpDown_MatchIndex_NullText_ThrowsNullReferenceException()
     {
         _control.Items.Add("item1");
-        Assert.Throws<NullReferenceException>(() => _control.MatchIndex(null, false, 0));
+        Action act = () => _control.MatchIndex(null, false, 0);
+        act.Should().Throw<NullReferenceException>();
     }
 
     public static IEnumerable<object[]> OnChanged_TestData()
@@ -1142,20 +1140,20 @@ public class DomainUpDownTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
-            Assert.Same(_sub, sender);
-            Assert.Same(eventArgs, e);
+            sender.Should().Be(_sub);
+            e.Should().Be(eventArgs);
             callCount++;
         };
 
-        // Call with handler.
-        _sub.SelectedItemChanged += handler;
-        _sub.OnSelectedItemChanged(source, eventArgs);
-        Assert.Equal(1, callCount);
+    // Call with handler.
+    _sub.SelectedItemChanged += handler;
+    _sub.OnSelectedItemChanged(source, eventArgs);
+    callCount.Should().Be(1);
 
-        // Remove handler.
-        _sub.SelectedItemChanged -= handler;
-        _sub.OnSelectedItemChanged(source, eventArgs);
-        Assert.Equal(1, callCount);
+    // Remove handler.
+    _sub.SelectedItemChanged -= handler;
+    _sub.OnSelectedItemChanged(source, eventArgs);
+    callCount.Should().Be(1);
     }
 
     [WinFormsTheory]
@@ -1165,20 +1163,20 @@ public class DomainUpDownTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
-            Assert.Same(_sub, sender);
-            Assert.Same(eventArgs, e);
+            sender.Should().Be(_sub);
+            e.Should().Be(eventArgs);
             callCount++;
         };
 
         // Call with handler.
         _sub.SelectedItemChanged += handler;
         _sub.OnSelectedItemChanged(source, eventArgs);
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
 
         // Remove handler.
         _sub.SelectedItemChanged -= handler;
         _sub.OnSelectedItemChanged(source, eventArgs);
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
     }
 
     public static IEnumerable<object[]> UpButton_TestData()
@@ -1200,32 +1198,32 @@ public class DomainUpDownTests : IDisposable
         _sub.Wrap = wrap;
 
         _sub.UpButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
 
         // Call again.
         _sub.UpButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
     }
 
     [WinFormsTheory]
     [MemberData(nameof(UpButton_TestData))]
     public void DomainUpDown_UpButton_InvokeEmpty_Nop(bool userEdit, bool wrap)
     {
-         _sub.UserEdit = userEdit;
+        _sub.UserEdit = userEdit;
         _sub.Wrap = wrap;
 
-        Assert.Empty(_sub.Items);
+        _sub.Items.Count.Should().Be(0);
 
         _sub.UpButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
 
         // Call again.
         _sub.UpButton();
-        Assert.Equal(-1, _sub.SelectedIndex);
-        Assert.Equal(userEdit, _sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(-1);
+        _sub.UserEdit.Should().Be(userEdit);
     }
 
     public static IEnumerable<object[]> UpButton_WithItems_TestData()
@@ -1248,23 +1246,23 @@ public class DomainUpDownTests : IDisposable
         _sub.SelectedIndex = 2;
 
         _sub.UpButton();
-        Assert.Equal(1, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(1);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.UpButton();
-        Assert.Equal(0, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(0);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.UpButton();
-        Assert.Equal(expectedWrapSelectedIndex1, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(expectedWrapSelectedIndex1);
+        _sub.UserEdit.Should().BeFalse();
 
         // Call again.
         _sub.UpButton();
-        Assert.Equal(expectedWrapSelectedIndex2, _sub.SelectedIndex);
-        Assert.False(_sub.UserEdit);
+        _sub.SelectedIndex.Should().Be(expectedWrapSelectedIndex2);
+        _sub.UserEdit.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -1278,17 +1276,17 @@ public class DomainUpDownTests : IDisposable
         _sub.ChangingText = changingText;
 
         _sub.UpdateEditText();
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Call again.
         _sub.UpdateEditText();
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -1304,17 +1302,17 @@ public class DomainUpDownTests : IDisposable
         _sub.ChangingText = changingText;
 
         _sub.UpdateEditText();
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Call again.
         _sub.UpdateEditText();
-        Assert.Empty(_sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().BeEmpty();
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -1332,17 +1330,17 @@ public class DomainUpDownTests : IDisposable
         _sub.ChangingText = changingText;
 
         _sub.UpdateEditText();
-        Assert.Equal("Item1", _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().Be("Item1");
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
 
         // Call again.
         _sub.UpdateEditText();
-        Assert.Equal("Item1", _sub.Text);
-        Assert.False(_sub.UserEdit);
-        Assert.False(_sub.ChangingText);
-        Assert.False(_sub.IsHandleCreated);
+        _sub.Text.Should().Be("Item1");
+        _sub.UserEdit.Should().BeFalse();
+        _sub.ChangingText.Should().BeFalse();
+        _sub.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
