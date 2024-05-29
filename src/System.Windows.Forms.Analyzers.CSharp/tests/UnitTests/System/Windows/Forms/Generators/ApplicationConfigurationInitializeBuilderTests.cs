@@ -48,7 +48,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
 
     public static TheoryData<CultureInfo, object, string> GenerateInitializeData()
     {
-        var testData = new TheoryData<CultureInfo, object, string>();
+        TheoryData<CultureInfo, object, string> testData = new();
 
         foreach (string cultureName in s_locales)
         {
