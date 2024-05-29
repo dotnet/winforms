@@ -39,7 +39,7 @@ namespace MyProject
 
     public static TheoryData<OutputKind> UnsupportedProjectTypes_TestData()
     {
-        var testData = new TheoryData<OutputKind>();
+        TheoryData<OutputKind> testData = new();
 
         foreach (OutputKind projectType in Enum.GetValues(typeof(OutputKind)))
         {

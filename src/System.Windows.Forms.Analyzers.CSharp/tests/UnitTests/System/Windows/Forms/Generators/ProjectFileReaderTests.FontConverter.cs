@@ -57,9 +57,9 @@ public partial class ProjectFileReaderTests
         }
 
         [Theory]
-        #pragma warning disable xUnit1042 // The member referenced by the MemberData attribute returns untyped data rows
+#pragma warning disable xUnit1042 // The member referenced by the MemberData attribute returns untyped data rows
         [MemberData(nameof(TestConvertFormData))]
-        #pragma warning restore xUnit1042 // The member referenced by the MemberData attribute returns untyped data rows
+#pragma warning restore xUnit1042
         internal void TestConvertFrom(CultureInfo culture, string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
         {
             Thread.CurrentThread.CurrentCulture = culture;
