@@ -1623,5 +1623,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="DesignBindingPickerHelpNodeProjectGroup" xml:space="preserve">
     <value>Contains project data sources belonging to this namespace.</value>
   </data>
-
+  <data name="CollectionEditorCreateInstanceError" xml:space="preserve">
+    <value>Neither {0} nor {1} can create an instance of {2}.</value>
+  </data>
 </root>
