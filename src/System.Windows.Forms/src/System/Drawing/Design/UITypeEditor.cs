@@ -25,6 +25,12 @@ public class UITypeEditor
 
     static UITypeEditor()
     {
+        // Trimming doesn't support UITypeEditor
+        if (!IsSupported)
+        {
+            return;
+        }
+
         // Our set of intrinsic editors.
         Hashtable intrinsicEditors = new Hashtable
         {
@@ -51,11 +57,6 @@ public class UITypeEditor
             [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {AssemblyRef.SystemDrawingDesign}",
             [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
         };
-
-        if (!IsSupported)
-        {
-            return;
-        }
 
         // Add our intrinsic editors to TypeDescriptor.
         TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);

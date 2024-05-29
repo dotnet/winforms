@@ -48,7 +48,7 @@
      <RuntimeHostConfigurationOption Include="System.Windows.Forms.ImageIndexConverter.IsSupported"
                                     Value="false"
                                     Trim="true" />
-    <RuntimeHostConfigurationOption Include="System.ComponentModel.TypeConverterHelper.UseComponentModelRegisteredTypes"
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Primitives.TypeConverterHelper.UseComponentModelRegisteredTypes"
                                     Value="true"
                                     Trim="true" />
     <RuntimeHostConfigurationOption Include="System.Windows.Forms.Control.UseComponentModelRegisteredTypes"
