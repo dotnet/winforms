@@ -14,8 +14,8 @@ public class DomainUpDownTests : IDisposable
 
     public DomainUpDownTests()
     {
-        _control = new DomainUpDown();
-        _sub= new SubDomainUpDown();
+        _control = new();
+        _sub= new();
     }
 
     public void Dispose()
