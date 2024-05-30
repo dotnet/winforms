@@ -44,7 +44,7 @@ internal readonly struct ARGB
     public static implicit operator Color(ARGB argb) => Color.FromArgb((int)argb.Value);
     public static implicit operator uint(ARGB argb) => argb.Value;
 
-    public static Color[] ToColorArray(ReadOnlySpan<ARGB> argbColors)
+    public static Color[] ToColorArray(params ReadOnlySpan<ARGB> argbColors)
     {
         Color[] colors = new Color[argbColors.Length];
         for (int i = 0; i < argbColors.Length; i++)
@@ -55,7 +55,8 @@ internal readonly struct ARGB
         return colors;
     }
 
-    public static Color[] ToColorArray(ReadOnlySpan<uint> argbColors) => ToColorArray(MemoryMarshal.CreateReadOnlySpan(
-        ref Unsafe.As<uint, ARGB>(ref MemoryMarshal.GetReference(argbColors)),
-        argbColors.Length));
+    public static Color[] ToColorArray(params ReadOnlySpan<uint> argbColors) => ToColorArray(
+        MemoryMarshal.CreateReadOnlySpan(
+            ref Unsafe.As<uint, ARGB>(ref MemoryMarshal.GetReference(argbColors)),
+            argbColors.Length));
 }
