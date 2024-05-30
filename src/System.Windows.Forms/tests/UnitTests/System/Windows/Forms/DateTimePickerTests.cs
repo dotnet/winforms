@@ -13,15 +13,9 @@ public class DateTimePickerTests: IDisposable
 {
     private readonly DateTimePicker _dateTimePicker;
 
-    public DateTimePickerTests()
-    {
-        _dateTimePicker = new();
-    }
+    public DateTimePickerTests() => _dateTimePicker = new();
 
-    public void Dispose()
-    {
-        _dateTimePicker.Dispose();
-    }
+    public void Dispose() => _dateTimePicker.Dispose();
 
     [WinFormsFact]
     public void DateTimePicker_Ctor_Default()
@@ -313,7 +307,7 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.CustomFormat.Should().BeNull();
 
-        _dateTimePicker.Value = new DateTime(2021, 12, 31);
+        _dateTimePicker.Value = new(2021, 12, 31);
         _dateTimePicker.CreateControl();
 
         _dateTimePicker.CustomFormat = "yyyy/MM/dd";
@@ -344,7 +338,7 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.MaxDate.ToString().Should().Be("12/31/9998 12:00:00 AM");
 
-        var expectedDate = new DateTime(2022, 12, 31);
+        DateTime expectedDate = new(2022, 12, 31);
         _dateTimePicker.MaxDate = expectedDate;
         _dateTimePicker.MaxDate.Should().Be(expectedDate);
     }
@@ -374,7 +368,7 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.MinDate.ToString().Should().Be("1/1/1753 12:00:00 AM");
 
-        var expectedDate = new DateTime(2022, 1, 1);
+        DateTime expectedDate = new(2022, 1, 1);
         _dateTimePicker.MinDate = expectedDate;
         _dateTimePicker.MinDate.Should().Be(expectedDate);
     }
@@ -435,7 +429,7 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_Value_GetSet_ReturnsExpected()
     {
-        var expectedDate = new DateTime(2022, 1, 1);
+        DateTime expectedDate = new(2022, 1, 1);
 
         _dateTimePicker.Value = expectedDate;
         _dateTimePicker.Value.Should().Be(expectedDate);
