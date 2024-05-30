@@ -358,7 +358,7 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
 #else
     private
 #endif
-    void TransformVectors(ReadOnlySpan<Point> pts)
+    void TransformVectors(params ReadOnlySpan<Point> pts)
     {
         fixed (Point* p = pts)
         {

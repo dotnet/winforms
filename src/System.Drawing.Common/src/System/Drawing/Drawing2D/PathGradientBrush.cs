@@ -5,14 +5,35 @@ using System.ComponentModel;
 
 namespace System.Drawing.Drawing2D;
 
+/// <summary>
+///  Encapsulates a <see cref="Brush"/> object that fills the interior of a <see cref="GraphicsPath"/> object with a gradient.
+/// </summary>
 public sealed unsafe class PathGradientBrush : Brush
 {
-    public PathGradientBrush(PointF[] points) : this(points, WrapMode.Clamp) { }
+    /// <summary>
+    ///  Initializes a new instance of the <see cref="PathGradientBrush"/> class with the specified points.
+    /// </summary>
+    public PathGradientBrush(params PointF[] points) : this(points, WrapMode.Clamp) { }
 
-    public PathGradientBrush(PointF[] points, WrapMode wrapMode)
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="PathGradientBrush(PointF[])"/>
+    public PathGradientBrush(params ReadOnlySpan<PointF> points) : this(WrapMode.Clamp, points) { }
+#endif
+
+    /// <summary>
+    ///  Initializes a new instance of the <see cref="PathGradientBrush"/> class with the specified points and
+    ///  <see cref="WrapMode"/>.
+    /// </summary>
+    public PathGradientBrush(PointF[] points, WrapMode wrapMode) : this(wrapMode, points.OrThrowIfNull().AsSpan()) { }
+
+    /// <inheritdoc cref="PathGradientBrush(PointF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    PathGradientBrush(WrapMode wrapMode, params ReadOnlySpan<PointF> points)
     {
-        ArgumentNullException.ThrowIfNull(points);
-
         if (wrapMode is < WrapMode.Tile or > WrapMode.Clamp)
             throw new InvalidEnumArgumentException(nameof(wrapMode), (int)wrapMode, typeof(WrapMode));
 
@@ -32,23 +53,27 @@ public sealed unsafe class PathGradientBrush : Brush
         }
     }
 
+    /// <inheritdoc cref="PathGradientBrush(PointF[])"/>
     public PathGradientBrush(params Point[] points) : this(points, WrapMode.Clamp) { }
 
+    /// <inheritdoc cref="PathGradientBrush(PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    PathGradientBrush(params ReadOnlySpan<Point> points) : this(points, WrapMode.Clamp) { }
+    PathGradientBrush(params ReadOnlySpan<Point> points) : this(WrapMode.Clamp, points) { }
 
-    public PathGradientBrush(Point[] points, WrapMode wrapMode) : this(points.OrThrowIfNull().AsSpan(), wrapMode) { }
+    /// <inheritdoc cref="PathGradientBrush(PointF[], WrapMode)"/>
+    public PathGradientBrush(Point[] points, WrapMode wrapMode) : this(wrapMode, points.OrThrowIfNull().AsSpan()) { }
 
+    /// <inheritdoc cref="PathGradientBrush(PointF[], WrapMode)"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    PathGradientBrush(ReadOnlySpan<Point> points, WrapMode wrapMode)
+    PathGradientBrush(WrapMode wrapMode, params ReadOnlySpan<Point> points)
     {
         if (wrapMode is < WrapMode.Tile or > WrapMode.Clamp)
             throw new InvalidEnumArgumentException(nameof(wrapMode), (int)wrapMode, typeof(WrapMode));
