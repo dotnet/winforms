@@ -108,9 +108,22 @@ public partial class CollectionEditor : UITypeEditor
             }
         }
 
-        return itemType.UnderlyingSystemType == typeof(string)
-            ? string.Empty
-            : TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null)!;
+        if (itemType.UnderlyingSystemType == typeof(string))
+        {
+            return string.Empty;
+        }
+
+        if (TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null) is { } obj)
+        {
+            return obj;
+        }
+
+        throw new InvalidOperationException(
+            string.Format(
+            SR.CollectionEditorCreateInstanceError,
+            nameof(IDesignerHost),
+            nameof(TypeDescriptor),
+            itemType.FullName));
     }
 
     /// <summary>

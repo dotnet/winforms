@@ -37,16 +37,20 @@ namespace MyProject
     }
 }";
 
-    public static IEnumerable<object[]> UnsupportedProjectTypes_TestData()
+    public static TheoryData<OutputKind> UnsupportedProjectTypes_TestData()
     {
+        TheoryData<OutputKind> testData = new();
+
         foreach (OutputKind projectType in Enum.GetValues(typeof(OutputKind)))
         {
             if (projectType is not OutputKind.ConsoleApplication
                 and not OutputKind.WindowsApplication)
             {
-                yield return new object[] { projectType };
+                testData.Add(projectType);
             }
         }
+
+        return testData;
     }
 
     [Theory]

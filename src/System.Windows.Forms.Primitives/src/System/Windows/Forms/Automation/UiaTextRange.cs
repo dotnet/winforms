@@ -298,7 +298,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
 
         ValidateEndpoints();
-        ReadOnlySpan<char> rangeText = new(_provider.Text.ToCharArray(), Start, Length);
+        ReadOnlySpan<char> rangeText = _provider.Text.AsSpan().Slice(Start, Length);
         StringComparison comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
         // Do a case-sensitive search for the text inside the range.

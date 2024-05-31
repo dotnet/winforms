@@ -52,32 +52,49 @@ public class CheckedListBox_CheckedIndexCollectionTests: IDisposable
     }
 
     [WinFormsTheory]
-    [InlineData([new string[] { "item1", "item2" }, new bool[] { true, false }, 0, true])]
-    [InlineData([new string[] { "item1", "item2" }, new bool[] { true, false }, 1, false])]
-    [InlineData([new string[] { "item1", "item2" }, new bool[] { false, false }, 0, false])]
-    public void CheckedIndexCollection_Contains_ReturnsExpected(string[] items, bool[] checkedStatus, int index, bool expected)
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 0, true)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 1, false)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, true, false }, 1, true)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, false, false }, 0, false)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, "invalid", false)]
+    public void CheckedIndexCollection_ContainsIntAndObject_ReturnsExpected(string[] items, bool[] checkedStates, object index, bool expected)
     {
         for (int i = 0; i < items.Length; i++)
         {
-            _checkedListBox.Items.Add(items[i], checkedStatus[i]);
+            _checkedListBox.Items.Add(items[i], checkedStates[i]);
         }
 
-        // Test Contains method
-        _collection.Contains(index).Should().Be(expected);
+        // Test Contains(int index) method
+        if (index is int @int)
+        {
+            _collection.Contains(@int).Should().Be(expected);
+        }
+
+        // Test IList.Contains(object? index) method
         ((IList)_collection).Contains(index).Should().Be(expected);
     }
 
     [WinFormsTheory]
-    [InlineData(true, 0)]
-    [InlineData(false, -1)]
-    public void CheckedIndexCollection_IndexOf_ReturnsExpected(bool isChecked, int expectedIndex)
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 0, 0)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 1, -1)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, true, false }, 1, 0)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, false, false }, 0, -1)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, "invalid", -1)]
+    public void CheckedIndexCollection_IndexOfIntAndObject_ReturnsExpected(string[] items, bool[] checkedStates, object index, int expected)
     {
-        _checkedListBox.Items.Add("item1", isChecked);
+        for (int i = 0; i < items.Length; i++)
+        {
+            _checkedListBox.Items.Add(items[i], checkedStates[i]);
+        }
 
-        // Test IndexOf method
-        _collection.IndexOf(0).Should().Be(expectedIndex);
-        ((IList)_collection).IndexOf(0).Should().Be(expectedIndex);
-        ((IList)_collection).IndexOf("invalid").Should().Be(-1);
+        // Test IndexOf(int index) method
+        if (index is int @int)
+        {
+            _collection.IndexOf(@int).Should().Be(expected);
+        }
+
+        // Test IList.IndexOf(object? index) method
+        ((IList)_collection).IndexOf(index).Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -121,5 +138,20 @@ public class CheckedListBox_CheckedIndexCollectionTests: IDisposable
         }
 
         enumerator.MoveNext().Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 0, 0)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { true, false, true }, 1, 2)]
+    [InlineData(new string[] { "item1", "item2", "item3" }, new bool[] { false, true, false }, 0, 1)]
+    public void CheckedIndexCollection_ItemGet_ReturnsExpected(string[] items, bool[] checkedStates, int index, int expected)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            _checkedListBox.Items.Add(items[i], checkedStates[i]);
+        }
+
+        int result = (int)((IList)_collection)[index];
+        result.Should().Be(expected);
     }
 }

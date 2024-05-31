@@ -756,7 +756,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawRectangles(Pen pen, ReadOnlySpan<RectangleF> rects)
+    void DrawRectangles(Pen pen, params ReadOnlySpan<RectangleF> rects)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -781,7 +781,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawRectangles(Pen pen, ReadOnlySpan<Rectangle> rects)
+    void DrawRectangles(Pen pen, params ReadOnlySpan<Rectangle> rects)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -855,7 +855,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawPolygon(Pen pen, ReadOnlySpan<PointF> points)
+    void DrawPolygon(Pen pen, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -880,7 +880,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawPolygon(Pen pen, ReadOnlySpan<Point> points)
+    void DrawPolygon(Pen pen, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -915,7 +915,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawCurve(Pen pen, ReadOnlySpan<PointF> points)
+    void DrawCurve(Pen pen, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -1000,7 +1000,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawCurve(Pen pen, ReadOnlySpan<Point> points)
+    void DrawCurve(Pen pen, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -1083,7 +1083,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawClosedCurve(Pen pen, ReadOnlySpan<PointF> points)
+    void DrawClosedCurve(Pen pen, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -1131,7 +1131,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
-    public void DrawClosedCurve(Pen pen, Point[] points) => DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
+    public void DrawClosedCurve(Pen pen, params Point[] points) => DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1139,7 +1139,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawClosedCurve(Pen pen, ReadOnlySpan<Point> points)
+    void DrawClosedCurve(Pen pen, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -1252,7 +1252,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void FillRectangles(Brush brush, ReadOnlySpan<RectangleF> rects)
+    void FillRectangles(Brush brush, params ReadOnlySpan<RectangleF> rects)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
@@ -1274,7 +1274,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void FillRectangles(Brush brush, ReadOnlySpan<Rectangle> rects)
+    void FillRectangles(Brush brush, params ReadOnlySpan<Rectangle> rects)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
@@ -1291,7 +1291,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
-    public void FillPolygon(Brush brush, ReadOnlySpan<PointF> points) => FillPolygon(brush, points, FillMode.Alternate);
+    public void FillPolygon(Brush brush, params ReadOnlySpan<PointF> points) => FillPolygon(brush, points, FillMode.Alternate);
 #endif
 
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
@@ -1325,7 +1325,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
-    public void FillPolygon(Brush brush, ReadOnlySpan<Point> points) => FillPolygon(brush, points, FillMode.Alternate);
+    public void FillPolygon(Brush brush, params ReadOnlySpan<Point> points) => FillPolygon(brush, points, FillMode.Alternate);
 #endif
 
     /// <summary>
@@ -1438,7 +1438,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void FillClosedCurve(Brush brush, ReadOnlySpan<PointF> points)
+    void FillClosedCurve(Brush brush, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
@@ -1506,7 +1506,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void FillClosedCurve(Brush brush, ReadOnlySpan<Point> points)
+    void FillClosedCurve(Brush brush, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(brush);
 
@@ -2339,7 +2339,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawLine(Pen pen, PointF pt1, PointF pt2) => DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
 
     /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
-    public void DrawLines(Pen pen, PointF[] points) => DrawLines(pen, points.OrThrowIfNull().AsSpan());
+    public void DrawLines(Pen pen, params PointF[] points) => DrawLines(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
 #if NET9_0_OR_GREATER
@@ -2347,7 +2347,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawLines(Pen pen, ReadOnlySpan<PointF> points)
+    void DrawLines(Pen pen, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -2394,7 +2394,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawLines(Pen pen, ReadOnlySpan<Point> points)
+    void DrawLines(Pen pen, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -2554,10 +2554,27 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         EnumerateMetafileProc callback,
         IntPtr callbackData) => EnumerateMetafile(metafile, destPoints, srcRect, srcUnit, callback, callbackData, null);
 
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, PointF[] pts)
+    /// <summary>
+    ///  Transforms an array of points from one coordinate space to another using the current world and page
+    ///  transformations of this <see cref="Graphics"/>.
+    /// </summary>
+    /// <param name="destSpace">The destination coordinate space.</param>
+    /// <param name="srcSpace">The source coordinate space.</param>
+    /// <param name="pts">The points to transform.</param>
+    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformPoints(destSpace, srcSpace, pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
+    {
         fixed (PointF* p = pts)
         {
             CheckStatus(PInvoke.GdipTransformPoints(
@@ -2569,10 +2586,21 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         }
     }
 
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, Point[] pts)
+    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformPoints(destSpace, srcSpace, pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
+    {
         fixed (Point* p = pts)
         {
             CheckStatus(PInvoke.GdipTransformPointsI(
@@ -2746,7 +2774,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawBeziers(Pen pen, ReadOnlySpan<PointF> points)
+    void DrawBeziers(Pen pen, params ReadOnlySpan<PointF> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 
@@ -2777,7 +2805,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #else
     private
 #endif
-    void DrawBeziers(Pen pen, ReadOnlySpan<Point> points)
+    void DrawBeziers(Pen pen, params ReadOnlySpan<Point> points)
     {
         ArgumentNullException.ThrowIfNull(pen);
 

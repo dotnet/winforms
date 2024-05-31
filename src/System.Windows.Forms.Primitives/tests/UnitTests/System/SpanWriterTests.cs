@@ -55,16 +55,16 @@ public class SpanWriterTests
         Span<int> span = new int[5];
         SpanWriter<int> writer = new(span);
 
-        writer.TryWrite(2, 1).Should().BeTrue();
+        writer.TryWriteCount(2, 1).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([1, 1, 0, 0, 0]);
 
-        writer.TryWrite(2, 2).Should().BeTrue();
+        writer.TryWriteCount(2, 2).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([1, 1, 2, 2, 0]);
 
-        writer.TryWrite(1, 3).Should().BeTrue();
+        writer.TryWriteCount(1, 3).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([1, 1, 2, 2, 3]);
 
-        writer.TryWrite(1, 4).Should().BeFalse();
+        writer.TryWriteCount(1, 4).Should().BeFalse();
     }
 
     [Fact]
@@ -73,15 +73,15 @@ public class SpanWriterTests
         Span<Point> span = new Point[5];
         SpanWriter<Point> writer = new(span);
 
-        writer.TryWrite(2, new Point(1, 2)).Should().BeTrue();
+        writer.TryWriteCount(2, new Point(1, 2)).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([new Point(1, 2), new Point(1, 2), default, default, default]);
 
-        writer.TryWrite(2, new Point(3, 4)).Should().BeTrue();
+        writer.TryWriteCount(2, new Point(3, 4)).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([new Point(1, 2), new Point(1, 2), new Point(3, 4), new Point(3, 4), default]);
 
-        writer.TryWrite(1, new Point(5, 6)).Should().BeTrue();
+        writer.TryWriteCount(1, new Point(5, 6)).Should().BeTrue();
         span.ToArray().Should().BeEquivalentTo([new Point(1, 2), new Point(1, 2), new Point(3, 4), new Point(3, 4), new Point(5, 6)]);
 
-        writer.TryWrite(1, new Point(7, 8)).Should().BeFalse();
+        writer.TryWriteCount(1, new Point(7, 8)).Should().BeFalse();
     }
 }
