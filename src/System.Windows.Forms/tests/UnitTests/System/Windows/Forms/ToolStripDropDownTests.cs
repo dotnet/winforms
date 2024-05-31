@@ -4930,6 +4930,128 @@ public class ToolStripDropDownTests
         Assert.Equal(value, control.WorkingAreaConstrained);
     }
 
+    [WinFormsFact]
+    public void ToolStripDropDown_DockChanged_AddRemoveEvent_Invoke_Success()
+    {
+        using ToolStripDropDown control = new();
+
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.DockChanged += handler;
+        control.Dock = DockStyle.Left;
+        callCount.Should().Be(1);
+        control.Dock.Should().Be(DockStyle.Left);
+
+        control.Dock = DockStyle.Right;
+        callCount.Should().Be(2);
+        control.Dock.Should().Be(DockStyle.Right);
+
+        control.DockChanged -= handler;
+        control.Dock = DockStyle.Top;
+        callCount.Should().Be(2);
+        control.Dock.Should().Be(DockStyle.Top);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData(ToolStripDropDownCloseReason.AppClicked)]
+    [InlineData(ToolStripDropDownCloseReason.AppFocusChange)]
+    [InlineData(ToolStripDropDownCloseReason.CloseCalled)]
+    [InlineData(ToolStripDropDownCloseReason.ItemClicked)]
+    [InlineData(ToolStripDropDownCloseReason.Keyboard)]
+    public void ToolStripDropDown_Close_InvokeReason_Success(ToolStripDropDownCloseReason? reason)
+    {
+        using ToolStripDropDown control = new();
+        control.Visible = true;
+
+        if (reason.HasValue)
+        {
+            control.Close(reason.Value);
+        }
+        else
+        {
+            control.Close();
+        }
+
+        control.Visible.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, ToolStripDropDownDirection.AboveLeft)]
+    public void ToolStripDropDown_Show_ControlPointDirection(int x, int y, ToolStripDropDownDirection direction)
+    {
+        using Control control = new();
+        using ToolStripDropDown toolStripDropDown = new();
+
+        toolStripDropDown.Show(control, new Point(x, y), direction);
+
+        toolStripDropDown.Location.Should().Be(new Point(x + 6, y + 27));
+    }  
+
+    [WinFormsTheory]
+    [InlineData(10, 20, ToolStripDropDownDirection.AboveLeft)]
+    public void ToolStripDropDown_Show_PositionDirection(int x, int y, ToolStripDropDownDirection direction)
+    {
+        using ToolStripDropDown toolStripDropDown = new();
+
+        toolStripDropDown.Show(new Point(x, y), direction);
+        Point expectedLocation = new(x, y);
+        var nonClientSize = SystemInformation.BorderSize;
+        expectedLocation.Offset(nonClientSize.Width-3, nonClientSize.Height -1);
+
+        if (direction is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
+        {
+            expectedLocation.Offset(0, -toolStripDropDown.Height);
+        }
+
+        toolStripDropDown.Location.Should().Be(expectedLocation);
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, true)]
+    [InlineData(10, 20, false)]
+    public void ToolStripDropDown_Show_ControlLocation(int x, int y, bool usePoint)
+    {
+        using Control control = new();
+        using ToolStripDropDown toolStripDropDown = new();
+
+        if (usePoint)
+        {
+            toolStripDropDown.Show(control, new Point(x, y));
+        }
+        else
+        {
+            toolStripDropDown.Show(control, x, y);
+        }
+
+        toolStripDropDown.Location.Should().Be(new Point(x + 8, y + 31));
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, true)]
+    [InlineData(10, 20, false)]
+    public void ToolStripDropDown_Show_ScreenLocation(int x, int y, bool usePoint)
+    {
+        using ToolStripDropDown toolStripDropDown = new();
+
+        if (usePoint)
+        {
+            toolStripDropDown.Show(new Point(x, y));
+        }
+        else
+        {
+            toolStripDropDown.Show(x, y);
+        }
+
+        toolStripDropDown.Location.Should().Be(new Point(x, y));
+    }
+
     private class SubAxHost : AxHost
     {
         public SubAxHost(string clsid) : base(clsid)
