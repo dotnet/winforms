@@ -379,6 +379,11 @@
         <target state="translated">{0}-Sammlungs-Editor</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">Weder „{0}“ noch „{1}“ können eine Instanz von „{2}“ erstellen.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">Es wurden schreibgeschützte Komponenten ausgewählt.</target>

@@ -3,13 +3,20 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class DateTimePickerTests
+public class DateTimePickerTests: IDisposable
 {
+    private readonly DateTimePicker _dateTimePicker;
+
+    public DateTimePickerTests() => _dateTimePicker = new();
+
+    public void Dispose() => _dateTimePicker.Dispose();
+
     [WinFormsFact]
     public void DateTimePicker_Ctor_Default()
     {
@@ -269,6 +276,178 @@ public class DateTimePickerTests
         using DateTimePicker control = new();
         Action act = () => control.CalendarMonthBackground = ColorTranslator.FromHtml(value);
         act.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarFont_GetSet_ReturnsExpected()
+    {
+        Font expectedFont = new("Arial", 8.25f);
+
+        _dateTimePicker.CalendarFont = expectedFont;
+        _dateTimePicker.CalendarFont.Should().Be(expectedFont);
+
+        _dateTimePicker.CalendarFont = null;
+        _dateTimePicker.CalendarFont.Should().Be(_dateTimePicker.Font);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_Checked_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.Checked.Should().BeTrue();
+
+        _dateTimePicker.Checked = false;
+        _dateTimePicker.Checked.Should().BeFalse();
+
+        _dateTimePicker.Checked = true;
+        _dateTimePicker.Checked.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CustomFormat_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.CustomFormat.Should().BeNull();
+
+        _dateTimePicker.Value = new(2021, 12, 31);
+        _dateTimePicker.CreateControl();
+
+        _dateTimePicker.CustomFormat = "yyyy/MM/dd";
+        _dateTimePicker.Format = DateTimePickerFormat.Custom;
+        _dateTimePicker.Text.Should().Be("2021/12/31");
+
+        _dateTimePicker.CustomFormat = "MM/dd/yyyy";
+        _dateTimePicker.Text.Should().Be("12/31/2021");
+
+        _dateTimePicker.CustomFormat = null;
+        _dateTimePicker.CustomFormat.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_DropDownAlign_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.DropDownAlign.Should().Be(LeftRightAlignment.Left);
+
+        _dateTimePicker.DropDownAlign = LeftRightAlignment.Right;
+        _dateTimePicker.DropDownAlign.Should().Be(LeftRightAlignment.Right);
+
+        _dateTimePicker.DropDownAlign = LeftRightAlignment.Left;
+        _dateTimePicker.DropDownAlign.Should().Be(LeftRightAlignment.Left);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MaxDate_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.MaxDate.ToString().Should().Be("12/31/9998 12:00:00 AM");
+
+        DateTime expectedDate = new(2022, 12, 31);
+        _dateTimePicker.MaxDate = expectedDate;
+        _dateTimePicker.MaxDate.Should().Be(expectedDate);
+    }
+
+    [WinFormsTheory]
+    [InlineData("0001-01-01")]
+    [InlineData("9999-12-31")]
+    public void DateTimePicker_MaxDate_SetInvalid_ThrowsArgumentOutOfRangeException(string value)
+    {
+        Action act = () => _dateTimePicker.MaxDate = DateTime.Parse(value);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MaximumDateTime_ReturnsExpected()
+    {
+        DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
+        DateTime expectedDate = maxSupportedDateTime.Year > DateTimePicker.MaxDateTime.Year ? DateTimePicker.MaxDateTime : maxSupportedDateTime;
+
+        DateTime result = DateTimePicker.MaximumDateTime;
+
+        result.Should().Be(expectedDate);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MinDate_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.MinDate.ToString().Should().Be("1/1/1753 12:00:00 AM");
+
+        DateTime expectedDate = new(2022, 1, 1);
+        _dateTimePicker.MinDate = expectedDate;
+        _dateTimePicker.MinDate.Should().Be(expectedDate);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MinimumDateTime_ReturnsExpected()
+    {
+        DateTime minSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime;
+        DateTime expectedDate = minSupportedDateTime.Year < 1753 ? new(1753, 1, 1) : minSupportedDateTime;
+
+        DateTimePicker.MinimumDateTime.Should().BeOnOrAfter(new DateTime(1753, 1, 1, 0, 0, 0));
+
+        DateTime result = DateTimePicker.MinimumDateTime;
+
+        result.Should().Be(expectedDate);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_RightToLeftLayout_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.RightToLeftLayout.Should().Be(false);
+
+        _dateTimePicker.RightToLeftLayout = true;
+        _dateTimePicker.RightToLeftLayout.Should().Be(true);
+
+        _dateTimePicker.RightToLeftLayout = false;
+        _dateTimePicker.RightToLeftLayout.Should().Be(false);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ShowUpDown_GetSet_ReturnsExpected()
+    {
+        _dateTimePicker.ShowUpDown.Should().Be(false);
+
+        _dateTimePicker.ShowUpDown = true;
+        _dateTimePicker.ShowUpDown.Should().Be(true);
+
+        _dateTimePicker.ShowUpDown = false;
+        _dateTimePicker.ShowUpDown.Should().Be(false);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_Text_GetSet_ReturnsExpected()
+    {
+        string validDateString = "2022-01-01";
+        _dateTimePicker.CreateControl();
+
+        _dateTimePicker.Text = validDateString;
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(validDateString, CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
+
+        _dateTimePicker.Text = null;
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
+
+        _dateTimePicker.Text = string.Empty;
+        _dateTimePicker.Text.Should().Be(DateTime.Parse(DateTime.Now.Date.ToString(), CultureInfo.CurrentCulture).ToString("dddd, MMMM d, yyyy"));
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_Value_GetSet_ReturnsExpected()
+    {
+        DateTime expectedDate = new(2022, 1, 1);
+
+        _dateTimePicker.Value = expectedDate;
+        _dateTimePicker.Value.Should().Be(expectedDate);
+
+        _dateTimePicker.Value = DateTimePicker.MinimumDateTime;
+        _dateTimePicker.Value.Should().Be(DateTimePicker.MinimumDateTime);
+
+        _dateTimePicker.Value = DateTimePicker.MaximumDateTime;
+        _dateTimePicker.Value.Should().Be(DateTimePicker.MaximumDateTime);
+    }
+
+    [WinFormsTheory]
+    [InlineData("0001-01-01")]
+    [InlineData("9999-12-31")]
+    public void DateTimePicker_Value_SetInvalid_ThrowsArgumentOutOfRangeException(string value)
+    {
+        Action act = () => _dateTimePicker.Value = DateTime.Parse(value);
+        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [WinFormsFact]

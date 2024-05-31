@@ -110,7 +110,7 @@ internal static class TraceSwitchExtensions
         ///  Writes the specified character span to the handler.
         /// </summary>
         /// <param name="value">The span to write.</param>
-        public void AppendFormatted(ReadOnlySpan<char> value) => _stringBuilderHandler.AppendFormatted(value);
+        public void AppendFormatted(params ReadOnlySpan<char> value) => _stringBuilderHandler.AppendFormatted(value);
 
         /// <summary>
         ///  Writes the specified character span to the handler.
