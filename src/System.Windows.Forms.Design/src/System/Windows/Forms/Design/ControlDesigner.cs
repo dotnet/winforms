@@ -1628,13 +1628,11 @@ public partial class ControlDesigner : ComponentDesigner
         // Handle shadowed properties
         string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
 
-        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
-                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ControlDesigner), prop, empty);
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ControlDesigner), prop, []);
             }
         }
 
