@@ -1305,10 +1305,9 @@ public partial class ControlDesigner : ComponentDesigner
 
         _mouseDragLast = new Point(x, y);
         _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
-        ISelectionService? selectionService = GetService<ISelectionService>();
 
         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-        if (!_ctrlSelect && selectionService is not null)
+        if (!_ctrlSelect && TryGetService<ISelectionService>(out ISelectionService? selectionService))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
         }
@@ -1399,8 +1398,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // Make sure the component is selected
         // But only select it if it is not already the primary selection, and we want to toggle the current primary selection.
-        ISelectionService? selectionService = GetService<ISelectionService>();
-        if (selectionService is not null && !Component.Equals(selectionService.PrimarySelection))
+        if (TryGetService<ISelectionService>(out ISelectionService? selectionService) && !Component.Equals(selectionService.PrimarySelection))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
         }
