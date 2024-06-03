@@ -3975,6 +3975,141 @@ public partial class PropertyGridTests
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_PropertyValueChanged_Invoke_CallsPropertyValueChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        PropertyValueChangedEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().NotBeNull();
+            e.ChangedItem.Should().NotBeNull();
+            e.OldValue.Should().Be(0);
+            callCount++;
+        };
+
+        propertyGrid.PropertyValueChanged += handler;
+        var accessor = propertyGrid.TestAccessor();
+        var gridItem = new Mock<GridItem>().Object;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertyValueChanged -= handler;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertySortChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.PropertySortChanged += handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertySort = PropertySort.Categorized;
+        callCount.Should().Be(2);
+
+        propertyGrid.PropertySortChanged -= handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedObjectsChanged_Invoke_CallsSelectedObjectsChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(propertyGrid);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.SelectedObjectsChanged += handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(1);
+
+        propertyGrid.SelectedObjects = [new object(), new object()];
+        callCount.Should().Be(2);
+
+        propertyGrid.SelectedObjectsChanged -= handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_CollapseAndExpandAllGridItems_CollapseAndExpandCorrectly()
+    {
+        using PropertyGrid propertyGrid = new();
+        var testObject = new { Property1 = "Value1", Property2 = "Value2" };
+        propertyGrid.SelectedObject = testObject;
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded = true;
+        }
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded.Should().BeTrue();
+        }
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded = false;
+        }
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded.Should().BeFalse();
+        }
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded = true;
+        }
+
+        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+        {
+            item.Expanded.Should().BeTrue();
+        }
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
+    {
+        using PropertyGrid propertyGrid = new();
+        var testObject = new TestObject { Property1 = "ChangedValue1", Property2 = "ChangedValue2" };
+        propertyGrid.SelectedObject = testObject;
+
+        propertyGrid.ResetSelectedProperty();
+
+        var selectedGridItem = propertyGrid.SelectedGridItem;
+        selectedGridItem.Should().NotBeNull();
+        selectedGridItem.Value.Should().Be("Default1");
+    }
+
+    public class TestObject
+    {
+        [DefaultValue("Default1")]
+        public string Property1 { get; set; }
+
+        [DefaultValue("Default2")]
+        public string Property2 { get; set; }
+    }
+
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
