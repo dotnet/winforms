@@ -6,16 +6,24 @@ using System.ComponentModel.Design;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Tests;
+internal static class ExtensionHelpers
+{
+    public static InheritedPropertyDescriptor GetInheritedPropertyDescriptor(this Control control, string property)
+    {
+        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(control);
+        PropertyDescriptor propertyDescriptor = properties.Find(property, false);
+        InheritedPropertyDescriptor inheritedPropertyDescriptor = new(propertyDescriptor, control);
+        return inheritedPropertyDescriptor;
+    }
+}
 
 public class InheritedPropertyDescriptorTests
 {
     [Fact]
-    public void GetValue_ReturnsExpected()
+    public void InheritedPropertyDescriptor_GetValue_ReturnsExpected()
     {
         using Control control = new();
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(control);
-        PropertyDescriptor propertyDescriptor = properties.Find(nameof(Control.Size), false);
-        InheritedPropertyDescriptor inheritedPropertyDescriptor = new(propertyDescriptor, control);
+        InheritedPropertyDescriptor inheritedPropertyDescriptor = control.GetInheritedPropertyDescriptor(nameof(Control.Size));
 
         Size size = (Size)inheritedPropertyDescriptor.GetValue(control);
         size.Height.Should().Be(0);
@@ -26,12 +34,10 @@ public class InheritedPropertyDescriptorTests
     }
 
     [Fact]
-    public void ResetValue_ReturnsExpected()
+    public void InheritedPropertyDescriptor_ResetValue_ReturnsExpected()
     {
         using Control control = new();
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(control);
-        PropertyDescriptor propertyDescriptor = properties.Find(nameof(Control.Anchor), false);
-        InheritedPropertyDescriptor inheritedPropertyDescriptor = new(propertyDescriptor, control);
+        InheritedPropertyDescriptor inheritedPropertyDescriptor = control.GetInheritedPropertyDescriptor(nameof(Control.Anchor));
 
         AnchorStyles anchor = (AnchorStyles)inheritedPropertyDescriptor.GetValue(control);
         anchor.Should().Be(AnchorStyles.Top | AnchorStyles.Left);
@@ -46,12 +52,10 @@ public class InheritedPropertyDescriptorTests
     }
 
     [Fact]
-    public void SetValue_ReturnsExpected()
+    public void InheritedPropertyDescriptor_SetValue_ReturnsExpected()
     {
         using Control control = new();
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(control);
-        PropertyDescriptor propertyDescriptor = properties.Find(nameof(Control.BackColor), false);
-        InheritedPropertyDescriptor inheritedPropertyDescriptor = new(propertyDescriptor, control);
+        InheritedPropertyDescriptor inheritedPropertyDescriptor = control.GetInheritedPropertyDescriptor(nameof(Control.BackColor));
 
         Color backColor = (Color)inheritedPropertyDescriptor.GetValue(control);
         backColor.Name.Should().Be("Control");
@@ -62,12 +66,10 @@ public class InheritedPropertyDescriptorTests
     }
 
     [Fact]
-    public void ShouldSerializeValue_ReturnsExpected()
+    public void InheritedPropertyDescriptor_ShouldSerializeValue_ReturnsExpected()
     {
         using Control control = new();
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(control);
-        PropertyDescriptor propertyDescriptor = properties.Find(nameof(Control.Visible), false);
-        InheritedPropertyDescriptor inheritedPropertyDescriptor = new(propertyDescriptor, control);
+        InheritedPropertyDescriptor inheritedPropertyDescriptor = control.GetInheritedPropertyDescriptor(nameof(Control.Visible));
 
         inheritedPropertyDescriptor.ShouldSerializeValue(control).Should().BeFalse();
 
