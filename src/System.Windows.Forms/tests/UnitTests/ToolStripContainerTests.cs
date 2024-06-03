@@ -62,7 +62,8 @@ public class ToolStripContainerTests : IDisposable
 
         _toolStripContainer.BackColorChanged -= handler;
 
-        callCount.Should().Be(0);
+        _toolStripContainer.BackColor = Color.Blue;
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -80,9 +81,14 @@ public class ToolStripContainerTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         _toolStripContainer.BackgroundImageChanged += handler;
+
+        _toolStripContainer.BackgroundImage = new Bitmap(10, 10);
+        callCount.Should().Be(1);
+
         _toolStripContainer.BackgroundImageChanged -= handler;
 
-        callCount.Should().Be(0);
+        _toolStripContainer.BackgroundImage = new Bitmap(20, 20);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -91,9 +97,14 @@ public class ToolStripContainerTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         _toolStripContainer.BackgroundImageLayoutChanged += handler;
+
+        _toolStripContainer.BackgroundImageLayout = ImageLayout.Center;
+        callCount.Should().Be(1);
+
         _toolStripContainer.BackgroundImageLayoutChanged -= handler;
 
-        callCount.Should().Be(0);
+        _toolStripContainer.BackgroundImageLayout = ImageLayout.Stretch;
+        callCount.Should().BeGreaterThan(1); 
     }
 
     [WinFormsTheory]
