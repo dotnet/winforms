@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -13,19 +11,20 @@ namespace System.Windows.Forms.Design;
 [Editor(typeof(ImageListImageEditor), typeof(UITypeEditor))]
 internal class ImageListImage
 {
-    private string _name;
+    private string? _name;
 
     public ImageListImage(Image image)
     {
         Image = image;
     }
 
-    public ImageListImage(Image image, string name)
+    public ImageListImage(Image image, string? name)
     {
         Image = image;
         Name = name;
     }
 
+    [AllowNull]
     public string Name
     {
         get => _name ?? string.Empty;
