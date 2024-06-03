@@ -64,7 +64,7 @@ public class ToolStripContainerTests : IDisposable
     [WinFormsFact]
     public void ToolStripContainer_BackgroundImage_GetSet_ReturnsExpected()
     {
-        Image value = new Bitmap(10, 10);
+        using Image value = new Bitmap(10, 10);
         _toolStripContainer.BackgroundImage = value;
 
         _toolStripContainer.BackgroundImage.Should().Be(value);

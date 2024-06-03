@@ -94,31 +94,31 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
         Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
-    private ToolStripDropDownButton CreateToolStripDropDownButton(string text = null, Bitmap image = null, EventHandler onClick = null, string name = null, ToolStripItem[] dropDownItems = null)
-    {
-        ToolStripDropDownButton toolStripDropDownButton = new(text, image, dropDownItems);
-        toolStripDropDownButton.Click += onClick;
-        toolStripDropDownButton.Name = name;
-
-        return toolStripDropDownButton;
-    }
-
     [WinFormsFact]
     public void ToolStripDropDownButton_ConstructorParameters_ShouldInitializeCorrectly()
     {
         string text = "Test text";
-        Bitmap image = new(10, 10);
+        using Bitmap image = new(10, 10);
         bool wasClicked = false;
         EventHandler onClick = (sender, e) => { wasClicked = true; };
         string name = "Test name";
-        var dropDownItems = new ToolStripItem[] { new ToolStripMenuItem("Test item") };
+        ToolStripItem[] dropDownItems = [new ToolStripMenuItem("Test item")];
+
+        ToolStripDropDownButton CreateToolStripDropDownButton(string text = null, Bitmap image = null, EventHandler onClick = null, string name = null, ToolStripItem[] dropDownItems = null)
+        {
+            ToolStripDropDownButton toolStripDropDownButton = new(text, image, dropDownItems);
+            toolStripDropDownButton.Click += onClick;
+            toolStripDropDownButton.Name = name;
+
+            return toolStripDropDownButton;
+        }
 
         var toolStripDropDownButton = CreateToolStripDropDownButton(text, image, onClick, name, dropDownItems);
         toolStripDropDownButton.PerformClick();
 
         toolStripDropDownButton.Text.Should().Be(text);
         toolStripDropDownButton.Image.Should().Be(image);
-        wasClicked.Should().BeTrue(); 
+        wasClicked.Should().BeTrue();
         toolStripDropDownButton.Name.Should().Be(name);
         toolStripDropDownButton.DropDownItems.Should().BeEquivalentTo(dropDownItems);
     }
