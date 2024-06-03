@@ -56,6 +56,10 @@ public class ToolStripContainerTests : IDisposable
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         _toolStripContainer.BackColorChanged += handler;
+
+        _toolStripContainer.BackColor = Color.Red;
+        callCount.Should().Be(1);
+
         _toolStripContainer.BackColorChanged -= handler;
 
         callCount.Should().Be(0);
