@@ -42,7 +42,6 @@ variables:
 
 # used for post-build phases
 - group: DotNet-Winforms-SDLValidation-Params
-- group: DotNetBuilds storage account read tokens
 - group: AzureDevOps-Artifact-Feeds-Pats
 - name: _InternalRuntimeDownloadArgs
   value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
