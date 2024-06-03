@@ -4109,7 +4109,6 @@ public partial class PropertyGridTests
         public string Property2 { get; set; }
     }
 
-
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
