@@ -196,6 +196,12 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private void Initialize()
     {
+        if (Control.UseComponentModelRegisteredTypes)
+        {
+            // Register the type with the ComponentModel so as to be trim safe
+            TypeDescriptor.RegisterType<Keys>();
+        }
+
         Overflow = ToolStripItemOverflow.Never;
         MouseDownAndUpMustBeInSameItem = false;
         SupportsDisabledHotTracking = true;
@@ -1114,8 +1120,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
         else
         {
-            // Call the trim safe API
-            TypeDescriptor.RegisterType<Keys>();
+            // Call the trim safe API, Keys type has been registered at Initialize()
             return TypeDescriptor.GetConverterFromRegisteredType(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
         }
     }
