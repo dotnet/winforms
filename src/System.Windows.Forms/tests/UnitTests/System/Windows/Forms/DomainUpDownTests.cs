@@ -15,7 +15,7 @@ public class DomainUpDownTests : IDisposable
     public DomainUpDownTests()
     {
         _control = new();
-        _sub= new();
+        _sub = new();
     }
 
     public void Dispose()
@@ -1145,15 +1145,15 @@ public class DomainUpDownTests : IDisposable
             callCount++;
         };
 
-    // Call with handler.
-    _sub.SelectedItemChanged += handler;
-    _sub.OnSelectedItemChanged(source, eventArgs);
-    callCount.Should().Be(1);
+        // Call with handler.
+        _sub.SelectedItemChanged += handler;
+        _sub.OnSelectedItemChanged(source, eventArgs);
+        callCount.Should().Be(1);
 
-    // Remove handler.
-    _sub.SelectedItemChanged -= handler;
-    _sub.OnSelectedItemChanged(source, eventArgs);
-    callCount.Should().Be(1);
+        // Remove handler.
+        _sub.SelectedItemChanged -= handler;
+        _sub.OnSelectedItemChanged(source, eventArgs);
+        callCount.Should().Be(1);
     }
 
     [WinFormsTheory]
