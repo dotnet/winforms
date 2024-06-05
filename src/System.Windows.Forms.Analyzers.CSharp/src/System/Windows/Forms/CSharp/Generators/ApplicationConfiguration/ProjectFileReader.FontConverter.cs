@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Generators;
+namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 
 internal static partial class ProjectFileReader
 {

@@ -4,7 +4,7 @@
 using System.Windows.Forms.Analyzers.Resources;
 using Microsoft.CodeAnalysis;
 
-namespace System.Windows.Forms.Analyzers;
+namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static partial class DiagnosticDescriptors
 {
@@ -12,13 +12,15 @@ internal static partial class DiagnosticDescriptors
 
     private static readonly LocalizableString s_localizableWFAC010Title
         = new LocalizableResourceString(nameof(SR.WFAC010Title), SR.ResourceManager, typeof(SR));
+
     private static readonly LocalizableString s_localizableWFAC010Message_CS
         = new LocalizableResourceString(nameof(SR.WFAC010Message_CS), SR.ResourceManager, typeof(SR));
+
     private static readonly LocalizableString s_localizableWFAC010Message_VB
         = new LocalizableResourceString(nameof(SR.WFAC010Message_VB), SR.ResourceManager, typeof(SR));
 
     internal static readonly DiagnosticDescriptor s_migrateHighDpiSettings_CSharp
-       = new(id: "WFAC010",
+       = new(id: DiagnosticIDs.MigrateHighDpiSettings,
              title: s_localizableWFAC010Title,
              messageFormat: s_localizableWFAC010Message_CS,
              category: Category,
@@ -26,7 +28,7 @@ internal static partial class DiagnosticDescriptors
              isEnabledByDefault: true);
 
     internal static readonly DiagnosticDescriptor s_migrateHighDpiSettings_VB
-       = new(id: "WFAC010",
+       = new(id: DiagnosticIDs.MigrateHighDpiSettings,
              title: s_localizableWFAC010Title,
              messageFormat: s_localizableWFAC010Message_VB,
              category: Category,

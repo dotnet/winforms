@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers;
-using System.Windows.Forms.Analyzers.CSharp;
+using System.Windows.Forms.CSharp.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Generators;
+namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 
 internal static partial class ProjectFileReader
 {
@@ -15,20 +15,24 @@ internal static partial class ProjectFileReader
         => configOptionsProvider.Select(
             (analyzerConfigOptions, cancellationToken) =>
             {
-                Diagnostic? diagnostic;
                 if (!TryReadBool(analyzerConfigOptions, PropertyNameCSharp.EnableVisualStyles,
                                  defaultValue: PropertyDefaultValue.EnableVisualStyles,
-                                 out bool enableVisualStyles, out diagnostic) ||
-                    !TryReadBool(analyzerConfigOptions, PropertyNameCSharp.UseCompatibleTextRendering,
+                                 out bool enableVisualStyles, out Diagnostic? diagnostic)
+                    || !TryReadBool(analyzerConfigOptions, PropertyNameCSharp.UseCompatibleTextRendering,
                                  defaultValue: PropertyDefaultValue.UseCompatibleTextRendering,
-                                 out bool useCompatibleTextRendering, out diagnostic) ||
-                    !TryReadFont(analyzerConfigOptions, out FontDescriptor? font, out diagnostic) ||
-                    !TryReadHighDpiMode(analyzerConfigOptions, out HighDpiMode highDpiMode, out diagnostic))
+                                 out bool useCompatibleTextRendering, out diagnostic)
+                    || !TryReadFont(analyzerConfigOptions, out FontDescriptor? font, out diagnostic)
+                    || !TryReadHighDpiMode(analyzerConfigOptions, out HighDpiMode highDpiMode, out diagnostic))
                 {
                     return ((ApplicationConfig?)null, diagnostic);
                 }
 
-                ApplicationConfig projectConfig = new(enableVisualStyles, font?.ToString(), highDpiMode, useCompatibleTextRendering);
+                ApplicationConfig projectConfig = new(
+                    EnableVisualStyles: enableVisualStyles,
+                    DefaultFont: font?.ToString(),
+                    HighDpiMode: highDpiMode,
+                    UseCompatibleTextRendering: useCompatibleTextRendering);
+
                 return (projectConfig, null);
             });
 

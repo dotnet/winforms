@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\HighDpiMode.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\Analyzers\HighDpiMode.cs" />
     <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
     <None Include="..\AppManifestAnalyzer.Help.md" Link="AppManifestAnalyzer.Help.md" />
   </ItemGroup>

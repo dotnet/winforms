@@ -33,4 +33,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="System\Windows\Forms\CSharp\CodeFixes\" />
+  </ItemGroup>
+
 </Project>
