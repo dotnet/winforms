@@ -136,6 +136,15 @@ public partial class Control
         private short _accelCount = -1;
         private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
+        // Feature switch, when set to false, ActiveX is not supported in trimmed applications.
+        [FeatureSwitchDefinition("System.Windows.Forms.ActiveXImpl.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+        private static bool IsSupported { get; } =
+            AppContext.TryGetSwitch("System.Windows.Forms.ActiveXImpl.IsSupported", out bool isSupported)
+                ? isSupported
+                : true;
+#pragma warning restore IDE0075
+
         /// <summary>
         ///  Creates a new ActiveXImpl.
         /// </summary>
@@ -1035,6 +1044,11 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
+            if (!IsSupported)
+            {
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 [DesignerSerializationVisibilityAttribute.Visible]);
@@ -1134,6 +1148,11 @@ public partial class Control
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     if (!success)
                     {
+                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
+
                         stream.Position = 0;
                         deserialized = new BinaryFormatter().Deserialize(stream);
                     }
@@ -1420,6 +1439,11 @@ public partial class Control
             {
                 Type? eventInterface = null;
 
+                if (!IsSupported)
+                {
+                    throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+                }
+
                 // Get the first declared interface, if any.
                 if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
                     is { } comSourceInterfaces)
@@ -1469,6 +1493,11 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
+            if (!IsSupported)
+            {
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 [DesignerSerializationVisibilityAttribute.Visible]);
@@ -1502,6 +1531,11 @@ public partial class Control
                     if (!success)
                     {
                         stream.SetLength(0);
+
+                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         new BinaryFormatter().Serialize(stream, sourceValue);

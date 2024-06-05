@@ -12,6 +12,15 @@ namespace System.Windows.Forms;
 /// </summary>
 public class ImageIndexConverter : Int32Converter
 {
+    // Feature switch, when set to false, ImageIndexConverter is not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Windows.Forms.ImageIndexConverter.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.ImageIndexConverter.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
+
     /// <summary>
     ///  Gets a value that indicates whether a <see langword="null" /> value is valid in
     ///  the <see cref="TypeConverter.StandardValuesCollection" /> collection.
@@ -83,6 +92,11 @@ public class ImageIndexConverter : Int32Converter
     /// </returns>
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ImageIndexConverter)));
+        }
+
         if (context is not null && context.Instance is not null)
         {
             object? instance = context.Instance;
