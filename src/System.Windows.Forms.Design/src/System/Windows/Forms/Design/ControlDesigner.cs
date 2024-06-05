@@ -1459,10 +1459,10 @@ public partial class ControlDesigner : ComponentDesigner
             parent = parent.Parent;
             if (parent is not null)
             {
-                object? d = _host?.GetDesigner(parent);
-                if (d != this)
+                object? designer = _host?.GetDesigner(parent);
+                if (designer != this)
                 {
-                    parentDesigner = d;
+                    parentDesigner = designer;
                 }
             }
         }
@@ -1488,10 +1488,10 @@ public partial class ControlDesigner : ComponentDesigner
             parent = parent.Parent;
             if (parent is not null)
             {
-                object? d = _host?.GetDesigner(parent);
-                if (d != this)
+                object? designer = _host?.GetDesigner(parent);
+                if (designer != this)
                 {
-                    parentDesigner = d;
+                    parentDesigner = designer;
                 }
             }
         }
@@ -1517,10 +1517,10 @@ public partial class ControlDesigner : ComponentDesigner
             parent = parent.Parent;
             if (parent is not null)
             {
-                object? d = _host?.GetDesigner(parent);
-                if (d != this)
+                object? designer = _host?.GetDesigner(parent);
+                if (designer != this)
                 {
-                    parentDesigner = d;
+                    parentDesigner = designer;
                 }
             }
         }
