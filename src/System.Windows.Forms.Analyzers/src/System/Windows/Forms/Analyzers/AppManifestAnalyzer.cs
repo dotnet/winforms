@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Immutable;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -10,17 +11,19 @@ using Microsoft.CodeAnalysis.Text;
 namespace System.Windows.Forms.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
-public partial class AppManifestAnalyzer : DiagnosticAnalyzer
+internal partial class AppManifestAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => ImmutableArray.Create(DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp,
-                                 DiagnosticDescriptors.s_migrateHighDpiSettings_VB);
+        => ImmutableArray.Create(
+            DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp,
+            DiagnosticDescriptors.s_migrateHighDpiSettings_VB);
 
     public override void Initialize(AnalysisContext context)
     {
-        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze
+            | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 
+        context.EnableConcurrentExecution();
         context.RegisterAdditionalFileAction(AdditionalFileAction);
     }
 
@@ -30,8 +33,6 @@ public partial class AppManifestAnalyzer : DiagnosticAnalyzer
         {
             VerifyAppManifest(context, context.AdditionalFile);
         }
-
-        // TODO: look for app.config?
     }
 
     private static void VerifyAppManifest(AdditionalFileAnalysisContext context, AdditionalText appManifest)
@@ -54,27 +55,29 @@ public partial class AppManifestAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        XmlNamespaceManager nsmgr = new(doc.NameTable);
-        nsmgr.AddNamespace("v1", "urn:schemas-microsoft-com:asm.v1");
-        nsmgr.AddNamespace("v3", "urn:schemas-microsoft-com:asm.v3");
-        nsmgr.AddNamespace("v3ws", "http://schemas.microsoft.com/SMI/2005/WindowsSettings");
+        XmlNamespaceManager nsMgr = new(doc.NameTable);
+        nsMgr.AddNamespace("v1", "urn:schemas-microsoft-com:asm.v1");
+        nsMgr.AddNamespace("v3", "urn:schemas-microsoft-com:asm.v3");
+        nsMgr.AddNamespace("v3ws", "http://schemas.microsoft.com/SMI/2005/WindowsSettings");
 
-        if (doc.DocumentElement.SelectSingleNode("//v3:application/v3:windowsSettings/v3ws:dpiAware", nsmgr) is not null)
+        if (doc.DocumentElement.SelectSingleNode("//v3:application/v3:windowsSettings/v3ws:dpiAware", nsMgr) is not null)
         {
             switch (context.Compilation.Language)
             {
                 case LanguageNames.CSharp:
                     context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp,
-                                      Location.None,
-                                      appManifest.Path,
-                                      ApplicationConfig.PropertyNameCSharp.HighDpiMode));
+                        Location.None,
+                        appManifest.Path,
+                        ApplicationConfig.PropertyNameCSharp.HighDpiMode));
                     break;
+
                 case LanguageNames.VisualBasic:
                     context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.s_migrateHighDpiSettings_VB,
-                                      Location.None,
-                                      appManifest.Path,
-                                      ApplicationConfig.PropertyNameVisualBasic.HighDpiMode));
+                        Location.None,
+                        appManifest.Path,
+                        ApplicationConfig.PropertyNameVisualBasic.HighDpiMode));
                     break;
+
                 default:
                     throw new NotSupportedException();
             }

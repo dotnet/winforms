@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -10,7 +10,7 @@ internal static class AnalyzerConfigOptionsProviderExtensions
     /// <summary>
     /// Attempts to read a value for the requested MSBuild property.
     /// </summary>
-    /// <param name="analyzerConfigOptions">The global optins.</param>
+    /// <param name="analyzerConfigOptions">The global options.</param>
     /// <param name="name">The name of the property to read the value for.</param>
     /// <param name="value">The property's value.</param>
     /// <returns><see langword="true"/> if the property is present; otherwise <see langword="true"/>.</returns>

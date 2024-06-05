@@ -13,18 +13,22 @@ internal partial record ApplicationConfig
         /// Normal text.
         /// </summary>
         Regular = 0,
+
         /// <summary>
         /// Bold text.
         /// </summary>
         Bold = 1,
+
         /// <summary>
         /// Italic text.
         /// </summary>
         Italic = 2,
+
         /// <summary>
         /// Underlined text.
         /// </summary>
         Underline = 4,
+
         /// <summary>
         /// Text with a line through the middle.
         /// </summary>

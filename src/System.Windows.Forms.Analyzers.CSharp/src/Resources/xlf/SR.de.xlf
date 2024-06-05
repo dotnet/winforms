@@ -47,6 +47,21 @@
         <target state="translated">Nicht unterstützter Eigenschaftswert</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFAC003AnalyzerDescription">
+        <source>When a property does not have it property content code-generation strategy configured, the Designer will automatically try to generate code into InitializeComponent to rebuild the property content at runtime or even binary-serialize it into Resource files, which can accidentelly leak data or lead to other security issues.</source>
+        <target state="new">When a property does not have it property content code-generation strategy configured, the Designer will automatically try to generate code into InitializeComponent to rebuild the property content at runtime or even binary-serialize it into Resource files, which can accidentelly leak data or lead to other security issues.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC003AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure its property content code-generation.</source>
+        <target state="new">Property '{0}' does not configure its property content code-generation.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC003AnalyzerTitle">
+        <source>Missing property content code-generation configuration.</source>
+        <target state="new">Missing property content code-generation configuration.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -4,6 +4,7 @@
 using System.Text;
 using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Tests;
+using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;

@@ -4,7 +4,7 @@
 using System.Text;
 using System.Windows.Forms.Analyzers;
 
-namespace System.Windows.Forms.Generators;
+namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 
 internal static class ApplicationConfigurationInitializeBuilder
 {
