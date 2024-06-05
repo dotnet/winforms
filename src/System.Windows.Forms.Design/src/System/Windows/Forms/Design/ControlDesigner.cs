@@ -1636,9 +1636,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // replace this one separately because it is of a different type (DesignerControlCollection) than the
         // original property (ControlCollection)
-        PropertyDescriptor? controlsProp = (PropertyDescriptor?)properties["Controls"];
-
-        if (controlsProp is not null)
+        if (properties["Controls"] is PropertyDescriptor controlsProp)
         {
             Attribute[] attrs = new Attribute[controlsProp.Attributes.Count];
             controlsProp.Attributes.CopyTo(attrs, 0);
@@ -1649,8 +1647,7 @@ public partial class ControlDesigner : ComponentDesigner
                 attrs);
         }
 
-        PropertyDescriptor? sizeProp = (PropertyDescriptor?)properties["Size"];
-        if (sizeProp is not null)
+        if (properties["Size"] is PropertyDescriptor sizeProp)
         {
             properties["Size"] = new CanResetSizePropertyDescriptor(sizeProp);
         }
