@@ -24,6 +24,7 @@ internal static partial class LocalAppContextSwitches
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
+    internal const string TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName = "System.Windows.Forms.TreeNodeDoNotUseFixedIndexWithSortedTreeView";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -34,6 +35,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_dataGridViewUIAStartRowCountAtZero;
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
+    private static int s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -200,6 +202,16 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(EnableMsoComponentManagerSwitchName, ref s_enableMsoComponentManager);
+    }
+
+    /// <summary>
+    ///  Indicates whether TreeNode.PrevNode uses a fixed index to return its value.
+    ///  Thus mirroring the behavior of the TreeNodeCollection.
+    /// </summary>
+    public static bool TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName, ref s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView);
     }
 
     internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
