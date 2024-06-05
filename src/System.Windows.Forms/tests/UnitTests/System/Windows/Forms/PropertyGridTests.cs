@@ -4090,7 +4090,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
     {
         using PropertyGrid propertyGrid = new();
-        var testObject = new TestObject { Property1 = "ChangedValue1", Property2 = "ChangedValue2" };
+        var testObject = new TestObject { Property1 = "ChangedValue1"};
         propertyGrid.SelectedObject = testObject;
 
         propertyGrid.ResetSelectedProperty();
@@ -4104,9 +4104,6 @@ public partial class PropertyGridTests
     {
         [DefaultValue("Default1")]
         public string Property1 { get; set; }
-
-        [DefaultValue("Default2")]
-        public string Property2 { get; set; }
     }
 
     private class SubToolStripRenderer : ToolStripRenderer
