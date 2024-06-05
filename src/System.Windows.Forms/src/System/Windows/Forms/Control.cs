@@ -56,6 +56,22 @@ public unsafe partial class Control :
         "Makes double buffered controls non-double buffered");
 #endif
 
+    // Feature switch, when set to false, design time features of controls are not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.AreDesignTimeFeaturesSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    internal static bool AreDesignTimeFeaturesSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.Control.AreDesignTimeFeaturesSupported", out bool isEnabled)
+            ? isEnabled
+            : true;
+
+    // Feature switch, when set to true, used for trimming to access ComponentModel in a trim safe manner
+    [FeatureSwitchDefinition("System.Windows.Forms.Control.UseComponentModelRegisteredTypes")]
+    internal static bool UseComponentModelRegisteredTypes { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.Control.UseComponentModelRegisteredTypes", out bool isEnabled)
+            ? isEnabled
+            : false;
+#pragma warning restore IDE0075
+
     private static readonly uint WM_GETCONTROLNAME = PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
     private static readonly uint WM_GETCONTROLTYPE = PInvoke.RegisterWindowMessage("WM_GETCONTROLTYPE");
 
@@ -977,6 +993,12 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void ResetBindings()
     {
+        if (!Binding.IsSupported)
+        {
+            // This gets called with Dispose that needs to be handled, a throwing is not appropriate in this case.
+            return;
+        }
+
         ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
         bindings?.Clear();
     }
@@ -1029,7 +1051,6 @@ public unsafe partial class Control :
     public virtual BindingContext? BindingContext
     {
         get => BindingContextInternal;
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => BindingContextInternal = value;
     }
 
@@ -1670,6 +1691,11 @@ public unsafe partial class Control :
     {
         get
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
             if (bindings is null)
             {
@@ -13006,6 +13032,11 @@ public unsafe partial class Control :
 
         if (site is not null && site.DesignMode && site.TryGetService(out changeService))
         {
+            if (!AreDesignTimeFeaturesSupported)
+            {
+                throw new NotSupportedException(SR.DesignTimeFeaturesNotSupported);
+            }
+
             sizeProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Size];
             locationProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Location];
             Debug.Assert(sizeProperty is not null && locationProperty is not null, "Error retrieving Size/Location properties on Control.");

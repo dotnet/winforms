@@ -220,7 +220,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
             return BindingContextInternal;
         }
 
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set
         {
             BindingContextInternal = value;
