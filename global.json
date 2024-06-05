@@ -21,6 +21,6 @@
     "Microsoft.NET.Sdk.IL": "9.0.0-preview.6.24305.2"
   },
   "native-tools": {
-    "cmake": "latest"
+    "cmake": "3.22.6"
   }
 }
