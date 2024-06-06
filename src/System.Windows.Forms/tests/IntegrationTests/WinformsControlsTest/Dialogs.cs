@@ -3,13 +3,13 @@
 
 #nullable enable
 
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Drawing.Design;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class Dialogs : Form
 {
     private readonly ToolStripButton _btnOpen;

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ComboBoxes
 {
@@ -44,7 +44,7 @@ partial class ComboBoxes
         this.comboBox11 = new System.Windows.Forms.ComboBox();
         this.comboBox12 = new System.Windows.Forms.ComboBox();
         this.dataBoundComboBox = new System.Windows.Forms.ComboBox();
-        this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
+        this.currentDPILabel1 = new WinFormsControlsTest.CurrentDPILabel();
         this.label1 = new System.Windows.Forms.Label();
         this.dataBoundLabel = new System.Windows.Forms.Label();
         this.SuspendLayout();

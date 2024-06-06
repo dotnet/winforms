@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>WinformsControlsTest</AssemblyName>
-    <RootNamespace>WinformsControlsTest</RootNamespace>
+    <AssemblyName>WinFormsControlsTest</AssemblyName>
+    <RootNamespace>WinFormsControlsTest</RootNamespace>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
@@ -75,19 +75,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\SmallA.bmp">
-      <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
+      <LogicalName>WinFormsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\SmallABlue.bmp">
-      <LogicalName>WinformsControlsTest.SmallABlue.bmp</LogicalName>
+      <LogicalName>WinFormsControlsTest.SmallABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\LargeA.bmp">
-      <LogicalName>WinformsControlsTest.LargeA.bmp</LogicalName>
+      <LogicalName>WinFormsControlsTest.LargeA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\LargeABlue.bmp">
-      <LogicalName>WinformsControlsTest.LargeABlue.bmp</LogicalName>
+      <LogicalName>WinFormsControlsTest.LargeABlue.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
