@@ -220,7 +220,7 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        if (!LocalAppContextSwitches.TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView || tv is null || !tv.Sorted)
+        if (!LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrder || tv is null || !tv.Sorted)
         {
             _owner.Nodes.FixedIndex = _owner._childCount;
         }

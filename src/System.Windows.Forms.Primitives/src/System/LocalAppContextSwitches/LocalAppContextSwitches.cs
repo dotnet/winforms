@@ -24,7 +24,7 @@ internal static partial class LocalAppContextSwitches
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
-    internal const string TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName = "System.Windows.Forms.TreeNodeDoNotUseFixedIndexWithSortedTreeView";
+    internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -35,7 +35,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_dataGridViewUIAStartRowCountAtZero;
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
-    private static int s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView;
+    private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -208,10 +208,10 @@ internal static partial class LocalAppContextSwitches
     ///  Indicates whether TreeNode.PrevNode uses a fixed index to return its value.
     ///  Thus mirroring the behavior of the TreeNodeCollection.
     /// </summary>
-    public static bool TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView
+    public static bool TreeNodeCollectionAddRangeRespectsSortOrder
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName, ref s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView);
+        get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
     }
 
     internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
@@ -229,6 +229,11 @@ internal static partial class LocalAppContextSwitches
         if (switchName == ApplyParentFontToMenusSwitchName)
         {
             s_applyParentFontToMenus = value ? 1 : 0;
+        }
+
+        if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
+        {
+            s_treeNodeCollectionAddRangeRespectsSortOrder = value ? 1 : 0;
         }
     }
 

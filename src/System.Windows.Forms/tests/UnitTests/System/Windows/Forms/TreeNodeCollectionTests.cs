@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
@@ -241,7 +242,8 @@ public class TreeNodeCollectionTests
 
         treeView.Sort();
         treeView.CreateControl();
-        treeView.Nodes.AddRange(new TreeNode[]
+
+        TreeNode[] treeNodeArray = new TreeNode[]
         {
             new()
             {
@@ -253,11 +255,77 @@ public class TreeNodeCollectionTests
                 Name = "1",
                 Text = "1"
             }
-        });
+        };
+
+        treeView.Nodes.AddRange(treeNodeArray);
 
         TreeNode treeNode = treeView.Nodes.Find(key, searchAllChildren: true)[0];
         treeNode.Should().NotBeNull();
         treeView.Nodes.IndexOf(treeNode).Should().Be(3);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_TreeNodeCollectionAddRangeRespectsSortOrderSwitch()
+    {
+        TreeNode child1 = new()
+        {
+            Name = "8",
+            Text = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5",
+            Text = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7",
+            Text = "7"
+        };
+        TreeNode[] treeNodeArray = new TreeNode[]
+        {
+            new()
+            {
+                Name = "2",
+                Text = "2"
+            },
+            new()
+            {
+                Name = "1",
+                Text = "1"
+            }
+        };
+
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, true);
+        using TreeView treeView2 = new();
+
+        treeView2.Nodes.Add(child1);
+        treeView2.Nodes.Add(child2);
+        treeView2.Nodes.Add(child3);
+
+        treeView2.CreateControl();
+        treeView2.Sort();
+        treeView2.Nodes.AddRange(treeNodeArray);
+
+        TreeNode treeNode = treeView2.Nodes.Find("2", searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView2.Nodes.IndexOf(treeNode).Should().Be(1);
+        treeView2.Nodes.Clear();
+
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, false);
+        using TreeView treeView3 = new();
+
+        treeView3.Nodes.Add(child1);
+        treeView3.Nodes.Add(child2);
+        treeView3.Nodes.Add(child3);
+
+        treeView3.CreateControl();
+        treeView3.Sort();
+        treeView3.Nodes.AddRange(treeNodeArray);
+
+        treeNode = treeView3.Nodes.Find("2", searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView3.Nodes.IndexOf(treeNode).Should().Be(1);
     }
 
     [WinFormsTheory]
