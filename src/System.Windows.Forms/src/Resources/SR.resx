@@ -6968,6 +6968,12 @@ Stack trace where the illegal operation occurred was:
     <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
   <data name="BinaryFormatterNotSupported" xml:space="preserve">
-    <value>Using the BinaryFormatter is not supported.</value>
+    <value>Using the BinaryFormatter is not supported in trimmed applications.</value>
+  </data>
+  <data name="ControlNotSupportedInTrimming" xml:space="preserve">
+    <value>'{0}' is not supported in trimmed applications.</value>
+  </data>
+  <data name="DesignTimeFeaturesNotSupported" xml:space="preserve">
+    <value>Design time features are not supported.</value>
   </data>
 </root>

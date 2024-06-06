@@ -381,7 +381,7 @@
       </trans-unit>
       <trans-unit id="CollectionEditorCreateInstanceError">
         <source>Neither {0} nor {1} can create an instance of {2}.</source>
-        <target state="new">Neither {0} nor {1} can create an instance of {2}.</target>
+        <target state="translated">Nem {0}, nem {1} podem criar uma instância de {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
