@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class DataGridViewTest
 {
@@ -42,7 +42,7 @@ partial class DataGridViewTest
         this.column6 = new System.Windows.Forms.DataGridViewImageColumn();
         this.column7 = new System.Windows.Forms.DataGridViewButtonColumn();
         this.column8 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-        this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
+        this.currentDPILabel1 = new WinFormsControlsTest.CurrentDPILabel();
         this.changeFontButton = new System.Windows.Forms.Button();
         this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
         this.label1 = new System.Windows.Forms.Label();
@@ -234,7 +234,7 @@ partial class DataGridViewTest
     private System.Windows.Forms.DataGridViewImageColumn column6;
     private System.Windows.Forms.DataGridViewButtonColumn column7;
     private System.Windows.Forms.DataGridViewCheckBoxColumn column8;
-    private WinformsControlsTest.CurrentDPILabel currentDPILabel1;
+    private WinFormsControlsTest.CurrentDPILabel currentDPILabel1;
     private System.Windows.Forms.Button changeFontButton;
     private System.Windows.Forms.NumericUpDown numericUpDown1;
     private System.Windows.Forms.Label label1;

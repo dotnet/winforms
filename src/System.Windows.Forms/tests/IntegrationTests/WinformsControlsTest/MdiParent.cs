@@ -3,8 +3,9 @@
 
 using System.Runtime.InteropServices;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class MdiParent : Form
 {
     private readonly MenuStrip _menuStrip;
