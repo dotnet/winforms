@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripDropDownButton;
 
@@ -91,5 +92,34 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
 
         Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+    }
+
+    [WinFormsFact]
+    public void ToolStripDropDownButton_ConstructorParameters_ShouldInitializeCorrectly()
+    {
+        string text = "Test text";
+        using Bitmap image = new(10, 10);
+        bool wasClicked = false;
+        EventHandler onClick = (sender, e) => { wasClicked = true; };
+        string name = "Test name";
+        ToolStripItem[] dropDownItems = [new ToolStripMenuItem("Test item")];
+
+        ToolStripDropDownButton CreateToolStripDropDownButton(string text = null, Bitmap image = null, EventHandler onClick = null, string name = null, ToolStripItem[] dropDownItems = null)
+        {
+            ToolStripDropDownButton toolStripDropDownButton = new(text, image, dropDownItems);
+            toolStripDropDownButton.Click += onClick;
+            toolStripDropDownButton.Name = name;
+
+            return toolStripDropDownButton;
+        }
+
+        var toolStripDropDownButton = CreateToolStripDropDownButton(text, image, onClick, name, dropDownItems);
+        toolStripDropDownButton.PerformClick();
+
+        toolStripDropDownButton.Text.Should().Be(text);
+        toolStripDropDownButton.Image.Should().Be(image);
+        wasClicked.Should().BeTrue();
+        toolStripDropDownButton.Name.Should().Be(name);
+        toolStripDropDownButton.DropDownItems.Should().BeEquivalentTo(dropDownItems);
     }
 }

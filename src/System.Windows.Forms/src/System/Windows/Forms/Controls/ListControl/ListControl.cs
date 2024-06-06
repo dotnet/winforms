@@ -135,6 +135,11 @@ public abstract class ListControl : Control
     {
         get
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             if (_displayMemberConverter is null)
             {
                 PropertyDescriptorCollection? props = DataManager?.GetItemProperties();
@@ -422,6 +427,11 @@ public abstract class ListControl : Control
     {
         if (item is not null && !string.IsNullOrEmpty(field))
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             try
             {
                 // if we have a dataSource, then use that to display the string
@@ -527,7 +537,15 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        if (!UseComponentModelRegisteredTypes)
+        {
+            s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        }
+        else
+        {
+            // Call the trim safe API
+            s_stringTypeConverter ??= TypeDescriptor.GetConverterFromRegisteredType(typeof(string));
+        }
 
         try
         {
