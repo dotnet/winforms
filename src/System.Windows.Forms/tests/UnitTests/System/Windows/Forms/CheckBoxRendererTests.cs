@@ -44,8 +44,8 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
     [InlineData(CheckBoxState.MixedNormal)]
     public void CheckBoxRenderer_DrawCheckBox_OverloadWithSizeAndText(CheckBoxState cBState)
     {
-        // Skip validation of CheckBoxState.CheckedNormal in X86 due to the active issue "https://github.com/dotnet/winforms/issues/11496"
-        if (cBState== CheckBoxState.CheckedNormal
+        // Skip validation of CheckBoxState.CheckedNormal on X86 due to the active issue "https://github.com/dotnet/winforms/issues/11496"
+        if (cBState == CheckBoxState.CheckedNormal
             && RuntimeInformation.ProcessArchitecture == Architecture.X86)
         {
             return;
