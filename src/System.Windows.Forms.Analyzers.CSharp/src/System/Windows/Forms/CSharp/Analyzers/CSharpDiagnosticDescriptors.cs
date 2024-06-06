@@ -44,9 +44,7 @@ internal static class CSharpDiagnosticDescriptors
     public static readonly DiagnosticDescriptor s_propertyCantBeSetToValueWithReason
         = new(id: DiagnosticIDs.PropertyCantBeSetToValue,
               title: s_localizableWFAC002Title,
-#pragma warning disable RS1032 // Define diagnostic message correctly. Justification - exception messages end with a comma.
               messageFormat: s_localizableWFAC002MessageWithReason,
-#pragma warning restore RS1032 // Define diagnostic message correctly
               category: Category,
               defaultSeverity: DiagnosticSeverity.Error,
               isEnabledByDefault: true);

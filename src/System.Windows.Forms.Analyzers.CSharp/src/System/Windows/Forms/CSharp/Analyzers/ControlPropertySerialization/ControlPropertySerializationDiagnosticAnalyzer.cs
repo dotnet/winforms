@@ -30,7 +30,6 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.Property);
     }
 
@@ -58,7 +57,7 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
 
         // Is the property attributed with DesignerSerializationVisibility or DefaultValue?
         if (propertySymbol.GetAttributes()
-            .Any(a => a.AttributeClass.Name is (nameof(DesignerSerializationVisibilityAttribute))
+            .Any(a => a?.AttributeClass?.Name is (nameof(DesignerSerializationVisibilityAttribute))
                 or (nameof(DefaultValueAttribute))))
         {
             return;
@@ -67,10 +66,10 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
         // Now, it get's a bit more tedious:
         // If the Serialization is managed via ShouldSerialize and Reset methods, we are also fine,
         // so let's check for that. First, let's get the class of the property:
-        var classSymbol = propertySymbol.ContainingType;
+        INamedTypeSymbol classSymbol = propertySymbol.ContainingType;
 
         // Now, let's check if the class has a method ShouldSerialize method:
-        var shouldSerializeMethod = classSymbol
+        IMethodSymbol? shouldSerializeMethod = classSymbol
             .GetMembers()
             .OfType<IMethodSymbol>()
             .FirstOrDefault(m => m.Name == $"ShouldSerialize{propertySymbol.Name}");
