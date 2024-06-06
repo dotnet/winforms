@@ -145,12 +145,15 @@
     <value>Only TrueType fonts are supported. '{0}' is not a TrueType font.</value>
   </data>
   <data name="WFAC003AnalyzerDescription" xml:space="preserve">
-    <value>When a property does not have it property content code-generation strategy configured, the Designer will automatically try to generate code into InitializeComponent to rebuild the property content at runtime or even binary-serialize it into Resource files, which can accidentelly leak data or lead to other security issues.</value>
+    <value>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</value>
   </data>
   <data name="WFAC003AnalyzerTitle" xml:space="preserve">
-    <value>Missing property content code-generation configuration.</value>
+    <value>Missing code serialization configuration for property content</value>
   </data>
   <data name="WFAC003AnalyzerMessageFormat" xml:space="preserve">
-    <value>Property '{0}' does not configure its property content code-generation.</value>
+    <value>Property '{0}' does not configure the code serialization for its property content</value>
+  </data>
+  <data name="AddDesignerSerializationVisibilityCodeFixTitle" xml:space="preserve">
+    <value>Add DesignerSerializationVisibilityAttribute to property</value>
   </data>
 </root>

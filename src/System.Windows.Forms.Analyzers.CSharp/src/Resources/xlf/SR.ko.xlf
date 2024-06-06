@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ko" original="../SR.resx">
     <body>
+      <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
+        <source>Add DesignerSerializationVisibilityAttribute to property</source>
+        <target state="new">Add DesignerSerializationVisibilityAttribute to property</target>
+        <note />
+      </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
         <target state="translated">'{0}' 글꼴을 찾을 수 없습니다.</target>
@@ -48,18 +53,18 @@
         <note />
       </trans-unit>
       <trans-unit id="WFAC003AnalyzerDescription">
-        <source>When a property does not have it property content code-generation strategy configured, the Designer will automatically try to generate code into InitializeComponent to rebuild the property content at runtime or even binary-serialize it into Resource files, which can accidentelly leak data or lead to other security issues.</source>
-        <target state="new">When a property does not have it property content code-generation strategy configured, the Designer will automatically try to generate code into InitializeComponent to rebuild the property content at runtime or even binary-serialize it into Resource files, which can accidentelly leak data or lead to other security issues.</target>
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</source>
+        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC003AnalyzerMessageFormat">
-        <source>Property '{0}' does not configure its property content code-generation.</source>
-        <target state="new">Property '{0}' does not configure its property content code-generation.</target>
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC003AnalyzerTitle">
-        <source>Missing property content code-generation configuration.</source>
-        <target state="new">Missing property content code-generation configuration.</target>
+        <source>Missing code serialization configuration for property content</source>
+        <target state="new">Missing code serialization configuration for property content</target>
         <note />
       </trans-unit>
     </body>
