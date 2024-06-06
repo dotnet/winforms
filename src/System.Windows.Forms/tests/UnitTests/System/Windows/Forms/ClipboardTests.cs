@@ -314,7 +314,7 @@ public partial class ClipboardTests
     [WinFormsTheory]
     [MemberData(nameof(Clipboard_SetDataObject_Null_TheoryData))]
     public void Clipboard_SetDataObject_NullData_ThrowsArgumentNullException(Action action)
-    {
+    { 
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 

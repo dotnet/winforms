@@ -451,6 +451,179 @@ public class DateTimePickerTests: IDisposable
     }
 
     [WinFormsFact]
+    public void DateTimePicker_FormatChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dateTimePicker);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dateTimePicker.FormatChanged += handler;
+        _dateTimePicker.Format = DateTimePickerFormat.Short;
+        callCount.Should().Be(1);
+
+        _dateTimePicker.FormatChanged -= handler;
+        _dateTimePicker.Format = DateTimePickerFormat.Long;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_PaintEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        PaintEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        control.Paint += handler;
+        using (Bitmap bmp = new(1, 1))
+        {
+            control.OnPaint(new(Graphics.FromImage(bmp), new()));
+        }
+
+        callCount.Should().Be(1);
+
+        control.Paint -= handler;
+        using (Bitmap bmp = new(1, 1))
+        {
+            control.OnPaint(new(Graphics.FromImage(bmp), new()));
+        }
+
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MouseClickEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        MouseEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(control);
+            e.Should().NotBeNull();
+        };
+
+        control.MouseClick += handler;
+        control.OnMouseClick(new(MouseButtons.Left, 1, 0, 0, 0));
+        callCount.Should().Be(1);
+
+        control.MouseClick -= handler;
+        control.OnMouseClick(new(MouseButtons.Left, 1, 0, 0, 0));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MouseDoubleClickEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        MouseEventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(control);
+            e.Should().NotBeNull();
+        };
+
+        control.MouseDoubleClick += handler;
+        control.OnMouseDoubleClick(new(MouseButtons.Left, 1, 0, 0, 0));
+        callCount.Should().Be(1);
+
+        control.MouseDoubleClick -= handler;
+        control.OnMouseDoubleClick(new(MouseButtons.Left, 1, 0, 0, 0));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CloseUpEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.CloseUp += handler;
+        control.OnCloseUp(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        control.CloseUp -= handler;
+        control.OnCloseUp(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_RightToLeftLayoutChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dateTimePicker);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dateTimePicker.RightToLeftLayoutChanged += handler;
+        _dateTimePicker.RightToLeftLayout = !_dateTimePicker.RightToLeftLayout;
+        callCount.Should().Be(1);
+
+        _dateTimePicker.RightToLeftLayoutChanged -= handler;
+        _dateTimePicker.RightToLeftLayout = !_dateTimePicker.RightToLeftLayout;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ValueChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dateTimePicker);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dateTimePicker.ValueChanged += handler;
+        _dateTimePicker.Value = DateTime.Now;
+        callCount.Should().Be(1);
+
+        _dateTimePicker.ValueChanged -= handler;
+        _dateTimePicker.Value = DateTime.Now.AddDays(1);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_DropDownEvent_Raised_Success()
+    {
+        using SubDateTimePicker control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.DropDown += handler;
+        control.OnDropDown(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        control.DropDown -= handler;
+        control.OnDropDown(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
     public void DateTimePicker_BackColorChangedEvent_Raised_Success()
     {
         using DateTimePicker control = new();
@@ -837,5 +1010,15 @@ public class DateTimePickerTests: IDisposable
         public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
 
         public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
+
+        public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
+
+        public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
+
+        public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
+
+        public new void OnCloseUp(EventArgs e) => base.OnCloseUp(e);
+
+        public new void OnDropDown(EventArgs e) => base.OnDropDown(e);
     }
 }
