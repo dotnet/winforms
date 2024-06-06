@@ -29,7 +29,6 @@ public partial class StatusStrip : ToolStrip
         SuspendLayout();
         CanOverflow = false;
         LayoutStyle = ToolStripLayoutStyle.Table;
-        RenderMode = ToolStripRenderMode.System;
         GripStyle = ToolStripGripStyle.Hidden;
 
         SetStyle(ControlStyles.ResizeRedraw, true);
