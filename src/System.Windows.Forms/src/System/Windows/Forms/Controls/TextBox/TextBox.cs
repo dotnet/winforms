@@ -682,7 +682,7 @@ public partial class TextBox : TextBoxBase
     /// <summary>
     ///  Process a command key.
     ///  Native "EDIT" control does not support "Select All" shortcut represented by Ctrl-A keys, when in multiline mode,
-    ///  Winforms TextBox supports this in .NET.
+    ///  WinForms TextBox supports this in .NET.
     /// </summary>
     /// <param name="m">The current windows message.</param>
     /// <param name="keyData">The bitmask containing one or more keys.</param>

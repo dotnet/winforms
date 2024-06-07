@@ -93,7 +93,7 @@ public class ApplicationTests
             Assert.False(Application.RenderWithVisualStyles);
 
             Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on WinForms app. This is a high priority bug and must be looked into");
             Assert.True(Application.RenderWithVisualStyles);
         }).Dispose();
     }
