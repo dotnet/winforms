@@ -4131,7 +4131,10 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11497")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11497")]
     public void TextBoxBase_ClearUndo_CanUndo_Success()
     {
         using SubTextBox control = new()
@@ -4216,7 +4219,10 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11498")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11498")]
     public void TextBoxBase_Copy_PasteNotEmptyWithHandle_Success()
     {
         using SubTextBox control = new()
