@@ -1,4 +1,7 @@
-﻿using System.Collections.Immutable;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Windows.Forms.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis;
@@ -24,7 +27,7 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
         description: new LocalizableResourceString(nameof(SR.WFAC003AnalyzerDescription), SR.ResourceManager, typeof(SR)));
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => ImmutableArray.Create(s_rule);
+        => [s_rule];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -79,7 +82,6 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
             || shouldSerializeMethod.ReturnType.SpecialType != SpecialType.System_Boolean
             || shouldSerializeMethod.Parameters.Length > 0)
         {
-
             // For ALL such other symbols, produce a diagnostic.
             var diagnostic = Diagnostic.Create(s_rule, propertySymbol.Locations[0], propertySymbol.Name);
 

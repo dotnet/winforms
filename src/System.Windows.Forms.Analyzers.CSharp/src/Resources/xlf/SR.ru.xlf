@@ -43,8 +43,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFAC002MessageWithReason">
-        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="translated">ArgumentException: свойство проекта "{0}" не может иметь значение "{1}". Причина: {2}</target>
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
+        <target state="needs-review-translation">ArgumentException: свойство проекта "{0}" не может иметь значение "{1}". Причина: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002Title">
@@ -53,8 +53,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFAC003AnalyzerDescription">
-        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</source>
-        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</target>
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC003AnalyzerMessageFormat">
