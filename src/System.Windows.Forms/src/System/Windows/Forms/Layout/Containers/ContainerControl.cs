@@ -1355,7 +1355,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-        // Check if font is inherited from parent and is not being scaled by Parent (e.g. Winforms designer
+        // Check if font is inherited from parent and is not being scaled by Parent (e.g. WinForms designer
         // in Visual Studio). In this case we need to scale Control explicitly with respect to new scaled Font.
         if (TryGetExplicitlySetFont(out _))
         {

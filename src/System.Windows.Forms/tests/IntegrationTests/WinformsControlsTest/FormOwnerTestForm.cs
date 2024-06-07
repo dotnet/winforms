@@ -3,8 +3,9 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 internal class FormOwnerTestForm : Form
 {
     public FormOwnerTestForm()

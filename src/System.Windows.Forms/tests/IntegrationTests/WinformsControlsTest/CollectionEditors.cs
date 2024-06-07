@@ -9,8 +9,9 @@ using System.Drawing.Design;
 using System.Windows.Forms.Design;
 #endif
 
-namespace WinformsControlsTest.UserControls;
+namespace WinFormsControlsTest.UserControls;
 
+[DesignerCategory("Default")]
 internal partial class CollectionEditors : Form
 {
     private readonly string[] _stringArray = ["Lorem ipsum dolor sit amet", "id quo accusamus definitionem", "graeco salutandi sed te", "mei in solum primis definitionem."];
