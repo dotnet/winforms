@@ -130,7 +130,7 @@
     <value>ArgumentException: Project property '{0}' cannot be set to '{1}'</value>
   </data>
   <data name="WFAC002MessageWithReason" xml:space="preserve">
-    <value>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</value>
+    <value>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</value>
   </data>
   <data name="TextParseFailedFormat" xml:space="preserve">
     <value>Text "{0}" cannot be parsed. The expected text format is "{1}".</value>
@@ -145,7 +145,7 @@
     <value>Only TrueType fonts are supported. '{0}' is not a TrueType font.</value>
   </data>
   <data name="WFAC003AnalyzerDescription" xml:space="preserve">
-    <value>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method</value>
+    <value>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</value>
   </data>
   <data name="WFAC003AnalyzerTitle" xml:space="preserve">
     <value>Missing code serialization configuration for property content</value>
