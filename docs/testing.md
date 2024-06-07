@@ -257,7 +257,7 @@ public void MyControl_Rendering()
 
 > :warning: There is a very blurry line between unit and functional tests in Windows Forms realm. A lot of our implementations depend on ambient contexts (such as Win32, COM, etc.). We classify tests as "functional" or "integration" that require process-wide settings (such as visual styles) or require user-like interactions (e.g. mouse gestures).
 
-Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
+The general purpose functional test suite is the **WinFormsControlsTest**. There is an xUnit project that executes various commands against this binary.
 
 ## Running functional tests
 

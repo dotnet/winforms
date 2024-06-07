@@ -3,7 +3,7 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class Password
 {

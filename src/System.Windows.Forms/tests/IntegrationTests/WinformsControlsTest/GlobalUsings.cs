@@ -3,3 +3,4 @@
 
 global using System.Diagnostics;
 global using System.Windows.Forms;
+global using System.ComponentModel;
