@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>System.Windows.Forms.Analyzers</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Deterministic>true</Deterministic>
+    <RootNamespace></RootNamespace>
+    <LangVersion>15.0</LangVersion>
+    <VBRuntime>None</VBRuntime>
+  </PropertyGroup>
+
+</Project>

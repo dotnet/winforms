@@ -8,26 +8,19 @@
     <NoWarn>$(NoWarn);RS2007</NoWarn>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
-    <None Include="..\ApplicationConfigurationGenerator.Help.md" Link="ApplicationConfigurationGenerator.Help.md" />
-  </ItemGroup>
-
-  <ItemGroup>
+  
+    <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
-
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
-  </ItemGroup>
+  
+    <ItemGroup>
+      <ProjectReference Include="..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
+    </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
