@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     '''  These are just checking the Proxy functions, the underlaying functions are tested elsewhere
     ''' </summary>
     <Collection("Sequential")>
-    <CollectionDefinition("Clipboard Tests", DisableParallelization:=True)>
+    <CollectionDefinition("Sequential", DisableParallelization:=True)>
     Public Class ClipboardProxyTests
 
         <WinFormsFact>
