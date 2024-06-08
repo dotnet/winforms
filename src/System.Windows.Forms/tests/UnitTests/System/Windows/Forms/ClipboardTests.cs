@@ -15,7 +15,7 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")]
-[CollectionDefinition("Clipboard Tests", DisableParallelization = true)]
+[CollectionDefinition("Sequential", DisableParallelization = true)]
 public partial class ClipboardTests
 {
     [WinFormsFact]
