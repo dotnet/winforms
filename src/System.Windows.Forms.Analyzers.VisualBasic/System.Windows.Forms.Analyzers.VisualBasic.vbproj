@@ -3,30 +3,21 @@
   <PropertyGroup>
     <RootNamespace>System.Windows.Forms.Analyzers</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>Preview</LangVersion>
-    <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);RS2007</NoWarn>
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <Deterministic>true</Deterministic>
+    <RootNamespace></RootNamespace>
+    <LangVersion>15.0</LangVersion>
+    <VBRuntime>None</VBRuntime>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
-    <None Include="..\ApplicationConfigurationGenerator.Help.md" Link="ApplicationConfigurationGenerator.Help.md" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="$(MicrosoftCodeAnalysisVisualBasicPackageVersion)" />
 
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

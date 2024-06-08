@@ -1,20 +1,20 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Immutable;
+using System.Composition;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Immutable;
-using System.Composition;
-using System.Windows.Forms.Analyzers.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AddDesignerSerializationVisibilityCodeFixProvider)), Shared]
-internal class AddDesignerSerializationVisibilityCodeFixProvider : CodeFixProvider
+internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFixProvider
 {
     private const string SystemComponentModelName = "System.ComponentModel";
 
