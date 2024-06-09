@@ -27,42 +27,42 @@
         <target state="translated">Der Text {0} kann nicht analysiert werden. Textformat {1} erwartet.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Message">
+      <trans-unit id="WFCA001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
-        <target state="translated">Nur Projekte mit "OutputType={0}" werden unterstützt.</target>
+        <target state="new">Only projects with 'OutputType={0}' supported</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Title">
+      <trans-unit id="WFCA001Title">
         <source>Unsupported project type</source>
-        <target state="translated">Nicht unterstützter Projekttyp</target>
+        <target state="new">Unsupported project type</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Message">
+      <trans-unit id="WFCA002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
-        <target state="translated">ArgumentException: Die Projekteigenschaft "{0}" kann nicht auf "{1}" festgelegt werden.</target>
+        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002MessageWithReason">
+      <trans-unit id="WFCA002MessageWithReason">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
-        <target state="needs-review-translation">ArgumentException: Die Projekteigenschaft "{0}" kann nicht auf "{1}" festgelegt werden. Grund: {2}</target>
+        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Title">
+      <trans-unit id="WFCA002Title">
         <source>Unsupported property value</source>
-        <target state="translated">Nicht unterstützter Eigenschaftswert</target>
+        <target state="new">Unsupported property value</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC003AnalyzerDescription">
+      <trans-unit id="WFCA100AnalyzerDescription">
         <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
         <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC003AnalyzerMessageFormat">
+      <trans-unit id="WFCA100AnalyzerMessageFormat">
         <source>Property '{0}' does not configure the code serialization for its property content</source>
         <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC003AnalyzerTitle">
+      <trans-unit id="WFCA100AnalyzerTitle">
         <source>Missing code serialization configuration for property content</source>
         <target state="new">Missing code serialization configuration for property content</target>
         <note />
