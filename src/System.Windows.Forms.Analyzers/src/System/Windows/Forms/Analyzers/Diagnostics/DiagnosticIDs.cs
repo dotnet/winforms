@@ -6,13 +6,13 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 internal static class DiagnosticIDs
 {
     // Application Configuration
-    public const string UnsupportedProjectType = "WFAC001";
-    public const string PropertyCantBeSetToValue = "WFAC002";
-    public const string MigrateHighDpiSettings = "WFAC010";
+    public const string UnsupportedProjectType = "WFCA001";
+    public const string PropertyCantBeSetToValue = "WFCA002";
+    public const string MigrateHighDpiSettings = "WFCA010";
 
     // Security
-    public const string ControlPropertySerialization = "WFAC100";
+    public const string ControlPropertySerialization = "WFCA100";
 
-    // Memory Management
-    public const string DisposeModalDialog = "WFAC200";
+    // WinForms Usage
+    public const string DisposeModalDialog = "WFCA500";
 }

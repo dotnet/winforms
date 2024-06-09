@@ -80,7 +80,7 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
         newProperty = newProperty.WithLeadingTrivia(leadingTrivia);
         newProperty = newProperty.WithTrailingTrivia(trailingTrivia);
 
-        var usingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
+        UsingDirectiveSyntax usingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
 
         // Let's check, if we already have the using directive or if we need to add it:
         // (Remember: We can't throw here, as we are in a code fixer. But this also cannot be null.)

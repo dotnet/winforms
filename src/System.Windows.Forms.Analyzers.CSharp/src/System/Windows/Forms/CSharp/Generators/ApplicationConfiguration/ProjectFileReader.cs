@@ -11,16 +11,16 @@ namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 
 internal static partial class ProjectFileReader
 {
-    public static IncrementalValueProvider<(ApplicationConfig? ApplicationConfig, Diagnostic? Diagnostic)> ReadApplicationConfig(IncrementalValueProvider<AnalyzerConfigOptionsProvider> configOptionsProvider)
-        => configOptionsProvider.Select(
+    public static IncrementalValueProvider<(ApplicationConfig? ApplicationConfig, Diagnostic? Diagnostic)> ReadApplicationConfig(IncrementalValueProvider<AnalyzerConfigOptionsProvider> configOptionsProvider) =>
+        configOptionsProvider.Select(
             (analyzerConfigOptions, cancellationToken) =>
             {
                 if (!TryReadBool(analyzerConfigOptions, PropertyNameCSharp.EnableVisualStyles,
-                                 defaultValue: PropertyDefaultValue.EnableVisualStyles,
-                                 out bool enableVisualStyles, out Diagnostic? diagnostic)
+                        defaultValue: PropertyDefaultValue.EnableVisualStyles,
+                        out bool enableVisualStyles, out Diagnostic? diagnostic)
                     || !TryReadBool(analyzerConfigOptions, PropertyNameCSharp.UseCompatibleTextRendering,
-                                 defaultValue: PropertyDefaultValue.UseCompatibleTextRendering,
-                                 out bool useCompatibleTextRendering, out diagnostic)
+                        defaultValue: PropertyDefaultValue.UseCompatibleTextRendering,
+                        out bool useCompatibleTextRendering, out diagnostic)
                     || !TryReadFont(analyzerConfigOptions, out FontDescriptor? font, out diagnostic)
                     || !TryReadHighDpiMode(analyzerConfigOptions, out HighDpiMode highDpiMode, out diagnostic))
                 {
@@ -86,10 +86,10 @@ internal static partial class ProjectFileReader
         catch (Exception ex)
         {
             diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValueWithReason,
-                                           Location.None,
-                                           PropertyNameCSharp.DefaultFont,
-                                           rawValue,
-                                           ex.Message);
+                Location.None,
+                PropertyNameCSharp.DefaultFont,
+                rawValue,
+                ex.Message);
         }
 
         return false;
@@ -111,9 +111,10 @@ internal static partial class ProjectFileReader
             !Enum.IsDefined(typeof(HighDpiMode), highDpiMode))
         {
             diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue,
-                                           Location.None,
-                                           PropertyNameCSharp.HighDpiMode,
-                                           rawValue);
+                Location.None,
+                PropertyNameCSharp.HighDpiMode,
+                rawValue);
+
             highDpiMode = PropertyDefaultValue.DpiMode;
             return false;
         }

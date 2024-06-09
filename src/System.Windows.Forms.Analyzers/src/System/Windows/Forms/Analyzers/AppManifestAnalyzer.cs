@@ -14,9 +14,7 @@ namespace System.Windows.Forms.Analyzers;
 internal partial class AppManifestAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => ImmutableArray.Create(
-            DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp,
-            DiagnosticDescriptors.s_migrateHighDpiSettings_VB);
+        => [DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp, DiagnosticDescriptors.s_migrateHighDpiSettings_VB];
 
     public override void Initialize(AnalysisContext context)
     {

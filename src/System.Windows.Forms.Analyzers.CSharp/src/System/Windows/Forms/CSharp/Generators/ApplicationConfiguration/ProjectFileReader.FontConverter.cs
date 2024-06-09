@@ -78,8 +78,8 @@ internal static partial class ProjectFileReader
                     {
                         // Exception from converter is too generic.
                         throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
-                                                                  font,
-                                                                  $"name{separator} size[units[{separator} style=style1[{separator} style2{separator} ...]]]"));
+                            font,
+                            $"name{separator} size[units[{separator} style=style1[{separator} style2{separator} ...]]]"));
                     }
                 }
 
@@ -157,6 +157,7 @@ internal static partial class ProjectFileReader
                 if (splitPoint > 0)
                 {
                     size = text.Substring(0, splitPoint);
+
                     // Trimming spaces between size and units.
                     size = size.Trim(trimChars);
                 }

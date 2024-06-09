@@ -6,7 +6,7 @@
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
     <LangVersion>15.0</LangVersion>
-    <VBRuntime>None</VBRuntime>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +18,10 @@
 
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
