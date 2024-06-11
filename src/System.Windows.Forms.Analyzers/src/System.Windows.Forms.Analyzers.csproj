@@ -24,6 +24,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
+      <Namespace>System.Windows.Forms.Analyzers.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 

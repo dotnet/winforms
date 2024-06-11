@@ -5,10 +5,12 @@ using System.Windows.Forms.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
-using VerifyCS = System.Windows.Forms.Analyzers.Tests.CSharpAnalyzerVerifier<
-    System.Windows.Forms.Analyzers.AppManifestAnalyzer>;
-using VerifyVB = System.Windows.Forms.Analyzers.Tests.VisualBasicAnalyzerVerifier<
-    System.Windows.Forms.Analyzers.AppManifestAnalyzer>;
+
+using VerifyCS = System.Windows.Forms.Analyzers.Tests
+    .CSharpAnalyzerVerifier<System.Windows.Forms.Analyzers.AppManifestAnalyzer>;
+
+using VerifyVB = System.Windows.Forms.Analyzers.Tests
+    .VisualBasicAnalyzerVerifier<System.Windows.Forms.Analyzers.AppManifestAnalyzer>;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
@@ -113,13 +115,14 @@ End Namespace";
     {
         const string manifestFilePath = @"C:\temp\app.manifest";
         SourceText manifestFile = SourceText.From(File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+
         await new VerifyCS.Test
         {
             TestCode = CSharCode,
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
-                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFAC010.severity = none") }
+                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFCA010.severity = none") }
             }
         }.RunAsync();
     }
@@ -129,13 +132,14 @@ End Namespace";
     {
         const string manifestFilePath = @"C:\temp\app.manifest";
         SourceText manifestFile = SourceText.From(File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+
         await new VerifyVB.Test
         {
             TestCode = VbCode,
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
-                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFAC010.severity = none") }
+                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFCA010.severity = none") }
             }
         }.RunAsync();
     }

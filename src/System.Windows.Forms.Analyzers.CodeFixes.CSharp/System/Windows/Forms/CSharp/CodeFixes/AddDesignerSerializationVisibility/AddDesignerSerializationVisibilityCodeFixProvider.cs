@@ -3,13 +3,14 @@
 
 using System.Collections.Immutable;
 using System.Composition;
+using System.Windows.Forms.Analyzers.Diagnostics;
+using System.Windows.Forms.Analyzers.CodeFixes.Resources;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 

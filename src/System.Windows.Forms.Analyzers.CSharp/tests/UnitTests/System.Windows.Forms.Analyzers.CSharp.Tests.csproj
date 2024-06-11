@@ -32,4 +32,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="System\Windows\Forms\Analyzers\" />
+  </ItemGroup>
+
 </Project>

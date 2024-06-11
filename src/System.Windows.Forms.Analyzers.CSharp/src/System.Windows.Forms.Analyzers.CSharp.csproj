@@ -31,7 +31,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System</Namespace>
+      <Namespace>System.Windows.Forms.Analyzers.CSharp.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 

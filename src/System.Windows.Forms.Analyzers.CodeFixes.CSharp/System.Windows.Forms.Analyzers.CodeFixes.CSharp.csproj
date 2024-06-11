@@ -18,14 +18,14 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
   </ItemGroup>
   
-    <ItemGroup>
-      <ProjectReference Include="..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
+  </ItemGroup>
+  
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System</Namespace>
+      <Namespace>System.Windows.Forms.Analyzers.CodeFixes.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 

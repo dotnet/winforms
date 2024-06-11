@@ -5,6 +5,7 @@ Imports System.Collections.Immutable
 Imports System.Composition
 Imports System.Threading
 Imports System.Windows.Forms.Analyzers.Diagnostics
+Imports System.Windows.Forms.Analyzers.CodeFixes.Resources
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.CodeActions
 Imports Microsoft.CodeAnalysis.CodeFixes
