@@ -427,17 +427,6 @@ public partial class StatusStrip : ToolStrip
         base.SetDisplayedItems();
     }
 
-    internal override void ResetRenderMode()
-    {
-        RenderMode = ToolStripRenderMode.System;
-    }
-
-    internal override bool ShouldSerializeRenderMode()
-    {
-        // We should NEVER serialize custom.
-        return (RenderMode is not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
-    }
-
     /// <summary>
     ///  Override this function if you want to do custom table layouts for the
     ///  StatusStrip.  The default layoutstyle is tablelayout, and we need to play
