@@ -22,7 +22,7 @@ namespace MyProject
         static void Main()
         {
              ApplicationConfiguration.Initialize();
-        }P
+        }
     }
 }";
     private const string SourceCompilationFailed = @"
@@ -65,7 +65,7 @@ namespace MyProject
                 Sources = { SourceCompilationFailed },
                 ExpectedDiagnostics =
                 {
-                    DiagnosticResult.CompilerError("WFAC001").WithArguments("WindowsApplication"),
+                    DiagnosticResult.CompilerError("WFCA001").WithArguments("WindowsApplication"),
                 }
             },
         };
