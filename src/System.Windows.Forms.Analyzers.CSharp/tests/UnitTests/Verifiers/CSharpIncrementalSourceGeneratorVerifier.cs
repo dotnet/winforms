@@ -18,8 +18,10 @@ public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementa
             SolutionTransforms.Add((solution, projectId) =>
             {
                 var compilationOptions = solution.GetProject(projectId)!.CompilationOptions;
+
                 compilationOptions = compilationOptions!.WithSpecificDiagnosticOptions(
                     compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
+
                 solution = solution.WithProjectCompilationOptions(projectId, compilationOptions);
 
                 return solution;
