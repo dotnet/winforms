@@ -106,6 +106,11 @@ internal static partial class LocalAppContextSwitches
                 return false;
             }
 
+            if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
+            {
+                return true;
+            }
+
             if (framework.Version.Major >= 8)
             {
                 // Behavior changes added in .NET 8
