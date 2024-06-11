@@ -4,6 +4,7 @@
 Imports System.Collections.Immutable
 Imports System.ComponentModel
 Imports System.Windows.Forms.Analyzers.Diagnostics
+Imports System.Windows.Forms.Analyzers.VisualBasic.Resources
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Diagnostics
 
@@ -20,12 +21,12 @@ Namespace System.Windows.Forms.VisualBasic.Analyzers.ControlPropertySerializatio
 
         Private Shared ReadOnly s_rule As New DiagnosticDescriptor(
             id:=DiagnosticIDs.ControlPropertySerialization,
-            title:=New LocalizableResourceString(NameOf(SR.WFAVB003AnalyzerTitle), SR.ResourceManager, GetType(SR)),
-            messageFormat:=New LocalizableResourceString(NameOf(SR.WFAVB003AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
+            title:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerTitle), SR.ResourceManager, GetType(SR)),
+            messageFormat:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
             category:=DiagnosticCategories.WinFormsSecurity,
             defaultSeverity:=DiagnosticSeverity.Error,
             isEnabledByDefault:=True,
-            description:=New LocalizableResourceString(NameOf(SR.WFAVB003AnalyzerDescription), SR.ResourceManager, GetType(SR))
+            description:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerDescription), SR.ResourceManager, GetType(SR))
         )
 
         Public Overrides ReadOnly Property SupportedDiagnostics As ImmutableArray(Of DiagnosticDescriptor)

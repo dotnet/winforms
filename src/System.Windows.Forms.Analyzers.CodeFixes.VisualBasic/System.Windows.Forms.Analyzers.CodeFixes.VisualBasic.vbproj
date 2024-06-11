@@ -25,8 +25,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System</Namespace>
-      <Generator>MSBuild:_GenerateResxSource</Generator>
+      <Namespace>System.Windows.Forms.Analyzers.CodeFixes.Resources</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 

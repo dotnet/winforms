@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows.Forms.Analyzers.CSharp.Resources;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;

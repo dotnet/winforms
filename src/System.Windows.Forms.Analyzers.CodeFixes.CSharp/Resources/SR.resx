@@ -117,42 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WFAC001Title" xml:space="preserve">
-    <value>Unsupported project type</value>
-  </data>
-  <data name="WFAC001Message" xml:space="preserve">
-    <value>Only projects with 'OutputType={0}' supported</value>
-  </data>
-  <data name="WFAC002Title" xml:space="preserve">
-    <value>Unsupported property value</value>
-  </data>
-  <data name="WFAC002Message" xml:space="preserve">
-    <value>ArgumentException: Project property '{0}' cannot be set to '{1}'</value>
-  </data>
-  <data name="WFAC002MessageWithReason" xml:space="preserve">
-    <value>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</value>
-  </data>
-  <data name="TextParseFailedFormat" xml:space="preserve">
-    <value>Text "{0}" cannot be parsed. The expected text format is "{1}".</value>
-  </data>
-  <data name="InvalidArgumentValueFontConverter" xml:space="preserve">
-    <value>Value of '{0}' is not valid for font size unit.</value>
-  </data>
-  <data name="GdiplusFontFamilyNotFound" xml:space="preserve">
-    <value>Font '{0}' cannot be found.</value>
-  </data>
-  <data name="GdiplusNotTrueTypeFont" xml:space="preserve">
-    <value>Only TrueType fonts are supported. '{0}' is not a TrueType font.</value>
-  </data>
-  <data name="WFAC003AnalyzerDescription" xml:space="preserve">
-    <value>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</value>
-  </data>
-  <data name="WFAC003AnalyzerTitle" xml:space="preserve">
-    <value>Missing code serialization configuration for property content</value>
-  </data>
-  <data name="WFAC003AnalyzerMessageFormat" xml:space="preserve">
-    <value>Property '{0}' does not configure the code serialization for its property content</value>
-  </data>
   <data name="AddDesignerSerializationVisibilityCodeFixTitle" xml:space="preserve">
     <value>Add DesignerSerializationVisibilityAttribute to property</value>
   </data>

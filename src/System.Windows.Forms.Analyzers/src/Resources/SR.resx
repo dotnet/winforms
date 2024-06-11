@@ -58,13 +58,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WFAC010Title" xml:space="preserve">
+  <data name="WFCA010Title" xml:space="preserve">
     <value>Unsupported high DPI configuration</value>
   </data>
-  <data name="WFAC010Message_CS" xml:space="preserve">
+  <data name="WFCA010Message_CS" xml:space="preserve">
     <value>Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property</value>
   </data>
-  <data name="WFAC010Message_VB" xml:space="preserve">
+  <data name="WFCA010Message_VB" xml:space="preserve">
     <value>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</value>
   </data>
 </root>
