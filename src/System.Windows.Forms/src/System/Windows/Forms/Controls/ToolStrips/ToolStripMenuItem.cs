@@ -1047,7 +1047,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
-        if (Enabled && ShortcutKeys == keyData && !HasDropDownItems)
+        if (Enabled && !HasDropDownItems && (ShortcutKeys == keyData || keyData == Keys.Space))
         {
             FireEvent(ToolStripItemEventType.Click);
             return true;
