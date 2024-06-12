@@ -1082,7 +1082,7 @@ public abstract partial class TextBoxBase : Control
 
     [Browsable(false)]
     public virtual int TextLength
-        // Note: Currently Winforms does not fully support surrogates.  If
+        // Note: Currently WinForms does not fully support surrogates.  If
         // the text contains surrogate characters this property may return incorrect values.
 
         => IsHandleCreated ? PInvoke.GetWindowTextLength(this) : Text.Length;

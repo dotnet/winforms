@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.Metafiles;
 using System.Windows.Forms.VisualStyles;
 
@@ -37,11 +38,19 @@ public class CheckBoxRendererTests : AbstractButtonBaseTests
         );
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11496")]
     [WinFormsTheory]
     [InlineData(CheckBoxState.CheckedNormal)]
     [InlineData(CheckBoxState.MixedNormal)]
     public void CheckBoxRenderer_DrawCheckBox_OverloadWithSizeAndText(CheckBoxState cBState)
     {
+        // Skip validation of CheckBoxState.CheckedNormal on X86 due to the active issue "https://github.com/dotnet/winforms/issues/11496"
+        if (cBState == CheckBoxState.CheckedNormal
+            && RuntimeInformation.ProcessArchitecture == Architecture.X86)
+        {
+            return;
+        }
+
         using Form form = new();
         using CheckBox control = (CheckBox)CreateButton();
         form.Controls.Add(control);

@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">BinaryFormatter の使用はサポートされていません。</target>
+        <target state="translated">BinaryFormatter の使用は、トリミングされたアプリケーションではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">'{0}' は、トリミングされたアプリケーションではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">デザイン時間機能はサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">

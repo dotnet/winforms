@@ -9,7 +9,7 @@ public partial class Control
 {
     public partial class ControlCollection
     {
-        // This is the same as WinformsUtils.ArraySubsetEnumerator
+        // This is the same as ArraySubsetEnumerator
         // however since we're no longer an array, we've gotta employ a
         // special version of this.
         private class ControlCollectionEnumerator : IEnumerator

@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">L'uso di BinaryFormatter non è supportato.</target>
+        <target state="translated">L'uso di BinaryFormatter non è supportato nelle applicazioni tagliate.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">'{0}' non è supportato nelle applicazioni tagliate.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">Le funzionalità della fase di progettazione non sono supportate.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">

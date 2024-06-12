@@ -3,11 +3,11 @@
 
 #nullable enable
 
-using System.ComponentModel;
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class DragDrop : Form
 {
     private const string DragDropDataDirectory = @"Data\DragDrop";
