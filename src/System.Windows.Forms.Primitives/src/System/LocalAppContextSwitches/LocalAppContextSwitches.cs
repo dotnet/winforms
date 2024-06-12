@@ -210,8 +210,8 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Indicates whether TreeNode.PrevNode uses a fixed index to return its value.
-    ///  Thus mirroring the behavior of the TreeNodeCollection.
+    ///  When set to (default), API will insert nodes in the sorted order.
+    ///  To get behavior compatible with the previous versions of .NET and .NET Framework, set this switch to.
     /// </summary>
     public static bool TreeNodeCollectionAddRangeRespectsSortOrder
     {
