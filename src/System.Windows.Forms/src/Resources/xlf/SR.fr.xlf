@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">L’utilisation de BinaryFormatter n’est pas prise en charge.</target>
+        <target state="translated">L’utilisation de BinaryFormatter n’est pas prise en charge dans les applications tronquées.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">« {0} » n’est pas pris en charge dans les applications tronquées.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">Les fonctionnalités au moment du design ne sont pas prises en charge.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">

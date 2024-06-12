@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">BinaryFormatter kullanımı desteklenmiyor.</target>
+        <target state="translated">Kırpılmış uygulamalarda BinaryFormatter’ın kullanımı desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">'{0}', kırpılmış uygulamalarda desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">Tasarım zamanı özellikleri desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
