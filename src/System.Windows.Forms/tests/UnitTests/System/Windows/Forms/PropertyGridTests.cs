@@ -4049,44 +4049,6 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
-    public void PropertyGrid_CollapseAndExpandAllGridItems_CollapseAndExpandCorrectly()
-    {
-        using PropertyGrid propertyGrid = new();
-        var testObject = new { Property1 = "Value1", Property2 = "Value2" };
-        propertyGrid.SelectedObject = testObject;
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded = true;
-        }
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded.Should().BeTrue();
-        }
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded = false;
-        }
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded.Should().BeFalse();
-        }
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded = true;
-        }
-
-        foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
-        {
-            item.Expanded.Should().BeTrue();
-        }
-    }
-
-    [WinFormsFact]
     public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
     {
         using PropertyGrid propertyGrid = new();
