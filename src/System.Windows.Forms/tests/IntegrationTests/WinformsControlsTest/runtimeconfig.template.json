@@ -5,10 +5,12 @@
     "System.Windows.Forms.ApplyParentFontToMenus": true,
     "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero": false,
     "System.Windows.Forms.DoNotCatchUnhandledExceptions": true,
-    "System.Windows.Forms.EnableMsoComponentManager": false,
-    "System.Windows.Forms.NoClientNotifications": false,
+    "Switch.System.Windows.Forms.EnableMsoComponentManager": false,
+    "Switch.System.Windows.Forms.NoClientNotifications": false,
     "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": false,
     "System.Windows.Forms.ServicePointManagerCheckCrl": false,
-    "System.Windows.Forms.TrackBarModernRendering": false
+    "System.Windows.Forms.TrackBarModernRendering": false,
+    "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder": true,
+    "System.Windows.Forms.Clipboard.EnableUnsafeBinaryFormatterDeserialization": false
   }
 }

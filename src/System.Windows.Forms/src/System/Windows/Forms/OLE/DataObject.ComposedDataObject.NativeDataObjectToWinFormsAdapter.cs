@@ -391,7 +391,7 @@ public unsafe partial class DataObject
                 }
             }
 
-            private static Image? TryGetBitmapData(Com.IDataObject* dataObject, string format)
+            private static Bitmap? TryGetBitmapData(Com.IDataObject* dataObject, string format)
             {
                 if (format != DataFormats.BitmapConstant)
                 {
@@ -418,7 +418,7 @@ public unsafe partial class DataObject
                     Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                 }
 
-                Image? data = null;
+                Bitmap? data = null;
 
                 try
                 {
@@ -426,10 +426,10 @@ public unsafe partial class DataObject
                     // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
                     if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
                         && !medium.hGlobal.IsNull
-                        && Image.FromHbitmap(medium.hGlobal) is Image clipboardImage)
+                        && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
                     {
-                        data = (Image)clipboardImage.Clone();
-                        clipboardImage.Dispose();
+                        data = (Bitmap)clipboardBitmap.Clone();
+                        clipboardBitmap.Dispose();
                     }
                 }
                 finally

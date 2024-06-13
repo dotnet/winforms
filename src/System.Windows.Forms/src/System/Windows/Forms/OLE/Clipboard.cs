@@ -288,7 +288,7 @@ public static class Clipboard
             // These are the only error states for Path.GetFullPath
             if (string.IsNullOrEmpty(path) || path.Contains('\0'))
             {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"));
+                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, nameof(filePaths)));
             }
         }
 
