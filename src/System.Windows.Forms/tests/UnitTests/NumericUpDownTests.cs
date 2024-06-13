@@ -225,10 +225,15 @@ public class NumericUpDownTests
     [WinFormsFact]
     public void NumericUpDown_Accelerations_Get_ReturnsExpected()
     {
+
         using NumericUpDown upDown = new();
-        NumericUpDownAccelerationCollection accelerations = upDown.Accelerations;
-        accelerations.Should().NotBeNull();
-        accelerations.Should().BeEmpty();
+        NumericUpDownAccelerationCollection accelerations1 = upDown.Accelerations;
+        NumericUpDownAccelerationCollection accelerations2 = upDown.Accelerations;
+
+        accelerations1.Should().BeSameAs(accelerations2);
+
+        accelerations1.Should().NotBeNull();
+        accelerations1.Should().BeEmpty();
     }
 
     [WinFormsFact]
@@ -244,7 +249,7 @@ public class NumericUpDownTests
     public void NumericUpDown_Accelerations_GetNotNullValue_ReturnsExpected()
     {
         using NumericUpDown upDown = new();
-        var acceleration = new NumericUpDownAcceleration(2, 1);
+        NumericUpDownAcceleration acceleration = new(2, 1);
         upDown.Accelerations.Add(acceleration);
         NumericUpDownAccelerationCollection accelerations = upDown.Accelerations;
         accelerations.Should().NotBeNull();
@@ -362,7 +367,7 @@ public class NumericUpDownTests
     public void NumericUpDown_Padding_Set_GetReturnsExpected()
     {
         using NumericUpDown upDown = new();
-        var padding = new Padding(1, 2, 3, 4);
+        Padding padding = new(1, 2, 3, 4);
         upDown.Padding = padding;
         upDown.Padding.Should().Be(padding);
     }
