@@ -33,8 +33,8 @@
     <!-- Analyzers and source generators -->
     <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
       <_AnalyzerTargetLanguage>$(AssemblyName.Substring($(AssemblyName.LastIndexOf('.'))))</_AnalyzerTargetLanguage>
-      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.CSharp', StringComparison.OrdinalIgnoreCase))">/cs</AnalyzerTargetLanguage>
-      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.VisualBasic', StringComparison.OrdinalIgnoreCase))">/vb</AnalyzerTargetLanguage>
+      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.CSharp', StringComparison.OrdinalIgnoreCase))">/CSharp</AnalyzerTargetLanguage>
+      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.VisualBasic', StringComparison.OrdinalIgnoreCase))">/VisualBasic</AnalyzerTargetLanguage>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(PackagePath)' == ''">
