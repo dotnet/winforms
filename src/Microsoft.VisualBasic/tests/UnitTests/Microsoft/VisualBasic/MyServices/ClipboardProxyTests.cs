@@ -9,6 +9,7 @@ using TextDataFormat = System.Windows.Forms.TextDataFormat;
 namespace Microsoft.VisualBasic.MyServices.Tests;
 
 [Collection("Sequential")]
+[CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
     [WinFormsFact]
