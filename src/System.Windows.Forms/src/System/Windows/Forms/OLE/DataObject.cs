@@ -111,7 +111,11 @@ public unsafe partial class DataObject :
     ///   for more details on default <see cref="JsonSerializer"/> behavior.
     ///  </para>
     ///  <para>
-    ///   If custom behavior is needed, manually JSON serialize the data and then use <see cref="SetData(object?)"/>
+    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use <see cref="SetData(object?)"/>,
+    ///   or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
+    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
+    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
+    ///   on custom converters for JSON serialization.
     ///  </para>
     /// </remarks>
     public void SetDataAsJson<T>(string format, T data)
