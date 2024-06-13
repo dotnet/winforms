@@ -53,10 +53,31 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     }
 
     /// <summary>
+    ///  Tries to deserialize this object if it was serialized as JSON.
+    /// </summary>
+    public static bool TryGetObjectFromJson(this BinaryFormattedObject format, out object? @object)
+    {
+        @object = null;
+
+        if (format.RootRecord is not ClassWithMembersAndTypes types
+            || !types.ClassInfo.Name.Contains(typeof(JsonData).FullName!)
+            || types["<JsonBytes>k__BackingField"] is not MemberReference reference
+            || format[reference] is not ArraySinglePrimitive<byte>)
+        {
+            // The data was not serialized as JSON.
+            return false;
+        }
+
+        @object = format.Deserialize();
+        return true;
+    }
+
+    /// <summary>
     ///  Try to get a supported object.
     /// </summary>
     public static bool TryGetObject(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value) =>
         format.TryGetFrameworkObject(out value)
         || format.TryGetBitmap(out value)
-        || format.TryGetImageListStreamer(out value);
+        || format.TryGetImageListStreamer(out value)
+        || format.TryGetObjectFromJson(out value);
 }
