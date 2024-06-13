@@ -4586,7 +4586,6 @@ public class MonthCalendarTests
 
         setColor(calendar, Color.Red);
         calendar.CreateControl();
-        _ = calendar.Handle;
         resetColor(testAccessor.Dynamic);
         getColor(calendar).Should().Be(originalColor);
     }
