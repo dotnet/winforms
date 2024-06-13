@@ -282,17 +282,25 @@ public class DateTimePickerTests: IDisposable
     public void DateTimePicker_CalendarFont_GetSet_ReturnsExpected()
     {
         Font expectedFont = new("Arial", 8.25f);
+        Font differentFont = new("Times New Roman", 10f);
 
         _dateTimePicker.CalendarFont = expectedFont;
         _dateTimePicker.CalendarFont.Should().Be(expectedFont);
+
+        _dateTimePicker.CalendarFont = differentFont;
+        _dateTimePicker.CalendarFont.Should().Be(differentFont);
 
         _dateTimePicker.CalendarFont = null;
         _dateTimePicker.CalendarFont.Should().Be(_dateTimePicker.Font);
     }
 
     [WinFormsFact]
-    public void DateTimePicker_Checked_GetSet_ReturnsExpected()
+    public void DateTimePicker_Checked_WhenShowCheckBoxTrueAndHandleCreated_ReturnsExpected()
     {
+        _dateTimePicker.ShowCheckBox = true;
+        _dateTimePicker.CreateControl();
+
+        _dateTimePicker.Checked = true;
         _dateTimePicker.Checked.Should().BeTrue();
 
         _dateTimePicker.Checked = false;
@@ -300,6 +308,30 @@ public class DateTimePickerTests: IDisposable
 
         _dateTimePicker.Checked = true;
         _dateTimePicker.Checked.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_Checked_WhenShowCheckBoxTrueAndHandleNotCreated_ReturnsExpected()
+    {
+        _dateTimePicker.ShowCheckBox = true;
+
+        _dateTimePicker.Checked = true;
+        _dateTimePicker.Checked.Should().BeTrue();
+
+        _dateTimePicker.Checked = false;
+        _dateTimePicker.Checked.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_Checked_WhenShowCheckBoxFalse_ReturnsExpected()
+    {
+        _dateTimePicker.ShowCheckBox = false;
+
+        _dateTimePicker.Checked = true;
+        _dateTimePicker.Checked.Should().BeTrue();
+
+        _dateTimePicker.Checked = false;
+        _dateTimePicker.Checked.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -312,6 +344,9 @@ public class DateTimePickerTests: IDisposable
 
         _dateTimePicker.CustomFormat = "yyyy/MM/dd";
         _dateTimePicker.Format = DateTimePickerFormat.Custom;
+        _dateTimePicker.Text.Should().Be("2021/12/31");
+
+        _dateTimePicker.CustomFormat = "yyyy/MM/dd";
         _dateTimePicker.Text.Should().Be("2021/12/31");
 
         _dateTimePicker.CustomFormat = "MM/dd/yyyy";
@@ -341,6 +376,9 @@ public class DateTimePickerTests: IDisposable
         DateTime expectedDate = new(2022, 12, 31);
         _dateTimePicker.MaxDate = expectedDate;
         _dateTimePicker.MaxDate.Should().Be(expectedDate);
+
+        _dateTimePicker.MaxDate = expectedDate;
+        _dateTimePicker.MaxDate.Should().Be(expectedDate);
     }
 
     [WinFormsTheory]
@@ -355,12 +393,18 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_MaximumDateTime_ReturnsExpected()
     {
-        DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
-        DateTime expectedDate = maxSupportedDateTime.Year > DateTimePicker.MaxDateTime.Year ? DateTimePicker.MaxDateTime : maxSupportedDateTime;
+        DateTime expectedMaxDateTime = DateTimePicker.MaxDateTime;
+        DateTime expectedMaxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
+        DateTime actualMaximumDateTime = DateTimePicker.MaximumDateTime;
 
-        DateTime result = DateTimePicker.MaximumDateTime;
-
-        result.Should().Be(expectedDate);
+        if (expectedMaxSupportedDateTime.Year > DateTimePicker.MaxDateTime.Year)
+        {
+            actualMaximumDateTime.Should().Be(expectedMaxDateTime);
+        }
+        else
+        {
+            actualMaximumDateTime.Should().Be(expectedMaxSupportedDateTime);
+        }
     }
 
     [WinFormsFact]
@@ -368,9 +412,36 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.MinDate.ToString().Should().Be("1/1/1753 12:00:00 AM");
 
-        DateTime expectedDate = new(2022, 1, 1);
+        DateTime expectedDate = DateTimePicker.MinimumDateTime.AddDays(1);
         _dateTimePicker.MinDate = expectedDate;
         _dateTimePicker.MinDate.Should().Be(expectedDate);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MinDate_SetGreaterThanMaxDate_Should_ThrowArgumentOutOfRangeException()
+    {
+        DateTime invalidMinDate = DateTimePicker.MaximumDateTime.AddDays(1);
+        Action act = () => _dateTimePicker.MinDate = invalidMinDate;
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MinDate_SetLessThanMinimumDateTime_Should_ThrowArgumentOutOfRangeException()
+    {
+        DateTime invalidMinDate = DateTimePicker.MinimumDateTime.AddDays(-1);
+        Action act = () => _dateTimePicker.MinDate = invalidMinDate;
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_MinDate_Set_AdjustsValueIfNeeded()
+    {
+        _dateTimePicker.Value = DateTimePicker.MinimumDateTime.AddDays(5);
+        DateTime newMinDate = DateTimePicker.MinimumDateTime.AddDays(10);
+        _dateTimePicker.MinDate = newMinDate;
+
+        _dateTimePicker.MinDate.Should().Be(newMinDate);
+        _dateTimePicker.Value.Should().Be(newMinDate);
     }
 
     [WinFormsFact]
@@ -429,16 +500,34 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_Value_GetSet_ReturnsExpected()
     {
-        DateTime expectedDate = new(2022, 1, 1);
+        DateTime initialDate = new(2022, 1, 1);
+        DateTime sameDate = new(2022, 1, 1);
+        DateTime newDate = new(2023, 1, 1);
 
-        _dateTimePicker.Value = expectedDate;
-        _dateTimePicker.Value.Should().Be(expectedDate);
+        _dateTimePicker.Value = initialDate;
+        _dateTimePicker.Value.Should().Be(initialDate);
+
+        bool valueChangedEventRaised = false;
+        _dateTimePicker.ValueChanged += (_, _) => valueChangedEventRaised = true;
+        _dateTimePicker.Value = sameDate;
+        _dateTimePicker.Value.Should().Be(initialDate);
+        valueChangedEventRaised.Should().BeFalse();
+
+        _dateTimePicker.Value = newDate;
+        _dateTimePicker.Value.Should().Be(newDate);
+        valueChangedEventRaised.Should().BeTrue();
 
         _dateTimePicker.Value = DateTimePicker.MinimumDateTime;
         _dateTimePicker.Value.Should().Be(DateTimePicker.MinimumDateTime);
 
         _dateTimePicker.Value = DateTimePicker.MaximumDateTime;
         _dateTimePicker.Value.Should().Be(DateTimePicker.MaximumDateTime);
+
+        Action act = () => _dateTimePicker.Value = DateTimePicker.MinDateTime.AddDays(-1);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+
+        act = () => _dateTimePicker.Value = DateTimePicker.MaxDateTime.AddDays(1);
+        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [WinFormsTheory]
