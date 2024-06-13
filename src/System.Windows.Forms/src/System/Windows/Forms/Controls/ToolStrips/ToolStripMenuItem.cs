@@ -1049,6 +1049,12 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         if (Enabled && !HasDropDownItems && (ShortcutKeys == keyData || keyData == Keys.Space))
         {
+            if (keyData == Keys.Space)
+            {
+                Checked = !Checked;
+                return true;
+            }
+
             FireEvent(ToolStripItemEventType.Click);
             return true;
         }

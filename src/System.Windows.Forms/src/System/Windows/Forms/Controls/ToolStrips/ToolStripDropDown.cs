@@ -1489,7 +1489,7 @@ public partial class ToolStripDropDown : ToolStrip
             return true;
         }
 
-        if ((keyData & Keys.KeyCode) == Keys.Escape)
+        if ((keyData & Keys.KeyCode) is Keys.Escape or Keys.Enter)
         {
             SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
             SelectPreviousToolStrip();
