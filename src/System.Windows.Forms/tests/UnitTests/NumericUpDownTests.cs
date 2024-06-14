@@ -225,7 +225,6 @@ public class NumericUpDownTests
     [WinFormsFact]
     public void NumericUpDown_Accelerations_Get_ReturnsExpected()
     {
-
         using NumericUpDown upDown = new();
         NumericUpDownAccelerationCollection accelerations1 = upDown.Accelerations;
         NumericUpDownAccelerationCollection accelerations2 = upDown.Accelerations;
