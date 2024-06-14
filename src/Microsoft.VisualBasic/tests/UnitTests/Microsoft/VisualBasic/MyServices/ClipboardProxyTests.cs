@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using FluentAssertions;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
@@ -83,6 +84,18 @@ public class ClipboardProxyTests
         object data = GetUniqueText();
         Assert.Equal(System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.UnicodeText), clipboard.GetDataObject().GetData(DataFormats.UnicodeText));
         clipboard.SetDataObject(new System.Windows.Forms.DataObject(data));
+    }
+
+    [WinFormsFact]
+    public void SetDataAsJson()
+    {
+        var clipboard = new Computer().Clipboard;
+        Point point = new(1, 1);
+        clipboard.SetDataAsJson("point", point);
+        clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
+        Point retrieved = clipboard.GetData("point").Should().BeOfType<Point>().Which;
+        retrieved.Should().BeEquivalentTo(System.Windows.Forms.Clipboard.GetData("point"));
+        retrieved.Should().BeEquivalentTo(point);
     }
 
     private static string GetUniqueText() => Guid.NewGuid().ToString("D");
