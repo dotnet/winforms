@@ -142,17 +142,6 @@ public class LabelAccessibleObjectTests
         Assert.Equal(1, accessibilityObject.RaiseAutomationNotificationCallCount);
     }
 
-    [WinFormsFact]
-    public void LabelAccessibleObject_Name_ReturnsExpected()
-    {
-        using Label label = new() { AccessibleName = "Test Accessible Name" };
-        LabelAccessibleObject accessibleObject = (LabelAccessibleObject)label.AccessibilityObject;
-
-        string name = accessibleObject.Name;
-
-        name.Should().Be("Test Accessible Name");
-    }
-
     [WinFormsTheory]
     [InlineData("&File", false, "&File")]
     [InlineData("&File", true, "File")]
@@ -175,11 +164,13 @@ public class LabelAccessibleObjectTests
     }
 
     [WinFormsTheory]
+    [InlineData("Test Accessible Name", "Test Accessible Name", false)]
+    [InlineData("Test Accessible Name", "Test Accessible Name", true)]
     [InlineData("", null, false)]
     [InlineData("", null, true)]
-    [InlineData(null, null, false)]
+    [InlineData(null, null, false)] 
     [InlineData(null, null, true)]
-    public void LabelAccessibleObject_Name_ReturnsExpected_WithEmptyOrNullText(string labelText, string expectedName, bool useMnemonic)
+    public void LabelAccessibleObject_Name_ReturnsExpected_WithVariousText(string labelText, string expectedName, bool useMnemonic)
     {
         using Label label = new() { Text = labelText, UseMnemonic = useMnemonic };
         LabelAccessibleObject accessibleObject = (LabelAccessibleObject)label.AccessibilityObject;
