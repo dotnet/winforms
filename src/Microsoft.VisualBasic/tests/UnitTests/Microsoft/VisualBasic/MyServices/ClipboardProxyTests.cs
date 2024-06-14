@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using FluentAssertions;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
@@ -14,41 +15,41 @@ public class ClipboardProxyTests
     [WinFormsFact]
     public void Clear()
     {
-        var clipboard = (new Computer()).Clipboard;
+        var clipboard = new Computer().Clipboard;
         string text = GetUniqueText();
         clipboard.SetText(text);
-        Assert.True(System.Windows.Forms.Clipboard.ContainsText());
+        System.Windows.Forms.Clipboard.ContainsText().Should().BeTrue();
         clipboard.Clear();
-        Assert.False(System.Windows.Forms.Clipboard.ContainsText());
+        System.Windows.Forms.Clipboard.ContainsText().Should().BeFalse();
     }
 
     [WinFormsFact]
     public void Text()
     {
-        var clipboard = (new Computer()).Clipboard;
+        var clipboard = new Computer().Clipboard;
         string text = GetUniqueText();
         clipboard.SetText(text, TextDataFormat.UnicodeText);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText), clipboard.GetText(TextDataFormat.UnicodeText));
-        Assert.Equal(text, clipboard.GetText(TextDataFormat.UnicodeText));
+        clipboard.ContainsText().Should().Be(System.Windows.Forms.Clipboard.ContainsText());
+        clipboard.GetText().Should().Be(System.Windows.Forms.Clipboard.GetText());
+        clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText));
+        clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(text);
     }
 
     [WinFormsFact]
     public void Image()
     {
-        var clipboard = (new Computer()).Clipboard;
+        var clipboard = new Computer().Clipboard;
         Bitmap image = new(2, 2);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsImage(), clipboard.ContainsImage());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetImage(), clipboard.GetImage());
         clipboard.SetImage(image);
+        clipboard.ContainsImage().Should().Be(System.Windows.Forms.Clipboard.ContainsImage());
+        clipboard.GetImage().Should().BeEquivalentTo(System.Windows.Forms.Clipboard.GetImage());
     }
 
     [WinFormsFact]
     public void Audio()
     {
-        var clipboard = (new Computer()).Clipboard;
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsAudio(), clipboard.ContainsAudio());
+        var clipboard = new Computer().Clipboard;
+        clipboard.ContainsAudio().Should().Be(System.Windows.Forms.Clipboard.ContainsAudio());
         // Not tested:
         //   Public Function GetAudioStream() As Stream
         //   Public Sub SetAudio(ByVal audioBytes As Byte())
@@ -58,8 +59,8 @@ public class ClipboardProxyTests
     [WinFormsFact]
     public void FileDropList()
     {
-        var clipboard = (new Computer()).Clipboard;
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsFileDropList(), clipboard.ContainsFileDropList());
+        var clipboard = new Computer().Clipboard;
+        clipboard.ContainsFileDropList().Should().Be(System.Windows.Forms.Clipboard.ContainsFileDropList());
         // Not tested:
         //   Public Function GetFileDropList() As StringCollection
         //   Public Sub SetFileDropList(ByVal filePaths As StringCollection)
@@ -68,20 +69,32 @@ public class ClipboardProxyTests
     [WinFormsFact]
     public void Data()
     {
-        var clipboard = (new Computer()).Clipboard;
+        var clipboard = new Computer().Clipboard;
         object data = GetUniqueText();
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsData(DataFormats.UnicodeText), clipboard.ContainsData(DataFormats.UnicodeText));
-        Assert.Equal(System.Windows.Forms.Clipboard.GetData(DataFormats.UnicodeText), clipboard.GetData(DataFormats.UnicodeText));
         clipboard.SetData(DataFormats.UnicodeText, data);
+        clipboard.ContainsData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.ContainsData(DataFormats.UnicodeText));
+        clipboard.GetData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetData(DataFormats.UnicodeText));
     }
 
     [WinFormsFact]
     public void DataObject()
     {
-        var clipboard = (new Computer()).Clipboard;
+        var clipboard = new Computer().Clipboard;
         object data = GetUniqueText();
-        Assert.Equal(System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.UnicodeText), clipboard.GetDataObject().GetData(DataFormats.UnicodeText));
         clipboard.SetDataObject(new System.Windows.Forms.DataObject(data));
+        clipboard.GetDataObject().GetData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.UnicodeText));
+    }
+
+    [WinFormsFact]
+    public void SetDataAsJson()
+    {
+        var clipboard = new Computer().Clipboard;
+        Point point = new(1, 1);
+        clipboard.SetDataAsJson("point", point);
+        clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
+        Point retrieved = clipboard.GetData("point").Should().BeOfType<Point>().Which;
+        retrieved.Should().Be(System.Windows.Forms.Clipboard.GetData("point"));
+        retrieved.Should().Be(point);
     }
 
     private static string GetUniqueText() => Guid.NewGuid().ToString("D");
