@@ -4,7 +4,7 @@
 using System.Runtime.Serialization;
 using System.Text.Json;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows;
 
 /// <summary>
 ///  Wrapper which contains JSON serialized data along with the JSON data's original type information
@@ -12,12 +12,12 @@ namespace System.Windows.Forms;
 /// </summary>
 [Serializable]
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-internal struct JsonData<T> : IObjectReference, JsonData
+internal struct JsonData<T> : IObjectReference, IJsonData
 #pragma warning restore SYSLIB0050
 {
     public byte[] JsonBytes { get; set; }
 
-    public readonly string TypeFullName => $"{typeof(JsonData).FullName}`1[[{typeof(T).AssemblyQualifiedName}]]";
+    public readonly string TypeFullName => $"{typeof(JsonData<T>).FullName}";
 
     public readonly object GetRealObject(StreamingContext context) =>
         JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
@@ -27,7 +27,7 @@ internal struct JsonData<T> : IObjectReference, JsonData
 ///  Represents an object that contains JSON serialized data. This interface is used to
 ///  identify a <see cref="JsonData{T}"/> without needing to have the generic type information.
 /// </summary>
-internal interface JsonData
+internal interface IJsonData
 {
     byte[] JsonBytes { get; set; }
 

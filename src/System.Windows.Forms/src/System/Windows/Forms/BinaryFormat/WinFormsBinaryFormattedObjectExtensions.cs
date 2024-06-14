@@ -3,6 +3,9 @@
 
 using System.Drawing;
 using System.Private.Windows.Core.BinaryFormat;
+using System.Reflection.Metadata;
+using System.Text.Json;
+using MemberReference = System.Private.Windows.Core.BinaryFormat.MemberReference;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -58,18 +61,28 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetObjectFromJson(this BinaryFormattedObject format, out object? @object)
     {
+        // we need the binder, to construct the type. This would also be a completely different method (separate from TryGetObject)
         @object = null;
 
-        if (format.RootRecord is not ClassWithMembersAndTypes types
-            || !types.ClassInfo.Name.Contains(typeof(JsonData).FullName!)
-            || types["<JsonBytes>k__BackingField"] is not MemberReference reference
-            || format[reference] is not ArraySinglePrimitive<byte>)
+        if (format[2] is not BinaryLibrary library || library.LibraryName != "System.Private.Windows.VirtualJson")
         {
             // The data was not serialized as JSON.
             return false;
         }
 
-        @object = format.Deserialize();
+        if (format.RootRecord is not ClassWithMembersAndTypes types
+            || types["<JsonBytes>k__BackingField"] is not MemberReference reference
+            || format[reference] is not ArraySinglePrimitive<byte> byteData
+            || !TypeName.TryParse(types.ClassInfo.Name, out TypeName? result)
+            || Type.GetType(result.GetGenericArguments()[0].AssemblyQualifiedName) is not Type genericType)
+        {
+            // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
+            throw new InvalidOperationException();
+        }
+
+        // TODO: We should get the type from the Func<TypeName, Type> that will be passed down instead of using Type.GetType()
+        @object = JsonSerializer.Deserialize((byte[])byteData.ArrayObjects, genericType);
+
         return true;
     }
 
