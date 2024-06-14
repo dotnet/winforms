@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -9,7 +11,7 @@ public partial class PrintControllerWithStatusDialog
 {
     private class StatusDialog : Form
     {
-        internal Label _cancellingLabel;
+        internal TextBox _cancellingLabel;
         private Button _cancelButton;
         private TableLayoutPanel? _tableLayoutPanel;
         private readonly BackgroundThread _backgroundThread;
@@ -32,15 +34,19 @@ public partial class PrintControllerWithStatusDialog
                 RightToLeft = RightToLeft.Yes;
             }
 
-            _cancellingLabel = new Label()
+            _cancellingLabel = new TextBox()
             {
                 AutoSize = true,
                 Location = new Point(8, 16),
-                TextAlign = ContentAlignment.MiddleCenter,
+                BorderStyle = BorderStyle.None,
+                ReadOnly = true,
+                TextAlign = HorizontalAlignment.Center,
                 Size = new Size(240, 64),
                 TabIndex = 1,
                 Anchor = AnchorStyles.None
             };
+
+            _cancellingLabel.TextChanged += _cancellingLabel_TextChanged;
 
             _cancelButton = new Button()
             {
@@ -87,6 +93,20 @@ public partial class PrintControllerWithStatusDialog
             _cancelButton.Enabled = false;
             _cancellingLabel.Text = SR.PrintControllerWithStatusDialog_Canceling;
             _backgroundThread._canceled = true;
+        }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
+
+        private void _cancellingLabel_TextChanged(object? sender, EventArgs e)
+        {
+            if (!_cancellingLabel.IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            using var textVariant = (VARIANT)_cancellingLabel.Text;
+            _cancellingLabel.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
+            _cancellingLabel.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, textVariant, textVariant);
         }
     }
 }
