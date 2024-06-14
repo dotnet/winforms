@@ -3,6 +3,7 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using Windows.Win32.System.Com;

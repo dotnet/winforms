@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Private.Windows;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 
@@ -13,25 +14,6 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 public class WinFormsBinaryFormattedObjectTests
 {
     private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
-
-    [Fact]
-    public void BinaryFormattedObject_JsonData_FromBinaryFormatter()
-    {
-        Point point = new() { X = 1, Y = 1 };
-
-        JsonData<Point> json = new()
-        {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
-        };
-
-        BinaryFormattedObject format = json.SerializeAndParse();
-        ClassWithMembersAndTypes root = format.RootRecord.Should().BeOfType<ClassWithMembersAndTypes>().Subject;
-        root.Name.Should().Be(typeof(JsonData<Point>).FullName);
-        root[$"<{nameof(json.JsonBytes)}>k__BackingField"].Should().BeOfType<MemberReference>();
-        format.TryGetObjectFromJson(out object? result).Should().BeTrue();
-        result.Should().BeOfType<Point>();
-        result.Should().BeEquivalentTo(point);
-    }
 
     [Fact]
     public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
@@ -56,7 +38,8 @@ public class WinFormsBinaryFormattedObjectTests
 
         stream.Position = 0;
         BinaryFormattedObject binary = new(stream);
-
+        binary[2].Should().BeOfType<BinaryLibrary>().Which
+            .LibraryName.Should().Be("System.Private.Windows.VirtualJson");
         binary.TryGetObjectFromJson(out object? result).Should().BeTrue();
         Point deserialized = result.Should().BeOfType<Point>().Which;
         deserialized.Should().BeEquivalentTo(point);
