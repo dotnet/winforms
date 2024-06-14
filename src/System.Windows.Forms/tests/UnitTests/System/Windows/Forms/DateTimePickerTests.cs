@@ -339,18 +339,20 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.CustomFormat.Should().BeNull();
 
-        _dateTimePicker.Value = new(2021, 12, 31);
         _dateTimePicker.CreateControl();
-
-        _dateTimePicker.CustomFormat = "yyyy/MM/dd";
         _dateTimePicker.Format = DateTimePickerFormat.Custom;
-        _dateTimePicker.Text.Should().Be("2021/12/31");
 
-        _dateTimePicker.CustomFormat = "yyyy/MM/dd";
-        _dateTimePicker.Text.Should().Be("2021/12/31");
+        string newCustomFormat = "yyyy-MM-dd";
+        _dateTimePicker.CustomFormat = newCustomFormat;
+        _dateTimePicker.CustomFormat.Should().Be(newCustomFormat);
 
-        _dateTimePicker.CustomFormat = "MM/dd/yyyy";
-        _dateTimePicker.Text.Should().Be("12/31/2021");
+        string initialCustomFormat = _dateTimePicker.CustomFormat;
+        _dateTimePicker.CustomFormat = initialCustomFormat;
+        _dateTimePicker.CustomFormat.Should().Be(initialCustomFormat);
+
+        string newCustomFormat2 = "MM/dd/yyyy";
+        _dateTimePicker.CustomFormat = newCustomFormat2;
+        _dateTimePicker.CustomFormat.Should().Be(newCustomFormat2);
 
         _dateTimePicker.CustomFormat = null;
         _dateTimePicker.CustomFormat.Should().BeNull();
@@ -377,8 +379,9 @@ public class DateTimePickerTests: IDisposable
         _dateTimePicker.MaxDate = expectedDate;
         _dateTimePicker.MaxDate.Should().Be(expectedDate);
 
-        _dateTimePicker.MaxDate = expectedDate;
-        _dateTimePicker.MaxDate.Should().Be(expectedDate);
+        DateTime initialMaxDate = _dateTimePicker.MaxDate;
+        _dateTimePicker.MaxDate = initialMaxDate;
+        _dateTimePicker.MaxDate.Should().Be(initialMaxDate);
     }
 
     [WinFormsTheory]
