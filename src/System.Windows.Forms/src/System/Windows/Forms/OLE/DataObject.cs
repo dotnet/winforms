@@ -123,7 +123,8 @@ public unsafe partial class DataObject :
     {
         if (data is DataObject)
         {
-            throw new InvalidOperationException(string.Format(SR.InvalidTypeForSetDataAsJson, nameof(SetData)));
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
         SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
