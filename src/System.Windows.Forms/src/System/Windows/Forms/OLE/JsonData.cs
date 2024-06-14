@@ -48,6 +48,11 @@ namespace System.Private.Windows;
 ///      BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options { Binder = new ReplicatedJsonDataBinder() });
 ///      // This should return the original data that was JSON serialized.
 ///      object? deserialized = binary.Deserialize();
+///
+///      // OR
+///      BinaryFormatter binaryFormatter = new() { Binder = new ReplicatedJsonDataBinder() };
+///      // This should return the original data that was JSON serialized.
+///      binaryFormatter.Deserialize(stream);
 ///  }
 ///  ]]>
 /// </example>
