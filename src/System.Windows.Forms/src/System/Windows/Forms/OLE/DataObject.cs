@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -98,7 +97,7 @@ public unsafe partial class DataObject :
     ///  Stores the specified data and its associated format in this instance as JSON.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    ///  If <see cref="DataObject"/> is passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
+    ///  <see cref="DataObject"/> was passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
     ///  If <see cref="DataObject"/> needs to be set, use <see cref="SetData(object?)"/>
     /// </exception>
     /// <remarks>
@@ -134,9 +133,7 @@ public unsafe partial class DataObject :
     public virtual object? GetData(string format, bool autoConvert)
     {
         object? data = ((IDataObject)_innerData).GetData(format, autoConvert);
-#pragma warning disable SYSLIB0050 // Type or member is obsolete
-        return data is IJsonData jsonData && jsonData is IObjectReference reference ? reference.GetRealObject(default) : data;
-#pragma warning restore SYSLIB0050
+        return data is IJsonData jsonData ? jsonData.Deserialize() : data;
     }
 
     public virtual object? GetData(string format) => GetData(format, autoConvert: true);
