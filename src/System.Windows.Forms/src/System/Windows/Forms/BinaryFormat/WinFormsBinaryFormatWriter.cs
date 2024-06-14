@@ -54,7 +54,7 @@ internal static class WinFormsBinaryFormatWriter
     public static void WriteJsonData(Stream stream, IJsonData jsonData)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(libraryId: 2, "System.Private.Windows.VirtualJson").Write(writer);
+        new BinaryLibrary(libraryId: 2, IJsonData.CustomAssemblyName).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, jsonData.TypeFullName, [$"<{nameof(jsonData.JsonBytes)}>k__BackingField"]),
             libraryId: 2,

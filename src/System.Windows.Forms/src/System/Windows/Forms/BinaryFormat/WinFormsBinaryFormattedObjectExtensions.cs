@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows;
 using System.Private.Windows.Core.BinaryFormat;
 using System.Reflection.Metadata;
 using System.Text.Json;
@@ -61,10 +62,9 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetObjectFromJson(this BinaryFormattedObject format, out object? @object)
     {
-        // we need the binder, to construct the type. This would also be a completely different method (separate from TryGetObject)
         @object = null;
 
-        if (format[2] is not BinaryLibrary library || library.LibraryName != "System.Private.Windows.VirtualJson")
+        if (format[2] is not BinaryLibrary library || library.LibraryName != IJsonData.CustomAssemblyName)
         {
             // The data was not serialized as JSON.
             return false;
