@@ -107,7 +107,7 @@ public class FormDpiTests : ControlTestBase
             form.Show();
 
             // Explicitly opt-in to resize min and max sizes with Dpi changed event.
-            using ScaleTopLevelFormMinMaxSizeForDpiScope scope = new(true);
+            using ScaleTopLevelFormMinMaxSizeForDpiScope scope = new(enable: true);
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
             Assert.NotEqual(form.MinimumSize, minSize);
             Assert.NotEqual(form.MaximumSize, maxSize);

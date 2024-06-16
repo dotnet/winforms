@@ -22,22 +22,18 @@ public class LocalAppContextSwitchesTest
     [InlineData(".NET Framework,Version=v4.8", false)]
     public void Validate_Default_Switch_Values(string targetFrameworkName, bool expected)
     {
-        FrameworkName? previousTestTargetFramework = LocalAppContextSwitches.TargetFrameworkName;
         dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
         ResetLocalSwitches(testAccessor);
 
         try
         {
-            testAccessor.s_targetFrameworkName = new FrameworkName(targetFrameworkName);
-
+            using TargetFrameworkNameScope scope = new(targetFrameworkName: targetFrameworkName);
             Assert.Equal(expected, LocalAppContextSwitches.TrackBarModernRendering);
             Assert.Equal(expected, LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi);
             Assert.Equal(expected, LocalAppContextSwitches.ServicePointManagerCheckCrl);
         }
         finally
         {
-            // Reset target framework name.
-            testAccessor.s_targetFrameworkName = previousTestTargetFramework;
             ResetLocalSwitches(testAccessor);
         }
     }

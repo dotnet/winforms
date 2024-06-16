@@ -1629,7 +1629,7 @@ public partial class ToolStripTests
 
         try
         {
-            using ApplyParentFontToMenusScope scope = new(true);
+            using ApplyParentFontToMenusScope scope = new(enable: true);
             font = new Font("Microsoft Sans Serif", 8.25f);
             form = new Form();
             toolStrip1 = new ToolStrip();

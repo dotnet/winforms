@@ -43,14 +43,14 @@ public class AnchorLayoutTests : ControlTestBase
     [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
     public void Control_AnchorLayoutV2_ResizeAnchoredControls_ParentHandleCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
     }
 
     [WinFormsFact]
     public void Control_NotParented_AnchorsNotComputed()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -75,7 +75,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void Control_SuspendedLayout_AnchorsNotComputed()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -97,7 +97,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void Control_ResumedLayout_AnchorsComputed()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -123,7 +123,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void ConfigSwitch_Disabled_SuspendedLayout_AnchorsComputed()
     {
-        using AnchorLayoutV2Scope scope = new(false);
+        using AnchorLayoutV2Scope scope = new(enable: false);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -143,7 +143,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void NestedContainer_AnchorsComputed()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
@@ -173,7 +173,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void ParentChanged_AnchorsUpdated()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
@@ -211,7 +211,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void SetBoundsOnAnchoredControl_BoundsChanged()
     {
-        using AnchorLayoutV2Scope scope = new(true);
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {

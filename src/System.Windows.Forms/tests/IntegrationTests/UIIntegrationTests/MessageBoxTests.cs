@@ -8,7 +8,7 @@ public class MessageBoxTests
     [WinFormsFact]
     public void MessageBox_MessageBoxDialogResult_Valid()
     {
-        using NoClientNotificationsScope scope = new(true);
+        using NoClientNotificationsScope scope = new(enable: true);
         Assert.Equal(DialogResult.None, MessageBox.Show("Testing DialogResult"));
     }
 }

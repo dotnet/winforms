@@ -296,7 +296,7 @@ public class TreeNodeCollectionTests
         };
 
         TreeNode treeNode;
-        using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(true))
+        using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(enable: true))
         {
             using TreeView treeView2 = new();
 
