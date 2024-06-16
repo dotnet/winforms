@@ -736,13 +736,10 @@ public class PictureBoxTests
     [BoolData]
     public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
     {
-        dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+        using ServicePointManagerCheckCrlScope scope = new(switchValue);
 
         try
         {
-            AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCrlSwitchName, switchValue);
-            Assert.Equal(switchValue, LocalAppContextSwitches.ServicePointManagerCheckCrl);
-
             using PictureBox pictureBox = new()
             {
                 WaitOnLoad = true
@@ -762,10 +759,6 @@ public class PictureBoxTests
         catch
         {
             // Swallow network errors.
-        }
-        finally
-        {
-            testAccessor.s_servicePointManagerCheckCrl = 0;
         }
     }
 
@@ -2006,13 +1999,10 @@ public class PictureBoxTests
     [BoolData]
     public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
     {
-        dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+        using ServicePointManagerCheckCrlScope scope = new(switchValue);
 
         try
         {
-            AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCrlSwitchName, switchValue);
-            Assert.Equal(switchValue, LocalAppContextSwitches.ServicePointManagerCheckCrl);
-
             using PictureBox pictureBox = new()
             {
                 WaitOnLoad = true
@@ -2032,10 +2022,6 @@ public class PictureBoxTests
         catch
         {
             // Swallow network errors.
-        }
-        finally
-        {
-            testAccessor.s_servicePointManagerCheckCrl = 0;
         }
     }
 

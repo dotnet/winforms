@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -2390,17 +2389,23 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
     {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZeroSwitchName, true); 
+        DataGridView dataGridView = null;
 
-        using DataGridView dataGridView = new();
-        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-        dataGridView.Rows.Add(new DataGridViewRow());
+        try
+        {
+            using var scope = new DataGridViewUIAStartRowCountAtZeroScope(true);
+            dataGridView = new DataGridView();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
-
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZeroSwitchName, false);
-
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
+        }
+        finally
+        {
+            // The scope is disposed here, so the following assertion will check if the row start index reverts to default.
+            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+            dataGridView.Dispose();
+        }
     }
 
     private class SubDataGridViewCell : DataGridViewCell
