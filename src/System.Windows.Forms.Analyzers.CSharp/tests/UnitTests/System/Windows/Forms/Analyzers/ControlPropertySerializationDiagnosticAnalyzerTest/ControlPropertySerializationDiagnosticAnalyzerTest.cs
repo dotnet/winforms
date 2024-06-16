@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
-using Xunit;
 
 using VerifyCS = System.Windows.Forms.Analyzers.Tests
     .CSharpCodeFixVerifier<
@@ -67,7 +66,6 @@ public class ControlPropertySerializationDiagnosticAnalyzer
         }
         
         """;
-
 
     [Fact]
     public async Task Test_CSharp_AddDesignerSerializationVisibility()

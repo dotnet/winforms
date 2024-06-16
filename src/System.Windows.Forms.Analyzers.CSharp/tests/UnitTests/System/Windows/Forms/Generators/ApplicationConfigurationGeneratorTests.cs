@@ -3,7 +3,6 @@
 
 using System.Text;
 using System.Windows.Forms.Analyzers;
-using System.Windows.Forms.Analyzers.Tests;
 using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
@@ -57,7 +56,8 @@ namespace MyProject
     [MemberData(nameof(UnsupportedProjectTypes_TestData))]
     public async Task ApplicationConfigurationGenerator_GenerateInitialize_fails_if_project_type_unsupported(OutputKind projectType)
     {
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -80,7 +80,7 @@ namespace MyProject
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -101,7 +101,7 @@ namespace MyProject
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -122,7 +122,7 @@ namespace MyProject
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_user_settings_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -156,8 +156,8 @@ ApplicationConfiguration.Initialize();
 ";
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_top_level");
-
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -182,7 +182,7 @@ ApplicationConfiguration.Initialize();
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_user_top_level");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
