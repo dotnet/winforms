@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Analyzers.Diagnostics;
 using Xunit;
 
 using VerifyCS = System.Windows.Forms.Analyzers.Tests
@@ -27,7 +28,7 @@ public class ControlPropertySerializationDiagnosticAnalyzer
 
         """;
 
-    private const string FixedCode = """
+    private const string CorrectCode = """
 
         using System.ComponentModel;
 
@@ -47,10 +48,33 @@ public class ControlPropertySerializationDiagnosticAnalyzer
         
         """;
 
+    private const string FixedCode = """
+
+        using System.ComponentModel;
+
+        namespace CSharpControls;
+
+        public class ScalableControlResolved : Control
+        {
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public float ScaleFactor { get; set; } = 1.0f;
+
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public SizeF ScaledSize { get; set; }
+
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public PointF ScaledLocation { get; set; }
+        }
+        
+        """;
+
+
     [Fact]
     public async Task Test_CSharp_AddDesignerSerializationVisibility()
     {
-        var expected = VerifyCS.Diagnostic(nameof(ControlPropertySerializationDiagnosticAnalyzer));
+        var expected = VerifyCS.Diagnostic(DiagnosticIDs.ControlPropertySerialization);
+        await VerifyCS.VerifyAnalyzerAsync(ProblematicCode, expected);
+        await VerifyCS.VerifyAnalyzerAsync(CorrectCode);
 
         await VerifyCS
             .VerifyCodeFixAsync(ProblematicCode, expected, FixedCode);
