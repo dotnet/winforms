@@ -6,10 +6,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Moq;
+using Windows.Win32.System.Ole;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using Windows.Win32.System.Ole;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
