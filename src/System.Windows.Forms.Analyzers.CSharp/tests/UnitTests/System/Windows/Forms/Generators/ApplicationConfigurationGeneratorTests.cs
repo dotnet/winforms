@@ -13,28 +13,33 @@ namespace System.Windows.Forms.Generators.Tests;
 
 public partial class ApplicationConfigurationGeneratorTests
 {
-    private const string SourceCompilable = @"
-namespace MyProject
-{
-    class Program
-    {
-        static void Main()
+    private const string SourceCompilable = """
+        namespace MyProject
         {
-             ApplicationConfiguration.Initialize();
+            class Program
+            {
+                static void Main()
+                {
+                     ApplicationConfiguration.Initialize();
+                }
+            }
         }
-    }
-}";
-    private const string SourceCompilationFailed = @"
-namespace MyProject
-{
-    class Program
-    {
-        static void Main()
+
+        """;
+
+    private const string SourceCompilationFailed = """
+        namespace MyProject
         {
-             {|CS0103:ApplicationConfiguration|}.Initialize();
+            class Program
+            {
+                static void Main()
+                {
+                     {|CS0103:ApplicationConfiguration|}.Initialize();
+                }
+            }
         }
-    }
-}";
+
+        """;
 
     public static TheoryData<OutputKind> UnsupportedProjectTypes_TestData()
     {
@@ -56,7 +61,6 @@ namespace MyProject
     [MemberData(nameof(UnsupportedProjectTypes_TestData))]
     public async Task ApplicationConfigurationGenerator_GenerateInitialize_fails_if_project_type_unsupported(OutputKind projectType)
     {
-        
         var test = new Analyzers.Tests.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
@@ -130,13 +134,15 @@ namespace MyProject
                 Sources = { SourceCompilable },
                 AnalyzerConfigFiles =
                 {
-                    ("/.globalconfig", $@"is_global = true
+                    ("/.globalconfig",
+                    $"""
+                    is_global = true
 
-build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
-build_property.{PropertyNameCSharp.EnableVisualStyles} =
-build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
-build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+                    build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                    build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                    build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                    build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                    """),
                 },
                 GeneratedSources =
                 {
@@ -151,9 +157,10 @@ build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
     [Fact]
     public async Task ApplicationConfigurationGenerator_GenerateInitialize_default_top_level()
     {
-        const string source = @"
-ApplicationConfiguration.Initialize();
-";
+        const string source =
+            """
+            ApplicationConfiguration.Initialize();
+            """;
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_top_level");
         
@@ -176,9 +183,10 @@ ApplicationConfiguration.Initialize();
     [Fact]
     public async Task ApplicationConfigurationGenerator_GenerateInitialize_user_settings_top_level()
     {
-        const string source = @"
-ApplicationConfiguration.Initialize();
-";
+        const string source =
+            """
+            ApplicationConfiguration.Initialize();
+            """;
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_user_top_level");
 
@@ -190,13 +198,15 @@ ApplicationConfiguration.Initialize();
                 Sources = { source },
                 AnalyzerConfigFiles =
                 {
-                    ("/.globalconfig", $@"is_global = true
+                    ("/.globalconfig",
+                    $"""
+                    is_global = true
 
-build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
-build_property.{PropertyNameCSharp.EnableVisualStyles} =
-build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
-build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+                    build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                    build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                    build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                    build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                    """),
                 },
                 GeneratedSources =
                 {
