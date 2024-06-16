@@ -2,17 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
-using VerifyCS = System.Windows.Forms.Analyzers.Tests
-    .CSharpCodeFixVerifier<
-        System.Windows.Forms.CSharp.Analyzers.ControlPropertySerialization.ControlPropertySerializationDiagnosticAnalyzer,
-        System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility.AddDesignerSerializationVisibilityCodeFixProvider>;
+using VerifyCS = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixVerifier<
+    System.Windows.Forms.CSharp.Analyzers.ControlPropertySerialization.ControlPropertySerializationDiagnosticAnalyzer,
+    System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility.AddDesignerSerializationVisibilityCodeFixProvider,
+    Microsoft.CodeAnalysis.Testing.DefaultVerifier>;
 
 namespace System.Windows.Forms.Analyzers.CSharp.Tests;
 
 public class ControlPropertySerializationDiagnosticAnalyzer
 {
     private const string ProblematicCode = """
+        using System.Drawing;
+        using System.Windows.Forms;
 
         namespace CSharpControls;
 
@@ -28,8 +32,9 @@ public class ControlPropertySerializationDiagnosticAnalyzer
         """;
 
     private const string CorrectCode = """
-
         using System.ComponentModel;
+        using System.Drawing;
+        using System.Windows.Forms;
 
         namespace CSharpControls;
 
@@ -48,9 +53,10 @@ public class ControlPropertySerializationDiagnosticAnalyzer
         """;
 
     private const string FixedCode = """
-
         using System.ComponentModel;
-
+        using System.Drawing;
+        using System.Windows.Forms;
+        
         namespace CSharpControls;
 
         public class ScalableControlResolved : Control
@@ -70,8 +76,18 @@ public class ControlPropertySerializationDiagnosticAnalyzer
     [Fact]
     public async Task Test_CSharp_AddDesignerSerializationVisibility()
     {
-        var expected = VerifyCS.Diagnostic(DiagnosticIDs.ControlPropertySerialization);
-        await VerifyCS.VerifyAnalyzerAsync(ProblematicCode, expected);
+        DiagnosticDescriptor diagnostic = new(
+            DiagnosticIDs.ControlPropertySerialization,
+            "Control property serialization",
+            "Control property serialization",
+            "ControlPropertySerialization",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true);
+
+        var expected = VerifyCS.Diagnostic(diagnostic);
+        var expected1 = expected.WithLocation(new LinePosition(7, 17));
+
+        await VerifyCS.VerifyAnalyzerAsync(ProblematicCode, expected1, expected, expected);
         await VerifyCS.VerifyAnalyzerAsync(CorrectCode);
 
         await VerifyCS
