@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">Não há suporte para o uso do BinaryFormatter.</target>
+        <target state="translated">Não há suporte para o uso do BinaryFormatter em aplicativos cortados.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">"{0}" não tem suporte em aplicativos cortados.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">Não há suporte para recursos de tempo de design.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">

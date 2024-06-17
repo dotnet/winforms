@@ -94,6 +94,37 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void CalendarButtonAccessibleObject_InvokeAndDoDefaultAction_DoesNotThrow()
+    {
+        using MonthCalendar control = new();
+        MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
+
+        Action combinedAction = () =>
+        {
+            buttonAccessibleObject.Invoke();
+            buttonAccessibleObject.DoDefaultAction();
+        };
+
+        combinedAction.Should().NotThrow();
+        control.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void CalendarButtonAccessibleObject_RaiseMouseClick_DoesNotThrow_WhenControlIsEnabledAndHasHandle()
+    {
+        using MonthCalendar control = new();
+        control.CreateControl();
+        MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        SubCalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
+
+        Action action = () => buttonAccessibleObject.TestAccessor().Dynamic.RaiseMouseClick();
+
+        action.Should().NotThrow();
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
     private class SubCalendarButtonAccessibleObject : CalendarButtonAccessibleObject
     {
         public SubCalendarButtonAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject)

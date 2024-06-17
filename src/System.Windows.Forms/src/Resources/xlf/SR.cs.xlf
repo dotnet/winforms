@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="needs-review-translation">Použití BinaryFormatter není podporováno.</target>
+        <target state="translated">Použití deserializace BinaryFormatter se v aplikacích s pročištěným kódem nepodporuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1664,7 +1664,7 @@
       </trans-unit>
       <trans-unit id="ControlNotSupportedInTrimming">
         <source>'{0}' is not supported in trimmed applications.</source>
-        <target state="new">'{0}' is not supported in trimmed applications.</target>
+        <target state="translated">{0} se v aplikacích s pročištěným kódem nepodporuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4646,7 +4646,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="DesignTimeFeaturesNotSupported">
         <source>Design time features are not supported.</source>
-        <target state="new">Design time features are not supported.</target>
+        <target state="translated">Funkce doby návrhu nejsou podporovány.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
