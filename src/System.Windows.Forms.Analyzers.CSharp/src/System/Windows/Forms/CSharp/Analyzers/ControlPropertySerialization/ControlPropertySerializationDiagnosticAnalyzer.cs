@@ -3,8 +3,7 @@
 
 using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Windows.Forms.Analyzers.CSharp.Resources;
-using System.Windows.Forms.Analyzers.Diagnostics;
+using System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,17 +12,8 @@ namespace System.Windows.Forms.CSharp.Analyzers.ControlPropertySerialization;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
 {
-    private static readonly DiagnosticDescriptor s_rule = new(
-        id: DiagnosticIDs.ControlPropertySerialization,
-        title: new LocalizableResourceString(nameof(SR.WFCA100AnalyzerTitle), SR.ResourceManager, typeof(SR)),
-        messageFormat: new LocalizableResourceString(nameof(SR.WFCA100AnalyzerMessageFormat), SR.ResourceManager, typeof(SR)),
-        category: DiagnosticCategories.WinFormsSecurity,
-        defaultSeverity: DiagnosticSeverity.Error,
-        isEnabledByDefault: true,
-        description: new LocalizableResourceString(nameof(SR.WFCA100AnalyzerDescription), SR.ResourceManager, typeof(SR)));
-
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [s_rule];
+        => [CSharpDiagnosticDescriptors.MissingControlPropertySerializationConfiguration];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -79,7 +69,10 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
             || shouldSerializeMethod.Parameters.Length > 0)
         {
             // For ALL such other symbols, produce a diagnostic.
-            var diagnostic = Diagnostic.Create(s_rule, propertySymbol.Locations[0], propertySymbol.Name);
+            var diagnostic = Diagnostic.Create(
+                descriptor: CSharpDiagnosticDescriptors.MissingControlPropertySerializationConfiguration,
+                location: propertySymbol.Locations[0],
+                messageArgs: propertySymbol.Name);
 
             context.ReportDiagnostic(diagnostic);
         }

@@ -5,6 +5,7 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static class DiagnosticCategories
 {
+    public const string ApplicationConfiguration = "Application Configuration";
     public const string WinFormsSecurity = "WinForms Security";
     public const string WinFormsUsage = "WinForms Usage";
 }
