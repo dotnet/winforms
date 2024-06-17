@@ -314,7 +314,7 @@ public static class Clipboard
         if (data is DataObject)
         {
             // TODO: Localize string
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetDataObject)} instead");
         }
 
         JsonData<T> jsonData = new()

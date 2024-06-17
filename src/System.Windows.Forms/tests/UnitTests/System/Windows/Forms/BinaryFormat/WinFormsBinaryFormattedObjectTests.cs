@@ -89,10 +89,10 @@ public class WinFormsBinaryFormattedObjectTests
     [Fact]
     public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_Throws()
     {
-        Size point = new() { Height = 1, Width = 1 };
+        Size size = new() { Height = 1, Width = 1 };
         JsonData<Size> data = new()
         {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(size)
         };
 
         using MemoryStream stream = new();
