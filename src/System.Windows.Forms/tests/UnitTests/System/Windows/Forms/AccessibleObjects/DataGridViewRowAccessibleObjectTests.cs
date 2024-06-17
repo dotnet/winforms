@@ -2389,23 +2389,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
     {
-        DataGridView dataGridView = null;
+        DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
+        using DataGridView dataGridView = new DataGridView();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
 
-        try
-        {
-            using DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
-            dataGridView = new DataGridView();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            dataGridView.Rows.Add(new DataGridViewRow());
-
-            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
-        }
-        finally
-        {
-            // The scope is disposed here, so the following assertion will check if the row start index reverts to default.
-            Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
-            dataGridView.Dispose();
-        }
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
+        // The scope is disposed here, so the following assertion will check if the row start index reverts to default.
+        scope.Dispose();
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell

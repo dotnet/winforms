@@ -1621,43 +1621,27 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
     {
-        Font font = null;
-        Form form = null;
-        ToolStrip toolStrip1 = null;
-        SubToolStripItem item1 = null;
-        SubToolStripItem item2 = null;
+        ApplyParentFontToMenusScope scope = new(enable: true);
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        using Form form = new();
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
 
-        try
-        {
-            using ApplyParentFontToMenusScope scope = new(enable: true);
-            font = new Font("Microsoft Sans Serif", 8.25f);
-            form = new Form();
-            toolStrip1 = new ToolStrip();
-            item1 = new SubToolStripItem();
-            item2 = new SubToolStripItem();
+        toolStrip1.Items.Add(item1);
+        toolStrip1.Items.Add(item2);
+        form.Controls.Add(toolStrip1);
+        form.Font = font;
 
-            toolStrip1.Items.Add(item1);
-            toolStrip1.Items.Add(item2);
-            form.Controls.Add(toolStrip1);
-            form.Font = font;
+        Assert.Same(form.Font, toolStrip1.Font);
+        Assert.Same(form.Font, item1.Font);
+        Assert.Same(form.Font, item2.Font);
 
-            Assert.Same(form.Font, toolStrip1.Font);
-            Assert.Same(form.Font, item1.Font);
-            Assert.Same(form.Font, item2.Font);
-        }
-        finally
-        {
-            // The scope is disposed here, so the following assertions will check if the fonts revert to default.
-            Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
-            Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
-            Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
-
-            font?.Dispose();
-            form?.Dispose();
-            toolStrip1?.Dispose();
-            item1?.Dispose();
-            item2?.Dispose();
-        }
+        // The scope is disposed here, so the following assertions will check if the fonts revert to default.
+        scope.Dispose();
+        Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()

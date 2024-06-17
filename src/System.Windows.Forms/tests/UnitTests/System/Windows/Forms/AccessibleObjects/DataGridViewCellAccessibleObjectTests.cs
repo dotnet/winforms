@@ -1459,23 +1459,14 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
     {
-        DataGridView dataGridView = null;
-
-        try
-        {
-            using DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
-            dataGridView = new DataGridView();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            dataGridView.Rows.Add(new DataGridViewRow());
-
-            Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 0)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
-        }
-        finally
-        {
-            // The scope is disposed here, so the following assertion will check if the cell row start index reverts to default.
-            Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 1)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
-            dataGridView.Dispose();
-        }
+        DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
+        using DataGridView dataGridView = new DataGridView();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 0)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
+        // The scope is disposed here, so the following assertion will check if the cell row start index reverts to default.
+        scope.Dispose();
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 1)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell
