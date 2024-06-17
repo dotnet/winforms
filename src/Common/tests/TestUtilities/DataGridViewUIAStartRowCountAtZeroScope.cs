@@ -15,7 +15,7 @@ public readonly ref struct DataGridViewUIAStartRowCountAtZeroScope
         // Prevent multiple BinaryFormatterScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(DataGridViewUIAStartRowCountAtZeroScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.DataGridViewUIAStartRowCountAtZero, enable);
+        _switchScope = new(AppContextSwitchNames.DataGridViewUIAStartRowCountAtZero, enable);
     }
 
     public void Dispose()

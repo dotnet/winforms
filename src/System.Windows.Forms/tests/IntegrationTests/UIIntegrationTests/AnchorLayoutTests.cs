@@ -67,7 +67,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -89,7 +88,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -115,7 +113,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -135,7 +132,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -165,7 +161,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -203,7 +198,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }
@@ -238,7 +232,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
             Dispose(form, button);
         }
     }

@@ -4,7 +4,8 @@
 namespace System;
 
 /// <summary>
-/// Scope for enabling / disabling the NoClientNotifications Switch. Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the NoClientNotifications Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct NoClientNotificationsScope
 {
@@ -15,7 +16,7 @@ public readonly ref struct NoClientNotificationsScope
         // Prevent multiple NoClientNotificationsScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(NoClientNotificationsScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.NoClientNotifications, enable);
+        _switchScope = new(AppContextSwitchNames.NoClientNotifications, enable);
     }
 
     public void Dispose()

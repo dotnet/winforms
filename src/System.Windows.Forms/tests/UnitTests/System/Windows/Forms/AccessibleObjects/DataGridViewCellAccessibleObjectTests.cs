@@ -1463,7 +1463,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         try
         {
-            using var scope = new DataGridViewUIAStartRowCountAtZeroScope(enable: true);
+            using DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
             dataGridView = new DataGridView();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Rows.Add(new DataGridViewRow());

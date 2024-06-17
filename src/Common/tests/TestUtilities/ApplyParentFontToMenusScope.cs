@@ -4,7 +4,8 @@
 namespace System;
 
 /// <summary>
-/// Scope for enabling / disabling the ApplyParentFontToMenus Switch. Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the ApplyParentFontToMenus Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct ApplyParentFontToMenusScope
 {
@@ -15,7 +16,7 @@ public readonly ref struct ApplyParentFontToMenusScope
         // Prevent multiple ApplyParentFontToMenusScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(ApplyParentFontToMenusScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.ApplyParentFontToMenus, enable);
+        _switchScope = new(AppContextSwitchNames.ApplyParentFontToMenus, enable);
     }
 
     public void Dispose()

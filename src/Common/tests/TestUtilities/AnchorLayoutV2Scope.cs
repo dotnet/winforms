@@ -4,7 +4,8 @@
 namespace System;
 
 /// <summary>
-/// Scope for enabling / disabling the AnchorLayoutV2 Switch. Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the AnchorLayoutV2 Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct AnchorLayoutV2Scope
 {
@@ -15,7 +16,7 @@ public readonly ref struct AnchorLayoutV2Scope
         // Prevent multiple AnchorLayoutV2Scope instances from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(AnchorLayoutV2Scope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.AnchorLayoutV2, enable);
+        _switchScope = new(AppContextSwitchNames.AnchorLayoutV2, enable);
     }
 
     public void Dispose()

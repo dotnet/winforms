@@ -735,7 +735,7 @@ public class PictureBoxTests
     [BoolData]
     public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
     {
-        using ServicePointManagerCheckCrlScope scope = new(enable: switchValue);
+        using ServicePointManagerCheckCrlScope scope = new(switchValue);
 
         try
         {
@@ -1998,7 +1998,7 @@ public class PictureBoxTests
     [BoolData]
     public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
     {
-        using ServicePointManagerCheckCrlScope scope = new(enable: switchValue);
+        using ServicePointManagerCheckCrlScope scope = new(switchValue);
 
         try
         {

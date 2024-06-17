@@ -4,7 +4,8 @@
 namespace System;
 
 /// <summary>
-/// Scope for enabling / disabling the ScaleTopLevelFormMinMaxSizeForDpi Switch. Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the ScaleTopLevelFormMinMaxSizeForDpi Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct ScaleTopLevelFormMinMaxSizeForDpiScope
 {
@@ -15,7 +16,7 @@ public readonly ref struct ScaleTopLevelFormMinMaxSizeForDpiScope
         // Prevent multiple ScaleTopLevelFormMinMaxSizeForDpi from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(ScaleTopLevelFormMinMaxSizeForDpiScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, enable);
+        _switchScope = new(AppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, enable);
     }
 
     public void Dispose()

@@ -3,8 +3,8 @@
 
 namespace System;
 /// <summary>
-/// Scope for enabling / disabling the TreeNodeCollectionAddRangeRespectsSortOrder Switch.
-/// Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the TreeNodeCollectionAddRangeRespectsSortOrder Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct TreeNodeCollectionAddRangeRespectsSortOrderScope
 {
@@ -15,7 +15,7 @@ public readonly ref struct TreeNodeCollectionAddRangeRespectsSortOrderScope
         // Prevent multiple TreeNodeCollectionAddRangeRespectsSortOrderScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(TreeNodeCollectionAddRangeRespectsSortOrderScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.TreeNodeCollectionAddRangeRespectsSortOrder, enable);
+        _switchScope = new(AppContextSwitchNames.TreeNodeCollectionAddRangeRespectsSortOrder, enable);
     }
 
     public void Dispose()

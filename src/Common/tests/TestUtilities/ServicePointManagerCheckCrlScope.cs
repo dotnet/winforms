@@ -4,7 +4,8 @@
 namespace System;
 
 /// <summary>
-/// Scope for enabling / disabling the ServicePointManagerCheckCrl Switch. Use in a <see langword="using"/> statement.
+///  Scope for enabling / disabling the ServicePointManagerCheckCrl Switch.
+///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct ServicePointManagerCheckCrlScope
 {
@@ -15,7 +16,7 @@ public readonly ref struct ServicePointManagerCheckCrlScope
         // Prevent multiple ServicePointManagerCheckCrlScope instances from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(ServicePointManagerCheckCrlScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.ServicePointManagerCheckCrl, enable);
+        _switchScope = new(AppContextSwitchNames.ServicePointManagerCheckCrl, enable);
     }
 
     public void Dispose()
