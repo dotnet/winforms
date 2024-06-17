@@ -3,8 +3,6 @@
 
 namespace System;
 
-#nullable enable
-
 /// <summary>
 ///  Scope for temporarily setting an <see cref="AppContext"/> switch. Use in a <see langword="using"/> statement.
 /// </summary>
@@ -19,7 +17,7 @@ public readonly ref struct AppContextSwitchScope
     private readonly string _switchName;
     private readonly bool _originalState;
 
-    public AppContextSwitchScope(string? targetFrameworkName, string switchName, bool enable)
+    public AppContextSwitchScope(string switchName, bool enable)
     {
         if (!AppContext.TryGetSwitch(AppContextSwitchNames.LocalAppContext_DisableCaching, out bool isEnabled)
             || !isEnabled)
@@ -27,7 +25,7 @@ public readonly ref struct AppContextSwitchScope
             // It doesn't make sense to try messing with AppContext switches if they are going to be cached.
             throw new InvalidOperationException("LocalAppContext switch caching is not disabled.");
         }
-        
+
         AppContext.TryGetSwitch(switchName, out _originalState);
 
         AppContext.SetSwitch(switchName, enable);
@@ -39,9 +37,7 @@ public readonly ref struct AppContextSwitchScope
         _switchName = switchName;
     }
 
-    public AppContextSwitchScope(string switchName, bool enable) : this(AppContext.TargetFrameworkName, switchName, enable) { }
-
-        public void Dispose()
+    public void Dispose()
     {
         AppContext.SetSwitch(_switchName, _originalState);
         if (!AppContext.TryGetSwitch(_switchName, out bool isEnabled) || isEnabled != _originalState)
