@@ -59,6 +59,15 @@ public partial class PrintingControls : Form
         printPreviewDialog1.Document = printDocument1;
 
         ((ToolStripButton)((ToolStrip)printPreviewDialog1.Controls[1]).Items[0]).Enabled = false;// disable the direct print from printpreview.as when we click that Print button PrintPage event fires again.
+        foreach (ToolStripItem item in ((ToolStrip)printPreviewDialog1.Controls[1]).Items)
+        {
+            if (item is ToolStripButton)
+            {
+                item.AutoSize = false;
+                item.Width = item.Width < 24 ? 24 : item.Width;
+                item.Height = item.Height < 24 ? 24 : item.Height;
+            }
+        }
 
         printPreviewDialog1.ShowDialog();
     }
