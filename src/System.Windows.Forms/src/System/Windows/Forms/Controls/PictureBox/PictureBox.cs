@@ -510,7 +510,9 @@ public partial class PictureBox : Control, ISupportInitialize
         {
             if (LocalAppContextSwitches.ServicePointManagerCheckCrl)
             {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
                 ServicePointManager.CheckCertificateRevocationList = true;
+#pragma warning restore SYSLIB0014
             }
 
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
