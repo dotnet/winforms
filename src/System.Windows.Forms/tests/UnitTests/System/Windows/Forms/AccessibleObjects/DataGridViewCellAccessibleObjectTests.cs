@@ -768,7 +768,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     [WinFormsFact]
-    public void DataGridViewCellAccessicbleObject_Row_ReturnExpected_IfFirstRowHidden()
+    public void DataGridViewCellAccessibleObject_Row_ReturnExpected_IfFirstRowHidden()
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add("Column 1", "Column 1");
@@ -788,7 +788,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     [WinFormsFact]
-    public void DataGridViewCellAccessicbleObject_Row_ReturnExpected_IfSecondRowHidden()
+    public void DataGridViewCellAccessibleObject_Row_ReturnExpected_IfSecondRowHidden()
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add("Column 1", "Column 1");
@@ -808,7 +808,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     [WinFormsFact]
-    public void DataGridViewCellAccessicbleObject_Row_ReturnExpected_IfLastRowHidden()
+    public void DataGridViewCellAccessibleObject_Row_ReturnExpected_IfLastRowHidden()
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add("Column 1", "Column 1");
@@ -828,7 +828,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     [WinFormsFact]
-    public void DataGridViewCellAccessibleObject_Сolumn_ReturnExpected_IfOwningColumnNotExist()
+    public void DataGridViewCellAccessibleObject_Column_ReturnExpected_IfOwningColumnNotExist()
     {
         AccessibleObject accessibleObject = new DataGridViewCellAccessibleObject(new SubDataGridViewCell());
 
@@ -1456,17 +1456,16 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     // Unit test for https://github.com/dotnet/winforms/issues/7154
-    [WinFormsFact]
-    public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
+    [WinFormsTheory]
+    [InlineData([false, 0])]
+    [InlineData([true, 1])]
+    public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices(bool switchValue, int expectedIndex)
     {
-        DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: true);
+        using DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: switchValue);
         using DataGridView dataGridView = new DataGridView();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
-        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 0)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
-        // The scope is disposed here, so the following assertion will check if the cell row start index reverts to default.
-        scope.Dispose();
-        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 1)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, expectedIndex)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell

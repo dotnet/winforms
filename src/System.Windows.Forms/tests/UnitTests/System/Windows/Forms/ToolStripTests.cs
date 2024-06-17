@@ -1621,7 +1621,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
     {
-        ApplyParentFontToMenusScope scope = new(enable: true);
+        using ApplyParentFontToMenusScope scope = new(enable: true);
         using Font font = new("Microsoft Sans Serif", 8.25f);
         using Form form = new();
         using ToolStrip toolStrip1 = new();
@@ -1636,9 +1636,23 @@ public partial class ToolStripTests
         Assert.Same(form.Font, toolStrip1.Font);
         Assert.Same(form.Font, item1.Font);
         Assert.Same(form.Font, item2.Font);
+    }
 
-        // The scope is disposed here, so the following assertions will check if the fonts revert to default.
-        scope.Dispose();
+    [WinFormsFact]
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsToolStripManagerDefaultFont()
+    {
+        using ApplyParentFontToMenusScope scope = new(enable: false);
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        using Form form = new();
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+
+        toolStrip1.Items.Add(item1);
+        toolStrip1.Items.Add(item2);
+        form.Controls.Add(toolStrip1);
+        form.Font = font;
+
         Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
         Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
         Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
