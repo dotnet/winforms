@@ -84,7 +84,7 @@ End Namespace";
             },
             ExpectedDiagnostics =
             {
-                new DiagnosticResult(DiagnosticDescriptors.s_migrateHighDpiSettings_CSharp)
+                new DiagnosticResult(SharedDiagnosticDescriptors.CSharpMigrateHighDpiSettings)
                     .WithArguments(manifestFilePath, ApplicationConfig.PropertyNameCSharp.HighDpiMode)
             }
         }.RunAsync();
@@ -104,7 +104,7 @@ End Namespace";
             },
             ExpectedDiagnostics =
             {
-                new DiagnosticResult(DiagnosticDescriptors.s_migrateHighDpiSettings_VB)
+                new DiagnosticResult(SharedDiagnosticDescriptors.VisualBasicMigrateHighDpiSettings)
                     .WithArguments(manifestFilePath, ApplicationConfig.PropertyNameVisualBasic.HighDpiMode)
             }
         }.RunAsync();
