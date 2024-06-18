@@ -19,6 +19,7 @@ namespace System.Windows.Forms;
     $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
 public partial class ToolStripMenuItem : ToolStripDropDownItem
 {
+    private CheckState _prevCheckState = CheckState.Unchecked;
     private static readonly MenuTimer s_menuTimer = new();
 
     private static readonly int s_propShortcutKeys = PropertyStore.CreateKey();
@@ -311,6 +312,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
             if (value != CheckState)
             {
+                _prevCheckState = CheckState;
                 Properties.SetInteger(s_propCheckState, (int)value);
                 OnCheckedChanged(EventArgs.Empty);
                 OnCheckStateChanged(EventArgs.Empty);
@@ -820,6 +822,13 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
         AccessibilityNotifyClients(AccessibleEvents.StateChange);
+
+        if (IsAccessibilityObjectCreated &&
+            AccessibilityObject is ToolStripMenuItemAccessibleObject accessibilityObject)
+        {
+            accessibilityObject.OnCheckStateChanged(_prevCheckState, CheckState);
+        }
+
         ((EventHandler?)Events[s_eventCheckStateChanged])?.Invoke(this, e);
     }
 

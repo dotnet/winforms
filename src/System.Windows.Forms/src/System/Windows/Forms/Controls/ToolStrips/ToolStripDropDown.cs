@@ -1253,6 +1253,7 @@ public partial class ToolStripDropDown : ToolStrip
                    || !(dismissingItem.HasDropDownItems))
                 {    // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
+                    SelectPreviousToolStrip();
                 }
             }
         }
@@ -1359,7 +1360,7 @@ public partial class ToolStripDropDown : ToolStrip
     {
         // snap the owner item before calling hide as non-auto created dropdowns will
         // exit menu mode if there's no OwnerItem.
-        ToolStripItem? itemOnPreviousMenuToSelect = OwnerItem;
+        ToolStripItem? itemOnPreviousMenuToSelect = GetToplevelOwnerItem();
         Hide();
 
         if (itemOnPreviousMenuToSelect is not null)
@@ -1495,15 +1496,6 @@ public partial class ToolStripDropDown : ToolStrip
             SelectPreviousToolStrip();
 
             return true;
-        }
-
-        if ((keyData & Keys.KeyCode) == Keys.Enter)
-        {
-            if (base.ProcessDialogKey(keyData))
-            {
-                SelectPreviousToolStrip();
-                return true;
-            }
         }
 
         return base.ProcessDialogKey(keyData);
