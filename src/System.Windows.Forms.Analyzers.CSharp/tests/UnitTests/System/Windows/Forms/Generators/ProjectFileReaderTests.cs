@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Tests;
-using System.Windows.Forms.CSharp.Analyzers;
+using System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;

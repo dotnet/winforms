@@ -5,4 +5,9 @@
 
 Imports System.Diagnostics.CodeAnalysis
 
-<Assembly: SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification:="Analyzer doesn't work correctly.", Scope:="type", Target:="~T:System.Windows.Forms.VisualBasic.Analyzers.ControlPropertySerialization.ControlPropertySerializationDiagnosticAnalyzer")>
+<Assembly: SuppressMessage(
+    "Performance",
+    "CA1825:Avoid zero-length array allocations",
+    Justification:="<Pending>",
+    Scope:="type",
+    Target:="~T:System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration.MissingPropertySerializationConfigurationDiagnosticAnalyzer")>

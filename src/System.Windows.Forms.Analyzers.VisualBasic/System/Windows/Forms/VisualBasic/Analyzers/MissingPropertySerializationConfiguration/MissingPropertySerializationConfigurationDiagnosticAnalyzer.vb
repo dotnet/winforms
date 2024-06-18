@@ -13,14 +13,14 @@ Imports Microsoft.CodeAnalysis.Diagnostics
 ' (VB is not case-sensitive, so we can't have the same names in a code file, even if the casing is different.)
 Imports VBDiagnostic = Microsoft.CodeAnalysis.Diagnostic
 
-Namespace System.Windows.Forms.VisualBasic.Analyzers.ControlPropertySerialization
+Namespace System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
 
     <DiagnosticAnalyzer(LanguageNames.VisualBasic)>
-    Public Class ControlPropertySerializationDiagnosticAnalyzer
+    Public Class MissingPropertySerializationConfigurationDiagnosticAnalyzer
         Inherits DiagnosticAnalyzer
 
         Private Shared ReadOnly s_rule As New DiagnosticDescriptor(
-            id:=DiagnosticIDs.ControlPropertySerialization,
+            id:=DiagnosticIDs.MissingPropertySerializationConfiguration,
             title:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerTitle), SR.ResourceManager, GetType(SR)),
             messageFormat:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
             category:=DiagnosticCategories.WinFormsSecurity,

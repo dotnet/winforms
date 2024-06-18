@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers;
-using System.Windows.Forms.CSharp.Analyzers;
+using System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
@@ -51,9 +51,10 @@ internal static partial class ProjectFileReader
         if (!bool.TryParse(rawValue, out value))
         {
             diagnostic = Diagnostic.Create(CSharpDiagnosticDescriptors.s_propertyCantBeSetToValue,
-                                           Location.None,
-                                           propertyName,
-                                           rawValue);
+                Location.None,
+                propertyName,
+                rawValue);
+
             value = defaultValue;
             return false;
         }

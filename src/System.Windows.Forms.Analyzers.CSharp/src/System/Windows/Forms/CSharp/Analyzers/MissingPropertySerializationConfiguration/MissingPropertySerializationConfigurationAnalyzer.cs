@@ -7,13 +7,13 @@ using System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.Windows.Forms.CSharp.Analyzers.ControlPropertySerialization;
+namespace System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConfiguration;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
+public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [CSharpDiagnosticDescriptors.MissingControlPropertySerializationConfiguration];
+        => [CSharpDiagnosticDescriptors.s_missingPropertySerializationConfiguration];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -70,7 +70,7 @@ public class ControlPropertySerializationDiagnosticAnalyzer : DiagnosticAnalyzer
         {
             // For ALL such other symbols, produce a diagnostic.
             var diagnostic = Diagnostic.Create(
-                descriptor: CSharpDiagnosticDescriptors.MissingControlPropertySerializationConfiguration,
+                descriptor: CSharpDiagnosticDescriptors.s_missingPropertySerializationConfiguration,
                 location: propertySymbol.Locations[0],
                 messageArgs: propertySymbol.Name);
 
