@@ -109,5 +109,6 @@
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
+    <SystemRuntimeSerializationFormattersVersion>9.0.0-preview.6.24318.4</SystemRuntimeSerializationFormattersVersion>
   </PropertyGroup>
 </Project>
