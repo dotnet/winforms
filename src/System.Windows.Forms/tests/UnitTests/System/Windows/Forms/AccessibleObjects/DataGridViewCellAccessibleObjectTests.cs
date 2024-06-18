@@ -1461,7 +1461,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [InlineData([true, 0])]
     public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices(bool switchValue, int expectedIndex)
     {
-        using DataGridViewUIAStartRowCountAtZeroScope scope = new(enable: switchValue);
+        using DataGridViewUIAStartRowCountAtZeroScope scope = new(switchValue);
         using DataGridView dataGridView = new DataGridView();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
