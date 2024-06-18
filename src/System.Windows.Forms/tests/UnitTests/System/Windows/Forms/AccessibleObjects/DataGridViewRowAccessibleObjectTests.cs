@@ -2387,8 +2387,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
     // Unit test for https://github.com/dotnet/winforms/issues/7154
     [WinFormsTheory]
-    [InlineData([false, 0])]
-    [InlineData([true, 1])]
+    [InlineData([false, 1])]
+    [InlineData([true, 0])]
     public void DataGridView_SwitchConfigured_AdjustsRowStartIndices(bool switchValue, int expectedIndex)
     {
         using DataGridViewUIAStartRowCountAtZeroScope scope = new(switchValue);
