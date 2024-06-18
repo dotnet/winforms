@@ -11,7 +11,7 @@ public partial class PrintControllerWithStatusDialog
 {
     private class StatusDialog : Form
     {
-        internal TextBox _cancellingLabel;
+        internal TextBox _cancellingTextBox;
         private Button _cancelButton;
         private TableLayoutPanel? _tableLayoutPanel;
         private readonly BackgroundThread _backgroundThread;
@@ -24,7 +24,7 @@ public partial class PrintControllerWithStatusDialog
             MinimumSize = Size;
         }
 
-        [MemberNotNull(nameof(_cancellingLabel))]
+        [MemberNotNull(nameof(_cancellingTextBox))]
         [MemberNotNull(nameof(_cancelButton))]
         private void InitializeComponent()
         {
@@ -34,7 +34,7 @@ public partial class PrintControllerWithStatusDialog
                 RightToLeft = RightToLeft.Yes;
             }
 
-            _cancellingLabel = new TextBox()
+            _cancellingTextBox = new TextBox()
             {
                 AutoSize = true,
                 Location = new Point(8, 16),
@@ -46,7 +46,7 @@ public partial class PrintControllerWithStatusDialog
                 Anchor = AnchorStyles.None
             };
 
-            _cancellingLabel.TextChanged += _cancellingLabel_TextChanged;
+            _cancellingTextBox.TextChanged += OnCancellingTextBoxTextChanged;
 
             _cancelButton = new Button()
             {
@@ -73,7 +73,7 @@ public partial class PrintControllerWithStatusDialog
             _tableLayoutPanel.ColumnStyles.Add(new(SizeType.Percent, 100F));
             _tableLayoutPanel.RowStyles.Add(new(SizeType.Percent, 50F));
             _tableLayoutPanel.RowStyles.Add(new(SizeType.Percent, 50F));
-            _tableLayoutPanel.Controls.Add(_cancellingLabel, 0, 0);
+            _tableLayoutPanel.Controls.Add(_cancellingTextBox, 0, 0);
             _tableLayoutPanel.Controls.Add(_cancelButton, 0, 1);
 
             AutoScaleDimensions = new Size(6, 13);
@@ -91,22 +91,22 @@ public partial class PrintControllerWithStatusDialog
         private void CancelClick(object? sender, EventArgs e)
         {
             _cancelButton.Enabled = false;
-            _cancellingLabel.Text = SR.PrintControllerWithStatusDialog_Canceling;
+            _cancellingTextBox.Text = SR.PrintControllerWithStatusDialog_Canceling;
             _backgroundThread._canceled = true;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
 
-        private void _cancellingLabel_TextChanged(object? sender, EventArgs e)
+        private void OnCancellingTextBoxTextChanged(object? sender, EventArgs e)
         {
-            if (!_cancellingLabel.IsAccessibilityObjectCreated)
+            if (!_cancellingTextBox.IsAccessibilityObjectCreated)
             {
                 return;
             }
 
-            using var textVariant = (VARIANT)_cancellingLabel.Text;
-            _cancellingLabel.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
-            _cancellingLabel.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, textVariant, textVariant);
+            using var textVariant = (VARIANT)_cancellingTextBox.Text;
+            _cancellingTextBox.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
+            _cancellingTextBox.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, textVariant, textVariant);
         }
     }
 }
