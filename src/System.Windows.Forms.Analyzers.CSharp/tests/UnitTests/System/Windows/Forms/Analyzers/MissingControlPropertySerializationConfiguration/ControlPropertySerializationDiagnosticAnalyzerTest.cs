@@ -21,7 +21,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         {
             public static void Main()
             {
-                var control = new ScalableControlNoSerializationConfiguration();
+                var control = new ScalableControl();
 
                 control.ScaleFactor = 1.5f;
                 control.ScaledSize = new SizeF(100, 100);
@@ -29,7 +29,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             }
         }
 
-        public class ScalableControlNoSerializationConfiguration : Control
+        public class ScalableControl : Control
         {
             public float [|ScaleFactor|] { get; set; } = 1.0f;
 
@@ -51,7 +51,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         {
             public static void Main()
             {
-                var control = new ScalableControlNoSerializationConfiguration();
+                var control = new ScalableControl();
         
                 control.ScaleFactor = 1.5f;
                 control.ScaledSize = new SizeF(100, 100);
@@ -59,7 +59,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             }
         }
         
-        public class ScalableControlResolved : Control
+        public class ScalableControl : Control
         {
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public float ScaleFactor { get; set; } = 1.0f;
@@ -68,7 +68,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             public SizeF ScaledSize { get; set; }
 
             public PointF ScaledLocation { get; set; }
-            private bool ShouldSerializeScaledSize() => this.ScaledSize != SizeF.Empty;
+            private bool ShouldSerializeScaledLocation() => this.ScaledLocation != PointF.Empty;
         }
         
         """;
@@ -84,7 +84,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         {
             public static void Main()
             {
-                var control = new ScalableControlNoSerializationConfiguration();
+                var control = new ScalableControl();
         
                 control.ScaleFactor = 1.5f;
                 control.ScaledSize = new SizeF(100, 100);
@@ -92,7 +92,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             }
         }
         
-        public class ScalableControlResolved : Control
+        public class ScalableControl : Control
         {
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public float ScaleFactor { get; set; } = 1.0f;
@@ -117,6 +117,25 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
 
     [Theory]
     [MemberData(nameof(GetReferenceAssemblies))]
+    public async Task CS_ControlPropertySerializationConfigurationAnalyzer(ReferenceAssemblies referenceAssemblies)
+    {
+        var context = new CSharpAnalyzerTest
+            <MissingPropertySerializationConfigurationAnalyzer,
+             DefaultVerifier>
+        {
+            TestCode = CorrectCode,
+            TestState =
+                {
+                    OutputKind = OutputKind.WindowsApplication,
+                },
+            ReferenceAssemblies = referenceAssemblies
+        };
+
+        await context.RunAsync();
+    }
+
+    [Theory]
+    [MemberData(nameof(GetReferenceAssemblies))]
     public async Task CS_MissingControlPropertySerializationConfigurationAnalyzer(ReferenceAssemblies referenceAssemblies)
     {
         var context = new CSharpAnalyzerTest
@@ -131,9 +150,6 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             ReferenceAssemblies = referenceAssemblies
         };
 
-        await context.RunAsync();
-
-        context.TestCode = CorrectCode;
         await context.RunAsync();
     }
 
