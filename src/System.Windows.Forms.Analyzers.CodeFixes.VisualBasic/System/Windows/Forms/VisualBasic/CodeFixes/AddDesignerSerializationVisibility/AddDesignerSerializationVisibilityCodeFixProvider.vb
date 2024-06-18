@@ -26,7 +26,7 @@ Namespace Global.System.Windows.Forms.VisualBasic.CodeFixes.AddDesignerSerializa
 
         Public Overrides ReadOnly Property FixableDiagnosticIds As ImmutableArray(Of String)
             Get
-                Return ImmutableArray.Create(DiagnosticIDs.ControlPropertySerialization)
+                Return ImmutableArray.Create(DiagnosticIDs.MissingPropertySerializationConfiguration)
             End Get
         End Property
 

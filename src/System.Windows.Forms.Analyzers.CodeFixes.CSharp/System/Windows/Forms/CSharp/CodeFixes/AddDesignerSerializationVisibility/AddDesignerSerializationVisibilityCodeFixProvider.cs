@@ -20,7 +20,7 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
     private const string SystemComponentModelName = "System.ComponentModel";
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [DiagnosticIDs.ControlPropertySerialization];
+        => [DiagnosticIDs.MissingPropertySerializationConfiguration];
 
     public sealed override FixAllProvider GetFixAllProvider()
         => WellKnownFixAllProviders.BatchFixer;

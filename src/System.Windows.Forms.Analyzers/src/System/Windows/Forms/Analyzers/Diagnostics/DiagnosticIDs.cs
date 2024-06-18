@@ -11,7 +11,7 @@ internal static class DiagnosticIDs
     public const string MigrateHighDpiSettings = "WFCA010";
 
     // Security
-    public const string ControlPropertySerialization = "WFCA100";
+    public const string MissingPropertySerializationConfiguration = "WFCA100";
 
     // WinForms Usage
     public const string DisposeModalDialog = "WFCA500";

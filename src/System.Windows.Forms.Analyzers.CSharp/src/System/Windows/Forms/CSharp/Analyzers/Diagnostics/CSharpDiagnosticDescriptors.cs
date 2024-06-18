@@ -9,7 +9,7 @@ namespace System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 
 internal static class CSharpDiagnosticDescriptors
 {
-    public static DiagnosticDescriptor ErrorUnsupportedProjectType { get; } =
+    public static readonly DiagnosticDescriptor s_errorUnsupportedProjectType =
         new(id: DiagnosticIDs.UnsupportedProjectType,
             title: new LocalizableResourceString(nameof(SR.WFCA001Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA001Message), SR.ResourceManager, typeof(SR)),
@@ -17,7 +17,7 @@ internal static class CSharpDiagnosticDescriptors
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-    public static DiagnosticDescriptor PropertyCantBeSetToValue { get; } =
+    public static readonly DiagnosticDescriptor s_propertyCantBeSetToValue =
         new(id: DiagnosticIDs.PropertyCantBeSetToValue,
             title: new LocalizableResourceString(nameof(SR.WFCA002Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA002Message), SR.ResourceManager, typeof(SR)),
@@ -25,7 +25,7 @@ internal static class CSharpDiagnosticDescriptors
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-    public static DiagnosticDescriptor PropertyCantBeSetToValueWithReason { get; } =
+    public static readonly DiagnosticDescriptor s_propertyCantBeSetToValueWithReason =
         new(id: DiagnosticIDs.PropertyCantBeSetToValue,
             title: new LocalizableResourceString(nameof(SR.WFCA002Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA002MessageWithReason), SR.ResourceManager, typeof(SR)),
@@ -33,8 +33,8 @@ internal static class CSharpDiagnosticDescriptors
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-    public static DiagnosticDescriptor MissingControlPropertySerializationConfiguration { get; } =
-        new(id: DiagnosticIDs.ControlPropertySerialization,
+    public static readonly DiagnosticDescriptor s_missingPropertySerializationConfiguration =
+        new(id: DiagnosticIDs.MissingPropertySerializationConfiguration,
             title: new LocalizableResourceString(nameof(SR.WFCA100AnalyzerTitle), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA100AnalyzerMessageFormat), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsSecurity,
