@@ -11,6 +11,9 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Diagnostics;
+using Microsoft.CodeAnalysis.Simplification;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 
@@ -18,6 +21,7 @@ namespace System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibili
 internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFixProvider
 {
     private const string SystemComponentModelName = "System.ComponentModel";
+    private const string DesignerSerializationVisibilityAttributeName = "DesignerSerializationVisibility";
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
         => [DiagnosticIDs.MissingPropertySerializationConfiguration];
@@ -62,9 +66,19 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             return document;
         }
 
+        // Let's make sure, the attribute we want to add is not already there:
+        if (propertyDeclarationSyntax.AttributeLists
+            .SelectMany(al => al.Attributes)
+            .Any(a => a.Name.ToString() == DesignerSerializationVisibilityAttributeName))
+        {
+            Debug.Assert(false, "The attribute should not be there.");
+
+            return document;
+        }
+
         // Generate the Attribute we need to put on the property
         AttributeSyntax designerSerializationVisibilityAttribute = SyntaxFactory.Attribute(
-            SyntaxFactory.ParseName("DesignerSerializationVisibility"),
+            SyntaxFactory.ParseName(DesignerSerializationVisibilityAttributeName),
             SyntaxFactory.ParseAttributeArgumentList("(DesignerSerializationVisibility.Hidden)"));
 
         // Make sure, we keep the white spaces before and after the property
@@ -77,31 +91,41 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
                 SyntaxFactory.AttributeList(
                     SyntaxFactory.SingletonSeparatedList(designerSerializationVisibilityAttribute)));
 
-        // Let's restore the trivia:
+        // Let's format the property, so the attribute is on top of it:
+        newProperty = newProperty.NormalizeWhitespace();
+
+        // Let's restore the original trivia:
         newProperty = newProperty.WithLeadingTrivia(leadingTrivia);
         newProperty = newProperty.WithTrailingTrivia(trailingTrivia);
-
-        UsingDirectiveSyntax usingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
+        newProperty = newProperty.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Let's check, if we already have the using directive or if we need to add it:
         // (Remember: We can't throw here, as we are in a code fixer. But this also cannot be null.)
         SyntaxNode root = (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false))!;
+
+        // Produce a new root, which has the updated property with the attribute.
+        root = root.ReplaceNode(propertyDeclarationSyntax, newProperty);
 
         // Let's check if we already have the using directive:
         if (!root.DescendantNodes()
                 .OfType<UsingDirectiveSyntax>()
                 .Any(u => u?.Name?.ToString() == SystemComponentModelName))
         {
+            UsingDirectiveSyntax usingDirective = SyntaxFactory
+                .UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
+
+            usingDirective = usingDirective
+                .WithAdditionalAnnotations(Simplifier.Annotation)
+                .WithAdditionalAnnotations(Formatter.Annotation);
+
             // We need to add the using directive:
             SyntaxNode firstNode = root.DescendantNodes().First();
             root = root.InsertNodesBefore(firstNode, [usingDirective]);
         }
 
-        // Produce a new root:
-        SyntaxNode originalRoot = (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false))!;
-        SyntaxNode newRoot = originalRoot.ReplaceNode(propertyDeclarationSyntax, newProperty);
+        document = document.WithSyntaxRoot(root);
 
         // Generate the new document:
-        return document.WithSyntaxRoot(newRoot);
+        return document;
     }
 }

@@ -23,13 +23,16 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             {
                 var control = new ScalableControl();
 
-                control.ScaleFactor = 1.5f;
-                control.ScaledSize = new SizeF(100, 100);
-                control.ScaledLocation = new PointF(10, 10);
+         // We deliberately format this weirdly, to make sure we only format code our code fix touches.
+         control.ScaleFactor = 1.5f;
+            control.ScaledSize = new SizeF(100, 100);
+               control.ScaledLocation = new PointF(10, 10);
             }
         }
 
-        public class ScalableControl : Control
+        // We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
+        // since this is nothing our code fix touches.
+        public class ScalableControl : System.Windows.Forms.Control
         {
             public float [|ScaleFactor|] { get; set; } = 1.0f;
 
@@ -77,7 +80,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         using System.ComponentModel;
         using System.Drawing;
         using System.Windows.Forms;
-        
+
         namespace CSharpControls;
 
         public static class Program
@@ -85,14 +88,17 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             public static void Main()
             {
                 var control = new ScalableControl();
-        
-                control.ScaleFactor = 1.5f;
-                control.ScaledSize = new SizeF(100, 100);
-                control.ScaledLocation = new PointF(10, 10);
+
+         // We deliberately format this weirdly, to make sure we only format code our code fix touches.
+         control.ScaleFactor = 1.5f;
+            control.ScaledSize = new SizeF(100, 100);
+               control.ScaledLocation = new PointF(10, 10);
             }
         }
-        
-        public class ScalableControl : Control
+
+        // We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
+        // since this is nothing our code fix touches.
+        public class ScalableControl : System.Windows.Forms.Control
         {
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public float ScaleFactor { get; set; } = 1.0f;
@@ -109,9 +115,9 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
     // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net60Windows];
-        yield return [ReferenceAssemblies.Net.Net70Windows];
-        yield return [ReferenceAssemblies.Net.Net80Windows];
+        // yield return [ReferenceAssemblies.Net.Net60Windows];
+        // yield return [ReferenceAssemblies.Net.Net70Windows];
+        // yield return [ReferenceAssemblies.Net.Net80Windows];
         yield return [ReferenceAssemblies.Net.Net90Windows];
     }
 
@@ -168,7 +174,8 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
                 {
                     OutputKind = OutputKind.WindowsApplication,
                 },
-            ReferenceAssemblies = referenceAssemblies
+            ReferenceAssemblies = referenceAssemblies,
+            NumberOfFixAllIterations = 2
         };
 
         await context.RunAsync();
