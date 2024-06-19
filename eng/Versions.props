@@ -24,6 +24,7 @@
     <MicrosoftNETCoreILDAsmPackageVersion>9.0.0-preview.6.24318.7</MicrosoftNETCoreILDAsmPackageVersion>
     <SystemDiagnosticsPerformanceCounterPackageVersion>9.0.0-preview.6.24318.7</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.0.0</SystemRuntimeCompilerServicesUnsafePackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>9.0.0-preview.6.24318.4</SystemRuntimeSerializationFormattersPackageVersion>
     <SystemSecurityCryptographyPkcsPackageVersion>9.0.0-preview.6.24318.7</SystemSecurityCryptographyPkcsPackageVersion>
     <SystemSecurityCryptographyProtectedDataPackageVersion>9.0.0-preview.6.24318.7</SystemSecurityCryptographyProtectedDataPackageVersion>
     <SystemTextEncodingsWebPackageVersion>9.0.0-preview.6.24318.7</SystemTextEncodingsWebPackageVersion>
@@ -109,6 +110,5 @@
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
-    <SystemRuntimeSerializationFormattersVersion>9.0.0-preview.6.24318.4</SystemRuntimeSerializationFormattersVersion>
   </PropertyGroup>
 </Project>
