@@ -218,33 +218,4 @@ internal static partial class LocalAppContextSwitches
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
     }
-
-    internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
-    {
-        if (switchName == NoClientNotificationsSwitchName)
-        {
-            s_noClientNotifications = value ? 1 : 0;
-        }
-
-        if (switchName == DataGridViewUIAStartRowCountAtZeroSwitchName)
-        {
-            s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
-        }
-
-        if (switchName == ApplyParentFontToMenusSwitchName)
-        {
-            s_applyParentFontToMenus = value ? 1 : 0;
-        }
-
-        if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
-        {
-            s_treeNodeCollectionAddRangeRespectsSortOrder = value ? 1 : 0;
-        }
-    }
-
-    internal static bool GetCachedSwitchValue(string switchName)
-    {
-        int cachedSwitchValue = 0;
-        return GetCachedSwitchValue(switchName, ref cachedSwitchValue);
-    }
 }
