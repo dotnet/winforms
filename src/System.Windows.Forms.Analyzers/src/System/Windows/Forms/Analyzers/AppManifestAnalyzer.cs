@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Analyzers;
 internal partial class AppManifestAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [SharedDiagnosticDescriptors.CSharpMigrateHighDpiSettings, SharedDiagnosticDescriptors.VisualBasicMigrateHighDpiSettings];
+        => [SharedDiagnosticDescriptors.s_cSharpMigrateHighDpiSettings, SharedDiagnosticDescriptors.s_visualBasicMigrateHighDpiSettings];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -63,14 +63,14 @@ internal partial class AppManifestAnalyzer : DiagnosticAnalyzer
             switch (context.Compilation.Language)
             {
                 case LanguageNames.CSharp:
-                    context.ReportDiagnostic(Diagnostic.Create(SharedDiagnosticDescriptors.CSharpMigrateHighDpiSettings,
+                    context.ReportDiagnostic(Diagnostic.Create(SharedDiagnosticDescriptors.s_cSharpMigrateHighDpiSettings,
                         Location.None,
                         appManifest.Path,
                         ApplicationConfig.PropertyNameCSharp.HighDpiMode));
                     break;
 
                 case LanguageNames.VisualBasic:
-                    context.ReportDiagnostic(Diagnostic.Create(SharedDiagnosticDescriptors.VisualBasicMigrateHighDpiSettings,
+                    context.ReportDiagnostic(Diagnostic.Create(SharedDiagnosticDescriptors.s_visualBasicMigrateHighDpiSettings,
                         Location.None,
                         appManifest.Path,
                         ApplicationConfig.PropertyNameVisualBasic.HighDpiMode));

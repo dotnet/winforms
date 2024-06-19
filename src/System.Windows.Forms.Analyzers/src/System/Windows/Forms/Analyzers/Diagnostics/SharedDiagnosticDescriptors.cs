@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static partial class SharedDiagnosticDescriptors
 {
-    internal static DiagnosticDescriptor CSharpMigrateHighDpiSettings { get; } =
+    internal static readonly DiagnosticDescriptor s_cSharpMigrateHighDpiSettings =
         new(id: DiagnosticIDs.MigrateHighDpiSettings,
             title: new LocalizableResourceString(nameof(SR.WFCA010Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA010Message_CS), SR.ResourceManager, typeof(SR)),
@@ -16,7 +16,7 @@ internal static partial class SharedDiagnosticDescriptors
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-    internal static DiagnosticDescriptor VisualBasicMigrateHighDpiSettings { get; } =
+    internal static readonly DiagnosticDescriptor s_visualBasicMigrateHighDpiSettings =
         new(id: DiagnosticIDs.MigrateHighDpiSettings,
             title: new LocalizableResourceString(nameof(SR.WFCA010Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFCA010Message_VB), SR.ResourceManager, typeof(SR)),

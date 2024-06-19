@@ -5,10 +5,10 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFAC010 | ApplicationConfiguration | Warning | DiagnosticDescriptors
+WFAC010 | Application Configuration | Warning | DiagnosticDescriptors
 
 ### New Rules
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFCA010 | ApplicationConfiguration | Warning | DiagnosticDescriptors
+WFCA010 | Application Configuration | Warning | DiagnosticDescriptors
