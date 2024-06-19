@@ -67,6 +67,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>4a0a04cf3e8b8c2a3613270df7f838246e4597e8</Sha>
     </Dependency>
+    <Dependency Name="System.Runtime.Serialization.Formatters" Version="9.0.0-preview.6.24318.4">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>4a0a04cf3e8b8c2a3613270df7f838246e4597e8</Sha>
+    </Dependency>
     <!-- These dependencies are required by windowsdesktop for coherency. -->
     <Dependency Name="Microsoft.Win32.Registry.AccessControl" Version="9.0.0-preview.6.24318.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
