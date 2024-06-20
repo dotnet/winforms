@@ -7,108 +7,109 @@ Imports Xunit
 
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
 
-    Private Const ProblematicCode As String = "
-        Imports System.Drawing
-        Imports System.Windows.Forms
+    Private Const ProblematicCode As String =
+"
+Imports System.Drawing
+Imports System.Windows.Forms
 
-        Namespace VBControls
+Namespace VBControls
 
-            Public Module Program
-                Public Sub Main()
-                    Dim control As New ScalableControl()
+    Public Module Program
+        Public Sub Main()
+            Dim control As New ScalableControl()
 
-                    ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
-                    control.ScaleFactor = 1.5F
-                    control.ScaledSize = New SizeF(100, 100)
-                    control.ScaledLocation = New PointF(10, 10)
-                End Sub
-            End Module
+            ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
+            control.ScaleFactor = 1.5F
+            control.ScaledSize = New SizeF(100, 100)
+            control.ScaledLocation = New PointF(10, 10)
+        End Sub
+    End Module
 
-            ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
-            ' since this is nothing our code fix touches.
-            Public Class ScalableControl
-                Inherits System.Windows.Forms.Control
+    ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
+    ' since this is nothing our code fix touches.
+    Public Class ScalableControl
+        Inherits System.Windows.Forms.Control
 
-                Public Property [|ScaleFactor|] As Single = 1.0F
+        Public Property [|ScaleFactor|] As Single = 1.0F
 
-                Public Property [|ScaledSize|] As SizeF
+        Public Property [|ScaledSize|] As SizeF
 
-                Public Property [|ScaledLocation|] As PointF
-            End Class
+        Public Property [|ScaledLocation|] As PointF
+    End Class
 
-        End Namespace
-        "
+End Namespace
+"
 
-    Private Const CorrectCode As String = "
-        Imports System.ComponentModel
-        Imports System.Drawing
-        Imports System.Windows.Forms
+    Private Const CorrectCode As String =
+"Imports System.ComponentModel
+Imports System.Drawing
+Imports System.Windows.Forms
 
-        Namespace VBControls
+Namespace VBControls
 
-            Public Module Program
-                Public Sub Main()
-                    Dim control As New ScalableControl()
+    Public Module Program
+        Public Sub Main()
+            Dim control As New ScalableControl()
         
-                    control.ScaleFactor = 1.5F
-                    control.ScaledSize = New SizeF(100, 100)
-                    control.ScaledLocation = New PointF(10, 10)
-                End Sub
-            End Module
+            control.ScaleFactor = 1.5F
+            control.ScaledSize = New SizeF(100, 100)
+            control.ScaledLocation = New PointF(10, 10)
+        End Sub
+    End Module
         
-            Public Class ScalableControl
-                Inherits Control
+    Public Class ScalableControl
+        Inherits Control
 
-                <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-                Public Property ScaleFactor As Single = 1.0F
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+        Public Property ScaleFactor As Single = 1.0F
 
-                <DefaultValue(GetType(SizeF), ""0,0"")>
-                Public Property ScaledSize As SizeF
+        <DefaultValue(GetType(SizeF), ""0,0"")>
+        Public Property ScaledSize As SizeF
 
-                Public Property ScaledLocation As PointF
-                Private Function ShouldSerializeScaledLocation() As Boolean
-                    Return Me.ScaledLocation <> PointF.Empty
-                End Function
-            End Class
+        Public Property ScaledLocation As PointF
+        Private Function ShouldSerializeScaledLocation() As Boolean
+            Return Me.ScaledLocation <> PointF.Empty
+        End Function
+    End Class
         
-        End Namespace
-        "
+End Namespace
+"
 
-    Private Const FixedCode As String = "
-        Imports System.ComponentModel
-        Imports System.Drawing
-        Imports System.Windows.Forms
+    Private Const FixedCode As String =
+"Imports System.ComponentModel
+Imports System.Drawing
+Imports System.Windows.Forms
 
-        Namespace VBControls
+Namespace VBControls
 
-            Public Module Program
-                Public Sub Main()
-                    Dim control As New ScalableControl()
+    Public Module Program
+        Public Sub Main()
+            Dim control As New ScalableControl()
 
-                    ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
-                    control.ScaleFactor = 1.5F
-                    control.ScaledSize = New SizeF(100, 100)
-                    control.ScaledLocation = New PointF(10, 10)
-                End Sub
-            End Module
+            ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
+            control.ScaleFactor = 1.5F
+            control.ScaledSize = New SizeF(100, 100)
+            control.ScaledLocation = New PointF(10, 10)
+        End Sub
+    End Module
 
-            ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
-            ' since this is nothing our code fix touches.
-            Public Class ScalableControl
-                Inherits System.Windows.Forms.Control
+    ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
+    ' since this is nothing our code fix touches.
+    Public Class ScalableControl
+        Inherits System.Windows.Forms.Control
 
-                <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-                Public Property ScaleFactor As Single = 1.0F
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+        Public Property ScaleFactor As Single = 1.0F
 
-                <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-                Public Property ScaledSize As SizeF
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+        Public Property ScaledSize As SizeF
 
-                <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-                Public Property ScaledLocation As PointF
-            End Class
-        
-        End Namespace
-        "
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+        Public Property ScaledLocation As PointF
+    End Class
+
+End Namespace
+"
 
     ' We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
     Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
