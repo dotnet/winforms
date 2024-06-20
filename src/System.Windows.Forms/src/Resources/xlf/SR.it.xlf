@@ -9704,6 +9704,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Troppe chiamate a ResumeUpdateMenuHandles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
         <target state="translated">Le proprietà AllowItemReorder e AllowDrop non possono avere entrambe valore true.</target>

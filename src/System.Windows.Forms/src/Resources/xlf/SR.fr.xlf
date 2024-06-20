@@ -9704,6 +9704,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Trop d'appels vers ResumeUpdateMenuHandles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
         <target state="translated">AllowItemReorder et AllowDrop ne peuvent pas être true en même temps.</target>

@@ -9704,6 +9704,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">对 ResumeUpdateMenuHandles 的调用过多。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
         <target state="translated">AllowItemReorder 和 AllowDrop 不能同时为 True。</target>
