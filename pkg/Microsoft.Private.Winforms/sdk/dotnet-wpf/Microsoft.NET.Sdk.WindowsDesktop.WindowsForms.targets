@@ -17,7 +17,6 @@
     <_MdiWindowDialogSupport Condition="'$(_MdiWindowDialogSupport)' == ''">false</_MdiWindowDialogSupport>
     <_WinFormsImageIndexConverterSupport Condition="'$(_WinFormsImageIndexConverterSupport)' == ''">false</_WinFormsImageIndexConverterSupport>
     <_UseComponentModelRegisteredTypes Condition="'$(_UseComponentModelRegisteredTypes)' == ''">true</_UseComponentModelRegisteredTypes>
-    <_EnableUnsafeBinaryFormatterInNativeObjectSerialization Condition="'$(_EnableUnsafeBinaryFormatterInNativeObjectSerialization)' == ''">false</_EnableUnsafeBinaryFormatterInNativeObjectSerialization>
   </PropertyGroup>
 
 </Project>
