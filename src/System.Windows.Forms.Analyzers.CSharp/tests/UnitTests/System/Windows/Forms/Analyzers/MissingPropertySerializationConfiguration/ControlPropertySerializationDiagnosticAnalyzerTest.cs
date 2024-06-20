@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace System.Windows.Forms.Analyzers.MissingPropertySerializationConfiguration;
+namespace System.Windows.Forms.Analyzers.Test;
 
 public class ControlPropertySerializationDiagnosticAnalyzerTest
 {

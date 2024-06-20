@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Immutable;
 
-namespace System.Windows.Forms.Analyzers.Verifiers;
+namespace System.Windows.Forms.Analyzers.Tests.Verifiers;
 
 internal static class CSharpVerifierHelper
 {
