@@ -5,7 +5,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
-    <LangVersion>15.0</LangVersion>
+    <LangVersion>15.5</LangVersion>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

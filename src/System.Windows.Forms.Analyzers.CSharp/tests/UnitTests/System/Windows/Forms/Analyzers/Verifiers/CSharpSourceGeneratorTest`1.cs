@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using static Microsoft.CodeAnalysis.Testing.ReferenceAssemblies;
 
-namespace System.Windows.Forms.Analyzers.Verifiers;
+namespace System.Windows.Forms.Analyzers.Tests.Verifiers;
 
 public class CSharpSourceGeneratorTest<TSourceGenerator>
     : CSharpSourceGeneratorTest<TSourceGenerator, XUnitVerifier>

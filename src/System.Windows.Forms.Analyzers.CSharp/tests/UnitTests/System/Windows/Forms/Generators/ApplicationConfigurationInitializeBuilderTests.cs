@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Windows.Forms.Analyzers;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Generators.Tests;
+namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ApplicationConfigurationInitializeBuilderTests
 {
