@@ -4172,7 +4172,7 @@ public partial class TextBoxBaseTests
     [ActiveIssue("https://github.com/dotnet/winforms/issues/11558")]
     [WinFormsFact]
     [SkipOnArchitecture(TestArchitectures.X86,
-     "Flaky tests, see: https://github.com/dotnet/winforms/issues/11558")]
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11558")]
     public void TextBoxBase_Copy_PasteNotEmpty_Success()
     {
         using SubTextBox control = new()
