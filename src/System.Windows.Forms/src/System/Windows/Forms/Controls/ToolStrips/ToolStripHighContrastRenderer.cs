@@ -180,7 +180,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
         }
 
-        if (e.Item is ToolStripMenuItem menuItem && (menuItem.Checked || menuItem.Selected))
+        if (e.Item is ToolStripMenuItem menuItem && !e.Item.IsOnDropDown && (menuItem.Checked || menuItem.Selected))
         {
             Graphics g = e.Graphics;
             Rectangle bounds = new(Point.Empty, menuItem.Size);
@@ -238,6 +238,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             ((ToolStripButton)e.Item).Checked) ||
             (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType()) &&
             ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
+            !e.Item.IsOnDropDown &&
             ((ToolStripMenuItem)e.Item).Checked))
         {
             e.TextColor = SystemColors.HighlightText;

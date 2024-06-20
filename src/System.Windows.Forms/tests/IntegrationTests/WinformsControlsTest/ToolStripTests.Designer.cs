@@ -61,6 +61,8 @@ partial class ToolStripTests
         this.toolStrip4_MenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip4_SubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.uncheckedCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.thirdLevelItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.thirdLevelButton = new System.Windows.Forms.ToolStripButton();
         this.checkCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.checkedCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.indeterminateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -240,6 +242,23 @@ partial class ToolStripTests
         this.checkCheckOnClickToolStripMenuItem.Name = "checkCheckOnClickToolStripMenuItem";
         this.checkCheckOnClickToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
         this.checkCheckOnClickToolStripMenuItem.Text = "Checked_CheckOnClick(T)";
+        this.checkCheckOnClickToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thirdLevelItem, thirdLevelButton });
+        // 
+        // thirdLevelItem
+        // 
+        this.thirdLevelItem.CheckOnClick = true;
+        this.thirdLevelItem.Name = "thirdLevelItem";
+        this.thirdLevelItem.Size = new System.Drawing.Size(481, 44);
+        this.thirdLevelItem.Text = "thirdLevelItem";
+        this.thirdLevelItem.CheckState = System.Windows.Forms.CheckState.Checked;
+        // 
+        // thirdLevelButton
+        // 
+        this.thirdLevelButton.CheckOnClick = true;
+        this.thirdLevelButton.Name = "thirdLevelButton";
+        this.thirdLevelButton.Size = new System.Drawing.Size(481, 44);
+        this.thirdLevelButton.Text = "thirdLevelButton";
+        this.thirdLevelButton.CheckState = System.Windows.Forms.CheckState.Checked;
         // 
         // checkedCheckOnClickFToolStripMenuItem
         // 
@@ -405,6 +424,7 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripButton toolStrip2_Button4;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button5;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button6;
+    private System.Windows.Forms.ToolStripButton thirdLevelButton;
     private System.Windows.Forms.ToolStripSplitButton toolStrip2_SplitButton1;
     private System.Windows.Forms.ToolStripDropDownButton toolStrip2_DropDownButton1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_DropDownButton1_ChildButton1;
@@ -415,6 +435,7 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripMenuItem toolStrip3_MenuItem2;
     private System.Windows.Forms.ToolStripMenuItem toolStrip4_MenuItem1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip4_SubMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem thirdLevelItem;
     private System.Windows.Forms.ToolStripMenuItem uncheckedCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkedCheckOnClickFToolStripMenuItem;
