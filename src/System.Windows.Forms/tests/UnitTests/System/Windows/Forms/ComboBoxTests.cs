@@ -2507,6 +2507,7 @@ public class ComboBoxTests
         control.SelectionStart.Should().Be(0);
         control.SelectionLength.Should().Be(control.Text.Length);
     }
+
     private void InitializeItems(ComboBox comboBox, int numItems)
     {
         for (int i = 0; i < numItems; i++)
