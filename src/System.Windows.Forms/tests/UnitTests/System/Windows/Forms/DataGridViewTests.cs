@@ -8,8 +8,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests;
 
-public partial class DataGridViewTests
+public partial class DataGridViewTests: IDisposable
 {
+    private readonly DataGridView _dataGridView;
     public DataGridViewTests()
     {
         // Some controls have behavior that changes when the mouse is over them. Make sure we start with the cursor
@@ -17,7 +18,11 @@ public partial class DataGridViewTests
         //
         // See https://github.com/dotnet/winforms/pull/7031#issuecomment-1101339968 for an example of this.
         Cursor.Position = default;
+
+        _dataGridView = new();
     }
+
+    public void Dispose() => _dataGridView.Dispose();
 
     [WinFormsFact]
     public void DataGridView_Ctor_Default()
@@ -2907,5 +2912,205 @@ public partial class DataGridViewTests
 
         Assert.Equal(1, changedCount);
         Assert.Equal(Color.Red, dataGrid.GridColor);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AllowUserToAddRowsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AllowUserToAddRowsChanged += handler;
+        _dataGridView.AllowUserToAddRows = !_dataGridView.AllowUserToAddRows;
+        callCount.Should().Be(1);
+
+        _dataGridView.AllowUserToAddRowsChanged -= handler;
+        _dataGridView.AllowUserToAddRows = !_dataGridView.AllowUserToAddRows;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AllowUserToDeleteRowsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AllowUserToDeleteRowsChanged += handler;
+        _dataGridView.AllowUserToDeleteRows = !_dataGridView.AllowUserToDeleteRows;
+        callCount.Should().Be(1);
+
+        _dataGridView.AllowUserToDeleteRowsChanged -= handler;
+        _dataGridView.AllowUserToDeleteRows = !_dataGridView.AllowUserToDeleteRows;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AllowUserToOrderColumnsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AllowUserToOrderColumnsChanged += handler;
+        _dataGridView.AllowUserToOrderColumns = !_dataGridView.AllowUserToOrderColumns;
+        callCount.Should().Be(1);
+
+        _dataGridView.AllowUserToOrderColumnsChanged -= handler;
+        _dataGridView.AllowUserToOrderColumns = !_dataGridView.AllowUserToOrderColumns;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AllowUserToResizeColumnsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AllowUserToResizeColumnsChanged += handler;
+        _dataGridView.AllowUserToResizeColumns = !_dataGridView.AllowUserToResizeColumns;
+        callCount.Should().Be(1);
+
+        _dataGridView.AllowUserToResizeColumnsChanged -= handler;
+        _dataGridView.AllowUserToResizeColumns = !_dataGridView.AllowUserToResizeColumns;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AllowUserToResizeRowsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AllowUserToResizeRowsChanged += handler;
+        _dataGridView.AllowUserToResizeRows = !_dataGridView.AllowUserToResizeRows;
+        callCount.Should().Be(1);
+
+        _dataGridView.AllowUserToResizeRowsChanged -= handler;
+        _dataGridView.AllowUserToResizeRows = !_dataGridView.AllowUserToResizeRows;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AlternatingRowsDefaultCellStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().BeOfType<DataGridViewCellStyleChangedEventArgs>();
+            callCount++;
+        };
+
+        _dataGridView.AlternatingRowsDefaultCellStyleChanged += handler;
+        _dataGridView.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.AliceBlue };
+        callCount.Should().Be(1);
+
+        _dataGridView.AlternatingRowsDefaultCellStyleChanged -= handler;
+        _dataGridView.AlternatingRowsDefaultCellStyle = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AutoGenerateColumnsChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.AutoGenerateColumnsChanged += handler;
+        _dataGridView.AutoGenerateColumns = !_dataGridView.AutoGenerateColumns;
+        callCount.Should().Be(1);
+
+        _dataGridView.AutoGenerateColumnsChanged -= handler;
+        _dataGridView.AutoGenerateColumns = !_dataGridView.AutoGenerateColumns;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BackgroundColorChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.BackgroundColorChanged += handler;
+        _dataGridView.BackgroundColor = Color.AliceBlue;
+        callCount.Should().Be(1);
+
+        _dataGridView.BackgroundColorChanged -= handler;
+        _dataGridView.BackgroundColor = Color.Azure;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BorderStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.BorderStyleChanged += handler;
+        _dataGridView.BorderStyle = BorderStyle.Fixed3D;
+        callCount.Should().Be(1);
+
+        _dataGridView.BorderStyleChanged -= handler;
+        _dataGridView.BorderStyle = BorderStyle.FixedSingle;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellBorderStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.CellBorderStyleChanged += handler;
+        _dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.SingleVertical;
+        callCount.Should().Be(1);
+
+        _dataGridView.CellBorderStyleChanged -= handler;
+        _dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+        callCount.Should().Be(1);   
     }
 }

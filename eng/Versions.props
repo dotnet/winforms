@@ -13,35 +13,36 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>9.0.0-preview.6.24307.2</VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>9.0.0-preview.6.24307.2</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>9.0.0-preview.6.24307.2</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>9.0.0-preview.6.24307.2</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>9.0.0-preview.6.24307.2</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOHashingPackageVersion>9.0.0-preview.6.24307.2</SystemIOHashingPackageVersion>
-    <SystemIOPackagingPackageVersion>9.0.0-preview.6.24307.2</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>9.0.0-preview.6.24319.3</VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>9.0.0-preview.6.24319.3</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>9.0.0-preview.6.24319.3</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>9.0.0-preview.6.24319.3</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>9.0.0-preview.6.24319.3</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOHashingPackageVersion>9.0.0-preview.6.24319.3</SystemIOHashingPackageVersion>
+    <SystemIOPackagingPackageVersion>9.0.0-preview.6.24319.3</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>9.0.0-preview.6.24307.2</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>9.0.0-preview.6.24307.2</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>9.0.0-preview.6.24319.3</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>9.0.0-preview.6.24319.3</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.0.0</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>9.0.0-preview.6.24307.2</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>9.0.0-preview.6.24307.2</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>9.0.0-preview.6.24307.2</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>9.0.0-preview.6.24307.2</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>9.0.0-preview.6.24307.2</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>9.0.0-preview.6.24307.2</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>9.0.0-preview.6.24307.2</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>9.0.0-preview.6.24307.2</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>9.0.0-preview.6.24307.2</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>9.0.0-preview.6.24307.2</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>9.0.0-preview.6.24307.2</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>9.0.0-preview.6.24307.2</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>9.0.0-preview.6.24307.2</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>9.0.0-preview.6.24307.2</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>9.0.0-preview.6.24307.2</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24307.2</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24307.2</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24307.2</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>9.0.0-preview.6.24319.3</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>9.0.0-preview.6.24319.3</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>9.0.0-preview.6.24319.3</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>9.0.0-preview.6.24319.3</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>9.0.0-preview.6.24319.3</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>9.0.0-preview.6.24319.3</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>9.0.0-preview.6.24319.3</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>9.0.0-preview.6.24319.3</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>9.0.0-preview.6.24319.3</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>9.0.0-preview.6.24319.3</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>9.0.0-preview.6.24319.3</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>9.0.0-preview.6.24319.3</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>9.0.0-preview.6.24319.3</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>9.0.0-preview.6.24319.3</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>9.0.0-preview.6.24319.3</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>9.0.0-preview.6.24319.3</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24319.3</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24319.3</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24319.3</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
@@ -54,9 +55,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>9.0.0-beta.24314.1</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>9.0.0-beta.24314.1</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>9.0.0-beta.24314.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>9.0.0-beta.24317.3</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>9.0.0-beta.24317.3</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>9.0.0-beta.24317.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->

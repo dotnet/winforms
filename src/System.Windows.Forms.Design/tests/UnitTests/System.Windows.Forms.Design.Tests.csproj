@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="$(SystemRuntimeSerializationFormattersPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

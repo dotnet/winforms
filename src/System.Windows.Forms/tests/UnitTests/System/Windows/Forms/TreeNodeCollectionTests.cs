@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
@@ -296,23 +295,25 @@ public class TreeNodeCollectionTests
             }
         };
 
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, true);
-        using TreeView treeView2 = new();
+        TreeNode treeNode;
+        using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(enable: true))
+        {
+            using TreeView treeView2 = new();
 
-        treeView2.Nodes.Add(child1);
-        treeView2.Nodes.Add(child2);
-        treeView2.Nodes.Add(child3);
+            treeView2.Nodes.Add(child1);
+            treeView2.Nodes.Add(child2);
+            treeView2.Nodes.Add(child3);
 
-        treeView2.CreateControl();
-        treeView2.Sort();
-        treeView2.Nodes.AddRange(treeNodeArray);
+            treeView2.CreateControl();
+            treeView2.Sort();
+            treeView2.Nodes.AddRange(treeNodeArray);
 
-        TreeNode treeNode = treeView2.Nodes.Find("2", searchAllChildren: true)[0];
-        treeNode.Should().NotBeNull();
-        treeView2.Nodes.IndexOf(treeNode).Should().Be(1);
-        treeView2.Nodes.Clear();
+            treeNode = treeView2.Nodes.Find("2", searchAllChildren: true)[0];
+            treeNode.Should().NotBeNull();
+            treeView2.Nodes.IndexOf(treeNode).Should().Be(1);
+            treeView2.Nodes.Clear();
+        }
 
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, false);
         using TreeView treeView3 = new();
 
         treeView3.Nodes.Add(child1);
