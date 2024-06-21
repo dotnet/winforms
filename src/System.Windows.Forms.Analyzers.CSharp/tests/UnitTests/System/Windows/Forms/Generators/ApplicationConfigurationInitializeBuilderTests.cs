@@ -3,13 +3,10 @@
 
 using System.Globalization;
 using System.Windows.Forms.Analyzers;
-using VerifyXunit;
-using Xunit;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests;
 
-[UsesVerify]
 public partial class ApplicationConfigurationInitializeBuilderTests
 {
     private static readonly string[] s_locales =
@@ -158,7 +155,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(null, (ApplicationConfig)config);
 
         // Compare all locale tests against the same files - we expect the produced output to be the same
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseMethodName("GenerateInitialize")
             .UseTextForParameters(testName)
             .DisableRequireUniquePrefix();

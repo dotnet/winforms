@@ -7,7 +7,6 @@ using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Tests;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Xunit;
 using Xunit.Abstractions;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
