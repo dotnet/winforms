@@ -14,7 +14,7 @@ public sealed partial class Application
     /// <summary>
     ///  <see cref="ThreadContext"/> that supports <see cref="IMsoComponent"/>.
     /// </summary>
-    internal unsafe sealed class ComponentThreadContext :
+    internal sealed unsafe class ComponentThreadContext :
         ThreadContext,
         IMsoComponent.Interface,
         IManagedWrapper<IMsoComponent>
