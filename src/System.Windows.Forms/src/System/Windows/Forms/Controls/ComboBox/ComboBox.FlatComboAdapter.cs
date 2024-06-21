@@ -73,7 +73,7 @@ public partial class ComboBox
                 using var borderPen = borderPenColor.GetCachedPenScope();
                 Pen innerPen = comboBox.Enabled ? borderPen : SystemPens.Control;
 
-                // Around the dropdown
+                // Draw a border around the dropdown.
                 if (rightToLeft)
                 {
                     g.DrawRectangle(
@@ -87,7 +87,7 @@ public partial class ComboBox
                         new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
                 }
 
-                // Around the whole comboBox.
+                // Draw a border around the whole comboBox.
                 g.DrawRectangle(borderPen, _outerBorder);
             }
         }
