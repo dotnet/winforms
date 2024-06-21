@@ -146,7 +146,7 @@ public class SerializableTypesTests
             Assert.Equal(HorizontalAlignment.Center, result.HeaderAlignment);
             Assert.Equal("Tag", result.Tag);
             Assert.Equal("GroupName", result.Name);
-            var item = Assert.Single(result.Items) as ListViewItem;
+            var item = Assert.Single(result.Items);
             Assert.NotNull(item);
             Assert.Equal("Item", item.Text);
         }
