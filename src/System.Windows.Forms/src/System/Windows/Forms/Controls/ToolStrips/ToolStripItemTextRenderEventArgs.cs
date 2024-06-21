@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
 {
-    private Color _textColor = SystemColors.ControlText;
+    private Color _textColor = Application.SystemColors.ControlText;
     private bool _textColorChanged;
 
     /// <summary>

@@ -33,6 +33,7 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     ///  </para>
     /// </remarks>
     private GraphicsState? _savedGraphicsState;
+    private readonly AsyncGraphicsFactory _graphicsFactory;
 
     public PaintEventArgs(Graphics graphics, Rectangle clipRect) : this(
         graphics,
@@ -47,6 +48,7 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
         Rectangle clipRect)
     {
         HDC hdc = e.HDC;
+        _graphicsFactory = new AsyncGraphicsFactory(hdc);
         _event = hdc.IsNull
             ? new DrawingEventArgs(e.GraphicsInternal, clipRect, e._event.Flags)
             : new DrawingEventArgs(hdc, clipRect, e._event.Flags);
@@ -58,6 +60,7 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
         DrawingEventFlags flags)
     {
         _event = new DrawingEventArgs(graphics, clipRect, flags);
+        _graphicsFactory = new AsyncGraphicsFactory(_event.HDC);
         SaveStateIfNeeded(graphics);
     }
 
@@ -70,6 +73,7 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
         DrawingEventFlags flags = DrawingEventFlags.CheckState)
     {
         _event = new DrawingEventArgs(hdc, clipRect, flags);
+        _graphicsFactory = new AsyncGraphicsFactory(hdc);
     }
 
     ~PaintEventArgs() => Dispose(false);
@@ -83,6 +87,8 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     ///  Gets the <see cref="Drawing.Graphics"/> object used to paint.
     /// </summary>
     public Graphics Graphics => _event.Graphics;
+
+    public AsyncGraphicsFactory GraphicsFactory => _graphicsFactory;
 
     /// <summary>
     ///  Disposes of the resources (other than memory) used by the <see cref="PaintEventArgs"/>.

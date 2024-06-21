@@ -196,7 +196,6 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripScrollButton.t_downScrollImage")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripSystemRenderer.t_renderer")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.TrackBarRenderer.t_visualStyleRenderer")]
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.MessageBox.t_helpInfoTable")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ErrorProvider.t_defaultIcon")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.DockingAttribute.Default")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.NativeWindow.t_anyHandleCreated")]

@@ -11,6 +11,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -159,6 +160,14 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+
+    public enum WindowCornerPreference
+    {
+        Default = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
+        DoNotRound = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
+        Round = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
+        RoundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL
+    }
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -2329,6 +2338,116 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Sets the rounding style of the corners of this Form.
+    /// </summary>
+    /// <param name="cornerPreference">
+    ///  A value of the <see cref="WindowCornerPreference"/> enum
+    ///  which determines the corner rounding style.
+    /// </param>
+    public void SetWindowCornerPreference(WindowCornerPreference cornerPreference)
+    {
+        SetWindowCornerPreferenceInternal(cornerPreference);
+    }
+
+    private unsafe void SetWindowCornerPreferenceInternal(WindowCornerPreference cornerPreference)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
+        {
+            WindowCornerPreference.Default => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
+            WindowCornerPreference.DoNotRound => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
+            WindowCornerPreference.Round => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
+            WindowCornerPreference.RoundSmall => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL,
+            _ => throw new ArgumentOutOfRangeException(nameof(cornerPreference))
+        };
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+            &dwmCornerPreference,
+            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+    }
+
+    /// <summary>
+    ///  Sets the color of the border of this Form.
+    /// </summary>
+    /// <param name="color">The border color.</param>
+    public void SetWindowBorderColor(Color color)
+    {
+        SetWindowBorderColorInternal(color);
+    }
+
+    private unsafe void SetWindowBorderColorInternal(Color color)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        COLORREF colorRef = color;
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+    }
+
+    /// <summary>
+    ///  Sets the color of the title bar of this Form containing the caption and control buttons.
+    /// </summary>
+    /// <param name="color">The title bar color.</param>
+    public void SetWindowCaptionColor(Color color)
+    {
+        SetWindowCaptionColorInternal(color);
+    }
+
+    private unsafe void SetWindowCaptionColorInternal(Color color)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        COLORREF colorRef = color;
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+    }
+
+    /// <summary>
+    ///  Sets the color of the text in the title bar of this Form.
+    /// </summary>
+    /// <param name="color">The text color of the title bar.</param>
+    public void SetWindowCaptionTextColor(Color color)
+    {
+        SetWindowCaptionTextColorInternal(color);
+    }
+
+    private unsafe void SetWindowCaptionTextColorInternal(Color color)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        COLORREF colorRef = color;
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+    }
+
+    /// <summary>
     ///  Gets or sets the form's window state.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
@@ -2719,7 +2838,8 @@ public partial class Form : ContainerControl
         UpdateWindowState();
         FormWindowState winState = WindowState;
         FormBorderStyle borderStyle = FormBorderStyle;
-        bool sizableBorder = borderStyle is FormBorderStyle.SizableToolWindow or FormBorderStyle.Sizable;
+        bool sizableBorder = (borderStyle is FormBorderStyle.SizableToolWindow
+                              or FormBorderStyle.Sizable);
 
         bool showMin = MinimizeBox && winState != FormWindowState.Minimized;
         bool showMax = MaximizeBox && winState != FormWindowState.Maximized;
@@ -4059,6 +4179,11 @@ public partial class Form : ContainerControl
         // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
+            if (IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+            }
+
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
     }
@@ -5372,6 +5497,48 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Shows the form as a modal dialog box asynchronously.
+    /// </summary>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    public Task<DialogResult> ShowDialogAsync()
+    {
+        return ShowDialogAsyncInternal(null);
+    }
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner)
+    {
+        return ShowDialogAsyncInternal(owner);
+    }
+
+    private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
+    {
+        var tcs = new TaskCompletionSource<DialogResult>();
+
+        BeginInvoke(new Action(() =>
+        {
+            try
+            {
+                DialogResult result = owner is null
+                    ? ShowDialog()
+                    : ShowDialog(owner);
+
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }), null);
+
+        return tcs.Task;
+    }
+
+    /// <summary>
     ///  Indicates whether the <see cref="AutoScaleBaseSize"/> property should be
     ///  persisted.
     /// </summary>
@@ -5524,9 +5691,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        if (containerControl.ActiveControl is IButtonControl buttonControl)
+        if (containerControl.ActiveControl is IButtonControl control)
         {
-            SetDefaultButton(buttonControl);
+            SetDefaultButton(control);
         }
         else
         {
