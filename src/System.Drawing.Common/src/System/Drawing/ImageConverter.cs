@@ -39,7 +39,7 @@ public partial class ImageConverter : TypeConverter
         }
     }
 
-    public unsafe override object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    public override unsafe object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
     {
         if (destinationType == typeof(string))
         {
