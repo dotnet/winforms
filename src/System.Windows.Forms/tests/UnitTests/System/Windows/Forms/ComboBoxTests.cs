@@ -2419,16 +2419,24 @@ public class ComboBoxTests
     {
         int index = 0;
         int expected = 15;
-        using ComboBox control = new()
+        using ComboBox control = CreateComboBox(drawMode, expected);
+        control.GetItemHeight(index).Should().Be(expected);
+    }
+
+    private ComboBox CreateComboBox(DrawMode drawMode, int itemHeight = 15)
+    {
+        ComboBox control = new()
         {
             DrawMode = drawMode,
-            ItemHeight = expected
+            ItemHeight = itemHeight
         };
+
         control.Items.Add("Item1");
         control.Items.Add("Item2");
         control.Items.Add("Item3");
+        control.CreateControl();
 
-        control.GetItemHeight(index).Should().Be(expected);
+        return control;
     }
 
     [WinFormsTheory]
