@@ -7,7 +7,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
     ''' <summary>
     '''  Stores an object in a context appropriate for the environment we are
-    '''  running in (web/windows)
+    '''  running in (web/windows).
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <remarks>
