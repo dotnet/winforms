@@ -199,7 +199,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves a DataObject to the clipboard
+        '''  Saves a <see cref="DataObject"/> to the clipboard.
         ''' </summary>
         ''' <param name="data">The data object to be saved</param>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
