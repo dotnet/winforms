@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Reflection.Metadata;
 using FluentAssertions;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
@@ -85,5 +86,80 @@ public class ClipboardProxyTests
         clipboard.GetDataObject().GetData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.UnicodeText));
     }
 
+#nullable enable
+    [WinFormsFact]
+    public void DataOfT_Bitmap()
+    {
+        var clipboard = new Computer().Clipboard;
+        Bitmap data = new(16, 16);
+        clipboard.SetDataAsJson(data);
+        clipboard.TryGetData(out Bitmap? actual).Should().Be(System.Windows.Forms.Clipboard.TryGetData(out Bitmap? expected));
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [WinFormsFact]
+    public void DataOfT_Text()
+    {
+        var clipboard = new Computer().Clipboard;
+        string data = GetUniqueText();
+        clipboard.SetData(DataFormats.Text, data);
+        clipboard.TryGetData(DataFormats.Text, out string? actual).Should().Be(System.Windows.Forms.Clipboard.TryGetData(DataFormats.Text, out string? expected));
+        actual.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void DataOfT_CustomType()
+    {
+        var clipboard = new Computer().Clipboard;
+        DataWithObjectField data = new("thing1", "thing2");
+        clipboard.SetDataAsJson(data);
+        clipboard.TryGetData(typeof(DataWithObjectField).FullName!, DataResolver, out DataWithObjectField? actual).Should()
+            .Be(System.Windows.Forms.Clipboard.TryGetData(typeof(DataWithObjectField).FullName!, DataResolver, out DataWithObjectField? expected));
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [WinFormsFact]
+    public void DataOfT_CustomType_BinaryFormatterRequired()
+    {
+        var clipboard = new Computer().Clipboard;
+        DataWithObjectField data = new("thing1", "thing2");
+        using BinaryFormatterScope scope = new(enable: true);
+        clipboard.SetData(typeof(DataWithObjectField).FullName!, data);
+        clipboard.TryGetData(typeof(DataWithObjectField).FullName!, DataResolver, out DataWithObjectField? actual).Should()
+            .Be(System.Windows.Forms.Clipboard.TryGetData(typeof(DataWithObjectField).FullName!, DataResolver, out DataWithObjectField? expected));
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+#nullable disable
+
     private static string GetUniqueText() => Guid.NewGuid().ToString("D");
+
+    [Serializable]
+    private class DataWithObjectField
+    {
+        public DataWithObjectField(string text1, object object2)
+        {
+            _text1 = text1;
+            _object2 = object2;
+        }
+
+        public string _text1;
+        public object _object2;
+    }
+
+    private static Type DataResolver(TypeName typeName)
+    {
+        Type type = typeof(DataWithObjectField);
+        TypeName parsed = TypeName.Parse($"{type.FullName}, {type.Assembly.FullName}");
+
+        // Namespace-qualified type name.
+        if (typeName.FullName == parsed.FullName
+            // Ignore version, culture, and public key token in the assembly name.
+            && typeName.AssemblyName?.Name == parsed.AssemblyName?.Name)
+        {
+            return type;
+        }
+
+        throw new NotSupportedException($"Unexpected type {typeName.AssemblyQualifiedName}.");
+    }
 }
