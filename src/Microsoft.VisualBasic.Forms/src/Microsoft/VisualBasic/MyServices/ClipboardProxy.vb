@@ -164,7 +164,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not there is data on the clipboard in the passed in format
+        '''  Indicates whether or not there is data on the clipboard in the passed in format.
         ''' </summary>
         ''' <param name="format"></param>
         ''' <returns>True if there's data in the passed in format, otherwise False</returns>
