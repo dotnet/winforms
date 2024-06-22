@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Downloads a file
+        '''  Downloads a file.
         ''' </summary>
         ''' <param name="address">The source for the file</param>
         ''' <param name="destinationFileName">The path and name where the file is saved</param>
