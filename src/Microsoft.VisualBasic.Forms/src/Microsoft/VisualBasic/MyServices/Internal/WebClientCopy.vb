@@ -183,17 +183,17 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the current async file transfer operation
         ''' </summary>
         ''' <remarks>
-        '''  Note that we don't want to close the progress dialog here.  Wait until
+        '''  Note that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            m_WebClient.CancelAsync() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            m_WebClient.CancelAsync() 'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
         End Sub
 
         ' The WebClient performs the downloading or uploading operations for us
         Private WithEvents m_WebClient As WebClient
 
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
         Private WithEvents m_ProgressDialog As ProgressDialog
 
         'Keeps track of the error that happened during upload/download so we can throw it once we can guarantee we are back on the main thread

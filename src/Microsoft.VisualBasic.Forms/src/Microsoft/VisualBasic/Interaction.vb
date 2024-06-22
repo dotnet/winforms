@@ -40,7 +40,7 @@ Namespace Microsoft.VisualBasic
                 'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
                 'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess() even though this version
                 'of the StartupInfo type uses IntPtr instead of String because GetStartupInfo() above requires that version so we don't
-                'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
+                'free the string fields since the API manages it instead. But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
                 ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, startupInfo, processInfo)
@@ -95,8 +95,8 @@ Namespace Microsoft.VisualBasic
             'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
 
             Dim processIdOwningWindow As Integer
-            'Note, a process can have multiple windows.  What we want to do is dig through to find one
-            'that we can actually activate.  So first ignore all the ones that are not visible and don't support mouse
+            'Note, a process can have multiple windows. What we want to do is dig through to find one
+            'that we can actually activate. So first ignore all the ones that are not visible and don't support mouse
             'or keyboard input
             Dim windowHandle As IntPtr = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
 
@@ -221,7 +221,7 @@ Namespace Microsoft.VisualBasic
 
             ' SetActiveWindow on Win32 only activates the Window - it does
             ' not bring to to the foreground unless the window belongs to
-            ' the current thread.  NativeMethods.SetForegroundWindow() activates the
+            ' the current thread. NativeMethods.SetForegroundWindow() activates the
             ' window, moves it to the foreground, and bumps the priority
             ' of the thread which owns the window.
 
@@ -242,7 +242,7 @@ Namespace Microsoft.VisualBasic
             Dim parentWindow As IWin32Window = Nothing
 
             vbHost = HostServices.VBHost
-            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
+            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window. If no parent window that's fine.
                 parentWindow = vbHost.GetParentWindow()
             End If
 
