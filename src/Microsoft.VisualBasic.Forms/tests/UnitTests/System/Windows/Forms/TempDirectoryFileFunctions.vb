@@ -14,11 +14,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <summary>
         '''  Creates or returns a directory based on the name of the function that
         '''  call it. The base directory is described above.
-        '''  Even if directory exists this call will success and just return it
+        '''  Even if directory exists this call will success and just return it.
         ''' </summary>
         ''' <param name="memberName"></param>
-        ''' <param name="lineNumber">If >1 use line number as part of name</param>
-        ''' <returns></returns>
+        ''' <param name="lineNumber">If >1 use line number as part of name.</param>
+        ''' <returns>The name of a directory that is safe to write to and is verified to exist.</returns>
         Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing, Optional lineNumber As Integer = -1) As String
             Dim folder As String
             If lineNumber > 1 Then
@@ -32,14 +32,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
         ''' <summary>
-        '''  If size >= 0 then create the file with size length
+        '''  If size >= 0 then create the file with size length.
         ''' </summary>
-        ''' <param name="tmpFilePath">Full path to working directory</param>
+        ''' <param name="tmpFilePath">Full path to working directory.</param>
         ''' <param name="optionalFilename"></param>
-        ''' <param name="size">File size to be created</param>
+        ''' <param name="size">Size in bytes of the file to be created.</param>
         ''' <returns>
-        '''  The full path and file name of the created file
-        '''  If size = -1 no file is create but the full path is returned
+        '''  The full path and file name of the created file.
+        '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
         Friend Function CreateTempFile(tmpFilePath As String, Optional optionalFilename As String = "Testing.Text", Optional size As Integer = -1) As String
             Dim filename As String = GetDestinationFileName(tmpFilePath, optionalFilename)

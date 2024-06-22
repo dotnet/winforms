@@ -17,12 +17,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const TestingConnectionTimeout As Integer = 100000
 
         ''' <summary>
-        '''  Verify that testDirectory exists, that destinationFileName exist and what its length is
+        '''  Verify that testDirectory exists, that destinationFileName exist and what its length is.
         ''' </summary>
-        ''' <param name="destinationFileName">The full path and filename of the new file</param>
+        ''' <param name="destinationFileName">The full path and filename of the new file.</param>
         ''' <returns>
         '''  The size in bytes of the destination file, this saves the caller from having to
-        '''  do another FileInfo call
+        '''  do another FileInfo call.
         ''' </returns>
         Private Shared Function ValidateDownload(destinationFileName As String) As Long
             Dim fileInfo As New FileInfo(destinationFileName)
