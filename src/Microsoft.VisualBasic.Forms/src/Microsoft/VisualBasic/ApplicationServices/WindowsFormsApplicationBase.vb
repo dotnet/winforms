@@ -285,8 +285,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
             ' before the Network object gets created because the network object will be doing a
-            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have
-            ' to have our principal on the thread before that happens.
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we must
+            ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
