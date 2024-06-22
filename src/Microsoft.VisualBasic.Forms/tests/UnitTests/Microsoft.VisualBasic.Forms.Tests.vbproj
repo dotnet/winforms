@@ -5,7 +5,7 @@
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <RootNamespace></RootNamespace>
-    <LangVersion>16.9</LangVersion>
+    <LangVersion>Latest</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
