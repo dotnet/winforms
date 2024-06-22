@@ -733,7 +733,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Hide the splash screen.  The splash screen was created on another thread
         '''  thread (main thread) than the one it was run on (secondary thread for the
-        '''  Splash screen so it doesn't block app startup. We need to invoke the close.
+        '''  splash screen so it doesn't block app startup. We need to invoke the close.
         '''  This function gets called from the main thread by the app fx.
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
