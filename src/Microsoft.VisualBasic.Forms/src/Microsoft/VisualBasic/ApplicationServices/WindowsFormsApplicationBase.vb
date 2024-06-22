@@ -211,7 +211,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Event
 
         ''' <summary>
-        '''  Occurs when the application encounters an unhandled exception.
+        '''  Occurs when the application encounters an <see cref="UnhandledException"/>.
         ''' </summary>
         Public Custom Event UnhandledException As UnhandledExceptionEventHandler
 
@@ -248,15 +248,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent(sender As Object, e As UnhandledExceptionEventArgs)
                 If _unhandledExceptionHandlers IsNot Nothing Then
 
-                    ' In the case that we throw from the unhandled exception handler, we don't want to
-                    ' run the unhandled exception handler again.
+                    ' In the case that we throw from the <see cref="UnhandledException"/> handler, we don't want to
+                    ' run the <see cref="UnhandledException"/>  handler again.
                     _processingUnhandledExceptionEvent = True
 
                     For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
                         handler?.Invoke(sender, e)
                     Next
 
-                    ' Now that we are out of the unhandled exception handler, treat exceptions normally again.
+                    ' Now that we are out of the <see cref="UnhandledException"/> handler, treat exceptions normally again.
                     _processingUnhandledExceptionEvent = False
                 End If
             End RaiseEvent
@@ -902,7 +902,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="e"></param>
         ''' <remarks>
         '''  Our UnHandledException event has a different signature then the Windows.Forms.Application
-        '''  unhandled exception event so we do the translation here before raising our event.
+        '''  <see cref="UnhandledException"/> event so we do the translation here before raising our event.
         ''' </remarks>
         Private Sub OnUnhandledExceptionEventAdaptor(sender As Object, e As ThreadExceptionEventArgs)
             OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
