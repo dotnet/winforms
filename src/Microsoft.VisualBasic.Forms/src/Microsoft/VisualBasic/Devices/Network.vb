@@ -180,7 +180,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.param>
+        ''' <param name="address">Uri to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             DownloadFile(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False)
