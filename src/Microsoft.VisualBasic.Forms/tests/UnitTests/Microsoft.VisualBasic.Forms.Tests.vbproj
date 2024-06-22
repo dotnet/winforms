@@ -7,7 +7,6 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace></RootNamespace>
     <LangVersion>latest</LangVersion>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
     <OptionStrict>On</OptionStrict>
