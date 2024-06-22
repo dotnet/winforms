@@ -667,7 +667,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Raises the UnHandled exception event and exits the application if the event handler indicated
+        '''  Raises the <see cref="UnhandledException"/> event and exits the application if the event handler indicated
         '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
