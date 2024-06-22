@@ -26,6 +26,9 @@ public partial class PictureBox : Control, ISupportInitialize
         !AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest)
         || useWebRequest;
 
+    private static readonly HttpClient s_httpClient = !LocalAppContextSwitches.ServicePointManagerCheckCrl ? new() :
+        new(new HttpClientHandler { CheckCertificateRevocationList = true });
+
     /// <summary>
     ///  The type of border this control will have.
     /// </summary>
@@ -464,23 +467,26 @@ public partial class PictureBox : Control, ISupportInitialize
         try
         {
             DisposeImageStream();
-            if (UseWebRequest())
+            Uri uri = CalculateUri(_imageLocation);
+            if (uri.IsFile)
             {
-                LoadImageViaWebClient();
+                _localImageStreamReader = new StreamReader(uri.LocalPath);
+                Image img = Image.FromStream(_localImageStreamReader.BaseStream);
+                InstallNewImage(img, ImageInstallationType.FromUrl);
+            }
+            else if (UseWebRequest())
+            {
+                // Run async operation synchronously to avoid blocking UI thread and potential deadlocks.
+                Task.Run(async () =>
+                {
+                    _uriImageStream = await s_httpClient.GetStreamAsync(uri).ConfigureAwait(false);
+                    Image img = Image.FromStream(_uriImageStream);
+                    InstallNewImage(img, ImageInstallationType.FromUrl);
+                }).GetAwaiter().GetResult();
             }
             else
             {
-                Uri uri = CalculateUri(_imageLocation);
-                if (uri.IsFile)
-                {
-                    _localImageStreamReader = new StreamReader(uri.LocalPath);
-                    Image img = Image.FromStream(_localImageStreamReader.BaseStream);
-                    InstallNewImage(img, ImageInstallationType.FromUrl);
-                }
-                else
-                {
-                    throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
-                }
+                throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
             }
         }
         catch
@@ -495,34 +501,6 @@ public partial class PictureBox : Control, ISupportInitialize
                 InstallNewImage(ErrorImage, ImageInstallationType.ErrorOrInitial);
             }
         }
-    }
-
-    private void LoadImageViaWebClient()
-    {
-        Image img;
-        Uri uri = CalculateUri(_imageLocation!);
-        if (uri.IsFile)
-        {
-            _localImageStreamReader = new StreamReader(uri.LocalPath);
-            img = Image.FromStream(_localImageStreamReader.BaseStream);
-        }
-        else
-        {
-            if (LocalAppContextSwitches.ServicePointManagerCheckCrl)
-            {
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-                ServicePointManager.CheckCertificateRevocationList = true;
-#pragma warning restore SYSLIB0014
-            }
-
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-            using WebClient webClient = new(); // lgtm[cs/webrequest-checkcertrevlist-disabled] - Having ServicePointManager.CheckCertificateRevocationList set to true has a slim chance of resulting in failure. We have an opt-out for this rare event.
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
-            _uriImageStream = webClient.OpenRead(uri.ToString());
-            img = Image.FromStream(_uriImageStream);
-        }
-
-        InstallNewImage(img, ImageInstallationType.FromUrl);
     }
 
     [SRCategory(nameof(SR.CatAsynchronous))]
