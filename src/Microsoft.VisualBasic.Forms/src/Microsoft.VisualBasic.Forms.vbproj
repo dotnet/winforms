@@ -8,6 +8,9 @@
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
     <RootNamespace></RootNamespace>
     <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
@@ -49,9 +52,6 @@
 
   <PropertyGroup>
     <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
-    <OptionExplicit>On</OptionExplicit>
-    <OptionInfer>Off</OptionInfer>
-    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
 </Project>
