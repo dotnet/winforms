@@ -3012,7 +3012,8 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-    ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+    ///  We don't want all controls (that are have transparent BackColor) to use
+    ///  theming API to render its background because it has HUGE PERF cost.
     /// </summary>
     internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -8583,7 +8584,8 @@ public unsafe partial class Control :
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
         // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
-        if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
+        if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
+            && parent.RenderTransparencyWithVisualStyles)
         {
             // When we are rendering with visual styles, we can use the cool DrawThemeParentBackground function
             // that UxTheme provides to render the parent's background. This function is control agnostic, so

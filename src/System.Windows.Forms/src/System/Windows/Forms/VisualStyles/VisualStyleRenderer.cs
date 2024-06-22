@@ -10,7 +10,7 @@ namespace System.Windows.Forms.VisualStyles;
 /// <summary>
 ///  This class provides full feature parity with UxTheme API.
 /// </summary>
-public sealed class VisualStyleRenderer : IHandle<HTHEME>
+public sealed partial class VisualStyleRenderer : IHandle<HTHEME>
 {
     private HRESULT _lastHResult;
     private const int NumberOfPossibleClasses = VisualStyleElement.Count; // used as size for themeHandles
@@ -866,44 +866,5 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         PInvoke.OpenThemeDataScope htheme = new(hwnd, classList);
         return htheme.IsNull ? throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed) : htheme;
-    }
-
-    // This wrapper class is needed for safely cleaning up TLS cache of handles.
-    private class ThemeHandle : IDisposable, IHandle<HTHEME>
-    {
-        private ThemeHandle(HTHEME hTheme)
-        {
-            Handle = hTheme;
-        }
-
-        public HTHEME Handle { get; private set; }
-
-        public static ThemeHandle? Create(string className, bool throwExceptionOnFail)
-        {
-            return Create(className, throwExceptionOnFail, HWND.Null);
-        }
-
-        internal static ThemeHandle? Create(string className, bool throwExceptionOnFail, HWND hWndRef)
-        {
-            // HThemes require an HWND when display scaling is different between monitors.
-            HTHEME hTheme = PInvoke.OpenThemeData(hWndRef, className);
-
-            return hTheme.IsNull
-                ? throwExceptionOnFail ? throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed) : null
-                : new ThemeHandle(hTheme);
-        }
-
-        public void Dispose()
-        {
-            if (!Handle.IsNull)
-            {
-                PInvoke.CloseThemeData(Handle);
-                Handle = HTHEME.Null;
-            }
-
-            GC.SuppressFinalize(this);
-        }
-
-        ~ThemeHandle() => Dispose();
     }
 }

@@ -2,10 +2,10 @@ System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
-static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
-static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
+static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+static System.Windows.Forms.Application.IsVisualStylesSupported.get -> bool
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
-static System.Windows.Forms.Application.SystemColors.get -> System.Windows.Forms.ThemedSystemColors!
+static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.Control.DarkMode.set -> void
 System.Windows.Forms.DarkMode
@@ -24,6 +24,11 @@ System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.For
 System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.ThemedSystemColors
 System.Windows.Forms.ThemedSystemColors.ThemedSystemColors() -> void
+System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Disabled = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 2 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Legacy = 1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Version10 = 2 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
 virtual System.Windows.Forms.Control.IsDarkModeEnabled.get -> bool
 virtual System.Windows.Forms.Control.SetDarkModeCore(System.Windows.Forms.DarkMode darkModeSetting) -> bool
