@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend NotInheritable Class WebClientCopy
 
         ''' <summary>
-        '''  Creates an instance of a WebClientCopy, used to download or upload a file
+        '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
         ''' <param name="client">The WebClient used to do the downloading or uploading</param>
         ''' <param name="dialog">UI for indicating progress</param>
