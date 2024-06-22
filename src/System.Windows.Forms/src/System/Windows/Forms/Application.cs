@@ -40,10 +40,10 @@ public sealed partial class Application
     private static readonly object s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-        private static DarkMode? s_darkMode;
+    private static DarkMode? s_darkMode;
 
-        private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
-        private const string DarkModeKey = "AppsUseLightTheme";
+    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string DarkModeKey = "AppsUseLightTheme";
 
     /// <summary>
     ///  Events the user can hook into
@@ -107,6 +107,7 @@ public sealed partial class Application
         // GetModuleHandle  returns a handle to a mapped module without incrementing its
         // reference count.
         var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
+
         fixed (byte* ptr = "ImageList_WriteEx\0"u8)
         {
             if (!hModule.IsNull)
@@ -117,6 +118,7 @@ public sealed partial class Application
 
         // Load comctl since GetModuleHandle failed to find it
         nint ninthModule = PInvoke.LoadComctl32(StartupPath);
+
         if (ninthModule == 0)
         {
             return false;
@@ -256,13 +258,52 @@ public sealed partial class Application
         }
     }
 
+    /// <summary>
+    ///  Gets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    /// </summary>
+    public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
+
+    /// <summary>
+    ///  Sets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    ///  Default is <see cref="VisualStylesMode.Latest"/> when visual style rendering is enabled,
+    ///  otherwise <see cref="VisualStylesMode.Disabled"/>. Setting to <see cref="VisualStylesMode.Disabled"/> has the same effect
+    ///  as not setting using <see cref="EnableVisualStyles"/>.
+    /// </summary>
+    /// <param name="styleSetting">The version of visual styles to set.</param>
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        if (styleSetting != DefaultVisualStylesMode)
+        {
+            DefaultVisualStylesMode = styleSetting;
+
+            if (styleSetting == VisualStylesMode.Disabled)
+            {
+                UseVisualStyles = false;
+                return;
+            }
+
+            EnableVisualStyles();
+        }
+    }
+
+    public static bool IsVisualStylesSupported
+        => DefaultVisualStylesMode switch
+        {
+            VisualStylesMode.Disabled => false,
+            _ => true
+        };
+
+    /// <summary>
+    ///  Sets the default dark mode for the application.
+    /// </summary>
+    /// <param name="darkMode">The default dark mode to set.</param>
+    /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
     public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
     {
         DarkMode.Enabled or
         DarkMode.Disabled or
         DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
-
-        _ => throw new ArgumentException($"{darkMode} is not supported in this context.")
+        _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
     };
 
     private static bool SetDefaultDarkModeCore(DarkMode darkMode)
@@ -317,7 +358,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark mode context.
-    ///  Note: We're never using dark mode in a high contrast context.
+    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
     public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
         && DefaultDarkMode switch
@@ -495,8 +536,9 @@ public sealed partial class Application
     ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
     ///  of the controls in your app.
     /// </summary>
-    public static bool RenderWithVisualStyles
-        => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
+    public static bool RenderWithVisualStyles =>
+        ComCtlSupportsVisualStyles
+            && DefaultVisualStylesMode != VisualStylesMode.Disabled;
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
@@ -875,6 +917,7 @@ public sealed partial class Application
             // Extract the manifest from managed resources.
             using Stream? stream = module.Assembly.GetManifestResourceStream(
                 "System.Windows.Forms.XPThemes.manifest");
+
             if (stream is not null)
             {
                 UseVisualStyles = ThemingScope.CreateActivationContext(stream);
@@ -882,6 +925,11 @@ public sealed partial class Application
         }
 
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+
+        if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
+        {
+            DefaultVisualStylesMode = VisualStylesMode.Latest;
+        }
 
         s_comCtlSupportsVisualStylesInitialized = false;
     }

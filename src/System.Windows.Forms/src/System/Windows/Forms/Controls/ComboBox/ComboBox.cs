@@ -780,7 +780,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  If the mouse is over the combobox, draw selection rect.
+    ///  If the mouse is over the ComboBox, draw selection rect.
     /// </summary>
     internal bool MouseIsOver
     {
@@ -793,7 +793,8 @@ public partial class ComboBox : ListControl
                 // Nothing to see here... Just keep on walking...
                 // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                 // our drawing gets a little messed up. So in case theming is off, force a draw here.
-                if ((!ContainsFocus || !Application.RenderWithVisualStyles) && FlatStyle == FlatStyle.Popup)
+                if ((!ContainsFocus || Application.DefaultVisualStylesMode != VisualStylesMode.Disabled)
+                    && FlatStyle == FlatStyle.Popup)
                 {
                     Invalidate();
                     Update();
@@ -3790,7 +3791,8 @@ public partial class ComboBox : ListControl
                     // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                     // as with Theming on.
 
-                    if (!Application.RenderWithVisualStyles && !GetStyle(ControlStyles.UserPaint)
+                    if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
+                        && !GetStyle(ControlStyles.UserPaint)
                         && DropDownStyle == ComboBoxStyle.DropDownList
                         && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
