@@ -173,7 +173,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in data to the clipboard in the passed in format
+        '''  Saves the passed in data to the clipboard in the passed in format.
         ''' </summary>
         ''' <param name="format">The format in which to save the data</param>
         ''' <param name="data">The data to be saved</param>
