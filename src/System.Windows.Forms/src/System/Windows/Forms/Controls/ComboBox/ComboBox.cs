@@ -2377,7 +2377,7 @@ public partial class ComboBox : ListControl
     ///  Inheriting classes should not forget to call
     ///  base.OnHandleCreated()
     /// </summary>
-    protected unsafe override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
 
