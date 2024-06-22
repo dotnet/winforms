@@ -7,7 +7,9 @@
     <RootNamespace></RootNamespace>
     <LangVersion>16.9</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>

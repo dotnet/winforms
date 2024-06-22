@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
   <!--
     https://github.com/dotnet/winforms/issues/2107#issuecomment-559289716
     https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
@@ -49,7 +49,9 @@
 
   <PropertyGroup>
     <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
+    <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
 </Project>
