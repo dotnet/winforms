@@ -182,7 +182,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Removes everything from the clipboard
+        '''  Removes everything from the clipboard.
         ''' </summary>
         Public Sub Clear()
             Clipboard.Clear()
