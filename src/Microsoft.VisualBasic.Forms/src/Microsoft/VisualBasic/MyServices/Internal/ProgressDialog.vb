@@ -145,7 +145,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="e"></param>
         ''' <remarks>
         '''  We listen for this event since we want to make closing the dialog before it's
-        '''  finished behave the same as a cancel
+        '''  finished behave the same as a cancel.
         '''</remarks>
         Private Sub ProgressDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
             If e.CloseReason = CloseReason.UserClosing And Not _closeDialogInvoked Then
