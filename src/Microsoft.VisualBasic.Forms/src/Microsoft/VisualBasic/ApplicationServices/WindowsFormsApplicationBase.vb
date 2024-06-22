@@ -129,7 +129,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Form
 
-        ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
+        ' Minimum amount of time to show the splash screen. 0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
@@ -161,7 +161,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     _turnOnNetworkListener = True
 
                     ' But the user may be doing an AddHandler of their own in which case we need
-                    ' to make sure to honor the request.  If we aren't past OnInitialize() yet
+                    ' to make sure to honor the request. If we aren't past OnInitialize() yet
                     ' we shouldn't do it but the flag above catches that case.
                     If _networkObject Is Nothing AndAlso _finishedOnInitialize Then
                         _networkObject = New Devices.Network
@@ -216,7 +216,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Custom Event UnhandledException As UnhandledExceptionEventHandler
 
             ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
-            ' only if the user writes a handler for this event.  We only want to hook the ThreadException event
+            ' only if the user writes a handler for this event. We only want to hook the ThreadException event
             ' if the user is handling this event because the act of listening to Application.ThreadException
             ' causes WinForms to snuff exceptions and we only want WinForms to do that if we are assured that
             ' the user wrote their own handler to deal with the error instead.
@@ -283,9 +283,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ValidateAuthenticationModeEnumValue(authenticationMode, NameOf(authenticationMode))
 
-            ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
+            ' Setup Windows Authentication if that's what the user wanted. Note, we want to do this now,
             ' before the Network object gets created because the network object will be doing a
-            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we must
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context. So we must
             ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
@@ -302,7 +302,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' We need to set the WindowsFormsSynchronizationContext because the network object is going to
             ' get created after this ctor runs (network gets created during event hookup) and we need the
-            ' context in place for it to latch on to.  The WindowsFormsSynchronizationContext won't otherwise
+            ' context in place for it to latch on to. The WindowsFormsSynchronizationContext won't otherwise
             ' get created until OnCreateMainForm() when the startup form is created and by then it is too late.
             ' When the startup form gets created, WinForms is going to push our context into the previous context
             ' and then restore it when Application.Run() exits.
@@ -358,7 +358,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Returns the collection of forms that are open.  We no longer have thread
+        '''  Returns the collection of forms that are open. We no longer have thread
         '''  affinity meaning that this is the WinForms collection that contains Forms that may
         '''  have been opened on another thread then the one we are calling in on right now.
         ''' </summary>
@@ -430,10 +430,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Use GDI for the text rendering engine by default.
         '''  The user can shadow this function to return True if they want their app
-        '''  to use the GDI+ render.  We read this function in Main() (My template) to
+        '''  to use the GDI+ render. We read this function in Main() (My template) to
         '''  determine how to set the text rendering flag on the WinForms application object.
         ''' </summary>
-        ''' <returns>True - Use GDI+ renderer.  False - use GDI renderer.</returns>
+        ''' <returns>True - Use GDI+ renderer. False - use GDI renderer.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
             Get
@@ -471,7 +471,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  This exposes the first in a series of extensibility points for the Startup process.  By default, it shows
+        '''  This exposes the first in a series of extensibility points for the Startup process. By default, it shows
         '''  the splash screen and does rudimentary processing of the command line to see if /nosplash or its
         '''  variants was passed in.
         ''' </summary>
@@ -558,11 +558,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' It is important not to create the network object until the ExecutionContext has everything on it.
             ' By now the principal will be on the thread so we can create the network object.
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
-            ' the network changed event to the main thread.  The asycnOperationsManager does a CreateOperation()
+            ' the network changed event to the main thread. The asycnOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
             ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
             ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
-            ' during the NetworkAvailabilityChanged event.  This problem would just extend itself to any future
+            ' during the NetworkAvailabilityChanged event. This problem would just extend itself to any future
             ' callback that involved the asyncOperationsManager so this is where we need to create objects that
             ' have a asyncOperationsContext in them.
             If _turnOnNetworkListener And _networkObject Is Nothing Then
@@ -615,8 +615,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 ' When we have a splash screen that hasn't timed out before the main form is ready to paint, we want to
-                ' block the main form from painting.  To do that I let the form get past the Load() event and hold it until
-                ' the splash screen goes down.  Then I let the main form continue it's startup sequence.  The ordering of
+                ' block the main form from painting. To do that I let the form get past the Load() event and hold it until
+                ' the splash screen goes down. Then I let the main form continue it's startup sequence. The ordering of
                 ' Form startup events for reference is: Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
                 AddHandler MainForm.Load, AddressOf MainFormLoadingDone
             End If
@@ -630,7 +630,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Finally
 
                 ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
-                ' is restored.  But we are going to dispose it so we need to disconnect the network listener so that it
+                ' is restored. But we are going to dispose it so we need to disconnect the network listener so that it
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 
@@ -731,7 +731,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Hide the splash screen.  The splash screen was created on another thread
+        '''  Hide the splash screen. The splash screen was created on another thread
         '''  thread (main thread) than the one it was run on (secondary thread for the
         '''  splash screen so it doesn't block app startup. We need to invoke the close.
         '''  This function gets called from the main thread by the app fx.
@@ -740,7 +740,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
 
-            'This ultimately wasn't necessary.  I suppose we better keep it for backwards compatibility.
+            'This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
             SyncLock _splashLock
 
                 ' .NET Framework 4.0 (Dev10 #590587) - we now activate the main form before calling
@@ -826,8 +826,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Displays the splash screen.  We get called here from a different thread than what the
-        '''  main form is starting up on.  This allows us to process events for the Splash screen so
+        '''  Displays the splash screen. We get called here from a different thread than what the
+        '''  main form is starting up on. This allows us to process events for the Splash screen so
         '''  it doesn't freeze up while the main form is getting it together.
         ''' </summary>
         Private Sub DisplaySplash()
@@ -845,9 +845,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  If a splash screen has a minimum time out, then once that is up we check to see whether
-        '''  we should close the splash screen.  If the main form has activated then we close it.
+        '''  we should close the splash screen. If the main form has activated then we close it.
         '''  Note that we are getting called on a secondary thread here which isn't necessarily
-        '''  associated with any form.  Don't touch forms from this function.
+        '''  associated with any form. Don't touch forms from this function.
         ''' </summary>
         Private Sub MinimumSplashExposureTimeIsUp(sender As Object, e As Timers.ElapsedEventArgs)
 
@@ -862,7 +862,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  The Load() event happens before the Shown and Paint events.  When we get called here
+        '''  The Load() event happens before the Shown and Paint events. When we get called here
         '''  we know that the form load event is done and that the form is about to paint
         '''  itself for the first time.
         '''  We can now hide the splash screen.

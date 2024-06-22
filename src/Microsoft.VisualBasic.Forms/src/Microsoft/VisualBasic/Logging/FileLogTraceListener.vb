@@ -744,7 +744,7 @@ Namespace Microsoft.VisualBasic.Logging
                     i += 1
                 End SyncLock
             End While
-            'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
+            'If we fall out the loop, we have failed to obtain a valid stream name. This occurs if there are files on your system
             'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
             Throw ExUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
         End Function
@@ -1226,7 +1226,7 @@ Namespace Microsoft.VisualBasic.Logging
             '''  Standard implementation of IDisposable.
             ''' </summary>
             Public Overloads Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+                ' Do not change this code. Put cleanup code in Dispose(disposing As Boolean) above.
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
@@ -1235,7 +1235,7 @@ Namespace Microsoft.VisualBasic.Logging
             '''  Ensures stream is closed at GC.
             ''' </summary>
             Protected Overrides Sub Finalize()
-                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+                ' Do not change this code. Put cleanup code in Dispose(disposing As Boolean) above.
                 Dispose(False)
                 MyBase.Finalize()
             End Sub

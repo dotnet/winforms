@@ -53,7 +53,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Returns the info about the application.  If we are executing in a DLL, we still return the info
+        '''  Returns the info about the application. If we are executing in a DLL, we still return the info
         '''  about the application, not the DLL.
         ''' </summary>
         Public ReadOnly Property Info() As AssemblyInfo

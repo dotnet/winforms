@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </summary>
     Friend NotInheritable Class HttpClientCopy
 
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
         Private WithEvents m_ProgressDialog As ProgressDialog
 
         ' The WebClient performs the downloading or uploading operations for us
@@ -90,11 +90,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the current async file transfer operation.
         '''  </summary>
         ''' <remarks>
-        '''  Note that we don't want to close the progress dialog here.  Wait until
+        '''  Note that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserHitCancel()
-            'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
             _cancelTokenSourceReadStream.Cancel()
