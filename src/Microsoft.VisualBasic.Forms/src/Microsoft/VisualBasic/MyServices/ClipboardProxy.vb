@@ -189,7 +189,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Gets a Data Object from the clipboard.
+        '''  Gets a <see cref="IDataObject"/> from the clipboard.
         ''' </summary>
         ''' <returns>The data object</returns>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
