@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Handles the WebClient's DownloadFileCompleted event
+        '''  Handles the WebClient's DownloadFileCompleted event.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
