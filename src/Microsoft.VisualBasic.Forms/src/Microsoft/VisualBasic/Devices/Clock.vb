@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class Clock
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
 
         ''' <summary>
         '''  Gets a Date that is the current local date and time on this computer.
@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
         '''  This property wraps the Environment.TickCount property to get the

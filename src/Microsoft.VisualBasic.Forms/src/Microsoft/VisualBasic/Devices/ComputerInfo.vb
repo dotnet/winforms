@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub New()
         End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:="<Public API>
         ''' <summary>
         '''  Gets the total size of physical memory on the machine.
         ''' </summary>
@@ -74,7 +74,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
         '''  Gets the current UICulture installed on the machine.
@@ -127,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
                 _instanceBeingWatched = RealClass
             End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
@@ -204,7 +204,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend Sub New()
             End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -232,7 +232,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
             Private Sub Refresh()
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
