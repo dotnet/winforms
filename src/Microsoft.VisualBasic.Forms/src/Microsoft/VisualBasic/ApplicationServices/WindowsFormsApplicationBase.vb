@@ -897,7 +897,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Handles the Windows.Forms.Application.ThreadException event and raises our Unhandled
-        '''  exception event
+        '''  exception event.
         ''' </summary>
         ''' <param name="e"></param>
         ''' <remarks>
