@@ -15,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Inherits Form
 
         ''' <summary>
-        '''  Event raised when user cancels the dialog or closes it before the operation is completed
+        '''  Event raised when user cancels the dialog or closes it before the operation is completed.
         ''' </summary>
         Public Event UserHitCancel()
 
