@@ -13,16 +13,16 @@ Namespace Microsoft.VisualBasic.Devices
     Partial Public Class Network
 
         ''' <summary>
-        '''  Creates class and hooks up events
+        '''  Creates class and hooks up events.
         ''' </summary>
         Public Sub New()
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As String, destinationFileName As String)
             Try
                 DownloadFileAsync(address,
@@ -41,11 +41,11 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
         ''' <param name="password">The user's password</param>
         Public Sub DownloadFile(address As String,
                     destinationFileName As String,
@@ -68,15 +68,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         Public Sub DownloadFile(address As String,
                     destinationFileName As String,
                     userName As String,
@@ -128,16 +128,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
         ''' <param name="password">The user's password</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         Public Sub DownloadFile(address As String,
                     destinationFileName As String,
                     userName As String,
@@ -194,15 +194,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(address As Uri,
                                 destinationFileName As String,
                                 networkCredentials As ICredentials,
@@ -246,16 +246,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
@@ -303,15 +303,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     userName As String,
@@ -356,16 +356,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     userName As String,
@@ -413,10 +413,10 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As Uri,
                     destinationFileName As String)
             Try
@@ -437,12 +437,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
+        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
         Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     userName As String,

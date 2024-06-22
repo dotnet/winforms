@@ -167,7 +167,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the version number of the assembly.
         ''' </summary>
-        ''' <value>A System.Version class containing the version number of the assembly</value>
+        ''' <value>A System.Version class containing the version number of the assembly.</value>
         ''' <remarks>Cannot use AssemblyVersionAttribute since it always return Nothing.</remarks>
         Public ReadOnly Property Version() As Version
             Get

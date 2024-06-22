@@ -15,14 +15,14 @@ Namespace Microsoft.VisualBasic.Devices
 
         ''' <summary>
         '''  Sends and receives a packet to and from the passed in Uri.
-        '''  Maps older networkCredentials to HttpClientHandler
+        '''  Maps older networkCredentials to HttpClientHandler.
         ''' </summary>
-        ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="addressUri">Uri to the remote file.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel"></param>
         Friend Shared Function DownloadFileAsync(addressUri As Uri,
                                     destinationFileName As String,
@@ -46,15 +46,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         userName As String,
@@ -74,16 +74,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="dialog">ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         userName As String,
@@ -106,16 +106,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="clientHandler">An HttpClientHandler of the user performing the download</param>
-        ''' <param name="dialog">Progress Dialog</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="clientHandler">An HttpClientHandler of the user performing the download.</param>
+        ''' <param name="dialog">Progress Dialog.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,
                                         clientHandler As HttpClientHandler,
@@ -181,15 +181,15 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         Friend Shared Async Function DownloadFileAsync(address As String,
                                         destinationFileName As String,
                                         userName As String,
@@ -209,16 +209,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         Friend Shared Async Function DownloadFileAsync(address As String,
                                         destinationFileName As String,
                                         userName As String,
@@ -247,16 +247,16 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <remarks>
-        '''  Function will Throw on unhandled exceptions
+        '''  Function will Throw on unhandled exceptions.
         ''' </remarks>
         Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
                                         destinationFileName As String,

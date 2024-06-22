@@ -18,9 +18,9 @@ Namespace Microsoft.VisualBasic.Devices
         Private _pingBuffer() As Byte
 
         ''' <summary>
-        '''  A buffer for pinging. This imitates the buffer used by Ping.Exe
+        '''  A buffer for pinging. This imitates the buffer used by Ping.Exe.
         ''' </summary>
-        ''' <value>A buffer</value>
+        ''' <value>A buffer.</value>
         Private ReadOnly Property PingBuffer() As Byte()
             Get
                 If _pingBuffer Is Nothing Then
@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Sends and receives a packet to and from the passed in address.
         ''' </summary>
         ''' <param name="hostNameOrAddress"></param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
+        ''' <returns>True if ping was successful, otherwise False.</returns>
         Public Function Ping(hostNameOrAddress As String) As Boolean
             Return Ping(hostNameOrAddress, DEFAULT_PING_TIMEOUT)
         End Function
@@ -47,8 +47,8 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
-        ''' <param name="address">A Uri representing the host</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
+        ''' <param name="address">A Uri representing the host.</param>
+        ''' <returns>True if ping was successful, otherwise False.</returns>
         Public Function Ping(address As Uri) As Boolean
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
@@ -61,9 +61,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Sends and receives a packet to and from the passed in address.
         ''' </summary>
-        ''' <param name="hostNameOrAddress">The name of the host as a Url or IP Address</param>
-        ''' <param name="timeout">Time to wait before aborting ping</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
+        ''' <param name="hostNameOrAddress">The name of the host as a Url or IP Address.</param>
+        ''' <param name="timeout">Time to wait before aborting ping.</param>
+        ''' <returns>True if ping was successful, otherwise False.</returns>
         Public Function Ping(hostNameOrAddress As String, timeout As Integer) As Boolean
 
             ' Make sure a network is available
@@ -82,9 +82,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Sends and receives a packet to and from the passed in Uri.
         ''' </summary>
-        ''' <param name="address">A Uri representing the host</param>
-        ''' <param name="timeout">Time to wait before aborting ping</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
+        ''' <param name="address">A Uri representing the host.</param>
+        ''' <param name="timeout">Time to wait before aborting ping.</param>
+        ''' <returns>True if ping was successful, otherwise False.</returns>
         Public Function Ping(address As Uri, timeout As Integer) As Boolean
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.

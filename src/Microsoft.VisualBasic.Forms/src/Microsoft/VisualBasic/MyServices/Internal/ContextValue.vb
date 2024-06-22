@@ -7,7 +7,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
     ''' <summary>
     '''  Stores an object in a context appropriate for the environment we are
-    '''  running in (web/windows)
+    '''  running in (web/windows).
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <remarks>
@@ -24,7 +24,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Get the object from the correct thread-appropriate location
+        '''  Get the object from the correct thread-appropriate location.
         ''' </summary>
         Public Property Value() As T 'No SyncLocks required because we are operating upon instance data and the object is not shared across threads
             Get

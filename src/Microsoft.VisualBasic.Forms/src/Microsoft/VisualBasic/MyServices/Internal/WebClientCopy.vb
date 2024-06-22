@@ -13,10 +13,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend NotInheritable Class WebClientCopy
 
         ''' <summary>
-        '''  Creates an instance of a WebClientCopy, used to download or upload a file
+        '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
-        ''' <param name="client">The WebClient used to do the downloading or uploading</param>
-        ''' <param name="dialog">UI for indicating progress</param>
+        ''' <param name="client">The WebClient used to do the downloading or uploading.</param>
+        ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As WebClient, dialog As ProgressDialog)
 
             Debug.Assert(client IsNot Nothing, "No WebClient")
@@ -27,10 +27,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Uploads a file
+        '''  Uploads a file.
         ''' </summary>
-        ''' <param name="sourceFileName">The name and path of the source file</param>
-        ''' <param name="address">The address to which the file is uploaded</param>
+        ''' <param name="sourceFileName">The name and path of the source file.</param>
+        ''' <param name="address">The address to which the file is uploaded.</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
@@ -53,9 +53,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Notifies the progress dialog to increment the progress bar
+        '''  Notifies the progress dialog to increment the progress bar.
         ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read</param>
+        ''' <param name="progressPercentage">The percentage of bytes read.</param>
         Private Sub InvokeIncrement(progressPercentage As Integer)
             ' Don't invoke unless dialog is up and running
             If m_ProgressDialog IsNot Nothing Then
@@ -73,7 +73,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Posts a message to close the progress dialog
+        '''  Posts a message to close the progress dialog.
         ''' </summary>
         Private Sub CloseProgressDialog()
             ' Don't invoke unless dialog is up and running
@@ -93,7 +93,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
 
         ''' <summary>
-        '''  Handles the WebClient's UploadFileCompleted event
+        '''  Handles the WebClient's UploadFileCompleted event.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -114,7 +114,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Handles event WebClient fires whenever progress of upload changes
+        '''  Handles event WebClient fires whenever progress of upload changes.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -125,7 +125,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         ''' <summary>
         '''  If the user clicks cancel on the Progress dialog, we need to cancel
-        '''  the current async file transfer operation
+        '''  the current async file transfer operation.
         ''' </summary>
         ''' <remarks>
         '''  Note that we don't want to close the progress dialog here.  Wait until

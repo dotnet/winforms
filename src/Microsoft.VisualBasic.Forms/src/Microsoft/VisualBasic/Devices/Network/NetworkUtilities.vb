@@ -36,11 +36,11 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Gets network credentials from a userName and password
+        '''  Gets network credentials from a userName and password.
         ''' </summary>
-        ''' <param name="userName">The name of the user</param>
-        ''' <param name="password">The password of the user</param>
-        ''' <returns>A new NetworkCredentials or Nothing</returns>
+        ''' <param name="userName">The name of the user.</param>
+        ''' <param name="password">The password of the user.</param>
+        ''' <returns>A new NetworkCredentials or Nothing.</returns>
         Friend Function GetNetworkCredentials(userName As String, password As String) As ICredentials
 
             Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
@@ -50,12 +50,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload
+        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <returns>New ProgressDialog</returns>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <returns>New ProgressDialog.</returns>
         Friend Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
             If showUI AndAlso Environment.UserInteractive Then
                 'Construct the local file. This will validate the full name and path
@@ -69,10 +69,10 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
+        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address).
         ''' </summary>
-        ''' <param name="address">The remote file address</param>
-        ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
+        ''' <param name="address">The remote file address.</param>
+        ''' <returns>A Uri if successful, otherwise it throws an exception.</returns>
         Friend Function GetUri(address As String) As Uri
             Try
                 Return New Uri(address)

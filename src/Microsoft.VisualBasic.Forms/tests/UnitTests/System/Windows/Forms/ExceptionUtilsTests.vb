@@ -9,7 +9,7 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     ''' <summary>
-    '''  These are just checking the Proxy functions, the underlaying functions are tested elsewhere
+    '''  These are just checking the Proxy functions, the underlaying functions are tested elsewhere.
     ''' </summary>
     Partial Public Class ExceptionUtilsTests
 

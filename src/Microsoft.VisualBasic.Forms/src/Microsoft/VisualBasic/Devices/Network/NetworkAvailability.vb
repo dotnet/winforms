@@ -29,10 +29,10 @@ Namespace Microsoft.VisualBasic.Devices
         Private _synchronizationContext As SynchronizationContext
 
         ''' <summary>
-        '''  Event fired when connected to the network
+        '''  Event fired when connected to the network.
         ''' </summary>
-        ''' <param name="Sender">Has no meaning for this event</param>
-        ''' <param name="e">Has no meaning for this event</param>
+        ''' <param name="Sender">Has no meaning for this event.</param>
+        ''' <param name="e">Has no meaning for this event.</param>
         Public Custom Event NetworkAvailabilityChanged As NetworkAvailableEventHandler
             'This is a custom event because we want to hook up the NetworkAvailabilityChanged event only if the user writes a handler for it.
             'The reason being that it is very expensive to handle and kills our application startup perf.
@@ -91,7 +91,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Indicates whether or not the local machine is connected to an IP network.
         ''' </summary>
-        ''' <value>True if connected, otherwise False</value>
+        ''' <value>True if connected, otherwise False.</value>
         Public ReadOnly Property IsAvailable() As Boolean
             Get
 

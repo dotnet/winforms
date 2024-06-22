@@ -24,9 +24,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Sub
 
             ''' <summary>
-            '''  Handles the two types of application shutdown:
-            '''    1 - shutdown when the main form closes
-            '''    2 - shutdown only after the last form closes
+            ''' <list type="number">
+            ''' <item>
+            ''' <description>shutdown when the main form closes.</description>
+            ''' </item>
+            ''' <item>
+            ''' <description>shutdown only after the last form closes.</description>
+            ''' </item>
+            ''' </list>
             ''' </summary>
             ''' <param name="sender"></param>
             ''' <param name="e"></param>

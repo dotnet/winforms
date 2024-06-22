@@ -9,7 +9,7 @@
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
-    <LangVersion>16.9</LangVersion>
+    <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
@@ -50,6 +50,8 @@
   <PropertyGroup>
     <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
     <OptionInfer>Off</OptionInfer>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
 </Project>

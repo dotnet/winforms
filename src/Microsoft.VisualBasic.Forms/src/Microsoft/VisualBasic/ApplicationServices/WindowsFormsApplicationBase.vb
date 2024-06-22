@@ -285,8 +285,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
             ' before the Network object gets created because the network object will be doing a
-            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have
-            ' to have our principal on the thread before that happens.
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we must
+            ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
@@ -310,9 +310,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Entry point to kick off the VB Startup/Shutdown Application model
+        '''  Entry point to kick off the VB Startup/Shutdown Application model.
         ''' </summary>
-        ''' <param name="commandLine">The command line from Main()</param>
+        ''' <param name="commandLine">The command line from Main().</param>
         <SecuritySafeCritical()>
         Public Sub Run(commandLine As String())
 
@@ -406,7 +406,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  Screen should be displayed for.  When not set then the splash screen is hidden
+        '''  screen should be displayed for. When not set then the splash screen is hidden
         '''  as soon as the main form becomes active.
         ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
@@ -433,7 +433,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  to use the GDI+ render.  We read this function in Main() (My template) to
         '''  determine how to set the text rendering flag on the WinForms application object.
         ''' </summary>
-        ''' <returns>True - Use GDI+ renderer.  False - use GDI renderer</returns>
+        ''' <returns>True - Use GDI+ renderer.  False - use GDI renderer.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
             Get
@@ -476,7 +476,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  variants was passed in.
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
-        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence</returns>
+        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -668,10 +668,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Raises the UnHandled exception event and exits the application if the event handler indicated
-        '''  that execution shouldn't continue
+        '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
-        ''' <returns>True indicates the exception event was raised / False it was not</returns>
+        ''' <returns>True indicates the exception event was raised / False it was not.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 
@@ -733,7 +733,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Hide the splash screen.  The splash screen was created on another thread
         '''  thread (main thread) than the one it was run on (secondary thread for the
-        '''  Splash screen so it doesn't block app startup. We need to invoke the close.
+        '''  splash screen so it doesn't block app startup. We need to invoke the close.
         '''  This function gets called from the main thread by the app fx.
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -944,8 +944,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Handles the Network.NetworkAvailability event (on the correct thread) and raises the
         '''  NetworkAvailabilityChanged event
         ''' </summary>
-        ''' <param name="Sender">Contains the Network instance that raised the event</param>
-        ''' <param name="e">Contains whether the network is available or not</param>
+        ''' <param name="Sender">Contains the Network instance that raised the event.</param>
+        ''' <param name="e">Contains whether the network is available or not.</param>
         Private Sub NetworkAvailableEventAdaptor(sender As Object, e As Devices.NetworkAvailableEventArgs)
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
@@ -1015,7 +1015,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  A string unique to the application that should be the same for versions of
         '''  the application that have the same Major and Minor Version Number
         ''' </returns>
-        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
         Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
 
             Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()

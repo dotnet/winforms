@@ -28,10 +28,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private _percentage As Integer
 
         ''' <summary>
-        '''  Creates an instance of a HttpClientCopy, used to download or upload a file
+        '''  Creates an instance of a HttpClientCopy, used to download or upload a file.
         ''' </summary>
-        ''' <param name="client">The HttpClient used to do the downloading or uploading</param>
-        ''' <param name="dialog">UI for indicating progress</param>
+        ''' <param name="client">The HttpClient used to do the downloading or uploading.</param>
+        ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As HttpClient, dialog As ProgressDialog)
 
             Debug.Assert(client IsNot Nothing, "No HttpClient")
@@ -66,9 +66,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Notifies the progress dialog to increment the progress bar
+        '''  Notifies the progress dialog to increment the progress bar.
         ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read</param>
+        ''' <param name="progressPercentage">The percentage of bytes read.</param>
         Private Sub InvokeIncrement(progressPercentage As Integer)
             ' Don't invoke unless dialog is up and running
             If m_ProgressDialog IsNot Nothing Then
@@ -87,7 +87,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         ''' <summary>
         '''  If the user clicks cancel on the Progress dialog, we need to cancel
-        '''  the current async file transfer operation
+        '''  the current async file transfer operation.
         '''  </summary>
         ''' <remarks>
         '''  Note that we don't want to close the progress dialog here.  Wait until
@@ -102,10 +102,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Downloads a file
+        '''  Downloads a file.
         ''' </summary>
-        ''' <param name="addressUri">The source for the file</param>
-        ''' <param name="normalizedFilePath">The path and name where the file is to be saved</param>
+        ''' <param name="addressUri">The source for the file.</param>
+        ''' <param name="normalizedFilePath">The path and name where the file is to be saved.</param>
         Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String) As Task
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
             Debug.Assert(addressUri IsNot Nothing, "No address")

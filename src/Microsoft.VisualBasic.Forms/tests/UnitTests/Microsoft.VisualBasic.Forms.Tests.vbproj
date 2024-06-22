@@ -10,7 +10,9 @@
     <RootNamespace></RootNamespace>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>
+    <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
   <ItemGroup>
