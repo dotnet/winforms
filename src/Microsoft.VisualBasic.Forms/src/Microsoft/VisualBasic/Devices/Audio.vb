@@ -8,7 +8,7 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic
 
     ''' <summary>
-    '''  Enum for three ways to play a .wav file
+    '''  Enum for three ways to play a .wav file.
     ''' </summary>
     Public Enum AudioPlayMode
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
@@ -20,28 +20,28 @@ Namespace Microsoft.VisualBasic
     Namespace Devices
 
         ''' <summary>
-        '''  An object that makes it easy to play wav files
+        '''  An object that makes it easy to play wav files.
         ''' </summary>
         Public Class Audio
 
             ''' <summary>
-            '''  Creates a new Audio object
+            '''  Creates a new Audio object.
             ''' </summary>
             Public Sub New()
             End Sub
 
             ''' <summary>
-            '''  Plays a .wav file in background mode
+            '''  Plays a .wav file in background mode.
             ''' </summary>
-            ''' <param name="location">The name of the file</param>
+            ''' <param name="location">The name of the file.</param>
             Public Sub Play(location As String)
                 Play(location, AudioPlayMode.Background)
             End Sub
 
             ''' <summary>
-            '''  Plays a .wav file in the passed in mode
+            '''  Plays a .wav file in the passed in mode.
             ''' </summary>
-            ''' <param name="location">The name of the file</param>
+            ''' <param name="location">The name of the file.</param>
             ''' <param name="playMode">
             '''  An enum value representing the mode, Background (async),
             '''  WaitToComplete (sync) or BackgroundLoop
@@ -54,10 +54,10 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            '''   Plays a Byte array representation of a .wav file in the passed in mode
+            '''   Plays a Byte array representation of a .wav file in the passed in mode.
             ''' </summary>
-            ''' <param name="data">The array representing the .wav file</param>
-            ''' <param name="playMode">The mode in which the array should be played</param>
+            ''' <param name="data">The array representing the .wav file.</param>
+            ''' <param name="playMode">The mode in which the array should be played.</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
                     Throw ExUtils.GetArgumentNullException(NameOf(data))
@@ -70,10 +70,10 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            '''  Plays a stream representation of a .wav file in the passed in mode
+            '''  Plays a stream representation of a .wav file in the passed in mode.
             ''' </summary>
-            ''' <param name="stream">The stream representing the .wav file</param>
-            ''' <param name="playMode">The mode in which the stream should be played</param>
+            ''' <param name="stream">The stream representing the .wav file.</param>
+            ''' <param name="playMode">The mode in which the stream should be played.</param>
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
@@ -86,8 +86,8 @@ Namespace Microsoft.VisualBasic
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
-            ''' <param name="systemSound">The sound to be played</param>
-            ''' <remarks>Plays the sound asynchronously</remarks>
+            ''' <param name="systemSound">The sound to be played.</param>
+            ''' <remarks>Plays the sound asynchronously.</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
                     Throw ExUtils.GetArgumentNullException(NameOf(systemSound))
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            '''  Stops the play of any playing sound
+            '''  Stops the play of any playing sound.
             ''' </summary>
             Public Sub [Stop]()
                 Dim sound As New Media.SoundPlayer()
@@ -106,10 +106,10 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            '''  Plays the passed in SoundPlayer in the passed in mode
+            '''  Plays the passed in SoundPlayer in the passed in mode.
             ''' </summary>
-            ''' <param name="sound">The SoundPlayer to play</param>
-            ''' <param name="mode">The mode in which to play the sound</param>
+            ''' <param name="sound">The SoundPlayer to play.</param>
+            ''' <param name="mode">The mode in which to play the sound.</param>
             Private Sub Play(sound As Media.SoundPlayer, mode As AudioPlayMode)
 
                 Debug.Assert(sound IsNot Nothing, "There's no SoundPlayer")
@@ -134,10 +134,10 @@ Namespace Microsoft.VisualBasic
             End Sub
 
             ''' <summary>
-            '''  Gets the full name and path for the file. Throws if unable to get full name and path
+            '''  Gets the full name and path for the file. Throws if unable to get full name and path.
             ''' </summary>
-            ''' <param name="location">The filename being tested</param>
-            ''' <returns>A full name and path of the file</returns>
+            ''' <param name="location">The filename being tested.</param>
+            ''' <returns>A full name and path of the file.</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
                     Throw ExUtils.GetArgumentNullException(NameOf(location))
@@ -147,7 +147,7 @@ Namespace Microsoft.VisualBasic
             End Function
 
             ''' <summary>
-            '''  Validates that the value being passed as an AudioPlayMode enum is a legal value
+            '''  Validates that the value being passed as an AudioPlayMode enum is a legal value.
             ''' </summary>
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)

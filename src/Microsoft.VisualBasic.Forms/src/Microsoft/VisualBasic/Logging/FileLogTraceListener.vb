@@ -13,7 +13,7 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Logging
 
     ''' <summary>
-    '''  Options for the location of a log's directory
+    '''  Options for the location of a log's directory.
     ''' </summary>
     Public Enum LogFileLocation As Integer
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
@@ -25,7 +25,7 @@ Namespace Microsoft.VisualBasic.Logging
     End Enum
 
     ''' <summary>
-    '''  Options for the date stamp in the name of a log file
+    '''  Options for the date stamp in the name of a log file.
     ''' </summary>
     Public Enum LogFileCreationScheduleOption As Integer
         None        '(default)
@@ -34,7 +34,7 @@ Namespace Microsoft.VisualBasic.Logging
     End Enum
 
     ''' <summary>
-    '''  Options for behavior when resources are exhausted
+    '''  Options for behavior when resources are exhausted.
     ''' </summary>
     Public Enum DiskSpaceExhaustedOption As Integer
         ThrowException
@@ -42,7 +42,7 @@ Namespace Microsoft.VisualBasic.Logging
     End Enum
 
     ''' <summary>
-    '''  Class for logging to a text file
+    '''  Class for logging to a text file.
     ''' </summary>
     ''' <remarks>
     '''  TraceListener is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
@@ -53,24 +53,24 @@ Namespace Microsoft.VisualBasic.Logging
         Inherits TraceListener
 
         ''' <summary>
-        '''  Creates a FileLogTraceListener with the passed in name
+        '''  Creates a FileLogTraceListener with the passed in name.
         ''' </summary>
-        ''' <param name="name">The name of the listener</param>
+        ''' <param name="name">The name of the listener.</param>
         Public Sub New(name As String)
             MyBase.New(name)
         End Sub
 
         ''' <summary>
-        '''  Creates a FileLogTraceListener with default name
+        '''  Creates a FileLogTraceListener with default name.
         ''' </summary>
         Public Sub New()
             Me.New(DEFAULT_NAME)
         End Sub
 
         ''' <summary>
-        '''  Indicates the log's directory
+        '''  Indicates the log's directory.
         ''' </summary>
-        ''' <value>An enum which can indicate one of several logical locations for the log</value>
+        ''' <value>An enum which can indicate one of several logical locations for the log.</value>
         Public Property Location() As LogFileLocation
             Get
                 If Not _propertiesSet(LOCATION_INDEX) Then
@@ -94,9 +94,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates whether or not the stream should be flushed after every write
+        '''  Indicates whether or not the stream should be flushed after every write.
         ''' </summary>
-        ''' <value>True if the stream should be flushed after every write, otherwise False</value>
+        ''' <value>True if the stream should be flushed after every write, otherwise False.</value>
         Public Property AutoFlush() As Boolean
             Get
                 If Not _propertiesSet(AUTOFLUSH_INDEX) Then
@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Indicates whether or not the host name of the logging machine should
         '''  be included in the output.
         ''' </summary>
-        ''' <value>True if the HostId should be included, otherwise False</value>
+        ''' <value>True if the HostId should be included, otherwise False.</value>
         Public Property IncludeHostName() As Boolean
             Get
                 If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
@@ -136,9 +136,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates whether or not the file should be appended to or overwritten
+        '''  Indicates whether or not the file should be appended to or overwritten.
         ''' </summary>
-        ''' <value>True if the file should be appended to, otherwise False</value>
+        ''' <value>True if the file should be appended to, otherwise False.</value>
         Public Property Append() As Boolean
             Get
                 If Not _propertiesSet(APPEND_INDEX) Then
@@ -164,9 +164,9 @@ Namespace Microsoft.VisualBasic.Logging
 
         ''' <summary>
         '''  Indicates what to do when the size of the log trespasses on the MaxFileSize
-        '''  or the ReserveDiskSpace set by the user
+        '''  or the ReserveDiskSpace set by the user.
         ''' </summary>
-        ''' <value>An enum indicating the desired behavior (do nothing, throw)</value>
+        ''' <value>An enum indicating the desired behavior (do nothing, throw).</value>
         Public Property DiskSpaceExhaustedBehavior() As DiskSpaceExhaustedOption
             Get
                 If Not _propertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) Then
@@ -186,9 +186,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The name of the log file not including DateStamp, file number, Path or extension
+        '''  The name of the log file not including DateStamp, file number, Path or extension.
         ''' </summary>
-        ''' <value>The name of the log file</value>
+        ''' <value>The name of the log file.</value>
         Public Property BaseFileName() As String
             Get
                 If Not _propertiesSet(BASEFILENAME_INDEX) Then
@@ -216,10 +216,10 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The full name and path of the actual log file including DateStamp and file number
+        '''  The full name and path of the actual log file including DateStamp and file number.
         ''' </summary>
-        ''' <value>The full name and path</value>
-        ''' <remarks>Calling this method will open the log file if it's not already open</remarks>
+        ''' <value>The full name and path.</value>
+        ''' <remarks>Calling this method will open the log file if it's not already open.</remarks>
         Public ReadOnly Property FullLogFileName() As String
             Get
                 ' The only way to reliably know the file name is to open the file. If we
@@ -234,9 +234,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates what Date to stamp the log file with (none, first day of week, day)
+        '''  Indicates what Date to stamp the log file with (none, first day of week, day).
         ''' </summary>
-        ''' <value>An enum indicating how to stamp the file</value>
+        ''' <value>An enum indicating how to stamp the file.</value>
         Public Property LogFileCreationSchedule() As LogFileCreationScheduleOption
             Get
                 If Not _propertiesSet(LOGFILECREATIONSCHEDULE_INDEX) Then
@@ -260,9 +260,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The maximum size in bytes the log file is allowed to grow to
+        '''  The maximum size in bytes the log file is allowed to grow to.
         ''' </summary>
-        ''' <value>The maximum size</value>
+        ''' <value>The maximum size.</value>
         Public Property MaxFileSize() As Long
             Get
                 If Not _propertiesSet(MAXFILESIZE_INDEX) Then
@@ -283,9 +283,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The amount of disk space, in bytes, that must be available after a write
+        '''  The amount of disk space, in bytes, that must be available after a write.
         ''' </summary>
-        ''' <value>The reserved disk space</value>
+        ''' <value>The reserved disk space.</value>
         Public Property ReserveDiskSpace() As Long
             Get
                 If Not _propertiesSet(RESERVEDISKSPACE_INDEX) Then
@@ -306,9 +306,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The delimiter to be used to delimit fields in a line of output
+        '''  The delimiter to be used to delimit fields in a line of output.
         ''' </summary>
-        ''' <value>The delimiter</value>
+        ''' <value>The delimiter.</value>
         Public Property Delimiter() As String
             Get
                 If Not _propertiesSet(DELIMITER_INDEX) Then
@@ -327,10 +327,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  The encoding to try when opening a file.
         ''' </summary>
-        ''' <value>The encoding</value>
+        ''' <value>The encoding.</value>
         ''' <remarks>
-        '''  If Append is true then this value will be trumped by the actual encoding value
-        '''  of the file
+        '''  If Append is true then this value will be trumped by the actual
+        '''  encoding value of the file.
         ''' </remarks>
         Public Property Encoding() As Encoding
             Get
@@ -351,10 +351,10 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The directory to be used if Location is set to Custom
+        '''  The directory to be used if Location is set to Custom.
         ''' </summary>
-        ''' <value>The name of the directory</value>
-        ''' <remarks>This will throw if the path cannot be resolved</remarks>
+        ''' <value>The name of the directory.</value>
+        ''' <remarks>This will throw if the path cannot be resolved.</remarks>
         Public Property CustomLocation() As String
             Get
                 If Not _propertiesSet(CUSTOMLOCATION_INDEX) Then
@@ -391,9 +391,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Writes the message to the log
+        '''  Writes the message to the log.
         ''' </summary>
-        ''' <param name="message">The message to be written</param>
+        ''' <param name="message">The message to be written.</param>
         Public Overloads Overrides Sub Write(message As String)
 
             ' Use Try block to attempt to close stream if an exception is thrown
@@ -417,9 +417,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Writes the message to the log as a line
+        '''  Writes the message to the log as a line.
         ''' </summary>
-        ''' <param name="message">The message to be written</param>
+        ''' <param name="message">The message to be written.</param>
         Public Overloads Overrides Sub WriteLine(message As String)
 
             ' Use Try block to attempt to close stream if an exception is thrown
@@ -442,13 +442,13 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Event fired by TraceSourceListener resulting in writing to the log
+        '''  Event fired by TraceSourceListener resulting in writing to the log.
         ''' </summary>
-        ''' <param name="eventCache">Cache of information</param>
-        ''' <param name="source">The name of the TraceSourceListener</param>
-        ''' <param name="eventType">The eventType of the message</param>
-        ''' <param name="id">The id of the message</param>
-        ''' <param name="message">The message</param>
+        ''' <param name="eventCache">Cache of information.</param>
+        ''' <param name="source">The name of the TraceSourceListener.</param>
+        ''' <param name="eventType">The eventType of the message.</param>
+        ''' <param name="id">The id of the message.</param>
+        ''' <param name="message">The message.</param>
         Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, message As String)
 
             If Filter IsNot Nothing Then
@@ -513,14 +513,14 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Event fired by TraceSourceListener resulting in writing to the log
+        '''  Event fired by TraceSourceListener resulting in writing to the log.
         ''' </summary>
-        ''' <param name="eventCache">Cache of information</param>
-        ''' <param name="source">The name of the TraceSourceListener</param>
-        ''' <param name="eventType">The eventType of the message</param>
-        ''' <param name="id">The id of the message</param>
-        ''' <param name="format">A string with placeholders that serves as a format for the message</param>
-        ''' <param name="args">The values for the placeholders in format</param>
+        ''' <param name="eventCache">Cache of information.</param>
+        ''' <param name="source">The name of the TraceSourceListener.</param>
+        ''' <param name="eventType">The eventType of the message.</param>
+        ''' <param name="id">The id of the message.</param>
+        ''' <param name="format">A string with placeholders that serves as a format for the message.</param>
+        ''' <param name="args">The values for the placeholders in format.</param>
         Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, format As String, ParamArray args() As Object)
 
             ' Create the message
@@ -535,13 +535,13 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Method of the base class we override to keep message format consistent
+        '''  Method of the base class we override to keep message format consistent.
         ''' </summary>
-        ''' <param name="eventCache">Cache of information</param>
-        ''' <param name="source">The name of the TraceSourceListener</param>
-        ''' <param name="eventType">The eventType of the message</param>
-        ''' <param name="id">The id of the message</param>
-        ''' <param name="data">An object containing the message to be logged</param>
+        ''' <param name="eventCache">Cache of information.</param>
+        ''' <param name="source">The name of the TraceSourceListener.</param>
+        ''' <param name="eventType">The eventType of the message.</param>
+        ''' <param name="id">The id of the message.</param>
+        ''' <param name="data">An object containing the message to be logged.</param>
         Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, data As Object)
 
             Dim message As String = ""
@@ -553,13 +553,13 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Method of the base class we override to keep message format consistent
+        '''  Method of the base class we override to keep message format consistent.
         ''' </summary>
-        ''' <param name="eventCache">Cache of information</param>
-        ''' <param name="source">The name of the TraceSourceListener</param>
-        ''' <param name="eventType">The eventType of the message</param>
-        ''' <param name="id">The id of the message</param>
-        ''' <param name="data">A list of objects making up the message to be logged</param>
+        ''' <param name="eventCache">Cache of information.</param>
+        ''' <param name="source">The name of the TraceSourceListener.</param>
+        ''' <param name="eventType">The eventType of the message.</param>
+        ''' <param name="id">The id of the message.</param>
+        ''' <param name="data">A list of objects making up the message to be logged.</param>
         Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, ParamArray data As Object())
 
             Dim messageBuilder As New StringBuilder()
@@ -577,14 +577,14 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Flushes the underlying stream
+        '''  Flushes the underlying stream.
         ''' </summary>
         Public Overrides Sub Flush()
             _stream?.Flush()
         End Sub
 
         ''' <summary>
-        '''  Closes the underlying stream
+        '''  Closes the underlying stream.
         ''' </summary>
         Public Overrides Sub Close()
             Dispose(True)
@@ -592,15 +592,15 @@ Namespace Microsoft.VisualBasic.Logging
 
         ''' <summary>
         '''  Gets a list of all the attributes recognized by the this listener. Trying to use an item not in this list
-        '''  in a config file will cause a configuration exception
+        '''  in a config file will cause a configuration exception.
         ''' </summary>
-        ''' <returns>An array of attribute names</returns>
+        ''' <returns>An array of attribute names.</returns>
         Protected Overrides Function GetSupportedAttributes() As String()
             Return _supportedAttributes
         End Function
 
         ''' <summary>
-        '''  Makes sure stream is flushed
+        '''  Makes sure stream is flushed.
         ''' </summary>
         ''' <param name="disposing"></param>
         Protected Overrides Sub Dispose(disposing As Boolean)
@@ -612,7 +612,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Gets the log file name under the current configuration.
         ''' </summary>
-        ''' <value>The log file name</value>
+        ''' <value>The log file name.</value>
         ''' <remarks>
         '''  Includes the full path and the DateStamp, but does not include the
         '''  file number or the extension.
@@ -663,9 +663,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Gets the stream to use for writing to the log
+        '''  Gets the stream to use for writing to the log.
         ''' </summary>
-        ''' <value>The stream</value>
+        ''' <value>The stream.</value>
         Private ReadOnly Property ListenerStream() As ReferencedStream
             Get
                 EnsureStreamIsOpen()
@@ -676,9 +676,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Gets or creates the stream used for writing to the log
+        '''  Gets or creates the stream used for writing to the log.
         ''' </summary>
-        ''' <returns>The stream</returns>
+        ''' <returns>The stream.</returns>
         Private Function GetStream() As ReferencedStream
 
             ' Check the hash table to see if this file is already opened by another
@@ -750,7 +750,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Makes sure we have an open stream
+        '''  Makes sure we have an open stream.
         ''' </summary>
         Private Sub EnsureStreamIsOpen()
             If _stream Is Nothing Then
@@ -761,7 +761,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Closes the stream.
         ''' </summary>
-        ''' <remarks>This method should be safe to call whether or not there is a stream</remarks>
+        ''' <remarks>This method should be safe to call whether or not there is a stream.</remarks>
         Private Sub CloseCurrentStream()
             If _stream IsNot Nothing Then
                 SyncLock s_streams
@@ -775,31 +775,31 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Indicates whether or not the current date has changed to new day
+        '''  Indicates whether or not the current date has changed to new day.
         ''' </summary>
-        ''' <returns>True if the date has changed, otherwise False</returns>
+        ''' <returns>True if the date has changed, otherwise False.</returns>
         Private Function DayChanged() As Boolean
             Return _day.Date <> Now.Date
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not the date has changed to a new week
+        '''  Indicates whether or not the date has changed to a new week.
         ''' </summary>
-        ''' <returns>True if the date has changed, otherwise False</returns>
+        ''' <returns>True if the date has changed, otherwise False.</returns>
         Private Function WeekChanged() As Boolean
             Return _firstDayOfWeek.Date <> GetFirstDayOfWeek(Now.Date)
         End Function
 
         ''' <summary>
-        '''  Utility to get the date of the first day of the week from the passed in date
+        '''  Utility to get the date of the first day of the week from the passed in date.
         ''' </summary>
-        ''' <param name="checkDate">The date being checked</param>
+        ''' <param name="checkDate">The date being checked.</param>
         Private Shared Function GetFirstDayOfWeek(checkDate As Date) As Date
             Return checkDate.AddDays(-checkDate.DayOfWeek).Date
         End Function
 
         ''' <summary>
-        '''  Checks for date changes and carries out appropriate actions
+        '''  Checks for date changes and carries out appropriate actions.
         ''' </summary>
         ''' <remarks>
         '''  If the user has selected a DateStamp option then a change of
@@ -818,12 +818,12 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Checks the size of the current log plus the new entry and the free disk space against
-        '''  the user's limits.
+        '''  Checks the size of the current log plus the new entry and
+        '''  the free disk space against the user's limits.
         ''' </summary>
-        ''' <param name="newEntrySize">The size of what's about to be written to the file</param>
-        ''' <returns>True if the limits aren't trespassed, otherwise False</returns>
-        ''' <remarks>This method is not 100% accurate if AutoFlush is False</remarks>
+        ''' <param name="newEntrySize">The size of what's about to be written to the file.</param>
+        ''' <returns>True if the limits aren't trespassed, otherwise False.</returns>
+        ''' <remarks>This method is not 100% accurate if AutoFlush is False.</remarks>
         Private Function ResourcesAvailable(newEntrySize As Long) As Boolean
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
@@ -844,10 +844,10 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Returns the total amount of free disk space available to the current user
+        '''  Returns the total amount of free disk space available to the current user.
         ''' </summary>
-        ''' <returns>The total amount, in bytes, of free disk space available to the current user</returns>
-        ''' <remarks>Throws an exception if API fails</remarks>
+        ''' <returns>The total amount, in bytes, of free disk space available to the current user.</returns>
+        ''' <remarks>Throws an exception if API fails.</remarks>
         Private Function GetFreeDiskSpace() As Long
             Dim pathName As String = Path.GetPathRoot(Path.GetFullPath(FullLogFileName))
 
@@ -866,9 +866,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Opens a file and attempts to determine the file's encoding
+        '''  Opens a file and attempts to determine the file's encoding.
         ''' </summary>
-        ''' <returns>The encoding or Nothing</returns>
+        ''' <returns>The encoding or Nothing.</returns>
         Private Function GetFileEncoding(fileName As String) As Encoding
 
             If File.Exists(fileName) Then
@@ -894,10 +894,10 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Gets the host name
+        '''  Gets the host name.
         ''' </summary>
-        ''' <value>The host name</value>
-        ''' <remarks>We use the machine name because we can get that even if not hooked up to a network</remarks>
+        ''' <value>The host name.</value>
+        ''' <remarks>We use the machine name because we can get that even if not hooked up to a network.</remarks>
         Private ReadOnly Property HostName() As String
             Get
                 If String.IsNullOrEmpty(_hostName) Then
@@ -912,7 +912,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Demands a FileIO write permission.
         ''' </summary>
         ''' <remarks>This method should be called by public API that doesn't map to TraceListener.
-        '''  This ensures these API cannot be used to circumvent CAS
+        '''  This ensures these API cannot be used to circumvent CAS.
         '''</remarks>
         Private Sub DemandWritePermission()
             Debug.Assert(Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)), "The log directory shouldn't be empty.")
@@ -920,7 +920,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Validates that the value being passed as an LogFileLocation enum is a legal value
+        '''  Validates that the value being passed as an LogFileLocation enum is a legal value.
         ''' </summary>
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
@@ -930,7 +930,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Validates that the value being passed as an DiskSpaceExhaustedOption enum is a legal value
+        '''  Validates that the value being passed as an DiskSpaceExhaustedOption enum is a legal value.
         ''' </summary>
         ''' <param name="value"></param>
         Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
@@ -940,7 +940,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value
+        '''  Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value.
         ''' </summary>
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
@@ -950,10 +950,10 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Convert a stack into a string
+        '''  Convert a stack into a string.
         ''' </summary>
         ''' <param name="stack"></param>
-        ''' <returns>Returns the stack as a .csv string</returns>
+        ''' <returns>Returns the stack as a .csv string.</returns>
         Private Shared Function StackToString(stack As Stack) As String
             Debug.Assert(stack IsNot Nothing, "Stack wasn't created.")
 
@@ -1125,17 +1125,17 @@ Namespace Microsoft.VisualBasic.Logging
             Implements IDisposable
 
             ''' <summary>
-            '''  Creates a new referenced stream
+            '''  Creates a new referenced stream.
             ''' </summary>
-            ''' <param name="stream">The stream that does the actual writing</param>
+            ''' <param name="stream">The stream that does the actual writing.</param>
             Friend Sub New(stream As StreamWriter)
                 _stream = stream
             End Sub
 
             ''' <summary>
-            '''  Writes a message to the stream
+            '''  Writes a message to the stream.
             ''' </summary>
-            ''' <param name="message">The message to write</param>
+            ''' <param name="message">The message to write.</param>
             Friend Sub Write(message As String)
                 SyncLock _syncObject
                     _stream.Write(message)
@@ -1143,9 +1143,9 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Writes a message to the stream as a line
+            '''  Writes a message to the stream as a line.
             ''' </summary>
-            ''' <param name="message">The message to write</param>
+            ''' <param name="message">The message to write.</param>
             Friend Sub WriteLine(message As String)
                 SyncLock _syncObject
                     _stream.WriteLine(message)
@@ -1153,7 +1153,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Increments the reference count for the stream
+            '''  Increments the reference count for the stream.
             ''' </summary>
             Friend Sub AddReference()
                 SyncLock _syncObject
@@ -1162,7 +1162,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Flushes the stream
+            '''  Flushes the stream.
             ''' </summary>
             Friend Sub Flush()
                 SyncLock _syncObject
@@ -1171,8 +1171,8 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Decrements the reference count to the stream and closes the stream if the reference count
-            '''  is zero
+            '''  Decrements the reference count to the stream and closes
+            '''  the stream if the reference count is zero.
             ''' </summary>
             Friend Sub CloseStream()
                 SyncLock _syncObject
@@ -1190,9 +1190,9 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Indicates whether or not the stream is still in use by a FileLogTraceListener
+            '''  Indicates whether or not the stream is still in use by a FileLogTraceListener.
             ''' </summary>
-            ''' <value>True if the stream is being used, otherwise False</value>
+            ''' <value>True if the stream is being used, otherwise False.</value>
             Friend ReadOnly Property IsInUse() As Boolean
                 Get
                     Return _stream IsNot Nothing
@@ -1200,9 +1200,9 @@ Namespace Microsoft.VisualBasic.Logging
             End Property
 
             ''' <summary>
-            '''  The size of the log file
+            '''  The size of the log file.
             ''' </summary>
-            ''' <value>The size</value>
+            ''' <value>The size.</value>
             Friend ReadOnly Property FileSize() As Long
                 Get
                     Return _stream.BaseStream.Length
@@ -1210,9 +1210,9 @@ Namespace Microsoft.VisualBasic.Logging
             End Property
 
             ''' <summary>
-            '''  Ensures the stream is closed (flushed) no matter how we are closed
+            '''  Ensures the stream is closed (flushed) no matter how we are closed.
             ''' </summary>
-            ''' <param name="disposing">Indicates who called dispose</param>
+            ''' <param name="disposing">Indicates who called dispose.</param>
             Private Overloads Sub Dispose(disposing As Boolean)
                 If disposing Then
                     If Not _disposed Then
@@ -1223,7 +1223,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Standard implementation of IDisposable
+            '''  Standard implementation of IDisposable.
             ''' </summary>
             Public Overloads Sub Dispose() Implements IDisposable.Dispose
                 ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
@@ -1232,7 +1232,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Ensures stream is closed at GC
+            '''  Ensures stream is closed at GC.
             ''' </summary>
             Protected Overrides Sub Finalize()
                 ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.

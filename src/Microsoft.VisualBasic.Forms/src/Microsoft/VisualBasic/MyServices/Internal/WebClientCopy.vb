@@ -15,8 +15,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
-        ''' <param name="client">The WebClient used to do the downloading or uploading</param>
-        ''' <param name="dialog">UI for indicating progress</param>
+        ''' <param name="client">The WebClient used to do the downloading or uploading.</param>
+        ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As WebClient, dialog As ProgressDialog)
 
             Debug.Assert(client IsNot Nothing, "No WebClient")
@@ -29,8 +29,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Downloads a file.
         ''' </summary>
-        ''' <param name="address">The source for the file</param>
-        ''' <param name="destinationFileName">The path and name where the file is saved</param>
+        ''' <param name="address">The source for the file.</param>
+        ''' <param name="destinationFileName">The path and name where the file is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
@@ -56,8 +56,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Uploads a file
         ''' </summary>
-        ''' <param name="sourceFileName">The name and path of the source file</param>
-        ''' <param name="address">The address to which the file is uploaded</param>
+        ''' <param name="sourceFileName">The name and path of the source file.</param>
+        ''' <param name="address">The address to which the file is uploaded.</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
@@ -82,7 +82,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Notifies the progress dialog to increment the progress bar
         ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read</param>
+        ''' <param name="progressPercentage">The percentage of bytes read.</param>
         Private Sub InvokeIncrement(progressPercentage As Integer)
             ' Don't invoke unless dialog is up and running
             If m_ProgressDialog IsNot Nothing Then

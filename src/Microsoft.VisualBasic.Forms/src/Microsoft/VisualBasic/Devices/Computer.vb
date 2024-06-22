@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  A thin wrapper for System.Windows.Forms.Clipboard
         ''' </summary>
-        ''' <value>An object representing the clipboard</value>
+        ''' <value>An object representing the clipboard.</value>
         Public ReadOnly Property Clipboard() As ClipboardProxy
             Get
                 If s_clipboard Is Nothing Then

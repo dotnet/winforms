@@ -194,7 +194,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Adds the default id values.
         ''' </summary>
-        ''' <remarks>Fix FxCop violation InitializeReferenceTypeStaticFieldsInline</remarks>
+        ''' <remarks>Fix FxCop violation InitializeReferenceTypeStaticFieldsInline.</remarks>
         Private Shared Function InitializeIDHash() As Dictionary(Of TraceEventType, Integer)
             Dim result As New Dictionary(Of TraceEventType, Integer)(10)
 
@@ -219,7 +219,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Converts a TraceEventType to an Id.
         ''' </summary>
         ''' <param name="traceEventValue"></param>
-        ''' <returns>The Id</returns>
+        ''' <returns>The Id.</returns>
         Private Shared Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
             Dim id As Integer = 0
             s_idHash.TryGetValue(traceEventValue, id)
