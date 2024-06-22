@@ -88,7 +88,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
         End Function
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
         ''' <summary>
         '''  Contains information about the current state of both physical and virtual memory, including extended memory.
@@ -122,7 +122,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
         End Structure
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
         '''  Obtains information about the system's current usage of both physical and virtual memory.
