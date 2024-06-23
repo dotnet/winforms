@@ -6,8 +6,12 @@ Option Strict On
 
 Imports System.Collections.Specialized
 Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports System.IO
+Imports System.Reflection.Metadata
+Imports System.Runtime.InteropServices
+Imports System.Runtime.Serialization
 Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices
@@ -38,7 +42,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="format">The type of text to get</param>
         ''' <returns>The text as a String</returns>
-        Public Function GetText(format As System.Windows.Forms.TextDataFormat) As String
+        Public Function GetText(format As TextDataFormat) As String
             Return Clipboard.GetText(format)
         End Function
 
@@ -56,7 +60,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="format">The type of text being checked for</param>
         ''' <returns>True if text is available, otherwise False</returns>
-        Public Function ContainsText(format As System.Windows.Forms.TextDataFormat) As Boolean
+        Public Function ContainsText(format As TextDataFormat) As Boolean
             Return Clipboard.ContainsText(format)
         End Function
 
@@ -73,7 +77,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="text">The String to save</param>
         ''' <param name="format">The format in which to save the String</param>
-        Public Sub SetText(text As String, format As System.Windows.Forms.TextDataFormat)
+        Public Sub SetText(text As String, format As TextDataFormat)
             Clipboard.SetText(text, format)
         End Sub
 
@@ -167,6 +171,33 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
+        ''' Gets data of type <typeparamref name="T"/> from the clipboard that's been saved in the passed in format.
+        ''' </summary>
+        ''' <param name="format">The format in which to search for the data of type <typeparamref name="T"/>. </param>
+        ''' <param name="data">The retrieved data, is successful.</param>
+        ''' <param name="resolver"> used to control BinaryFormatter deserialization if needed.</param>
+        Public Function TryGetData(Of T)(format As String, resolver As Func(Of TypeName, Type), <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, resolver, data)
+        End Function
+
+        ''' <summary>
+        ''' Gets data of type <typeparamref name="T"/> from the clipboard that's been saved in the passed in format.
+        ''' </summary>
+        ''' <param name="format">The format in which to search for the data of type <typeparamref name="T"/>. </param>
+        ''' <param name="data">The retrieved data, is successful.</param>
+        Public Function TryGetData(Of T)(format As String, <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, data)
+        End Function
+
+        ''' <summary>
+        ''' Gets data of type <typeparamref name="T"/> from the clipboard.
+        ''' </summary>
+        ''' <param name="data">The retrieved data, if successful.</param>
+        Public Function TryGetData(Of T)(<Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(data)
+        End Function
+
+        ''' <summary>
         ''' Indicates whether or not there is data on the clipboard in the passed in format
         ''' </summary>
         ''' <param name="format"></param>
@@ -185,6 +216,14 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
+        ''' Saves the passed in data to the clipboard as JSON that contains <typeparamref name="T"/>.
+        ''' </summary>
+        ''' <param name="data">The data to be saved.</param>
+        Public Sub SetDataAsJson(Of T)(data As T)
+            Clipboard.SetDataAsJson(data)
+        End Sub
+
+        ''' <summary>
         ''' Removes everything from the clipboard
         ''' </summary>
         Public Sub Clear()
@@ -197,7 +236,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <returns>The data object</returns>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public Function GetDataObject() As System.Windows.Forms.IDataObject
+        Public Function GetDataObject() As IDataObject
             Return Clipboard.GetDataObject()
         End Function
 
@@ -207,7 +246,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="data">The data object to be saved</param>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public Sub SetDataObject(data As System.Windows.Forms.DataObject)
+        Public Sub SetDataObject(data As DataObject)
             Clipboard.SetDataObject(data)
         End Sub
     End Class

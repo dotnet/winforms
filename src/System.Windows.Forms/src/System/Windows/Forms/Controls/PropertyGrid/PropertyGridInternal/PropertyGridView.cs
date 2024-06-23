@@ -1045,8 +1045,7 @@ internal sealed partial class PropertyGridView :
             IDataObject? dataObj = Clipboard.GetDataObject();
             if (dataObj is not null)
             {
-                string? data = (string?)dataObj.GetData(typeof(string));
-                if (data is not null)
+                if (dataObj.TryGetData(out string? data))
                 {
                     EditTextBox.Focus();
                     EditTextBox.Text = data;

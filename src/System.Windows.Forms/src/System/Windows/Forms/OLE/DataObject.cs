@@ -3,6 +3,7 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
@@ -92,12 +93,39 @@ public unsafe partial class DataObject :
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
     #region IDataObject
-    public virtual object? GetData(string format, bool autoConvert) =>
-        ((IDataObject)_innerData).GetData(format, autoConvert);
+    public virtual object? GetData(string format, bool autoConvert)
+    {
+        TryGetData(format, Clipboard.GetDataResolver(), autoConvert, out object? data);
+        return data;
+    }
 
     public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
     public virtual object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
+
+    public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+#pragma warning disable CS3001 // Argument type is not CLS-compliant
+        Func<TypeName, Type> resolver,
+#pragma warning restore CS3001 // Argument type is not CLS-compliant
+        bool autoConvert,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        ((IDataObject)_innerData).TryGetData(format, resolver, autoConvert, out data);
+
+    public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        bool autoConvert,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        ((IDataObject)_innerData).TryGetData(format, Clipboard.NotSupportedResolver, autoConvert, out data);
+
+    public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        ((IDataObject)_innerData).TryGetData(format, Clipboard.NotSupportedResolver, autoConvert: false, out data);
+
+    public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        ((IDataObject)_innerData).TryGetData(typeof(T).FullName!, Clipboard.NotSupportedResolver, autoConvert: false, out data);
 
     public virtual bool GetDataPresent(string format, bool autoConvert) =>
         ((IDataObject)_innerData).GetDataPresent(format, autoConvert);
@@ -135,12 +163,16 @@ public unsafe partial class DataObject :
         return GetDataPresent(ConvertToDataFormats(format), autoConvert: false);
     }
 
-    public virtual Stream? GetAudioStream() => GetData(DataFormats.WaveAudio, autoConvert: false) as Stream;
+    public virtual Stream? GetAudioStream()
+    {
+        TryGetData(DataFormats.WaveAudio, Clipboard.GetDataResolver(), autoConvert: false, out Stream? data);
+        return data;
+    }
 
     public virtual StringCollection GetFileDropList()
     {
         StringCollection dropList = [];
-        if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
+        if (TryGetData(DataFormats.FileDropConstant, Clipboard.GetDataResolver(), autoConvert: true, out string[]? strings))
         {
             dropList.AddRange(strings);
         }
@@ -148,7 +180,12 @@ public unsafe partial class DataObject :
         return dropList;
     }
 
-    public virtual Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
+    public virtual Image? GetImage()
+    {
+        // Serialization and deserialization of DataFormats.Bitmap is restricted to Bitmap type.
+        TryGetData(DataFormats.Bitmap, Clipboard.GetDataResolver(), autoConvert: true, out Bitmap? image);
+        return image;
+    }
 
     public virtual string GetText() => GetText(TextDataFormat.UnicodeText);
 
@@ -156,7 +193,12 @@ public unsafe partial class DataObject :
     {
         // Valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        return GetData(ConvertToDataFormats(format), false) is string text ? text : string.Empty;
+        if (!TryGetData(ConvertToDataFormats(format), Clipboard.GetDataResolver(), autoConvert: false, out string? text))
+        {
+            return string.Empty;
+        }
+
+        return text;
     }
 
     public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
@@ -183,6 +225,83 @@ public unsafe partial class DataObject :
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
         SetData(ConvertToDataFormats(format), false, textData);
+    }
+
+    internal static bool ValidateGetDataArguments<T>(string format, Func<TypeName, Type> resolver)
+    {
+        if (string.IsNullOrWhiteSpace(format))
+        {
+            return false;
+        }
+
+        Type type = typeof(T);
+        // resolver is null only when user code calls the Clipboard or DataObject overload that takes a resolver with a null.
+        // Other TryGetData supply a predefined resolver that does not resolve any types - NotSupportedResolver,
+        // GetData methods supply resolver that can resolve all types available to BinaryFormatter or the one that doesn't resolve anything,
+        // depending on the compatibility switch.
+        if (!IsRestrictedFormat(format)
+            && (resolver is null || resolver == Clipboard.NotSupportedResolver)
+            // TanyaSo - should I test IsSealed instead of == typeof(object)?
+            && (type == typeof(object) || type.IsInterface || type.IsAbstract))
+        {
+            // TODO: localize string
+            throw new NotSupportedException(
+                $"'{typeof(T).Name}' is not a concrete type, and could allow for " +
+                $"unbounded deserialization.  Use '{nameof(TryGetData)}' overload that takes a resolver " +
+                $"function that supports allowed types derived '{typeof(T).Name}'");
+        }
+
+        if (!FormatSupportsType())
+        {
+            return false;
+        }
+
+        return true;
+
+        static bool IsRestrictedFormat(string format) =>
+            format is DataFormats.StringConstant
+            or BitmapFullName
+            or DataFormats.CsvConstant
+            or DataFormats.DibConstant
+            or DataFormats.DifConstant
+            or DataFormats.LocaleConstant
+            or DataFormats.PenDataConstant
+            or DataFormats.RiffConstant
+            or DataFormats.SymbolicLinkConstant
+            or DataFormats.TiffConstant
+            or DataFormats.WaveAudioConstant
+            or DataFormats.BitmapConstant
+            or DataFormats.EmfConstant
+            or DataFormats.PaletteConstant
+            or DataFormats.WmfConstant
+            or DataFormats.TextConstant
+            or DataFormats.UnicodeTextConstant
+            or DataFormats.RtfConstant
+            or DataFormats.HtmlConstant
+            or DataFormats.OemTextConstant
+            or DataFormats.FileDropConstant
+            or CF_DEPRECATED_FILENAME
+            or CF_DEPRECATED_FILENAMEW;
+
+        // For OLE formats, we support only a few known managed types.
+        // For unknown formats, return true, they will be further validated when reading the data.
+        bool FormatSupportsType() => format switch
+        {
+            DataFormats.TextConstant or
+            DataFormats.UnicodeTextConstant or
+            DataFormats.StringConstant or
+            DataFormats.RtfConstant or
+            DataFormats.HtmlConstant or
+            DataFormats.OemTextConstant => typeof(string).IsAssignableTo(typeof(T)),
+
+            DataFormats.FileDropConstant or
+            CF_DEPRECATED_FILENAME or
+            CF_DEPRECATED_FILENAMEW => typeof(string[]).IsAssignableTo(typeof(T)),
+
+            DataFormats.BitmapConstant or BitmapFullName => typeof(Bitmap).IsAssignableTo(typeof(T)),
+            null => false,
+            _ => true
+        };
     }
 
     private static string ConvertToDataFormats(TextDataFormat format) => format switch
