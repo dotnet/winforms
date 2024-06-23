@@ -69,12 +69,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of <see cref="ArgumentException"/> with the message from resource file and the Exception.ArgumentName property set.
+        ''' Returns a new instance of ArgumentException with the message from resource file and the Exception.ArgumentName property set.
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
-        ''' <returns>A new instance of <see cref="ArgumentException"/>.</returns>
+        ''' <returns>A new instance of ArgumentException.</returns>
         ''' <remarks>This is the preferred way to construct an argument exception.</remarks>
         Friend Shared Function GetArgumentExceptionWithArgName(ArgumentName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentException
@@ -83,10 +83,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' Returns a new instance of <see cref="ArgumentException"/> with message: "Argument cannot be Nothing."
+        ''' Returns a new instance of ArgumentNullException with message: "Argument cannot be Nothing."
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
-        ''' <returns>A new instance of <see cref="ArgumentException"/>.</returns>
+        ''' <returns>A new instance of ArgumentNullException.</returns>
         Friend Shared Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
 
             Return New ArgumentNullException(ArgumentName, GetResourceString(SR.General_ArgumentNullException))
