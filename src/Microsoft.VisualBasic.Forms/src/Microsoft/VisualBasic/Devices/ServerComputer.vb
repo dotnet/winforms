@@ -8,7 +8,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' <summary>
     '''  A RAD object representing the server 'computer' for the web/Windows Services
     '''  that serves as a discovery mechanism for finding principle abstractions in
-    '''  the system that you can code against
+    '''  the system that you can code against.
     ''' </summary>
     Public Class ServerComputer
 
@@ -71,7 +71,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  This property wraps the System.Environment.MachineName property
+        '''  This property wraps the  <see cref="Environment.MachineName"/> property
         '''  in the .NET framework to return the name of the computer.
         ''' </summary>
         ''' <value>A string containing the name of the computer.</value>
