@@ -261,6 +261,21 @@ public sealed partial class Application
     /// <summary>
     ///  Gets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Starting from .NET 9, controls are required to adapt to new requirements in certain situations such as
+    ///   dark mode and enhanced accessibility (A11Y) features. These changes can potentially alter the layout
+    ///   and appearance of forms.
+    ///  </para>
+    ///  <para>
+    ///   Therefore, it is necessary to provide mechanisms to finely control backwards compatibility for existing
+    ///   and upcoming versions. This includes adjusting control rendering, requesting different sizes for new
+    ///   minimum space requirements, and handling adornments or margins/paddings. This property allows developers
+    ///   to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
+    ///   particularly when backwards compatibility is essential.
+    ///  </para>
+    /// </remarks>
+
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
     /// <summary>
