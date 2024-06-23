@@ -163,7 +163,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Ensure the label resizes with the dialog
+        '''  Ensure the label resizes with the dialog.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>

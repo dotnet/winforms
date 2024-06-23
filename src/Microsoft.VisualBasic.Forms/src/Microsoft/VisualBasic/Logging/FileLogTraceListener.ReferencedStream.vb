@@ -5,7 +5,7 @@ Imports System.IO
 
 Namespace Microsoft.VisualBasic.Logging
 
-    Partial Public Class FileLogTraceListener
+    Public Class FileLogTraceListener
 
         Friend NotInheritable Class ReferencedStream
             Implements IDisposable
@@ -139,5 +139,5 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
         End Class 'ReferencedStream
-    End Class
+    End Class 'FileLogTraceListener
 End Namespace

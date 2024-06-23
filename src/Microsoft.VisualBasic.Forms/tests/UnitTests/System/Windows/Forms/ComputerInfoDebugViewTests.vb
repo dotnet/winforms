@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class ComputerInfoDebugViewTests
 
-        <Fact>
+        <WinFormsFact>
         Public Sub Memory()
             Dim info As New ComputerInfoDebugView(New ComputerInfo)
             If PlatformDetection.IsWindows Then
@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub Properties()
             Dim info As New ComputerInfoDebugView(New ComputerInfo)
             Assert.Equal(Globalization.CultureInfo.InstalledUICulture, info.InstalledUICulture)

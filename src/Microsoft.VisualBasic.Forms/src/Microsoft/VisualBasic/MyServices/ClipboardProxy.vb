@@ -17,13 +17,13 @@ Namespace Microsoft.VisualBasic.MyServices
     Public Class ClipboardProxy
 
         ''' <summary>
-        '''  Only Allows instantiation of the class
+        '''  Only allows instantiation of the class
         ''' </summary>
         Friend Sub New()
         End Sub
 
         ''' <summary>
-        '''  Gets text from the clipboard
+        '''  Gets text from the clipboard.
         ''' </summary>
         ''' <returns>The text as a String.</returns>
         Public Function GetText() As String
@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Gets text from the clipboard saved in the passed in format
+        '''  Gets text from the clipboard saved in the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text to get.</param>
         ''' <returns>The text as a String.</returns>
@@ -40,7 +40,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not text is available on the clipboard
+        '''  Indicates whether or not text is available on the clipboard.
         ''' </summary>
         ''' <returns>True if text is available, otherwise False.</returns>
         Public Function ContainsText() As Boolean
@@ -49,7 +49,7 @@ Namespace Microsoft.VisualBasic.MyServices
 
         ''' <summary>
         '''  Indicates whether or not text is available on the clipboard in
-        '''  the passed in format
+        '''  the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
         ''' <returns>True if text is available, otherwise False.</returns>
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in String to the clipboard
+        '''  Saves the passed in String to the clipboard.
         ''' </summary>
         ''' <param name="text">The String to save.</param>
         Public Sub SetText(text As String)
@@ -66,7 +66,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in String to the clipboard in the passed in format
+        '''  Saves the passed in String to the clipboard in the passed in format.
         ''' </summary>
         ''' <param name="text">The String to save.</param>
         ''' <param name="format">The format in which to save the String.</param>
@@ -75,7 +75,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Gets an Image from the clipboard
+        '''  Gets an Image from the clipboard.
         ''' </summary>
         ''' <returns>The image.</returns>
         Public Function GetImage() As Image
@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicate whether or not an image has been saved to the clipboard
+        '''  Indicate whether or not an image has been saved to the clipboard.
         ''' </summary>
         ''' <returns>True if an image is available, otherwise False.</returns>
         Public Function ContainsImage() As Boolean
@@ -91,7 +91,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in image to the clipboard
+        '''  Saves the passed in image to the clipboard.
         ''' </summary>
         ''' <param name="image">The image to be saved.</param>
         Public Sub SetImage(image As Image)
@@ -99,7 +99,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Gets an audio stream from the clipboard
+        '''  Gets an audio stream from the clipboard.
         ''' </summary>
         ''' <returns>The audio stream as a Stream.</returns>
         Public Function GetAudioStream() As Stream
@@ -107,7 +107,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not there's an audio stream saved to the clipboard
+        '''  Indicates whether or not there's an audio stream saved to the clipboard.
         ''' </summary>
         ''' <returns>True if an audio stream is available, otherwise False.</returns>
         Public Function ContainsAudio() As Boolean
@@ -115,7 +115,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in audio byte array to the clipboard
+        '''  Saves the passed in audio byte array to the clipboard.
         ''' </summary>
         ''' <param name="audioBytes">The byte array to be saved.</param>
         Public Sub SetAudio(audioBytes As Byte())
@@ -123,7 +123,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in audio stream to the clipboard
+        '''  Saves the passed in audio stream to the clipboard.
         ''' </summary>
         ''' <param name="audioStream">The stream to be saved.</param>
         Public Sub SetAudio(audioStream As Stream)
@@ -131,7 +131,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Gets a file drop list from the clipboard
+        '''  Gets a file drop list from the clipboard.
         ''' </summary>
         ''' <returns>The list of file paths as a StringCollection.</returns>
         Public Function GetFileDropList() As StringCollection
@@ -139,7 +139,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not a file drop list has been saved to the clipboard
+        '''  Indicates whether or not a file drop list has been saved to the clipboard.
         ''' </summary>
         ''' <returns>True if a file drop list is available, otherwise False.</returns>
         Public Function ContainsFileDropList() As Boolean
@@ -147,7 +147,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in file drop list to the clipboard
+        '''  Saves the passed in file drop list to the clipboard.
         ''' </summary>
         ''' <param name="filePaths">The file drop list as a StringCollection.</param>
         Public Sub SetFileDropList(filePaths As StringCollection)
