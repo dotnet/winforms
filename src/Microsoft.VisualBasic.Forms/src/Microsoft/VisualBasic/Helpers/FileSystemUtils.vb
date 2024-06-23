@@ -36,10 +36,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        '''  Throw ArgumentException if the file path ends with a separator.
+        '''  Throw <see cref="ArgumentException "/> if the file path ends with a separator.
         ''' </summary>
         ''' <param name="path">The file path.</param>
-        ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
+        ''' <param name="paramName">The parameter name to include in <see cref="ArgumentException "/> .</param>
         Friend Shared Sub CheckFilePathTrailingSeparator(path As String,
                                 paramName As String)
             ' Check for argument null
