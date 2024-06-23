@@ -6979,4 +6979,10 @@ Stack trace where the illegal operation occurred was:
   <data name="DesignTimeFeaturesNotSupported" xml:space="preserve">
     <value>Design time features are not supported.</value>
   </data>
+  <data name="ControlVisualStylesModeDescr" xml:space="preserve">
+    <value>Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</value>
+  </data>
+  <data name="ControlDarkModeDescr" xml:space="preserve">
+    <value>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</value>
+  </data>
 </root>

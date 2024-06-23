@@ -1527,6 +1527,11 @@
         <target state="translated">Il cursore che viene visualizzato quando il puntatore del mouse viene spostato sul controllo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Generato quando il valore della proprietà DataSource cambia.</target>
@@ -2130,6 +2135,11 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Determina se il controllo è visibile o nascosto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</source>
+        <target state="new">Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">

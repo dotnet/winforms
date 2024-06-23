@@ -1527,6 +1527,11 @@
         <target state="translated">Wygląd kursora, gdy wskaźnik myszy przesuwa się nad formantem.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Występuje, gdy wartość właściwości DataContext zostanie zmieniona.</target>
@@ -2130,6 +2135,11 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Określa, czy formant jest widoczny, czy ukryty.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</source>
+        <target state="new">Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
