@@ -16,8 +16,10 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Options for the location of a log's directory.
     ''' </summary>
     Public Enum LogFileLocation As Integer
+
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
+
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
@@ -49,7 +51,7 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Therefore, mark FileLogTraceListener as ComVisible(False).
     ''' </remarks>
     <Runtime.InteropServices.ComVisible(False)>
-    Public Class FileLogTraceListener
+    Partial Public Class FileLogTraceListener
         Inherits TraceListener
 
         ''' <summary>
@@ -1044,6 +1046,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Identifies properties in the BitArray
         Private Const PROPERTY_COUNT As Integer = 12
+
         Private Const APPEND_INDEX As Integer = 0
         Private Const AUTOFLUSH_INDEX As Integer = 1
         Private Const BASEFILENAME_INDEX As Integer = 2
@@ -1069,6 +1072,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
+
         Private Const KEY_APPEND_PASCAL As String = "Append"
 
         Private Const KEY_AUTOFLUSH As String = "autoflush"
@@ -1117,141 +1121,5 @@ Namespace Microsoft.VisualBasic.Logging
         ' Delimiter used when converting a stack to a string
         Private Const STACK_DELIMITER As String = ", "
 
-        ''' <summary>
-        '''  Wraps a StreamWriter and keeps a reference count. This enables multiple
-        '''  FileLogTraceListeners on multiple threads to access the same file.
-        ''' </summary>
-        Friend NotInheritable Class ReferencedStream
-            Implements IDisposable
-
-            ''' <summary>
-            '''  Creates a new referenced stream.
-            ''' </summary>
-            ''' <param name="stream">The stream that does the actual writing.</param>
-            Friend Sub New(stream As StreamWriter)
-                _stream = stream
-            End Sub
-
-            ''' <summary>
-            '''  Writes a message to the stream.
-            ''' </summary>
-            ''' <param name="message">The message to write.</param>
-            Friend Sub Write(message As String)
-                SyncLock _syncObject
-                    _stream.Write(message)
-                End SyncLock
-            End Sub
-
-            ''' <summary>
-            '''  Writes a message to the stream as a line.
-            ''' </summary>
-            ''' <param name="message">The message to write.</param>
-            Friend Sub WriteLine(message As String)
-                SyncLock _syncObject
-                    _stream.WriteLine(message)
-                End SyncLock
-            End Sub
-
-            ''' <summary>
-            '''  Increments the reference count for the stream.
-            ''' </summary>
-            Friend Sub AddReference()
-                SyncLock _syncObject
-                    _referenceCount += 1
-                End SyncLock
-            End Sub
-
-            ''' <summary>
-            '''  Flushes the stream.
-            ''' </summary>
-            Friend Sub Flush()
-                SyncLock _syncObject
-                    _stream.Flush()
-                End SyncLock
-            End Sub
-
-            ''' <summary>
-            '''  Decrements the reference count to the stream and closes
-            '''  the stream if the reference count is zero.
-            ''' </summary>
-            Friend Sub CloseStream()
-                SyncLock _syncObject
-                    Try
-                        _referenceCount -= 1
-                        _stream.Flush()
-                        Debug.Assert(_referenceCount >= 0, "Ref count is below 0")
-                    Finally
-                        If _referenceCount <= 0 Then
-                            _stream.Close()
-                            _stream = Nothing
-                        End If
-                    End Try
-                End SyncLock
-            End Sub
-
-            ''' <summary>
-            '''  Indicates whether or not the stream is still in use by a FileLogTraceListener.
-            ''' </summary>
-            ''' <value>True if the stream is being used, otherwise False.</value>
-            Friend ReadOnly Property IsInUse() As Boolean
-                Get
-                    Return _stream IsNot Nothing
-                End Get
-            End Property
-
-            ''' <summary>
-            '''  The size of the log file.
-            ''' </summary>
-            ''' <value>The size.</value>
-            Friend ReadOnly Property FileSize() As Long
-                Get
-                    Return _stream.BaseStream.Length
-                End Get
-            End Property
-
-            ''' <summary>
-            '''  Ensures the stream is closed (flushed) no matter how we are closed.
-            ''' </summary>
-            ''' <param name="disposing">Indicates who called dispose.</param>
-            Private Overloads Sub Dispose(disposing As Boolean)
-                If disposing Then
-                    If Not _disposed Then
-                        _stream?.Close()
-                        _disposed = True
-                    End If
-                End If
-            End Sub
-
-            ''' <summary>
-            '''  Standard implementation of IDisposable.
-            ''' </summary>
-            Public Overloads Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code. Put cleanup code in Dispose(disposing As Boolean) above.
-                Dispose(True)
-                GC.SuppressFinalize(Me)
-            End Sub
-
-            ''' <summary>
-            '''  Ensures stream is closed at GC.
-            ''' </summary>
-            Protected Overrides Sub Finalize()
-                ' Do not change this code. Put cleanup code in Dispose(disposing As Boolean) above.
-                Dispose(False)
-                MyBase.Finalize()
-            End Sub
-
-            ' The stream that does the writing
-            Private _stream As StreamWriter
-
-            ' The number of FileLogTraceListeners using the stream
-            Private _referenceCount As Integer
-
-            ' Used for synchronizing writing and reference counting
-            Private ReadOnly _syncObject As Object = New Object
-
-            ' Indicates whether or not the object has been disposed
-            Private _disposed As Boolean
-
-        End Class 'ReferencedStream
     End Class 'FileLogTraceListener
 End Namespace
