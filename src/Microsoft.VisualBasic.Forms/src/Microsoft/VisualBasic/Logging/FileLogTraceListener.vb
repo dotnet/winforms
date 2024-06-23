@@ -16,8 +16,10 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Options for the location of a log's directory.
     ''' </summary>
     Public Enum LogFileLocation As Integer
+
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
+
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
@@ -49,7 +51,7 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Therefore, mark FileLogTraceListener as ComVisible(False).
     ''' </remarks>
     <Runtime.InteropServices.ComVisible(False)>
-    Public Class FileLogTraceListener
+    Partial Public Class FileLogTraceListener
         Inherits TraceListener
 
         ''' <summary>
@@ -1044,6 +1046,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Identifies properties in the BitArray
         Private Const PROPERTY_COUNT As Integer = 12
+
         Private Const APPEND_INDEX As Integer = 0
         Private Const AUTOFLUSH_INDEX As Integer = 1
         Private Const BASEFILENAME_INDEX As Integer = 2
@@ -1069,6 +1072,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
+
         Private Const KEY_APPEND_PASCAL As String = "Append"
 
         Private Const KEY_AUTOFLUSH As String = "autoflush"
@@ -1116,5 +1120,6 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Delimiter used when converting a stack to a string
         Private Const STACK_DELIMITER As String = ", "
+
     End Class 'FileLogTraceListener
 End Namespace
