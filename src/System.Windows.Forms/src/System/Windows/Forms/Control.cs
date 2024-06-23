@@ -1717,6 +1717,9 @@ public unsafe partial class Control :
     ///  The dark mode for the control. The default value is <see cref="DarkMode.Inherits"/>. This property is ambient.
     ///  Deriving classes should override <see cref="SetDarkModeCore(DarkMode)"/> to implement their own dark-mode detection logic.
     /// </value>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [SRDescription(nameof(SR.ControlDarkModeDescr))]
     public DarkMode DarkMode
     {
         get
@@ -3848,13 +3851,13 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Gets or sets the <see cref="VisualStylesMode"/> for the control, which gives the control information about
-    ///  how to render itself when visual styles are enabled in a specific version. This property is ambient.
+    ///  Gets or sets how the control renders itself with visual styles. This ambient property can inherit its value
+    ///  from its parent control or, if it is a top-level control, from the application's default setting.
     /// </summary>
     /// <value>
     ///  The <see cref="VisualStylesMode"/> for the control. A control's VisualStylesMode default value always derives
     ///  from its parent control, or if there is no parent, from the Application. The Application's
-    ///  default value is <see cref="VisualStylesMode.Latest"/>.
+    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Latest"/>.
     /// </value>
     /// <remarks>
     ///  <para>
@@ -3871,6 +3874,9 @@ public unsafe partial class Control :
     ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>.
     ///  </para>
     /// </remarks>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
     public VisualStylesMode VisualStylesMode
     {
         get
