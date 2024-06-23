@@ -1013,7 +1013,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="entry"></param>
         ''' <returns>
         '''  A string unique to the application that should be the same for versions of
-        '''  the application that have the same Major and Minor Version Number
+        '''  the application that have the same Major and Minor Version Number.
         ''' </returns>
         ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
         Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
