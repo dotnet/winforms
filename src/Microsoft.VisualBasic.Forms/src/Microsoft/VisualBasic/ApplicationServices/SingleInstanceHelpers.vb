@@ -85,5 +85,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
     End Module
-
 End Namespace
