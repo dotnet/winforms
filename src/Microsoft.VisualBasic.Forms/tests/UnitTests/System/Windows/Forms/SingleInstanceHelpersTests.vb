@@ -45,36 +45,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub WaitForClientConnectionsAsyncTests()
+        Public Async Function WaitForClientConnectionsAsyncTests() As Task
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
             If TryCreatePipeServer(pipeName, pipeServer) Then
 
                 Using pipeServer
                     Dim tokenSource As New CancellationTokenSource()
-#Disable Warning BC42358 ' Call is not awaited.
-                    WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
-#Enable Warning BC42358
+                    Dim clientConnection As Task = WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
                     Dim commandLine As String() = {"Hello"}
                     Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(pipeName, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
                     Dim buffer As Byte() = New Byte(commandLine.Length) {}
 
-#Disable Warning CA2012 ' Use ValueTasks correctly
-                    ' NOTE TO REVIEWS: Below needs to be fixed but I don't know how
-                    Dim countTask As ValueTask(Of Integer) = pipeServer.ReadAsync(buffer.AsMemory(0, commandLine.Length))
-#Enable Warning CA2012 ' Use ValueTasks correctly
+                    Dim count As Integer = Await pipeServer.ReadAsync(buffer.AsMemory(0, commandLine.Length))
+                    ' Ensure the result is set
                     Do
-                        Thread.Sleep(5)
-                    Loop Until _resultArgs IsNot Nothing AndAlso countTask.IsCompleted
-                    Assert.True(countTask.IsCompletedSuccessfully)
+                        Await Task.Delay(5)
+                    Loop Until _resultArgs IsNot Nothing
                     Assert.Equal("Hello", _resultArgs(0))
-                    tokenSource.Cancel()
+                    Await tokenSource.CancelAsync()
                 End Using
             End If
 
-        End Sub
+        End Function
 
     End Class
 End Namespace
