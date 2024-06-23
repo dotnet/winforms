@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.IO
 Imports System.Security
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -59,7 +60,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>The given path in long format if the path exists.</returns>
         ''' <remarks>
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
-        '''  Use DirectoryInfo.GetFiles and GetDirectories (which call FindFirstFile) so that we always have permission.
+        '''  Use <see cref="DirectoryInfo.GetFiles"/> and <see cref="DirectoryInfo.GetDirectories"/> (which call FindFirstFile) so that we always have permission.
         '''</remarks>
         Private Shared Function GetLongPath(fullPath As String) As String
             Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso IO.Path.IsPathRooted(fullPath), "Must be full path")
