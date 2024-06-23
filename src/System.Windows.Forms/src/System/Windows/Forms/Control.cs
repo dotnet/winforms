@@ -217,9 +217,10 @@ public unsafe partial class Control :
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
+    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
+    private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
-    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
 
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
@@ -3511,7 +3512,7 @@ public unsafe partial class Control :
             //          ProcessUICues will check the current state of the control using WM_QUERYUISTATE
             //          If WM_QUERYUISTATE indicates that the accelerators are hidden we will
             //                  either call WM_UPDATEUISTATE or WM_CHANGEUISTATE depending on whether we're hosted or not.
-            //          All controls in the heirarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
+            //          All controls in the hierarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
             //   In WmUpdateUIState, we will update our uiCuesState cached value, which
             //   changes the public value of what we return here for ShowKeyboardCues/ShowFocusCues.
 
@@ -3723,6 +3724,75 @@ public unsafe partial class Control :
         add => Events.AddHandler(s_visibleEvent, value);
         remove => Events.RemoveHandler(s_visibleEvent, value);
     }
+
+    /// <summary>
+    ///  Gets or sets the <see cref="VisualStylesMode"/> for the control, which gives the control information about
+    ///  how to render itself when visual styles are enabled in a specific version. This property is ambient.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="VisualStylesMode"/> for the control. A control's VisualStylesMode default value always derives
+    ///  from its parent control, or if there is no parent, from the Application. The Application's
+    ///  default value is <see cref="VisualStylesMode.Latest"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   Starting from .NET 9, controls are required to adapt to new requirements such as dark mode and enhanced
+    ///   accessibility (A11Y) features. These changes can potentially alter the layout and appearance of forms.
+    ///   Therefore, it is necessary to provide mechanisms to finely control backwards compatibility for existing
+    ///   and upcoming versions. This includes adjusting control rendering, requesting different sizes for new
+    ///   minimum space requirements, and handling adornments or margins/paddings. This property allows developers
+    ///   to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
+    ///   particularly when backwards compatibility is essential.
+    ///  </para>
+    ///  <para>
+    ///   As an ambient property, if the control is a top-level control and its VisualStylesMode is not explicitly set,
+    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>.
+    ///  </para>
+    /// </remarks>
+    public VisualStylesMode VisualStylesMode
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_visualStylesModeProperty))
+            {
+                return (VisualStylesMode)Properties.GetObject(s_visualStylesModeProperty)!;
+            }
+
+            return ParentInternal?.VisualStylesMode ?? VisualStylesMode.Latest;
+        }
+
+        set
+        {
+            // If the value is the same as the parent, remove the property.
+            if (value == ParentInternal?.VisualStylesMode)
+            {
+                Properties.SetObject(s_visualStylesModeProperty, null);
+            }
+            else
+            {
+                Properties.SetObject(s_visualStylesModeProperty, value);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Gets the default visual styles mode for the control.
+    /// </summary>
+    /// <returns>The default visual styles mode for the control.</returns>
+    protected virtual VisualStylesMode DefaultVisualStylesMode
+    {
+        // When the control is a top-level control, it should use the
+        // Application's visual styles mode, if it has not been dedicatedly set.
+        get => ParentInternal is null
+            ? Application.DefaultVisualStylesMode
+            : VisualStylesMode.Latest;
+    }
+
+    private bool ShouldSerializeVisualStylesMode() =>
+        Properties.GetObject(s_visualStylesModeProperty) is not null;
+
+    private void ResetVisualStylesMode() =>
+        Properties.SetObject(s_visualStylesModeProperty, null);
 
     /// <summary>
     ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
