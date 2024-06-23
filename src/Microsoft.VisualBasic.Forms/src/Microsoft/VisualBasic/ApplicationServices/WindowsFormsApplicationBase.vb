@@ -942,7 +942,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Handles the Network.NetworkAvailability event (on the correct thread) and raises the
-        '''  NetworkAvailabilityChanged event
+        '''  NetworkAvailabilityChanged event.
         ''' </summary>
         ''' <param name="Sender">Contains the Network instance that raised the event.</param>
         ''' <param name="e">Contains whether the network is available or not.</param>
