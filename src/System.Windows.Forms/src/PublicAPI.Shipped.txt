@@ -9983,8 +9983,6 @@ System.Windows.Forms.TextBoxBase.Modified.set -> void
 System.Windows.Forms.TextBoxBase.ModifiedChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.MouseClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.TextBoxBase.MultilineChanged -> System.EventHandler?
-System.Windows.Forms.TextBoxBase.Padding.get -> System.Windows.Forms.Padding
-System.Windows.Forms.TextBoxBase.Padding.set -> void
 System.Windows.Forms.TextBoxBase.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.TextBoxBase.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.TextBoxBase.Paste() -> void
