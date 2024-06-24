@@ -239,6 +239,11 @@ public partial class TextBox : TextBoxBase
         }
     }
 
+    /// <summary>
+    ///  Defines <see cref="VisualStylesMode.Latest"/> as default for this control, so this control provides the latest visual styles for .NET 9+.
+    /// </summary>
+    protected override VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Latest;
+
     public override bool Multiline
     {
         get => base.Multiline;

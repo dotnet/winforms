@@ -753,15 +753,6 @@ public abstract partial class TextBoxBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public new Padding Padding
-    {
-        get => base.Padding;
-        set => base.Padding = value;
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
     public new event EventHandler? PaddingChanged
@@ -791,7 +782,7 @@ public abstract partial class TextBoxBase : Control
         get
         {
             // COMPAT we must return the same busted height we did in Everett, even
-            // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
+            // if it doesn't take multiline and word wrap into account.  For better accuracy and/or wrapping use
             // GetPreferredSize instead.
             int height = FontHeight;
             if (_borderStyle != BorderStyle.None)
@@ -1140,6 +1131,11 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
+    /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
+    /// </summary>
+    protected override VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Legacy;
+
+    /// <summary>
     ///  Gets or sets a value indicating whether a multiline text box control automatically wraps words to the
     ///  beginning of the next line when necessary.
     /// </summary>
@@ -1180,6 +1176,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         int saveHeight = _requestedHeight;
+
         try
         {
             if (_textBoxFlags[s_autoSize] && !_textBoxFlags[s_multiline])
