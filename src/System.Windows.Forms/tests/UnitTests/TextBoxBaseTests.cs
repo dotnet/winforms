@@ -4169,7 +4169,10 @@ public partial class TextBoxBaseTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11558")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11558")]
     public void TextBoxBase_Copy_PasteNotEmpty_Success()
     {
         using SubTextBox control = new()
@@ -7135,7 +7138,10 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11559")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11559")]
     public void TextBoxBase_Undo_CanUndo_Success()
     {
         using SubTextBox control = new()
