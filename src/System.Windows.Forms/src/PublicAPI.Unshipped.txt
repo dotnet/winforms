@@ -1,6 +1,9 @@
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
+override System.Windows.Forms.MaskedTextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
+override System.Windows.Forms.RichTextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.TextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode

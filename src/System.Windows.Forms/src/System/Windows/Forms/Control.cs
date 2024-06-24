@@ -3749,7 +3749,9 @@ public unsafe partial class Control :
     ///  </para>
     ///  <para>
     ///   As an ambient property, if the control is a top-level control and its VisualStylesMode is not explicitly set,
-    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>.
+    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>. Inherited controls can
+    ///   overwrite <see cref="DefaultVisualStylesMode"/> to ensure backwards compatibility for controls, which
+    ///   rely on a specific version of the visual styles of a base control (see <see cref="TextBoxBase"/> as an example).
     ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatAppearance))]
@@ -3764,7 +3766,7 @@ public unsafe partial class Control :
                 return (VisualStylesMode)Properties.GetObject(s_visualStylesModeProperty)!;
             }
 
-            return ParentInternal?.VisualStylesMode ?? VisualStylesMode.Latest;
+            return ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
         }
 
         set
@@ -3782,17 +3784,10 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Gets the default visual styles mode for the control.
+    ///  Gets the default visual styles mode for the control; standard is <see cref="VisualStylesMode.Latest"/>.
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
-    protected virtual VisualStylesMode DefaultVisualStylesMode
-    {
-        // When the control is a top-level control, it should use the
-        // Application's visual styles mode, if it has not been dedicatedly set.
-        get => ParentInternal is null
-            ? Application.DefaultVisualStylesMode
-            : VisualStylesMode.Latest;
-    }
+    protected virtual VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Latest;
 
     private bool ShouldSerializeVisualStylesMode() =>
         Properties.GetObject(s_visualStylesModeProperty) is not null;
