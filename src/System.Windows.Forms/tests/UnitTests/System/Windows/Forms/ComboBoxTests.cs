@@ -2447,9 +2447,8 @@ public class ComboBoxTests
     [InlineData(4)]
     public void ComboBox_GetItemHeight_Index_ThrowsArgumentOutOfRangeException(int index)
     {
-        using ComboBox control = new();
-        control.DrawMode = DrawMode.OwnerDrawVariable; // Set the DrawMode property
-        control.CreateControl(); // Make sure the IsHandleCreated property is true
+        using ComboBox control = CreateComboBox(DrawMode.OwnerDrawVariable);
+        control.CreateControl(); // Ensure the handle is created
         control.Items.Add("Item1");
         control.Items.Add("Item2");
         control.Items.Add("Item3");
@@ -2457,7 +2456,8 @@ public class ComboBoxTests
         if (index < 0 || index >= control.Items.Count)
         {
             control.Invoking(y => y.GetItemHeight(index))
-                   .Should().Throw<ArgumentException>()
+                   .Should().Throw<ArgumentOutOfRangeException>()
+                   .WithMessage("*index*")
                    .Where(ex => ex.ParamName == "index");
         }
         else
