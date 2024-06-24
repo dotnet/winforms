@@ -51,7 +51,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="argumentName">The name of the argument (parameter). Not localized.</param>
         ''' <param name="resourceID">The resource ID.</param>
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
-        ''' <returns>A new instance of <see cref="ArgumentException"/> .</returns>
+        ''' <returns>A new instance of <see cref="ArgumentException"/>.</returns>
         ''' <remarks>This is the preferred way to construct an argument exception.</remarks>
         Friend Function GetArgumentExceptionWithArgName(argumentName As String,
                             resourceID As String,
@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        '''  Returns a new instance of  <see cref="ArgumentNullException"/> with message: "Argument cannot be Nothing."
+        '''  Returns a new instance of <see cref="ArgumentNullException"/> with message: "Argument cannot be Nothing."
         ''' </summary>
         ''' <param name="argumentName">The name of the argument (parameter). Not localized.</param>
         ''' <returns>A new instance of <see cref="ArgumentNullException"/>.</returns>
