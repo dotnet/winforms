@@ -3,9 +3,12 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
+using Switches = System.Windows.Forms.Primitives.LocalAppContextSwitches;
 
 namespace System.Windows.Forms;
 
@@ -14,6 +17,24 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class Clipboard
 {
+    /// <devdoc>
+    ///  This resolver is used in deserialization of Clipboard and when wrapped into a serialization binder, suppresses all dangerous type.
+    /// </devdoc>
+    // TODO: Localize string
+    internal static Type NotSupportedResolver(TypeName typeName) =>
+        throw new NotSupportedException($"Using BinaryFormatter is not supported in WinForms Clipboard data deserialization." +
+            $"  Can't resolve {typeName.AssemblyQualifiedName}.");
+
+    /// <devdoc>
+    ///  This resolver is used in deserialization of Clipboard content and when wrapped into a serialization binder, passes all types through.
+    ///  It is used in compatibility scenarios when user explicitly opts into its use.
+    /// </devdoc>
+    // Nullability warning is suppressed because the application had explicitly opted into unsafe compatible behavior.
+    internal static Type UnboundedResolver(TypeName typeName) => null!;
+
+    internal static Func<TypeName, Type> GetDataResolver() =>
+        Switches.ClipboardEnableUnsafeBinaryFormatterDeserialization ? UnboundedResolver : NotSupportedResolver;
+
     /// <summary>
     ///  Places nonpersistent data on the system <see cref="Clipboard"/>.
     /// </summary>
@@ -198,16 +219,119 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves an audio stream from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Stream? GetAudioStream() => GetData(DataFormats.WaveAudioConstant) as Stream;
+    public static Stream? GetAudioStream()
+    {
+        // TanyaSo  - test if this would return a FileStream
+        TryGetDataInternal(DataFormats.WaveAudioConstant, GetDataResolver(), autoConvert: false, out Stream? data);
+        return data;
+    }
 
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
     /// </summary>
+    /// <exception cref="ThreadStateException">
+    ///  The current thread is not in single-threaded apartment (STA) mode.
+    /// </exception>
+    /// <exception cref="NotSupportedException">This value requires <see cref="BinaryFormatter"/> deserialization and
+    ///  the following 2 conditions are not satisfied: application opt-ins into <see cref="BinaryFormatter"/> use, and
+    ///  application opts-in into <see cref="BinaryFormatter"/> deserialization in the WinForms Clipboard.
+    /// </exception>
     public static object? GetData(string format) =>
         string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
 
-    private static object? GetData(string format, bool autoConvert) =>
-        GetDataObject() is { } dataObject ? dataObject.GetData(format, autoConvert) : null;
+    private static object? GetData(string format, bool autoConvert)
+    {
+        if (GetDataObject() is { } dataObject)
+        {
+            dataObject.TryGetData(format, GetDataResolver(), autoConvert, out object? data);
+            return data;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    ///  Retrieves data from the <see cref="Clipboard"/> in format named after <typeparamref name="T"/>, if that data is of type <typeparamref name="T"/>.
+    ///  This is a safer alternative to <see cref="GetData(string)"/> that does not use <see cref="BinaryFormatter"/> to deserialize the payload.
+    /// </summary>
+    /// <exception cref="ThreadStateException">The current thread is not in single-threaded apartment (STA) mode.</exception>
+    /// <exception cref="NotSupportedException">This value requires <see cref="BinaryFormatter"/> deserialization.</exception>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        TryGetData(typeof(T).FullName!, out data);
+
+    /// <summary>
+    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
+    ///  This is a safer alternative to <see cref="GetData(string)"/> that does not use <see cref="BinaryFormatter"/> to deserialize the payload.
+    /// </summary>
+    /// <exception cref="ThreadStateException">The current thread is not in single-threaded apartment (STA) mode.</exception>
+    /// <exception cref="NotSupportedException">This value requires <see cref="BinaryFormatter"/> deserialization.</exception>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        TryGetDataInternal(format, NotSupportedResolver, autoConvert: false, out data);
+
+    /// <summary>
+    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
+    ///  This is a safer alternative to <see cref="GetData(string)"/> that uses <see cref="BinaryFormatter"/> within constrains
+    ///  defined by <paramref name="resolver"/>.
+    ///  <paramref name="resolver">
+    ///  Resolver is used only when deserializing non-OLE formats. It returns the type if <see cref="TypeName"/> is allowed or
+    ///  throws a <see cref="NotSupportedException"/> if type is not expected. It should not return a <see langword="null"/>.
+    ///  </paramref>
+    /// </summary>
+    /// <exception cref="ThreadStateException">The current thread is not in single-threaded apartment (STA) mode.</exception>
+    /// <exception cref="NotSupportedException">
+    ///  If application does not support <see cref="BinaryFormatter"/> and the object can't be deserialized otherwise, or
+    ///  application supports <see cref="BinaryFormatter"/> but <typeparamref name="T"/> is an <see cref="object"/> or not a concrete type,
+    ///  or if <paramref name="resolver"/> does not resolve the actual payload type.
+    /// </exception>
+    /// <example>
+    /// <![CDATA[
+    ///  using System.Reflection.Metadata;
+    ///
+    ///  internal static Type MyResolver(TypeName typeName)
+    ///  {
+    ///      Type[] allowedTypes =
+    ///      [
+    ///          typeof(MyClass),
+    ///          typeof(MyClass1)
+    ///      ];
+    ///
+    ///      foreach (Type type in allowedTypes)
+    ///      {
+    ///          TypeName parsed = TypeName.Parse($"{type.FullName}, {type.Assembly.FullName}");
+    ///
+    ///          // Namespace-qualified type name.
+    ///          if (typeName.FullName == parsed.FullName
+    ///              // Ignore version, culture, and public key token in the assembly name.
+    ///              && typeName.AssemblyName?.Name == parsed.AssemblyName?.Name)
+    ///          {
+    ///              return type;
+    ///          }
+    ///      }
+    ///
+    ///      throw new NotSupportedException();
+    ///  }
+    ///  ]]>
+    /// </example>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+#pragma warning disable CS3001 // Argument type is not CLS-compliant
+        Func<TypeName, Type> resolver,
+#pragma warning restore CS3001 // Argument type is not CLS-compliant
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+        TryGetDataInternal(format, resolver, autoConvert: false, out data);
+
+    private static bool TryGetDataInternal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        Func<TypeName, Type> resolver,
+        bool autoConvert,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+    {
+        data = default;
+        return GetDataObject() is DataObject dataObject && dataObject.TryGetData(format, resolver, autoConvert, out data);
+    }
 
     /// <summary>
     ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.
@@ -216,7 +340,7 @@ public static class Clipboard
     {
         StringCollection result = [];
 
-        if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
+        if (TryGetDataInternal(DataFormats.FileDropConstant, GetDataResolver(), autoConvert: true, out string[]? strings))
         {
             result.AddRange(strings);
         }
@@ -225,9 +349,18 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Retrieves an image from the <see cref="Clipboard"/>.
+    ///  Retrieves a <see cref="Bitmap"/> from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
+    /// <devdoc>
+    ///    <see cref="Bitmap"/>s are resolved by the BinaryFormattedObject but if that fails,
+    ///    <see cref="BinaryFormatter"/> is restricted by the BitmapBinder.
+    /// </devdoc>
+    public static Image? GetImage()
+    {
+        // Serialization and deserialization of DataFormats.Bitmap is restricted to Bitmap type.
+        TryGetDataInternal(DataFormats.Bitmap, GetDataResolver(), autoConvert: true, out Bitmap? image);
+        return image;
+    }
 
     /// <summary>
     ///  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
@@ -241,7 +374,12 @@ public static class Clipboard
     public static string GetText(TextDataFormat format)
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        return GetData(ConvertToDataFormats(format)) as string ?? string.Empty;
+        if (TryGetDataInternal(ConvertToDataFormats(format), GetDataResolver(), autoConvert: false, out string? data))
+        {
+            return data;
+        }
+
+        return string.Empty;
     }
 
     /// <summary>
@@ -270,6 +408,14 @@ public static class Clipboard
     }
 
     /// <summary>
+    ///  Places nonpersistent data of type <typeparamref name="T"/> on the system clipboard.
+    /// </summary>
+    /// <param name="data">The data of type T to place on the clipboard.</param>
+    /// <typeparam name="T">The type of data to place on the clipboard.</typeparam>
+    public static void SetDataAsJson<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(T data) =>
+        SetData(typeof(T).FullName!, data!); // TanyaSo SetDataAsJson(typeof(T).FullName!, data)
+
+    /// <summary>
     ///  Clears the Clipboard and then adds a collection of file names in the <see cref="DataFormats.FileDrop"/> format.
     /// </summary>
     public static void SetFileDropList(StringCollection filePaths)
@@ -288,7 +434,7 @@ public static class Clipboard
             // These are the only error states for Path.GetFullPath
             if (string.IsNullOrEmpty(path) || path.Contains('\0'))
             {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"));
+                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, nameof(filePaths)));
             }
         }
 

@@ -8,13 +8,20 @@ namespace System;
 public static class AppContextSwitchNames
 {
     /// <summary>
+    ///  The switch that controls whether or not the <see cref="BinaryFormatter"/> is enabled in the Clipboard.
+    /// </summary>
+    public const string ClipboardEnableUnsafeBinaryFormatterDeserializationSwitchName =
+        "System.Windows.Forms.Clipboard.EnableUnsafeBinaryFormatterDeserialization";
+
+    /// <summary>
     ///  The switch that controls whether or not the <see cref="BinaryFormatter"/> is enabled.
     /// </summary>
     public static string EnableUnsafeBinaryFormatterSerialization { get; }
         = "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization";
 
     /// <summary>
-    ///  Switch that controls <see cref="AppContext"/> switch caching.
+    ///  Switch that controls <see cref="AppContext"/> switch caching. This switch is set to
+    ///  <see langword="true" /> in our test assemblies.
     /// </summary>
     public static string LocalAppContext_DisableCaching { get; }
         = "TestSwitch.LocalAppContext.DisableCaching";

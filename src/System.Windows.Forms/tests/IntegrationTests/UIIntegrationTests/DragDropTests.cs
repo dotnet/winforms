@@ -60,7 +60,7 @@ public class DragDropTests : ControlTestBase
         // non-serialized object.
 
         Button? button = null;
-        object? data = null;
+        Button? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -77,7 +77,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
                 {
                     // Get the non-serialized Button.
-                    data = e.Data?.GetData(typeof(Button));
+                    e.Data?.TryGetData(out data);
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -116,9 +116,8 @@ public class DragDropTests : ControlTestBase
         });
 
         Assert.NotNull(data);
-        Assert.True(data is Button);
-        Assert.Equal(button?.Name, ((Button)data).Name);
-        Assert.Equal(button?.Text, ((Button)data).Text);
+        Assert.Equal(button?.Name, data.Name);
+        Assert.Equal(button?.Text, data.Text);
     }
 
     [WinFormsFact(Skip = "Crashes dotnet.exe, see: https://github.com/dotnet/winforms/issues/8598")]
@@ -275,7 +274,7 @@ public class DragDropTests : ControlTestBase
         // Verifies that we can successfully drag and drop a serialized object.
 
         ListViewItem? listViewItem = null;
-        object? data = null;
+        ListViewItem? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -292,7 +291,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
                 {
                     // Get the serialized ListViewItem.
-                    data = e.Data?.GetData(DataFormats.Serializable);
+                    e.Data?.TryGetData(DataFormats.Serializable, out data);
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -331,8 +330,8 @@ public class DragDropTests : ControlTestBase
 
         Assert.NotNull(data);
         Assert.True(data is ListViewItem);
-        Assert.Equal(listViewItem?.Name, ((ListViewItem)data).Name);
-        Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
+        Assert.Equal(listViewItem?.Name, data.Name);
+        Assert.Equal(listViewItem?.Text, data.Text);
     }
 
     [WinFormsFact]
@@ -827,10 +826,8 @@ public class DragDropTests : ControlTestBase
             // Ensure that the list item index is contained in the data.
             if (e.Data is not null && e.Data.GetDataPresent(typeof(string)))
             {
-                object? item = e.Data.GetData(typeof(string));
-
                 // Perform drag-and-drop, depending upon the effect.
-                if (item is not null && (e.Effect == DragDropEffects.Copy || e.Effect == DragDropEffects.Move))
+                if (e.Data.TryGetData(out string? item) && item is not null && (e.Effect == DragDropEffects.Copy || e.Effect == DragDropEffects.Move))
                 {
                     // Insert the item.
                     if (_indexOfItemUnderMouseToDrop != ListBox.NoMatches)
@@ -1048,7 +1045,7 @@ public class DragDropTests : ControlTestBase
 
             if (e.Data is not null
                 && e.Data.GetDataPresent(DataFormats.FileDrop)
-                && e.Data.GetData(DataFormats.FileDrop) is string[] fileNames
+                && e.Data.TryGetData(DataFormats.FileDrop, out string[]? fileNames)
                 && fileNames.Length > 0 && fileNames[0].Contains(DragAcceptRtf))
             {
                 RichTextBoxDropTarget.Clear();
@@ -1063,7 +1060,7 @@ public class DragDropTests : ControlTestBase
 
             if (e.Data is not null
                 && e.Data.GetDataPresent(DataFormats.FileDrop)
-                && e.Data.GetData(DataFormats.FileDrop) is string[] fileNames
+                && e.Data.TryGetData(DataFormats.FileDrop, out string[]? fileNames)
                 && fileNames.Length > 0 && fileNames[0].Contains(DragAcceptRtf))
             {
                 e.DropImageType = DropImageType.Link;
