@@ -24,22 +24,19 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Return SR.GetResourceString(id, id)
         End Function
 
+        Friend Function VbMakeException(resourceId As Integer) As Exception
+            Dim description As String = ""
 
-        Friend Function VbMakeException(hr As Integer) As Exception
-            Dim sMsg As String
-
-            If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = GetResourceString(CType(hr, vbErrors))
-            Else
-                sMsg = ""
+            If resourceId > 0 AndAlso resourceId <= &HFFFFI Then
+                description = GetResourceString(DirectCast(resourceId, vbErrors))
             End If
-            VbMakeException = VbMakeExceptionEx(hr, sMsg)
+            VbMakeException = VbMakeExceptionEx(resourceId, description)
         End Function
 
-        Friend Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
+        Friend Function VbMakeExceptionEx(resourceId As Integer, description As String) As Exception
             Dim vBDefinedError As Boolean
 
-            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
+            VbMakeExceptionEx = BuildException(resourceId, description, vBDefinedError)
 
             If vBDefinedError Then
                 ' .NET Framework implementation calls:
@@ -48,13 +45,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         End Function
 
-        Friend Function BuildException(number As Integer,
+        Friend Function BuildException(resourceId As Integer,
                             description As String,
                             ByRef vbDefinedError As Boolean) As Exception
 
             vbDefinedError = True
 
-            Select Case number
+            Select Case resourceId
 
                 Case vbErrors.None
 
