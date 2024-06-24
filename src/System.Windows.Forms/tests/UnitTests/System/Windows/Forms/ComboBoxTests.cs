@@ -2449,9 +2449,6 @@ public class ComboBoxTests
     {
         using ComboBox control = CreateComboBox(DrawMode.OwnerDrawVariable);
         control.CreateControl(); // Ensure the handle is created
-        control.Items.Add("Item1");
-        control.Items.Add("Item2");
-        control.Items.Add("Item3");
 
         if (index < 0 || index >= control.Items.Count)
         {
