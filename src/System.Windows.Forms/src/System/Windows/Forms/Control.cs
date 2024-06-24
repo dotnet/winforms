@@ -146,7 +146,6 @@ public unsafe partial class Control :
     private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
-    private static readonly object s_visualStylesModeChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -1614,7 +1613,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Gets or sets the dark mode setting for the control.
+    ///  Gets or sets the dark mode for the control.
     /// </summary>
     /// <value>
     ///  The dark mode for the control. The default value is <see cref="DarkMode.Inherits"/>. This property is ambient.
@@ -3749,56 +3748,14 @@ public unsafe partial class Control :
     ///   particularly when backwards compatibility is essential.
     ///  </para>
     ///  <para>
-    ///   The design pattern implemented here separates the `VisualStylesMode` property into two parts:
-    ///   - `VisualStylesMode` for public access and setting.
-    ///   - `VisualStylesModeCore` for internal handling and storage.
-    ///   This separation allows derived controls to maintain their original behavior, even if the base control's behavior changes.
+    ///   As an ambient property, if the control is a top-level control and its VisualStylesMode is not explicitly set,
+    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>.
     ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
-    public virtual VisualStylesMode VisualStylesMode
-    {
-        get => VisualStylesModeCore;
-        set
-        {
-            if (VisualStylesModeCore != value)
-            {
-                VisualStylesModeCore = value;
-                OnVisualStylesModeChanged(EventArgs.Empty);
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Raises the <see cref="VisualStylesModeChanged"/> event.
-    /// </summary>
-    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-    protected virtual void OnVisualStylesModeChanged(EventArgs e)
-    {
-        EventHandler? handler = (EventHandler?)Events[s_visualStylesModeChangedEvent];
-        handler?.Invoke(this, e);
-    }
-
-    /// <summary>
-    ///  Gets or sets the core value of the <see cref="VisualStylesMode"/> property.
-    /// </summary>
-    /// <value>
-    ///  The <see cref="VisualStylesMode"/> value used internally by the control.
-    /// </value>
-    /// <remarks>
-    ///  <para>
-    ///   This property provides the internal storage and handling for the <see cref="VisualStylesMode"/> property.
-    ///   If the control is not a top-level control and does not have an explicitly set value, it inherits the value from its parent.
-    ///   The default value is <see cref="VisualStylesMode.Latest"/>.
-    ///  </para>
-    ///  <para>
-    ///   This separation of the properties allows derived controls to maintain their original behavior,
-    ///   even if the base control's behavior changes.
-    ///  </para>
-    /// </remarks>
-    protected virtual VisualStylesMode VisualStylesModeCore
+    public VisualStylesMode VisualStylesMode
     {
         get
         {
@@ -3824,10 +3781,23 @@ public unsafe partial class Control :
         }
     }
 
-    protected virtual bool ShouldSerializeVisualStylesMode() =>
+    /// <summary>
+    ///  Gets the default visual styles mode for the control.
+    /// </summary>
+    /// <returns>The default visual styles mode for the control.</returns>
+    protected virtual VisualStylesMode DefaultVisualStylesMode
+    {
+        // When the control is a top-level control, it should use the
+        // Application's visual styles mode, if it has not been dedicatedly set.
+        get => ParentInternal is null
+            ? Application.DefaultVisualStylesMode
+            : VisualStylesMode.Latest;
+    }
+
+    private bool ShouldSerializeVisualStylesMode() =>
         Properties.GetObject(s_visualStylesModeProperty) is not null;
 
-    protected virtual void ResetVisualStylesMode() =>
+    private void ResetVisualStylesMode() =>
         Properties.SetObject(s_visualStylesModeProperty, null);
 
     /// <summary>
@@ -3846,8 +3816,7 @@ public unsafe partial class Control :
         HANDLE threadHandle = ctx.Handle;
         bool processed = false;
 
-        // setting default exitcode to 0, though it won't be accessed in current code below due to
-        // short-circuit logic in condition (returnValue will be false when exitCode is undefined)
+        // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
         uint exitCode = 0;
         bool returnValue = false;
         while (!processed)
