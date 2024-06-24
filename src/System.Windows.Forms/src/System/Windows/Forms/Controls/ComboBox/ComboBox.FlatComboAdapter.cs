@@ -62,6 +62,11 @@ public partial class ComboBox
 
         public virtual void DrawPopUpCombo(ComboBox comboBox, Graphics g)
         {
+            if (comboBox.DropDownStyle == ComboBoxStyle.Simple)
+            {
+                return;
+            }
+
             bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
 
             // Draw a dark border around everything if we're in popup mode
