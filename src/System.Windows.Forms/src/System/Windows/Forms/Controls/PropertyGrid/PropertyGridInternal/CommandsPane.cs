@@ -75,7 +75,7 @@ internal partial class CommandsPane : PropertyGrid.SnappableControl
                     LinkBehavior = LinkBehavior.AlwaysUnderline,
 
                     // Use default LinkLabel colors for regular, active, and visited.
-                    DisabledLinkColor = Application.SystemColors.ControlDark
+                    DisabledLinkColor = Application.ApplicationColors.ControlDark
                 };
 
                 _label.LinkClicked += LinkClicked;

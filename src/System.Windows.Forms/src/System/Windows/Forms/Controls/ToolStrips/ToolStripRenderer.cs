@@ -832,7 +832,7 @@ public abstract class ToolStripRenderer
 
                 if (SystemInformation.HighContrast && image is Bitmap bitmap)
                 {
-                    Color backgroundColor = e.Item.Selected ? Application.SystemColors.Highlight : e.Item.BackColor;
+                    Color backgroundColor = e.Item.Selected ? Application.ApplicationColors.Highlight : e.Item.BackColor;
 
                     if (ControlPaint.IsDark(backgroundColor))
                     {
@@ -869,7 +869,7 @@ public abstract class ToolStripRenderer
         Rectangle textRect = e.TextRectangle;
         TextFormatFlags textFormat = e.TextFormat;
         // if we're disabled draw in a different color.
-        textColor = (item is not null && item.Enabled) ? textColor : Application.SystemColors.GrayText;
+        textColor = (item is not null && item.Enabled) ? textColor : Application.ApplicationColors.GrayText;
 
         if (e.TextDirection != ToolStripTextDirection.Horizontal && textRect.Width > 0 && textRect.Height > 0)
         {

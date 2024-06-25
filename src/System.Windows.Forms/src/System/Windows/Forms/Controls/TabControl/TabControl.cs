@@ -171,7 +171,7 @@ public partial class TabControl : Control
             // The tab control can only be rendered in 1 color: System's Control color.
             // So, always return this value... otherwise, we're inheriting the forms BackColor
             // and passing it on to the pab pages.
-            return Application.SystemColors.Control;
+            return Application.ApplicationColors.Control;
         }
         set
         {

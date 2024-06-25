@@ -288,7 +288,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                     return _listView.BackColor;
                 }
 
-                return Application.SystemColors.Window;
+                return Application.ApplicationColors.Window;
             }
             else
             {
@@ -419,7 +419,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                     return _listView.ForeColor;
                 }
 
-                return Application.SystemColors.WindowText;
+                return Application.ApplicationColors.WindowText;
             }
             else
             {

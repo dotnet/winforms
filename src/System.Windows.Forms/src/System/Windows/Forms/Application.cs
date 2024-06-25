@@ -390,10 +390,10 @@ public sealed partial class Application
             }
         };
 
-    public static ThemedSystemColors SystemColors
+    public static ApplicationColors ApplicationColors
         => IsDarkModeEnabled
-            ? DarkThemedSystemColors.DefaultInstance
-            : LightThemedSystemColors.DefaultInstance;
+            ? DarkThemedApplicationColors.DefaultInstance
+            : LightThemedApplicationColors.DefaultInstance;
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.

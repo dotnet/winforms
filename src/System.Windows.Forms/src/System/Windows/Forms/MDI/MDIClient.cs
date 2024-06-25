@@ -29,7 +29,7 @@ public sealed partial class MdiClient : Control
     public MdiClient() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
-        BackColor = Application.SystemColors.AppWorkspace;
+        BackColor = Application.ApplicationColors.AppWorkspace;
         Dock = DockStyle.Fill;
     }
 
@@ -311,7 +311,7 @@ public sealed partial class MdiClient : Control
 
     internal override bool ShouldSerializeBackColor()
     {
-        return BackColor != Application.SystemColors.AppWorkspace;
+        return BackColor != Application.ApplicationColors.AppWorkspace;
     }
 
     private static bool ShouldSerializeLocation() => false;

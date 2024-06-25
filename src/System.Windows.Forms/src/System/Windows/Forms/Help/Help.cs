@@ -82,7 +82,7 @@ public static class Help
             pt = location,
             rcMargins = new RECT(-1, -1, -1, -1),               // Ignore
             clrForeground = new COLORREF(unchecked((uint)-1)),  // Ignore
-            clrBackground = Application.SystemColors.Window
+            clrBackground = Application.ApplicationColors.Window
         };
 
         Font font = SystemFonts.StatusFont ?? SystemFonts.DefaultFont;

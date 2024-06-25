@@ -137,7 +137,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
             if (SystemInformation.HighContrast && !OwnerGrid.HasCustomLineColor)
             {
                 // Line color is Application.SystemColors.ControlDarkDark in high contrast mode.
-                ControlPaint.DrawFocusRectangle(g, focusRect, Application.SystemColors.ControlText, OwnerGrid.LineColor);
+                ControlPaint.DrawFocusRectangle(g, focusRect, Application.ApplicationColors.ControlText, OwnerGrid.LineColor);
             }
             else
             {

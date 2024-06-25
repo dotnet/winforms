@@ -72,14 +72,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private int _paintFrozen;
 
     private Color _lineColor = SystemInformation.HighContrast
-        ? Application.SystemColors.ControlDarkDark
-        : Application.SystemColors.InactiveBorder;
+        ? Application.ApplicationColors.ControlDarkDark
+        : Application.ApplicationColors.InactiveBorder;
 
-    private Color _categoryForegroundColor = Application.SystemColors.ControlText;
-    private Color _categorySplitterColor = Application.SystemColors.Control;
-    private Color _viewBorderColor = Application.SystemColors.ControlDark;
-    private Color _selectedItemWithFocusForeColor = Application.SystemColors.HighlightText;
-    private Color _selectedItemWithFocusBackColor = Application.SystemColors.Highlight;
+    private Color _categoryForegroundColor = Application.ApplicationColors.ControlText;
+    private Color _categorySplitterColor = Application.ApplicationColors.Control;
+    private Color _viewBorderColor = Application.ApplicationColors.ControlDark;
+    private Color _selectedItemWithFocusForeColor = Application.ApplicationColors.HighlightText;
+    private Color _selectedItemWithFocusBackColor = Application.ApplicationColors.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
 
     private AttributeCollection? _browsableAttributes;
@@ -215,8 +215,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 _helpPane.TabStop = false;
                 _helpPane.Dock = DockStyle.None;
-                _helpPane.BackColor = Application.SystemColors.Control;
-                _helpPane.ForeColor = Application.SystemColors.ControlText;
+                _helpPane.BackColor = Application.ApplicationColors.Control;
+                _helpPane.ForeColor = Application.ApplicationColors.ControlText;
                 _helpPane.MouseMove += OnChildMouseMove;
                 _helpPane.MouseDown += OnChildMouseDown;
 
@@ -3705,7 +3705,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     private void SetHotCommandColors()
-        => _commandsPane.SetColors(SystemColors.Control, Application.SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
+        => _commandsPane.SetColors(SystemColors.Control, Application.ApplicationColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
 
     internal void SetStatusBox(string? title, string? description) => _helpPane.SetDescription(title, description);
 

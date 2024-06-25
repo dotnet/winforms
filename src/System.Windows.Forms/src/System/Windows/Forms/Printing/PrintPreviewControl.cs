@@ -290,7 +290,7 @@ public partial class PrintPreviewControl : Control
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void ResetBackColor() => BackColor = Application.SystemColors.AppWorkspace;
+    public override void ResetBackColor() => BackColor = Application.ApplicationColors.AppWorkspace;
 
     internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
 
@@ -717,7 +717,7 @@ public partial class PrintPreviewControl : Control
 
         if (isHighContrast)
         {
-            ControlPaint.DrawHighContrastFocusRectangle(e.Graphics, focusRect, Application.SystemColors.ControlText);
+            ControlPaint.DrawHighContrastFocusRectangle(e.Graphics, focusRect, Application.ApplicationColors.ControlText);
         }
         else
         {
@@ -737,7 +737,7 @@ public partial class PrintPreviewControl : Control
     /// </returns>
     private Color GetBackColor(bool isHighContract)
     {
-        return (isHighContract && !ShouldSerializeBackColor()) ? Application.SystemColors.ControlDark : BackColor;
+        return (isHighContract && !ShouldSerializeBackColor()) ? Application.ApplicationColors.ControlDark : BackColor;
     }
 
     private static int PixelsToPhysical(int pixels, int dpi) => (int)(pixels * 100.0 / dpi);

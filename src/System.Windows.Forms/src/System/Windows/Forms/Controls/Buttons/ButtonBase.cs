@@ -1256,7 +1256,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     [SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))]
     public bool UseVisualStyleBackColor
     {
-        get => (_isEnableVisualStyleBackgroundSet || (RawBackColor.IsEmpty && (BackColor == Application.SystemColors.Control)))
+        get => (_isEnableVisualStyleBackgroundSet || (RawBackColor.IsEmpty && (BackColor == Application.ApplicationColors.Control)))
             && _enableVisualStyleBackground;
         set
         {

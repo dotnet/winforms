@@ -549,15 +549,15 @@ public static class TextRenderer
     {
         if (SystemInformation.HighContrast)
         {
-            return Application.SystemColors.GrayText;
+            return Application.ApplicationColors.GrayText;
         }
 
         // If the color is darker than Application.SystemColors.Control make it slightly darker,
         // otherwise use the standard control dark color.
 
-        return ControlPaint.IsDarker(backColor, Application.SystemColors.Control)
+        return ControlPaint.IsDarker(backColor, Application.ApplicationColors.Control)
             ? ControlPaint.Dark(backColor)
-            : Application.SystemColors.ControlDark;
+            : Application.ApplicationColors.ControlDark;
     }
 
     /// <summary>

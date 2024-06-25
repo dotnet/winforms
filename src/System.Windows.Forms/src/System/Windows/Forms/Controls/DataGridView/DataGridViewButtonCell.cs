@@ -783,7 +783,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                             ControlPaint.DrawBorder(
                                 g,
                                 valBounds,
-                                Application.SystemColors.Control,
+                                Application.ApplicationColors.Control,
                                 (ButtonState == ButtonState.Normal) ? ButtonBorderStyle.Outset : ButtonBorderStyle.Inset);
                         }
 

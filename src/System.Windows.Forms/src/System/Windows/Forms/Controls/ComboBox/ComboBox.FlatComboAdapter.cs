@@ -168,19 +168,19 @@ public partial class ComboBox
         }
 
         protected virtual Color GetOuterBorderColor(ComboBox comboBox)
-            => comboBox.Enabled ? Application.SystemColors.Window : Application.SystemColors.ControlDark;
+            => comboBox.Enabled ? Application.ApplicationColors.Window : Application.ApplicationColors.ControlDark;
 
         protected virtual Color GetPopupOuterBorderColor(ComboBox comboBox, bool focused)
         {
             if (!comboBox.Enabled)
             {
-                return Application.SystemColors.ControlDark;
+                return Application.ApplicationColors.ControlDark;
             }
 
-            return focused ? Application.SystemColors.ControlDark : Application.SystemColors.Window;
+            return focused ? Application.ApplicationColors.ControlDark : Application.ApplicationColors.Window;
         }
 
         protected virtual Color GetInnerBorderColor(ComboBox comboBox)
-            => comboBox.Enabled ? comboBox.BackColor : Application.SystemColors.Control;
+            => comboBox.Enabled ? comboBox.BackColor : Application.ApplicationColors.Control;
     }
 }

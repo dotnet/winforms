@@ -192,7 +192,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : Application.SystemColors.Window;
+        get => ShouldSerializeBackColor() ? base.BackColor : Application.ApplicationColors.Window;
         set
         {
             base.BackColor = value;
@@ -436,7 +436,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : Application.SystemColors.WindowText;
+        get => ShouldSerializeForeColor() ? base.ForeColor : Application.ApplicationColors.WindowText;
         set
         {
             base.ForeColor = value;
@@ -1878,14 +1878,14 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-        if (c != Application.SystemColors.Window || IsDarkModeEnabled)
+        if (c != Application.ApplicationColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
         }
 
         c = ForeColor;
 
-        if (c != Application.SystemColors.WindowText || IsDarkModeEnabled)
+        if (c != Application.ApplicationColors.WindowText || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
@@ -2833,13 +2833,13 @@ public partial class TreeView : Control
                             TreeNodeStates curState = e.State;
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
-                            Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? Application.SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
+                            Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? Application.ApplicationColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                             // Draw the actual node.
                             if ((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected)
                             {
                                 g.FillRectangle(SystemBrushes.Highlight, bounds);
-                                ControlPaint.DrawFocusRectangle(g, bounds, color, Application.SystemColors.Highlight);
+                                ControlPaint.DrawFocusRectangle(g, bounds, color, Application.ApplicationColors.Highlight);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else

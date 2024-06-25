@@ -263,7 +263,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return Application.SystemColors.Window;
+                return Application.ApplicationColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -585,7 +585,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return Application.SystemColors.WindowText;
+                return Application.ApplicationColors.WindowText;
             }
         }
         set => base.ForeColor = value;
@@ -3584,7 +3584,7 @@ public partial class ComboBox : ListControl
         {
             PInvokeCore.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
-            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? Application.SystemColors.Control);
+            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? Application.ApplicationColors.Control);
             hdc.FillRectangle(rect, hbrush);
             m.ResultInternal = (LRESULT)1;
             return;
@@ -3864,7 +3864,7 @@ public partial class ComboBox : ListControl
             case PInvoke.WM_PAINT:
                 if (!GetStyle(ControlStyles.UserPaint)
                     && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
-                    && !(SystemInformation.HighContrast && BackColor == Application.SystemColors.Window))
+                    && !(SystemInformation.HighContrast && BackColor == Application.ApplicationColors.Window))
                 {
                     using RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
                     using RegionScope windowRegion = new(Bounds);
