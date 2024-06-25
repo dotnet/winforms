@@ -11149,6 +11149,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La combinaison donnée Classe, Partie et État n'est pas définie par le style visuel actuel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">Le contrôle WebBrowser ne prend pas en charge AllowDrop. Utilisez AllowWebBrowserDrop pour autoriser WebBrowser à utiliser le glisser-déplacer.</target>

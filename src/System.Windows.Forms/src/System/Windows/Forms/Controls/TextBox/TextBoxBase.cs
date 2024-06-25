@@ -775,6 +775,25 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
+            return VisualStylesMode switch
+            {
+                VisualStylesMode.Disabled => PreferredHeightLegacy,
+                VisualStylesMode.Legacy => PreferredHeightLegacy,
+                >= VisualStylesMode.Version10 => PreferredHeightVersion10,
+
+                // We'll should never be here.
+                _ => throw new InvalidEnumArgumentException(
+                    nameof(VisualStylesMode),
+                    (int)VisualStylesMode,
+                    typeof(VisualStylesMode))
+            };
+        }
+    }
+
+    private int PreferredHeightLegacy
+    {
+        get
+        {
             // COMPAT we must return the same busted height we did in Everett, even
             // if it does not take multiline and word wrap into account.
             // For better accuracy and/or wrapping use GetPreferredSize instead.
@@ -789,9 +808,20 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private int PreferredHeightVersion10
+    {
+        get
+        {
+            // For Versions >=10, we take the Padding into account when calculating the preferred height.
+            int height = PreferredHeightLegacy + Padding.Vertical;
+
+            return height;
+        }
+    }
+
     // GetPreferredSizeCore
-    //  This method can return a different value than PreferredHeight!  It properly handles
-    //  border style + multiline and word-wrap.
+    //  This method can return a different value than PreferredHeight!
+    //  It properly handles border style + multiline and word-wrap.
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
@@ -835,16 +865,17 @@ public abstract partial class TextBoxBase : Control
         textSize.Height = Math.Max(textSize.Height, FontHeight);
 
         Padding padding = new Padding(0, 0, bordersAndPadding.Width, bordersAndPadding.Height);
-        padding = GetPreferredPadding(padding);
+
+        if (VisualStylesMode>=VisualStylesMode.Version10)
+        {
+            padding = Padding.Add(padding, Padding);
+        }
 
         Size preferredSize = textSize
             + new Size(padding.Left + padding.Right, padding.Top + padding.Bottom);
 
         return preferredSize;
     }
-
-    protected virtual Padding GetPreferredPadding(Padding padding)
-        => padding;
 
     /// <summary>
     ///  Get the currently selected text start position and length.  Use this method internally
@@ -1412,7 +1443,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  TextBox / RichTextBox Onpaint.
+    ///  TextBox / RichTextBox OnPaint.
     /// </summary>
     /// <hideinheritance/>
     [Browsable(false)]
@@ -2004,22 +2035,25 @@ public abstract partial class TextBoxBase : Control
 
     private protected virtual unsafe void InitializeClientAreaAndNCBkColor(HDC hDC, nint msg)
     {
-        // Get the device context information
-        int width = PInvokeCore.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.HORZRES);
-        int height = PInvokeCore.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.VERTRES);
-        int colorDepth = PInvokeCore.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+        // We only want to do this for VisualStylesMode >= Version10
+        if (VisualStylesMode < VisualStylesMode.Version10)
+        {
+            return;
+        }
 
         var hwnd = PInvokeCore.WindowFromDC(hDC);
 
         // Get the bounds of the Window
         PInvoke.GetWindowRect(hwnd, out RECT rect);
 
-        // Get the text of the Window
-        int textLength = PInvoke.GetWindowTextLength(hwnd);
-        string windowText = PInvoke.GetWindowText(hwnd);
-
         // Get the current ViewPort definition for the DC
         PInvokeCore.GetViewportOrgEx(hDC, out Point viewportOrg);
+
+        // If the ViewPort is not at (0, 0) then we bail, since we don't want to mess with existing settings.
+        if (viewportOrg.X != 0 || viewportOrg.Y != 0)
+        {
+            return;
+        }
 
         // Get the clipping region of the DC
         PInvoke.GetClipBox(hDC, out RECT clipRect);
@@ -2033,16 +2067,17 @@ public abstract partial class TextBoxBase : Control
         // Translate the origin of the DC by the bottom padding
         PInvoke.SetViewportOrgEx(hDC, 0, Padding.Bottom);
 
-        // We do that only one time per instance!
+        // We do that only one time per instance,
+        // but we need to reset this, when the handle is recreated.
         if (!_triggerNewClientSizeRequest)
         {
             _triggerNewClientSizeRequest = true;
 
             // Get the window bounds
-            RECT windowRect;
-            PInvoke.GetWindowRect(hwnd, out windowRect);
+            PInvoke.GetWindowRect(hwnd, out RECT windowRect);
 
-            // Call SetWindowPos with SWP_FRAMECHANGED flag
+            // Call SetWindowPos with SWP_FRAMECHANGED flag.
+            // Only new we get the WmNcCalcSize message version that we need to adjust the client area.
             PInvoke.SetWindowPos(
                 hWnd: hwnd,
                 hWndInsertAfter: HWND.Null,
@@ -2058,6 +2093,7 @@ public abstract partial class TextBoxBase : Control
     {
         if (m.Msg == PInvoke.WM_NCCALCSIZE)
         {
+            // Make sure _we_ actually kicked this off.
             if (_triggerNewClientSizeRequest)
             {
                 bool wParam = m.WParamInternal != 0;
@@ -2079,7 +2115,8 @@ public abstract partial class TextBoxBase : Control
 
             if (m.GetLParam(typeof(RECT)) is RECT rect)
             {
-                // Adjust the size of the client area
+                // Adjust the size of the client area. Writing this structure back
+                // will cause the client area to be resized.
                 rect.left += Padding.Left;
                 rect.top += Padding.Top;
                 rect.right -= Padding.Right;

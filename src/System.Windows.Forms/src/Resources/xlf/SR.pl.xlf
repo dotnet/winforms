@@ -11149,6 +11149,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Podana kombinacja elementów Class, Part i State nie jest zdefiniowana w aktualnym stylu wizualnym.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">Formant WebBrowser nie obsługuje elementu AllowDrop. Użyj elementu AllowWebBrowserDrop, aby zezwolić elementowi WebBrowser na przetworzenie przeciągania/upuszczania.</target>

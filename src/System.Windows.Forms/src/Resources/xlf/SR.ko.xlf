@@ -11149,6 +11149,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">클래스, 파트 및 상태의 지정된 조합이 현재 비주얼 스타일로 정의되지 않았습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">WebBrowser 컨트롤에는 AllowDrop을 사용할 수 없습니다. WebBrowser에서 끌기/놓기 작업을 사용하려면 AllowWebBrowserDrop을 사용하십시오.</target>

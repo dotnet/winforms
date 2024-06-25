@@ -11149,6 +11149,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Verilen Class, Part ve State birleşimi geçerli görsel stil tarafından tanımlanmamış.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">WebBrowser denetimi AllowDrop'u desteklemiyor. WebBrowser'ın sürükle/bırak işlemine izin vermesi için AllowWebBrowserDrop'u kullanın.</target>

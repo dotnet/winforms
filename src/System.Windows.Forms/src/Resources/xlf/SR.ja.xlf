@@ -11149,6 +11149,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">クラス、パート、および状態の指定された組み合わせは、現在の Visual スタイルによって定義されていません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">WebBrowser コントロールは AllowDrop をサポートしていません。  WebBrowser でドラッグ アンド ドロップ操作を可能にするには、AllowWebBrowserDrop を使用してください。</target>

@@ -3771,6 +3771,23 @@ public unsafe partial class Control :
 
         set
         {
+            if (VisualStylesMode == value)
+            {
+                return;
+            }
+
+            if (!ValidateVisualStylesMode(value))
+            {
+                throw new NotSupportedException(
+                    string.Format(
+                        SR.VisualStylesModeNotSupported,
+                        value,
+                        GetType().Name,
+                        string.IsNullOrWhiteSpace(Name)
+                            ? "- - -"
+                            : Name));
+            }
+
             // If the value is the same as the parent, remove the property.
             if (value == ParentInternal?.VisualStylesMode)
             {
@@ -11517,6 +11534,17 @@ public unsafe partial class Control :
     {
     }
 
+    protected virtual bool ValidateVisualStylesMode(VisualStylesMode visualStylesMode)
+    {
+        return visualStylesMode switch
+        {
+            VisualStylesMode.Disabled => true,
+            VisualStylesMode.Legacy => true,
+            >= VisualStylesMode.Version10 => true,
+            _ => false,
+        };
+    }
+
     // These Window* methods allow us to keep access to the "window"
     // property private, which is important for restricting access to the
     // handle.
@@ -11642,9 +11670,11 @@ public unsafe partial class Control :
     {
         // We could simply reflect the message, but it's faster to handle it here if possible.
         Control? control = FromHandle(m.LParamInternal);
+
         if (control is not null)
         {
             m.ResultInternal = (LRESULT)(nint)control.InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+
             if (m.ResultInternal != 0)
             {
                 return;

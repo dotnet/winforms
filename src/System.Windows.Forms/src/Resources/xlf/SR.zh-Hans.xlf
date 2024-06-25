@@ -11149,6 +11149,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">类、部分和状态的给定组合在当前视觉样式中没有定义。</target>
         <note />
       </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">
         <source>The WebBrowser control does not support AllowDrop.  Use AllowWebBrowserDrop to allow the WebBrowser to process drag/drop.</source>
         <target state="translated">WebBrowser 控件不支持 AllowDrop。  请使用 AllowWebBrowserDrop 以允许 WebBrowser 处理拖/放操作。</target>

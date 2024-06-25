@@ -6,25 +6,25 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents the version of the visual renderer.
 /// </summary>
-public enum VisualStylesMode
+public enum VisualStylesMode : short
 {
     /// <summary>
     ///  The visual renderer is not in use. See <see cref="UseVisualStyles"/>.
     /// </summary>
-    Disabled,
+    Disabled = 0,
 
     /// <summary>
     ///  The legacy version of the visual renderer (.NET 8 and earlier).
     /// </summary>
-    Legacy,
+    Legacy = 8,
 
     /// <summary>
     ///  The .NET 9/.NET 10 version of the visual renderer.
     /// </summary>
-    Version10,
+    Version10 = 10,
 
     /// <summary>
     ///  The latest version of the visual renderer.
     /// </summary>
-    Latest = Version10
+    Latest = short.MaxValue
 }

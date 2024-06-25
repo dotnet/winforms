@@ -6985,4 +6985,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ControlDarkModeDescr" xml:space="preserve">
     <value>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</value>
   </data>
+  <data name="VisualStylesModeNotSupported" xml:space="preserve">
+    <value>The visual style {0} is not supported for the {1} control with the name {2}.</value>
+  </data>
 </root>
