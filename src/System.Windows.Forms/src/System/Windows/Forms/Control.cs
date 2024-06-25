@@ -158,6 +158,9 @@ public unsafe partial class Control :
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
+    private const string DarkModeIdentifier = "DarkMode";
+    private const string ExplorerThemeIdentifier = "Explorer";
+
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
 
@@ -7715,54 +7718,16 @@ public unsafe partial class Control :
 
             if (IsDarkModeEnabled)
             {
-                if (this is
-
-                    // Controls with 4 levels of inheritance, sorted alphabetically by type name
-                    DomainUpDown         // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
-                    or NumericUpDown     // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
-
-                    // Controls with 3 levels of inheritance, sorted alphabetically by type name
-                    or CheckedListBox    // Inherits from ListBox, ListControl, Control
-                    or Form              // Excluded - too invasive.
-                    or FlowLayoutPanel   // Inherits from Panel, ScrollableControl, Control
-                    or SplitContainer    // Inherits from ContainerControl, ScrollableControl, Control
-                    or TabPage           // Inherits from Panel, ScrollableControl, Control
-                    or TableLayoutPanel  // Inherits from Panel, ScrollableControl, Control
-
-                    // Controls with 2 levels of inheritance, sorted alphabetically by type name
-                    // or ComboBox       // Excluded - directly handled.
-                    or ListBox           // Inherits from ListControl, Control
-
-                    or Button            // Inherits from ButtonBase, Control
-                    or CheckBox          // Inherits from ButtonBase, Control
-                    or MaskedTextBox     // Inherits from TextBoxBase, Control
-                    or Panel             // Inherits from ScrollableControl, Control
-                    or RadioButton       // Inherits from ButtonBase, Control
-                    or RichTextBox       // Inherits from TextBoxBase, Control
-                    or TextBox           // Inherits from TextBoxBase, Control
-                    or HScrollBar        // Inherits from ScrollBar, Control
-                    or VScrollBar        // Inherits from ScrollBar, Control
-
-                    // Base classes and controls with direct inheritance from Control, sorted alphabetically by type name
-                    or ButtonBase        // Inherits from Control
-                    or DateTimePicker    // Inherits from Control
-                    // or GroupBox       // Inherits from Control directly, but behaves like a container
-                    or Label             // Inherits from Control
-                    or LinkLabel         // Inherits from Label, Control
-                    // or ListView       // Excluded - directly handled.
-                    or MonthCalendar     // Inherits from Control
-                    or PictureBox        // Inherits from Control
-                    or ProgressBar       // Inherits from Control
-                    or ScrollableControl // Inherits from Control
-                    // or TextBoxBase    // Excluded - probably too invasive.
-                    or TrackBar          // Inherits from Control
-                    or TreeView          // Inherits from Control
-                    or UpDownBase)       // Inherits from Control
-
-                // Base class for all UI controls in WinForms
-                // or Control           // Excluded.
+                // These controls need to be individually themed.
+                if (this is not ComboBox
+                    and not GroupBox
+                    and not ListView
+                    and not MonthCalendar)
                 {
-                    _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+                    _ = PInvoke.SetWindowTheme(
+                        hwnd: HWND,
+                        pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                        pszSubIdList: null);
                 }
             }
 
