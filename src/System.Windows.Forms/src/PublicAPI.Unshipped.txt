@@ -4,6 +4,7 @@ override System.Windows.Forms.MaskedTextBox.DefaultVisualStylesMode.get -> Syste
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 override System.Windows.Forms.RichTextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.TextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+static System.Windows.Forms.Application.ApplicationColors.get -> System.Windows.Forms.ApplicationColors!
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
@@ -11,7 +12,6 @@ static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
 static System.Windows.Forms.Application.IsVisualStylesSupported.get -> bool
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
-static System.Windows.Forms.Application.SystemColors.get -> System.Windows.Forms.ThemedSystemColors!
 System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.Control.DarkMode.set -> void
 System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
@@ -30,8 +30,8 @@ System.Windows.Forms.Form.WindowCornerPreference.Default = 0 -> System.Windows.F
 System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.ThemedSystemColors
-System.Windows.Forms.ThemedSystemColors.ThemedSystemColors() -> void
+System.Windows.Forms.ApplicationColors
+System.Windows.Forms.ApplicationColors.ApplicationColors() -> void
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 0 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
@@ -171,36 +171,36 @@ virtual System.Windows.Forms.WebBrowserDocumentCompletedEventHandler.Invoke(obje
 virtual System.Windows.Forms.WebBrowserNavigatedEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserNavigatedEventArgs! e) -> void
 virtual System.Windows.Forms.WebBrowserNavigatingEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserNavigatingEventArgs! e) -> void
 virtual System.Windows.Forms.WebBrowserProgressChangedEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserProgressChangedEventArgs! e) -> void
-virtual System.Windows.Forms.ThemedSystemColors.ActiveBorder.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ActiveCaption.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ActiveCaptionText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.AppWorkspace.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ButtonFace.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ButtonHighlight.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ButtonShadow.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Control.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ControlDark.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ControlDarkDark.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ControlLight.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ControlLightLight.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ControlText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Desktop.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.GradientActiveCaption.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.GradientInactiveCaption.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.GrayText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Highlight.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.HighlightText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.HotTrack.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.InactiveBorder.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.InactiveCaption.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.InactiveCaptionText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Info.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.InfoText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Menu.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.MenuBar.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.MenuHighlight.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.MenuText.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.ScrollBar.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.Window.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.WindowFrame.get -> System.Drawing.Color
-virtual System.Windows.Forms.ThemedSystemColors.WindowText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ActiveBorder.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ActiveCaption.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ActiveCaptionText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.AppWorkspace.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ButtonFace.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ButtonHighlight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ButtonShadow.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Control.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ControlDark.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ControlDarkDark.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ControlLight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ControlLightLight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ControlText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Desktop.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.GradientActiveCaption.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.GradientInactiveCaption.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.GrayText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Highlight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.HighlightText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.HotTrack.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.InactiveBorder.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.InactiveCaption.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.InactiveCaptionText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Info.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.InfoText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Menu.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.MenuBar.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.MenuHighlight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.MenuText.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.ScrollBar.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.Window.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.WindowFrame.get -> System.Drawing.Color
+virtual System.Windows.Forms.ApplicationColors.WindowText.get -> System.Drawing.Color

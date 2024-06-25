@@ -198,21 +198,21 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         {
             if (DisplayInformation.HighContrast)
             {
-                FillBackground(g, bounds, Application.SystemColors.ButtonFace);
+                FillBackground(g, bounds, Application.ApplicationColors.ButtonFace);
             }
             else if (DisplayInformation.LowResolution)
             {
-                FillBackground(g, bounds, (toolStrip is ToolStripDropDown) ? Application.SystemColors.ControlLight : e.BackColor);
+                FillBackground(g, bounds, (toolStrip is ToolStripDropDown) ? Application.ApplicationColors.ControlLight : e.BackColor);
             }
             else if (toolStrip.IsDropDown)
             {
                 FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                     e.BackColor : Application.SystemColors.Menu);
+                                     e.BackColor : Application.ApplicationColors.Menu);
             }
             else if (toolStrip is MenuStrip)
             {
                 FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                           e.BackColor : Application.SystemColors.MenuBar);
+                                           e.BackColor : Application.ApplicationColors.MenuBar);
             }
             else if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Band.Normal))
             {
@@ -223,7 +223,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             else
             {
                 FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                           e.BackColor : Application.SystemColors.MenuBar);
+                                           e.BackColor : Application.ApplicationColors.MenuBar);
             }
         }
     }
@@ -389,7 +389,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         else
         {
             RenderItemInternal(e);
-            Color arrowColor = item.Enabled ? Application.SystemColors.ControlText : Application.SystemColors.ControlDark;
+            Color arrowColor = item.Enabled ? Application.ApplicationColors.ControlText : Application.ApplicationColors.ControlDark;
             DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
         }
     }
@@ -458,7 +458,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                     }
 
                     Color borderColor = ToolStripManager.VisualStylesEnabled
-                        ? Application.SystemColors.Highlight
+                        ? Application.ApplicationColors.Highlight
                         : ProfessionalColors.MenuItemBorder;
 
                     // Draw selection border - always drawn regardless of Enabled.
@@ -520,7 +520,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         Graphics g = e.Graphics;
 
         bool rightToLeft = splitButton.RightToLeft == RightToLeft.Yes;
-        Color arrowColor = splitButton.Enabled ? Application.SystemColors.ControlText : Application.SystemColors.ControlDark;
+        Color arrowColor = splitButton.Enabled ? Application.ApplicationColors.ControlText : Application.ApplicationColors.ControlDark;
 
         // in right to left - we need to swap the parts so we don't draw  v][ toolStripSplitButton
         VisualStyleElement splitButtonDropDownPart = rightToLeft ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
@@ -648,7 +648,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             {
                 var bounds = item.ClientBounds;
                 bounds.Height -= 1;
-                ControlPaint.DrawBorderSimple(g, bounds, Application.SystemColors.Highlight);
+                ControlPaint.DrawBorderSimple(g, bounds, Application.ApplicationColors.Highlight);
             }
         }
         else
@@ -788,7 +788,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         {
             VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
 
-            if (vsRenderer is null || (item.BackColor != Application.SystemColors.Control))
+            if (vsRenderer is null || (item.BackColor != Application.ApplicationColors.Control))
             {
                 FillBackground(g, fillRect, item.BackColor);
             }

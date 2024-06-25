@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents a class that provides themed system colors.
 /// </summary>
-public abstract class ThemedSystemColors
+public abstract class ApplicationColors
 {
     /// <summary>
     ///  Gets the active border color.

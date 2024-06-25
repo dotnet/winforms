@@ -26,7 +26,7 @@ public static partial class ControlPaint
 
         public HLSColor(Color color)
         {
-            _isSystemColors_Control = color.ToKnownColor() == Application.SystemColors.Control.ToKnownColor();
+            _isSystemColors_Control = color.ToKnownColor() == Application.ApplicationColors.Control.ToKnownColor();
 
             ARGB argb = color;
             int r = argb.R;
@@ -100,16 +100,16 @@ public static partial class ControlPaint
                 // what we would otherwise calculate
                 if (percDarker == 0.0f)
                 {
-                    return Application.SystemColors.ControlDark;
+                    return Application.ApplicationColors.ControlDark;
                 }
                 else if (percDarker == 1.0f)
                 {
-                    return Application.SystemColors.ControlDarkDark;
+                    return Application.ApplicationColors.ControlDarkDark;
                 }
                 else
                 {
-                    ARGB dark = Application.SystemColors.ControlDark;
-                    ARGB darkDark = Application.SystemColors.ControlDarkDark;
+                    ARGB dark = Application.ApplicationColors.ControlDark;
+                    ARGB darkDark = Application.ApplicationColors.ControlDarkDark;
 
                     return Color.FromArgb(
                         (byte)(dark.R - (byte)((dark.R - darkDark.R) * percDarker)),
@@ -151,16 +151,16 @@ public static partial class ControlPaint
                 // what we would otherwise calculate
                 if (percentLighter == 0.0f)
                 {
-                    return Application.SystemColors.ControlLight;
+                    return Application.ApplicationColors.ControlLight;
                 }
                 else if (percentLighter == 1.0f)
                 {
-                    return Application.SystemColors.ControlLightLight;
+                    return Application.ApplicationColors.ControlLightLight;
                 }
                 else
                 {
-                    ARGB light = Application.SystemColors.ControlLight;
-                    ARGB lightLight = Application.SystemColors.ControlLightLight;
+                    ARGB light = Application.ApplicationColors.ControlLight;
+                    ARGB lightLight = Application.ApplicationColors.ControlLightLight;
 
                     return Color.FromArgb(
                         (byte)(light.R - (byte)((light.R - lightLight.R) * percentLighter)),

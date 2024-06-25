@@ -1718,7 +1718,7 @@ public unsafe partial class Control :
     ///  The default BackColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultBackColor => Application.SystemColors.Control;
+    public static Color DefaultBackColor => Application.ApplicationColors.Control;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1749,7 +1749,7 @@ public unsafe partial class Control :
     ///  The default ForeColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultForeColor => Application.SystemColors.ControlText;
+    public static Color DefaultForeColor => Application.ApplicationColors.ControlText;
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -8664,7 +8664,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using CreateBrushScope hbrush = new(Application.SystemColors.Control);
+            using CreateBrushScope hbrush = new(Application.ApplicationColors.Control);
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }

@@ -103,8 +103,8 @@ public partial class ListView : Control
 
     // Ownerdraw data caches...  Only valid inside WM_PAINT.
 
-    private Color _odCacheForeColor = Application.SystemColors.WindowText;
-    private Color _odCacheBackColor = Application.SystemColors.Window;
+    private Color _odCacheForeColor = Application.ApplicationColors.WindowText;
+    private Color _odCacheBackColor = Application.ApplicationColors.Window;
     private Font _odCacheFont;
     private HFONT _odCacheFontHandle;
     private FontHandleWrapper? _odCacheFontHandleWrapper;
@@ -353,7 +353,7 @@ public partial class ListView : Control
             }
             else
             {
-                return Application.SystemColors.Window;
+                return Application.ApplicationColors.Window;
             }
         }
         set
@@ -853,7 +853,7 @@ public partial class ListView : Control
             }
             else
             {
-                return Application.SystemColors.WindowText;
+                return Application.ApplicationColors.WindowText;
             }
         }
         set
@@ -5018,13 +5018,13 @@ public partial class ListView : Control
         Color c;
 
         c = BackColor;
-        if (c != Application.SystemColors.Window || IsDarkModeEnabled)
+        if (c != Application.ApplicationColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
-        if (c != Application.SystemColors.WindowText || IsDarkModeEnabled)
+        if (c != Application.ApplicationColors.WindowText || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }

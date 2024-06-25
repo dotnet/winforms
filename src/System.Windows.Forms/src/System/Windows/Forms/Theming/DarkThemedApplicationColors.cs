@@ -5,11 +5,11 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    internal class DarkThemedSystemColors : ThemedSystemColors
+    internal class DarkThemedApplicationColors : ApplicationColors
     {
-        private static DarkThemedSystemColors? s_instance;
+        private static DarkThemedApplicationColors? s_instance;
 
-        public static DarkThemedSystemColors DefaultInstance => s_instance ??= new DarkThemedSystemColors();
+        public static DarkThemedApplicationColors DefaultInstance => s_instance ??= new DarkThemedApplicationColors();
 
         public override Color ActiveBorder => Color.FromArgb(255, 70, 70, 70);
         public override Color ActiveCaption => Color.FromArgb(255, 60, 95, 120);

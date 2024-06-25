@@ -135,9 +135,9 @@ internal sealed partial class PropertyGridView :
         SetStyle(ControlStyles.ResizeRedraw, false);
         SetStyle(ControlStyles.UserMouse, true);
 
-        BackColor = Application.SystemColors.Window;
-        ForeColor = Application.SystemColors.WindowText;
-        _grayTextColor = Application.SystemColors.GrayText;
+        BackColor = Application.ApplicationColors.Window;
+        ForeColor = Application.ApplicationColors.WindowText;
+        _grayTextColor = Application.ApplicationColors.GrayText;
         TabStop = true;
 
         Text = "PropertyGridView";
@@ -205,8 +205,8 @@ internal sealed partial class PropertyGridView :
 
                 Bitmap bitmap = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
                 _dropDownButton.Image = bitmap;
-                _dropDownButton.BackColor = Application.SystemColors.Control;
-                _dropDownButton.ForeColor = Application.SystemColors.ControlText;
+                _dropDownButton.BackColor = Application.ApplicationColors.Control;
+                _dropDownButton.ForeColor = Application.ApplicationColors.ControlText;
                 _dropDownButton.Click += OnButtonClick;
                 _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
                 _dropDownButton.LostFocus += OnChildLostFocus;
@@ -241,8 +241,8 @@ internal sealed partial class PropertyGridView :
 
                 _dialogButton = new DropDownButton
                 {
-                    BackColor = Application.SystemColors.Control,
-                    ForeColor = Application.SystemColors.ControlText,
+                    BackColor = Application.ApplicationColors.Control,
+                    ForeColor = Application.ApplicationColors.ControlText,
                     TabIndex = 3,
                     Image = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight)
                 };
@@ -357,9 +357,9 @@ internal sealed partial class PropertyGridView :
                 return _grayTextColor;
             }
 
-            if (ForeColor.ToArgb() == Application.SystemColors.WindowText.ToArgb())
+            if (ForeColor.ToArgb() == Application.ApplicationColors.WindowText.ToArgb())
             {
-                return Application.SystemColors.GrayText;
+                return Application.ApplicationColors.GrayText;
             }
 
             // Compute the new color by halving the value of the old one.

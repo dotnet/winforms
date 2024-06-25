@@ -5826,7 +5826,7 @@ public partial class DataGridView
 
             if (ApplyVisualStylesToHeaderCells)
             {
-                using var brush = Application.SystemColors.HotTrack.GetCachedSolidBrushScope();
+                using var brush = Application.ApplicationColors.HotTrack.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, rectInsertionBar);
             }
             else
@@ -17103,7 +17103,7 @@ public partial class DataGridView
             {
                 if (SystemInformation.HighContrast)
                 {
-                    ControlPaint.DrawHighContrastFocusRectangle(g, GetGridFocusRectangle(), Application.SystemColors.ActiveCaptionText);
+                    ControlPaint.DrawHighContrastFocusRectangle(g, GetGridFocusRectangle(), Application.ApplicationColors.ActiveCaptionText);
                 }
                 else
                 {
@@ -19744,7 +19744,7 @@ public partial class DataGridView
             }
             else if (BorderStyle == BorderStyle.FixedSingle)
             {
-                using var pen = Application.SystemColors.ControlText.GetCachedPenScope();
+                using var pen = Application.ApplicationColors.ControlText.GetCachedPenScope();
                 g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
             }
             else

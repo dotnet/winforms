@@ -25,7 +25,7 @@ public partial class ProgressBar : Control
 
     private int _marqueeAnimationSpeed = 100;
 
-    private static readonly Color s_defaultForeColor = Application.SystemColors.Highlight;
+    private static readonly Color s_defaultForeColor = Application.ApplicationColors.Highlight;
 
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 

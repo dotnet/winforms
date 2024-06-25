@@ -59,9 +59,9 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionMonthCalendar))]
 public partial class MonthCalendar : Control
 {
-    private static readonly Color s_defaultTitleBackColor = Application.SystemColors.ActiveCaption;
-    private static readonly Color s_defaultTitleForeColor = Application.SystemColors.ActiveCaptionText;
-    private static readonly Color s_trailingForeColor = Application.SystemColors.GrayText;
+    private static readonly Color s_defaultTitleBackColor = Application.ApplicationColors.ActiveCaption;
+    private static readonly Color s_defaultTitleForeColor = Application.ApplicationColors.ActiveCaptionText;
+    private static readonly Color s_trailingForeColor = Application.ApplicationColors.GrayText;
     private const int MonthsInYear = 12;
 
     /// <summary>
@@ -198,7 +198,7 @@ public partial class MonthCalendar : Control
                 return base.BackColor;
             }
 
-            return Application.SystemColors.Window;
+            return Application.ApplicationColors.Window;
         }
         set => base.BackColor = value;
     }
@@ -412,7 +412,7 @@ public partial class MonthCalendar : Control
                 return base.ForeColor;
             }
 
-            return Application.SystemColors.WindowText;
+            return Application.ApplicationColors.WindowText;
         }
         set => base.ForeColor = value;
     }

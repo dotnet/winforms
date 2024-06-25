@@ -1467,8 +1467,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         Debug.Assert(DataGridView is not null);
 
-        int darkDistance = ColorDistance(baseline, Application.SystemColors.ControlDark);
-        int lightDistance = ColorDistance(baseline, Application.SystemColors.ControlLightLight);
+        int darkDistance = ColorDistance(baseline, Application.ApplicationColors.ControlDark);
+        int lightDistance = ColorDistance(baseline, Application.ApplicationColors.ControlLightLight);
 
         Color darkColor;
         Color lightColor;
@@ -1477,21 +1477,21 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         {
             darkColor = darkDistance < HighContrastThreshold
                 ? ControlPaint.DarkDark(baseline)
-                : Application.SystemColors.ControlDark;
+                : Application.ApplicationColors.ControlDark;
 
             lightColor = lightDistance < HighContrastThreshold
                 ? ControlPaint.LightLight(baseline)
-                : Application.SystemColors.ControlLightLight;
+                : Application.ApplicationColors.ControlLightLight;
         }
         else
         {
             darkColor = darkDistance < ContrastThreshold
                 ? ControlPaint.Dark(baseline)
-                : Application.SystemColors.WindowFrame;
+                : Application.ApplicationColors.WindowFrame;
 
             lightColor = lightDistance < ContrastThreshold
                 ? ControlPaint.Light(baseline)
-                : Application.SystemColors.ControlLightLight;
+                : Application.ApplicationColors.ControlLightLight;
         }
 
         return (darkColor, lightColor);
@@ -3187,8 +3187,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             Color dividerWidthColor = advancedBorderStyle.Right switch
             {
                 DataGridViewAdvancedCellBorderStyle.Single => DataGridView.GridPenColor,
-                DataGridViewAdvancedCellBorderStyle.Inset => Application.SystemColors.ControlLightLight,
-                _ => Application.SystemColors.ControlDark,
+                DataGridViewAdvancedCellBorderStyle.Inset => Application.ApplicationColors.ControlLightLight,
+                _ => Application.ApplicationColors.ControlDark,
             };
 
             using var dividerWidthBrush = dividerWidthColor.GetCachedSolidBrushScope();
@@ -3222,8 +3222,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             Color dividerHeightColor = advancedBorderStyle.Bottom switch
             {
                 DataGridViewAdvancedCellBorderStyle.Single => DataGridView.GridPenColor,
-                DataGridViewAdvancedCellBorderStyle.Inset => Application.SystemColors.ControlLightLight,
-                _ => Application.SystemColors.ControlDark,
+                DataGridViewAdvancedCellBorderStyle.Inset => Application.ApplicationColors.ControlLightLight,
+                _ => Application.ApplicationColors.ControlDark,
             };
 
             using var dividerHeightColorBrush = dividerHeightColor.GetCachedSolidBrushScope();
