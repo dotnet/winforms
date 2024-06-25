@@ -11,7 +11,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     ''' <summary>
     '''  These are just checking the Proxy functions, the underlying functions are tested elsewhere.
     ''' </summary>
-    Partial Public Class ExceptionUtilsTests
+    Public Class ExceptionUtilsTests
 
         <WinFormsFact>
         Public Sub GetArgumentNullExceptionTest_Succeed()

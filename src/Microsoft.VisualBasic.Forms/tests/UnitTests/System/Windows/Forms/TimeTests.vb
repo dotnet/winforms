@@ -5,7 +5,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class TimeTests
+    Public Class TimeTests
         Private Const PrecisionTickLimit As Integer = 1000
 
         Private Function timesEqual(systemLocalTime As Date, vbLocalTime As Date, acceptableDifferenceInTicks As Long) As Boolean

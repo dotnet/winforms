@@ -8,7 +8,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class NetworkTests
+    Public Class NetworkTests
         Private Const DefaultPassword As String = "TBD"
         Private Const DefaultUserName As String = "TBD"
         Private Const DownloadLargeFileSize As Integer = 104857600
