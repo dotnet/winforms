@@ -7,8 +7,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     <ComVisible(False)>
-    Friend NotInheritable Class _
-        SafeNativeMethods
+    Friend Module SafeNativeMethods
 
         <PreserveSig()> Friend Declare Function _
             IsWindowEnabled _
@@ -22,12 +21,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
             GetWindowThreadProcessId _
                 Lib "user32" (hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
 
-        ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
-        ''' </summary>
-        Private Sub New()
-        End Sub
-    End Class
-
+    End Module
 End Namespace
-

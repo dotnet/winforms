@@ -18,6 +18,6 @@ public class KeyboardTests
     }
 
     // Not tested:
-    //    Public Sub SendKeys(ByVal keys As String)
-    //    Public Sub SendKeys(ByVal keys As String, ByVal wait As Boolean)
+    //    Public Sub SendKeys(keys As String)
+    //    Public Sub SendKeys(keys As String, wait As Boolean)
 }

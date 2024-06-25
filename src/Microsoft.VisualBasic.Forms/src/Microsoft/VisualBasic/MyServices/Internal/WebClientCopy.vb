@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.IO
 Imports System.Net
 Imports System.Windows.Forms
@@ -16,10 +13,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend NotInheritable Class WebClientCopy
 
         ''' <summary>
-        ''' Creates an instance of a WebClientCopy, used to download or upload a file
+        '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
-        ''' <param name="client">The WebClient used to do the downloading or uploading</param>
-        ''' <param name="dialog">UI for indicating progress</param>
+        ''' <param name="client">The WebClient used to do the downloading or uploading.</param>
+        ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As WebClient, dialog As ProgressDialog)
 
             Debug.Assert(client IsNot Nothing, "No WebClient")
@@ -30,10 +27,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Downloads a file
+        '''  Downloads a file.
         ''' </summary>
-        ''' <param name="address">The source for the file</param>
-        ''' <param name="destinationFileName">The path and name where the file is saved</param>
+        ''' <param name="address">The source for the file.</param>
+        ''' <param name="destinationFileName">The path and name where the file is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
@@ -57,10 +54,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Uploads a file
+        '''  Uploads a file
         ''' </summary>
-        ''' <param name="sourceFileName">The name and path of the source file</param>
-        ''' <param name="address">The address to which the file is uploaded</param>
+        ''' <param name="sourceFileName">The name and path of the source file.</param>
+        ''' <param name="address">The address to which the file is uploaded.</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
@@ -85,7 +82,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Notifies the progress dialog to increment the progress bar
         ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read</param>
+        ''' <param name="progressPercentage">The percentage of bytes read.</param>
         Private Sub InvokeIncrement(progressPercentage As Integer)
             ' Don't invoke unless dialog is up and running
             If m_ProgressDialog IsNot Nothing Then
@@ -121,7 +118,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles the WebClient's DownloadFileCompleted event
+        '''  Handles the <see cref="WebClient.DownloadFileCompleted"/> event.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -142,7 +139,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles event WebClient fires whenever progress of download changes
+        '''  Handles event WebClient fires whenever progress of download changes
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -151,7 +148,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles the WebClient's UploadFileCompleted event
+        '''  Handles the WebClient's UploadFileCompleted event
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -172,7 +169,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles event WebClient fires whenever progress of upload changes
+        '''  Handles event WebClient fires whenever progress of upload changes
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -182,21 +179,21 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' If the user clicks cancel on the Progress dialog, we need to cancel
-        ''' the current async file transfer operation
+        '''  If the user clicks cancel on the Progress dialog, we need to cancel
+        '''  the current async file transfer operation
         ''' </summary>
         ''' <remarks>
-        ''' Note that we don't want to close the progress dialog here.  Wait until
-        ''' the actual file transfer cancel event comes through and do it there.
+        '''  Note that we don't want to close the progress dialog here. Wait until
+        '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            m_WebClient.CancelAsync() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            m_WebClient.CancelAsync() 'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
         End Sub
 
         ' The WebClient performs the downloading or uploading operations for us
         Private WithEvents m_WebClient As WebClient
 
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
         Private WithEvents m_ProgressDialog As ProgressDialog
 
         'Keeps track of the error that happened during upload/download so we can throw it once we can guarantee we are back on the main thread

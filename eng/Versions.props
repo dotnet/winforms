@@ -43,7 +43,7 @@
     <MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24323.2</MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24323.2</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>9.0.0-preview.6.24323.2</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
-    <!-- 
+    <!--
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
     <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>

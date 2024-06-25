@@ -1,16 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Runtime.InteropServices
 Imports System.Text
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComVisible(False)>
-    Friend NotInheritable Class NativeMethods
+    Friend Module NativeMethods
 
         <PreserveSig()>
         Friend Declare Auto Function _
@@ -29,7 +26,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
 #Disable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
         <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
-        Friend Shared Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
+        Friend Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
 #Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
         End Function
 
@@ -69,7 +66,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
              PreserveSig:=True,
              BestFitMapping:=False,
              ThrowOnUnmappableChar:=True)>
-        Friend Shared Sub GetStartupInfo(<[In](), Out()> lpStartupInfo As NativeTypes.STARTUPINFO)
+        Friend Sub GetStartupInfo(<[In](), Out()> lpStartupInfo As NativeTypes.STARTUPINFO)
         End Sub
 
         <DllImport(
@@ -78,7 +75,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
              PreserveSig:=True,
              BestFitMapping:=False,
              ThrowOnUnmappableChar:=True)>
-        Friend Shared Function CreateProcess(
+        Friend Function CreateProcess(
             lpApplicationName As String,
             lpCommandLine As String,
             lpProcessAttributes As NativeTypes.SECURITY_ATTRIBUTES,
@@ -91,10 +88,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
             lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
         End Function
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
         ''' <summary>
-        ''' Contains information about the current state of both physical and virtual memory, including extended memory.
+        '''  Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
@@ -125,23 +122,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
         End Structure
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
-        ''' Obtains information about the system's current usage of both physical and virtual memory.
+        '''  Obtains information about the system's current usage of both physical and virtual memory.
         ''' </summary>
         ''' <param name="lpBuffer">Pointer to a MEMORYSTATUSEX structure.</param>
         ''' <returns>True if the function succeeds. Otherwise, False.</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
-        Friend Shared Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
-        ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
-        ''' </summary>
-        Private Sub New()
-        End Sub
-
-    End Class
-
+    End Module
 End Namespace
