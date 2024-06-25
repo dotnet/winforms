@@ -439,6 +439,14 @@ public partial class ClipboardTests
     }
 
     [WinFormsFact]
+    public void Clipboard_SetText_InvokeString_GetReturnsExpected()
+    {
+        Clipboard.SetText("text");
+        Assert.Equal("text", Clipboard.GetText());
+        Assert.True(Clipboard.ContainsText());
+    }
+
+    [WinFormsFact]
     public void Clipboard_SetImage_NullImage_ThrowsArgumentNullException()
     {
         Action action = () => Clipboard.SetImage(null!);
