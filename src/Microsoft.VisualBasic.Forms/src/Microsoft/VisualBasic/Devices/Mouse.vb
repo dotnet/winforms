@@ -1,29 +1,27 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' A wrapper object that acts as a discovery mechanism for finding 
-    ''' information about the mouse on your computer such as whether the mouse
-    ''' exists, the number of buttons, WheelScrolls details.
+    '''  A wrapper object that acts as a discovery mechanism for finding
+    '''  information about the mouse on your computer such as whether the mouse
+    '''  exists, the number of buttons, WheelScrolls details.
     '''
-    ''' This class is a Singleton Class. See Common.Computer for details.
+    '''  This class is a Singleton Class. See Common.Computer for details.
     ''' </summary>
     Public Class Mouse
 
         ''' <summary>
-        ''' Gets a value indicating whether the functions of the left and right
-        ''' mouses buttons have been swapped.
+        '''  Gets a value indicating whether the functions of the left and right
+        '''  mouses buttons have been swapped.
         ''' </summary>
         ''' <value>
-        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise. 
+        '''  true if the functions of the left and right mouse buttons are swapped. false otherwise.
         ''' </value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
@@ -31,13 +29,13 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets a value indicating whether a mouse with a mouse wheel is installed
+        '''  Gets a value indicating whether a mouse with a mouse wheel is installed
         ''' </summary>
         ''' <value>true if a mouse with a mouse wheel is installed, false otherwise.</value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
@@ -46,13 +44,13 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets the number of lines to scroll when the mouse wheel is rotated.
+        '''  Gets the number of lines to scroll when the mouse wheel is rotated.
         ''' </summary>
         ''' <value>The number of lines to scroll.</value>
         ''' <exception cref="InvalidOperationException">if no mouse is installed or no wheels exists.</exception>
@@ -61,7 +59,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If WheelExists Then
                     Return SystemInformation.MouseWheelScrollLines
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
                 End If
             End Get
         End Property

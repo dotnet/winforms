@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
@@ -18,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Inherits Form
 
         ''' <summary>
-        ''' Event raised when user cancels the dialog or closes it before the operation is completed
+        '''  Event raised when user cancels the dialog or closes it before the operation is completed.
         ''' </summary>
         Public Event UserHitCancel()
 
@@ -31,9 +28,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Increments the progress bar by the passed in amount
+        '''  Increments the progress bar by the passed in amount.
         ''' </summary>
-        ''' <param name="incrementAmount">The amount to increment the bar</param>
+        ''' <param name="incrementAmount">The amount to increment the bar.</param>
         ''' <remarks>
         '''  This method should never be called directly. It should be called with
         '''  an InvokeBegin by a secondary thread.
@@ -43,7 +40,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Closes the Progress Dialog
+        '''  Closes the Progress Dialog.
         ''' </summary>
         ''' <remarks>
         '''  This method should never be called directly. It should be called with
@@ -57,7 +54,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Displays the progress dialog modally
         ''' </summary>
-        ''' <remarks>This method should be called on the main thread after the worker thread has been started</remarks>
+        ''' <remarks>This method should be called on the main thread after the worker thread has been started.</remarks>
         Public Sub ShowProgressDialog()
             Try
                 If Not _closing Then
@@ -69,10 +66,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Sets the text of the label (usually something like Copying x to y)
+        '''  Sets the text of the label (usually something like Copying x to y).
         ''' </summary>
-        ''' <value>The value to set the label to</value>
-        ''' <remarks>This should only be called on the main thread before showing the dialog</remarks>
+        ''' <value>The value to set the label to.</value>
+        ''' <remarks>This should only be called on the main thread before showing the dialog.</remarks>
         Public Property LabelText() As String
             Get
                 Return LabelInfo.Text
@@ -83,10 +80,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Property
 
         ''' <summary>
-        ''' Used to set or get the semaphore which signals when the dialog
-        ''' is in a closable state.
+        '''  Used to set or get the semaphore which signals when the dialog
+        '''  is in a closable state.
         ''' </summary>
-        ''' <value>The ManualResetEvent</value>
+        ''' <value>The ManualResetEvent.</value>
         Public ReadOnly Property FormClosableSemaphore() As ManualResetEvent
             Get
                 Return _formClosableSemaphore
@@ -94,21 +91,21 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Property
 
         ''' <summary>
-        '''  Inform the dialog that CloseDialog will soon be called
+        '''  Inform the dialog that CloseDialog will soon be called.
         ''' </summary>
         ''' <remarks>
         '''  This method should be called directly from the secondary thread. We want
         '''  to indicate we're closing as soon as we can so w don't show the dialog when we
-        '''  don't need to (when the work is finished before we can show the dialog)
+        '''  don't need to (when the work is finished before we can show the dialog).
         '''</remarks>
         Public Sub IndicateClosing()
             _closing = True
         End Sub
 
         ''' <summary>
-        '''  Indicated if the user has clicked the cancel button
+        '''  Indicated if the user has clicked the cancel button.
         ''' </summary>
-        ''' <value>True if the user has canceled, otherwise False</value>
+        ''' <value>True if the user has canceled, otherwise False.</value>
         ''' <remarks>
         '''  The secondary thread checks this property directly. If it's True, the thread
         '''  breaks out of its loop.
@@ -120,7 +117,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Property
 
         ''' <summary>
-        ''' This enables a dialog with a close button, sizable borders, and no icon
+        '''  This enables a dialog with a close button, sizable borders, and no icon
         ''' </summary>
         Protected Overrides ReadOnly Property CreateParams() As CreateParams
             Get
@@ -133,8 +130,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Handles user clicking Cancel. Sets a flag read by secondary thread.
         ''' </summary>
-        ''' <param name="sender">The cancel button</param>
-        ''' <param name="e">Arguments</param>
+        ''' <param name="sender">The cancel button.</param>
+        ''' <param name="e">Arguments.</param>
         Private Sub ButtonCloseDialog_Click(sender As Object, e As EventArgs) Handles ButtonCloseDialog.Click
             ButtonCloseDialog.Enabled = False
             _canceled = True
@@ -142,13 +139,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Indicates the form is closing
+        '''  Indicates the form is closing
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         ''' <remarks>
-        ''' We listen for this event since we want to make closing the dialog before it's
-        ''' finished behave the same as a cancel
+        '''  We listen for this event since we want to make closing the dialog before it's
+        '''  finished behave the same as a cancel.
         '''</remarks>
         Private Sub ProgressDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
             If e.CloseReason = CloseReason.UserClosing And Not _closeDialogInvoked Then
@@ -166,21 +163,21 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Ensure the label resizes with the dialog
+        '''  Ensure the label resizes with the dialog.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         ''' <remarks>
-        ''' Since the label has AutoSize set to True we have to set the maximum size so the label
-        ''' will grow down rather than off the dialog. As the size of the dialog changes, the maximum
-        ''' size needs to be adjusted.
+        '''  Since the label has AutoSize set to True we have to set the maximum size so the label
+        '''  will grow down rather than off the dialog. As the size of the dialog changes, the maximum
+        '''  size needs to be adjusted.
         ''' </remarks>
         Private Sub ProgressDialog_Resize(sender As Object, e As EventArgs) Handles Me.Resize
             LabelInfo.MaximumSize = New Size(ClientSize.Width - BORDER_SIZE, 0)
         End Sub
 
         ''' <summary>
-        '''  Exits the monitor when we're activated
+        '''  Exits the monitor when we're activated.
         ''' </summary>
         ''' <param name="sender">Dialog</param>
         ''' <param name="e">Arguments</param>
@@ -208,8 +205,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' Border area for label (10 pixels on each side)
         Private Const BORDER_SIZE As Integer = 20
 
-#Region " Windows Form Designer generated code "
-
         'Form overrides dispose to clean up the component list.
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
@@ -221,6 +216,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
             MyBase.Dispose(disposing)
         End Sub
+
         Friend WithEvents LabelInfo As Label
         Friend WithEvents ProgressBarWork As ProgressBar
         Friend WithEvents ButtonCloseDialog As Button
@@ -233,7 +229,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         'Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
             LabelInfo = New Label
             ProgressBarWork = New ProgressBar
             ButtonCloseDialog = New Button
@@ -270,8 +266,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             PerformLayout()
 
         End Sub
-
-#End Region
 
     End Class
 End Namespace
