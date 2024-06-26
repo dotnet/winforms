@@ -4068,6 +4068,62 @@ public partial class PropertyGridTests
         public string Property1 { get; set; }
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_PropertyTabChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        PropertyTabChangedEventArgs eventArgs = null;
+
+        propertyGrid.PropertyTabChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+        };
+
+        var tab1 = new TestPropertyTab();
+        var tab2 = new TestPropertyTab();
+        propertyGrid.PropertyTabs.AddTabType(tab2.GetType());
+        propertyGrid.PropertyTabs.AddTabType(tab1.GetType());
+
+        var oldTab = tab2;
+        var newTab = tab1;
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnPropertyTabChanged(new PropertyTabChangedEventArgs(oldTab, newTab));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        eventArgs.OldTab.Should().Be(oldTab);
+        eventArgs.NewTab.Should().Be(newTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedGridItemChanged_TriggeredCorrectly()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        SelectedGridItemChangedEventArgs eventArgs = null;
+        object actualSender = null;
+
+        propertyGrid.SelectedGridItemChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+            actualSender = sender;
+        };
+
+        var gridItemMock = new Mock<GridItem>();
+        var gridItem = gridItemMock.Object;
+
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(null, gridItem));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        actualSender.Should().Be(propertyGrid);
+        eventArgs?.NewSelection.Should().Be(gridItem);
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
