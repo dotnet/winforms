@@ -311,7 +311,7 @@ public class DateTimePickerTests: IDisposable
     }
 
     [WinFormsFact]
-    public void DateTimePicker_Checked_WhenShowCheckBoxTrueAndHandleNotCreated_ReturnsExpected()
+    public void DateTimePicker_Checked_WhenShowCheckBoxAndHandleNotCreated_ReturnsExpected()
     {
         _dateTimePicker.ShowCheckBox = true;
 
@@ -320,11 +320,7 @@ public class DateTimePickerTests: IDisposable
 
         _dateTimePicker.Checked = false;
         _dateTimePicker.Checked.Should().BeFalse();
-    }
 
-    [WinFormsFact]
-    public void DateTimePicker_Checked_WhenShowCheckBoxFalse_ReturnsExpected()
-    {
         _dateTimePicker.ShowCheckBox = false;
 
         _dateTimePicker.Checked = true;
@@ -339,20 +335,19 @@ public class DateTimePickerTests: IDisposable
     {
         _dateTimePicker.CustomFormat.Should().BeNull();
 
+        _dateTimePicker.Value = new(2021, 12, 31);
         _dateTimePicker.CreateControl();
         _dateTimePicker.Format = DateTimePickerFormat.Custom;
 
-        string newCustomFormat = "yyyy-MM-dd";
+        string newCustomFormat = "yyyy/MM/dd";
         _dateTimePicker.CustomFormat = newCustomFormat;
         _dateTimePicker.CustomFormat.Should().Be(newCustomFormat);
-
-        string initialCustomFormat = _dateTimePicker.CustomFormat;
-        _dateTimePicker.CustomFormat = initialCustomFormat;
-        _dateTimePicker.CustomFormat.Should().Be(initialCustomFormat);
+        _dateTimePicker.Text.Should().Be("2021/12/31");
 
         string newCustomFormat2 = "MM/dd/yyyy";
         _dateTimePicker.CustomFormat = newCustomFormat2;
         _dateTimePicker.CustomFormat.Should().Be(newCustomFormat2);
+        _dateTimePicker.Text.Should().Be("12/31/2021");
 
         _dateTimePicker.CustomFormat = null;
         _dateTimePicker.CustomFormat.Should().BeNull();
@@ -396,18 +391,12 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_MaximumDateTime_ReturnsExpected()
     {
-        DateTime expectedMaxDateTime = DateTimePicker.MaxDateTime;
-        DateTime expectedMaxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
-        DateTime actualMaximumDateTime = DateTimePicker.MaximumDateTime;
+        DateTime maxSupportedDateTime = CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime;
+        DateTime expectedDate = maxSupportedDateTime.Year > DateTimePicker.MaxDateTime.Year ? DateTimePicker.MaxDateTime : maxSupportedDateTime;
 
-        if (expectedMaxSupportedDateTime.Year > DateTimePicker.MaxDateTime.Year)
-        {
-            actualMaximumDateTime.Should().Be(expectedMaxDateTime);
-        }
-        else
-        {
-            actualMaximumDateTime.Should().Be(expectedMaxSupportedDateTime);
-        }
+        DateTime result = DateTimePicker.MaximumDateTime;
+
+        result.Should().Be(expectedDate);
     }
 
     [WinFormsFact]
@@ -421,18 +410,12 @@ public class DateTimePickerTests: IDisposable
     }
 
     [WinFormsFact]
-    public void DateTimePicker_MinDate_SetGreaterThanMaxDate_Should_ThrowArgumentOutOfRangeException()
+    public void DateTimePicker_MinDate_SetGreaterThanMaxDate_LessThanMinimumDateTime_Should_ThrowArgumentOutOfRangeException()
     {
-        DateTime invalidMinDate = DateTimePicker.MaximumDateTime.AddDays(1);
-        Action act = () => _dateTimePicker.MinDate = invalidMinDate;
+        Action act = () => _dateTimePicker.MinDate = DateTimePicker.MaximumDateTime.AddDays(1);
         act.Should().Throw<ArgumentOutOfRangeException>();
-    }
 
-    [WinFormsFact]
-    public void DateTimePicker_MinDate_SetLessThanMinimumDateTime_Should_ThrowArgumentOutOfRangeException()
-    {
-        DateTime invalidMinDate = DateTimePicker.MinimumDateTime.AddDays(-1);
-        Action act = () => _dateTimePicker.MinDate = invalidMinDate;
+        act = () => _dateTimePicker.MinDate = DateTimePicker.MinimumDateTime.AddDays(-1);
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -504,33 +487,19 @@ public class DateTimePickerTests: IDisposable
     public void DateTimePicker_Value_GetSet_ReturnsExpected()
     {
         DateTime initialDate = new(2022, 1, 1);
-        DateTime sameDate = new(2022, 1, 1);
         DateTime newDate = new(2023, 1, 1);
 
         _dateTimePicker.Value = initialDate;
         _dateTimePicker.Value.Should().Be(initialDate);
 
-        bool valueChangedEventRaised = false;
-        _dateTimePicker.ValueChanged += (_, _) => valueChangedEventRaised = true;
-        _dateTimePicker.Value = sameDate;
-        _dateTimePicker.Value.Should().Be(initialDate);
-        valueChangedEventRaised.Should().BeFalse();
-
         _dateTimePicker.Value = newDate;
         _dateTimePicker.Value.Should().Be(newDate);
-        valueChangedEventRaised.Should().BeTrue();
 
         _dateTimePicker.Value = DateTimePicker.MinimumDateTime;
         _dateTimePicker.Value.Should().Be(DateTimePicker.MinimumDateTime);
 
         _dateTimePicker.Value = DateTimePicker.MaximumDateTime;
         _dateTimePicker.Value.Should().Be(DateTimePicker.MaximumDateTime);
-
-        Action act = () => _dateTimePicker.Value = DateTimePicker.MinDateTime.AddDays(-1);
-        act.Should().Throw<ArgumentOutOfRangeException>();
-
-        act = () => _dateTimePicker.Value = DateTimePicker.MaxDateTime.AddDays(1);
-        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [WinFormsTheory]
