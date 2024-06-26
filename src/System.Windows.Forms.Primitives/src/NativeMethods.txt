@@ -603,6 +603,7 @@ SetActiveWindow
 SetBkColor
 SetBkMode
 SetCapture
+SetCaretPos
 SetCursor
 SetCursorPos
 SetFocus

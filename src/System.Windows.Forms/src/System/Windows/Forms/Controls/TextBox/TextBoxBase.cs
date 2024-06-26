@@ -2046,27 +2046,6 @@ public abstract partial class TextBoxBase : Control
         // Get the bounds of the Window
         PInvoke.GetWindowRect(hwnd, out RECT rect);
 
-        // Get the current ViewPort definition for the DC
-        PInvokeCore.GetViewportOrgEx(hDC, out Point viewportOrg);
-
-        // If the ViewPort is not at (0, 0) then we bail, since we don't want to mess with existing settings.
-        if (viewportOrg.X != 0 || viewportOrg.Y != 0)
-        {
-            return;
-        }
-
-        // Get the clipping region of the DC
-        PInvoke.GetClipBox(hDC, out RECT clipRect);
-
-        clipRect.top += Padding.Top;
-        clipRect.bottom += Padding.Top;
-
-        // Move the whole clipping region down by the Padding.Top value
-        PInvokeCore.OffsetClipRgn(hDC, 0, Padding.Top);
-
-        // Translate the origin of the DC by the bottom padding
-        PInvoke.SetViewportOrgEx(hDC, 0, Padding.Bottom);
-
         // We do that only one time per instance,
         // but we need to reset this, when the handle is recreated.
         if (!_triggerNewClientSizeRequest)
@@ -2089,57 +2068,90 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private void WmNcPaint(ref Message m)
+    {
+        HDC hdc = PInvokeCore.GetDCEx(
+            (HWND)Handle,
+            (HRGN)(nint)m.WParamInternal,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_INTERSECTRGN);
+
+        if (hdc != IntPtr.Zero)
+        {
+            DrawRoundedRectangle(hdc);
+
+            // Get the clipping region of the DC
+            PInvoke.GetClipBox(hdc, out RECT clipRect);
+
+            PaintEventArgs? pEvent = null;
+
+            pEvent = new PaintEventArgs(
+                hdc,
+                clipRect,
+                default);
+
+            try
+            {
+                OnNonClientPaint(pEvent);
+            }
+            catch (Exception)
+            {
+                // Experimental. We swallow the exception to avoid the app to crash.
+            }
+            finally
+            {
+                pEvent.Dispose();
+                PInvoke.ReleaseDC((HWND)Handle, hdc);
+            }
+        }
+    }
+
+    protected virtual void OnNonClientPaint(PaintEventArgs pEvent)
+    {
+    }
+
+    private void DrawRoundedRectangle(HDC hdc)
+    {
+        int borderWidth = 2; // Width of the border
+        int radius = 15; // Radius of the rounded corners
+
+        PInvoke.GetWindowRect((HWND)Handle, out RECT rect);
+
+        HBRUSH hBrush = PInvoke.CreateSolidBrush(ColorTranslator.ToWin32(Color.Red));
+
+        HRGN hRgn = PInvokeCore.CreateRoundRectRgn(
+            borderWidth,
+            borderWidth,
+            rect.right - rect.left - borderWidth,
+            rect.bottom - rect.top - borderWidth,
+            radius,
+            radius);
+
+        PInvoke.FillRgn(hdc, ref hRgn, hBrush);
+
+        PInvokeCore.DeleteObject(hRgn);
+        PInvokeCore.DeleteObject(hBrush);
+    }
+
     private void WmNcCalcSize(ref Message m)
     {
-        if (m.Msg == PInvoke.WM_NCCALCSIZE)
+        // Make sure _we_ actually kicked this off.
+        if (_triggerNewClientSizeRequest)
         {
-            // Make sure _we_ actually kicked this off.
-            if (_triggerNewClientSizeRequest)
+            bool wParam = m.WParamInternal != 0;
+
+            if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
             {
-                bool wParam = m.WParamInternal != 0;
+                ncCalcSizeParams.rgrc._0.top += Padding.Top;
+                ncCalcSizeParams.rgrc._0.bottom -= Padding.Bottom;
+                ncCalcSizeParams.rgrc._0.left += Padding.Left;
+                ncCalcSizeParams.rgrc._0.right -= Padding.Right;
 
-                if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
-                {
-                    ncCalcSizeParams.rgrc._0.top += Padding.Top;
-                    ncCalcSizeParams.rgrc._0.bottom -= Padding.Bottom;
-                    ncCalcSizeParams.rgrc._0.left += Padding.Left;
-                    ncCalcSizeParams.rgrc._0.right -= Padding.Right;
-
-                    // Write the modified structure back to lParam
-                    Marshal.StructureToPtr(ncCalcSizeParams, m.LParamInternal, false);
-
-                    m.ResultInternal = (LRESULT)0;
-                    return;
-                }
-            }
-
-            if (m.GetLParam(typeof(RECT)) is RECT rect)
-            {
-                // Adjust the size of the client area. Writing this structure back
-                // will cause the client area to be resized.
-                rect.left += Padding.Left;
-                rect.top += Padding.Top;
-                rect.right -= Padding.Right;
-                rect.bottom -= Padding.Bottom;
+                // Write the modified structure back to lParam
+                Marshal.StructureToPtr(ncCalcSizeParams, m.LParamInternal, false);
 
                 m.ResultInternal = (LRESULT)0;
                 return;
             }
-        }
-
-        else if (m.Msg == PInvoke.WM_PAINT)
-        {
-            //// Get the device context
-            // IntPtr hdc = PInvokeCore.GetDC(HWnd);
-
-            //// Offset the caret position
-            // POINT caretPos;
-            // PInvoke.GetCaretPos(out caretPos);
-            // PInvoke.SetCaretPos(caretPos.X, caretPos.Y + Padding.Top);
-
-            // PInvokeCore.ReleaseDC(m.HWnd, hdc);
-
-            // return;
         }
 
         base.WndProc(ref m);
@@ -2219,19 +2231,31 @@ public abstract partial class TextBoxBase : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvoke.WM_NCCALCSIZE:
+                WmNcCalcSize(ref m);
+                break;
+
+            case PInvoke.WM_NCPAINT:
+                WmNcPaint(ref m);
+                break;
+
             case PInvoke.WM_LBUTTONDBLCLK:
                 _doubleClickFired = true;
                 base.WndProc(ref m);
                 break;
+
             case MessageId.WM_REFLECT_COMMAND:
                 WmReflectCommand(ref m);
                 break;
+
             case PInvoke.WM_GETDLGCODE:
                 WmGetDlgCode(ref m);
                 break;
+
             case PInvoke.WM_SETFONT:
                 WmSetFont(ref m);
                 break;
+
             case PInvoke.WM_CONTEXTMENU:
                 if (ShortcutsEnabled)
                 {

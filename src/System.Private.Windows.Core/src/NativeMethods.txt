@@ -13,6 +13,7 @@ CreateDIBSection
 CreateFontIndirect
 CreateICW
 CreateRectRgn
+CreateRoundRectRgn
 DeleteDC
 DeleteObject
 DestroyIcon
