@@ -65,6 +65,8 @@ jobs:
   - powershell: Remove-Item -Recurse -ErrorAction Ignore "$env:LocalAppData\NuGet\v3-cache"
     displayName: Clear NuGet http cache (if exists)
 
+  - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
+
   # Build and rename binlog
   # The /p:Coverage argument is passed here since some build properties change to accommodate running with
   # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and

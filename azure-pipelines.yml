@@ -23,8 +23,6 @@ variables:
   
 # used for post-build phases
 - group: DotNet-Winforms-SDLValidation-Params
-- group: DotNet-Symbol-Server-Pats
-- group: DotNetBuilds storage account read tokens
 - group: AzureDevOps-Artifact-Feeds-Pats
 - name: _InternalRuntimeDownloadArgs
   value: >-
