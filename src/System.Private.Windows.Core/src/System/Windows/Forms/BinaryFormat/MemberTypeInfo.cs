@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
@@ -17,57 +17,57 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, object? Info)>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+internal readonly struct MemberTypeInfo
 {
-    private readonly IList<(BinaryType Type, object? Info)> _info;
+    internal BinaryType Type { get; init; }
+    internal object? Info { get; init; }
 
-    public MemberTypeInfo(IList<(BinaryType Type, object? Info)> info) => _info = info;
-
-    public MemberTypeInfo(params (BinaryType Type, object? Info)[] info) => _info = info;
-
-    public (BinaryType Type, object? Info) this[int index] => _info[index];
-    public int Count => _info.Count;
-
-    public static MemberTypeInfo Parse(BinaryReader reader, Count expectedCount)
+    internal MemberTypeInfo(BinaryType type, object? info)
     {
-        List<(BinaryType Type, object? Info)> info = new(expectedCount);
+        Type = type;
+        Info = info;
+    }
 
-        // Get all of the BinaryTypes
-        for (int i = 0; i < expectedCount; i++)
+    internal static MemberTypeInfo Parse(BinaryReader reader)
+    {
+        BinaryType type = (BinaryType)reader.ReadByte();
+        return new(type, GetInfo(reader, type));
+    }
+
+    [SkipLocalsInit]
+    internal static IReadOnlyList<MemberTypeInfo> Parse(BinaryReader reader, int expectedCount)
+    {
+        // Expected count is guarded by the member parser.
+        MemberTypeInfo[] info = new MemberTypeInfo[expectedCount];
+
+        using BufferScope<byte> buffer = new(stackalloc byte[64], expectedCount);
+
+        if (reader.Read(buffer.Slice(0, expectedCount)) < expectedCount)
         {
-            info.Add(((BinaryType)reader.ReadByte(), null));
+            throw new EndOfStreamException();
         }
 
         // Check for more clarifying information
-
         for (int i = 0; i < expectedCount; i++)
         {
-            BinaryType type = info[i].Type;
-            switch (type)
-            {
-                case BinaryType.Primitive:
-                case BinaryType.PrimitiveArray:
-                    info[i] = (type, (PrimitiveType)reader.ReadByte());
-                    break;
-                case BinaryType.SystemClass:
-                    info[i] = (type, reader.ReadString());
-                    break;
-                case BinaryType.Class:
-                    info[i] = (type, ClassTypeInfo.Parse(reader));
-                    break;
-                case BinaryType.String:
-                case BinaryType.ObjectArray:
-                case BinaryType.StringArray:
-                case BinaryType.Object:
-                    // Other types have no additional data.
-                    break;
-                default:
-                    throw new SerializationException("Unexpected binary type.");
-            }
+            BinaryType type = (BinaryType)buffer[i];
+            info[i] = new(type, GetInfo(reader, type));
         }
 
-        return new MemberTypeInfo(info);
+        return info;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? GetInfo(BinaryReader reader, BinaryType type) => type switch
+    {
+        BinaryType.Primitive or BinaryType.PrimitiveArray => (PrimitiveType)reader.ReadByte(),
+        BinaryType.SystemClass => reader.ReadString(),
+        BinaryType.Class => ClassTypeInfo.Parse(reader),
+        // Other types have no additional data.
+        BinaryType.String or BinaryType.ObjectArray or BinaryType.StringArray or BinaryType.Object => null,
+        _ => throw new SerializationException("Unexpected binary type."),
+    };
 
     [UnconditionalSuppressMessage(
         "Trimming",
@@ -78,7 +78,7 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
                 than any other case where the type can't be found (e.g. a missing assembly). The deserializer will fail
                 with information on the missing type that can be used to attribute to keep said type.
                 """)]
-    internal static MemberTypeInfo CreateFromClassInfoAndLibrary(BinaryFormattedObject.IParseState state, ClassInfo classInfo, Id libraryId)
+    internal static IReadOnlyList<MemberTypeInfo> CreateFromClassInfoAndLibrary(BinaryFormattedObject.IParseState state, ClassInfo classInfo, Id libraryId)
     {
         Type type = state.TypeResolver.GetType(classInfo.Name, libraryId);
 
@@ -91,8 +91,9 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         MemberInfo[] memberInfo = FormatterServices.GetSerializableMembers(type);
 #pragma warning restore SYSLIB0050
+
         IReadOnlyList<string> memberNames = classInfo.MemberNames;
-        var info = new (BinaryType Type, object? Info)[memberInfo.Length];
+        MemberTypeInfo[] info = new MemberTypeInfo[memberInfo.Length];
 
         for (int i = 0; i < memberNames.Count; i++)
         {
@@ -102,7 +103,7 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
 
             BinaryType binaryType = TypeInfo.GetBinaryType(field.FieldType);
 
-            info[i] = (binaryType, binaryType switch
+            info[i] = new(binaryType, binaryType switch
             {
                 BinaryType.PrimitiveArray => TypeInfo.GetPrimitiveArrayType(field.FieldType),
                 BinaryType.Primitive => TypeInfo.GetPrimitiveType(field.FieldType),
@@ -112,44 +113,16 @@ internal class MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, 
             });
         }
 
-        return new(info);
+        return info;
     }
 
-    public void Write(BinaryWriter writer)
+    private string DebuggerDisplay => Info switch
     {
-        foreach ((BinaryType type, _) in this)
-        {
-            writer.Write((byte)type);
-        }
-
-        foreach ((BinaryType type, object? info) in this)
-        {
-            switch (type)
-            {
-                case BinaryType.Primitive:
-                case BinaryType.PrimitiveArray:
-                    writer.Write((byte)info!);
-                    break;
-                case BinaryType.SystemClass:
-                    writer.Write((string)info!);
-                    break;
-                case BinaryType.Class:
-                    ((ClassTypeInfo)info!).Write(writer);
-                    break;
-                case BinaryType.String:
-                case BinaryType.ObjectArray:
-                case BinaryType.StringArray:
-                case BinaryType.Object:
-                    // Other types have no additional data.
-                    break;
-                default:
-                    throw new SerializationException("Unexpected binary type.");
-            }
-        }
-    }
-
-    IEnumerator<(BinaryType Type, object? Info)> IEnumerable<(BinaryType Type, object? Info)>.GetEnumerator()
-        => _info.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => _info.GetEnumerator();
+        null => Type.ToString()!,
+        Type type => type.Name,
+        PrimitiveType primitive => primitive.ToString()!,
+        ClassTypeInfo info => info.ToString()!,
+        string typeName => typeName,
+        _ => throw new InvalidOperationException()
+    };
 }

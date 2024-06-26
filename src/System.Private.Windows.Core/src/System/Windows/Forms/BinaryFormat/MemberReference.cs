@@ -24,7 +24,7 @@ internal sealed class MemberReference : Record, IRecord<MemberReference>, IBinar
     static MemberReference IBinaryFormatParseable<MemberReference>.Parse(
         BinaryFormattedObject.IParseState state) => new(state.Reader.ReadInt32());
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
         writer.Write(IdRef);

@@ -13,21 +13,28 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ArraySingleString : ArrayRecord<object?>, IRecord<ArraySingleString>, IBinaryFormatParseable<ArraySingleString>
+internal sealed partial class ArraySingleString : ArrayRecord<string?>, IRecord<ArraySingleString>, IBinaryFormatParseable<ArraySingleString>
 {
     public static RecordType RecordType => RecordType.ArraySingleString;
 
-    public ArraySingleString(Id objectId, IReadOnlyList<object?> arrayObjects)
-        : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
-    { }
+    private readonly IReadOnlyList<object?> _records;
 
-    static ArraySingleString IBinaryFormatParseable<ArraySingleString>.Parse(BinaryFormattedObject.IParseState state) =>
-        new(ArrayInfo.Parse(state.Reader, out Count length), ReadObjectArrayValues(state, length));
+    internal ArraySingleString(Id objectId, IReadOnlyList<object?> arrayObjects, IReadOnlyRecordMap recordMap)
+        : base(new ArrayInfo(objectId, arrayObjects.Count), new StringListAdapter(arrayObjects, recordMap))
+    {
+        _records = arrayObjects;
+    }
 
-    public override void Write(BinaryWriter writer)
+    public override BinaryType ElementType => BinaryType.String;
+
+    static ArraySingleString IBinaryFormatParseable<ArraySingleString>.Parse(BinaryFormattedObject.IParseState state) => new(
+        ArrayInfo.Parse(state.Reader, out Count length),
+        ReadObjectArrayValues(state, length), state.RecordMap);
+
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
-        ArrayInfo.Write(writer);
-        WriteRecords(writer, ArrayObjects, coalesceNulls: true);
+        _arrayInfo.Write(writer);
+        WriteRecords(writer, _records, coalesceNulls: true);
     }
 }

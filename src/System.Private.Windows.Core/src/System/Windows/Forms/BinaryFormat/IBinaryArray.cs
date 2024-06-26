@@ -25,7 +25,23 @@ internal interface IBinaryArray : IRecord
     IReadOnlyList<int> Lengths { get; }
 
     /// <summary>
-    ///  Array element type information.
+    ///  Additional array element type information. Varies with <see cref="ArrayRecord.ElementType"/>.
     /// </summary>
-    MemberTypeInfo TypeInfo { get; }
+    /// <remarks>
+    ///  <para>
+    ///   For <see cref="BinaryType.SystemClass"/> this will either be the <see cref="Type"/> or the
+    ///   type name string.
+    ///  </para>
+    ///  <para>
+    ///   For <see cref="BinaryType.Class"/> this will either be the <see cref="Type"/> or a tuple
+    ///   of the type name string and the library <see cref="Id"/>.
+    ///  </para>
+    ///  <para>
+    ///   For <see cref="BinaryType.PrimitiveArray"/> this will be the <see cref="PrimitiveType"/>.
+    ///  </para>
+    ///  <para>
+    ///   For all other types, this is <see langword="null"/>.
+    ///  </para>
+    /// </remarks>
+    object? ElementTypeInfo { get; }
 }

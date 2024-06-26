@@ -52,7 +52,7 @@ internal sealed class MemberPrimitiveTyped :
             ReadPrimitiveType(state.Reader, primitiveType));
     }
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
         writer.Write((byte)PrimitiveType);

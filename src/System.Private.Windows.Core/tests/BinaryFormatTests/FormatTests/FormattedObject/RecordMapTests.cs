@@ -8,11 +8,11 @@ namespace FormatTests.FormattedObject;
 
 public class RecordMapTests
 {
-    private class Record : IRecord
+    private class Record : IWritableRecord
     {
         public Id Id => 1;
 
-        void IBinaryWriteable.Write(BinaryWriter writer) { }
+        void IWritableRecord.Write(BinaryWriter writer) { }
     }
 
     [Fact]
