@@ -6,7 +6,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// <summary>
 ///  Non-generic record base interface.
 /// </summary>
-internal interface IRecord : IBinaryWriteable
+internal interface IRecord
 {
     /// <summary>
     ///  Id for the record, or null if the record has no id.

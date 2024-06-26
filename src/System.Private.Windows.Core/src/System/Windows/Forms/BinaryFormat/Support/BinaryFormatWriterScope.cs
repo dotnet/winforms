@@ -19,7 +19,7 @@ internal readonly ref struct BinaryFormatWriterScope
 
     public void Dispose()
     {
-        MessageEnd.Instance.Write(Writer);
+        MessageEnd.Write(Writer);
         Writer.Dispose();
     }
 }

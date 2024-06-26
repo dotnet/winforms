@@ -33,7 +33,7 @@ internal abstract partial class NullRecord
             case 0:
                 throw new ArgumentOutOfRangeException(nameof(nullCount));
             case 1:
-                ObjectNull.Instance.Write(writer);
+                ObjectNull.Write(writer);
                 break;
             case <= 255:
                 new ObjectNullMultiple256(nullCount).Write(writer);

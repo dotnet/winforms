@@ -42,7 +42,7 @@ public class NullRecordTests : NullRecordTests<FormattedObjectSerializer>
         RecordType recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
         ClassInfo classInfo = ClassInfo.Parse(parser.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
+        var memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
 
         recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.ObjectNull);
@@ -60,7 +60,7 @@ public class NullRecordTests : NullRecordTests<FormattedObjectSerializer>
         RecordType recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
         ClassInfo classInfo = ClassInfo.Parse(parser.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
+        var memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
 
         recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.ObjectNull);

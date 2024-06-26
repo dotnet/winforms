@@ -24,6 +24,8 @@ internal sealed class ArraySinglePrimitive<T> :
 
     public static RecordType RecordType => RecordType.ArraySinglePrimitive;
 
+    public override BinaryType ElementType => BinaryType.Primitive;
+
     public ArraySinglePrimitive(Id objectId, IReadOnlyList<T> arrayObjects)
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     {
@@ -40,10 +42,10 @@ internal sealed class ArraySinglePrimitive<T> :
         return new ArraySinglePrimitive<T>(id, state.Reader.ReadPrimitiveArray<T>(length));
     }
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
-        ArrayInfo.Write(writer);
+        _arrayInfo.Write(writer);
         writer.Write((byte)PrimitiveType);
         writer.WritePrimitives(ArrayObjects);
     }

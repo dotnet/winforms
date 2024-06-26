@@ -222,8 +222,8 @@ internal static class BinaryFormattedObjectExtensions
                 case PrimitiveType.String:
                     if (array is ArraySingleString stringArray)
                     {
-                        List<string> stringList = new(size);
-                        stringList.AddRange((IEnumerable<string>)stringArray.GetStringValues(format.RecordMap));
+                        List<string?> stringList = new(size);
+                        stringList.AddRange(stringArray);
                         list = stringList;
                         return true;
                     }
@@ -326,7 +326,7 @@ internal static class BinaryFormattedObjectExtensions
 
             if (array is ArraySingleString stringArray)
             {
-                value = stringArray.GetStringValues(format.RecordMap).ToArray();
+                value = stringArray.ToArray();
                 return true;
             }
 
@@ -493,14 +493,5 @@ internal static class BinaryFormattedObjectExtensions
         _ => record
     };
 
-    /// <summary>
-    ///  Gets strings from a <see cref="ArraySingleString"/>.
-    /// </summary>
-    public static IEnumerable<string?> GetStringValues(this ArraySingleString array, IReadOnlyRecordMap recordMap)
-        => array.ArrayObjects.Select(record =>
-            record is null ? null : recordMap.Dereference((IRecord)record) switch
-            {
-                BinaryObjectString stringRecord => stringRecord.Value,
-                _ => null
-            });
+    internal static void Write(this IWritableRecord record, BinaryWriter writer) => record.Write(writer);
 }

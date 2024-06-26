@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.IO;
 
@@ -21,5 +23,41 @@ internal static class BinaryWriterExtensions
         // we access the sole field directly via an unsafe cast.
         long dateData = Unsafe.As<DateTime, long>(ref value);
         writer.Write(dateData);
+    }
+
+    /// <summary>
+    ///  Writes <see cref="MemberTypeInfo"/>.
+    /// </summary>
+    internal static void Write(this BinaryWriter writer, IReadOnlyList<MemberTypeInfo> memberTypeInfo)
+    {
+        for (int i = 0; i < memberTypeInfo.Count; i++)
+        {
+            writer.Write((byte)memberTypeInfo[i].Type);
+        }
+
+        for (int i = 0; i < memberTypeInfo.Count; i++)
+        {
+            switch (memberTypeInfo[i].Type)
+            {
+                case BinaryType.Primitive:
+                case BinaryType.PrimitiveArray:
+                    writer.Write((byte)memberTypeInfo[i].Info!);
+                    break;
+                case BinaryType.SystemClass:
+                    writer.Write((string)memberTypeInfo[i].Info!);
+                    break;
+                case BinaryType.Class:
+                    ((ClassTypeInfo)memberTypeInfo[i].Info!).Write(writer);
+                    break;
+                case BinaryType.String:
+                case BinaryType.ObjectArray:
+                case BinaryType.StringArray:
+                case BinaryType.Object:
+                    // Other types have no additional data.
+                    break;
+                default:
+                    throw new SerializationException("Unexpected binary type.");
+            }
+        }
     }
 }

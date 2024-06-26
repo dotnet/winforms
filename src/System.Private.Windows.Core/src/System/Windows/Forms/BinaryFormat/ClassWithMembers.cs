@@ -17,7 +17,11 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
 {
     public override Id LibraryId { get; }
 
-    private ClassWithMembers(ClassInfo classInfo, Id libraryId, MemberTypeInfo memberTypeInfo, IReadOnlyList<object?> memberValues)
+    private ClassWithMembers(
+        ClassInfo classInfo,
+        Id libraryId,
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo,
+        IReadOnlyList<object?> memberValues)
         : base(classInfo, memberTypeInfo, memberValues)
     {
         LibraryId = libraryId;
@@ -30,7 +34,7 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out _);
         Id libraryId = state.Reader.ReadInt32();
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, libraryId);
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo = BinaryFormat.MemberTypeInfo.CreateFromClassInfoAndLibrary(state, classInfo, libraryId);
         return new(
             classInfo,
             libraryId,
@@ -38,7 +42,7 @@ internal sealed class ClassWithMembers : ClassRecord, IRecord<ClassWithMembers>,
             ReadObjectMemberValues(state, memberTypeInfo));
     }
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         // Really shouldn't be writing this record type. It isn't as safe as the typed variant
         // and saves very little space.

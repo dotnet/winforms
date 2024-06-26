@@ -138,7 +138,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             ClassInfo classInfo = record.ClassInfo;
             new ClassInfo(2, classInfo.Name, classInfo.MemberNames).Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
             NullRecord.Write(scope, 1);
         }
 
@@ -221,7 +221,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             scope.Writer.Write((byte)RecordType.SystemClassWithMembersAndTypes);
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             record.ClassInfo.Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
             NullRecord.Write(scope, 2);
         }
 
@@ -243,7 +243,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             scope.Writer.Write((byte)RecordType.SystemClassWithMembersAndTypes);
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             record.ClassInfo.Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
 
             scope.Writer.Write((byte)RecordType.ObjectNullMultiple);
             scope.Writer.Write(0);

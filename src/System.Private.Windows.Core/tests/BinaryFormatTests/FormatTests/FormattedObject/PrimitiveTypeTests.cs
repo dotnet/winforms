@@ -153,7 +153,7 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
         public static object ReadPrimitiveValue(BinaryReader reader, PrimitiveType type)
             => ReadPrimitiveType(reader, type);
 
-        public override void Write(BinaryWriter writer)
+        private protected override void Write(BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

@@ -23,7 +23,7 @@ internal sealed class ClassWithMembersAndTypes :
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
         Id libraryId,
-        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo,
         IReadOnlyList<object?> memberValues)
         : base(classInfo, memberTypeInfo, memberValues)
     {
@@ -33,7 +33,7 @@ internal sealed class ClassWithMembersAndTypes :
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
         Id libraryId,
-        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo,
         params object[] memberValues)
         : this(classInfo, libraryId, memberTypeInfo, (IReadOnlyList<object>)memberValues)
     {
@@ -45,7 +45,7 @@ internal sealed class ClassWithMembersAndTypes :
         BinaryFormattedObject.IParseState state)
     {
         ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(state.Reader, memberCount);
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo = BinaryFormat.MemberTypeInfo.Parse(state.Reader, memberCount);
 
         return new(
             classInfo,
@@ -54,11 +54,11 @@ internal sealed class ClassWithMembersAndTypes :
             ReadObjectMemberValues(state, memberTypeInfo));
     }
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
         ClassInfo.Write(writer);
-        MemberTypeInfo.Write(writer);
+        writer.Write(MemberTypeInfo);
         writer.Write(LibraryId);
         WriteValuesFromMemberTypeInfo(writer, MemberTypeInfo, MemberValues);
     }

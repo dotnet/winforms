@@ -9,8 +9,11 @@ namespace System.Windows.Forms.BinaryFormat;
 /// <summary>
 ///  Base record class.
 /// </summary>
-internal abstract class Record : IRecord
+internal abstract class Record : IWritableRecord
 {
+    // Prevent creating outside of the assembly.
+    private protected Record() { }
+
     Id IRecord.Id => Id;
 
     private protected virtual Id Id => Id.Null;
@@ -129,8 +132,8 @@ internal abstract class Record : IRecord
             RecordType.ArraySinglePrimitive => ReadArraySinglePrimitive(state),
             RecordType.ArraySingleObject => ReadSpecificRecord<ArraySingleObject>(state),
             RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(state),
-            RecordType.MethodCall => throw new NotSupportedException(),
-            RecordType.MethodReturn => throw new NotSupportedException(),
+            // RecordType.MethodCall => throw new NotSupportedException(),
+            // RecordType.MethodReturn => throw new NotSupportedException(),
             _ => throw new SerializationException("Invalid record type."),
         };
 
@@ -214,7 +217,7 @@ internal abstract class Record : IRecord
                 nullCount = 0;
             }
 
-            if (@object is not IRecord record || record is NullRecord)
+            if (@object is not IWritableRecord record || record is NullRecord)
             {
                 throw new ArgumentException("Invalid record.", nameof(objects));
             }
@@ -229,20 +232,18 @@ internal abstract class Record : IRecord
     }
 
     /// <summary>
-    ///  Reads an object member value of <paramref name="type"/> with optional clarifying <paramref name="typeInfo"/>.
+    ///  Reads an object member value of <paramref name="memberType"/>.
     /// </summary>
-    /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
     private protected static object ReadValue(
         BinaryFormattedObject.IParseState state,
-        BinaryType type,
-        object? typeInfo)
+        MemberTypeInfo memberType)
     {
-        if (type == BinaryType.Primitive)
+        if (memberType.Type == BinaryType.Primitive)
         {
-            return ReadPrimitiveType(state.Reader, (PrimitiveType)typeInfo!);
+            return ReadPrimitiveType(state.Reader, (PrimitiveType)memberType.Info!);
         }
 
-        if (type == BinaryType.String)
+        if (memberType.Type == BinaryType.String)
         {
             IRecord stringRecord = ReadBinaryFormatRecord(state);
 
@@ -251,7 +252,7 @@ internal abstract class Record : IRecord
                 : (object)stringRecord;
         }
 
-        return type switch
+        return memberType.Type switch
         {
             BinaryType.Object
                 or BinaryType.StringArray
@@ -259,9 +260,10 @@ internal abstract class Record : IRecord
                 or BinaryType.Class
                 or BinaryType.SystemClass
                 or BinaryType.ObjectArray => ReadBinaryFormatRecord(state),
-            _ => throw new SerializationException($"Invalid binary type {type}."),
+            _ => throw new SerializationException($"Invalid binary type {memberType.Type}."),
         };
     }
 
-    public abstract void Write(BinaryWriter writer);
+    private protected abstract void Write(BinaryWriter writer);
+    void IWritableRecord.Write(BinaryWriter writer) => Write(writer);
 }

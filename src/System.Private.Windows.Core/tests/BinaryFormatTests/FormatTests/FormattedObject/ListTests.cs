@@ -19,7 +19,7 @@ public class ListTests : SerializationTest<FormattedObjectSerializer>
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
         systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
-        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+        systemClass.MemberTypeInfo[0].Should().Be(new MemberTypeInfo(BinaryType.ObjectArray, null));
 
         format[2].Should().BeOfType<ArraySingleObject>();
     }
@@ -37,7 +37,7 @@ public class ListTests : SerializationTest<FormattedObjectSerializer>
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
         systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
-        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+        systemClass.MemberTypeInfo[0].Should().Be(new MemberTypeInfo(BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
         MemberPrimitiveTyped primitve = (MemberPrimitiveTyped)array[0]!;
@@ -56,7 +56,7 @@ public class ListTests : SerializationTest<FormattedObjectSerializer>
 
         systemClass.Name.Should().Be(typeof(ArrayList).FullName);
         systemClass.MemberNames.Should().BeEquivalentTo(["_items", "_size", "_version"]);
-        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+        systemClass.MemberTypeInfo[0].Should().Be(new MemberTypeInfo(BinaryType.ObjectArray, null));
 
         ArraySingleObject array = (ArraySingleObject)format[2];
         BinaryObjectString binaryString = (BinaryObjectString)array[0]!;
@@ -141,9 +141,9 @@ public class ListTests : SerializationTest<FormattedObjectSerializer>
             "_version"
         ]);
 
-        classInfo.MemberTypeInfo[0].Should().Be((BinaryType.PrimitiveArray, PrimitiveType.Int32));
-        classInfo.MemberTypeInfo[1].Should().Be((BinaryType.Primitive, PrimitiveType.Int32));
-        classInfo.MemberTypeInfo[2].Should().Be((BinaryType.Primitive, PrimitiveType.Int32));
+        classInfo.MemberTypeInfo[0].Should().Be(new MemberTypeInfo(BinaryType.PrimitiveArray, PrimitiveType.Int32));
+        classInfo.MemberTypeInfo[1].Should().Be(new MemberTypeInfo(BinaryType.Primitive, PrimitiveType.Int32));
+        classInfo.MemberTypeInfo[2].Should().Be(new MemberTypeInfo(BinaryType.Primitive, PrimitiveType.Int32));
         classInfo["_items"].Should().BeOfType<MemberReference>();
         classInfo["_size"].Should().Be(0);
         classInfo["_version"].Should().Be(0);
@@ -158,7 +158,7 @@ public class ListTests : SerializationTest<FormattedObjectSerializer>
         BinaryFormattedObject format = new(Serialize(new List<string>()));
         SystemClassWithMembersAndTypes classInfo = (SystemClassWithMembersAndTypes)format[1];
         classInfo.ClassInfo.Name.Should().StartWith("System.Collections.Generic.List`1[[System.String,");
-        classInfo.MemberTypeInfo[0].Should().Be((BinaryType.StringArray, null));
+        classInfo.MemberTypeInfo[0].Should().Be(new MemberTypeInfo(BinaryType.StringArray, null));
         classInfo["_items"].Should().BeOfType<MemberReference>();
 
         ArraySingleString array = (ArraySingleString)format[2];

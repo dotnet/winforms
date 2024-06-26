@@ -20,17 +20,17 @@ public class MemberTypeInfoTests
     public void MemberTypeInfo_ReadHashtable()
     {
         using BinaryReader reader = new(new MemoryStream(s_hashtableMemberInfo));
-        MemberTypeInfo info = MemberTypeInfo.Parse(reader, 7);
+        var info = MemberTypeInfo.Parse(reader, 7);
 
-        info.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
+        info.Should().BeEquivalentTo(new MemberTypeInfo[]
         {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.SystemClass, "System.Collections.IComparer"),
-            (BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.ObjectArray, null),
-            (BinaryType.ObjectArray, null)
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.SystemClass, "System.Collections.IComparer"),
+            new(BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.ObjectArray, null),
+            new(BinaryType.ObjectArray, null)
         });
     }
 
@@ -38,24 +38,24 @@ public class MemberTypeInfoTests
     public void MemberTypeInfo_HashtableRoundTrip()
     {
         using BinaryReader reader = new(new MemoryStream(s_hashtableMemberInfo));
-        MemberTypeInfo info = MemberTypeInfo.Parse(reader, 7);
+        var info = MemberTypeInfo.Parse(reader, 7);
 
         MemoryStream stream = new();
         BinaryWriter writer = new(stream);
-        info.Write(writer);
+        writer.Write(info);
         stream.Position = 0;
 
         using BinaryReader reader2 = new(stream);
         info = MemberTypeInfo.Parse(reader2, 7);
-        info.Should().BeEquivalentTo(new (BinaryType Type, object? Info)[]
+        info.Should().BeEquivalentTo(new MemberTypeInfo[]
         {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.SystemClass, "System.Collections.IComparer"),
-            (BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.ObjectArray, null),
-            (BinaryType.ObjectArray, null)
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.SystemClass, "System.Collections.IComparer"),
+            new(BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.ObjectArray, null),
+            new(BinaryType.ObjectArray, null)
         });
     }
 
