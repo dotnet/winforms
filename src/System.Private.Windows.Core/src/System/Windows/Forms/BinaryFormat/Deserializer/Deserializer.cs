@@ -63,7 +63,6 @@ internal sealed partial class Deserializer : IDeserializer
     private readonly Dictionary<Type, ISerializationSurrogate?>? _surrogates;
 
     // Keeping a separate stack for ids for fast infinite loop checks.
-    private readonly Stack<int> _parseStack = [];
     private readonly Stack<ObjectRecordDeserializer> _parserStack = [];
 
     /// <inheritdoc cref="IDeserializer.IncompleteObjects"/>
@@ -167,14 +166,10 @@ internal sealed partial class Deserializer : IDeserializer
             return;
         }
 
-        _parseStack.Push(rootId);
         _parserStack.Push(parser);
 
         while (_parserStack.TryPop(out ObjectRecordDeserializer? currentParser))
         {
-            int currentId = _parseStack.Pop();
-            Debug.Assert(currentId == currentParser.ObjectRecord.ObjectId);
-
             Id requiredId;
             while (!(requiredId = currentParser.Continue()).IsNull)
             {
@@ -184,20 +179,10 @@ internal sealed partial class Deserializer : IDeserializer
 
                 if (requiredObject is ObjectRecordDeserializer requiredParser)
                 {
-                    // The required object is not complete.
-
-                    if (_parseStack.Contains(requiredId))
-                    {
-                        // All objects should be available before they're asked for a second time.
-                        throw new SerializationException("Unexpected parser cycle.");
-                    }
-
                     // Push our current parser.
-                    _parseStack.Push(currentId);
                     _parserStack.Push(currentParser);
 
                     // Push the required parser so we can complete it.
-                    _parseStack.Push(requiredId);
                     _parserStack.Push(requiredParser);
 
                     break;
@@ -225,7 +210,7 @@ internal sealed partial class Deserializer : IDeserializer
             {
                 Array? values = arrayRecord switch
                 {
-                    ArraySingleString stringArray => stringArray.GetStringValues(_recordMap).ToArray(),
+                    ArraySingleString stringArray => stringArray.ToArray(),
                     IPrimitiveTypeRecord primitiveArray => primitiveArray.GetPrimitiveArray(),
                     _ => null
                 };
@@ -238,7 +223,11 @@ internal sealed partial class Deserializer : IDeserializer
             }
 
             // Not a simple case, need to do a full deserialization of the record.
-            _incompleteObjects.Add(id);
+            if (!_incompleteObjects.Add(id))
+            {
+                // All objects should be available before they're asked for a second time.
+                throw new SerializationException("Unexpected parser cycle.");
+            }
 
             var deserializer = ObjectRecordDeserializer.Create(id, record, this);
 

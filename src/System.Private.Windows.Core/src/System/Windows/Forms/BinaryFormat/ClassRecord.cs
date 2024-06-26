@@ -20,7 +20,7 @@ internal abstract class ClassRecord : ObjectRecord
 {
     internal ClassInfo ClassInfo { get; }
     public IReadOnlyList<object?> MemberValues { get; }
-    public MemberTypeInfo MemberTypeInfo { get; }
+    internal IReadOnlyList<MemberTypeInfo> MemberTypeInfo { get; }
 
     public string Name => ClassInfo.Name;
     public override Id ObjectId => ClassInfo.ObjectId;
@@ -45,7 +45,10 @@ internal abstract class ClassRecord : ObjectRecord
         }
     }
 
-    private protected ClassRecord(ClassInfo classInfo, MemberTypeInfo memberTypeInfo, IReadOnlyList<object?> memberValues)
+    private protected ClassRecord(
+        ClassInfo classInfo,
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo,
+        IReadOnlyList<object?> memberValues)
     {
         ClassInfo = classInfo;
         MemberValues = memberValues;
@@ -57,7 +60,7 @@ internal abstract class ClassRecord : ObjectRecord
     /// </summary>
     private protected static IReadOnlyList<object?> ReadObjectMemberValues(
         BinaryFormattedObject.IParseState state,
-        MemberTypeInfo memberTypeInfo)
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo)
     {
         int count = memberTypeInfo.Count;
         if (count == 0)
@@ -66,9 +69,9 @@ internal abstract class ClassRecord : ObjectRecord
         }
 
         ArrayBuilder<object?> memberValues = new(count);
-        foreach ((BinaryType type, object? info) in memberTypeInfo)
+        foreach (MemberTypeInfo info in memberTypeInfo)
         {
-            object value = ReadValue(state, type, info);
+            object value = ReadValue(state, info);
             if (value is not ObjectNull nullValue)
             {
                 memberValues.Add(value);
@@ -91,18 +94,17 @@ internal abstract class ClassRecord : ObjectRecord
     /// </summary>
     private protected static void WriteValuesFromMemberTypeInfo(
         BinaryWriter writer,
-        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<MemberTypeInfo> memberTypeInfo,
         IReadOnlyList<object?> memberValues)
     {
         for (int i = 0; i < memberTypeInfo.Count; i++)
         {
-            (BinaryType type, object? info) = memberTypeInfo[i];
             object? memberValue = memberValues[i];
 
-            switch (type)
+            switch (memberTypeInfo[i].Type)
             {
                 case BinaryType.Primitive:
-                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValue!);
+                    WritePrimitiveType(writer, (PrimitiveType)memberTypeInfo[i].Info!, memberValue!);
                     break;
                 case BinaryType.String:
                 case BinaryType.Object:
@@ -111,7 +113,7 @@ internal abstract class ClassRecord : ObjectRecord
                 case BinaryType.Class:
                 case BinaryType.SystemClass:
                 case BinaryType.ObjectArray:
-                    if (memberValue is IRecord record)
+                    if (memberValue is IWritableRecord record)
                     {
                         record.Write(writer);
                     }

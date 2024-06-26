@@ -61,7 +61,7 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
             ReadObjectMemberValues(state, referencedRecord.MemberTypeInfo));
     }
 
-    public override void Write(BinaryWriter writer)
+    private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
         writer.Write(ObjectId);

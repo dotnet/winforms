@@ -59,7 +59,7 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     {
         BinaryFormattedObject format = new(Serialize(strings));
         ArraySingleString array = (ArraySingleString)format.RootRecord;
-        array.GetStringValues(format.RecordMap).Should().BeEquivalentTo(strings);
+        array.Should().BeEquivalentTo(strings);
     }
 
     public static TheoryData<string?[]> StringArray_Parse_Data => new()

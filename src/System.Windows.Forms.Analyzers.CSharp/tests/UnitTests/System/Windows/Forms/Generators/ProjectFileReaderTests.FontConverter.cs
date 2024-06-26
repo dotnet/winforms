@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using Xunit;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 using static System.Windows.Forms.Generators.ProjectFileReader;
 
