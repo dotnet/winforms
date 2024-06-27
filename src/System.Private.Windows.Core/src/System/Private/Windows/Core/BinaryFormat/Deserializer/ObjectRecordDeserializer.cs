@@ -4,7 +4,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 
@@ -88,7 +88,7 @@ internal abstract partial class ObjectRecordDeserializer
                 // Value types that aren't "complete" need to be reapplied.
                 || (Deserializer.IncompleteObjects.Contains(valueRecord) && value.GetType().IsValueType));
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.ClassRecordParser.Create(ClassRecord, IDeserializer)")]
+    [RequiresUnreferencedCode("Calls System.Private.Windows.Core.BinaryFormat.Deserializer.ClassRecordParser.Create(ClassRecord, IDeserializer)")]
     internal static ObjectRecordDeserializer Create(Id id, IRecord record, IDeserializer deserializer) => record switch
     {
         ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),

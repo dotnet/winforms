@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 /// <summary>
 ///  Member type info.

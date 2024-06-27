@@ -3,6 +3,8 @@
 
 using System.Runtime.InteropServices;
 
+namespace Windows.Win32.Foundation;
+
 /// <summary>
 ///  Used to abstract access to classes that contain a potentially owned handle.
 /// </summary>

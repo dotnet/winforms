@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 

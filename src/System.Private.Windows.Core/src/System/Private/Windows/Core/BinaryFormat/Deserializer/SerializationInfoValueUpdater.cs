@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 internal sealed class SerializationInfoValueUpdater : ValueUpdater
 {

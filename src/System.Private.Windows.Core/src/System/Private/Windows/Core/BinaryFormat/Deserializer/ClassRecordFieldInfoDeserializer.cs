@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 

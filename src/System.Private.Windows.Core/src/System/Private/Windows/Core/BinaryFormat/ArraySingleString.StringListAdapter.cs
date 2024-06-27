@@ -3,7 +3,7 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 internal sealed partial class ArraySingleString
 {

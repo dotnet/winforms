@@ -3,7 +3,7 @@
 
 using System.Text;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 internal readonly ref struct BinaryFormatWriterScope
 {

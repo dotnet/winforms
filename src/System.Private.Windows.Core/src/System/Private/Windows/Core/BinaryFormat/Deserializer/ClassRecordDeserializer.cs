@@ -4,7 +4,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 
@@ -33,7 +33,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
         _onlyAllowPrimitives = @object is IObjectReference;
     }
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
+    [RequiresUnreferencedCode("Calls System.Private.Windows.Core.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(String, Id)")]
     internal static ObjectRecordDeserializer Create(ClassRecord classRecord, IDeserializer deserializer)
     {
         Type type = deserializer.TypeResolver.GetType(classRecord.Name, classRecord.LibraryId);

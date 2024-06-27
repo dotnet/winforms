@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 /// <summary>
 ///  Writer that writes specific types in binary format without using the BinaryFormatter.

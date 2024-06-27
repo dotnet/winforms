@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 /// <summary>
 ///  Base class for class records.

@@ -3,7 +3,7 @@
 
 using FormatTests.Common.TestTypes;
 using System.Runtime.Serialization;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.Common;
 

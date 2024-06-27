@@ -2008,12 +2008,12 @@
     <type fullname="Windows.Win32.Graphics.GdiPlus.Status" preserve="all" />
     <type fullname="Windows.Win32.Graphics.GdiPlus.Unit" preserve="all" />
     <type fullname="Windows.Win32.Foundation.WIN32_ERROR" preserve="all" />
-    <type fullname="System.Windows.Forms.BinaryFormat.BinaryArrayType" preserve="all" />
-    <type fullname="System.Windows.Forms.BinaryFormat.BinaryType" preserve="all" />
-    <type fullname="System.Windows.Forms.BinaryFormat.PrimitiveType" preserve="all" />
-    <type fullname="System.Windows.Forms.BinaryFormat.RecordType" preserve="all" />
+    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryArrayType" preserve="all" />
+    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryType" preserve="all" />
+    <type fullname="System.Private.Windows.Core.BinaryFormat.PrimitiveType" preserve="all" />
+    <type fullname="System.Private.Windows.Core.BinaryFormat.RecordType" preserve="all" />
     <type fullname="System.Drawing.ApplyGraphicsProperties" preserve="all" />
-    <type fullname="System.Windows.Forms.BinaryFormat.BinaryFormattedObjectExtensions/TryGetDelegate" preserve="all" />
+    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryFormattedObjectExtensions/TryGetDelegate" preserve="all" />
 </assembly>
 
 <assembly fullname="System.Private.Xml, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">

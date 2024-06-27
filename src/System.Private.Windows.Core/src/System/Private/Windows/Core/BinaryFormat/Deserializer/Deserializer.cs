@@ -4,7 +4,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms.BinaryFormat.Deserializer;
+namespace System.Private.Windows.Core.BinaryFormat.Deserializer;
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 
@@ -101,7 +101,7 @@ internal sealed partial class Deserializer : IDeserializer
     /// <summary>
     ///  Deserializes the object graph for the given <paramref name="recordMap"/> and <paramref name="rootId"/>.
     /// </summary>
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.Deserializer.Deserialize()")]
+    [RequiresUnreferencedCode("Calls System.Private.Windows.Core.BinaryFormat.Deserializer.Deserializer.Deserialize()")]
     internal static object Deserialize(
         Id rootId,
         IReadOnlyRecordMap recordMap,
@@ -112,7 +112,7 @@ internal sealed partial class Deserializer : IDeserializer
         return deserializer.Deserialize();
     }
 
-    [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.Deserializer.DeserializeRoot(Id)")]
+    [RequiresUnreferencedCode("Calls System.Private.Windows.Core.BinaryFormat.Deserializer.Deserializer.DeserializeRoot(Id)")]
     private object Deserialize()
     {
         DeserializeRoot(_rootId);
@@ -191,7 +191,7 @@ internal sealed partial class Deserializer : IDeserializer
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.ObjectRecordParser.Create(Id, IRecord, IDeserializer)")]
+        [RequiresUnreferencedCode("Calls System.Private.Windows.Core.BinaryFormat.Deserializer.ObjectRecordParser.Create(Id, IRecord, IDeserializer)")]
         object DeserializeNew(Id id)
         {
             // Strings, string arrays, and primitive arrays can be completed without creating a
