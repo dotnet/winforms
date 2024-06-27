@@ -264,6 +264,19 @@ public class GraphicsPathIteratorTests
         AssertExtensions.Throws<ArgumentException>(null, () => gpi.Enumerate(ref points, ref types));
     }
 
+    [Fact]
+    public void Enumerate_NotEnoughSpace_ThrowsArgumentException()
+    {
+        using GraphicsPath gp = new();
+        gp.AddLine(new(0, 0), new(1, 1));
+        using GraphicsPathIterator gpi = new(gp);
+
+        PointF[] points = [];
+        byte[] types = [];
+
+        AssertExtensions.Throws<ArgumentException>(null, () => gpi.Enumerate(ref points, ref types));
+    }
+
     public static IEnumerable<object[]> NullPointsTypes_TestData()
     {
         yield return new object[] { null, new byte[1] };
@@ -273,11 +286,11 @@ public class GraphicsPathIteratorTests
 
     [Theory]
     [MemberData(nameof(NullPointsTypes_TestData))]
-    public void Enumerate_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
+    public void Enumerate_NullPointsTypes_ThrowsArgumentNullException(PointF[] points, byte[] types)
     {
         using GraphicsPath gp = new();
         using GraphicsPathIterator gpi = new(gp);
-        Assert.Throws<NullReferenceException>(() => gpi.Enumerate(ref points, ref types));
+        Assert.Throws<ArgumentNullException>(() => gpi.Enumerate(ref points, ref types));
     }
 
     [Theory]
@@ -291,11 +304,11 @@ public class GraphicsPathIteratorTests
 
     [Theory]
     [MemberData(nameof(NullPointsTypes_TestData))]
-    public void CopyData_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
+    public void CopyData_NullPointsTypes_ThrowsArgumentNullException(PointF[] points, byte[] types)
     {
         using GraphicsPath gp = new();
         using GraphicsPathIterator gpi = new(gp);
-        Assert.Throws<NullReferenceException>(() => gpi.CopyData(ref points, ref types, 0, 1));
+        Assert.Throws<ArgumentNullException>(() => gpi.CopyData(ref points, ref types, 0, 1));
     }
 
     [Theory]
@@ -320,14 +333,14 @@ public class GraphicsPathIteratorTests
 
     [Theory]
     [MemberData(nameof(CopyData_StartEndIndexesOutOfRange_TestData))]
-    public void CopyData_StartEndIndexesOutOfRange_ReturnsExpected(PointF[] points, byte[] types, int startIndex, int endIndex)
+    public void CopyData_WithData_StartEndIndexesOutOfRange_ThrowsArgumentException(PointF[] points, byte[] types, int startIndex, int endIndex)
     {
         PointF[] resultPoints = new PointF[points.Length];
         byte[] resultTypes = new byte[points.Length];
 
         using GraphicsPath gp = new(points, types);
         using GraphicsPathIterator gpi = new(gp);
-        Assert.Equal(0, gpi.CopyData(ref resultPoints, ref resultTypes, startIndex, endIndex));
+        AssertExtensions.Throws<ArgumentException>(null, () => gpi.CopyData(ref resultPoints, ref resultTypes, startIndex, endIndex));
     }
 
     [Fact]
