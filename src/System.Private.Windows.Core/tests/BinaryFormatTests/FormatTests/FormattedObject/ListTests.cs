@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
 
 namespace FormatTests.FormattedObject;
