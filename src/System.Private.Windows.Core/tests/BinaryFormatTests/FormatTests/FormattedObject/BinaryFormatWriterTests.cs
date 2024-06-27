@@ -3,7 +3,7 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 

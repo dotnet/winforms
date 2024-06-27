@@ -3,9 +3,9 @@
 
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
-using Record = System.Windows.Forms.BinaryFormat.Record;
+using Record = System.Private.Windows.Core.BinaryFormat.Record;
 
 namespace FormatTests.FormattedObject;
 

@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
-using Record = System.Windows.Forms.BinaryFormat.Record;
+using System.Private.Windows.Core.BinaryFormat;
+using Record = System.Private.Windows.Core.BinaryFormat.Record;
 
 namespace FormatTests.Common;
 
