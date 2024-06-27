@@ -5,12 +5,13 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    /// <inheritdoc cref="FillRgn(HDC, ref RECT, HBRUSH)"/>
+    /// <inheritdoc cref="FillRgn(HDC, HRGN, HBRUSH)"/>
     public static int FillRgn<T>(T hDC, ref HRGN hRgn, HBRUSH hbr)
         where T : IHandle<HDC>
     {
-        int result = FillRgn(hDC.Handle, ref hRgn, hbr);
+        int result = FillRgn(hDC.Handle, hRgn, hbr);
         GC.KeepAlive(hDC.Wrapper);
+
         return result;
     }
 }

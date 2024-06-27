@@ -2011,14 +2011,7 @@ public abstract partial class TextBoxBase : Control
 
     internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
-        InitializeClientAreaAndNCBkColor(dc, (int)msg);
-
-        // if (!color.IsEmpty)
-        // {
-        //    // Create a GDI Brush object for the color
-        //    HBRUSH brush = PInvoke.CreateSolidBrush(color.ToArgb());
-        //    return brush;
-        // }
+        InitializeClientAreaAndNCBkColor(dc, (HWND)Handle);
 
         if (msg == PInvoke.WM_CTLCOLORSTATIC && !ShouldSerializeBackColor())
         {
@@ -2033,52 +2026,50 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    private protected virtual unsafe void InitializeClientAreaAndNCBkColor(HDC hDC, nint msg)
+    private protected virtual unsafe void InitializeClientAreaAndNCBkColor(HDC hDC, HWND hwnd)
     {
         // We only want to do this for VisualStylesMode >= Version10
-        if (VisualStylesMode < VisualStylesMode.Version10)
+        // Also, we do that only one time per instance,
+        // but we need to reset this, when the handle is recreated.
+        if (VisualStylesMode < VisualStylesMode.Version10 || _triggerNewClientSizeRequest)
         {
             return;
         }
 
-        var hwnd = PInvokeCore.WindowFromDC(hDC);
+        _triggerNewClientSizeRequest = true;
 
-        // Get the bounds of the Window
-        PInvoke.GetWindowRect(hwnd, out RECT rect);
+        // Get the window bounds
+        Rectangle bounds = Bounds;
 
-        // We do that only one time per instance,
-        // but we need to reset this, when the handle is recreated.
-        if (!_triggerNewClientSizeRequest)
-        {
-            _triggerNewClientSizeRequest = true;
+        // Call SetWindowPos with the current Bounds with SWP_FRAMECHANGED flag.
+        // Only then we do not change the Window pos/size, but we'll get that WmNcCalcSize message version
+        // that we need to adjust the client area.
+        PInvoke.SetWindowPos(
+            hWnd: hwnd,
+            hWndInsertAfter: HWND.Null,
+            X: bounds.Left,
+            Y: bounds.Top,
+            cx: bounds.Width,
+            cy: bounds.Height,
+            uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
 
-            // Get the window bounds
-            PInvoke.GetWindowRect(hwnd, out RECT windowRect);
-
-            // Call SetWindowPos with SWP_FRAMECHANGED flag.
-            // Only new we get the WmNcCalcSize message version that we need to adjust the client area.
-            PInvoke.SetWindowPos(
-                hWnd: hwnd,
-                hWndInsertAfter: HWND.Null,
-                X: windowRect.left,
-                Y: windowRect.top,
-                cx: windowRect.right - windowRect.left,
-                cy: windowRect.bottom - windowRect.top,
-                uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
-        }
+        // Create a GDI Brush object for the color
+        // HBRUSH brush = PInvoke.CreateSolidBrush(color.ToArgb());
+        // return brush;
     }
 
     private void WmNcPaint(ref Message m)
     {
-        HDC hdc = PInvokeCore.GetDCEx(
-            (HWND)Handle,
-            (HRGN)(nint)m.WParamInternal,
-            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_INTERSECTRGN);
+        if (VisualStylesMode < VisualStylesMode.Version10 || !_triggerNewClientSizeRequest)
+        {
+            base.WndProc(ref m);
+            return;
+        }
+
+        HDC hdc = PInvokeCore.GetDC((HWND)Handle);
 
         if (hdc != IntPtr.Zero)
         {
-            DrawRoundedRectangle(hdc);
-
             // Get the clipping region of the DC
             PInvoke.GetClipBox(hdc, out RECT clipRect);
 
@@ -2116,7 +2107,7 @@ public abstract partial class TextBoxBase : Control
 
         PInvoke.GetWindowRect((HWND)Handle, out RECT rect);
 
-        HBRUSH hBrush = PInvoke.CreateSolidBrush(ColorTranslator.ToWin32(Color.Red));
+        HBRUSH hBrush = PInvoke.CreateSolidBrush(ColorTranslator.ToWin32(BackColor));
 
         HRGN hRgn = PInvokeCore.CreateRoundRectRgn(
             borderWidth,
