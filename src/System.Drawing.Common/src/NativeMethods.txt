@@ -28,7 +28,6 @@ EndPage
 EnumPrinters
 ExtEscape
 ExtractAssociatedIcon
-FillRgn
 GdipAddPathArc
 GdipAddPathBezier
 GdipAddPathBeziers
