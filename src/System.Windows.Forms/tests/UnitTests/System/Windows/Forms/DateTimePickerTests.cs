@@ -281,14 +281,17 @@ public class DateTimePickerTests: IDisposable
     [WinFormsFact]
     public void DateTimePicker_CalendarFont_GetSet_ReturnsExpected()
     {
-        Font expectedFont = new("Arial", 8.25f);
-        Font differentFont = new("Times New Roman", 10f);
+        using (Font expectedFont = new("Arial", 8.25f))
+        {
+            _dateTimePicker.CalendarFont = expectedFont;
+            _dateTimePicker.CalendarFont.Should().Be(expectedFont);
+        }
 
-        _dateTimePicker.CalendarFont = expectedFont;
-        _dateTimePicker.CalendarFont.Should().Be(expectedFont);
-
-        _dateTimePicker.CalendarFont = differentFont;
-        _dateTimePicker.CalendarFont.Should().Be(differentFont);
+        using (Font differentFont = new("Times New Roman", 10f))
+        {
+            _dateTimePicker.CalendarFont = differentFont;
+            _dateTimePicker.CalendarFont.Should().Be(differentFont);
+        }
 
         _dateTimePicker.CalendarFont = null;
         _dateTimePicker.CalendarFont.Should().Be(_dateTimePicker.Font);
@@ -310,18 +313,12 @@ public class DateTimePickerTests: IDisposable
         _dateTimePicker.Checked.Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void DateTimePicker_Checked_WhenShowCheckBoxAndHandleNotCreated_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void DateTimePicker_Checked_WhenShowCheckBoxAndHandleNotCreated_ReturnsExpected(bool value)
     {
-        _dateTimePicker.ShowCheckBox = true;
-
-        _dateTimePicker.Checked = true;
-        _dateTimePicker.Checked.Should().BeTrue();
-
-        _dateTimePicker.Checked = false;
-        _dateTimePicker.Checked.Should().BeFalse();
-
-        _dateTimePicker.ShowCheckBox = false;
+        _dateTimePicker.ShowCheckBox = value;
 
         _dateTimePicker.Checked = true;
         _dateTimePicker.Checked.Should().BeTrue();
