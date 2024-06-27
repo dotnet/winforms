@@ -211,6 +211,7 @@ public sealed unsafe class GraphicsPathIterator : MarshalByRefObject, IDisposabl
         if ((points.Length != types.Length)
             || endIndex < 0
             || startIndex < 0
+            || endIndex < startIndex
             || count > points.Length
             || endIndex >= Count)
         {
