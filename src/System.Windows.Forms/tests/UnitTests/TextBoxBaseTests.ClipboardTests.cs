@@ -8,10 +8,7 @@ public partial class TextBoxBaseTests
     [Collection("Sequential")]
     public class ClipboardTests
     {
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/11497")]
         [WinFormsFact]
-        [SkipOnArchitecture(TestArchitectures.X86,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/11497")]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
             using SubTextBox control = new()
@@ -32,10 +29,7 @@ public partial class TextBoxBaseTests
             Assert.Equal("bcxt", control.Text);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/11558")]
         [WinFormsFact]
-        [SkipOnArchitecture(TestArchitectures.X86,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/11558")]
         public void TextBoxBase_Copy_PasteNotEmpty_Success()
         {
             using SubTextBox control = new()
@@ -57,10 +51,7 @@ public partial class TextBoxBaseTests
             Assert.True(control.IsHandleCreated);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/11498")]
         [WinFormsFact]
-        [SkipOnArchitecture(TestArchitectures.X86,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/11498")]
         public void TextBoxBase_Copy_PasteNotEmptyWithHandle_Success()
         {
             using SubTextBox control = new()
@@ -177,10 +168,7 @@ public partial class TextBoxBaseTests
             Assert.True(control.IsHandleCreated);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/11559")]
         [WinFormsFact]
-        [SkipOnArchitecture(TestArchitectures.X86,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/11559")]
         public void TextBoxBase_Undo_CanUndo_Success()
         {
             using SubTextBox control = new()
