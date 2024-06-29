@@ -2066,33 +2066,40 @@ public abstract partial class TextBoxBase : Control
             return;
         }
 
-        HDC hdc = PInvokeCore.GetDC((HWND)Handle);
+        Debugger.Break();
 
-        if (hdc != IntPtr.Zero)
+        HDC hdc = PInvokeCore.GetDCEx(
+            (HWND) Handle,
+            (HRGN)(int)m.WParamInternal,
+            GET_DCX_FLAGS.DCX_WINDOW
+            | GET_DCX_FLAGS.DCX_CACHE
+            | GET_DCX_FLAGS.DCX_CLIPCHILDREN
+            | GET_DCX_FLAGS.DCX_CLIPSIBLINGS);
+
+        PInvoke.GetClipBox(hdc, out RECT clipRect);
+
+        PInvoke.GetClientRect(Handle, out RECT clientRect);
+        PInvoke.GetWindowRect(Handle, out RECT windowRect);
+
+        int width = windowRect.right - windowRect.left;
+        int height = windowRect.bottom - windowRect.top;
+
+        clip = new(
+            (width - clientRect.right) / 2,
+            (height - clientRect.bottom) / 2,
+            clientRect.right,
+            clientRect.bottom);
+
+        try
         {
-            // Get the clipping region of the DC
-            PInvoke.GetClipBox(hdc, out RECT clipRect);
-
-            PaintEventArgs? pEvent = null;
-
-            pEvent = new PaintEventArgs(
-                hdc,
-                clipRect,
-                default);
-
-            try
-            {
-                OnNonClientPaint(pEvent);
-            }
-            catch (Exception)
-            {
-                // Experimental. We swallow the exception to avoid the app to crash.
-            }
-            finally
-            {
-                pEvent.Dispose();
-                PInvoke.ReleaseDC((HWND)Handle, hdc);
-            }
+            DrawRoundedRectangle(hdc);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            PInvoke.ReleaseDC((HWND)Handle, hdc);
         }
     }
 
