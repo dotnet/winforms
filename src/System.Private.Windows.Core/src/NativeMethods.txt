@@ -58,6 +58,7 @@ E_OUTOFMEMORY
 E_POINTER
 E_UNEXPECTED
 EncoderParameters
+ExtSelectClipRgn
 fdex*
 FDEX_PROP_FLAGS
 FILETIME
@@ -97,6 +98,7 @@ GetSystemMetrics
 GetThreadLocale
 GetViewportExtEx
 GetViewportOrgEx
+GetWindowDC
 GlobalAlloc
 GlobalFree
 GlobalLock

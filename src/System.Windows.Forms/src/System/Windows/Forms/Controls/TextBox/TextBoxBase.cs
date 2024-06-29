@@ -412,22 +412,39 @@ public abstract partial class TextBoxBase : Control
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
             cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
-            switch (_borderStyle)
+            if (VisualStylesMode >= VisualStylesMode.Version10)
             {
-                case BorderStyle.Fixed3D:
-                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
-                    break;
-                case BorderStyle.FixedSingle:
-                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
-                    break;
-            }
-
-            if (_textBoxFlags[s_multiline])
-            {
-                cp.Style |= PInvoke.ES_MULTILINE;
-                if (_textBoxFlags[s_wordWrap])
+                // We draw the borders ourselves for the visual styles for .NET 9/10 onwards.
+                if (_textBoxFlags[s_multiline])
                 {
-                    cp.Style &= ~PInvoke.ES_AUTOHSCROLL;
+                    cp.Style |= PInvoke.ES_MULTILINE;
+                    if (_textBoxFlags[s_wordWrap])
+                    {
+                        cp.Style &= ~PInvoke.ES_AUTOHSCROLL;
+                    }
+
+                    // TODO: For Multiline, we need a different way to move the client area, since it can be done natively.
+                }
+            }
+            else
+            {
+                switch (_borderStyle)
+                {
+                    case BorderStyle.Fixed3D:
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
+                        break;
+                    case BorderStyle.FixedSingle:
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                        break;
+                }
+
+                if (_textBoxFlags[s_multiline])
+                {
+                    cp.Style |= PInvoke.ES_MULTILINE;
+                    if (_textBoxFlags[s_wordWrap])
+                    {
+                        cp.Style &= ~PInvoke.ES_AUTOHSCROLL;
+                    }
                 }
             }
 
@@ -866,7 +883,7 @@ public abstract partial class TextBoxBase : Control
 
         Padding padding = new Padding(0, 0, bordersAndPadding.Width, bordersAndPadding.Height);
 
-        if (VisualStylesMode>=VisualStylesMode.Version10)
+        if (VisualStylesMode >= VisualStylesMode.Version10)
         {
             padding = Padding.Add(padding, Padding);
         }
@@ -1168,11 +1185,12 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
     /// </summary>
-    protected override VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Legacy;
+    protected override VisualStylesMode DefaultVisualStylesMode =>
+        VisualStylesMode.Legacy;
 
     /// <summary>
-    ///  Gets or sets a value indicating whether a multiline text box control automatically wraps words to the
-    ///  beginning of the next line when necessary.
+    ///  Gets or sets a value indicating whether a multiline text box control
+    ///  automatically wraps words to the beginning of the next line when necessary.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
@@ -2052,75 +2070,92 @@ public abstract partial class TextBoxBase : Control
             cx: bounds.Width,
             cy: bounds.Height,
             uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
-
-        // Create a GDI Brush object for the color
-        // HBRUSH brush = PInvoke.CreateSolidBrush(color.ToArgb());
-        // return brush;
     }
 
-    private void WmNcPaint(ref Message m)
+    protected virtual void WmNcPaint(ref Message m)
     {
-        if (VisualStylesMode < VisualStylesMode.Version10 || !_triggerNewClientSizeRequest)
+        if (VisualStylesMode < VisualStylesMode.Version10
+            || !_triggerNewClientSizeRequest)
         {
-            base.WndProc(ref m);
-            return;
-        }
+            HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
 
-        HDC hdc = PInvokeCore.GetDC((HWND)Handle);
+            // Get the background color of the parent control, or, if we don't have one, our background color:
+            COLORREF parentBackColor = Parent?.BackColor ?? BackColor;
+            COLORREF adornerColor = Color.Blue;
 
-        if (hdc != IntPtr.Zero)
-        {
-            // Get the clipping region of the DC
-            PInvoke.GetClipBox(hdc, out RECT clipRect);
+            HBRUSH parentBackColorBrush = PInvoke.CreateSolidBrush(parentBackColor);
+            HBRUSH adornerBrush = PInvoke.CreateSolidBrush(adornerColor);
 
-            PaintEventArgs? pEvent = null;
-
-            pEvent = new PaintEventArgs(
-                hdc,
-                clipRect,
-                default);
+            var bounds = Bounds;
 
             try
             {
-                OnNonClientPaint(pEvent);
+                // Define the radius for the rounded corners and the width of the border
+                int cornerRadius = 15;
+                int borderWidth = 3;
+
+                // Create a region for the outer rectangle (full window bounds)
+                HRGN hRgnOuter = PInvokeCore.CreateRectRgn(
+                    x1: 0,
+                    y1: 0,
+                    x2: bounds.Width,
+                    y2: bounds.Height);
+
+                // Create a region for the rounded rectangle's inner part (to clip it out)
+                HRGN hRgnInner = PInvokeCore.CreateRectRgn(
+                    x1: Padding.Left,
+                    y1: Padding.Top,
+                    x2: bounds.Width - Padding.Right,
+                    y2: bounds.Height - Padding.Bottom);
+
+                // Define inner rounded region:
+                PInvokeCore.CombineRgn(
+                    hRgnOuter,
+                    hRgnOuter,
+                    hRgnInner,
+                    RGN_COMBINE_MODE.RGN_DIFF);
+
+                PInvoke.FillRgn(hdc, hRgnOuter, parentBackColorBrush);
+
+                // Create a region for the rounded rectangle (inner part to be painted with ForeColor)
+                HRGN hRoundedRgnOuter = PInvokeCore.CreateRoundRectRgn(
+                    x1: 0,
+                    y1: 0,
+                    x2: bounds.Width,
+                    y2: bounds.Height,
+                    cornerRadius,
+                    cornerRadius);
+
+                // Create a region for the rounded rectangle (inner part to be painted with ForeColor)
+                HRGN hRoundedRgnInner = PInvokeCore.CreateRoundRectRgn(
+                    x1: borderWidth,
+                    y1: borderWidth,
+                    x2: bounds.Width - borderWidth,
+                    y2: bounds.Height - borderWidth,
+                    cornerRadius,
+                    cornerRadius);
+
+                PInvokeCore.CombineRgn(
+                    hRoundedRgnOuter,
+                    hRoundedRgnOuter,
+                    hRoundedRgnInner,
+                    RGN_COMBINE_MODE.RGN_DIFF);
+
+                PInvoke.FillRgn(hdc, hRoundedRgnOuter, adornerBrush);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Experimental. We swallow the exception to avoid the app to crash.
+                // Handle exceptions if necessary
+                Debug.WriteLine(ex);
             }
             finally
             {
-                pEvent.Dispose();
-                PInvoke.ReleaseDC((HWND)Handle, hdc);
+                // Cleanup
+                PInvokeCore.DeleteObject(parentBackColorBrush);
+                PInvokeCore.DeleteObject(adornerBrush);
+                PInvokeCore.ReleaseDC((HWND)m.HWnd, hdc);
             }
         }
-    }
-
-    protected virtual void OnNonClientPaint(PaintEventArgs pEvent)
-    {
-    }
-
-    private void DrawRoundedRectangle(HDC hdc)
-    {
-        int borderWidth = 2; // Width of the border
-        int radius = 15; // Radius of the rounded corners
-
-        PInvoke.GetWindowRect((HWND)Handle, out RECT rect);
-
-        HBRUSH hBrush = PInvoke.CreateSolidBrush(ColorTranslator.ToWin32(BackColor));
-
-        HRGN hRgn = PInvokeCore.CreateRoundRectRgn(
-            borderWidth,
-            borderWidth,
-            rect.right - rect.left - borderWidth,
-            rect.bottom - rect.top - borderWidth,
-            radius,
-            radius);
-
-        PInvoke.FillRgn(hdc, ref hRgn, hBrush);
-
-        PInvokeCore.DeleteObject(hRgn);
-        PInvokeCore.DeleteObject(hBrush);
     }
 
     private void WmNcCalcSize(ref Message m)

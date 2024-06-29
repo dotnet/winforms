@@ -3800,6 +3800,8 @@ public unsafe partial class Control :
             {
                 Properties.SetObject(s_visualStylesModeProperty, value);
             }
+
+            UpdateStyles();
         }
     }
 
@@ -3807,7 +3809,8 @@ public unsafe partial class Control :
     ///  Gets the default visual styles mode for the control; standard is <see cref="VisualStylesMode.Latest"/>.
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
-    protected virtual VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Latest;
+    protected virtual VisualStylesMode DefaultVisualStylesMode =>
+        VisualStylesMode.Latest;
 
     private bool ShouldSerializeVisualStylesMode() =>
         Properties.GetObject(s_visualStylesModeProperty) is not null;
@@ -13384,4 +13387,86 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
+
+    /// <summary>
+    ///  DEBUG ONLY: Maintains a dictionary of counters for each ticket, which let's you invoke a Debugger.Break() call
+    ///  when a respective counter reaches 0.
+    /// </summary>
+    /// <remarks>
+    ///  <para>Usage example:</para>
+    ///  <code>
+    ///     // Create an instance of the class containing the OnDebuggerBreak method.
+    ///     var yourClassInstance = new YourClass();
+    ///
+    ///     // Define breakpoints for specific tickets.
+    ///     yourClassInstance.DebuggerBreakCounters.Add("loadData", 3);
+    ///     yourClassInstance.DebuggerBreakCounters.Add("saveData", -1);
+    ///
+    ///     // Simulate the process where a breakpoint might be necessary.
+    ///     for(int i = 0; i != 5; i++)
+    ///     {
+    ///         if (yourClassInstance.OnDebuggerBreak("loadData"))
+    ///         {
+    ///             Debugger.Break(); // This will trigger a break on the 3rd call.
+    ///         }
+    ///     }
+    ///
+    ///     // Directly call to simulate another ticket without loop.
+    ///     if (yourClassInstance.OnDebuggerBreak("saveData"))
+    ///     {
+    ///         Debugger.Break(); // This will always break.
+    ///     }
+    ///  </code>
+    ///  <para>
+    ///    This setup helps in debugging specific parts of the code by allowing conditional
+    ///    breakpoints based on dynamic runtime conditions.
+    ///   </para>
+    /// </remarks>
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [DefaultValue(0)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription("Debug only property: enter a counter value at which a hard-coded Debugger.Break() call will be invoked.")]
+    public Dictionary<string, int> DebuggerBreakCounters { get; set; } = [];
+
+    private readonly Dictionary<string, int> _currentDebuggerBreakCounters = [];
+
+    protected virtual bool OnDebuggerBreak(string ticket)
+    {
+        if (!Debugger.IsAttached
+            || !DebuggerBreakCounters.TryGetValue(ticket, out int counter))
+        {
+            return false;
+        }
+
+        if (counter == -1)
+        {
+            // We always break!
+            return true;
+        }
+
+        if (counter == 0)
+        {
+            // We never break!
+            return false;
+        }
+
+        if (!_currentDebuggerBreakCounters.TryGetValue(ticket, out int currentCounter))
+        {
+            // let's add the ticket to the current counters, and start counting, if it's not 0.
+            _currentDebuggerBreakCounters.Add(
+                ticket,
+                DebuggerBreakCounters[ticket]);
+        }
+
+        if (--counter > 0)
+        {
+            return false;
+        }
+
+        // Let's reset the counter, but signal breaking!
+        _currentDebuggerBreakCounters[ticket] = DebuggerBreakCounters[ticket];
+
+        return true;
+    }
 }
