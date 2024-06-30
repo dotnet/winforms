@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Private.Windows.Core.BinaryFormat;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -48,6 +49,13 @@ public sealed partial class CodeDomComponentSerializationService
 
         // These fields are available after serialization or deserialization
         private ICollection? _errors;
+
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+        internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } =
+            AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled)
+                ? isEnabled
+                : true;
+#pragma warning restore IDE0075
 
         /// <summary>
         ///  Creates a new store.
@@ -162,10 +170,23 @@ public sealed partial class CodeDomComponentSerializationService
                 if (_resourceStream is null)
                 {
                     _resourceStream = new MemoryStream();
+                    bool success = false;
 
+                    try
+                    {
+                        success = BinaryFormatWriter.TryWriteFrameworkObject(_resourceStream, _resources.Data);
+                    }
+                    catch (Exception ex) when (!ex.IsCriticalException())
+                    {
+                        Debug.Fail($"Failed to write with BinaryFormatWriter: {ex.Message}");
+                    }
+
+                    if (!success)
+                    {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
+                        new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    }
                 }
             }
 
@@ -223,6 +244,29 @@ public sealed partial class CodeDomComponentSerializationService
             // Recreate resources
             if (_resourceStream is not null)
             {
+                long startPosition = _resourceStream.Position;
+                try
+                {
+                    if (new BinaryFormattedObject(_resourceStream).TryGetPrimitiveHashtable(out Hashtable? value))
+                    {
+                        _resources = new LocalResourceManager(value);
+                    }
+                }
+                catch (Exception ex) when (!ex.IsCriticalException())
+                {
+                    // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
+                }
+
+                // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(), which has a RequiresUnreferencedCode annotation.
+                // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
+                // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
+                if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                {
+                    throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                }
+
+                _resourceStream.Position = startPosition;
+
                 _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable;
