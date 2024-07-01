@@ -58,7 +58,7 @@ public partial class ControlDesigner
             }
             catch (Exception ex)
             {
-                _designer.SetUnhandledException(Control.FromChildHandle(m.HWnd), ex);
+                _designer.SetUnhandledException(Control.FromChildHandle(m.HWnd)!, ex);
             }
             finally
             {

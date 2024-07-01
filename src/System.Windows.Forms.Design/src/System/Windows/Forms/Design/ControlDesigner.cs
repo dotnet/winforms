@@ -2235,7 +2235,7 @@ public partial class ControlDesigner : ComponentDesigner
                 break;
         }
     }
-#nullable disable
+
     private void PaintException(PaintEventArgs e, Exception ex)
     {
         StringFormat stringFormat = new StringFormat
@@ -2312,7 +2312,7 @@ public partial class ControlDesigner : ComponentDesigner
         stringFormat.Dispose();
     }
 
-    private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
+    private IOverlayService? OverlayService => _overlayService ??= GetService<IOverlayService>();
 
     private static bool IsMouseMessage(MessageId msg)
     {
@@ -2397,7 +2397,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         Point pt = PARAM.ToPoint(lParam);
         pt = Control.PointToScreen(pt);
-        pt = Control.Parent.PointToClient(pt);
+        pt = Control.Parent!.PointToClient(pt);
         return PARAM.ToInt(pt.X, pt.Y);
     }
 
@@ -2412,7 +2412,7 @@ public partial class ControlDesigner : ComponentDesigner
             }
 
             // Is it a control?
-            Control child = Control.FromHandle(hwndChild);
+            Control? child = Control.FromHandle(hwndChild);
             if (child is null)
             {
                 // No control.  We must subclass this control.
@@ -2490,8 +2490,8 @@ public partial class ControlDesigner : ComponentDesigner
         _thrownException = exception;
         owner ??= Control;
 
-        string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
-        string typeName = owner.GetType().FullName;
+        string[] exceptionLines = exception.StackTrace!.Split('\r', '\n');
+        string typeName = owner.GetType().FullName!;
         string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
         InvalidOperationException wrapper = new(
