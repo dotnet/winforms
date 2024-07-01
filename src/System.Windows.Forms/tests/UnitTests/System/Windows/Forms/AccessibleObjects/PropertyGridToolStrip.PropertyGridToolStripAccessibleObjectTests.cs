@@ -55,9 +55,9 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.AccessibleName = parentAccessibleName;
-        using var propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        using PropertyGridToolStrip propertyGridToolStrip = new(propertyGrid);
         propertyGridToolStrip.AccessibleName = toolStripAccessibleName;
-        var accessibleObject = new PropertyGridToolStrip.PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
+        PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject = new(propertyGridToolStrip, propertyGrid);
 
         string name = accessibleObject.Name;
 

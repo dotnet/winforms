@@ -4083,8 +4083,6 @@ public partial class PropertyGridTests
 
         var tab1 = new TestPropertyTab();
         var tab2 = new TestPropertyTab();
-        propertyGrid.PropertyTabs.AddTabType(tab2.GetType());
-        propertyGrid.PropertyTabs.AddTabType(tab1.GetType());
 
         var oldTab = tab2;
         var newTab = tab1;
@@ -4121,7 +4119,7 @@ public partial class PropertyGridTests
         eventCallCount.Should().Be(1);
         eventArgs.Should().NotBeNull();
         actualSender.Should().Be(propertyGrid);
-        eventArgs?.NewSelection.Should().Be(gridItem);
+        eventArgs.NewSelection.Should().Be(gridItem);
     }
 
     private class SubToolStripRenderer : ToolStripRenderer
