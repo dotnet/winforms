@@ -105,10 +105,9 @@ public static class Help
         // resolve the out of memory condition with file names that include spaces.
         // If we can't, though, we can't assume that the path's no good: it might be in
         // the Windows help directory.
-        Uri? file = null;
+        Uri? file = Resolve(url) ?? throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), nameof(url));
         string? pathAndFileName = url; // This is our best guess at the path yet.
 
-        file = Resolve(url);
         if (file is not null)
         {
             // Can't assume we have a good url
@@ -289,7 +288,7 @@ public static class Help
 
     private static int GetHelpFileType(string? url)
     {
-        if (url is null)
+        if (string.IsNullOrEmpty(url))
         {
             return HTMLFILE;
         }
