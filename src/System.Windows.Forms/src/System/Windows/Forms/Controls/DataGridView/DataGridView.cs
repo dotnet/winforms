@@ -505,7 +505,7 @@ public partial class DataGridView : Control, ISupportInitialize
                         dgvabs = new DataGridViewAdvancedBorderStyle();
                         if (RightToLeftInternal)
                         {
-                            dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                            dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         }
                         else
                         {
@@ -1250,7 +1250,7 @@ public partial class DataGridView : Control, ISupportInitialize
                             break;
 
                         case DataGridViewCellBorderStyle.Raised:
-                            AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Outset;
+                            AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
                             break;
 
                         case DataGridViewCellBorderStyle.Sunken:
