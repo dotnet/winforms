@@ -128,7 +128,7 @@ public class HelpProvider : Component, IExtenderProvider
         }
 
         // If we have a help file, and help keyword we try F1 help next
-        if (!string.IsNullOrEmpty(HelpNamespace))
+        if (HelpNamespace is not null)
         {
             if (!string.IsNullOrEmpty(keyword))
             {
