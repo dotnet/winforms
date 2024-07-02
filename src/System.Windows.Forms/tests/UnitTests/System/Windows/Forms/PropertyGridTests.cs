@@ -4081,8 +4081,8 @@ public partial class PropertyGridTests
             eventArgs = e;
         };
 
-        var tab1 = new TestPropertyTab();
-        var tab2 = new TestPropertyTab();
+        TestPropertyTab tab1 = new();
+        TestPropertyTab tab2 = new();
 
         var oldTab = tab2;
         var newTab = tab1;
@@ -4110,7 +4110,7 @@ public partial class PropertyGridTests
             actualSender = sender;
         };
 
-        var gridItemMock = new Mock<GridItem>();
+        Mock<GridItem> gridItemMock = new();
         var gridItem = gridItemMock.Object;
 
         var accessor = propertyGrid.TestAccessor();
