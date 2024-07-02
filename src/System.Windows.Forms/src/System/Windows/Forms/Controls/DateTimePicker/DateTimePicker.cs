@@ -25,22 +25,22 @@ public partial class DateTimePicker : Control
     /// <summary>
     ///  Specifies the default title back color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTitleBackColor = SystemColors.ActiveCaption;
+    protected static readonly Color DefaultTitleBackColor = Application.ApplicationColors.ActiveCaption;
 
     /// <summary>
     ///  Specifies the default foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTitleForeColor = SystemColors.ActiveCaptionText;
+    protected static readonly Color DefaultTitleForeColor = Application.ApplicationColors.ActiveCaptionText;
 
     /// <summary>
     ///  Specifies the default month background color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
+    protected static readonly Color DefaultMonthBackColor = Application.ApplicationColors.Window;
 
     /// <summary>
     ///  Specifies the default trailing foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
+    protected static readonly Color DefaultTrailingForeColor = Application.ApplicationColors.GrayText;
 
     private static readonly object s_formatChangedEvent = new();
 
@@ -80,7 +80,7 @@ public partial class DateTimePicker : Control
     private bool _validTime = true;
 
     // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
-    // of whether or not its values have been initialised in a separate boolean.
+    // of whether or not its values have been initialized in a separate boolean.
     private bool _userHasSetValue;
     private DateTime _value = DateTime.Now;
     private DateTime _creationTime = DateTime.Now;
@@ -127,7 +127,7 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
+        get => ShouldSerializeBackColor() || IsDarkModeEnabled ? base.BackColor : Application.ApplicationColors.Window;
         set => base.BackColor = value;
     }
 
@@ -488,7 +488,7 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
+        get => ShouldSerializeForeColor() || IsDarkModeEnabled ? base.ForeColor : Application.ApplicationColors.WindowText;
         set => base.ForeColor = value;
     }
 
@@ -1083,7 +1083,7 @@ public partial class DateTimePicker : Control
     {
         base.OnGotFocus(e);
 
-        // Raise automation event to annouce the control.
+        // Raise automation event to announce the control.
         if (IsAccessibilityObjectCreated)
         {
             _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
@@ -1133,7 +1133,7 @@ public partial class DateTimePicker : Control
     {
         _onValueChanged?.Invoke(this, eventargs);
 
-        // Raise automation event to annouce changed value.
+        // Raise automation event to announce changed value.
         if (IsAccessibilityObjectCreated)
         {
             // If date is changed so dtp value is changed too.

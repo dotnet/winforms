@@ -13,6 +13,7 @@ CreateDIBSection
 CreateFontIndirect
 CreateICW
 CreateRectRgn
+CreateRoundRectRgn
 DeleteDC
 DeleteObject
 DestroyIcon
@@ -142,7 +143,9 @@ MonitorFromWindow
 MONITORINFOEXW
 MONITORINFOF_*
 NONCLIENTMETRICSW
+NCCALCSIZE_PARAMS
 OBJ_TYPE
+OffsetClipRgn
 OffsetViewportOrgEx
 OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT

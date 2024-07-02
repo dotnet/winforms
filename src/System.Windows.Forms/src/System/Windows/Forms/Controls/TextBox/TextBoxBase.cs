@@ -81,6 +81,7 @@ public abstract partial class TextBoxBase : Control
 
     // We store all boolean properties in here.
     private BitVector32 _textBoxFlags;
+    private bool _triggerNewClientSizeRequest;
 
     /// <summary>
     ///  Creates a new TextBox control.  Uses the parent's current font and color
@@ -242,10 +243,8 @@ public abstract partial class TextBoxBase : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool AutoSize
     {
-        get
-        {
-            return _textBoxFlags[s_autoSize];
-        }
+        get => _textBoxFlags[s_autoSize];
+
         set
         {
             // Note that we intentionally do not call base.  TextBoxes size themselves by
@@ -285,11 +284,11 @@ public abstract partial class TextBoxBase : Control
             }
             else if (ReadOnly)
             {
-                return SystemColors.Control;
+                return Application.ApplicationColors.Control;
             }
             else
             {
-                return SystemColors.Window;
+                return Application.ApplicationColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -476,12 +475,7 @@ public abstract partial class TextBoxBase : Control
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
     protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(100, PreferredHeight);
-        }
-    }
+        => new Size(100, PreferredHeight);
 
     /// <summary>
     ///  Gets or sets the foreground color of the control.
@@ -499,7 +493,7 @@ public abstract partial class TextBoxBase : Control
             }
             else
             {
-                return SystemColors.WindowText;
+                return Application.ApplicationColors.WindowText;
             }
         }
         set => base.ForeColor = value;
@@ -753,15 +747,6 @@ public abstract partial class TextBoxBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public new Padding Padding
-    {
-        get => base.Padding;
-        set => base.Padding = value;
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
     public new event EventHandler? PaddingChanged
@@ -790,10 +775,30 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
+            return VisualStylesMode switch
+            {
+                VisualStylesMode.Disabled => PreferredHeightLegacy,
+                VisualStylesMode.Legacy => PreferredHeightLegacy,
+                >= VisualStylesMode.Version10 => PreferredHeightVersion10,
+
+                // We'll should never be here.
+                _ => throw new InvalidEnumArgumentException(
+                    nameof(VisualStylesMode),
+                    (int)VisualStylesMode,
+                    typeof(VisualStylesMode))
+            };
+        }
+    }
+
+    private int PreferredHeightLegacy
+    {
+        get
+        {
             // COMPAT we must return the same busted height we did in Everett, even
-            // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
-            // GetPreferredSize instead.
+            // if it does not take multiline and word wrap into account.
+            // For better accuracy and/or wrapping use GetPreferredSize instead.
             int height = FontHeight;
+
             if (_borderStyle != BorderStyle.None)
             {
                 height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
@@ -803,17 +808,28 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private int PreferredHeightVersion10
+    {
+        get
+        {
+            // For Versions >=10, we take the Padding into account when calculating the preferred height.
+            int height = PreferredHeightLegacy + Padding.Vertical;
+
+            return height;
+        }
+    }
+
     // GetPreferredSizeCore
-    //  This method can return a different value than PreferredHeight!  It properly handles
-    //  border style + multiline and wordwrap.
+    //  This method can return a different value than PreferredHeight!
+    //  It properly handles border style + multiline and word-wrap.
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         // 3px vertical space is required between the text and the border to keep the last
         // line from being clipped.
-        // This 3 pixel size was added in everett and we do this to maintain compat.
-        // old everett behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3]
-        // however the [ ] was only added if borderstyle was not none.
+        // This 3 pixel size was added in Everett and we do this to maintain compat.
+        // old Everett behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3]
+        // however the [ ] was only added if BorderStyle was not none.
         Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
 
         if (BorderStyle != BorderStyle.None)
@@ -847,7 +863,17 @@ public abstract partial class TextBoxBase : Control
 
         // We use this old computation as a lower bound to ensure backwards compatibility.
         textSize.Height = Math.Max(textSize.Height, FontHeight);
-        Size preferredSize = textSize + bordersAndPadding;
+
+        Padding padding = new Padding(0, 0, bordersAndPadding.Width, bordersAndPadding.Height);
+
+        if (VisualStylesMode>=VisualStylesMode.Version10)
+        {
+            padding = Padding.Add(padding, Padding);
+        }
+
+        Size preferredSize = textSize
+            + new Size(padding.Left + padding.Right, padding.Top + padding.Bottom);
+
         return preferredSize;
     }
 
@@ -1140,6 +1166,11 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
+    /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
+    /// </summary>
+    protected override VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Legacy;
+
+    /// <summary>
     ///  Gets or sets a value indicating whether a multiline text box control automatically wraps words to the
     ///  beginning of the next line when necessary.
     /// </summary>
@@ -1180,6 +1211,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         int saveHeight = _requestedHeight;
+
         try
         {
             if (_textBoxFlags[s_autoSize] && !_textBoxFlags[s_multiline])
@@ -1411,7 +1443,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  TextBox / RichTextBox Onpaint.
+    ///  TextBox / RichTextBox OnPaint.
     /// </summary>
     /// <hideinheritance/>
     [Browsable(false)]
@@ -1979,6 +2011,8 @@ public abstract partial class TextBoxBase : Control
 
     internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
+        InitializeClientAreaAndNCBkColor(dc, (HWND)Handle);
+
         if (msg == PInvoke.WM_CTLCOLORSTATIC && !ShouldSerializeBackColor())
         {
             // Let the Win32 Edit control handle background colors itself.
@@ -1992,16 +2026,145 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private protected virtual unsafe void InitializeClientAreaAndNCBkColor(HDC hDC, HWND hwnd)
+    {
+        // We only want to do this for VisualStylesMode >= Version10
+        // Also, we do that only one time per instance,
+        // but we need to reset this, when the handle is recreated.
+        if (VisualStylesMode < VisualStylesMode.Version10 || _triggerNewClientSizeRequest)
+        {
+            return;
+        }
+
+        _triggerNewClientSizeRequest = true;
+
+        // Get the window bounds
+        Rectangle bounds = Bounds;
+
+        // Call SetWindowPos with the current Bounds with SWP_FRAMECHANGED flag.
+        // Only then we do not change the Window pos/size, but we'll get that WmNcCalcSize message version
+        // that we need to adjust the client area.
+        PInvoke.SetWindowPos(
+            hWnd: hwnd,
+            hWndInsertAfter: HWND.Null,
+            X: bounds.Left,
+            Y: bounds.Top,
+            cx: bounds.Width,
+            cy: bounds.Height,
+            uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
+
+        // Create a GDI Brush object for the color
+        // HBRUSH brush = PInvoke.CreateSolidBrush(color.ToArgb());
+        // return brush;
+    }
+
+    private void WmNcPaint(ref Message m)
+    {
+        if (VisualStylesMode < VisualStylesMode.Version10 || !_triggerNewClientSizeRequest)
+        {
+            base.WndProc(ref m);
+            return;
+        }
+
+        Debugger.Break();
+
+        HDC hdc = PInvokeCore.GetDCEx(
+            (HWND) Handle,
+            (HRGN)(int)m.WParamInternal,
+            GET_DCX_FLAGS.DCX_WINDOW
+            | GET_DCX_FLAGS.DCX_CACHE
+            | GET_DCX_FLAGS.DCX_CLIPCHILDREN
+            | GET_DCX_FLAGS.DCX_CLIPSIBLINGS);
+
+        PInvoke.GetClipBox(hdc, out RECT clipRect);
+
+        PInvoke.GetClientRect(Handle, out RECT clientRect);
+        PInvoke.GetWindowRect(Handle, out RECT windowRect);
+
+        int width = windowRect.right - windowRect.left;
+        int height = windowRect.bottom - windowRect.top;
+
+        clip = new(
+            (width - clientRect.right) / 2,
+            (height - clientRect.bottom) / 2,
+            clientRect.right,
+            clientRect.bottom);
+
+        try
+        {
+            DrawRoundedRectangle(hdc);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            PInvoke.ReleaseDC((HWND)Handle, hdc);
+        }
+    }
+
+    protected virtual void OnNonClientPaint(PaintEventArgs pEvent)
+    {
+    }
+
+    private void DrawRoundedRectangle(HDC hdc)
+    {
+        int borderWidth = 2; // Width of the border
+        int radius = 15; // Radius of the rounded corners
+
+        PInvoke.GetWindowRect((HWND)Handle, out RECT rect);
+
+        HBRUSH hBrush = PInvoke.CreateSolidBrush(ColorTranslator.ToWin32(BackColor));
+
+        HRGN hRgn = PInvokeCore.CreateRoundRectRgn(
+            borderWidth,
+            borderWidth,
+            rect.right - rect.left - borderWidth,
+            rect.bottom - rect.top - borderWidth,
+            radius,
+            radius);
+
+        PInvoke.FillRgn(hdc, ref hRgn, hBrush);
+
+        PInvokeCore.DeleteObject(hRgn);
+        PInvokeCore.DeleteObject(hBrush);
+    }
+
+    private void WmNcCalcSize(ref Message m)
+    {
+        // Make sure _we_ actually kicked this off.
+        if (_triggerNewClientSizeRequest)
+        {
+            bool wParam = m.WParamInternal != 0;
+
+            if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
+            {
+                ncCalcSizeParams.rgrc._0.top += Padding.Top;
+                ncCalcSizeParams.rgrc._0.bottom -= Padding.Bottom;
+                ncCalcSizeParams.rgrc._0.left += Padding.Left;
+                ncCalcSizeParams.rgrc._0.right -= Padding.Right;
+
+                // Write the modified structure back to lParam
+                Marshal.StructureToPtr(ncCalcSizeParams, m.LParamInternal, false);
+
+                m.ResultInternal = (LRESULT)0;
+                return;
+            }
+        }
+
+        base.WndProc(ref m);
+    }
+
     private void WmReflectCommand(ref Message m)
     {
         if (!_textBoxFlags[s_codeUpdateText] && !_textBoxFlags[s_creatingHandle])
         {
-            uint hiword = m.WParamInternal.HIWORD;
-            if (hiword == PInvoke.EN_CHANGE && CanRaiseTextChangedEvent)
+            uint hiWord = m.WParamInternal.HIWORD;
+            if (hiWord == PInvoke.EN_CHANGE && CanRaiseTextChangedEvent)
             {
                 OnTextChanged(EventArgs.Empty);
             }
-            else if (hiword == PInvoke.EN_UPDATE)
+            else if (hiWord == PInvoke.EN_UPDATE)
             {
                 // Force update to the Modified property, which will trigger ModifiedChanged event handlers
                 _ = Modified;
@@ -2066,19 +2229,31 @@ public abstract partial class TextBoxBase : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvoke.WM_NCCALCSIZE:
+                WmNcCalcSize(ref m);
+                break;
+
+            case PInvoke.WM_NCPAINT:
+                WmNcPaint(ref m);
+                break;
+
             case PInvoke.WM_LBUTTONDBLCLK:
                 _doubleClickFired = true;
                 base.WndProc(ref m);
                 break;
+
             case MessageId.WM_REFLECT_COMMAND:
                 WmReflectCommand(ref m);
                 break;
+
             case PInvoke.WM_GETDLGCODE:
                 WmGetDlgCode(ref m);
                 break;
+
             case PInvoke.WM_SETFONT:
                 WmSetFont(ref m);
                 break;
+
             case PInvoke.WM_CONTEXTMENU:
                 if (ShortcutsEnabled)
                 {

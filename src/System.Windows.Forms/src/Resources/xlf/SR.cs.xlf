@@ -1527,6 +1527,11 @@
         <target state="translated">Ukazatel myši, který se zobrazí, pokud jej přesunete přes ovládací prvek.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Vyvolá se při změně hodnoty vlastnosti DataContext.</target>
@@ -2130,6 +2135,11 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Určuje, zda je ovládací prvek viditelný nebo skrytý.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</source>
+        <target state="new">Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -11132,6 +11142,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="VisualStylesInvalidCombination">
         <source>Given combination of Class, Part, and State is not defined by the current visual style.</source>
         <target state="translated">Zadaná kombinace Class, Part a State není definována aktuálním vizuálním stylem.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VisualStylesModeNotSupported">
+        <source>The visual style {0} is not supported for the {1} control with the name {2}.</source>
+        <target state="new">The visual style {0} is not supported for the {1} control with the name {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WebBrowserAllowDropNotSupported">

@@ -108,6 +108,8 @@ DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DwmSetWindowAttribute
+DWM_WINDOW_CORNER_PREFERENCE
 DuplicateHandle
 EC_*
 ECO_*
@@ -135,6 +137,7 @@ EXTLOGFONTW
 ExtTextOut
 FDAP
 FillRect
+FillRgn
 FindExecutable
 FINDREPLACE_FLAGS
 FindWindow
@@ -164,6 +167,7 @@ GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
+GetComboBoxInfo
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess
@@ -600,6 +604,7 @@ SetActiveWindow
 SetBkColor
 SetBkMode
 SetCapture
+SetCaretPos
 SetCursor
 SetCursorPos
 SetFocus

@@ -350,6 +350,11 @@ public partial class RichTextBox : TextBoxBase
     protected override Size DefaultSize => new(100, 96);
 
     /// <summary>
+    ///  Defines <see cref="VisualStylesMode.Latest"/> as default for this control, so this control provides the latest visual styles for .NET 9+.
+    /// </summary>
+    protected override VisualStylesMode DefaultVisualStylesMode => VisualStylesMode.Latest;
+
+    /// <summary>
     ///  We can't just enable drag/drop of text by default: it's a breaking change.
     ///  Should be false by default.
     /// </summary>

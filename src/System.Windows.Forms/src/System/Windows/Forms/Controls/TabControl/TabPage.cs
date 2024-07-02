@@ -101,7 +101,7 @@ public partial class TabPage : Panel
             {
                 return color;
             }
-            else if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+            else if (!IsDarkModeEnabled && Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
             {
                 return Color.Transparent;
             }
@@ -590,15 +590,24 @@ public partial class TabPage : Panel
 
         // Utilize the UseVisualStyleBackColor property to determine whether or not the themed
         // background should be utilized.
-        if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+        if (Application.RenderWithVisualStyles
+            && UseVisualStyleBackColor
+            && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
         {
-            Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
+            Color bkColor = (UseVisualStyleBackColor && !IsDarkModeEnabled)
+                ? Color.Transparent
+                : BackColor;
+
             Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 
             // To ensure that the TabPage draws correctly (the border will get clipped and
-            // and gradient fill will match correctly with the tabcontrol). Unfortunately,
+            // and gradient fill will match correctly with the TabControl). Unfortunately,
             // there is no good way to determine the padding used on the TabPage.
-            Rectangle rectWithBorder = new(inflateRect.X - 4, inflateRect.Y - 2, inflateRect.Width + 8, inflateRect.Height + 6);
+            Rectangle rectWithBorder = new(
+                inflateRect.X - 4,
+                inflateRect.Y - 2,
+                inflateRect.Width + 8,
+                inflateRect.Height + 6);
 
             TabRenderer.DrawTabPage(e, rectWithBorder);
 
@@ -606,7 +615,14 @@ public partial class TabPage : Panel
             // draw it ourselves.
             if (BackgroundImage is not null)
             {
-                ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
+                ControlPaint.DrawBackgroundImage(
+                    e.Graphics,
+                    BackgroundImage,
+                    bkColor,
+                    BackgroundImageLayout,
+                    inflateRect,
+                    inflateRect,
+                    DisplayRectangle.Location);
             }
         }
         else

@@ -9,7 +9,7 @@
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
-    <LangVersion>15.0</LangVersion>
+    <LangVersion>15.5</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>

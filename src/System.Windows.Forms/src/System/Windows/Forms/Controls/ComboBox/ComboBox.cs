@@ -263,7 +263,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return SystemColors.Window;
+                return Application.ApplicationColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -585,7 +585,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return SystemColors.WindowText;
+                return Application.ApplicationColors.WindowText;
             }
         }
         set => base.ForeColor = value;
@@ -780,7 +780,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  If the mouse is over the combobox, draw selection rect.
+    ///  If the mouse is over the ComboBox, draw selection rect.
     /// </summary>
     internal bool MouseIsOver
     {
@@ -793,7 +793,8 @@ public partial class ComboBox : ListControl
                 // Nothing to see here... Just keep on walking...
                 // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                 // our drawing gets a little messed up. So in case theming is off, force a draw here.
-                if ((!ContainsFocus || !Application.RenderWithVisualStyles) && FlatStyle == FlatStyle.Popup)
+                if ((!ContainsFocus || Application.DefaultVisualStylesMode != VisualStylesMode.Disabled)
+                    && FlatStyle == FlatStyle.Popup)
                 {
                     Invalidate();
                     Update();
@@ -2377,7 +2378,7 @@ public partial class ComboBox : ListControl
     ///  Inheriting classes should not forget to call
     ///  base.OnHandleCreated()
     /// </summary>
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
 
@@ -2386,10 +2387,9 @@ public partial class ComboBox : ListControl
             PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)MaxLength);
         }
 
-        // Get the handles and wndprocs of the ComboBox's child windows
-        //
-        Debug.Assert(_childEdit is null, "Child edit window already attached");
-        Debug.Assert(_childListBox is null, "Child listbox window already attached");
+        // Get the handles and WndProcs of the ComboBox's child windows
+        Debug.Assert(_childEdit is null, "Child Edit window is already attached.");
+        Debug.Assert(_childListBox is null, "Child ListBox window is already attached.");
 
         bool ok = _childEdit is null && _childListBox is null;
 
@@ -2398,7 +2398,7 @@ public partial class ComboBox : ListControl
             HWND hwnd = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
             if (!hwnd.IsNull)
             {
-                // If it's a simple dropdown list, the first HWND is the list box.
+                // If it's a simple dropdown list, the first HWND is the ListBox.
                 if (DropDownStyle == ComboBoxStyle.Simple)
                 {
                     _childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
@@ -2411,7 +2411,7 @@ public partial class ComboBox : ListControl
                 _childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
                 _childEdit.AssignHandle(hwnd);
 
-                // Set the initial margin for combobox to be zero (this is also done whenever the font is changed).
+                // Set the initial margin for ComboBox to be zero (this is also done whenever the font is changed).
                 PInvoke.SendMessage(_childEdit, PInvoke.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
             }
         }
@@ -2429,7 +2429,7 @@ public partial class ComboBox : ListControl
             UpdateItemHeight();
         }
 
-        // Resize a simple style combobox on handle creation
+        // Resize a simple style ComboBox on handle creation
         // to respect the requested height.
         //
         if (DropDownStyle == ComboBoxStyle.Simple)
@@ -2438,7 +2438,7 @@ public partial class ComboBox : ListControl
         }
 
         // If HandleCreated set the AutoComplete...
-        // this function checks if the correct properties are set to enable AutoComplete feature on combobox.
+        // This function checks if the correct properties are set to enable AutoComplete feature on ComboBox.
         try
         {
             _fromHandleCreate = true;
@@ -2447,6 +2447,18 @@ public partial class ComboBox : ListControl
         finally
         {
             _fromHandleCreate = false;
+        }
+
+        if (IsDarkModeEnabled)
+        {
+            // Style the ComboBox Open-Button:
+            PInvoke.SetWindowTheme(HWND, "DarkMode_CFD", null);
+            COMBOBOXINFO cInfo = default;
+            cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+
+            // Style the ComboBox drop-down (including its ScrollBar(s)):
+            var result = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
+            PInvoke.SetWindowTheme(cInfo.hwndList, "DarkMode_Explorer", null);
         }
 
         if (_itemsCollection is not null)
@@ -2465,7 +2477,7 @@ public partial class ComboBox : ListControl
             }
         }
 
-        // NOTE: Setting SelectedIndex must be the last thing we do.
+        // NOTE: Setting SelectedIndex must be the last thing we do!
     }
 
     /// <summary>
@@ -2722,7 +2734,7 @@ public partial class ComboBox : ListControl
         // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
         if (DataManager is not null && DataManager.Position != SelectedIndex)
         {
-            // read this as "if everett or   (whidbey and selindex is valid)"
+            // read this as "if Everett or (Whidbey and selIndex is valid)"
             if (!FormattingEnabled || SelectedIndex != -1)
             {
                 DataManager.Position = SelectedIndex;
@@ -2756,7 +2768,7 @@ public partial class ComboBox : ListControl
 
     /// <summary>
     ///  This method is called by the parent control when any property
-    ///  changes on the parent. This can be overriden by inheriting
+    ///  changes on the parent. This can be overridden by inheriting
     ///  classes, however they must call base.OnParentPropertyChanged.
     /// </summary>
     protected override void OnParentBackColorChanged(EventArgs e)
@@ -3572,7 +3584,7 @@ public partial class ComboBox : ListControl
         {
             PInvokeCore.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
-            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
+            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? Application.ApplicationColors.Control);
             hdc.FillRectangle(rect, hbrush);
             m.ResultInternal = (LRESULT)1;
             return;
@@ -3779,7 +3791,8 @@ public partial class ComboBox : ListControl
                     // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                     // as with Theming on.
 
-                    if (!Application.RenderWithVisualStyles && !GetStyle(ControlStyles.UserPaint)
+                    if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
+                        && !GetStyle(ControlStyles.UserPaint)
                         && DropDownStyle == ComboBoxStyle.DropDownList
                         && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
@@ -3851,7 +3864,7 @@ public partial class ComboBox : ListControl
             case PInvoke.WM_PAINT:
                 if (!GetStyle(ControlStyles.UserPaint)
                     && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
-                    && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
+                    && !(SystemInformation.HighContrast && BackColor == Application.ApplicationColors.Window))
                 {
                     using RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
                     using RegionScope windowRegion = new(Bounds);

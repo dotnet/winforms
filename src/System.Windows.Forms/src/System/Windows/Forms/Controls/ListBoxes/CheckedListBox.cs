@@ -582,7 +582,7 @@ public partial class CheckedListBox : ListBox
             Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
             if (!Enabled)
             {
-                foreColor = SystemColors.GrayText;
+                foreColor = Application.ApplicationColors.GrayText;
             }
 
             Font font = Font;
@@ -595,13 +595,13 @@ public partial class CheckedListBox : ListBox
             {
                 if (Enabled)
                 {
-                    backColor = SystemColors.Highlight;
-                    foreColor = SystemColors.HighlightText;
+                    backColor = Application.ApplicationColors.Highlight;
+                    foreColor = Application.ApplicationColors.HighlightText;
                 }
                 else
                 {
-                    backColor = SystemColors.InactiveBorder;
-                    foreColor = SystemColors.GrayText;
+                    backColor = Application.ApplicationColors.InactiveBorder;
+                    foreColor = Application.ApplicationColors.GrayText;
                 }
             }
 
@@ -728,7 +728,7 @@ public partial class CheckedListBox : ListBox
                 Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
                 if (!Enabled)
                 {
-                    foreColor = SystemColors.GrayText;
+                    foreColor = Application.ApplicationColors.GrayText;
                 }
 
                 ControlPaint.DrawFocusRectangle(e.Graphics, emptyRectangle, foreColor, backColor);

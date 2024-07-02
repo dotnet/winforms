@@ -40,6 +40,11 @@ public sealed partial class Application
     private static readonly object s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
+    private static DarkMode? s_darkMode;
+
+    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string DarkModeKey = "AppsUseLightTheme";
+
     /// <summary>
     ///  Events the user can hook into
     /// </summary>
@@ -52,7 +57,6 @@ public sealed partial class Application
 
     // Used to avoid recursive exit
     private static bool s_exiting;
-
     private static bool s_parkingWindowCreated;
 
     /// <summary>
@@ -103,6 +107,7 @@ public sealed partial class Application
         // GetModuleHandle  returns a handle to a mapped module without incrementing its
         // reference count.
         var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
+
         fixed (byte* ptr = "ImageList_WriteEx\0"u8)
         {
             if (!hModule.IsNull)
@@ -113,6 +118,7 @@ public sealed partial class Application
 
         // Load comctl since GetModuleHandle failed to find it
         nint ninthModule = PInvoke.LoadComctl32(StartupPath);
+
         if (ninthModule == 0)
         {
             return false;
@@ -234,13 +240,166 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-    internal static Font? DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+    public static DarkMode DefaultDarkMode
+    {
+        get
+        {
+            if (!s_darkMode.HasValue)
+            {
+                if (EnvironmentDarkMode is DarkMode.NotSupported)
+                {
+                    return DarkMode.NotSupported;
+                }
+
+                return DarkMode.Disabled;
+            }
+
+            return s_darkMode.Value;
+        }
+    }
+
+    /// <summary>
+    ///  Gets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Starting from .NET 9, controls are required to adapt to new requirements in certain situations such as
+    ///   dark mode and enhanced accessibility (A11Y) features. These changes can potentially alter the layout
+    ///   and appearance of forms.
+    ///  </para>
+    ///  <para>
+    ///   Therefore, it is necessary to provide mechanisms to finely control backwards compatibility for existing
+    ///   and upcoming versions. This includes adjusting control rendering, requesting different sizes for new
+    ///   minimum space requirements, and handling adornments or margins/paddings. This property allows developers
+    ///   to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
+    ///   particularly when backwards compatibility is essential.
+    ///  </para>
+    /// </remarks>
+
+    public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
+
+    /// <summary>
+    ///  Sets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    ///  Default is <see cref="VisualStylesMode.Latest"/> when visual style rendering is enabled,
+    ///  otherwise <see cref="VisualStylesMode.Disabled"/>. Setting to <see cref="VisualStylesMode.Disabled"/> has the same effect
+    ///  as not setting using <see cref="EnableVisualStyles"/>.
+    /// </summary>
+    /// <param name="styleSetting">The version of visual styles to set.</param>
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        if (styleSetting != DefaultVisualStylesMode)
+        {
+            DefaultVisualStylesMode = styleSetting;
+
+            if (styleSetting == VisualStylesMode.Disabled)
+            {
+                UseVisualStyles = false;
+                return;
+            }
+
+            EnableVisualStyles();
+        }
+    }
+
+    public static bool IsVisualStylesSupported
+        => DefaultVisualStylesMode switch
+        {
+            VisualStylesMode.Disabled => false,
+            _ => true
+        };
+
+    /// <summary>
+    ///  Sets the default dark mode for the application.
+    /// </summary>
+    /// <param name="darkMode">The default dark mode to set.</param>
+    /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
+    public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
+    {
+        DarkMode.Enabled or
+        DarkMode.Disabled or
+        DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
+        _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
+    };
+
+    private static bool SetDefaultDarkModeCore(DarkMode darkMode)
+    {
+        if (EnvironmentDarkMode == DarkMode.NotSupported)
+        {
+            s_darkMode = DarkMode.NotSupported;
+            return false;
+        }
+
+        s_darkMode = darkMode;
+        return true;
+    }
+
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
+
+    public static DarkMode EnvironmentDarkMode
+    {
+        get
+        {
+            int systemDarkMode = -1;
+
+            if (SystemInformation.HighContrast)
+            {
+                return DarkMode.NotSupported;
+            }
+
+            // Dark mode is supported when we are >= W11/22000
+            // Technically, we could go earlier, but then the APIs we're using weren't officially public.
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                try
+                {
+                    systemDarkMode = (int)(Registry.GetValue(
+                        keyName: DarkModeKeyPath,
+                        valueName: DarkModeKey,
+                        defaultValue: -1) ?? 0);
+                }
+                catch
+                {
+                }
+            }
+
+            return systemDarkMode switch
+            {
+                0 => DarkMode.Enabled,
+                1 => DarkMode.Disabled,
+                _ => DarkMode.NotSupported
+            };
+        }
+    }
+
+    /// <summary>
+    ///  Gets a value indicating whether the application is running in a dark mode context.
+    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    /// </summary>
+    public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
+        && DefaultDarkMode switch
+        {
+            DarkMode.Enabled => true,
+            DarkMode.Disabled => false,
+            _ => EnvironmentDarkMode switch
+            {
+                DarkMode.Enabled => true,
+                DarkMode.Disabled => false,
+
+                // We return false even if DarkMode is not supported so that we ALWAYS have a valid result here.
+                _ => false
+            }
+        };
+
+    public static ApplicationColors ApplicationColors
+        => IsDarkModeEnabled
+            ? DarkThemedApplicationColors.DefaultInstance
+            : LightThemedApplicationColors.DefaultInstance;
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
     /// </summary>
-    public static string ExecutablePath =>
-        s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
+    public static string ExecutablePath
+        => s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
 
     /// <summary>
     ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
@@ -392,8 +551,9 @@ public sealed partial class Application
     ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
     ///  of the controls in your app.
     /// </summary>
-    public static bool RenderWithVisualStyles
-        => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
+    public static bool RenderWithVisualStyles =>
+        ComCtlSupportsVisualStyles
+            && DefaultVisualStylesMode != VisualStylesMode.Disabled;
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
@@ -772,6 +932,7 @@ public sealed partial class Application
             // Extract the manifest from managed resources.
             using Stream? stream = module.Assembly.GetManifestResourceStream(
                 "System.Windows.Forms.XPThemes.manifest");
+
             if (stream is not null)
             {
                 UseVisualStyles = ThemingScope.CreateActivationContext(stream);
@@ -779,6 +940,11 @@ public sealed partial class Application
         }
 
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+
+        if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
+        {
+            DefaultVisualStylesMode = VisualStylesMode.Latest;
+        }
 
         s_comCtlSupportsVisualStylesInitialized = false;
     }
