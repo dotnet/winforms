@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -219,36 +220,94 @@ public class ApplicationTests
     }
 
     [WinFormsFact]
-    public void Application_SetDefaultFont_MustNotCloneSystemFont()
+    public void Application_SetDefaultFont_SystemFont()
     {
         var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
-        Font systemCaptionFont = SystemFonts.CaptionFont;
-        Assert.True(systemCaptionFont.IsSystemFont);
-
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
         var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
         bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
-
         try
         {
             nativeWindowTestAccessor.t_anyHandleCreated = false;
-            Application.SetDefaultFont(systemCaptionFont);
+            using Font sysFont = SystemFonts.CaptionFont;
+            Assert.True(sysFont.IsSystemFont);
+            Application.SetDefaultFont(sysFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            // Because we set default font to system font, then in this test it must not be changed,
+            // unless, of course, after calling SystemFonts.CaptionFont and this check
+            // HKCU\Software\Microsoft\Accessibility\TextScaleFactor is not changed
+            Assert.True(sysFont == Application.DefaultFont);
 
-            // We now handle the system font case within the ScaleHelper so we have no need to clone it.
-            Assert.True(applicationTestAccessor.s_defaultFont.IsSystemFont);
+            // create fake system font
+            using Font fakeSysFont = sysFont.WithSize(sysFont.Size * 1.25f);
+            // set IsSystemFont flag
+            fakeSysFont.TestAccessor().Dynamic.SetSystemFontName(sysFont.SystemFontName);
+            Assert.True(fakeSysFont.IsSystemFont);
+            Application.SetDefaultFont(fakeSysFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            Assert.False(fakeSysFont.Equals(Application.DefaultFont));
+            Assert.False(sysFont == Application.DefaultFont);
+            Assert.True(sysFont.Equals(Application.DefaultFont));
         }
         finally
         {
             // Flip the bit back
             nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
-
             applicationTestAccessor.s_defaultFont.Dispose();
-            applicationTestAccessor.s_defaultFontScaled?.Dispose();
             applicationTestAccessor.s_defaultFont = null;
+        }
+    }
+
+    [WinFormsFact]
+    public void Application_SetDefaultFont_NonSystemFont()
+    {
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        Assert.Null(applicationTestAccessor.s_defaultFont);
+        Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+        using Font font = new(new FontFamily("Arial"), 12f);
+        Assert.False(font.IsSystemFont);
+
+        // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
+        // And we won't be able to set the font, unless we flip the bit
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
+        try
+        {
+            nativeWindowTestAccessor.t_anyHandleCreated = false;
+            Application.SetDefaultFont(font);
+            if (!OsVersion.IsWindows10_1507OrGreater())
+            {
+                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+                Assert.True(font == Application.DefaultFont);
+                return;
+            }
+
+            // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
+            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);
+            if (textScale == 100) // Application.DefaultFont must be the same
+            {
+                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+                Assert.True(font == Application.DefaultFont);
+            }
+            else // Application.DefaultFont must be a new scaled font
+            {
+                Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
+                Assert.False(font.Equals(Application.DefaultFont));
+            }
+        }
+        finally
+        {
+            // Flip the bit back
+            nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
+            applicationTestAccessor.s_defaultFont.Dispose();
+            applicationTestAccessor.s_defaultFont = null;
+            applicationTestAccessor.s_defaultFontScaled?.Dispose();
             applicationTestAccessor.s_defaultFontScaled = null;
         }
     }
