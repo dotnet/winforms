@@ -51,7 +51,7 @@ public sealed partial class CodeDomComponentSerializationService
         private ICollection? _errors;
 
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-        internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } =
+        internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization =>
             AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled)
                 ? isEnabled
                 : true;
@@ -174,7 +174,7 @@ public sealed partial class CodeDomComponentSerializationService
 
                     try
                     {
-                        success = BinaryFormatWriter.TryWriteFrameworkObject(_resourceStream, _resources.Data);
+                        success = BinaryFormatWriter.TryWriteHashtable(_resourceStream, _resources.Data);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
