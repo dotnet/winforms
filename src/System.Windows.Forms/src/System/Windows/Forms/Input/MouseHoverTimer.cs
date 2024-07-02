@@ -6,9 +6,7 @@ namespace System.Windows.Forms;
 internal class MouseHoverTimer : IDisposable
 {
     private readonly Timer _mouseHoverTimer = new();
-
-    // Consider - weak reference?
-    private ToolStripItem? _currentItem;
+    private readonly WeakReference<ToolStripItem?> _currentItem = new(null);
 
     public MouseHoverTimer()
     {
@@ -18,30 +16,26 @@ internal class MouseHoverTimer : IDisposable
 
     public void Start(ToolStripItem? item)
     {
-        if (item != _currentItem)
+        _currentItem.TryGetTarget(out var currentItem);
+        if (item != currentItem)
         {
-            Cancel(_currentItem);
+            Cancel();
+            _currentItem.SetTarget(item);
         }
 
-        _currentItem = item;
-        if (_currentItem is not null)
+        if (item is not null)
         {
             _mouseHoverTimer.Enabled = true;
         }
     }
 
-    public void Cancel()
-    {
-        _mouseHoverTimer.Enabled = false;
-        _currentItem = null;
-    }
-
-    /// <summary> cancels if and only if this item was the one that
-    ///  requested the timer
+    /// <summary>
+    /// Cancels if and only if this <paramref name="item"/> was the one that requested the timer.
     /// </summary>
     public void Cancel(ToolStripItem? item)
     {
-        if (item == _currentItem)
+        _currentItem.TryGetTarget(out var currentItem);
+        if (item == currentItem)
         {
             Cancel();
         }
@@ -53,12 +47,18 @@ internal class MouseHoverTimer : IDisposable
         _mouseHoverTimer.Dispose();
     }
 
+    private void Cancel()
+    {
+        _mouseHoverTimer.Enabled = false;
+        _currentItem.SetTarget(null);
+    }
+
     private void OnTick(object? sender, EventArgs e)
     {
         _mouseHoverTimer.Enabled = false;
-        if (_currentItem is not null && !_currentItem.IsDisposed)
+        if (_currentItem.TryGetTarget(out var currentItem) && !currentItem.IsDisposed)
         {
-            _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
+            currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
         }
     }
 }
