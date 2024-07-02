@@ -11,6 +11,8 @@ Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
+Imports System.Security.Cryptography
+Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
@@ -354,7 +356,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
-                        Throw New CantStartSingleInstanceException()
+                        Throw New CantStartSingleInstanceException($"{GetResourceString(SR.AppModel_SingleInstanceCantConnect)}: {ApplicationInstanceID}")
                     End Try
                 End If
             End If 'Single-Instance application
@@ -1006,28 +1008,35 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         ''' Generates the name for the remote singleton that we use to channel multiple instances
-        ''' to the same application model thread.
+        ''' to the same application model thread for the current user.
         ''' </summary>
         ''' <returns>A string unique to the application that should be the same for versions of
         '''  the application that have the same Major and Minor Version Number
         ''' </returns>
         ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
-        Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
-
-            Dim guidAttrib As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
-
-            If guidAttrib IsNot Nothing Then
-
-                Dim version As Version = Entry.GetName.Version
-
+        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
+            Dim guidAttribute As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
+            Dim currentUserSID As String = Principal.WindowsIdentity.GetCurrent().User.Value
+            Dim location As String = entry.Location
+            Dim pathGuid As Guid = GetFilePathAsGuid(location)
+            If guidAttribute IsNot Nothing Then
+                Dim version As Version = entry.GetName.Version
                 If version IsNot Nothing Then
-                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                    Return $"{pathGuid}-{guidAttribute.Value}{version.Major}.{version.Minor}-{currentUserSID}"
                 Else
-                    Return guidAttrib.Value
+                    Return $"{pathGuid}-{guidAttribute.Value}-{currentUserSID}"
                 End If
             End If
 
-            Return Entry.ManifestModule.ModuleVersionId.ToString()
+            Return $"{pathGuid}-{entry.ManifestModule.ModuleVersionId}-{currentUserSID}"
         End Function
+
+#Disable Warning CA5351 ' We want speed over collision resistance.
+        Private Shared Function GetFilePathAsGuid(filePath As String) As Guid
+            Dim filePathBytes As Byte() = Encoding.UTF8.GetBytes(filePath)
+            Dim hashBytes As Byte() = MD5.HashData(filePathBytes)
+            Return New Guid(hashBytes)
+        End Function
+#Enable Warning CA5351
     End Class
 End Namespace
