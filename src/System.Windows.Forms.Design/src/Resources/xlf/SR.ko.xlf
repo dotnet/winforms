@@ -137,6 +137,11 @@
         <target state="translated">바이트 배열 속성 편집기</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="new">Using the BinaryFormatter is not supported in trimmed applications.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormat">
         <source>Custo&amp;m format</source>
         <target state="translated">사용자 지정 서식(&amp;M)</target>

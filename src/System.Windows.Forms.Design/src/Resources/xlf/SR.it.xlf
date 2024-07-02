@@ -137,6 +137,11 @@
         <target state="translated">Editor proprietà matrici di byte</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
+        <target state="new">Using the BinaryFormatter is not supported in trimmed applications.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormat">
         <source>Custo&amp;m format</source>
         <target state="translated">For&amp;mato personalizzato</target>

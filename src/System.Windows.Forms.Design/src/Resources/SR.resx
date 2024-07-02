@@ -1626,4 +1626,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="CollectionEditorCreateInstanceError" xml:space="preserve">
     <value>Neither {0} nor {1} can create an instance of {2}.</value>
   </data>
+  <data name="BinaryFormatterNotSupported" xml:space="preserve">
+    <value>Using the BinaryFormatter is not supported in trimmed applications.</value>
+  </data>
 </root>
