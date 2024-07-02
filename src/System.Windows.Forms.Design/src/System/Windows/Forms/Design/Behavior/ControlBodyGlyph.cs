@@ -20,7 +20,11 @@ public class ControlBodyGlyph : ComponentGlyph
     /// <summary>
     ///  Standard Constructor.
     /// </summary>
-    public ControlBodyGlyph(Rectangle bounds, Cursor? cursor, IComponent? relatedComponent, ControlDesigner? designer)
+    public ControlBodyGlyph(
+        Rectangle bounds,
+        Cursor? cursor,
+        IComponent? relatedComponent,
+        ControlDesigner designer)
         : base(relatedComponent, new ControlDesigner.TransparentBehavior(designer))
     {
         _bounds = bounds;
