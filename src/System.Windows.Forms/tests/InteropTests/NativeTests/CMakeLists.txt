@@ -32,6 +32,7 @@ add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/we4055>) # 'conversion' : from 
 
 add_library(NativeTests SHARED
     AccessibleObjectTests.cpp
+    AxTestControl.cpp
     DllGetClassObject.cpp
     DispatchImpl.cpp
     RawErrorInfoUsageTest.cpp
