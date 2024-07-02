@@ -3455,4 +3455,160 @@ public partial class DataGridViewTests: IDisposable
         _dataGridView.Sort(_dataGridView.Columns[0], ListSortDirection.Descending);
         callCount.Should().Be(1);
     }
+
+    [WinFormsFact]
+    public void DataGridView_BackColorChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.BackColorChanged += handler;
+        _dataGridView.BackColor = Color.Red;
+        callCount.Should().Be(1);
+
+        _dataGridView.BackColorChanged -= handler;
+        _dataGridView.BackColor = Color.Blue;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BackgroundImageChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.BackgroundImageChanged += handler;
+        using (Bitmap bmp = new(10, 10))
+        {
+            _dataGridView.BackgroundImage = bmp;
+        }
+
+        callCount.Should().Be(1);
+
+        _dataGridView.BackgroundImageChanged -= handler;
+        using (Bitmap bmp = new(20, 20))
+        {
+            _dataGridView.BackgroundImage = bmp;
+        }
+
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BackgroundImageLayoutChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.BackgroundImageLayoutChanged += handler;
+        _dataGridView.BackgroundImageLayout = ImageLayout.Center;
+        callCount.Should().Be(1);
+
+        _dataGridView.BackgroundImageLayoutChanged -= handler;
+        _dataGridView.BackgroundImageLayout = ImageLayout.Stretch;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ForeColorChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.ForeColorChanged += handler;
+        _dataGridView.ForeColor = Color.Red;
+        callCount.Should().Be(1);
+
+        _dataGridView.ForeColorChanged -= handler;
+        _dataGridView.ForeColor = Color.Blue;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_FontChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.FontChanged += handler;
+        using (Font font = new("Arial", 12))
+        {
+            _dataGridView.Font = font;
+        }
+      
+        callCount.Should().Be(1);
+
+        _dataGridView.FontChanged -= handler;
+        using (Font font = new("Times New Roman", 14))
+        {
+            _dataGridView.Font = font;
+        }
+
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_PaddingChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.PaddingChanged += handler;
+        _dataGridView.Padding = new(10);
+        callCount.Should().Be(1);
+
+        _dataGridView.PaddingChanged -= handler;
+        _dataGridView.Padding = new(20);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_TextChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.TextChanged += handler;
+        _dataGridView.Text = "New Text";
+        callCount.Should().Be(1);
+
+        _dataGridView.TextChanged -= handler;
+        _dataGridView.Text = "Another Text";
+        callCount.Should().Be(1);
+    }
 }
