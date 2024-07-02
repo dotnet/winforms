@@ -275,4 +275,158 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
 
         Assert.Equal(lastCalendar, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_TodayDate_ReturnsOwnerTodayDate_IfOwnerIsNotNull()
+    {
+        using MonthCalendar monthCalendar = new();
+        DateTime expectedTodayDate = new(2023, 1, 1);
+        monthCalendar.TodayDate = expectedTodayDate;
+        var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+
+        accessibleObject.TodayDate.Should().Be(expectedTodayDate);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendarAccessibleObject_ShowWeekNumbers_IsExpected(bool showWeekNumbers)
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.ShowWeekNumbers = showWeekNumbers;
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        accessibleObject.ShowWeekNumbers.Should().Be(showWeekNumbers);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_FirstDayOfWeek_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.FirstDayOfWeek = Day.Monday;
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        accessibleObject.FirstDayOfWeek.Should().Be(DayOfWeek.Monday);
+    }
+
+    [WinFormsFact]
+    public void GetColumnHeaders_ShouldReturnNull()
+    {
+        using MonthCalendar monthCalendar = new();
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+
+        accessibleObject.GetColumnHeaders().Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_GetFocus_ReturnsFocusedCell()
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.CreateControl();
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        DateTime focusedDate = new(2023, 10, 1);
+        monthCalendar.SetDate(focusedDate);
+
+        var focusedCell = accessibleObject.FocusedCell;
+        var focus = accessibleObject.GetFocus();
+
+        focus.Should().Be(focusedCell);
+        monthCalendar.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_GetFocus_ReturnsNull_IfNoFocusedCell()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var focus = accessibleObject.GetFocus();
+
+        focus.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void CanGetHelpInternal_ShouldBeFalse()
+    {
+        using MonthCalendar monthCalendar = new();
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+
+        accessibleObject.CanGetHelpInternal.Should().BeFalse();
+        monthCalendar.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendarAccessibleObject_IsEnabled_ReturnsExpected(bool enabled)
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.Enabled = enabled;
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        accessibleObject.IsEnabled.Should().Be(enabled);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendarAccessibleObject_RowOrColumnMajor_ReturnsExpected(bool createControl)
+    {
+        using MonthCalendar monthCalendar = new();
+        if (createControl)
+        {
+            monthCalendar.CreateControl();
+        }
+
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        accessibleObject.RowOrColumnMajor.Should().Be(RowOrColumnMajor.RowOrColumnMajor_RowMajor);
+        monthCalendar.IsHandleCreated.Should().Be(createControl);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_SelectionRange_ReturnsExpected_IfHandleIsCreated()
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.CreateControl();
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        SelectionRange expected = monthCalendar.SelectionRange;
+        SelectionRange actual = accessibleObject.SelectionRange;
+
+        actual.Start.Should().Be(expected.Start);
+        actual.End.Should().Be(expected.End);
+        monthCalendar.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_SetFocus_RaisesAutomationEvent_IfFocusedCellIsNotNull()
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.CreateControl();
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        var focusedCell = accessibleObject.FocusedCell;
+        focusedCell.Should().NotBeNull();
+
+        bool eventRaised = false;
+        focusedCell.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+        eventRaised = true;
+
+        accessibleObject.SetFocus();
+        eventRaised.Should().BeTrue();
+        monthCalendar.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_SetFocus_DoesNotRaiseAutomationEvent_IfFocusedCellIsNull()
+    {
+        using MonthCalendar monthCalendar = new();
+        var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+        accessibleObject.FocusedCell.Should().BeNull();
+
+        bool eventRaised = false;
+
+        accessibleObject.SetFocus();
+        eventRaised.Should().BeFalse();
+    }
 }

@@ -249,4 +249,48 @@ public class MonthCalendar_CalendarCellAccessibleObjectTests
         Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_CanGetDescriptionInternal_ReturnsFalse()
+    {
+        using MonthCalendar control = new();
+        CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control);
+
+        bool canGetDescription = cellAccessibleObject.CanGetDescriptionInternal;
+
+        canGetDescription.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_GetColumnHeaderItems_ReturnsNull_IfHandleNotCreated()
+    {
+        using MonthCalendar control = new();
+        CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control);
+        cellAccessibleObject.GetColumnHeaderItems().Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, 1, typeof(CalendarWeekNumberCellAccessibleObject))]
+    [InlineData(false, 0, null)]
+    public void CalendarCellAccessibleObject_GetRowHeaderItems_ReturnsCorrectly(bool showWeekNumbers, int expectedCount, Type expectedType)
+    {
+        using MonthCalendar control = new() { ShowWeekNumbers = showWeekNumbers };
+        control.CreateControl();
+        CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
+
+        var rowHeaderItems = cellAccessibleObject.GetRowHeaderItems();
+
+        if (expectedCount == 0)
+        {
+            rowHeaderItems.Should().BeNull("no week number cells should be present as row headers when week numbers are not visible");
+        }
+        else
+        {
+            rowHeaderItems.Should().NotBeNull();
+            rowHeaderItems.Should().HaveCount(expectedCount, $"expected {expectedCount} week number cell(s) as row header(s)");
+            rowHeaderItems[0].Should().BeAssignableTo(expectedType, "the row header should match the expected type");
+        }
+
+        control.IsHandleCreated.Should().BeTrue();
+    }
 }

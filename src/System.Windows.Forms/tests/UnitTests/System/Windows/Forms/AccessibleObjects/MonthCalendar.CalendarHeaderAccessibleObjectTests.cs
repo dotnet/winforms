@@ -61,4 +61,14 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
 
         return headerAccessibleObject;
     }
+
+    [WinFormsFact]
+    public void CalendarHeaderAccessibleObject_CanGetNameInternal_ReturnsFalse()
+    {
+        using MonthCalendar control = new();
+        CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
+        bool canGetName = headerAccessibleObject.CanGetNameInternal;
+
+        canGetName.Should().BeFalse();
+    }
 }
