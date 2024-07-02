@@ -180,7 +180,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
         }
 
-        if (e.Item is ToolStripMenuItem menuItem && (menuItem.Checked || menuItem.Selected))
+        if (e.Item is ToolStripMenuItem menuItem && !e.Item.IsOnDropDown && (menuItem.Checked || menuItem.Selected))
         {
             Graphics g = e.Graphics;
             Rectangle bounds = new(Point.Empty, menuItem.Size);
@@ -233,12 +233,13 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
 
         // ToolstripButtons and ToolstripMenuItems that are checked are rendered with a highlight
         // background. In that case, set the text color to highlight as well.
-        if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&
-            ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripButton)e.Item).Checked) ||
-            (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType()) &&
-            ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripMenuItem)e.Item).Checked))
+        if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType())
+            && ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image
+            && ((ToolStripButton)e.Item).Checked)
+            || (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType())
+            && ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image
+            && !e.Item.IsOnDropDown
+            && ((ToolStripMenuItem)e.Item).Checked))
         {
             e.TextColor = SystemColors.HighlightText;
         }
