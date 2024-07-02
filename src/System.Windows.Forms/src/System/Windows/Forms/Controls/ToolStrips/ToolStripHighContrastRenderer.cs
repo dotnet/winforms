@@ -233,13 +233,13 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
 
         // ToolstripButtons and ToolstripMenuItems that are checked are rendered with a highlight
         // background. In that case, set the text color to highlight as well.
-        if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&
-            ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripButton)e.Item).Checked) ||
-            (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType()) &&
-            ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            !e.Item.IsOnDropDown &&
-            ((ToolStripMenuItem)e.Item).Checked))
+        if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType())
+            && ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image
+            && ((ToolStripButton)e.Item).Checked)
+            || (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType())
+            && ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image
+            && !e.Item.IsOnDropDown
+            && ((ToolStripMenuItem)e.Item).Checked))
         {
             e.TextColor = SystemColors.HighlightText;
         }
