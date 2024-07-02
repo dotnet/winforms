@@ -94,4 +94,18 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void CalendarPreviousButtonAccessibleObject_CanGetDescriptionInternal_And_CanGetNameInternal_ReturnFalse()
+    {
+        using MonthCalendar control = new();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
+
+        bool canGetDescription = previousButtonAccessibleObject.CanGetDescriptionInternal;
+        bool canGetName = previousButtonAccessibleObject.CanGetNameInternal;
+
+        canGetDescription.Should().BeFalse();
+        canGetName.Should().BeFalse();
+    }
 }

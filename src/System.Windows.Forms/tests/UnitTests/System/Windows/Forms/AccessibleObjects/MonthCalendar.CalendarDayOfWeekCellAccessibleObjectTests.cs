@@ -209,4 +209,15 @@ public class MonthCalendar_CalendarDayOfWeekCellAccessibleObjectTests
 
         return cellAccessibleObject;
     }
+
+    [WinFormsFact]
+    public void CalendarDayOfWeekCellAccessibleObject_IsPatternSupported_CallsBaseForUnsupportedPatterns_UsingFluentAssertions()
+    {
+        using MonthCalendar control = new();
+        CalendarDayOfWeekCellAccessibleObject cellAccessibleObject = CreateCalendarDayOfWeekCellCellAccessibleObject(control);
+        UIA_PATTERN_ID basePatternId = UIA_PATTERN_ID.UIA_ExpandCollapsePatternId;
+
+        bool actual = cellAccessibleObject.IsPatternSupported(basePatternId);
+        actual.Should().BeFalse();
+    }
 }

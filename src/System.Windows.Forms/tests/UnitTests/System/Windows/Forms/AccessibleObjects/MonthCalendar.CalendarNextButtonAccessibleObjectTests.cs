@@ -30,6 +30,8 @@ public class MonthCalendar_CalendarNextButtonAccessibleObjectTests
 
         nextButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling).Should().BeSameAs(previousButton);
         nextButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling).Should().BeSameAs(firstCalendar);
+        nextButtonAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
+        nextButtonAccessibleObject.CanGetNameInternal.Should().BeFalse();
 
         Rectangle actual = nextButtonAccessibleObject.Bounds;
         Rectangle actualInClientCoordinates = control.RectangleToClient(actual);

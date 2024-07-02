@@ -114,4 +114,18 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void CalendarTodayLinkAccessibleObject_CanGetDescriptionInternalAndCanGetNameInternal_ReturnsFalse()
+    {
+        using MonthCalendar control = new();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+        bool canGetDescription = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetDescriptionInternal;
+        bool canGetName = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetNameInternal;
+
+        canGetDescription.Should().BeFalse();
+        canGetName.Should().BeFalse();
+    }
 }

@@ -209,12 +209,12 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void CalendarRowAccessibleObject_CanGetDescriptionInternal_ReturnsFalse()
+    public void CalendarRowAccessibleObject_CanGetDescriptionAndNameInternal_ShouldBeFalse()
     {
         using MonthCalendar control = new();
         CalendarRowAccessibleObject rowAccessibleObject = CreateCalendarRowAccessibleObject(control);
 
         rowAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
-        control.IsHandleCreated.Should().BeFalse();
+        rowAccessibleObject.CanGetNameInternal.Should().BeFalse();
     }
 }
