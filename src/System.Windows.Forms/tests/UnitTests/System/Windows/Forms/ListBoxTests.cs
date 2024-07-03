@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Moq;
 using System.Windows.Forms.TestUtilities;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -6256,6 +6257,205 @@ public class ListBoxTests
             Assert.Equal(0, listBox.SelectedIndices.Count);
             Assert.Equal(0, listBox.SelectedItems.Count);
         }
+    }
+
+    [WinFormsFact]
+    public void ListBox_GetItemText_FormattingEnabledTrue_SelectedItemNull_ReturnsEmptyString()
+    {
+        using ListBox listBox = new() { FormattingEnabled = true, SelectedItem = null };
+
+        string result = listBox.GetItemText(listBox.SelectedItem);
+        result.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void ListBox_GetItemText_FormattingEnabledTrue_SelectedItemNotNull_ReturnsItemText()
+    {
+        using ListBox listBox = new() { FormattingEnabled = true };
+        listBox.Items.Add("TestItem");
+        listBox.SelectedItem = "TestItem";
+
+        string result = listBox.GetItemText(listBox.SelectedItem);
+        result.Should().Be("TestItem");
+    }
+
+    [WinFormsFact]
+    public void ListBox_GetItemText_FormattingEnabledFalse_ReturnsItemText()
+    {
+        using ListBox listBox = new() { FormattingEnabled = false };
+        listBox.Items.Add("TestItem");
+        listBox.SelectedItem = "TestItem";
+
+        string result = listBox.GetItemText(listBox.SelectedItem);
+        result.Should().Be("TestItem");
+    }
+
+    [WinFormsFact]
+    public void ListBox_Refresh_OwnerDrawVariable_CallsOnMeasureItem()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.OwnerDrawVariable,
+            Items = { "Item1", "Item2", "Item3" }
+        };
+
+        bool measureItemCalled = false;
+        listBox.MeasureItem += (sender, e) =>
+        {
+            measureItemCalled = true;
+        };
+
+        listBox.Refresh();
+
+        measureItemCalled.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void ListBox_Refresh_OwnerDrawFixed_DoesNotCallOnMeasureItem()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.OwnerDrawFixed,
+            Items = { "Item1", "Item2", "Item3" }
+        };
+
+        bool measureItemCalled = false;
+        listBox.MeasureItem += (sender, e) =>
+        {
+            measureItemCalled = true;
+        };
+
+        listBox.Refresh();
+
+        measureItemCalled.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ListBox_Refresh_Normal_DoesNotCallOnMeasureItem()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            Items = { "Item1", "Item2", "Item3" }
+        };
+
+        bool measureItemCalled = false;
+        listBox.MeasureItem += (sender, e) =>
+        {
+            measureItemCalled = true;
+        };
+
+        listBox.Refresh();
+
+        measureItemCalled.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ListBox_ItemsCollectionIsNull_ReturnsZero()
+    {
+        using ListBox listBox = new();
+        listBox.Items.Clear();
+        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
+        itemCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void ListBox_ItemsCollectionIsNotNull_ReturnsItemCount()
+    {
+        using ListBox listBox = new();
+        listBox.Items.Add("Item1");
+        listBox.Items.Add("Item2");
+        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
+        itemCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void ListBox_ItemsCollectionIsEmpty_ReturnsZero()
+    {
+        using ListBox listBox = new();
+        listBox.Items.Clear();
+        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
+        itemCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void ListBox_SelectionModeNone_ThrowsArgumentException()
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = SelectionMode.None;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().Throw<ArgumentException>()
+            .WithMessage("Cannot call this method when SelectionMode is SelectionMode.NONE.*");
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.One)]
+    [InlineData(SelectionMode.MultiSimple)]
+    [InlineData(SelectionMode.MultiExtended)]
+    public void ListBox_SelectionModeValid_DoesNotThrow(SelectionMode selectionMode)
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = selectionMode;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_RecreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        var recreateHandleMethod = typeof(ListBox).GetMethod("RecreateHandle", BindingFlags.NonPublic | BindingFlags.Instance);
+        recreateHandleMethod.Should().NotBeNull("RecreateHandle method should exist in ListBox class");
+        recreateHandleMethod.Invoke(listBox, null);
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_CreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        var setStateMethod = typeof(ListBox).GetMethod("SetState", BindingFlags.NonPublic | BindingFlags.Instance);
+        setStateMethod.Should().NotBeNull("SetState method should exist in ListBox class");
+        setStateMethod.Invoke(listBox, new object[] { 1, true });
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
     }
 
     private class SubListBox : ListBox
