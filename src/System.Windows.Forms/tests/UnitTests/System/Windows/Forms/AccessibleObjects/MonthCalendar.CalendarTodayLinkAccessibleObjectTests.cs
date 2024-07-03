@@ -14,9 +14,15 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         using MonthCalendar control = new();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+     
+        controlAccessibleObject.Should().BeEquivalentTo(todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
+        control.IsHandleCreated.Should().BeFalse();
 
-        Assert.Equal(controlAccessibleObject, todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
-        Assert.False(control.IsHandleCreated);
+        bool canGetDescriptionInternalResult = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetDescriptionInternal;
+        canGetDescriptionInternalResult.Should().BeFalse();
+
+        bool CanGetNameInternalResult = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetNameInternal;
+        CanGetNameInternalResult.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -113,19 +119,5 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void CalendarTodayLinkAccessibleObject_CanGetDescriptionInternalAndCanGetNameInternal_ReturnsFalse()
-    {
-        using MonthCalendar control = new();
-        var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
-        CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
-
-        bool canGetDescription = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetDescriptionInternal;
-        bool canGetName = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetNameInternal;
-
-        canGetDescription.Should().BeFalse();
-        canGetName.Should().BeFalse();
     }
 }

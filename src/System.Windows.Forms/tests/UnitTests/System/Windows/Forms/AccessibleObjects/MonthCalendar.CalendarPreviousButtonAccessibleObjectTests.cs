@@ -15,8 +15,10 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
 
-        Assert.Equal(controlAccessibleObject, previousButtonAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
-        Assert.False(control.IsHandleCreated);
+        controlAccessibleObject.Should().BeEquivalentTo(previousButtonAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
+        control.IsHandleCreated.Should().BeFalse();
+        previousButtonAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
+        previousButtonAccessibleObject.CanGetNameInternal.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -93,19 +95,5 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void CalendarPreviousButtonAccessibleObject_CanGetDescriptionInternal_And_CanGetNameInternal_ReturnFalse()
-    {
-        using MonthCalendar control = new();
-        var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
-        CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
-
-        bool canGetDescription = previousButtonAccessibleObject.CanGetDescriptionInternal;
-        bool canGetName = previousButtonAccessibleObject.CanGetNameInternal;
-
-        canGetDescription.Should().BeFalse();
-        canGetName.Should().BeFalse();
     }
 }

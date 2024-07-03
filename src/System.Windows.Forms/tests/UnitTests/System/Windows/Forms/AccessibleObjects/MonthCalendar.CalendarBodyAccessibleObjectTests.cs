@@ -17,8 +17,9 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, 0, "Test name");
         CalendarBodyAccessibleObject accessibleObject = new(calendarAccessibleObject, controlAccessibleObject, 0);
 
-        Assert.Equal(calendarAccessibleObject, accessibleObject.Parent);
-        Assert.False(control.IsHandleCreated);
+        accessibleObject.Parent.Should().Be(calendarAccessibleObject);
+        control.IsHandleCreated.Should().BeFalse();
+        accessibleObject.RowOrColumnMajor.Should().Be(RowOrColumnMajor.RowOrColumnMajor_RowMajor);
     }
 
     [WinFormsFact]
@@ -328,13 +329,5 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
 
         var accessibleObject = CreateCalendarBodyAccessibleObject(control);
         accessibleObject.CanGetNameInternal.Should().Be(expected);
-    }
-
-    [WinFormsFact]
-    public void CalendarBodyAccessibleObject_RowOrColumnMajor_ReturnsRowMajor()
-    {
-        using MonthCalendar control = new();
-        var accessibleObject = CreateCalendarBodyAccessibleObject(control);
-        accessibleObject.RowOrColumnMajor.Should().Be(RowOrColumnMajor.RowOrColumnMajor_RowMajor);
     }
 }

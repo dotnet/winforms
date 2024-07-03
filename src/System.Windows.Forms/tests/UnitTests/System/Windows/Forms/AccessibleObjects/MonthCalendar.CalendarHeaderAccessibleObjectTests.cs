@@ -24,6 +24,7 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling).Should().BeNull();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild).Should().BeNull();
         headerAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild).Should().BeNull();
+        headerAccessibleObject.CanGetNameInternal.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -60,15 +61,5 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         CalendarHeaderAccessibleObject headerAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, calendarIndex);
 
         return headerAccessibleObject;
-    }
-
-    [WinFormsFact]
-    public void CalendarHeaderAccessibleObject_CanGetNameInternal_ReturnsFalse()
-    {
-        using MonthCalendar control = new();
-        CalendarHeaderAccessibleObject headerAccessibleObject = CreateCalendarHeaderAccessibleObject(control);
-        bool canGetName = headerAccessibleObject.CanGetNameInternal;
-
-        canGetName.Should().BeFalse();
     }
 }
