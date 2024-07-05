@@ -6308,7 +6308,6 @@ public class ListBoxTests
     public void ListBox_ItemsCollection_ReturnsExpectedCount(string[] items, int expectedCount)
     {
         using ListBox listBox = new();
-        listBox.Items.Clear();
         foreach (string item in items)
         {
             listBox.Items.Add(item);
