@@ -6259,43 +6259,36 @@ public class ListBoxTests
         }
     }
 
-    [WinFormsFact]
-    public void ListBox_GetItemText_FormattingEnabledTrue_SelectedItemNull_ReturnsEmptyString()
+    [WinFormsTheory]
+    [InlineData(true, null, "")]
+    [InlineData(true, "TestItem", "TestItem")]
+    [InlineData(false, "TestItem", "TestItem")]
+    public void ListBox_GetItemText_ReturnsExpected(bool formattingEnabled, string selectedItem, string expected)
     {
-        using ListBox listBox = new() { FormattingEnabled = true, SelectedItem = null };
+        using ListBox listBox = new() { FormattingEnabled = formattingEnabled };
+        if (selectedItem is not null)
+        {
+            listBox.Items.Add(selectedItem);
+            listBox.SelectedItem = selectedItem;
+        }
+        else
+        {
+            listBox.SelectedItem = null;
+        }
 
         string result = listBox.GetItemText(listBox.SelectedItem);
-        result.Should().BeEmpty();
+        result.Should().Be(expected);
     }
 
-    [WinFormsFact]
-    public void ListBox_GetItemText_FormattingEnabledTrue_SelectedItemNotNull_ReturnsItemText()
-    {
-        using ListBox listBox = new() { FormattingEnabled = true };
-        listBox.Items.Add("TestItem");
-        listBox.SelectedItem = "TestItem";
-
-        string result = listBox.GetItemText(listBox.SelectedItem);
-        result.Should().Be("TestItem");
-    }
-
-    [WinFormsFact]
-    public void ListBox_GetItemText_FormattingEnabledFalse_ReturnsItemText()
-    {
-        using ListBox listBox = new() { FormattingEnabled = false };
-        listBox.Items.Add("TestItem");
-        listBox.SelectedItem = "TestItem";
-
-        string result = listBox.GetItemText(listBox.SelectedItem);
-        result.Should().Be("TestItem");
-    }
-
-    [WinFormsFact]
-    public void ListBox_Refresh_OwnerDrawVariable_CallsOnMeasureItem()
+    [WinFormsTheory]
+    [InlineData(DrawMode.OwnerDrawVariable, true)]
+    [InlineData(DrawMode.OwnerDrawFixed, false)]
+    [InlineData(DrawMode.Normal, false)]
+    public void ListBox_Refresh_CallsOnMeasureItemBasedOnDrawMode(DrawMode drawMode, bool expectedMeasureItemCalled)
     {
         using ListBox listBox = new()
         {
-            DrawMode = DrawMode.OwnerDrawVariable,
+            DrawMode = drawMode,
             Items = { "Item1", "Item2", "Item3" }
         };
 
@@ -6307,75 +6300,23 @@ public class ListBoxTests
 
         listBox.Refresh();
 
-        measureItemCalled.Should().BeTrue();
+        measureItemCalled.Should().Be(expectedMeasureItemCalled);
     }
 
-    [WinFormsFact]
-    public void ListBox_Refresh_OwnerDrawFixed_DoesNotCallOnMeasureItem()
-    {
-        using ListBox listBox = new()
-        {
-            DrawMode = DrawMode.OwnerDrawFixed,
-            Items = { "Item1", "Item2", "Item3" }
-        };
-
-        bool measureItemCalled = false;
-        listBox.MeasureItem += (sender, e) =>
-        {
-            measureItemCalled = true;
-        };
-
-        listBox.Refresh();
-
-        measureItemCalled.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void ListBox_Refresh_Normal_DoesNotCallOnMeasureItem()
-    {
-        using ListBox listBox = new()
-        {
-            DrawMode = DrawMode.Normal,
-            Items = { "Item1", "Item2", "Item3" }
-        };
-
-        bool measureItemCalled = false;
-        listBox.MeasureItem += (sender, e) =>
-        {
-            measureItemCalled = true;
-        };
-
-        listBox.Refresh();
-
-        measureItemCalled.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void ListBox_ItemsCollectionIsNull_ReturnsZero()
+    [WinFormsTheory]
+    [InlineData(new string[] { }, 0)]
+    [InlineData(new string[] { "Item1", "Item2" }, 2)]
+    public void ListBox_ItemsCollection_ReturnsExpectedCount(string[] items, int expectedCount)
     {
         using ListBox listBox = new();
         listBox.Items.Clear();
-        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
-        itemCount.Should().Be(0);
-    }
+        foreach (string item in items)
+        {
+            listBox.Items.Add(item);
+        }
 
-    [WinFormsFact]
-    public void ListBox_ItemsCollectionIsNotNull_ReturnsItemCount()
-    {
-        using ListBox listBox = new();
-        listBox.Items.Add("Item1");
-        listBox.Items.Add("Item2");
-        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
-        itemCount.Should().Be(2);
-    }
-
-    [WinFormsFact]
-    public void ListBox_ItemsCollectionIsEmpty_ReturnsZero()
-    {
-        using ListBox listBox = new();
-        listBox.Items.Clear();
-        int itemCount = (listBox.Items is null) ? 0 : listBox.Items.Count;
-        itemCount.Should().Be(0);
+        int itemCount = listBox.Items.Count;
+        itemCount.Should().Be(expectedCount);
     }
 
     [WinFormsFact]
@@ -6418,9 +6359,8 @@ public class ListBoxTests
             Items = { "Item 1", "Item 2", "Item 3" }
         };
 
-        var recreateHandleMethod = typeof(ListBox).GetMethod("RecreateHandle", BindingFlags.NonPublic | BindingFlags.Instance);
-        recreateHandleMethod.Should().NotBeNull("RecreateHandle method should exist in ListBox class");
-        recreateHandleMethod.Invoke(listBox, null);
+        var accessor = listBox.TestAccessor();
+        accessor.Dynamic.RecreateHandle();
 
         int totalItemHeight = 0;
         for (int i = 0; i < listBox.Items.Count; i++)
@@ -6443,9 +6383,8 @@ public class ListBoxTests
             Items = { "Item 1", "Item 2", "Item 3" }
         };
 
-        var setStateMethod = typeof(ListBox).GetMethod("SetState", BindingFlags.NonPublic | BindingFlags.Instance);
-        setStateMethod.Should().NotBeNull("SetState method should exist in ListBox class");
-        setStateMethod.Invoke(listBox, new object[] { 1, true });
+        var accessor = listBox.TestAccessor();
+        accessor.Dynamic.SetState(1, true);
 
         int totalItemHeight = 0;
         for (int i = 0; i < listBox.Items.Count; i++)
