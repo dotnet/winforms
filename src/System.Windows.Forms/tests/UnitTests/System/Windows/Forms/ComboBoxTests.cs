@@ -2411,6 +2411,108 @@ public class ComboBoxTests
         Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(DrawMode.Normal)]
+    [InlineData(DrawMode.OwnerDrawFixed)]
+    [InlineData(DrawMode.OwnerDrawVariable)]
+    public void ComboBox_GetItemHeight_Invoke_ReturnsExpected(DrawMode drawMode)
+    {
+        int index = 0;
+        int expected = 15;
+        using ComboBox control = CreateComboBox(drawMode, expected);
+        control.GetItemHeight(index).Should().Be(expected);
+    }
+
+    private ComboBox CreateComboBox(DrawMode drawMode, int itemHeight = 15)
+    {
+        ComboBox control = new()
+        {
+            DrawMode = drawMode,
+            ItemHeight = itemHeight
+        };
+
+        control.Items.Add("Item1");
+        control.Items.Add("Item2");
+        control.Items.Add("Item3");
+        control.CreateControl();
+
+        return control;
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void ComboBox_GetItemHeight_Index_ThrowsArgumentOutOfRangeException(int index)
+    {
+        using ComboBox control = CreateComboBox(DrawMode.OwnerDrawVariable);
+        control.CreateControl(); // Ensure the handle is created
+
+        if (index < 0 || index >= control.Items.Count)
+        {
+            control.Invoking(y => y.GetItemHeight(index))
+                   .Should().Throw<ArgumentOutOfRangeException>()
+                   .WithMessage("*index*")
+                   .Where(ex => ex.ParamName == "index");
+        }
+        else
+        {
+            // Test valid index
+            int itemHeight = control.GetItemHeight(index);
+            itemHeight.Should().BeGreaterThan(0, "Item height should be greater than 0.");
+        }
+    }
+
+    [WinFormsFact]
+    public void ComboBox_GetItemHeight_NoItems_ThrowsArgumentOutOfRangeException()
+    {
+        using ComboBox control = new();
+        control.DrawMode = DrawMode.OwnerDrawVariable;
+        control.CreateControl();
+        control.Invoking(c => c.GetItemHeight(0))
+               .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ComboBox_ResetText_Invoke_Success(bool withHandle)
+    {
+        using ComboBox control = new();
+        if (withHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        control.Text = "Some text";
+        control.ResetText();
+        Assert.Equal(string.Empty, control.Text);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectAll_InvokeWithoutHandle_Success()
+    {
+        using ComboBox control = new();
+        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.SelectAll();
+
+        control.SelectionStart.Should().Be(0);
+        control.SelectionLength.Should().Be(control.Text.Length);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectAll_InvokeWithoutItems_Success()
+    {
+        using ComboBox control = new();
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.SelectAll();
+
+        control.SelectionStart.Should().Be(0);
+        control.SelectionLength.Should().Be(control.Text.Length);
+    }
+
     private void InitializeItems(ComboBox comboBox, int numItems)
     {
         for (int i = 0; i < numItems; i++)

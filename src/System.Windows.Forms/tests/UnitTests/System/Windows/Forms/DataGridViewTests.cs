@@ -3026,7 +3026,7 @@ public partial class DataGridViewTests: IDisposable
         };
 
         _dataGridView.AlternatingRowsDefaultCellStyleChanged += handler;
-        _dataGridView.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.AliceBlue };
+        _dataGridView.AlternatingRowsDefaultCellStyle = new() { BackColor = Color.AliceBlue };
         callCount.Should().Be(1);
 
         _dataGridView.AlternatingRowsDefaultCellStyleChanged -= handler;
@@ -3112,5 +3112,347 @@ public partial class DataGridViewTests: IDisposable
         _dataGridView.CellBorderStyleChanged -= handler;
         _dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         callCount.Should().Be(1);   
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnHeadersBorderStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.ColumnHeadersBorderStyleChanged += handler;
+        _dataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnHeadersBorderStyleChanged -= handler;
+        _dataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnHeadersDefaultCellStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().BeOfType<DataGridViewCellStyleChangedEventArgs>();
+            callCount++;
+        };
+
+        _dataGridView.ColumnHeadersDefaultCellStyleChanged += handler;
+        _dataGridView.ColumnHeadersDefaultCellStyle = new() { BackColor = Color.Red };
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnHeadersDefaultCellStyleChanged -= handler;
+        _dataGridView.ColumnHeadersDefaultCellStyle = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DataMemberChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.DataMemberChanged += handler;
+        _dataGridView.DataMember = "TestMember";
+        callCount.Should().Be(1);
+
+        _dataGridView.DataMemberChanged -= handler;
+        _dataGridView.DataMember = "AnotherTestMember";
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DataSourceChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.DataSourceChanged += handler;
+        _dataGridView.DataSource = new();
+        callCount.Should().Be(1);
+
+        _dataGridView.DataSourceChanged -= handler;
+        _dataGridView.DataSource = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DefaultCellStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().BeOfType<DataGridViewCellStyleChangedEventArgs>();
+            callCount++;
+        };
+
+        _dataGridView.DefaultCellStyleChanged += handler;
+        _dataGridView.DefaultCellStyle = new() { BackColor = Color.Red };
+        callCount.Should().Be(1);
+
+        _dataGridView.DefaultCellStyleChanged -= handler;
+        _dataGridView.DefaultCellStyle = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_EditModeChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.EditModeChanged += handler;
+        _dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+        callCount.Should().Be(1);
+
+        _dataGridView.EditModeChanged -= handler;
+        _dataGridView.EditMode = DataGridViewEditMode.EditOnKeystroke;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_GridColorChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.GridColorChanged += handler;
+        _dataGridView.GridColor = Color.Red;
+        callCount.Should().Be(1);
+
+        _dataGridView.GridColorChanged -= handler;
+        _dataGridView.GridColor = Color.Blue;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_MultiSelectChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.MultiSelectChanged += handler;
+        _dataGridView.MultiSelect = false;
+        callCount.Should().Be(1);
+
+        _dataGridView.MultiSelectChanged -= handler;
+        _dataGridView.MultiSelect = true;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ReadOnlyChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.ReadOnlyChanged += handler;
+        _dataGridView.ReadOnly = true;
+        callCount.Should().Be(1);
+
+        _dataGridView.ReadOnlyChanged -= handler;
+        _dataGridView.ReadOnly = false;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_RowHeadersBorderStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.RowHeadersBorderStyleChanged += handler;
+        _dataGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+        callCount.Should().Be(1);
+
+        _dataGridView.RowHeadersBorderStyleChanged -= handler;
+        _dataGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_RowHeadersDefaultCellStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().BeOfType<DataGridViewCellStyleChangedEventArgs>();
+            callCount++;
+        };
+
+        _dataGridView.RowHeadersDefaultCellStyleChanged += handler;
+        _dataGridView.RowHeadersDefaultCellStyle = new();
+        callCount.Should().Be(1);
+
+        _dataGridView.RowHeadersDefaultCellStyleChanged -= handler;
+        _dataGridView.RowHeadersDefaultCellStyle = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_RowsDefaultCellStyleChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().BeOfType<DataGridViewCellStyleChangedEventArgs>();
+            callCount++;
+        };
+
+        _dataGridView.RowsDefaultCellStyleChanged += handler;
+        _dataGridView.RowsDefaultCellStyle = new() { BackColor = Color.Red };
+        callCount.Should().Be(1);
+
+        _dataGridView.RowsDefaultCellStyleChanged -= handler;
+        _dataGridView.RowsDefaultCellStyle = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CurrentCellChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add();
+        _dataGridView.Rows.Add();
+
+        _dataGridView.CurrentCellChanged += handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 0];
+        callCount.Should().Be(1);
+
+        _dataGridView.CurrentCellChanged -= handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 1];
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CurrentCellDirtyStateChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add();
+        _dataGridView.Rows.Add();
+
+        _dataGridView.CurrentCellDirtyStateChanged += handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 0];
+        _dataGridView[0, 0].Value = true;
+        _dataGridView.NotifyCurrentCellDirty(true);
+        callCount.Should().Be(1);
+
+        _dataGridView.CurrentCellDirtyStateChanged -= handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 1];
+        _dataGridView[0, 1].Value = true;
+        _dataGridView.NotifyCurrentCellDirty(true);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_SelectionChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add();
+        _dataGridView.Rows.Add();
+
+        _dataGridView.SelectionChanged += handler;
+        _dataGridView.ClearSelection();
+        _dataGridView.Rows[0].Selected = true;
+        callCount.Should().Be(1);
+
+        _dataGridView.SelectionChanged -= handler;
+        _dataGridView.ClearSelection();
+        _dataGridView.Rows[1].Selected = true;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_SortedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add("B");
+        _dataGridView.Rows.Add("A");
+
+        _dataGridView.Sorted += handler;
+        _dataGridView.Sort(_dataGridView.Columns[0], ListSortDirection.Ascending);
+        callCount.Should().Be(1);
+
+        _dataGridView.Sorted -= handler;
+        _dataGridView.Sort(_dataGridView.Columns[0], ListSortDirection.Descending);
+        callCount.Should().Be(1);
     }
 }

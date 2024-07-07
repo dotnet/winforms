@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace System.Windows.Forms.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat;
 
 internal static class BinaryFormatTestExtensions
 {

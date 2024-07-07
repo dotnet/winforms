@@ -3,7 +3,7 @@
 
 using System.IO.Compression;
 using System.Runtime.Serialization;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;

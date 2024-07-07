@@ -147,13 +147,28 @@ public sealed unsafe class GraphicsPathIterator : MarshalByRefObject, IDisposabl
         GC.KeepAlive(this);
     }
 
+    /// <inheritdoc cref="CopyData(ref PointF[], ref byte[], int, int)"/>
     public unsafe int Enumerate(ref PointF[] points, ref byte[] types)
+        => Enumerate(points.OrThrowIfNull().AsSpan(), types.OrThrowIfNull().AsSpan());
+
+    /// <inheritdoc cref="CopyData(ref PointF[], ref byte[], int, int)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    unsafe int Enumerate(Span<PointF> points, Span<byte> types)
     {
-        if (points.Length != types.Length)
+        if (points.Length != types.Length
+            || points.Length < Count)
+        {
             throw Status.InvalidParameter.GetException();
+        }
 
         if (points.Length == 0)
+        {
             return 0;
+        }
 
         fixed (PointF* p = points)
         fixed (byte* t = types)
@@ -171,10 +186,37 @@ public sealed unsafe class GraphicsPathIterator : MarshalByRefObject, IDisposabl
         }
     }
 
+    /// <summary>
+    ///  Copies the <see cref="GraphicsPath.PathPoints"/> property and <see cref="GraphicsPath.PathTypes"/> property data
+    ///  of the associated <see cref="GraphicsPath"/>.
+    /// </summary>
+    /// <param name="points">Upon return, contains <see cref="PointF"/> structures that represent the points in the path.</param>
+    /// <param name="types">Upon return, contains bytes that represent the types of points in the path.</param>
+    /// <param name="startIndex">The index of the first point to copy.</param>
+    /// <param name="endIndex">The index of the last point to copy.</param>
+    /// <returns>The number of points copied.</returns>
     public unsafe int CopyData(ref PointF[] points, ref byte[] types, int startIndex, int endIndex)
+        => CopyData(points.OrThrowIfNull().AsSpan(), types.OrThrowIfNull().AsSpan(), startIndex, endIndex);
+
+    /// <inheritdoc cref="CopyData(ref PointF[], ref byte[], int, int)"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    unsafe int CopyData(Span<PointF> points, Span<byte> types, int startIndex, int endIndex)
     {
-        if ((points.Length != types.Length) || (endIndex - startIndex + 1 > points.Length))
+        int count = endIndex - startIndex + 1;
+
+        if ((points.Length != types.Length)
+            || endIndex < 0
+            || startIndex < 0
+            || endIndex < startIndex
+            || count > points.Length
+            || endIndex >= Count)
+        {
             throw Status.InvalidParameter.GetException();
+        }
 
         fixed (PointF* p = points)
         fixed (byte* t = types)

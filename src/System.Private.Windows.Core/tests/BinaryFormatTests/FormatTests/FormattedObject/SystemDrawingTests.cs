@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 
@@ -18,10 +18,10 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
         classInfo.Name.Should().Be("System.Drawing.PointF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
         classInfo.MemberValues.Should().BeEquivalentTo(new object[] { 0.0f, 0.0f });
-        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new[]
+        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new MemberTypeInfo[]
         {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single)
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Single)
         });
 
         format[classInfo.LibraryId].Should().BeOfType<BinaryLibrary>()
@@ -38,12 +38,12 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
         classInfo.Name.Should().Be("System.Drawing.RectangleF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y", "width", "height"]);
         classInfo.MemberValues.Should().BeEquivalentTo(new object[] { 0.0f, 0.0f, 0.0f, 0.0f });
-        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new[]
+        classInfo.MemberTypeInfo.Should().BeEquivalentTo(new MemberTypeInfo[]
         {
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single),
-            (BinaryType.Primitive, PrimitiveType.Single)
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Single),
+            new(BinaryType.Primitive, PrimitiveType.Single)
         });
     }
 
