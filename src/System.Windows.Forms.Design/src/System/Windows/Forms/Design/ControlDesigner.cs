@@ -2492,9 +2492,17 @@ public partial class ControlDesigner : ComponentDesigner
         _thrownException = exception;
         owner ??= Control;
 
-        string[] exceptionLines = exception.StackTrace!.Split('\r', '\n');
-        string typeName = owner.GetType().FullName!;
-        string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+        string? typeName = null;
+        string? stack = null;
+        if (exception.StackTrace is not null)
+        {
+            string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
+            typeName = owner.GetType().FullName;
+            if (typeName is not null)
+            {
+                stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+            }
+        }
 
         InvalidOperationException wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
