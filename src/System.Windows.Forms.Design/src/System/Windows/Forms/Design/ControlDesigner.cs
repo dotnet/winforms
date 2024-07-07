@@ -2397,6 +2397,8 @@ public partial class ControlDesigner : ComponentDesigner
     {
         Point pt = PARAM.ToPoint(lParam);
         pt = Control.PointToScreen(pt);
+
+        // We have already checked if Parent is null before calling the method.
         pt = Control.Parent!.PointToClient(pt);
         return PARAM.ToInt(pt.X, pt.Y);
     }
