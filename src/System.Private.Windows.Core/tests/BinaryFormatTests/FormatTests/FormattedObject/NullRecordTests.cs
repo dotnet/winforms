@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
 
 namespace FormatTests.FormattedObject;
@@ -42,7 +41,7 @@ public class NullRecordTests : NullRecordTests<FormattedObjectSerializer>
         RecordType recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
         ClassInfo classInfo = ClassInfo.Parse(parser.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
+        var memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
 
         recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.ObjectNull);
@@ -60,7 +59,7 @@ public class NullRecordTests : NullRecordTests<FormattedObjectSerializer>
         RecordType recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.SystemClassWithMembersAndTypes);
         ClassInfo classInfo = ClassInfo.Parse(parser.Reader, out Count memberCount);
-        MemberTypeInfo memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
+        var memberTypeInfo = MemberTypeInfo.Parse(parser.Reader, memberCount);
 
         recordType = (RecordType)parser.Reader.ReadByte();
         recordType.Should().Be(RecordType.ObjectNull);

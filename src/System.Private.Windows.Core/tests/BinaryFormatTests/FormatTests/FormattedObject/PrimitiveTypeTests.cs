@@ -3,9 +3,9 @@
 
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
-using Record = System.Windows.Forms.BinaryFormat.Record;
+using Record = System.Private.Windows.Core.BinaryFormat.Record;
 
 namespace FormatTests.FormattedObject;
 
@@ -153,7 +153,7 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
         public static object ReadPrimitiveValue(BinaryReader reader, PrimitiveType type)
             => ReadPrimitiveType(reader, type);
 
-        public override void Write(BinaryWriter writer)
+        private protected override void Write(BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

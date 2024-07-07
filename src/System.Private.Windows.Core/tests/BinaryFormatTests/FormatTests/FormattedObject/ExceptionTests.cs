@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
 
 namespace FormatTests.FormattedObject;
@@ -31,20 +31,20 @@ public class ExceptionTests : SerializationTest<FormattedObjectSerializer>
             "WatsonBuckets"
         ]);
 
-        systemClass.MemberTypeInfo.Should().BeEquivalentTo(new (BinaryType, object?)[]
+        systemClass.MemberTypeInfo.Should().BeEquivalentTo(new MemberTypeInfo[]
         {
-            (BinaryType.String, null),
-            (BinaryType.String, null),
-            (BinaryType.SystemClass, typeof(IDictionary).FullName),
-            (BinaryType.SystemClass, typeof(Exception).FullName),
-            (BinaryType.String, null),
-            (BinaryType.String, null),
-            (BinaryType.String, null),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.String, null),
-            (BinaryType.Primitive, PrimitiveType.Int32),
-            (BinaryType.String, null),
-            (BinaryType.PrimitiveArray, PrimitiveType.Byte)
+            new(BinaryType.String, null),
+            new(BinaryType.String, null),
+            new(BinaryType.SystemClass, typeof(IDictionary).FullName),
+            new(BinaryType.SystemClass, typeof(Exception).FullName),
+            new(BinaryType.String, null),
+            new(BinaryType.String, null),
+            new(BinaryType.String, null),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.String, null),
+            new(BinaryType.Primitive, PrimitiveType.Int32),
+            new(BinaryType.String, null),
+            new(BinaryType.PrimitiveArray, PrimitiveType.Byte)
         });
 
         systemClass.MemberValues.Should().BeEquivalentTo(new object?[]

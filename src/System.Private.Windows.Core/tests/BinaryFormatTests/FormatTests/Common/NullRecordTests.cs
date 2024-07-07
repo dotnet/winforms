@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.Common;
 
@@ -138,7 +137,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             ClassInfo classInfo = record.ClassInfo;
             new ClassInfo(2, classInfo.Name, classInfo.MemberNames).Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
             NullRecord.Write(scope, 1);
         }
 
@@ -221,7 +220,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             scope.Writer.Write((byte)RecordType.SystemClassWithMembersAndTypes);
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             record.ClassInfo.Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
             NullRecord.Write(scope, 2);
         }
 
@@ -243,7 +242,7 @@ public abstract class NullRecordTests<T> : SerializationTest<T> where T : ISeria
             scope.Writer.Write((byte)RecordType.SystemClassWithMembersAndTypes);
             var record = (SystemClassWithMembersAndTypes)format[(Id)1];
             record.ClassInfo.Write(scope);
-            record.MemberTypeInfo.Write(scope);
+            scope.Writer.Write(record.MemberTypeInfo);
 
             scope.Writer.Write((byte)RecordType.ObjectNullMultiple);
             scope.Writer.Write(0);

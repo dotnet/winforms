@@ -4,8 +4,7 @@
 using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 
@@ -59,7 +58,7 @@ public class ArrayTests : Common.ArrayTests<FormattedObjectSerializer>
     {
         BinaryFormattedObject format = new(Serialize(strings));
         ArraySingleString array = (ArraySingleString)format.RootRecord;
-        array.GetStringValues(format.RecordMap).Should().BeEquivalentTo(strings);
+        array.Should().BeEquivalentTo(strings);
     }
 
     public static TheoryData<string?[]> StringArray_Parse_Data => new()
