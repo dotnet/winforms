@@ -1627,15 +1627,9 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlDarkModeDescr))]
     public DarkMode DarkMode
     {
-        get
-        {
-            if (Properties.ContainsObject(s_darkModeProperty))
-            {
-                return (DarkMode)Properties.GetObject(s_darkModeProperty)!;
-            }
-
-            return ParentInternal?.DarkMode ?? DarkMode.Inherits;
-        }
+        get => Properties.TryGetObject(s_darkModeProperty, out DarkMode value)
+            ? value
+            : ParentInternal?.DarkMode ?? DarkMode.Inherits;
 
         set => SetDarkMode(value);
     }
@@ -1698,6 +1692,15 @@ public unsafe partial class Control :
             }
 
             SetDarkModeCore(darkMode);
+
+            if (IsHandleCreated)
+            {
+                RecreateHandle();
+            }
+            else
+            {
+                UpdateStyles();
+            }
         }
     }
 
@@ -3762,46 +3765,72 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
     public VisualStylesMode VisualStylesMode
     {
-        get
-        {
-            if (Properties.ContainsObject(s_visualStylesModeProperty))
-            {
-                return (VisualStylesMode)Properties.GetObject(s_visualStylesModeProperty)!;
-            }
-
-            return ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
-        }
+        get => Properties.TryGetObject(s_visualStylesModeProperty, out VisualStylesMode value)
+            ? value
+            : ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
 
         set
         {
-            if (VisualStylesMode == value)
             {
-                return;
+                if (Equals(value, VisualStylesMode))
+                {
+                    return;
+                }
+
+                if (!ValidateVisualStylesMode(value))
+                {
+                    if (Debugger.IsAttached)
+                        Debugger.Break();
+
+                    throw new NotSupportedException(
+                        string.Format(
+                            format: SR.VisualStylesModeNotSupported,
+                            arg0: value,
+                            arg1: GetType().Name,
+                            arg2: string.IsNullOrWhiteSpace(Name)
+                                ? "- - -"
+                                : Name));
+                }
+
+                // When VisualStyleMode was different than its parent before, but now it is about to become the same,
+                // we're removing it altogether, so it can again inherit the value from its parent.
+                if (Properties.ContainsObject(s_visualStylesModeProperty)
+                    && Equals(ParentInternal?.VisualStylesMode, value))
+                {
+                    Properties.RemoveObject(s_visualStylesModeProperty);
+                }
+                else
+                {
+                    Properties.SetObject(s_visualStylesModeProperty, value);
+                }
             }
 
-            if (!ValidateVisualStylesMode(value))
+            if (IsHandleCreated)
             {
-                throw new NotSupportedException(
-                    string.Format(
-                        SR.VisualStylesModeNotSupported,
-                        value,
-                        GetType().Name,
-                        string.IsNullOrWhiteSpace(Name)
-                            ? "- - -"
-                            : Name));
-            }
+                // This implies updating the styles.
+                RecreateHandle();
 
-            // If the value is the same as the parent, remove the property.
-            if (value == ParentInternal?.VisualStylesMode)
-            {
-                Properties.SetObject(s_visualStylesModeProperty, null);
+                // We need to re-layout, because changing the VisualStylesMode in many cases
+                // affects the layout of the control.
+                using (LayoutTransaction.CreateTransactionIf(
+                    condition: true,
+                    controlToLayout: ParentInternal,
+                    elementCausingLayout: this,
+                    property: nameof(Padding)))
+                { }
+
+                if (GetState(States.LayoutIsDirty))
+                {
+                    // The above did not cause our layout to be refreshed. We explicitly refresh our
+                    // layout to ensure that any children are repositioned to account for the change
+                    // in whatever could cause a new size (most likely a new BorderStyle related Padding)..
+                    LayoutTransaction.DoLayout(this, this, nameof(Padding));
+                }
             }
             else
             {
-                Properties.SetObject(s_visualStylesModeProperty, value);
+                UpdateStyles();
             }
-
-            UpdateStyles();
         }
     }
 
@@ -3810,13 +3839,13 @@ public unsafe partial class Control :
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
     protected virtual VisualStylesMode DefaultVisualStylesMode =>
-        VisualStylesMode.Latest;
+            VisualStylesMode.Latest;
 
-    private bool ShouldSerializeVisualStylesMode() =>
-        Properties.GetObject(s_visualStylesModeProperty) is not null;
+    private bool ShouldSerializeVisualStylesMode()
+        => Properties.ContainsObject(s_visualStylesModeProperty);
 
-    private void ResetVisualStylesMode() =>
-        Properties.SetObject(s_visualStylesModeProperty, null);
+    private void ResetVisualStylesMode()
+        => Properties.RemoveObject(s_visualStylesModeProperty);
 
     /// <summary>
     ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
@@ -11503,15 +11532,13 @@ public unsafe partial class Control :
     }
 
     protected virtual bool ValidateVisualStylesMode(VisualStylesMode visualStylesMode)
-    {
-        return visualStylesMode switch
+        => visualStylesMode switch
         {
             VisualStylesMode.Disabled => true,
             VisualStylesMode.Legacy => true,
             >= VisualStylesMode.Version10 => true,
             _ => false,
         };
-    }
 
     // These Window* methods allow us to keep access to the "window"
     // property private, which is important for restricting access to the
