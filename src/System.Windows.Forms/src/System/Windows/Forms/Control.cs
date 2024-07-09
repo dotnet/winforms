@@ -3779,9 +3779,6 @@ public unsafe partial class Control :
 
                 if (!ValidateVisualStylesMode(value))
                 {
-                    if (Debugger.IsAttached)
-                        Debugger.Break();
-
                     throw new NotSupportedException(
                         string.Format(
                             format: SR.VisualStylesModeNotSupported,

@@ -403,11 +403,6 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
-
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
@@ -1211,12 +1206,6 @@ public abstract partial class TextBoxBase : Control
             _textBoxFlags[s_codeUpdateText] = false;
         }
     }
-
-    /// <summary>
-    /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
-    /// </summary>
-    protected override VisualStylesMode DefaultVisualStylesMode =>
-        VisualStylesMode.Legacy;
 
     /// <summary>
     ///  Gets or sets a value indicating whether a multiline text box control
@@ -2125,8 +2114,7 @@ public abstract partial class TextBoxBase : Control
 
     protected virtual void WmNcPaint(ref Message m)
     {
-        if (VisualStylesMode < VisualStylesMode.Version10
-            || !_triggerNewClientSizeRequest)
+        if (VisualStylesMode < VisualStylesMode.Version10)
         {
             return;
         }

@@ -224,16 +224,27 @@ public partial class CheckBox : ButtonBase
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (OwnerDraw)
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
             }
             else
             {
-                cp.Style |= PInvoke.BS_3STATE;
-                if (Appearance == Appearance.Button)
+                if (VisualStylesMode >= VisualStylesMode.Version10)
                 {
-                    cp.Style |= PInvoke.BS_PUSHLIKE;
+                    SetStyle(ControlStyles.UserPaint, true);
+                    SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+                    SetStyle(ControlStyles.ResizeRedraw, true);
+                    cp.Style |= PInvoke.BS_OWNERDRAW;
+                }
+                else
+                {
+                    cp.Style |= PInvoke.BS_3STATE;
+                    if (Appearance == Appearance.Button)
+                    {
+                        cp.Style |= PInvoke.BS_PUSHLIKE;
+                    }
                 }
 
                 // Determine the alignment of the check box
@@ -269,6 +280,21 @@ public partial class CheckBox : ButtonBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        Size textSize;
+
+        if (VisualStylesMode >= VisualStylesMode.Version10)
+        {
+            int dpiScale = (int)(DeviceDpi / 96f);
+
+            textSize = TextRenderer.MeasureText(Text, Font);
+            int switchWidth = 50 * dpiScale;
+            int switchHeight = 25 * dpiScale;
+            int totalWidth = textSize.Width + switchWidth + 20 * dpiScale; // 10 dpi padding on each side
+            int totalHeight = Math.Max(textSize.Height, switchHeight);
+
+            return new Size(totalWidth, totalHeight);
+        }
+
         if (Appearance == Appearance.Button)
         {
             ButtonStandardAdapter adapter = new(this);
@@ -280,7 +306,7 @@ public partial class CheckBox : ButtonBase
             return base.GetPreferredSizeCore(proposedConstraints);
         }
 
-        Size textSize = TextRenderer.MeasureText(Text, Font);
+        textSize = TextRenderer.MeasureText(Text, Font);
         Size size = SizeFromClientSize(textSize);
         size.Width += _flatSystemStylePaddingWidth;
 

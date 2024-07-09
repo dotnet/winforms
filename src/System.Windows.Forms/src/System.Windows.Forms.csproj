@@ -81,4 +81,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="System\Windows\Forms\Rendering\Animation\" />
+    <Folder Include="System\Windows\Forms\Rendering\V10\TextBox\" />
+  </ItemGroup>
 </Project>
