@@ -11532,7 +11532,7 @@ public unsafe partial class Control :
         => visualStylesMode switch
         {
             VisualStylesMode.Disabled => true,
-            VisualStylesMode.Legacy => true,
+            VisualStylesMode.Classic => true,
             >= VisualStylesMode.Version10 => true,
             _ => false,
         };

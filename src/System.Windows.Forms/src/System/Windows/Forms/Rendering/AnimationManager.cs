@@ -16,6 +16,7 @@ internal partial class AnimationManager
 
     private readonly Dictionary<AnimatedControlRenderer, AnimationRendererItem> _renderer = [];
     private static readonly AnimationManager s_instance = new();
+    private readonly WindowsFormsSynchronizationContext? _syncContext = (WindowsFormsSynchronizationContext?)SynchronizationContext.Current;
 
     /// <summary>
     ///  The frame rate of every animation.
@@ -64,7 +65,6 @@ internal partial class AnimationManager
         AnimationRendererItem renderItem = new(animationRenderer, animationDuration, animationCycle)
         {
             StopwatchTarget = s_instance._stopwatch.ElapsedMilliseconds + animationDuration,
-            IsRunning = true
         };
 
         s_instance._renderer.Add(animationRenderer, renderItem);
@@ -80,43 +80,6 @@ internal partial class AnimationManager
     }
 
     /// <summary>
-    ///  Restarts the animation for the specified control renderer.
-    /// </summary>
-    /// <param name="animatedControlRenderer">The control renderer to restart the animation for.</param>
-    internal static void Restart(AnimatedControlRenderer animatedControlRenderer)
-    {
-        if (s_instance._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? item))
-        {
-            item.StopwatchTarget = s_instance._stopwatch.ElapsedMilliseconds + item.AnimationDuration;
-            item.IsRunning = true;
-        }
-    }
-
-    /// <summary>
-    ///  Stops the animation for the specified control renderer.
-    /// </summary>
-    /// <param name="animatedControlRenderer">The control renderer to stop the animation for.</param>
-    internal static void Stop(AnimatedControlRenderer animatedControlRenderer)
-    {
-        if (s_instance._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? item))
-        {
-            item.IsRunning = false;
-        }
-    }
-
-    /// <summary>
-    ///  Continues the animation for the specified control renderer.
-    /// </summary>
-    /// <param name="animatedControlRenderer">The control renderer to continue the animation for.</param>
-    internal static void Continue(AnimatedControlRenderer animatedControlRenderer)
-    {
-        if (s_instance._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? item))
-        {
-            item.IsRunning = true;
-        }
-    }
-
-    /// <summary>
     ///  Handles the tick event of the timer.
     /// </summary>
     /// <param name="state">The state object.</param>
@@ -124,32 +87,41 @@ internal partial class AnimationManager
     {
         foreach (AnimationRendererItem item in _renderer.Values)
         {
-            if (!item.IsRunning)
+            if (!item.Renderer.IsRunning)
             {
                 continue;
             }
 
+            long elapsedStopwatchMilliseconds = s_instance._stopwatch.ElapsedMilliseconds;
+            long remainingAnimationMilliseconds = item.StopwatchTarget - elapsedStopwatchMilliseconds;
+
             item.FrameCount += item.FrameOffset;
 
-            if (s_instance._stopwatch.ElapsedMilliseconds >= item.StopwatchTarget)
+            if (elapsedStopwatchMilliseconds >= item.StopwatchTarget)
             {
                 switch (item.AnimationCycle)
                 {
                     case AnimationCycle.Once:
                         item.Renderer.StopAnimation();
-                        item.IsRunning = false;
                         break;
 
                     case AnimationCycle.Loop:
                         item.FrameCount = 0;
+                        item.StopwatchTarget = elapsedStopwatchMilliseconds + item.AnimationDuration;
+                        item.Renderer.RestartAnimation();
                         break;
 
                     case AnimationCycle.Bounce:
-                        item.FrameCount = 0;
                         item.FrameOffset = -item.FrameOffset;
+                        item.StopwatchTarget = elapsedStopwatchMilliseconds + item.AnimationDuration;
+                        item.Renderer.RestartAnimation();
                         break;
                 }
             }
+
+            _syncContext?.Post(
+                _ => item.Renderer.AnimationProc(
+                    remainingAnimationMilliseconds / (float)item.AnimationDuration), null);
         }
     }
 }

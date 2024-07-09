@@ -50,7 +50,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
     private object? _commandParameter;
-
     internal static readonly object s_commandChangedEvent = new();
     internal static readonly object s_commandParameterChangedEvent = new();
     internal static readonly object s_commandCanExecuteChangedEvent = new();

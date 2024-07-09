@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.V10.CheckBox;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -35,6 +36,7 @@ public partial class CheckBox : ButtonBase
     // A flag indicating if UIA StateChanged event needs to be triggered,
     // to avoid double-triggering when Checked value changes.
     private bool _notifyAccessibilityStateChangedNeeded;
+    private AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="CheckBox"/> class.
@@ -80,6 +82,12 @@ public partial class CheckBox : ButtonBase
                 else
                 {
                     UpdateStyles();
+
+                    if (value == Appearance.ToggleSwitch
+                        && VisualStylesMode >= VisualStylesMode.Version10)
+                    {
+                        Refresh();
+                    }
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
@@ -282,8 +290,10 @@ public partial class CheckBox : ButtonBase
     {
         Size textSize;
 
-        if (VisualStylesMode >= VisualStylesMode.Version10)
+        if (Appearance == Appearance.ToggleSwitch
+            && VisualStylesMode >= VisualStylesMode.Version10)
         {
+            _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
             int dpiScale = (int)(DeviceDpi / 96f);
 
             textSize = TextRenderer.MeasureText(Text, Font);
@@ -313,6 +323,18 @@ public partial class CheckBox : ButtonBase
         // Ensure minimum height to avoid truncation of check-box or text
         size.Height = Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight);
         return size + Padding.Size;
+    }
+
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+        if (VisualStylesMode >= VisualStylesMode.Version10
+            && Appearance == Appearance.ToggleSwitch)
+        {
+            _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
+            return;
+        }
+
+        base.OnPaint(pevent);
     }
 
     internal override Rectangle OverChangeRectangle
@@ -418,6 +440,12 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
+        if (VisualStylesMode== VisualStylesMode.Version10 && Appearance == Appearance.ToggleSwitch)
+        {
+            _toggleSwitchRenderer?.RestartAnimation();
+            Refresh();
+        }
+
         if (OwnerDraw)
         {
             Refresh();

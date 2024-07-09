@@ -24,6 +24,5 @@ internal partial class AnimationManager
         public int FrameCount { get; set; }
         public AnimationCycle AnimationCycle { get; }
         public int FrameOffset { get; set; } = 1;
-        public bool IsRunning { get; set; }
     }
 }

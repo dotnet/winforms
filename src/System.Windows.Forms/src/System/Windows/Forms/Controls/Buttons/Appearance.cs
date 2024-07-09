@@ -17,4 +17,11 @@ public enum Appearance
     ///  The appearance of a Windows button.
     /// </summary>
     Button = 1,
+
+    /// <summary>
+    ///  The appearance of a Modern UI toggle switch.
+    ///  This setting is not taken into account, when <see cref="VisualStylesMode"/> is set
+    ///  to <see cref="VisualStylesMode.Disabled"/> or <see cref="VisualStylesMode.Classic"/>.
+    /// </summary>
+    ToggleSwitch = 2
 }

@@ -14,9 +14,9 @@ public enum VisualStylesMode : short
     Disabled = 0,
 
     /// <summary>
-    ///  The legacy version of the visual renderer (.NET 8 and earlier).
+    ///  The classic version of the visual renderer (.NET 8 and earlier).
     /// </summary>
-    Legacy = 8,
+    Classic = 8,
 
     /// <summary>
     ///  The .NET 9/.NET 10 version of the visual renderer.

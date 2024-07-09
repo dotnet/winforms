@@ -1,6 +1,7 @@
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 override System.Windows.Forms.MaskedTextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 static System.Windows.Forms.Application.ApplicationColors.get -> System.Windows.Forms.ApplicationColors!
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
@@ -10,6 +11,7 @@ static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
 static System.Windows.Forms.Application.IsVisualStylesSupported.get -> bool
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
+System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
 System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.Control.DarkMode.set -> void
 System.Windows.Forms.Control.DebuggerBreakCounters.get -> System.Collections.Generic.Dictionary<string!, int>!
@@ -33,9 +35,9 @@ System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Window
 System.Windows.Forms.ApplicationColors
 System.Windows.Forms.ApplicationColors.ApplicationColors() -> void
 System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 8 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 0 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Legacy = 8 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Version10 = 10 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode

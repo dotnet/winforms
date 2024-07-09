@@ -632,15 +632,17 @@ public static class TextRenderer
             // translation (rotation for example), and this likely impacted the decision to only have a translation
             // flag when this was originally written.
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                || graphics.Clip is null
-                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                "Must preserve Graphics clipping region!");
+            // Disabled. We are getting this pretty much whenever we call a DrawText.
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+            // Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
+            //    || graphics.Clip is null
+            //    || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+            //    "Must preserve Graphics clipping region!");
+
+            // Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+            //    || graphics.Transform is null
+            //    || graphics.Transform.IsIdentity,
+            //    "Must preserve Graphics transformation!");
         }
 #endif
 

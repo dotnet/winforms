@@ -798,7 +798,7 @@ public abstract partial class TextBoxBase : Control
     public int PreferredHeight => VisualStylesMode switch
     {
         VisualStylesMode.Disabled => PreferredHeightLegacy,
-        VisualStylesMode.Legacy => PreferredHeightLegacy,
+        VisualStylesMode.Classic => PreferredHeightLegacy,
         >= VisualStylesMode.Version10 => PreferredHeightVersion10,
 
         // We'll should never be here.

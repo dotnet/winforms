@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.Rendering.V10.CheckBox;
 
 /// <summary>
@@ -9,6 +11,7 @@ namespace System.Windows.Forms.Rendering.V10.CheckBox;
 internal abstract class AnimatedControlRenderer
 {
     private bool _disposedValue;
+    private bool _isRunning;
     private readonly Control _control;
 
     /// <summary>
@@ -18,25 +21,26 @@ internal abstract class AnimatedControlRenderer
     protected AnimatedControlRenderer(Control control)
     {
         _control = control;
-        _control.Paint += (sender, e) => OnPaint(e);
     }
 
     /// <summary>
-    ///  Triggers the animation for the specified number of frames.
+    ///  Callback for the animation progress. This method is called by the animation manager roughly every
+    ///  25ms which results in about 40 frames per second.
     /// </summary>
     /// <param name="animationProgress">A fraction between 0 and 1 representing the animation progress.</param>
-    public abstract void TriggerAnimation(float animationProgress);
+    public abstract void AnimationProc(float animationProgress);
 
     /// <summary>
     ///  Called when the control needs to be painted.
     /// </summary>
-    /// <param name="e">A <see cref="PaintEventArgs"/> that contains the event data.</param>
-    protected abstract void OnPaint(PaintEventArgs e);
+    /// <param name="graphics">The <see cref="Graphics"/> to paint the control.</param>
+    public abstract void RenderControl(Graphics graphics);
 
     /// <summary>
-    ///  Invalidates the control, causing it to be redrawn, which in turns triggers <see cref="OnPaint(PaintEventArgs)"/>.
+    ///  Invalidates the control, causing it to be redrawn, which in turns triggers
+    ///  <see cref="RenderControl(PaintEventArgs)"/>.
     /// </summary>
-    protected void Invalidate()
+    public void Invalidate()
     {
         _control.Invalidate();
     }
@@ -48,12 +52,23 @@ internal abstract class AnimatedControlRenderer
     {
         // Get the animation parameters
         (int animationDuration, AnimationCycle animationCycle) = OnStartAnimation();
+        _isRunning = true;
 
         // Register the renderer with the animation manager
         AnimationManager.RegisterAnimationRenderer(
             this,
             animationDuration,
             animationCycle);
+    }
+
+    internal void RestartAnimation()
+    {
+        if (_isRunning)
+        {
+            StopAnimation();
+        }
+
+        StartAnimation();
     }
 
     /// <summary>
@@ -69,9 +84,8 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     public void StopAnimation()
     {
-        // Remove the renderer from the animation manager
-        AnimationManager.UnregisterAnimationRenderer(this);
         OnStopAnimation();
+        _isRunning = false;
     }
 
     /// <summary>
@@ -83,6 +97,8 @@ internal abstract class AnimatedControlRenderer
     ///  Gets the DPI scale of the control.
     /// </summary>
     protected int DpiScale => (int)(_control.DeviceDpi / 96f);
+
+    public bool IsRunning => _isRunning;
 
     /// <summary>
     ///  Gets the control associated with the renderer.

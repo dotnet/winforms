@@ -6,33 +6,30 @@ using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms.Rendering.V10.CheckBox;
 
-internal class CheckBoxRenderer : AnimatedControlRenderer
+internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300; // milliseconds
 
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _animationProgress;
 
-    public CheckBoxRenderer(Control control, ModernCheckBoxStyle switchStyle) : base(control)
+    public AnimatedToggleSwitchRenderer(Control control, ModernCheckBoxStyle switchStyle) : base(control)
     {
         _switchStyle = switchStyle;
     }
 
     private Forms.CheckBox CheckBox => (Forms.CheckBox)Control;
 
-    protected override void OnPaint(PaintEventArgs e) =>
-        Render(e.Graphics);
-
     protected override (int animationDuration, AnimationCycle animationCycle) OnStartAnimation()
         => (AnimationDuration, AnimationCycle.Once);
 
-    public override void TriggerAnimation(float animationProgress)
+    public override void AnimationProc(float animationProgress)
     {
         _animationProgress = animationProgress;
         Invalidate();
     }
 
-    private void Render(Graphics graphics)
+    public override void RenderControl(Graphics graphics)
     {
         int dpiScale = DpiScale;
 
