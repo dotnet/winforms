@@ -3459,142 +3459,58 @@ public partial class DataGridViewTests: IDisposable
     [WinFormsFact]
     public void DataGridView_BackColorChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
-
-        _dataGridView.BackColorChanged += handler;
-        _dataGridView.BackColor = Color.Red;
-        callCount.Should().Be(1);
-
-        _dataGridView.BackColorChanged -= handler;
-        _dataGridView.BackColor = Color.Blue;
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.BackColorChanged), nameof(DataGridView.BackColor), Color.Red, Color.Blue);
     }
 
     [WinFormsFact]
     public void DataGridView_BackgroundImageChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
+        using Bitmap bitMap1 = new(10, 10);
+        using Bitmap bitMap2 = new(20, 20);
 
-        _dataGridView.BackgroundImageChanged += handler;
-        using (Bitmap bmp = new(10, 10))
-        {
-            _dataGridView.BackgroundImage = bmp;
-        }
-
-        callCount.Should().Be(1);
-
-        _dataGridView.BackgroundImageChanged -= handler;
-        using (Bitmap bmp = new(20, 20))
-        {
-            _dataGridView.BackgroundImage = bmp;
-        }
-
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.BackgroundImageChanged), nameof(DataGridView.BackgroundImage), bitMap1, bitMap2);
     }
 
     [WinFormsFact]
     public void DataGridView_BackgroundImageLayoutChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
-
-        _dataGridView.BackgroundImageLayoutChanged += handler;
-        _dataGridView.BackgroundImageLayout = ImageLayout.Center;
-        callCount.Should().Be(1);
-
-        _dataGridView.BackgroundImageLayoutChanged -= handler;
-        _dataGridView.BackgroundImageLayout = ImageLayout.Stretch;
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.BackgroundImageLayoutChanged), nameof(DataGridView.BackgroundImageLayout), ImageLayout.Center, ImageLayout.Stretch);
     }
 
     [WinFormsFact]
     public void DataGridView_ForeColorChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
-
-        _dataGridView.ForeColorChanged += handler;
-        _dataGridView.ForeColor = Color.Red;
-        callCount.Should().Be(1);
-
-        _dataGridView.ForeColorChanged -= handler;
-        _dataGridView.ForeColor = Color.Blue;
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.ForeColorChanged), nameof(DataGridView.ForeColor), Color.Red, Color.Blue);
     }
 
     [WinFormsFact]
     public void DataGridView_FontChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
+        using Font font1 = new("Arial", 12);
+        using Font font2 = new("Times New Roman", 14);
 
-        _dataGridView.FontChanged += handler;
-        using (Font font = new("Arial", 12))
-        {
-            _dataGridView.Font = font;
-        }
-      
-        callCount.Should().Be(1);
-
-        _dataGridView.FontChanged -= handler;
-        using (Font font = new("Times New Roman", 14))
-        {
-            _dataGridView.Font = font;
-        }
-
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.FontChanged), nameof(DataGridView.Font), font1, font2);
     }
 
     [WinFormsFact]
     public void DataGridView_PaddingChangedEvent_Raised_Success()
     {
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            sender.Should().Be(_dataGridView);
-            e.Should().Be(EventArgs.Empty);
-            callCount++;
-        };
+        Padding padding1 = new(10);
+        Padding padding2 = new(20);
 
-        _dataGridView.PaddingChanged += handler;
-        _dataGridView.Padding = new(10);
-        callCount.Should().Be(1);
-
-        _dataGridView.PaddingChanged -= handler;
-        _dataGridView.Padding = new(20);
-        callCount.Should().Be(1);
+        TestEvent(nameof(DataGridView.PaddingChanged), nameof(DataGridView.Padding), padding1, padding2);
     }
 
     [WinFormsFact]
     public void DataGridView_TextChangedEvent_Raised_Success()
     {
+        TestEvent(nameof(DataGridView.TextChanged), nameof(DataGridView.Text), "New Text", "Another Text");
+    }
+
+    private void TestEvent(string eventName, string propertyName, object propertyValue, object newPropertyValue)
+    {
+        Type type = typeof(DataGridView);
+
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3603,12 +3519,15 @@ public partial class DataGridViewTests: IDisposable
             callCount++;
         };
 
-        _dataGridView.TextChanged += handler;
-        _dataGridView.Text = "New Text";
+        Reflection.EventInfo eventInfo = type.GetEvent(eventName);
+        Reflection.PropertyInfo propertyInfo = type.GetProperty(propertyName);
+
+        eventInfo.AddEventHandler(_dataGridView, handler);
+        propertyInfo.SetValue(_dataGridView, propertyValue, null);
         callCount.Should().Be(1);
 
-        _dataGridView.TextChanged -= handler;
-        _dataGridView.Text = "Another Text";
+        eventInfo.RemoveEventHandler(_dataGridView, handler);
+        propertyInfo.SetValue(_dataGridView, newPropertyValue, null);
         callCount.Should().Be(1);
     }
 }
