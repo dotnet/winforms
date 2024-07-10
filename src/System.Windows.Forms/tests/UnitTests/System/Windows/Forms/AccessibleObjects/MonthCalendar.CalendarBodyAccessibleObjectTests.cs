@@ -17,8 +17,9 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, 0, "Test name");
         CalendarBodyAccessibleObject accessibleObject = new(calendarAccessibleObject, controlAccessibleObject, 0);
 
-        Assert.Equal(calendarAccessibleObject, accessibleObject.Parent);
-        Assert.False(control.IsHandleCreated);
+        accessibleObject.Parent.Should().Be(calendarAccessibleObject);
+        control.IsHandleCreated.Should().BeFalse();
+        accessibleObject.RowOrColumnMajor.Should().Be(RowOrColumnMajor.RowOrColumnMajor_RowMajor);
     }
 
     [WinFormsFact]
@@ -242,5 +243,91 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         CalendarBodyAccessibleObject bodyAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, calendarIndex);
 
         return bodyAccessibleObject;
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1, -1, null)]
+    [InlineData(5, 6, typeof(CalendarCellAccessibleObject))]
+    public void CalendarBodyAccessibleObject_GetItem_ReturnsExpectedResult_ForGivenIndices(int rowIndex, int columnIndex, Type expectedType)
+    {
+        using MonthCalendar control = new();
+        control.CreateControl();
+        CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
+
+        var result = accessibleObject.GetItem(rowIndex, columnIndex);
+
+        if (expectedType is null)
+        {
+            result.Should().BeNull();
+        }
+        else
+        {
+            result.Should().NotBeNull();
+            result.Should().BeOfType(expectedType);
+        }
+
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, (int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 6)]
+    [InlineData(false, (int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 0)]
+    [InlineData(true, (int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 0)]
+    [InlineData(true, (int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 0)]
+    [InlineData(true, (int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 0)]
+    public void CalendarBodyAccessibleObject_GetRowHeaders_ReturnsExpected(bool showWeekNumbers, int viewInt, int expectedCount)
+    {
+        MONTH_CALDENDAR_MESSAGES_VIEW view = (MONTH_CALDENDAR_MESSAGES_VIEW)viewInt;
+        using MonthCalendar control = new() { ShowWeekNumbers = showWeekNumbers };
+        control.CreateControl();
+        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
+        CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
+
+        var rowHeaders = accessibleObject.GetRowHeaders();
+
+        if (expectedCount == 0)
+        {
+            rowHeaders.Should().BeNull();
+        }
+        else
+        {
+            rowHeaders.Should().NotBeNull();
+            rowHeaders.Length.Should().Be(expectedCount);
+        }
+
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CalendarBodyAccessibleObject_GetRowHeaders_ReturnsCorrectType()
+    {
+        using MonthCalendar control = new() { ShowWeekNumbers = true };
+        control.CreateControl();
+        CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
+
+        var rowHeaders = accessibleObject.GetRowHeaders();
+
+        rowHeaders.Should().AllBeOfType<CalendarWeekNumberCellAccessibleObject>();
+        control.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [InlineData(null, false)] 
+    [InlineData("CustomName", false)] 
+    [InlineData("AccessibleName", false, true)]
+    public void CalendarBodyAccessibleObject_CanGetNameInternal_ShouldBeConsistentlyFalse(string name, bool expected, bool isAccessibleName = false)
+    {
+        using MonthCalendar control = new();
+        if (isAccessibleName)
+        {
+            control.AccessibleName = name;
+        }
+        else
+        {
+            control.Name = name;
+        }
+
+        var accessibleObject = CreateCalendarBodyAccessibleObject(control);
+        accessibleObject.CanGetNameInternal.Should().Be(expected);
     }
 }

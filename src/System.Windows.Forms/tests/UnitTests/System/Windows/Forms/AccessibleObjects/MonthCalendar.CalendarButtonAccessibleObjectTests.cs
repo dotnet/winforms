@@ -15,9 +15,11 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        Assert.Equal(controlAccessibleObject, buttonAccessibleObject.Parent);
-        Assert.Equal(controlAccessibleObject, buttonAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
-        Assert.False(control.IsHandleCreated);
+        buttonAccessibleObject.Parent.Should().Be(controlAccessibleObject);
+
+        bool canGetDefaultActionInternal = buttonAccessibleObject.TestAccessor().Dynamic.CanGetDefaultActionInternal;
+        canGetDefaultActionInternal.Should().BeFalse();
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
