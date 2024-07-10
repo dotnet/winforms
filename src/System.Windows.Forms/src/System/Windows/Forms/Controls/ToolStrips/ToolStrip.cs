@@ -256,6 +256,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         set => base.AutoScrollPosition = value;
     }
 
+    /// <summary>
+    ///  When <see langword="true"/> Allows the control to be interacted when window does not have focus.
+    /// </summary>
     [Browsable(true)]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.ToolStripAllowClickThrough))]
