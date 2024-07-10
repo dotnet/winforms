@@ -3455,4 +3455,79 @@ public partial class DataGridViewTests: IDisposable
         _dataGridView.Sort(_dataGridView.Columns[0], ListSortDirection.Descending);
         callCount.Should().Be(1);
     }
+
+    [WinFormsFact]
+    public void DataGridView_BackColorChangedEvent_Raised_Success()
+    {
+        TestEvent(nameof(DataGridView.BackColorChanged), nameof(DataGridView.BackColor), Color.Red, Color.Blue);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BackgroundImageChangedEvent_Raised_Success()
+    {
+        using Bitmap bitMap1 = new(10, 10);
+        using Bitmap bitMap2 = new(20, 20);
+
+        TestEvent(nameof(DataGridView.BackgroundImageChanged), nameof(DataGridView.BackgroundImage), bitMap1, bitMap2);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_BackgroundImageLayoutChangedEvent_Raised_Success()
+    {
+        TestEvent(nameof(DataGridView.BackgroundImageLayoutChanged), nameof(DataGridView.BackgroundImageLayout), ImageLayout.Center, ImageLayout.Stretch);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ForeColorChangedEvent_Raised_Success()
+    {
+        TestEvent(nameof(DataGridView.ForeColorChanged), nameof(DataGridView.ForeColor), Color.Red, Color.Blue);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_FontChangedEvent_Raised_Success()
+    {
+        using Font font1 = new("Arial", 12);
+        using Font font2 = new("Times New Roman", 14);
+
+        TestEvent(nameof(DataGridView.FontChanged), nameof(DataGridView.Font), font1, font2);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_PaddingChangedEvent_Raised_Success()
+    {
+        Padding padding1 = new(10);
+        Padding padding2 = new(20);
+
+        TestEvent(nameof(DataGridView.PaddingChanged), nameof(DataGridView.Padding), padding1, padding2);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_TextChangedEvent_Raised_Success()
+    {
+        TestEvent(nameof(DataGridView.TextChanged), nameof(DataGridView.Text), "New Text", "Another Text");
+    }
+
+    private void TestEvent(string eventName, string propertyName, object propertyValue, object newPropertyValue)
+    {
+        Type type = typeof(DataGridView);
+
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        Reflection.EventInfo eventInfo = type.GetEvent(eventName);
+        Reflection.PropertyInfo propertyInfo = type.GetProperty(propertyName);
+
+        eventInfo.AddEventHandler(_dataGridView, handler);
+        propertyInfo.SetValue(_dataGridView, propertyValue, null);
+        callCount.Should().Be(1);
+
+        eventInfo.RemoveEventHandler(_dataGridView, handler);
+        propertyInfo.SetValue(_dataGridView, newPropertyValue, null);
+        callCount.Should().Be(1);
+    }
 }
