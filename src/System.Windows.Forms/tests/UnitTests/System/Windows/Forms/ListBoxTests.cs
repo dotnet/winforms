@@ -6357,8 +6357,8 @@ public class ListBoxTests
             Items = { "Item 1", "Item 2", "Item 3" }
         };
 
-        var accessor = listBox.TestAccessor();
-        accessor.Dynamic.RecreateHandle();
+        // Use TestAccessor to call the private RecreateHandle method
+        listBox.TestAccessor().Dynamic.RecreateHandle();
 
         int totalItemHeight = 0;
         for (int i = 0; i < listBox.Items.Count; i++)
@@ -6381,8 +6381,8 @@ public class ListBoxTests
             Items = { "Item 1", "Item 2", "Item 3" }
         };
 
-        var accessor = listBox.TestAccessor();
-        accessor.Dynamic.SetState(1, true);
+        // Use TestAccessor to call the private SetState method and set the state to 'true'
+        listBox.TestAccessor().Dynamic.SetState(1, true);
 
         int totalItemHeight = 0;
         for (int i = 0; i < listBox.Items.Count; i++)
