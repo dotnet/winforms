@@ -570,11 +570,11 @@ public unsafe partial class Control :
 
             if (Site is not null)
             {
-                ambientProperties = Site.GetService(typeof(AmbientProperties)) as AmbientProperties;
+                ambientProperties = Site.GetService<AmbientProperties>();
             }
             else
             {
-                ambientProperties = (AmbientProperties?)GetService(typeof(AmbientProperties));
+                ambientProperties = GetService<AmbientProperties>();
             }
 
             if (ambientProperties is not null)
@@ -3083,7 +3083,7 @@ public unsafe partial class Control :
 
             if (value is not null)
             {
-                newAmbients = value.GetService(typeof(AmbientProperties)) as AmbientProperties;
+                newAmbients = value.GetService<AmbientProperties>();
             }
 
             // If the ambients changed, compare each property.
@@ -5410,10 +5410,7 @@ public unsafe partial class Control :
     ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
     ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
     /// </summary>
-    internal bool IsUpdating()
-    {
-        return _updateCount > 0;
-    }
+    internal bool IsUpdating() => _updateCount > 0;
 
     /// <summary>
     ///  This is a helper method that is called by ScaleControl to retrieve the bounds
@@ -5434,20 +5431,12 @@ public unsafe partial class Control :
 
         // Don't reposition top level controls.  Also, if we're in
         // design mode, don't reposition the root component.
-        bool scaleLoc = !GetState(States.TopLevel);
-        if (scaleLoc)
-        {
-            ISite? site = Site;
-            if (site is not null && site.DesignMode)
-            {
-                if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
-                {
-                    scaleLoc = false;
-                }
-            }
-        }
 
-        if (scaleLoc)
+        if (!GetState(States.TopLevel) && !(
+            Site is { } site
+            && site.DesignMode
+            && site.TryGetService(out IDesignerHost? host)
+            && host.RootComponent == this))
         {
             if ((specified & BoundsSpecified.X) != 0)
             {
@@ -5509,20 +5498,18 @@ public unsafe partial class Control :
 
     internal bool GetAnyDisposingInHierarchy()
     {
-        Control? up = this;
-        bool isDisposing = false;
-        while (up is not null)
+        Control? control = this;
+        while (control is not null)
         {
-            if (up.Disposing)
+            if (control.Disposing)
             {
-                isDisposing = true;
-                break;
+                return true;
             }
 
-            up = up._parent;
+            control = control.ParentInternal;
         }
 
-        return isDisposing;
+        return false;
     }
 
     /// <summary>
