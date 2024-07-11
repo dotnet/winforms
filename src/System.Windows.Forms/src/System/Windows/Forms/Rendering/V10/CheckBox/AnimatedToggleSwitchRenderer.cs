@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.Rendering.Animation;
 
 namespace System.Windows.Forms.Rendering.V10.CheckBox;
 
@@ -11,7 +12,7 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     private const int AnimationDuration = 300; // milliseconds
 
     private readonly ModernCheckBoxStyle _switchStyle;
-    private float _animationProgress;
+    private float? _animationProgress;
 
     public AnimatedToggleSwitchRenderer(Control control, ModernCheckBoxStyle switchStyle) : base(control)
     {
@@ -29,6 +30,11 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Invalidate();
     }
 
+    /// <summary>
+    ///  Called from OnPaint of the control. If we only want the render animations, we need to make sure,
+    ///  that this was triggered by AnimationProc and we know the relative progress.
+    /// </summary>
+    /// <param name="graphics">The graphics objects to render in.</param>
     public override void RenderControl(Graphics graphics)
     {
         int dpiScale = DpiScale;
@@ -66,12 +72,23 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     private void RenderSwitch(Graphics g, Rectangle rect, int circleDiameter)
     {
-        Color backgroundColor = CheckBox.Checked ? SystemColors.Highlight : SystemColors.ControlDark;
+        if (_animationProgress is null)
+        {
+            // Let's make sure, we don't draw anything if the animation is not running.
+            return;
+        }
+
+        Color backgroundColor = CheckBox.Checked ^ (_animationProgress < 0.8f)
+            ? SystemColors.Highlight
+            : SystemColors.ControlDark;
+
         Color circleColor = SystemColors.ControlLightLight;
 
+        static float EaseOut(float t) => (1 - t) * (1 - t);
+
         float circlePosition = CheckBox.Checked
-            ? (rect.Width - circleDiameter) * EaseOut(_animationProgress)
-            : (rect.Width - circleDiameter) * (1 - EaseOut(_animationProgress));
+            ? (rect.Width - circleDiameter) * (1 - EaseOut(_animationProgress.Value))
+            : (rect.Width - circleDiameter) * EaseOut(_animationProgress.Value);
 
         using var backgroundBrush = new SolidBrush(backgroundColor);
         using var circleBrush = new SolidBrush(circleColor);
@@ -100,8 +117,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         g.FillEllipse(circleBrush, rect.X + circlePosition, rect.Y + 2.5f * DpiScale, circleDiameter, circleDiameter);
     }
 
-    protected override void OnStopAnimation() => throw new NotImplementedException();
-
-    private static float EaseOut(float t)
-        => 1 - (1 - t) * (1 - t);
+    protected override void OnStoppedAnimation()
+    {
+        _animationProgress = null;
+    }
 }

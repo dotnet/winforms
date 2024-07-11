@@ -440,9 +440,11 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
-        if (VisualStylesMode== VisualStylesMode.Version10 && Appearance == Appearance.ToggleSwitch)
+        if (VisualStylesMode >= VisualStylesMode.Version10
+            && Appearance == Appearance.ToggleSwitch)
         {
             _toggleSwitchRenderer?.RestartAnimation();
+
             Refresh();
         }
 

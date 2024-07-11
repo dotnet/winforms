@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         public override Color MenuHighlight => Color.FromArgb(255, 42, 128, 210);
         public override Color MenuText => Color.FromArgb(255, 240, 240, 240);
         public override Color ScrollBar => Color.FromArgb(255, 80, 80, 80);
-        public override Color Window => Color.FromArgb(255, 30, 30, 30);
+        public override Color Window => Color.FromArgb(255, 50, 50, 50);
         public override Color WindowFrame => Color.FromArgb(255, 40, 40, 40);
         public override Color WindowText => Color.FromArgb(255, 240, 240, 240);
     }

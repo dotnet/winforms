@@ -3,7 +3,7 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Rendering.V10.CheckBox;
+namespace System.Windows.Forms.Rendering.Animation;
 
 /// <summary>
 ///  Represents an abstract base class for animated control renderers.
@@ -50,15 +50,21 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     public void StartAnimation()
     {
+        if (_isRunning)
+        {
+            return;
+        }
+
         // Get the animation parameters
         (int animationDuration, AnimationCycle animationCycle) = OnStartAnimation();
-        _isRunning = true;
 
         // Register the renderer with the animation manager
-        AnimationManager.RegisterAnimationRenderer(
+        AnimationManager.RegisterOrUpdateAnimationRenderer(
             this,
             animationDuration,
             animationCycle);
+
+        _isRunning = true;
     }
 
     internal void RestartAnimation()
@@ -84,14 +90,14 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     public void StopAnimation()
     {
-        OnStopAnimation();
         _isRunning = false;
+        OnStoppedAnimation();
     }
 
     /// <summary>
     ///  Called when the animation stops.
     /// </summary>
-    protected abstract void OnStopAnimation();
+    protected abstract void OnStoppedAnimation();
 
     /// <summary>
     ///  Gets the DPI scale of the control.

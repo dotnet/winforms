@@ -406,6 +406,7 @@ public abstract partial class TextBoxBase : Control
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
+
             if (!_textBoxFlags[s_hideSelection])
             {
                 cp.Style |= PInvoke.ES_NOHIDESEL;
@@ -439,6 +440,7 @@ public abstract partial class TextBoxBase : Control
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
+
                     case BorderStyle.FixedSingle:
                         cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
@@ -832,14 +834,14 @@ public abstract partial class TextBoxBase : Control
         {
             // For Versions >=10, we take the Padding into account when calculating the preferred height.
             int height = PreferredHeightLegacy
-                + 2 * GetVisualStylesSystemPadding()
+                + 2 * GetLatestVisualStylesSystemPadding()
                 + Padding.Vertical;
 
             return height;
         }
     }
 
-    private int GetVisualStylesSystemPadding() =>
+    private int GetLatestVisualStylesSystemPadding() =>
         BorderStyle switch
         {
             BorderStyle.Fixed3D => VisualStylesFixed3DBorderPadding,
@@ -871,7 +873,9 @@ public abstract partial class TextBoxBase : Control
 
         if (VisualStylesMode >= VisualStylesMode.Version10)
         {
-            int systemPaddingOffset = GetVisualStylesSystemPadding();
+            // For Versions >=10, we take our modern Style adorners into account
+            // when we're calculating the preferred height.
+            int systemPaddingOffset = GetLatestVisualStylesSystemPadding();
 
             padding = new Padding(
                 systemPaddingOffset,
@@ -879,6 +883,8 @@ public abstract partial class TextBoxBase : Control
                 systemPaddingOffset,
                 systemPaddingOffset);
 
+            // And also we take the actual Padding property into account
+            // when calculating the preferred height.
             padding = Padding.Add(padding, Padding);
             proposedConstraints -= padding.Size;
         }
@@ -900,9 +906,16 @@ public abstract partial class TextBoxBase : Control
             if (BorderStyle == BorderStyle.FixedSingle)
             {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
+                // TODO: I am not sure, if this calculation still fits since we got the underlined border style.
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }
+
+            // We used to add the borders and padding to the returned size - this remains effectively the same:
+            padding.Left = 0;
+            padding.Top = 0;
+            padding.Right = bordersAndPadding.Width;
+            padding.Bottom = bordersAndPadding.Height;
 
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
@@ -914,7 +927,7 @@ public abstract partial class TextBoxBase : Control
         textSize.Height = Math.Max(textSize.Height, FontHeight);
 
         Size preferredSize = textSize
-            + new Size(padding.Left + padding.Right, padding.Top + padding.Bottom);
+            + new Size(padding.Horizontal, padding.Vertical);
 
         return preferredSize;
     }
@@ -2087,15 +2100,6 @@ public abstract partial class TextBoxBase : Control
         // Call SetWindowPos with the current Bounds with SWP_FRAMECHANGED flag.
         // Only then we do not change the Window pos/size, but we'll get that WmNcCalcSize message version
         // that we need to adjust the client area.
-        // PInvoke.SetWindowPos(
-        //    hWnd: hwnd,
-        //    hWndInsertAfter: HWND.Null,
-        //    X: bounds.Left,
-        //    Y: bounds.Top,
-        //    cx: bounds.Width,
-        //    cy: bounds.Height,
-        //    uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
-
         PInvoke.SetWindowPos(
             hWnd: this,
             hWndInsertAfter: HWND.HWND_TOP,
@@ -2122,146 +2126,15 @@ public abstract partial class TextBoxBase : Control
         HWND hwnd = (HWND)m.HWnd;
         HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
 
-        switch (BorderStyle)
-        {
-            case BorderStyle.Fixed3D:
-                RenderModernFixed3DBorder(hdc);
-                break;
-
-            case BorderStyle.FixedSingle:
-                RenderModernFixedSingleBorder(hdc);
-                break;
-
-            default:
-                RenderModernNoBorder(hdc);
-                break;
-        }
+        RenderModernBorder(hdc, BorderStyle);
 
         int result = PInvokeCore.ReleaseDC(hwnd, hdc);
         Debug.Assert(result != 0);
     }
 
-    private void RenderModernFixedSingleBorder(HDC hdc)
+    private void RenderModernBorder(HDC hdc, BorderStyle borderStyle)
     {
         int borderThickness = 2;
-        int deflateOffset = borderThickness / 2;
-
-        Color adornerColor = ForeColor;
-        Color parentBackColor = Parent?.BackColor ?? BackColor;
-        Color clientBackColor = BackColor;
-
-        using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
-        using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
-        using Brush adornerBrush = new SolidBrush(adornerColor);
-        using Pen adornerPen = new(adornerColor, borderThickness);
-
-        Rectangle bounds = Bounds;
-
-        Rectangle deflatedBounds = new(
-            x: bounds.Left + deflateOffset,
-            y: bounds.Top + deflateOffset,
-            width: bounds.Width - borderThickness,
-            height: bounds.Height - borderThickness);
-
-        Rectangle clientBounds = new(
-            (bounds.Width - ClientRectangle.Width) / 2,
-            (bounds.Height - ClientRectangle.Height) / 2,
-            ClientRectangle.Width,
-            ClientRectangle.Height);
-
-        // Get the Graphics Object from the DC:
-        using Graphics graphics = Graphics.FromHdc(hdc);
-
-        // We need Anti-Aliasing:
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // Contrast to Copilot's suggestions, we need to first exclude
-        // the clip, then translate the origin.
-        Rectangle translatedClientBounds = new(
-            clientBounds.Left,
-            clientBounds.Top,
-            clientBounds.Width,
-            clientBounds.Height);
-
-        // Exclude the client bounds from the clipping region to only allow drawing on the frame:
-        graphics.ExcludeClip(translatedClientBounds);
-
-        // Translate the origin to the top-left corner of the control:
-        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
-
-        // Fill the background with the specified brush:
-        graphics.FillRectangle(parentBackgroundBrush, bounds);
-
-        // Draw a rounded Rectangle with the borderthickness
-        graphics.FillRectangle(
-            clientBackgroundBrush,
-            deflatedBounds);
-
-        // Draw a rounded Rectangle with the borderthickness
-        graphics.DrawRectangle(
-            adornerPen,
-            deflatedBounds);
-    }
-
-    private void RenderModernNoBorder(HDC hdc)
-    {
-        int borderThickness = 2;
-        int deflateOffset = borderThickness / 2;
-
-        Color adornerColor = ForeColor;
-        Color parentBackColor = Parent?.BackColor ?? BackColor;
-        Color clientBackColor = BackColor;
-
-        using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
-        using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
-        using Brush adornerBrush = new SolidBrush(adornerColor);
-
-        Rectangle bounds = Bounds;
-
-        Rectangle deflatedBounds = new(
-            x: bounds.Left + deflateOffset,
-            y: bounds.Top + deflateOffset,
-            width: bounds.Width - borderThickness,
-            height: bounds.Height - borderThickness);
-
-        Rectangle clientBounds = new(
-            (bounds.Width - ClientRectangle.Width) / 2,
-            (bounds.Height - ClientRectangle.Height) / 2,
-            ClientRectangle.Width,
-            ClientRectangle.Height);
-
-        // Get the Graphics Object from the DC:
-        using Graphics graphics = Graphics.FromHdc(hdc);
-
-        // We need Anti-Aliasing:
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // Contrast to Copilot's suggestions, we need to first exclude
-        // the clip, then translate the origin.
-        Rectangle translatedClientBounds = new(
-            clientBounds.Left,
-            clientBounds.Top,
-            clientBounds.Width,
-            clientBounds.Height);
-
-        // Exclude the client bounds from the clipping region to only allow drawing on the frame:
-        graphics.ExcludeClip(translatedClientBounds);
-
-        // Translate the origin to the top-left corner of the control:
-        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
-
-        // Fill the background with the specified brush:
-        graphics.FillRectangle(parentBackgroundBrush, bounds);
-
-        // Draw a rounded Rectangle with the borderthickness
-        graphics.FillRectangle(
-            clientBackgroundBrush,
-            deflatedBounds);
-    }
-
-    private void RenderModernFixed3DBorder(HDC hdc)
-    {
-        int borderThickness = 3;
         int deflateOffset = borderThickness / 2;
         int cornerRadius = 15;
 
@@ -2276,23 +2149,28 @@ public abstract partial class TextBoxBase : Control
 
         Rectangle bounds = Bounds;
 
-        Rectangle deflatedBounds = new(
-            x: bounds.Left + deflateOffset,
-            y: bounds.Top + deflateOffset,
-            width: bounds.Width - borderThickness,
-            height: bounds.Height - borderThickness);
-
         Rectangle clientBounds = new(
             (bounds.Width - ClientRectangle.Width) / 2,
             (bounds.Height - ClientRectangle.Height) / 2,
             ClientRectangle.Width,
             ClientRectangle.Height);
 
+        Rectangle deflatedBounds = new(
+            x: bounds.Left + Padding.Left + deflateOffset,
+            y: bounds.Top + Padding.Top + deflateOffset,
+            width: bounds.Width - (Padding.Horizontal + deflateOffset + deflateOffset),
+            height: bounds.Height - (Padding.Vertical + deflateOffset + deflateOffset));
+
         // Get the Graphics Object from the DC:
         using Graphics graphics = Graphics.FromHdc(hdc);
 
         // We need Anti-Aliasing:
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Translate the origin to the top-left corner of the control:
+        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
+
+        bounds.Inflate(1, 1);
 
         Rectangle translatedClientBounds = new(
             clientBounds.Left,
@@ -2304,23 +2182,50 @@ public abstract partial class TextBoxBase : Control
         // the clip, then translate the origin.
         graphics.ExcludeClip(translatedClientBounds);
 
-        // Translate the origin to the top-left corner of the control:
-        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
-
         // Fill the background with the specified brush:
         graphics.FillRectangle(parentBackgroundBrush, bounds);
 
-        // Draw a rounded Rectangle with the borderthickness
-        graphics.FillRoundedRectangle(
-            clientBackgroundBrush,
-            deflatedBounds,
-            new Size(cornerRadius, cornerRadius));
+        switch (borderStyle)
+        {
+            case BorderStyle.None:
 
-        // Draw a rounded Rectangle with the borderthickness
-        graphics.DrawRoundedRectangle(
-            adornerPen,
-            deflatedBounds,
-            new Size(cornerRadius, cornerRadius));
+                // Draw a rounded Rectangle with the border thickness
+                graphics.FillRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds);
+
+                break;
+
+            case BorderStyle.FixedSingle:
+
+                // Draw a rounded Rectangle with the border thickness
+                graphics.FillRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds);
+
+                // Draw a rounded Rectangle with the border thickness
+                graphics.DrawRectangle(
+                    adornerPen,
+                    deflatedBounds);
+
+                break;
+
+            default:
+
+                // fill a rounded Rectangle
+                graphics.FillRoundedRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds,
+                    new Size(cornerRadius, cornerRadius));
+
+                // Draw a rounded Rectangle with the border thickness
+                graphics.DrawRoundedRectangle(
+                    adornerPen,
+                    deflatedBounds,
+                    new Size(cornerRadius, cornerRadius));
+
+                break;
+        }
     }
 
     private void WmNcCalcSize(ref Message m)
@@ -2332,7 +2237,7 @@ public abstract partial class TextBoxBase : Control
 
             if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
             {
-                int borderLineOffset = GetVisualStylesSystemPadding();
+                int borderLineOffset = GetLatestVisualStylesSystemPadding();
 
                 ncCalcSizeParams.rgrc._0.top += (Padding.Top + borderLineOffset);
                 ncCalcSizeParams.rgrc._0.bottom -= (Padding.Bottom + borderLineOffset);
