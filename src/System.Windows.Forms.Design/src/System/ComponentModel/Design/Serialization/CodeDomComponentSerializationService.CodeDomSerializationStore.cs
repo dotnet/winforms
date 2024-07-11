@@ -226,7 +226,7 @@ public sealed partial class CodeDomComponentSerializationService
                 delegator.Manager.Container = container;
             }
 
-            if (provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+            if (provider?.GetService<IDesignerSerializationManager>() is DesignerSerializationManager hostManager)
             {
                 foreach (IDesignerSerializationProvider serProvider in hostManager.SerializationProviders)
                 {
@@ -244,7 +244,7 @@ public sealed partial class CodeDomComponentSerializationService
             // Recreate resources
             if (_resourceStream is not null)
             {
-                long startPosition = _resourceStream.Position;
+                _resourceStream.Seek(0, SeekOrigin.Begin);
                 try
                 {
                     if (new BinaryFormattedObject(_resourceStream).TryGetPrimitiveHashtable(out Hashtable? value))
@@ -257,21 +257,22 @@ public sealed partial class CodeDomComponentSerializationService
                     // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
                 }
 
-                // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(), which has a RequiresUnreferencedCode annotation.
-                // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
-                // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
-                if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                if (_resources is null)
                 {
-                    throw new NotSupportedException(SR.BinaryFormatterNotSupported);
-                }
+                    // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(), which has a RequiresUnreferencedCode annotation.
+                    // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
+                    // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
+                    if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                    {
+                        throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                    }
 
-                _resourceStream.Position = startPosition;
-
-                _resourceStream.Seek(0, SeekOrigin.Begin);
+                    _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable;
+                    Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable;
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                _resources = new LocalResourceManager(resources);
+                    _resources = new LocalResourceManager(resources);
+                }
             }
 
             using (delegator.Manager.CreateSession())
