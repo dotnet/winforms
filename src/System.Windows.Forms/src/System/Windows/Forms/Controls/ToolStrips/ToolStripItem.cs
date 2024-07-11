@@ -1660,6 +1660,9 @@ public abstract partial class ToolStripItem :
     /// </summary>
     internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
 
+    /// <summary>
+    /// Returns tool strip item's renderer
+    /// </summary>
     protected internal virtual ToolStripRenderer? Renderer
     {
         get
