@@ -22,23 +22,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(vbErrors.FileNotFound)
-            Dim ex As Exception = ExUtils.GetDirectoryNotFoundException(resourceString)
-            Assert.IsType(Of IO.DirectoryNotFoundException)(ex)
-            Assert.Equal("File not found.", ex.Message)
-        End Sub
-
-        <WinFormsFact>
-        Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(vbErrors.FileNotFound)
-            Dim ex As Exception = ExUtils.GetFileNotFoundException("Test", resourceString)
-            Assert.IsType(Of IO.FileNotFoundException)(ex)
-            Assert.Equal("File not found.", ex.Message)
-            Assert.Equal("Test", CType(ex, IO.FileNotFoundException).FileName)
-        End Sub
-
-        <WinFormsFact>
         Public Sub GetInvalidOperationExceptionTest_Succeed()
             Dim ex As Exception = ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
             Assert.IsType(Of InvalidOperationException)(ex)
