@@ -14,7 +14,7 @@ public class AudioTests
     }
 
     // Not tested:
-    //    Public Sub PlaySystemSound(ByVal systemSound As System.Media.SystemSound)
+    //    Public Sub PlaySystemSound(systemSound As System.Media.SystemSound)
 
     [Fact]
     public void Stop()

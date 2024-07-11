@@ -7,13 +7,21 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
     Partial Public Class ControlTests
 
+        Public Shared Function FaultingFunc(a As Integer) As Integer
+            Return a \ 0
+        End Function
+
+        Public Shared Sub FaultingMethod()
+            Throw New DivideByZeroException()
+        End Sub
+
         <WinFormsFact>
         Public Sub Control_Invoke_Action_calls_correct_method()
             Using _control As New Control
                 _control.CreateControl()
 
                 Dim invoker As Action = AddressOf FaultingMethod
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub() _control.Invoke(invoker))
 
                 '    Expecting something Like the following.
@@ -41,7 +49,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _control.CreateControl()
 
                 Dim invoker As New MethodInvoker(AddressOf FaultingMethod)
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub() _control.Invoke(invoker))
 
                 '    Expecting something Like the following.
@@ -69,9 +77,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _control.CreateControl()
 
                 Dim invoker As Func(Of Integer, Integer) = AddressOf FaultingFunc
-                Dim exception = Assert.Throws(Of DivideByZeroException)(
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
                     Sub()
-                        Dim result = _control.Invoke(Function() invoker(19))
+                        Dim result As Integer = _control.Invoke(Function() invoker(19))
                     End Sub)
 
                 '    Expecting something Like the following.
@@ -91,15 +99,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        Public Shared Sub FaultingMethod()
-            Throw New DivideByZeroException()
-        End Sub
-
-        Public Shared Function FaultingFunc(a As Integer) As Integer
-            Return a \ 0
-        End Function
-
     End Class
-
 End Namespace
-

@@ -9,6 +9,7 @@ using TextDataFormat = System.Windows.Forms.TextDataFormat;
 namespace Microsoft.VisualBasic.MyServices.Tests;
 
 [Collection("Sequential")]
+[CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
     [WinFormsFact]
@@ -51,8 +52,8 @@ public class ClipboardProxyTests
         Assert.Equal(System.Windows.Forms.Clipboard.ContainsAudio(), clipboard.ContainsAudio());
         // Not tested:
         //   Public Function GetAudioStream() As Stream
-        //   Public Sub SetAudio(ByVal audioBytes As Byte())
-        //   Public Sub SetAudio(ByVal audioStream As Stream)
+        //   Public Sub SetAudio(audioBytes As Byte())
+        //   Public Sub SetAudio(audioStream As Stream)
     }
 
     [WinFormsFact]
@@ -62,7 +63,7 @@ public class ClipboardProxyTests
         Assert.Equal(System.Windows.Forms.Clipboard.ContainsFileDropList(), clipboard.ContainsFileDropList());
         // Not tested:
         //   Public Function GetFileDropList() As StringCollection
-        //   Public Sub SetFileDropList(ByVal filePaths As StringCollection)
+        //   Public Sub SetFileDropList(filePaths As StringCollection)
     }
 
     [WinFormsFact]
