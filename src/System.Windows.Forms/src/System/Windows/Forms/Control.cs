@@ -449,49 +449,10 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Returns a specific AccessibleObject associated with this
-    ///  control, based on standard "accessible object id".
-    /// </summary>
-    private AccessibleObject? GetAccessibilityObject(int accObjId)
-    {
-        AccessibleObject? accessibleObject;
-
-        switch ((OBJECT_IDENTIFIER)accObjId)
-        {
-            case OBJECT_IDENTIFIER.OBJID_CLIENT:
-                accessibleObject = AccessibilityObject;
-                break;
-            case OBJECT_IDENTIFIER.OBJID_WINDOW:
-                accessibleObject = NcAccessibilityObject;
-                break;
-            default:
-                if (accObjId > 0)
-                {
-                    accessibleObject = GetAccessibilityObjectById(accObjId);
-                }
-                else
-                {
-                    accessibleObject = null;
-                }
-
-                break;
-        }
-
-        return accessibleObject;
-    }
-
-    /// <summary>
     ///  Returns a specific AccessibleObject associated w/ the objectID
     /// </summary>
-    protected virtual AccessibleObject? GetAccessibilityObjectById(int objectId)
-    {
-        if (this is IAutomationLiveRegion)
-        {
-            return AccessibilityObject;
-        }
-
-        return null;
-    }
+    protected virtual AccessibleObject? GetAccessibilityObjectById(int objectId) =>
+        this is IAutomationLiveRegion ? AccessibilityObject : null;
 
     /// <summary>
     ///  The default action description of the control
@@ -544,14 +505,7 @@ public unsafe partial class Control :
         get
         {
             int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            if (found)
-            {
-                return (AccessibleRole)role;
-            }
-            else
-            {
-                return AccessibleRole.Default;
-            }
+            return found ? (AccessibleRole)role : AccessibleRole.Default;
         }
         set
         {
@@ -570,30 +524,30 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAllowDropDescr))]
     public virtual bool AllowDrop
     {
-        get
-        {
-            return GetState(States.AllowDrop);
-        }
+        get => GetState(States.AllowDrop);
         set
         {
-            if (GetState(States.AllowDrop) != value)
+            if (GetState(States.AllowDrop) == value)
             {
-                SetState(States.AllowDrop, value);
+                return;
+            }
 
-                if (IsHandleCreated)
-                {
-                    try
-                    {
-                        SetAcceptDrops(value);
-                    }
-                    catch
-                    {
-                        // If there is an error, back out the AllowDrop state...
-                        //
-                        SetState(States.AllowDrop, !value);
-                        throw;
-                    }
-                }
+            SetState(States.AllowDrop, value);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            try
+            {
+                SetAcceptDrops(value);
+            }
+            catch
+            {
+                // If there is an error, back out the AllowDrop state.
+                SetState(States.AllowDrop, !value);
+                throw;
             }
         }
     }
@@ -605,32 +559,36 @@ public unsafe partial class Control :
     {
         get
         {
-            AmbientProperties? props = (AmbientProperties?)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
-            if (!contains)
-            {
-                if (Site is not null)
-                {
-                    props = Site.GetService(typeof(AmbientProperties)) as AmbientProperties;
-                }
-                else
-                {
-                    props = (AmbientProperties?)GetService(typeof(AmbientProperties));
-                }
+            AmbientProperties? ambientProperties = (AmbientProperties?)Properties.GetObject(
+                s_ambientPropertiesServiceProperty,
+                out bool found);
 
-                if (props is not null)
-                {
-                    Properties.SetObject(s_ambientPropertiesServiceProperty, props);
-                }
+            if (found)
+            {
+                return ambientProperties;
             }
 
-            return props;
+            if (Site is not null)
+            {
+                ambientProperties = Site.GetService<AmbientProperties>();
+            }
+            else
+            {
+                ambientProperties = GetService<AmbientProperties>();
+            }
+
+            if (ambientProperties is not null)
+            {
+                Properties.SetObject(s_ambientPropertiesServiceProperty, ambientProperties);
+            }
+
+            return ambientProperties;
         }
     }
 
     /// <summary>
-    ///  The current value of the anchor property. The anchor property
-    ///  determines which edges of the control are anchored to the container's
-    ///  edges.
+    ///  The current value of the anchor property. The anchor property determines which edges of the control are
+    ///  anchored to the container's edges.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
     [Localizable(true)]
@@ -653,27 +611,29 @@ public unsafe partial class Control :
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public virtual bool AutoSize
     {
-        get { return CommonProperties.GetAutoSize(this); }
+        get => CommonProperties.GetAutoSize(this);
         set
         {
-            if (value != AutoSize)
+            if (value == AutoSize)
             {
-                CommonProperties.SetAutoSize(this, value);
-                if (ParentInternal is not null)
-                {
-                    // DefaultLayout does not keep anchor information until it needs to.  When
-                    // AutoSize became a common property, we could no longer blindly call into
-                    // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
-                    if (value && ParentInternal.LayoutEngine == DefaultLayout.Instance)
-                    {
-                        ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
-                    }
+                return;
+            }
 
-                    LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
+            CommonProperties.SetAutoSize(this, value);
+            if (ParentInternal is { } parent)
+            {
+                // DefaultLayout does not keep anchor information until it needs to.  When
+                // AutoSize became a common property, we could no longer blindly call into
+                // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
+                if (value && parent.LayoutEngine == DefaultLayout.Instance)
+                {
+                    parent.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                 }
 
-                OnAutoSizeChanged(EventArgs.Empty);
+                LayoutTransaction.DoLayout(parent, this, PropertyNames.AutoSize);
             }
+
+            OnAutoSizeChanged(EventArgs.Empty);
         }
     }
 
@@ -697,8 +657,8 @@ public unsafe partial class Control :
     public virtual Point AutoScrollOffset
     {
         get => Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point)
-                ? point
-                : Point.Empty;
+            ? point
+            : Point.Empty;
         set
         {
             if (AutoScrollOffset != value)
@@ -738,9 +698,9 @@ public unsafe partial class Control :
                 // No custom back color.  See if we can get to our parent.
                 // The color check here is to account for parents and children who
                 // override the BackColor property.
-                if (_parent is not null && _parent.BackColor == BackColor)
+                if (ParentInternal is { } parent && parent.BackColor == BackColor)
                 {
-                    return _parent.BackColorBrush;
+                    return parent.BackColorBrush;
                 }
             }
 
@@ -787,8 +747,8 @@ public unsafe partial class Control :
     public virtual object? DataContext
     {
         get => Properties.TryGetObject(s_dataContextProperty, out object? value)
-                ? value
-                : ParentInternal?.DataContext;
+            ? value
+            : ParentInternal?.DataContext;
         set
         {
             if (Equals(value, DataContext))
@@ -934,8 +894,8 @@ public unsafe partial class Control :
     public virtual ImageLayout BackgroundImageLayout
     {
         get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
-                ? imageLayout
-                : ImageLayout.Tile;
+            ? imageLayout
+            : ImageLayout.Tile;
         set
         {
             if (BackgroundImageLayout == value)
@@ -974,10 +934,7 @@ public unsafe partial class Control :
     // Set/reset by ContainerControl.AssignActiveControlInternal
     internal bool BecomingActiveControl
     {
-        get
-        {
-            return GetExtendedState(ExtendedStates.BecomingActiveControl);
-        }
+        get => GetExtendedState(ExtendedStates.BecomingActiveControl);
         set
         {
             if (value != BecomingActiveControl)
@@ -1098,19 +1055,7 @@ public unsafe partial class Control :
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.ControlCanFocusDescr))]
-    public bool CanFocus
-    {
-        get
-        {
-            if (!IsHandleCreated)
-            {
-                return false;
-            }
-
-            return PInvoke.IsWindowVisible(this)
-                && PInvoke.IsWindowEnabled(this);
-        }
-    }
+    public bool CanFocus => IsHandleCreated && PInvoke.IsWindowVisible(this) && PInvoke.IsWindowEnabled(this);
 
     /// <summary>
     ///  Determines if events can be fired on the control.  If this control is being
@@ -1143,16 +1088,18 @@ public unsafe partial class Control :
         get => IsHandleCreated && PInvoke.GetCapture() == HWND;
         set
         {
-            if (Capture != value)
+            if (Capture == value)
             {
-                if (value)
-                {
-                    PInvoke.SetCapture(this);
-                }
-                else
-                {
-                    PInvoke.ReleaseCapture();
-                }
+                return;
+            }
+
+            if (value)
+            {
+                PInvoke.SetCapture(this);
+            }
+            else
+            {
+                PInvoke.ReleaseCapture();
             }
         }
     }
@@ -1247,13 +1194,7 @@ public unsafe partial class Control :
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ControlClientRectangleDescr))]
-    public Rectangle ClientRectangle
-    {
-        get
-        {
-            return new Rectangle(0, 0, _clientWidth, _clientHeight);
-        }
-    }
+    public Rectangle ClientRectangle => new Rectangle(0, 0, _clientWidth, _clientHeight);
 
     /// <summary>
     ///  The size of the clientRect.
@@ -1307,12 +1248,7 @@ public unsafe partial class Control :
             }
 
             HWND focusHwnd = PInvoke.GetFocus();
-            if (focusHwnd.IsNull)
-            {
-                return false;
-            }
-
-            return focusHwnd == Handle || PInvoke.IsChild(this, focusHwnd);
+            return !focusHwnd.IsNull && (focusHwnd == Handle || PInvoke.IsChild(this, focusHwnd));
         }
     }
 
@@ -1331,24 +1267,26 @@ public unsafe partial class Control :
         {
             ContextMenuStrip? oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
-            if (oldValue != value)
+            if (oldValue == value)
             {
-                EventHandler disposedHandler = new(DetachContextMenuStrip);
-
-                if (oldValue is not null)
-                {
-                    oldValue.Disposed -= disposedHandler;
-                }
-
-                Properties.SetObject(s_contextMenuStripProperty, value);
-
-                if (value is not null)
-                {
-                    value.Disposed += disposedHandler;
-                }
-
-                OnContextMenuStripChanged(EventArgs.Empty);
+                return;
             }
+
+            EventHandler disposedHandler = new(DetachContextMenuStrip);
+
+            if (oldValue is not null)
+            {
+                oldValue.Disposed -= disposedHandler;
+            }
+
+            Properties.SetObject(s_contextMenuStripProperty, value);
+
+            if (value is not null)
+            {
+                value.Disposed += disposedHandler;
+            }
+
+            OnContextMenuStripChanged(EventArgs.Empty);
         }
     }
 
@@ -1404,7 +1342,7 @@ public unsafe partial class Control :
             if (s_needToLoadComCtl)
             {
                 if ((PInvoke.GetModuleHandle(Libraries.Comctl32) != 0)
-                 || (PInvoke.LoadComctl32(Application.StartupPath) != 0))
+                    || (PInvoke.LoadComctl32(Application.StartupPath) != 0))
                 {
                     s_needToLoadComCtl = false;
                 }
@@ -1486,13 +1424,8 @@ public unsafe partial class Control :
         }
     }
 
-    internal virtual void NotifyValidationResult(object? sender, CancelEventArgs ev)
-    {
-        ValidationCancelled = ev.Cancel;
-    }
-
     /// <summary>
-    ///  Helper method...
+    ///  Helper method.
     ///
     ///  Triggers validation on the active control, and returns bool indicating whether that control was valid.
     ///
@@ -1504,61 +1437,30 @@ public unsafe partial class Control :
     /// </summary>
     internal bool ValidateActiveControl(out bool validatedControlAllowsFocusChange)
     {
-        bool valid = true;
         validatedControlAllowsFocusChange = false;
-        IContainerControl? c = GetContainerControl();
-        if (c is not null && CausesValidation)
-        {
-            if (c is ContainerControl container)
-            {
-                while (container.ActiveControl is null)
-                {
-                    ContainerControl? cc;
-                    Control? parent = container.ParentInternal;
-                    if (parent is not null)
-                    {
-                        cc = parent.GetContainerControl() as ContainerControl;
-                        if (cc is not null)
-                        {
-                            container = cc;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
 
-                valid = container.ValidateInternal(true, out validatedControlAllowsFocusChange);
-            }
+        if (GetContainerControl() is not ContainerControl container || !CausesValidation)
+        {
+            return true;
         }
 
-        return valid;
+        while (container.ActiveControl is null)
+        {
+            if (container.ParentInternal is not Control parent
+                || parent.GetContainerControl() is not ContainerControl parentContainer)
+            {
+                break;
+            }
+
+            container = parentContainer;
+        }
+
+        return container.ValidateInternal(true, out validatedControlAllowsFocusChange);
     }
 
     internal bool ValidationCancelled
     {
-        get
-        {
-            if (GetState(States.ValidationCancelled))
-            {
-                return true;
-            }
-            else
-            {
-                Control? parent = ParentInternal;
-                if (parent is not null)
-                {
-                    return parent.ValidationCancelled;
-                }
-
-                return false;
-            }
-        }
+        get => GetState(States.ValidationCancelled) || (ParentInternal is { } parent && parent.ValidationCancelled);
         set => SetState(States.ValidationCancelled, value);
     }
 
@@ -1780,21 +1682,23 @@ public unsafe partial class Control :
         get
         {
             Color color = BackColor;
-            if (color.A == 0)
+            if (color.A != 0)
             {
-                Control? control = ParentInternal;
-                while (color.A == 0)
-                {
-                    if (control is null)
-                    {
-                        // Don't know what to do, this seems good as anything
-                        color = SystemColors.Control;
-                        break;
-                    }
+                return color;
+            }
 
-                    color = control.BackColor;
-                    control = control.ParentInternal;
+            Control? control = ParentInternal;
+            while (color.A == 0)
+            {
+                if (control is null)
+                {
+                    // Don't know what to do, this seems good as anything
+                    color = SystemColors.Control;
+                    break;
                 }
+
+                color = control.BackColor;
+                control = control.ParentInternal;
             }
 
             return color;
@@ -2108,31 +2012,29 @@ public unsafe partial class Control :
                 return fontHandle.Handle;
             }
 
-            if (_parent is not null)
+            if (ParentInternal is { } parent)
             {
-                return _parent.FontHandle;
+                return parent.FontHandle;
             }
 
-            AmbientProperties? ambient = AmbientPropertiesService;
-
-            if (ambient is not null && ambient.Font is not null)
+            if (AmbientPropertiesService?.Font is { } ambientFont)
             {
                 FontHandleWrapper? fontHandle = null;
 
                 Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
 
-                if (currentAmbient is not null && currentAmbient == ambient.Font)
+                if (currentAmbient is not null && currentAmbient == ambientFont)
                 {
                     fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
                 }
                 else
                 {
-                    Properties.SetObject(s_currentAmbientFontProperty, ambient.Font);
+                    Properties.SetObject(s_currentAmbientFontProperty, ambientFont);
                 }
 
                 if (fontHandle is null)
                 {
-                    font = ambient.Font;
+                    font = ambientFont;
                     fontHandle = new FontHandleWrapper(font);
 
                     Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
@@ -2141,7 +2043,8 @@ public unsafe partial class Control :
                 return fontHandle.Handle;
             }
 
-            return GetDefaultFontHandleWrapper().Handle;
+            s_defaultFontHandleWrapper ??= new FontHandleWrapper(DefaultFont);
+            return s_defaultFontHandleWrapper.Handle;
         }
     }
 
@@ -2198,47 +2101,36 @@ public unsafe partial class Control :
                 return color;
             }
 
-            Control? parent = ParentInternal;
-            if (parent is not null && parent.CanAccessProperties)
+            if (ParentInternal is { } parent && parent.CanAccessProperties)
             {
                 return parent.ForeColor;
             }
 
-            Color c = Color.Empty;
-
             if (IsActiveX)
             {
-                c = ActiveXAmbientForeColor;
+                color = ActiveXAmbientForeColor;
             }
 
-            if (c.IsEmpty)
+            if (color.IsEmpty)
             {
                 AmbientProperties? ambient = AmbientPropertiesService;
                 if (ambient is not null)
                 {
-                    c = ambient.ForeColor;
+                    color = ambient.ForeColor;
                 }
             }
 
-            if (!c.IsEmpty)
-            {
-                return c;
-            }
-            else
-            {
-                return DefaultForeColor;
-            }
+            return !color.IsEmpty ? color : DefaultForeColor;
         }
-
         set
         {
-            Color c = ForeColor;
+            Color color = ForeColor;
             if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
             {
                 Properties.SetColor(s_foreColorProperty, value);
             }
 
-            if (!c.Equals(ForeColor))
+            if (!color.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }
@@ -2253,70 +2145,55 @@ public unsafe partial class Control :
         remove => Events.RemoveHandler(s_foreColorEvent, value);
     }
 
-    private Font? GetParentFont(out int fontDpi)
-    {
-        fontDpi = _deviceDpi;
-        if (ParentInternal is not null && ParentInternal.CanAccessProperties)
-        {
-            return ParentInternal.GetCurrentFontAndDpi(out fontDpi);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public virtual Size GetPreferredSize(Size proposedSize)
     {
-        Size prefSize;
-
         if (GetState(States.Disposing | States.Disposed))
         {
-            // if someone's asking when we're disposing just return what we last had.
-            prefSize = CommonProperties.xGetPreferredSizeCache(this);
+            // If someone's asking when we're disposing just return what we last had.
+            return CommonProperties.xGetPreferredSizeCache(this);
         }
-        else
+
+        // Switch Size.Empty to maximum possible values
+        proposedSize = LayoutUtils.ConvertZeroToUnbounded(proposedSize);
+
+        // Force proposedSize to be within the elements constraints.  (This applies
+        // minimumSize, maximumSize, etc.)
+        proposedSize = ApplySizeConstraints(proposedSize);
+        if (GetExtendedState(ExtendedStates.UserPreferredSizeCache))
         {
-            // Switch Size.Empty to maximum possible values
-            proposedSize = LayoutUtils.ConvertZeroToUnbounded(proposedSize);
+            Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
 
-            // Force proposedSize to be within the elements constraints.  (This applies
-            // minimumSize, maximumSize, etc.)
-            proposedSize = ApplySizeConstraints(proposedSize);
-            if (GetExtendedState(ExtendedStates.UserPreferredSizeCache))
+            // If the "default" preferred size is being requested, and we have a cached value for it, return it.
+            if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.s_maxSize))
             {
-                Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
-
-                // If the "default" preferred size is being requested, and we have a cached value for it, return it.
-                if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.s_maxSize))
-                {
-                    return cachedSize;
-                }
-            }
-
-            CacheTextInternal = true;
-            try
-            {
-                prefSize = GetPreferredSizeCore(proposedSize);
-            }
-            finally
-            {
-                CacheTextInternal = false;
-            }
-
-            // There is no guarantee that GetPreferredSizeCore() return something within
-            // proposedSize, so we apply the element's constraints again.
-            prefSize = ApplySizeConstraints(prefSize);
-
-            // If the "default" preferred size was requested, cache the computed value.
-            if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.s_maxSize)
-            {
-                CommonProperties.xSetPreferredSizeCache(this, prefSize);
+                return cachedSize;
             }
         }
 
-        return prefSize;
+        Size preferredSize;
+
+        CacheTextInternal = true;
+        try
+        {
+            preferredSize = GetPreferredSizeCore(proposedSize);
+        }
+        finally
+        {
+            CacheTextInternal = false;
+        }
+
+        // There is no guarantee that GetPreferredSizeCore() return something within
+        // proposedSize, so we apply the element's constraints again.
+        preferredSize = ApplySizeConstraints(preferredSize);
+
+        // If the "default" preferred size was requested, cache the computed value.
+        if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.s_maxSize)
+        {
+            CommonProperties.xSetPreferredSizeCache(this, preferredSize);
+        }
+
+        return preferredSize;
     }
 
     // Overriding this method allows us to get the caching and clamping the proposedSize/output to
@@ -3206,7 +3083,7 @@ public unsafe partial class Control :
 
             if (value is not null)
             {
-                newAmbients = value.GetService(typeof(AmbientProperties)) as AmbientProperties;
+                newAmbients = value.GetService<AmbientProperties>();
             }
 
             // If the ambients changed, compare each property.
@@ -5533,18 +5410,7 @@ public unsafe partial class Control :
     ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
     ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
     /// </summary>
-    internal bool IsUpdating()
-    {
-        return _updateCount > 0;
-    }
-
-    // Essentially an Hfont; see inner class for details.
-    private static FontHandleWrapper GetDefaultFontHandleWrapper()
-    {
-        s_defaultFontHandleWrapper ??= new FontHandleWrapper(DefaultFont);
-
-        return s_defaultFontHandleWrapper;
-    }
+    internal bool IsUpdating() => _updateCount > 0;
 
     /// <summary>
     ///  This is a helper method that is called by ScaleControl to retrieve the bounds
@@ -5565,20 +5431,12 @@ public unsafe partial class Control :
 
         // Don't reposition top level controls.  Also, if we're in
         // design mode, don't reposition the root component.
-        bool scaleLoc = !GetState(States.TopLevel);
-        if (scaleLoc)
-        {
-            ISite? site = Site;
-            if (site is not null && site.DesignMode)
-            {
-                if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
-                {
-                    scaleLoc = false;
-                }
-            }
-        }
 
-        if (scaleLoc)
+        if (!GetState(States.TopLevel) && !(
+            Site is { } site
+            && site.DesignMode
+            && site.TryGetService(out IDesignerHost? host)
+            && host.RootComponent == this))
         {
             if ((specified & BoundsSpecified.X) != 0)
             {
@@ -5640,20 +5498,18 @@ public unsafe partial class Control :
 
     internal bool GetAnyDisposingInHierarchy()
     {
-        Control? up = this;
-        bool isDisposing = false;
-        while (up is not null)
+        Control? control = this;
+        while (control is not null)
         {
-            if (up.Disposing)
+            if (control.Disposing)
             {
-                isDisposing = true;
-                break;
+                return true;
             }
 
-            up = up._parent;
+            control = control.ParentInternal;
         }
 
-        return isDisposing;
+        return false;
     }
 
     /// <summary>
@@ -5760,7 +5616,7 @@ public unsafe partial class Control :
     /// </summary>
     /// <param name="fontDpi">Dpi of the control for which <see cref="Font"/> is evaluated.</param>
     /// <returns>The control's <see cref="Font"/></returns>
-    internal Font GetCurrentFontAndDpi(out int fontDpi)
+    private Font GetCurrentFontAndDpi(out int fontDpi)
     {
         fontDpi = _deviceDpi;
 
@@ -5775,7 +5631,11 @@ public unsafe partial class Control :
             return font;
         }
 
-        font = GetParentFont(out fontDpi);
+        if (ParentInternal is { } parent && parent.CanAccessProperties)
+        {
+            font = parent.GetCurrentFontAndDpi(out fontDpi);
+        }
+
         if (font is not null)
         {
             return font;
@@ -11637,7 +11497,14 @@ public unsafe partial class Control :
             return;
         }
 
-        AccessibleObject? accessibleObject = GetAccessibilityObject((int)m.LParamInternal);
+        int objectId = (int)m.LParamInternal;
+
+        AccessibleObject? accessibleObject = (OBJECT_IDENTIFIER)objectId switch
+        {
+            OBJECT_IDENTIFIER.OBJID_CLIENT => AccessibilityObject,
+            OBJECT_IDENTIFIER.OBJID_WINDOW => NcAccessibilityObject,
+            _ => objectId > 0 ? GetAccessibilityObjectById(objectId) : null,
+        };
 
         // See "How to Handle WM_GETOBJECT" in MSDN.
         if (accessibleObject is null)
