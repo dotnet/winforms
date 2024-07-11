@@ -54,7 +54,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
         public TreeNodeCollectionForm(CollectionEditor editor)
             : base(editor)
         {
-            editor = (TreeNodeCollectionEditor)editor;
+            _editor = (TreeNodeCollectionEditor)editor;
             InitializeComponent();
             HookEvents();
 
