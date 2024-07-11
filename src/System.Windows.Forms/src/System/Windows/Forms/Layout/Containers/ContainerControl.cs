@@ -1932,7 +1932,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
                         {
                             Cancel = true
                         };
-                        currentActiveControl.NotifyValidationResult(currentValidatingControl, ev);
+
+                        currentActiveControl.ValidationCancelled = ev.Cancel;
+
                         if (currentActiveControl is ContainerControl currentActiveContainerControl)
                         {
                             if (currentActiveContainerControl._focusedControl is not null)
