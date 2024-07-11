@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  The ControlPaint class provides a series of methods that can be used to paint common Windows UI pieces. Many
 ///  Windows Forms controls use this class to paint their UI elements.
 /// </summary>
-public static partial class ControlPaint
+public static unsafe partial class ControlPaint
 {
     [ThreadStatic]
     private static Bitmap? t_checkImage;         // image used to render checkmarks
@@ -67,14 +67,9 @@ public static partial class ControlPaint
     // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
     private const int MaximumLuminosityDifference = 20;
 
-    internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
+    internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Size imageSize, ImageLayout imageLayout)
     {
         Rectangle result = bounds;
-
-        if (backgroundImage is null)
-        {
-            return result;
-        }
 
         switch (imageLayout)
         {
@@ -83,27 +78,25 @@ public static partial class ControlPaint
                 break;
 
             case ImageLayout.None:
-                result.Size = backgroundImage.Size;
+                result.Size = imageSize;
                 break;
 
             case ImageLayout.Center:
-                result.Size = backgroundImage.Size;
-                Size szCtl = bounds.Size;
+                result.Size = imageSize;
 
-                if (szCtl.Width > result.Width)
+                if (bounds.Width > result.Width)
                 {
-                    result.X = (szCtl.Width - result.Width) / 2;
+                    result.X = (bounds.Width - result.Width) / 2;
                 }
 
-                if (szCtl.Height > result.Height)
+                if (bounds.Height > result.Height)
                 {
-                    result.Y = (szCtl.Height - result.Height) / 2;
+                    result.Y = (bounds.Height - result.Height) / 2;
                 }
 
                 break;
 
             case ImageLayout.Zoom:
-                Size imageSize = backgroundImage.Size;
                 float xRatio = bounds.Width / (float)imageSize.Width;
                 float yRatio = bounds.Height / (float)imageSize.Height;
                 if (xRatio < yRatio)
@@ -160,11 +153,11 @@ public static partial class ControlPaint
         Size size = bitmap.Size;
 
         // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
-        using PInvoke.CreateDcScope screen = new(default);
-        using PInvoke.CreateDcScope dc = new(screen);
+        using CreateDcScope screen = new(default);
+        using CreateDcScope dc = new(screen);
 
         HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
-        PInvoke.GetObject(palette, out uint entryCount);
+        PInvokeCore.GetObject(palette, out uint entryCount);
 
         using BufferScope<byte> bitmapInfoBuffer = new
             (checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
@@ -184,7 +177,7 @@ public static partial class ControlPaint
 
             Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
             Span<PALETTEENTRY> entries = stackalloc PALETTEENTRY[(int)entryCount];
-            PInvoke.GetPaletteEntries(palette, entries);
+            PInvokeCore.GetPaletteEntries(palette, entries);
 
             // Set up color table
             for (int i = 0; i < entryCount; i++)
@@ -198,10 +191,10 @@ public static partial class ControlPaint
                 };
             }
 
-            PInvoke.DeleteObject(palette);
+            PInvokeCore.DeleteObject(palette);
 
             void* bitsBuffer;
-            hbitmap = PInvoke.CreateDIBSection(
+            hbitmap = PInvokeCore.CreateDIBSection(
                 screen,
                 (BITMAPINFO*)bi,
                 DIB_USAGE.DIB_RGB_COLORS,
@@ -226,7 +219,7 @@ public static partial class ControlPaint
                 throw new Win32Exception();
             }
 
-            PInvoke.DeleteObject(previousBitmap);
+            PInvokeCore.DeleteObject(previousBitmap);
 
             using Graphics graphics = dc.CreateGraphics();
             using var brush = background.GetCachedSolidBrushScope();
@@ -236,7 +229,7 @@ public static partial class ControlPaint
         catch
         {
             // As we're throwing out, we can't return this and need to delete it.
-            PInvoke.DeleteObject(hbitmap);
+            PInvokeCore.DeleteObject(hbitmap);
             throw;
         }
 
@@ -269,22 +262,23 @@ public static partial class ControlPaint
             monochromeStride++;
         }
 
-        // This needs to be zero'ed out so we cannot use the ArrayPool
+        // This needs to be zeroed out so we cannot use the ArrayPool
         byte[] bits = new byte[monochromeStride * height];
         BitmapData data = bitmap.LockBits(
             new Rectangle(0, 0, width, height),
             ImageLockMode.ReadOnly,
             PixelFormat.Format32bppArgb);
 
-        Debug.Assert(data.Scan0 != IntPtr.Zero, "BitmapData.Scan0 is null; check marshalling");
+        Debug.Assert(data.Scan0 != 0, "BitmapData.Scan0 is null; check marshalling");
+
+        ReadOnlySpan<ARGB> colors = new((ARGB*)data.Scan0, width * height);
 
         for (int y = 0; y < height; y++)
         {
-            IntPtr scan = (IntPtr)((long)data.Scan0 + y * data.Stride);
             for (int x = 0; x < width; x++)
             {
-                int color = Marshal.ReadInt32(scan, x * 4);
-                if (color >> 24 == 0)
+                ARGB color = colors[y * width + x];
+                if (color.A == 0)
                 {
                     // Pixel is transparent; set bit to 1
                     int index = monochromeStride * y + x / 8;
@@ -298,7 +292,7 @@ public static partial class ControlPaint
         // Create 1bpp.
         fixed (byte* pBits = bits)
         {
-            return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
+            return (IntPtr)PInvokeCore.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
         }
     }
 
@@ -314,10 +308,10 @@ public static partial class ControlPaint
 
         HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
         using GetDcScope screenDC = new(HWND.Null);
-        using PInvoke.CreateDcScope sourceDC = new(screenDC);
-        using PInvoke.CreateDcScope targetDC = new(screenDC);
-        using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
-        using PInvoke.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
+        using CreateDcScope sourceDC = new(screenDC);
+        using CreateDcScope targetDC = new(screenDC);
+        using SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
+        using SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
 
         // Now the trick is to make colorBitmap black wherever the transparent color is located, but keep the
         // original color everywhere else. We've already got the original bitmap, so all we need to do is to AND
@@ -326,7 +320,7 @@ public static partial class ControlPaint
 
         PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
         PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
-        PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
+        PInvokeCore.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
         // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
         return (IntPtr)colorMask;
@@ -340,16 +334,16 @@ public static partial class ControlPaint
             grayPattern[i] = (short)(0x5555 << (i & 1));
         }
 
-        using PInvoke.CreateBitmapScope hBitmap = new(8, 8, 1, 1, grayPattern);
+        using CreateBitmapScope hBitmap = new(8, 8, 1, 1, grayPattern);
 
-        LOGBRUSH lb = new()
+        LOGBRUSH logicalBrush = new()
         {
             lbStyle = BRUSH_STYLE.BS_PATTERN,
             lbColor = default, // color is ignored since style is BS.PATTERN
             lbHatch = (nuint)(IntPtr)hBitmap
         };
 
-        return PInvoke.CreateBrushIndirect(&lb);
+        return PInvoke.CreateBrushIndirect(&logicalBrush);
     }
 
     /// <summary>
@@ -448,7 +442,7 @@ public static partial class ControlPaint
         {
             // Center, Stretch, Zoom
 
-            Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage, backgroundImageLayout);
+            Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage.Size, backgroundImageLayout);
 
             // Flip the coordinates only if we don't do any layout, since otherwise the image should be at the
             // center of the displayRectangle anyway.
@@ -469,7 +463,7 @@ public static partial class ControlPaint
 
             if (!clipRect.Contains(imageRectangle))
             {
-                if (backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Zoom)
+                if (backgroundImageLayout is ImageLayout.Stretch or ImageLayout.Zoom)
                 {
                     imageRectangle.Intersect(clipRect);
                     g.DrawImage(backgroundImage, imageRectangle);
@@ -509,7 +503,7 @@ public static partial class ControlPaint
             }
             else
             {
-                ImageAttributes imageAttrib = new();
+                using ImageAttributes imageAttrib = new();
                 imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                 g.DrawImage(
                     backgroundImage,
@@ -520,8 +514,6 @@ public static partial class ControlPaint
                     backgroundImage.Height,
                     GraphicsUnit.Pixel,
                     imageAttrib);
-
-                imageAttrib.Dispose();
             }
         }
     }
@@ -586,34 +578,25 @@ public static partial class ControlPaint
         ArgumentOutOfRangeException.ThrowIfNegative(bottomWidth);
 
         int totalData = (topWidth + leftWidth + bottomWidth + rightWidth) * 2;
-        Span<int> allData;
 
-        if (totalData <= 40)
-        {
-            // Reasonable to put on the stack (40 * 8 bytes)
-            int* data = stackalloc int[totalData];
-            allData = new Span<int>(data, totalData);
-        }
-        else
-        {
-            allData = new int[totalData];
-        }
-
-        Span<int> topLineLefts = allData.Slice(0, topWidth);
-        allData = allData.Slice(topWidth);
-        Span<int> topLineRights = allData.Slice(0, topWidth);
-        allData = allData.Slice(topWidth);
-        Span<int> leftLineTops = allData.Slice(0, leftWidth);
-        allData = allData.Slice(leftWidth);
-        Span<int> leftLineBottoms = allData.Slice(0, leftWidth);
-        allData = allData.Slice(leftWidth);
-        Span<int> bottomLineLefts = allData.Slice(0, bottomWidth);
-        allData = allData.Slice(bottomWidth);
-        Span<int> bottomLineRights = allData.Slice(0, bottomWidth);
-        allData = allData.Slice(bottomWidth);
-        Span<int> rightLineTops = allData.Slice(0, rightWidth);
-        allData = allData.Slice(rightWidth);
-        Span<int> rightLineBottoms = allData.Slice(0, rightWidth);
+        // Reasonable to put on the stack (40 * 8 bytes)
+        using BufferScope<int> buffer = new(stackalloc int[40], totalData);
+        Span<int> allData = buffer;
+        Span<int> topLineLefts = allData[..topWidth];
+        allData = allData[topWidth..];
+        Span<int> topLineRights = allData[..topWidth];
+        allData = allData[topWidth..];
+        Span<int> leftLineTops = allData[..leftWidth];
+        allData = allData[leftWidth..];
+        Span<int> leftLineBottoms = allData[..leftWidth];
+        allData = allData[leftWidth..];
+        Span<int> bottomLineLefts = allData[..bottomWidth];
+        allData = allData[bottomWidth..];
+        Span<int> bottomLineRights = allData[..bottomWidth];
+        allData = allData[bottomWidth..];
+        Span<int> rightLineTops = allData[..rightWidth];
+        allData = allData[rightWidth..];
+        Span<int> rightLineBottoms = allData[..rightWidth];
 
         float topToLeft = 0.0f;
         float bottomToLeft = 0.0f;
@@ -732,31 +715,27 @@ public static partial class ControlPaint
                 {
                     if (!topColor.HasTransparency() && topStyle == ButtonBorderStyle.Solid)
                     {
-                        using DeviceContextHdcScope hdc = new(deviceContext);
-                        using PInvoke.CreatePenScope hpen = new(topColor);
+                        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
+                        using CreatePenScope hpen = new(topColor);
                         for (int i = 0; i < topWidth; i++)
                         {
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
+                        using var pen = topColor.CreateStaticPen(
+                        topStyle switch
                         {
-                            using var pen = topColor.CreateStaticPen(
-                            topStyle switch
-                            {
-                                ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                _ => DashStyle.Solid,
-                            });
+                            ButtonBorderStyle.Dotted => DashStyle.Dot,
+                            ButtonBorderStyle.Dashed => DashStyle.Dash,
+                            _ => DashStyle.Solid,
+                        });
 
-                            for (int i = 0; i < topWidth; i++)
-                            {
-                                graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                            }
+                        for (int i = 0; i < topWidth; i++)
+                        {
+                            graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
                         }
                     }
 
@@ -768,10 +747,10 @@ public static partial class ControlPaint
                 {
                     HLSColor hlsColor = new(topColor);
                     float inc = InfinityToOne(1.0f / (topWidth - 1));
-                    using DeviceContextHdcScope hdc = new(deviceContext);
+                    using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
                     for (int i = 0; i < topWidth; i++)
                     {
-                        using PInvoke.CreatePenScope hpen = new(
+                        using CreatePenScope hpen = new(
                             topStyle == ButtonBorderStyle.Inset
                             ? hlsColor.Darker(1.0f - i * inc)
                             : hlsColor.Lighter(1.0f - i * inc));
@@ -795,31 +774,27 @@ public static partial class ControlPaint
                 {
                     if (!leftColor.HasTransparency() && leftStyle == ButtonBorderStyle.Solid)
                     {
-                        using DeviceContextHdcScope hdc = new(deviceContext);
-                        using PInvoke.CreatePenScope hpen = new(leftColor);
+                        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
+                        using CreatePenScope hpen = new(leftColor);
                         for (int i = 0; i < leftWidth; i++)
                         {
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = leftColor.CreateStaticPen(
-                               leftStyle switch
-                               {
-                                   ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                   ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                   _ => DashStyle.Solid,
-                               });
-
-                            for (int i = 0; i < leftWidth; i++)
+                        using var pen = leftColor.CreateStaticPen(
+                            leftStyle switch
                             {
-                                graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < leftWidth; i++)
+                        {
+                            graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                         }
                     }
 
@@ -831,10 +806,10 @@ public static partial class ControlPaint
                 {
                     HLSColor hlsColor = new(leftColor);
                     float inc = InfinityToOne(1.0f / (leftWidth - 1));
-                    using DeviceContextHdcScope hdc = new(deviceContext);
+                    using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
                     for (int i = 0; i < leftWidth; i++)
                     {
-                        using PInvoke.CreatePenScope hpen = new(
+                        using CreatePenScope hpen = new(
                             leftStyle == ButtonBorderStyle.Inset
                             ? hlsColor.Darker(1.0f - i * inc)
                             : hlsColor.Lighter(1.0f - i * inc));
@@ -858,8 +833,8 @@ public static partial class ControlPaint
                 {
                     if (!bottomColor.HasTransparency() && bottomStyle == ButtonBorderStyle.Solid)
                     {
-                        using DeviceContextHdcScope hdc = new(deviceContext);
-                        using PInvoke.CreatePenScope hpen = new(bottomColor);
+                        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
+                        using CreatePenScope hpen = new(bottomColor);
                         for (int i = 0; i < bottomWidth; i++)
                         {
                             // Need to add one to the destination point for GDI to render the same as GDI+
@@ -871,28 +846,24 @@ public static partial class ControlPaint
                                 bounds.Y + bounds.Height - 1 - i);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = bottomColor.CreateStaticPen(
-                               bottomStyle switch
-                               {
-                                   ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                   ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                   _ => DashStyle.Solid,
-                               });
-
-                            for (int i = 0; i < bottomWidth; i++)
+                        using var pen = bottomColor.CreateStaticPen(
+                            bottomStyle switch
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bottomLineLefts[i],
-                                    bounds.Y + bounds.Height - 1 - i,
-                                    bottomLineRights[i],
-                                    bounds.Y + bounds.Height - 1 - i);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < bottomWidth; i++)
+                        {
+                            graphics.DrawLine(
+                                pen,
+                                bottomLineLefts[i],
+                                bounds.Y + bounds.Height - 1 - i,
+                                bottomLineRights[i],
+                                bounds.Y + bounds.Height - 1 - i);
                         }
                     }
 
@@ -904,10 +875,10 @@ public static partial class ControlPaint
                 {
                     HLSColor hlsColor = new(bottomColor);
                     float inc = InfinityToOne(1.0f / (bottomWidth - 1));
-                    using DeviceContextHdcScope hdc = new(deviceContext);
+                    using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
                     for (int i = 0; i < bottomWidth; i++)
                     {
-                        using PInvoke.CreatePenScope hpen = new(
+                        using CreatePenScope hpen = new(
                             bottomStyle != ButtonBorderStyle.Inset
                             ? hlsColor.Darker(1.0f - i * inc)
                             : hlsColor.Lighter(1.0f - i * inc));
@@ -936,8 +907,8 @@ public static partial class ControlPaint
                 {
                     if (!rightColor.HasTransparency() && rightStyle == ButtonBorderStyle.Solid)
                     {
-                        using DeviceContextHdcScope hdc = new(deviceContext);
-                        using PInvoke.CreatePenScope hpen = new(rightColor);
+                        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
+                        using CreatePenScope hpen = new(rightColor);
                         for (int i = 0; i < rightWidth; i++)
                         {
                             // Need to add one to the destination point for GDI to render the same as GDI+
@@ -949,28 +920,24 @@ public static partial class ControlPaint
                                 rightLineBottoms[i] + 1);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = rightColor.CreateStaticPen(
-                                                            rightStyle switch
-                                                            {
-                                                                ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                                                ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                                                _ => DashStyle.Solid,
-                                                            });
-
-                            for (int i = 0; i < rightWidth; i++)
+                        using var pen = rightColor.CreateStaticPen(
+                            rightStyle switch
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineTops[i],
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineBottoms[i]);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < rightWidth; i++)
+                        {
+                            graphics.DrawLine(
+                                pen,
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineTops[i],
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineBottoms[i]);
                         }
                     }
 
@@ -982,10 +949,10 @@ public static partial class ControlPaint
                 {
                     HLSColor hlsColor = new(rightColor);
                     float inc = InfinityToOne(1.0f / (rightWidth - 1));
-                    using DeviceContextHdcScope hdc = new(deviceContext);
+                    using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
                     for (int i = 0; i < rightWidth; i++)
                     {
-                        using PInvoke.CreatePenScope hpen = new(
+                        using CreatePenScope hpen = new(
                             rightStyle != ButtonBorderStyle.Inset
                             ? hlsColor.Darker(1.0f - i * inc)
                             : hlsColor.Lighter(1.0f - i * inc));
@@ -1063,7 +1030,7 @@ public static partial class ControlPaint
         RECT rc = new Rectangle(x, y, width, height);
 
         // Windows just draws the border to size, and then shrinks the rectangle so the user can paint the client
-        // area. We can't really do that, so we do the opposite: We precalculate the size of the border and enlarge
+        // area. We can't really do that, so we do the opposite: We pre-calculate the size of the border and enlarge
         // the rectangle so the client size is preserved.
         if (flags.HasFlag((DRAW_EDGE_FLAGS)Border3DStyle.Adjust))
         {
@@ -1201,8 +1168,8 @@ public static partial class ControlPaint
             }
         }
 
-        using DeviceContextHdcScope hdc = new(context);
-        using PInvoke.CreatePenScope hpen = new(color);
+        using DeviceContextHdcScope hdc = context.ToHdcScope();
+        using CreatePenScope hpen = new(color);
         hdc.DrawRectangle(bounds, hpen);
     }
 
@@ -1488,26 +1455,21 @@ public static partial class ControlPaint
         else
         {
             // Replace black/white with foreColor/backColor.
-            ImageAttributes attrs = new();
-            ColorMap cm1 = new()
-            {
-                OldColor = Color.Black,
-                NewColor = foreColor
-            };
+            ImageAttributes attributes = new();
 
-            ColorMap cm2 = new()
-            {
-                OldColor = Color.White,
-                NewColor = backColor
-            };
+            Span<(Color OldColor, Color NewColor)> map =
+            [
+                new(Color.Black, foreColor),
+                new(Color.White, backColor)
+            ];
 
-            attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
+            attributes.SetRemapTable(ColorAdjustType.Bitmap, map);
             graphics.DrawImage(
                 bitmap,
                 new Rectangle(x, y, width, height),
                 0, 0, width, height,
                 GraphicsUnit.Pixel,
-                attrs,
+                attributes,
                 null,
                 IntPtr.Zero);
         }
@@ -1607,7 +1569,7 @@ public static partial class ControlPaint
             GraphicsUnit.Pixel,
             attributes,
             null,
-            IntPtr.Zero);
+            0);
     }
 
     internal static bool IsImageTransparent(Image? backgroundImage)
@@ -1617,31 +1579,24 @@ public static partial class ControlPaint
     // the supplied Graphics object.
     internal static void DrawImageReplaceColor(Graphics g, Image image, Rectangle dest, Color oldColor, Color newColor)
     {
-        ImageAttributes attrs = new();
+        using ImageAttributes attributes = new();
 
-        ColorMap cm = new()
-        {
-            OldColor = oldColor,
-            NewColor = newColor
-        };
+        (Color OldColor, Color NewColor) map = new(oldColor, newColor);
+        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
 
-        attrs.SetRemapTable(new ColorMap[] { cm }, ColorAdjustType.Bitmap);
-
-        g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
-        attrs.Dispose();
+        g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes, null, 0);
     }
 
     /// <summary>
     ///  Draws an image and makes it look disabled.
     /// </summary>
-#pragma warning disable IDE0060 // Remove unused parameter- public API
     public static void DrawImageDisabled(Graphics graphics, Image image, int x, int y, Color background)
-#pragma warning restore IDE0060
         => DrawImageDisabled(graphics, image, new Rectangle(x, y, image.Width, image.Height), unscaledImage: false);
 
     /// <summary>
     ///  Draws an image and makes it look disabled.
     /// </summary>
+    [SkipLocalsInit]
     internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, bool unscaledImage)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -1651,7 +1606,7 @@ public static partial class ControlPaint
 
         if (t_disabledImageAttr is null)
         {
-            // This ColorMatrix is set up to resemble Office 10 commandbars, but still be able to deal with
+            // This ColorMatrix is set up to resemble Office 10 command bars, but still be able to deal with
             // hi-color (256+) icons and images.
             //
             // The idea is to scale everything down (more than just a grayscale does, therefore the small numbers
@@ -1660,12 +1615,14 @@ public static partial class ControlPaint
             // Second part of the matrix is to translate everything, so all colors are a bit brighter. Grays become
             // lighter and washed out looking black becomes a shade of gray as well.
 
-            float[][] array = new float[5][];
-            array[0] = new float[5] { 0.2125f, 0.2125f, 0.2125f, 0, 0 };
-            array[1] = new float[5] { 0.2577f, 0.2577f, 0.2577f, 0, 0 };
-            array[2] = new float[5] { 0.0361f, 0.0361f, 0.0361f, 0, 0 };
-            array[3] = new float[5] { 0, 0, 0, 1, 0 };
-            array[4] = new float[5] { 0.38f, 0.38f, 0.38f, 0, 1 };
+            Span<float> array =
+            [
+                0.2125f, 0.2125f, 0.2125f, 0, 0,
+                0.2577f, 0.2577f, 0.2577f, 0, 0,
+                0.0361f, 0.0361f, 0.0361f, 0, 0,
+                0, 0, 0, 1, 0,
+                0.38f, 0.38f, 0.38f, 0, 1
+            ];
 
             ColorMatrix grayMatrix = new(array);
 
@@ -1842,20 +1799,20 @@ public static partial class ControlPaint
         }
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
-        using PInvoke.ObjectScope pen = new(style switch
+        using ObjectScope pen = new(style switch
         {
             FrameStyle.Dashed => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
             FrameStyle.Thick => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
             _ => default
         });
 
-        using PInvoke.SetRop2Scope rop2Scope = new(desktopDC, rop2);
-        using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
-        using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
+        using SetRop2Scope rop2Scope = new(desktopDC, rop2);
+        using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope penSelection = new(desktopDC, pen);
 
         PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
         PInvoke.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
@@ -1869,14 +1826,14 @@ public static partial class ControlPaint
         R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
-        using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
-        using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
-        using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
-        using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
+        using ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+        using SetRop2Scope ropScope = new(desktopDC, rop2);
+        using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope penSelection = new(desktopDC, pen);
 
         PInvoke.MoveToEx(desktopDC, start.X, start.Y, lppt: null);
         PInvoke.LineTo(desktopDC, end.X, end.Y);
@@ -1966,9 +1923,9 @@ public static partial class ControlPaint
         int right = x + width - 1;
         int bottom = y + height - 2;
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
-        using PInvoke.CreatePenScope hpenBright = new(LightLight(backColor));
-        using PInvoke.CreatePenScope hpenDark = new(Dark(backColor));
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
+        using CreatePenScope hpenBright = new(LightLight(backColor));
+        using CreatePenScope hpenDark = new(Dark(backColor));
 
         // Moving from the lower right corner, draw as many groups of 4 diagonal lines as will fit
         // (skip a line, dark, dark, light)
@@ -2029,7 +1986,7 @@ public static partial class ControlPaint
         // This must come before creating the scope.
         FONT_QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
 
-        using DeviceContextHdcScope hdc = new(dc, TextRenderer.GetApplyStateFlags(dc, format));
+        using DeviceContextHdcScope hdc = dc.ToHdcScope(TextRenderer.GetApplyStateFlags(dc, format));
         DrawStringDisabled(hdc, s, font, color, layoutRectangle, format, quality);
     }
 
@@ -2084,13 +2041,13 @@ public static partial class ControlPaint
         R2_MODE rop2 = R2_MODE.R2_NOT;
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
-        using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
-        using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
-        using PInvoke.SelectObjectScope brushSelection = new(desktopDC, brush);
+        using ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+        using SetRop2Scope ropScope = new(desktopDC, rop2);
+        using SelectObjectScope brushSelection = new(desktopDC, brush);
 
         // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
         PInvoke.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
@@ -2136,7 +2093,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new(patternSize, patternSize);
+            using Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 
@@ -2160,7 +2117,6 @@ public static partial class ControlPaint
             }
 
             t_frameBrushActive = new TextureBrush(bitmap);
-            bitmap.Dispose();
         }
 
         return t_frameBrushActive;
@@ -2267,7 +2223,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new(patternSize, patternSize);
+            using Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 
@@ -2292,7 +2248,6 @@ public static partial class ControlPaint
             }
 
             t_frameBrushSelected = new TextureBrush(bitmap);
-            bitmap.Dispose();
         }
 
         return t_frameBrushSelected;
@@ -2639,7 +2594,7 @@ public static partial class ControlPaint
 
         // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens
         // when AutoSize is false and a one-word line still doesn't fit the binding box (width). The other effect
-        // is that partially visiblelines are clipped; this is how GDI+ works by default.
+        // is that partially visible lines are clipped; this is how GDI+ works by default.
         flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
 
         if (showEllipsis)

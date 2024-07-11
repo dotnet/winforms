@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -22,34 +21,34 @@ namespace System.Windows.Forms;
 ///  way disposing the object does not force a GC. Since DCMapping objects aren't likely to be passed between
 ///  functions rather used and disposed in the same one, this reduces overhead.
 /// </summary>
-internal struct DCMapping : IDisposable
+internal readonly struct DCMapping : IDisposable
 {
-    private HDC _hdc;
-    private int _savedState;
+    private readonly HDC _hdc;
+    private readonly int _savedState;
 
     public unsafe DCMapping(HDC hdc, Rectangle bounds)
     {
         ArgumentNullException.ThrowIfNull(hdc);
 
         _hdc = hdc;
-        _savedState = PInvoke.SaveDC(hdc);
+        _savedState = PInvokeCore.SaveDC(hdc);
 
         // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
         Point viewportOrg = default;
-        bool success = PInvoke.GetViewportOrgEx(hdc, &viewportOrg);
+        bool success = PInvokeCore.GetViewportOrgEx(hdc, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
         // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-        PInvoke.RegionScope hClippingRegion = new(
+        RegionScope clippingRegion = new(
             viewportOrg.X + bounds.Left,
             viewportOrg.Y + bounds.Top,
             viewportOrg.X + bounds.Right,
             viewportOrg.Y + bounds.Bottom);
-        Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
+        Debug.Assert(!clippingRegion.IsNull, "CreateRectRgn() failed.");
 
         try
         {
-            PInvoke.RegionScope hOriginalClippingRegion = new(hdc);
+            RegionScope originalRegion = new(hdc);
 
             // Shift the viewpoint origin by coordinates specified in "bounds".
             success = PInvoke.SetViewportOrgEx(
@@ -59,41 +58,41 @@ internal struct DCMapping : IDisposable
                 lppt: null);
             Debug.Assert(success, "SetViewportOrgEx() failed.");
 
-            RegionType originalRegionType;
-            if (!hOriginalClippingRegion.IsNull)
+            GDI_REGION_TYPE originalRegionType;
+            if (!originalRegion.IsNull)
             {
                 // Get the original clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                 RECT originalClipRect = default;
-                originalRegionType = (RegionType)PInvoke.GetRgnBox(hOriginalClippingRegion, &originalClipRect);
+                originalRegionType = PInvoke.GetRgnBox(originalRegion, &originalClipRect);
                 Debug.Assert(
-                    originalRegionType != RegionType.ERROR,
+                    originalRegionType != GDI_REGION_TYPE.RGN_ERROR,
                     "ERROR returned from SelectClipRgn while selecting the original clipping region..");
 
-                if (originalRegionType == RegionType.SIMPLEREGION)
+                if (originalRegionType == GDI_REGION_TYPE.SIMPLEREGION)
                 {
                     // Find the intersection of our clipping region and the current clipping region (our parent's)
 
-                    RegionType combineResult = (RegionType)PInvoke.CombineRgn(
-                        hClippingRegion,
-                        hClippingRegion,
-                        hOriginalClippingRegion,
+                    GDI_REGION_TYPE combineResult = PInvokeCore.CombineRgn(
+                        clippingRegion,
+                        clippingRegion,
+                        originalRegion,
                         RGN_COMBINE_MODE.RGN_AND);
 
                     Debug.Assert(
-                        (combineResult == RegionType.SIMPLEREGION) || (combineResult == RegionType.NULLREGION),
+                        combineResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
                         "SIMPLEREGION or NULLREGION expected.");
                 }
             }
             else
             {
                 // If there was no clipping region, then the result is a simple region.
-                originalRegionType = RegionType.SIMPLEREGION;
+                originalRegionType = GDI_REGION_TYPE.SIMPLEREGION;
             }
 
             // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-            RegionType selectResult = (RegionType)PInvoke.SelectClipRgn(hdc, hClippingRegion);
+            GDI_REGION_TYPE selectResult = PInvokeCore.SelectClipRgn(hdc, clippingRegion);
             Debug.Assert(
-                selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
+                selectResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
                 "SIMPLEREGION or NULLLREGION expected.");
         }
         catch (Exception ex) when (!ex.IsCriticalException())
@@ -105,7 +104,7 @@ internal struct DCMapping : IDisposable
     {
         if (!_hdc.IsNull)
         {
-            PInvoke.RestoreDC(_hdc, _savedState);
+            PInvokeCore.RestoreDC(_hdc, _savedState);
         }
     }
 }

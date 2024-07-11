@@ -3,17 +3,18 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class Buttons : Form
 {
     private readonly FlatStyle[] _styles =
-    {
+    [
         FlatStyle.Flat,
         FlatStyle.Popup,
         FlatStyle.Standard,
         FlatStyle.System
-    };
+    ];
 
     public Buttons()
     {

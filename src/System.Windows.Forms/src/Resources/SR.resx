@@ -2188,7 +2188,7 @@ To replace this default dialog please handle the DataError event.</value>
     <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
   </data>
   <data name="DataGridView_SortedDescr" xml:space="preserve">
-    <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
+    <value>Occurs when the DataGridView control completes a sorting operation.</value>
   </data>
   <data name="DataGridView_StandardTabDescr" xml:space="preserve">
     <value>Indicates whether the TAB key moves the focus to the next control in the tab order rather than moving focus to the next cell in the control.</value>
@@ -5562,6 +5562,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TimerTimerDescr" xml:space="preserve">
     <value>Occurs whenever the specified interval time elapses.</value>
   </data>
+  <data name="ToolStripAllowClickThrough" xml:space="preserve">
+    <value>Allows the control to be interacted when window does not have focus.</value>
+  </data>
   <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
     <value>AllowItemReorder and AllowDrop cannot both be true.</value>
   </data>
@@ -6963,5 +6966,17 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="FolderBrowserDialogMultiSelectDescr" xml:space="preserve">
     <value>Controls whether multiple folders can be selected in the dialog.</value>
+  </data>
+  <data name="BindingNotSupported" xml:space="preserve">
+    <value>Binding operations are not supported when application trimming is enabled.</value>
+  </data>
+  <data name="BinaryFormatterNotSupported" xml:space="preserve">
+    <value>Using the BinaryFormatter is not supported in trimmed applications.</value>
+  </data>
+  <data name="ControlNotSupportedInTrimming" xml:space="preserve">
+    <value>'{0}' is not supported in trimmed applications.</value>
+  </data>
+  <data name="DesignTimeFeaturesNotSupported" xml:space="preserve">
+    <value>Design time features are not supported.</value>
   </data>
 </root>

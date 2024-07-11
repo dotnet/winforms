@@ -11,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -36,9 +35,9 @@ public partial class ListBox : ListControl
     /// </summary>
     public const int DefaultItemHeight = 13;
 
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
-    private static readonly object EVENT_DRAWITEM = new();
-    private static readonly object EVENT_MEASUREITEM = new();
+    private static readonly object s_selectedIndexChangedEvent = new();
+    private static readonly object s_drawItemEvent = new();
+    private static readonly object s_measureItemEvent = new();
 
     private SelectedObjectCollection? _selectedItems;
     private SelectedIndexCollection? _selectedIndices;
@@ -90,7 +89,7 @@ public partial class ListBox : ListControl
     private int _itemsCount;
 
     /// <summary>
-    ///  This value stores the array of custom tabstops in the listbox. the array should be populated by
+    ///  This value stores the array of custom tabstops in the listBox. the array should be populated by
     ///  integers in a ascending order.
     /// </summary>
     private IntegerCollection? _customTabOffsets;
@@ -201,7 +200,7 @@ public partial class ListBox : ListControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.Fixed3D)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.ListBoxBorderDescr))]
     public BorderStyle BorderStyle
     {
@@ -214,7 +213,7 @@ public partial class ListBox : ListControl
             {
                 _borderStyle = value;
                 RecreateHandle();
-                // Avoid the listbox and textbox behavior in Collection editors
+                // Avoid the listBox and textbox behavior in Collection editors
                 //
                 _integralHeightAdjust = true;
                 try
@@ -379,7 +378,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Retrieves the style of the listbox.  This will indicate if the system
+    ///  Retrieves the style of the listBox.  This will indicate if the system
     ///  draws it, or if the user paints each item manually.  It also indicates
     ///  whether or not items have to be of the same height.
     /// </summary>
@@ -431,7 +430,7 @@ public partial class ListBox : ListControl
         {
             base.Font = value;
 
-            if (_integralHeight == false)
+            if (!_integralHeight)
             {
                 // Refresh the list to force the scroll bars to display
                 // when the integral height is false.
@@ -507,12 +506,12 @@ public partial class ListBox : ListControl
 
                 // There seems to be a bug in the native ListBox in that the addition
                 // of the horizontal scroll bar does not get reflected in the control
-                // rightaway. So, we refresh the items here.
+                // right away. So, we refresh the items here.
 
                 RefreshItems();
 
                 // Only need to recreate the handle if not MultiColumn
-                // (HorizontalScrollbar has no effect on a MultiColumn listbox)
+                // (HorizontalScrollbar has no effect on a MultiColumn listBox)
                 //
                 if (!MultiColumn)
                 {
@@ -523,8 +522,8 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Indicates if the listbox should avoid showing partial Items.  If so,
-    ///  then only full items will be displayed, and the listbox will be resized
+    ///  Indicates if the listBox should avoid showing partial Items.  If so,
+    ///  then only full items will be displayed, and the listBox will be resized
     ///  to prevent partial items from being shown.  Otherwise, they will be
     ///  shown
     /// </summary>
@@ -546,8 +545,7 @@ public partial class ListBox : ListControl
             {
                 _integralHeight = value;
                 RecreateHandle();
-                // Avoid the listbox and textbox behaviour in Collection editors
-                //
+                // Avoid the listBox and textbox behaviour in Collection editors
 
                 _integralHeightAdjust = true;
                 try
@@ -574,8 +572,7 @@ public partial class ListBox : ListControl
     {
         get
         {
-            if (_drawMode == DrawMode.OwnerDrawFixed ||
-                _drawMode == DrawMode.OwnerDrawVariable)
+            if (_drawMode is DrawMode.OwnerDrawFixed or DrawMode.OwnerDrawVariable)
             {
                 return _itemHeight;
             }
@@ -611,7 +608,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Collection of items in this listbox.
+    ///  Collection of items in this listBox.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -670,7 +667,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Indicates if the listbox is multi-column
+    ///  Indicates if the listBox is multi-column
     ///  or not.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -981,7 +978,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Controls how many items at a time can be selected in the listbox. Valid
+    ///  Controls how many items at a time can be selected in the listBox. Valid
     ///  values are from the System.Windows.Forms.SelectionMode enumeration.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -1169,7 +1166,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Performs the work of adding the specified items to the Listbox
+    ///  Performs the work of adding the specified items to the ListBox
     /// </summary>
     [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected virtual void AddItemsCore(object[] value)
@@ -1216,7 +1213,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  ListBox / CheckedListBox Onpaint.
+    ///  ListBox / CheckedListBox OnPaint.
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1230,24 +1227,24 @@ public partial class ListBox : ListControl
     [SRDescription(nameof(SR.drawItemEventDescr))]
     public event DrawItemEventHandler? DrawItem
     {
-        add => Events.AddHandler(EVENT_DRAWITEM, value);
-        remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
+        add => Events.AddHandler(s_drawItemEvent, value);
+        remove => Events.RemoveHandler(s_drawItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.measureItemEventDescr))]
     public event MeasureItemEventHandler? MeasureItem
     {
-        add => Events.AddHandler(EVENT_MEASUREITEM, value);
-        remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
+        add => Events.AddHandler(s_measureItemEvent, value);
+        remove => Events.RemoveHandler(s_measureItemEvent, value);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
     public event EventHandler? SelectedIndexChanged
     {
-        add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
+        add => Events.AddHandler(s_selectedIndexChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedIndexChangedEvent, value);
     }
 
     /// <summary>
@@ -1509,8 +1506,8 @@ public partial class ListBox : ListControl
     public int IndexFromPoint(int x, int y)
     {
         // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
-        // call Sendmessage.
-        PInvoke.GetClientRect(this, out RECT r);
+        // call SendMessage.
+        PInvokeCore.GetClientRect(this, out RECT r);
         if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
         {
             int index = (int)PInvoke.SendMessage(this, PInvoke.LB_ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
@@ -1615,7 +1612,7 @@ public partial class ListBox : ListControl
         bool selected = (int)PInvoke.SendMessage(this, PInvoke.LB_GETSEL, (WPARAM)index) > 0;
         PInvoke.SendMessage(this, PInvoke.LB_DELETESTRING, (WPARAM)index);
 
-        // If the item currently selected is removed then we should fire a Selectionchanged event
+        // If the item currently selected is removed then we should fire a SelectionChanged event
         // as the next time selected index returns -1.
 
         if (selected)
@@ -1730,7 +1727,7 @@ public partial class ListBox : ListControl
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+        ((DrawItemEventHandler?)Events[s_drawItemEvent])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -1743,7 +1740,7 @@ public partial class ListBox : ListControl
         base.OnHandleCreated(e);
 
         // Get the current locale to set the Scrollbars
-        PInvoke.SendMessage(this, PInvoke.LB_SETLOCALE, (WPARAM)PInvoke.GetThreadLocale());
+        PInvoke.SendMessage(this, PInvoke.LB_SETLOCALE, (WPARAM)PInvokeCore.GetThreadLocale());
 
         if (_columnWidth != 0)
         {
@@ -1817,7 +1814,7 @@ public partial class ListBox : ListControl
 
     protected virtual void OnMeasureItem(MeasureItemEventArgs e)
     {
-        ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+        ((MeasureItemEventHandler?)Events[s_measureItemEvent])?.Invoke(this, e);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -1827,7 +1824,7 @@ public partial class ListBox : ListControl
         // Changing the font causes us to resize, always rounding down.
         // Make sure we do this after base.OnPropertyChanged, which sends the WM_SETFONT message
 
-        // Avoid the listbox and textbox behaviour in Collection editors
+        // Avoid the listBox and textbox behaviour in Collection editors
         UpdateFontCache();
     }
 
@@ -1837,7 +1834,7 @@ public partial class ListBox : ListControl
     protected override void OnParentChanged(EventArgs e)
     {
         base.OnParentChanged(e);
-        // No need to RecreateHandle if we are removing the Listbox from controls collection...
+        // No need to RecreateHandle if we are removing the ListBox from controls collection...
         // so check the parent before recreating the handle...
         if (ParentInternal is not null)
         {
@@ -1903,7 +1900,7 @@ public partial class ListBox : ListControl
 
         // Call the handler after updating the DataManager's position so that
         // the DataManager's selected index will be correct in an event handler.
-        ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedIndexChangedEvent])?.Invoke(this, e);
     }
 
     protected override void OnSelectedValueChanged(EventArgs e)
@@ -1947,21 +1944,14 @@ public partial class ListBox : ListControl
     {
         if (_drawMode == DrawMode.OwnerDrawVariable)
         {
-            // Fire MeasureItem for Each Item in the Listbox...
+            // Fire MeasureItem for Each Item in the ListBox...
             int cnt = Items.Count;
-            Graphics graphics = CreateGraphicsInternal();
+            using Graphics graphics = CreateGraphicsInternal();
 
-            try
+            for (int i = 0; i < cnt; i++)
             {
-                for (int i = 0; i < cnt; i++)
-                {
-                    MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
-                    OnMeasureItem(mie);
-                }
-            }
-            finally
-            {
-                graphics.Dispose();
+                MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
+                OnMeasureItem(mie);
             }
         }
 
@@ -2087,7 +2077,7 @@ public partial class ListBox : ListControl
     /// </summary>
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        // Avoid the listbox and textbox behaviour in Collection editors
+        // Avoid the listBox and textbox behaviour in Collection editors
         if (!_integralHeightAdjust && height != Height)
         {
             _requestedHeight = height;
@@ -2125,7 +2115,7 @@ public partial class ListBox : ListControl
             }
 
             // if the list changed and we still did not fire the
-            // onselectedChanged event, then fire it now;
+            // onSelectedChanged event, then fire it now;
             if (!_selectedValueChangedFired)
             {
                 OnSelectedValueChanged(EventArgs.Empty);
@@ -2170,11 +2160,11 @@ public partial class ListBox : ListControl
     // ShouldSerialize and Reset Methods are being used by Designer via reflection.
     private bool ShouldSerializeItemHeight()
     {
-        return ItemHeight != DefaultListBoxItemHeight;
+        return ItemHeight != DefaultListBoxItemHeight && _drawMode != DrawMode.Normal;
     }
 
     /// <summary>
-    ///  Sorts the items in the listbox.
+    ///  Sorts the items in the listBox.
     /// </summary>
     protected virtual void Sort()
     {
@@ -2474,8 +2464,8 @@ public partial class ListBox : ListControl
                 break;
 
             case PInvoke.WM_LBUTTONDBLCLK:
-                // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP sequence for
-                // doubleclick. The first WM_LBUTTONUP, resets the flag for double click so its necessary for us
+                // The ListBox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP sequence for
+                // doubleClick. The first WM_LBUTTONUP, resets the flag for double click so its necessary for us
                 // to set it again.
                 _doubleClickFired = true;
                 base.WndProc(ref m);

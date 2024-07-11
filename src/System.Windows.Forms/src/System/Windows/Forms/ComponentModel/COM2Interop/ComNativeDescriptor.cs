@@ -22,8 +22,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   <see cref="TypeDescriptor.ComObjectType"/>.
 ///  </para>
 /// </remarks>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IManagedPerPropertyBrowsingHandler which is not trim-compatible.")]
 internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvider
 {
+    internal const string ComTypeDescriptorsMessage = "COM type descriptors are not trim-compatible.";
+
     private static readonly Attribute[] s_staticAttributes = [BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No];
 
     // Our collection of Object managers (Com2Properties) for native properties
@@ -96,13 +99,14 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
 
     internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
+    [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
     internal static object? GetEditor(object component, Type baseEditorType)
         => TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
 
     internal static string GetName(IDispatch* dispatch)
     {
         int dispid = Com2TypeInfoProcessor.GetNameDispId(dispatch);
-        if (dispid != PInvoke.DISPID_UNKNOWN)
+        if (dispid != PInvokeCore.DISPID_UNKNOWN)
         {
             HRESULT hr = GetPropertyValue(dispatch, dispid, out object? value);
 
@@ -122,15 +126,15 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         fixed (char* n = propertyName)
         {
             Guid guid = Guid.Empty;
-            int dispid = PInvoke.DISPID_UNKNOWN;
+            int dispid = PInvokeCore.DISPID_UNKNOWN;
 
-            HRESULT hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+            HRESULT hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvokeCore.GetThreadLocale(), &dispid);
             if (hr.Failed)
             {
                 return hr;
             }
 
-            return dispid == PInvoke.DISPID_UNKNOWN
+            return dispid == PInvokeCore.DISPID_UNKNOWN
                 ? HRESULT.DISP_E_MEMBERNOTFOUND
                 : GetPropertyValue(dispatch, dispid, out value);
         }
@@ -141,7 +145,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         value = null;
 
         using VARIANT result = default;
-        HRESULT hr = dispatch->TryGetProperty(dispid, &result, PInvoke.GetThreadLocale());
+        HRESULT hr = dispatch->TryGetProperty(dispid, &result, PInvokeCore.GetThreadLocale());
 
         if (hr.Succeeded)
         {
@@ -163,10 +167,10 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     ///  Checks if the given dispid matches the dispid that the Object would like to specify
     ///  as its identification property (Name, ID, etc).
     /// </summary>
-    internal static bool IsNameDispId(object @object, int dispid)
+    internal static bool IsNameDispId(object? @object, int dispid)
     {
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(@object, out HRESULT hr);
-        return hr.Failed ? false : dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
+        return !hr.Failed && dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
     }
 
     /// <summary>

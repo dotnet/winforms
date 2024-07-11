@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -16,7 +15,7 @@ public sealed partial class BehaviorService
     {
         private readonly BehaviorService _behaviorService;
         private static MouseHook? s_mouseHook;
-        private static readonly List<AdornerWindow> s_adornerWindowList = new();
+        private static readonly List<AdornerWindow> s_adornerWindowList = [];
 
         /// <summary>
         ///  Constructor that parents itself to the Designer Frame and hooks all
@@ -292,7 +291,7 @@ public sealed partial class BehaviorService
                 case PInvoke.WM_PAINT:
                     {
                         // Stash off the region we have to update.
-                        using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
+                        using RegionScope hrgn = new(0, 0, 0, 0);
                         PInvoke.GetUpdateRgn(m.HWND, hrgn, true);
 
                         // The region we have to update in terms of the smallest rectangle that completely encloses
@@ -301,7 +300,7 @@ public sealed partial class BehaviorService
                         PInvoke.GetUpdateRect(m.HWND, &clip, true);
                         Rectangle paintRect = clip;
 
-                        using Region region = hrgn.CreateGdiPlusRegion();
+                        using Region region = hrgn.ToRegion();
 
                         // Call the base class to do its painting.
                         DefWndProc(ref m);

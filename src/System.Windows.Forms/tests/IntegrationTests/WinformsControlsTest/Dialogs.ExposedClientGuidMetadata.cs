@@ -3,9 +3,7 @@
 
 #nullable enable
 
-using System.ComponentModel;
-
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 public partial class Dialogs
 {

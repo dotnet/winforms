@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class DesignTimeAligned
 {
@@ -35,7 +35,7 @@ partial class DesignTimeAligned
         this.label2 = new System.Windows.Forms.Label();
         this.button1 = new System.Windows.Forms.Button();
         this.textBox1 = new System.Windows.Forms.TextBox();
-        this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
+        this.currentDPILabel1 = new WinFormsControlsTest.CurrentDPILabel();
         this.SuspendLayout();
         //
         // label1

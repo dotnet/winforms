@@ -424,7 +424,7 @@ public partial class GroupBox : Control
             // We only pass in the text color if it is explicitly set, else we let the renderer use the color
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
-            if (ShouldSerializeForeColor() || Enabled == false)
+            if (ShouldSerializeForeColor() || !Enabled)
             {
                 Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
                 GroupBoxRenderer.DrawGroupBox(
@@ -561,7 +561,7 @@ public partial class GroupBox : Control
             else
             {
                 using DeviceContextHdcScope hdc = new(e);
-                using PInvoke.CreatePenScope hpen = new(boxColor);
+                using CreatePenScope hpen = new(boxColor);
                 hdc.DrawLines(hpen, lines);
             }
         }
@@ -586,9 +586,9 @@ public partial class GroupBox : Control
             ];
 
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
+            using CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
             hdc.DrawLines(hpenLight, lightLines);
-            using PInvoke.CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
+            using CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
             hdc.DrawLines(hpenDark, darkLines);
         }
     }
@@ -657,7 +657,7 @@ public partial class GroupBox : Control
             return;
         }
 
-        PInvoke.GetClientRect(this, out RECT rect);
+        PInvokeCore.GetClientRect(this, out RECT rect);
         Color backColor = BackColor;
 
         if (backColor.HasTransparency())
@@ -668,7 +668,7 @@ public partial class GroupBox : Control
         }
         else
         {
-            using var hbrush = new PInvoke.CreateBrushScope(backColor);
+            using var hbrush = new CreateBrushScope(backColor);
             PInvoke.FillRect((HDC)m.WParamInternal, rect, hbrush);
         }
 

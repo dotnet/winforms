@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
             Get
-                If System.Windows.Forms.SystemInformation.MousePresent Then
+                If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
                     Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
@@ -43,7 +43,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property WheelExists() As Boolean
             Get
-                If System.Windows.Forms.SystemInformation.MousePresent Then
+                If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
                     Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)

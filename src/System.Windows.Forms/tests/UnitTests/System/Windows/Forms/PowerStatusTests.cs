@@ -50,7 +50,7 @@ public class PowerStatusTests
     {
         PowerStatus status = SystemInformation.PowerStatus;
         float value = status.BatteryLifePercent;
-        Assert.True((value >= 0 && value <= 100) || value == 255);
+        Assert.True(value is >= 0 and <= 100 or 255);
     }
 
     [Fact]

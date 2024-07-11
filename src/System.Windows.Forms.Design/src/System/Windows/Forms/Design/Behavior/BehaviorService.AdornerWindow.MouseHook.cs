@@ -4,7 +4,6 @@
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -43,7 +42,9 @@ public sealed partial class BehaviorService
 
 #if DEBUG
             private readonly string _callingStack;
+#pragma warning disable CA1821 // Remove empty Finalizers
             ~MouseHook()
+#pragma warning restore CA1821
             {
                 Debug.Assert(
                     _mouseHookHandle == 0,

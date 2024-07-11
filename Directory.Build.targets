@@ -44,7 +44,7 @@
 	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
       Path="$(TargetPath)"
@@ -61,7 +61,7 @@
     </Coverlet.MSbuild.Tasks.InstrumentationTask>
   </Target>
 
-  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
     <Coverlet.MSbuild.Tasks.CoverageResultTask
       Condition="'$(CollectCoverage)' == 'true'"
       Output="$(CoverletOutput)"

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
@@ -15,14 +13,14 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class RichTextBoxDesigner : TextBoxBaseDesigner
 {
-    private DesignerActionListCollection _actionLists;
+    private DesignerActionListCollection? _actionLists;
 
     /// <summary>
     ///  Called when the designer is initialized.  This allows the designer to provide some
     ///  meaningful default values in the control.  The default implementation of this
     ///  sets the control's text to its name.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
@@ -64,20 +62,19 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor prop;
-
         // Handle shadowed properties
         //
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             nameof(Text)
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
+        PropertyDescriptor? prop;
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            prop = (PropertyDescriptor?)properties[shadowProps[i]];
             if (prop is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(RichTextBoxDesigner), prop, empty);

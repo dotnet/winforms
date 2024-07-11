@@ -7,16 +7,9 @@ public class CustomButtonDesigner : ControlDesigner
 {
     private DesignerActionListCollection _actionLists;
 
-    public override DesignerActionListCollection ActionLists
-    {
-        get
+    public override DesignerActionListCollection ActionLists =>
+        _actionLists ??= new DesignerActionListCollection
         {
-            _actionLists ??= new DesignerActionListCollection
-                {
-                    new CustomButtonDesignerActionList(Component)
-                };
-
-            return _actionLists;
-        }
-    }
+            new CustomButtonDesignerActionList(Component)
+        };
 }

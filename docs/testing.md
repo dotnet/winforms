@@ -106,9 +106,6 @@ Tests are built and executed by file name convention
 * Test files names should match the class they are testing followed by a "**Tests**" suffix.
   * For example, tests for the `Button` class should be in ButtonTests.cs.
   * For example, tests for the `Button.ButtonAccessibleObject` class should be in **Button.ButtonAccessibleObjectTests.cs**.
-* Test class names should match the class they are testing, followed by a "**Tests**" suffix.
-  * For example, tests for the `Button` class should in the `ButtonTests` class.
-  * For example, tests for the `Button.ButtonAccessibleObject` class should in the `Button_ButtonAccessibleObjectTests` class.
 * Test names should start with the class they are testing.
   * For example, all tests for the `Button` class should start with "Button".
 * Test names should end with a description of what the test does - this is very useful when viewing test results, and when browsing in the test explorer. As far as naming conventions are concerned we don't mandate a specific one, as long as a test name clearly communicates its purpose.
@@ -191,7 +188,7 @@ When writing theories note the following:
     ```
 
 
-Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
+Also be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
 
 
 #### Strategy
@@ -199,7 +196,7 @@ Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/t
 ##### Unit tests should be part of the same PR as code changes
 
 * Unit tests must be added for any change to public APIs. 
-* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
+* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/Common/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
 
 ##### Code Coverage
 
@@ -260,7 +257,7 @@ public void MyControl_Rendering()
 
 > :warning: There is a very blurry line between unit and functional tests in Windows Forms realm. A lot of our implementations depend on ambient contexts (such as Win32, COM, etc.). We classify tests as "functional" or "integration" that require process-wide settings (such as visual styles) or require user-like interactions (e.g. mouse gestures).
 
-Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
+The general purpose functional test suite is the **WinFormsControlsTest**. There is an xUnit project that executes various commands against this binary.
 
 ## Running functional tests
 

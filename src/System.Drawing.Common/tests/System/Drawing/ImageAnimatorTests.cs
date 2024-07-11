@@ -17,10 +17,8 @@ public class ImageAnimatorTests
     [InlineData("81773-interlaced.gif")]
     public void CanAnimate_ReturnsFalse_ForNonAnimatedImages(string imageName)
     {
-        using (Bitmap image = new(Helpers.GetTestBitmapPath(imageName)))
-        {
-            Assert.False(ImageAnimator.CanAnimate(image));
-        }
+        using Bitmap image = new(Helpers.GetTestBitmapPath(imageName));
+        Assert.False(ImageAnimator.CanAnimate(image));
     }
 
     [Fact]
@@ -83,10 +81,8 @@ public class ImageAnimatorTests
     [InlineData("animated-timer-100fps-repeat-infinite.gif")]
     public void CanAnimate_ReturnsTrue_ForAnimatedImages(string imageName)
     {
-        using (Bitmap image = new(Helpers.GetTestBitmapPath(imageName)))
-        {
-            Assert.True(ImageAnimator.CanAnimate(image));
-        }
+        using Bitmap image = new(Helpers.GetTestBitmapPath(imageName));
+        Assert.True(ImageAnimator.CanAnimate(image));
     }
 
     [Fact]

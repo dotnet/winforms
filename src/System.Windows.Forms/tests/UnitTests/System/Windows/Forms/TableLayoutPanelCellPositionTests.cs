@@ -174,7 +174,7 @@ public class TableLayoutPanelCellPositionTests
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new TableLayoutPanelCellPosition(1, 2), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(TableLayoutPanelCellPosition).GetConstructor([typeof(int), typeof(int)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2 }, descriptor.Arguments);
         Assert.True(descriptor.IsComplete);
     }

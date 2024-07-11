@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -58,7 +57,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     public override int LinesPerPage => _owningChildEditAccessibilityObject.BoundingRectangle.IsEmpty ? 0 : OwnerChildEditLinesCount;
 
-    public override LOGFONTW Logfont => _owningControl.TryGetTarget(out Control? target) ? LOGFONTW.FromFont(target.Font) : default;
+    public override LOGFONTW Logfont => _owningControl.TryGetTarget(out Control? target) ? target.Font.ToLogicalFont() : default;
 
     public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 

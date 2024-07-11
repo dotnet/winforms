@@ -30,7 +30,7 @@ public partial class Control
         public nint MarshalManagedToNative(object obj)
         {
             Font font = (Font)obj;
-            LOGFONTW logFont = LOGFONTW.FromFont(font);
+            LOGFONTW logFont = font.ToLogicalFont();
 
             fixed (char* n = font.Name)
             {

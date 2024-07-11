@@ -3,13 +3,14 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 internal class FormOwnerTestForm : Form
 {
     public FormOwnerTestForm()
     {
-        this.Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
+        Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
     }
 
     /// <summary>
@@ -24,7 +25,7 @@ internal class FormOwnerTestForm : Form
     {
         long memoryStart = GC.GetTotalMemory(false);
 
-        List<Form> childForms = new();
+        List<Form> childForms = [];
         for (int i = 0; i < 500; i++)
         {
             MemoryTestParentForm parent = new();
@@ -52,13 +53,13 @@ internal class FormOwnerTestForm : Form
 
     public class MemoryTestParentForm : Form
     {
-        private byte[] array;
+        private byte[] _array;
 
         public Form CreateChildFormWithMemory()
         {
             // Create a byte array to consume memory on the parent so the leak is more obvious.
-            this.array = new byte[1024 * 1024];
-            Array.Clear(array, 0, this.array.Length);
+            _array = new byte[1024 * 1024];
+            Array.Clear(_array, 0, _array.Length);
             Form child = new();
 
             // Show the child and pass the parent as the owner, this is where the leak can happen.

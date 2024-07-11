@@ -4,7 +4,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -17,19 +16,19 @@ public class DeviceContextScopeTests
     public unsafe void Scope_ApplyGraphicsProperties()
     {
         // Create a bitmap using the screen's stats
-        using PInvoke.CreateDcScope dcScope = new(default);
-        using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
+        using CreateDcScope dcScope = new(default);
+        using CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
         PInvoke.SelectObject(dcScope, bitmapScope);
 
         // Select a clipping region into the DC
-        using var dcRegion = new PInvoke.RegionScope(2, 1, 4, 7);
-        RegionType type = (RegionType)PInvoke.SelectClipRgn(dcScope, dcRegion);
-        Assert.Equal(RegionType.SIMPLEREGION, type);
+        using RegionScope dcRegion = new(2, 1, 4, 7);
+        GDI_REGION_TYPE type = PInvokeCore.SelectClipRgn(dcScope, dcRegion);
+        Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, type);
 
-        using var test = new PInvoke.RegionScope(0, 0, 0, 0);
+        using RegionScope test = new(0, 0, 0, 0);
         int result = GetRandomRgn(dcScope, test, 1);
         RECT rect2 = default;
-        type = (RegionType)PInvoke.GetRgnBox(test, &rect2);
+        type = PInvoke.GetRgnBox(test, &rect2);
 
         // Create a Graphics object and set it's clipping region
         using Graphics graphics = dcScope.CreateGraphics();
@@ -44,10 +43,10 @@ public class DeviceContextScopeTests
         graphics.Transform = new Matrix(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f);
 
         using DeviceContextHdcScope hdcScope = new(graphics);
-        using var regionScope = new PInvoke.RegionScope(hdcScope);
+        using RegionScope regionScope = new(hdcScope);
         Assert.False(regionScope.IsNull);
         RECT rect = default;
-        type = (RegionType)PInvoke.GetRgnBox(regionScope, &rect);
+        type = PInvoke.GetRgnBox(regionScope, &rect);
 
         // Our clipping region should be the intersection
         Assert.Equal(new Rectangle(2, 1, 1, 3), (Rectangle)rect);
@@ -57,19 +56,19 @@ public class DeviceContextScopeTests
     public void Graphics_HdcStatePersistence()
     {
         // Create a bitmap using the screen's stats
-        using PInvoke.CreateDcScope dcScope = new(default);
-        using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
+        using CreateDcScope dcScope = new(default);
+        using CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
         HDC_MAP_MODE originalMapMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_HIMETRIC);
         PInvoke.SelectObject(dcScope, bitmapScope);
 
-        using PInvoke.CreateBrushScope blueBrush = new(Color.Blue);
-        using PInvoke.CreateBrushScope redBrush = new(Color.Red);
+        using CreateBrushScope blueBrush = new(Color.Blue);
+        using CreateBrushScope redBrush = new(Color.Red);
         PInvoke.SelectObject(dcScope, blueBrush);
 
         using Graphics graphics = dcScope.CreateGraphics();
         HGDIOBJ current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
-        HDC_MAP_MODE currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+        HDC_MAP_MODE currentMode = PInvoke.GetMapMode(dcScope);
         Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
 
         IntPtr hdc = graphics.GetHdc();
@@ -86,14 +85,14 @@ public class DeviceContextScopeTests
         finally
         {
             graphics.ReleaseHdc(hdc);
-            currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+            currentMode = PInvoke.GetMapMode(dcScope);
             Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
             current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
             graphics.GetHdc();
             try
             {
-                currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                currentMode = PInvoke.GetMapMode(dcScope);
                 Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
             }
             finally

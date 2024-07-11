@@ -3,10 +3,11 @@
 
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Drawing.Internal;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+#endif
 using System.IO;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace System.Drawing;
@@ -14,14 +15,14 @@ namespace System.Drawing;
 [Editor($"System.Drawing.Design.BitmapEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed class Bitmap : Image
+[TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
 
     private Bitmap() { }
 
-    internal Bitmap(IntPtr ptr) => SetNativeImage(ptr);
+    internal Bitmap(GpBitmap* ptr) => SetNativeImage((GpImage*)ptr);
 
     public Bitmap(string filename) : this(filename, useIcm: false) { }
 
@@ -31,50 +32,39 @@ public sealed class Bitmap : Image
         // so if the app's default directory changes we won't get an error.
         filename = Path.GetFullPath(filename);
 
-        IntPtr bitmap;
-        int status;
+        GpBitmap* bitmap;
 
-        if (useIcm)
+        fixed (char* fn = filename)
         {
-            status = Gdip.GdipCreateBitmapFromFileICM(filename, out bitmap);
-        }
-        else
-        {
-            status = Gdip.GdipCreateBitmapFromFile(filename, out bitmap);
+            Status status = useIcm
+                ? PInvoke.GdipCreateBitmapFromFileICM(fn, &bitmap)
+                : PInvoke.GdipCreateBitmapFromFile(fn, &bitmap);
+            status.ThrowIfFailed();
         }
 
-        Gdip.CheckStatus(status);
-
-        ValidateImage(bitmap);
-
-        SetNativeImage(bitmap);
-        EnsureSave(this, filename, null);
+        ValidateImage((GpImage*)bitmap);
+        SetNativeImage((GpImage*)bitmap);
+        GetAnimatedGifRawData(this, filename, dataStream: null);
     }
 
     public Bitmap(Stream stream) : this(stream, false)
     {
     }
 
-    public unsafe Bitmap(Stream stream, bool useIcm)
+    public Bitmap(Stream stream, bool useIcm)
     {
         ArgumentNullException.ThrowIfNull(stream);
+        using var iStream = stream.ToIStream(makeSeekable: true);
 
-        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
+        GpBitmap* bitmap = null;
+        Status status = useIcm
+            ? PInvoke.GdipCreateBitmapFromStreamICM(iStream, &bitmap)
+            : PInvoke.GdipCreateBitmapFromStream(iStream, &bitmap);
+        status.ThrowIfFailed();
 
-        IntPtr bitmap = IntPtr.Zero;
-        if (useIcm)
-        {
-            Gdip.CheckStatus(Gdip.GdipCreateBitmapFromStreamICM(streamWrapper.Ptr, &bitmap));
-        }
-        else
-        {
-            Gdip.CheckStatus(Gdip.GdipCreateBitmapFromStream(streamWrapper.Ptr, &bitmap));
-        }
-
-        ValidateImage(bitmap);
-
-        SetNativeImage(bitmap);
-        EnsureSave(this, null, stream);
+        ValidateImage((GpImage*)bitmap);
+        SetNativeImage((GpImage*)bitmap);
+        GetAnimatedGifRawData(this, filename: null, stream);
     }
 
     public Bitmap(Type type, string resource) : this(GetResourceStream(type, resource))
@@ -86,13 +76,8 @@ public sealed class Bitmap : Image
         ArgumentNullException.ThrowIfNull(type);
         ArgumentNullException.ThrowIfNull(resource);
 
-        Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream is null)
-        {
-            throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
-        }
-
-        return stream;
+        return type.Module.Assembly.GetManifestResourceStream(type, resource)
+            ?? throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
     }
 
     public Bitmap(int width, int height) : this(width, height, PixelFormat.Format32bppArgb)
@@ -103,29 +88,24 @@ public sealed class Bitmap : Image
     {
         ArgumentNullException.ThrowIfNull(g);
 
-        IntPtr bitmap;
-        int status = Gdip.GdipCreateBitmapFromGraphics(width, height, new HandleRef(g, g.NativeGraphics), out bitmap);
-        Gdip.CheckStatus(status);
-
-        SetNativeImage(bitmap);
+        GpBitmap* bitmap;
+        PInvoke.GdipCreateBitmapFromGraphics(width, height, g.NativeGraphics, &bitmap).ThrowIfFailed();
+        SetNativeImage((GpImage*)bitmap);
+        GC.KeepAlive(g);
     }
 
     public Bitmap(int width, int height, int stride, PixelFormat format, IntPtr scan0)
     {
-        IntPtr bitmap;
-        int status = Gdip.GdipCreateBitmapFromScan0(width, height, stride, unchecked((int)format), scan0, out bitmap);
-        Gdip.CheckStatus(status);
-
-        SetNativeImage(bitmap);
+        GpBitmap* bitmap;
+        PInvoke.GdipCreateBitmapFromScan0(width, height, stride, (int)format, (byte*)scan0, &bitmap).ThrowIfFailed();
+        SetNativeImage((GpImage*)bitmap);
     }
 
     public Bitmap(int width, int height, PixelFormat format)
     {
-        IntPtr bitmap;
-        int status = Gdip.GdipCreateBitmapFromScan0(width, height, 0, unchecked((int)format), IntPtr.Zero, out bitmap);
-        Gdip.CheckStatus(status);
-
-        SetNativeImage(bitmap);
+        GpBitmap* bitmap;
+        PInvoke.GdipCreateBitmapFromScan0(width, height, 0, (int)format, null, &bitmap).ThrowIfFailed();
+        SetNativeImage((GpImage*)bitmap);
     }
 
     public Bitmap(Image original) : this(original, original.Width, original.Height)
@@ -148,24 +128,25 @@ public sealed class Bitmap : Image
     {
     }
 
+    GpBitmap* IPointer<GpBitmap>.Pointer => (GpBitmap*)((Image)this).Pointer();
+
     public static Bitmap FromHicon(IntPtr hicon)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateBitmapFromHICON(hicon, out IntPtr bitmap));
+        GpBitmap* bitmap;
+        PInvoke.GdipCreateBitmapFromHICON((HICON)hicon, &bitmap).ThrowIfFailed();
         return new Bitmap(bitmap);
     }
 
     public static Bitmap FromResource(IntPtr hinstance, string bitmapName)
     {
-        IntPtr name = Marshal.StringToHGlobalUni(bitmapName);
-        try
+        ArgumentNullException.ThrowIfNull(bitmapName);
+        GpBitmap* bitmap = null;
+        fixed (char* bn = bitmapName)
         {
-            Gdip.CheckStatus(Gdip.GdipCreateBitmapFromResource(hinstance, name, out IntPtr bitmap));
-            return new Bitmap(bitmap);
+            PInvoke.GdipCreateBitmapFromResource((HINSTANCE)hinstance, bn, &bitmap).ThrowIfFailed();
         }
-        finally
-        {
-            Marshal.FreeHGlobal(name);
-        }
+
+        return new Bitmap(bitmap);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -174,27 +155,30 @@ public sealed class Bitmap : Image
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IntPtr GetHbitmap(Color background)
     {
-        IntPtr hBitmap;
-        int status = Gdip.GdipCreateHBITMAPFromBitmap(new HandleRef(this, _nativeImage), out hBitmap,
-                                                         ColorTranslator.ToWin32(background));
-        if (status == 2 /* invalid parameter*/ && (Width >= short.MaxValue || Height >= short.MaxValue))
+        try
         {
-            throw new ArgumentException(SR.GdiplusInvalidSize);
+            return this.GetHBITMAP(background);
         }
-
-        Gdip.CheckStatus(status);
-
-        return hBitmap;
+        catch (ArgumentException)
+        {
+            if (Width >= short.MaxValue || Height >= short.MaxValue)
+            {
+                throw new ArgumentException(SR.GdiplusInvalidSize);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IntPtr GetHicon()
     {
-        IntPtr hIcon;
-        int status = Gdip.GdipCreateHICONFromBitmap(new HandleRef(this, _nativeImage), out hIcon);
-        Gdip.CheckStatus(status);
-
-        return hIcon;
+        HICON hicon;
+        PInvoke.GdipCreateHICONFromBitmap(this.Pointer(), &hicon).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return hicon;
     }
 
     public Bitmap Clone(RectangleF rect, PixelFormat format)
@@ -204,21 +188,21 @@ public sealed class Bitmap : Image
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
         }
 
-        IntPtr dstHandle;
+        GpBitmap* clone;
 
-        int status = Gdip.GdipCloneBitmapArea(
-                                                rect.X,
-                                                rect.Y,
-                                                rect.Width,
-                                                rect.Height,
-                                                unchecked((int)format),
-                                                new HandleRef(this, _nativeImage),
-                                                out dstHandle);
+        Status status = PInvoke.GdipCloneBitmapArea(
+            rect.X, rect.Y, rect.Width, rect.Height,
+            (int)format,
+            this.Pointer(),
+            &clone);
 
-        if (status != Gdip.Ok || dstHandle == IntPtr.Zero)
+        if (status != Status.Ok || clone is null)
+        {
             throw Gdip.StatusException(status);
+        }
 
-        return new Bitmap(dstHandle);
+        GC.KeepAlive(this);
+        return new Bitmap(clone);
     }
 
     public void MakeTransparent()
@@ -259,42 +243,52 @@ public sealed class Bitmap : Image
         using (ImageAttributes attributes = new())
         {
             attributes.SetColorKey(transparentColor, transparentColor);
-            graphics.DrawImage(this, rectangle,
-                                0, 0, size.Width, size.Height,
-                                GraphicsUnit.Pixel, attributes, null, IntPtr.Zero);
+            graphics.DrawImage(
+                this,
+                rectangle,
+                0, 0, size.Width, size.Height,
+                GraphicsUnit.Pixel,
+                attributes,
+                callback: null,
+                callbackData: 0);
         }
 
         // Swap nativeImage pointers to make it look like we modified the image in place
-        IntPtr temp = _nativeImage;
-        _nativeImage = result._nativeImage;
-        result._nativeImage = temp;
+        GpBitmap* temp = this.Pointer();
+        SetNativeImage((GpImage*)result.Pointer());
+        result.SetNativeImage((GpImage*)temp);
     }
 
-    public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format)
-    {
-        return LockBits(rect, flags, format, new BitmapData());
-    }
+    public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format) =>
+        LockBits(rect, flags, format, new());
 
     public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format, BitmapData bitmapData)
     {
-        int status = Gdip.GdipBitmapLockBits(
-            new HandleRef(this, _nativeImage), ref rect, flags, format, bitmapData);
+        ArgumentNullException.ThrowIfNull(bitmapData);
 
-        // libgdiplus has the wrong error code mapping for this state.
-        if (status == 7)
+        fixed (void* data = &bitmapData.GetPinnableReference())
         {
-            status = 8;
+            this.LockBits(
+                rect,
+                (GdiPlus.ImageLockMode)flags,
+                (GdiPlus.PixelFormat)format,
+                ref Unsafe.AsRef<GdiPlus.BitmapData>(data));
         }
 
-        Gdip.CheckStatus(status);
-
+        GC.KeepAlive(this);
         return bitmapData;
     }
 
     public void UnlockBits(BitmapData bitmapdata)
     {
-        int status = Gdip.GdipBitmapUnlockBits(new HandleRef(this, _nativeImage), bitmapdata);
-        Gdip.CheckStatus(status);
+        ArgumentNullException.ThrowIfNull(bitmapdata);
+
+        fixed (void* data = &bitmapdata.GetPinnableReference())
+        {
+            this.UnlockBits(ref Unsafe.AsRef<GdiPlus.BitmapData>(data));
+        }
+
+        GC.KeepAlive(this);
     }
 
     public Color GetPixel(int x, int y)
@@ -309,11 +303,10 @@ public sealed class Bitmap : Image
             throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
         }
 
-        int color;
-        int status = Gdip.GdipBitmapGetPixel(new HandleRef(this, _nativeImage), x, y, out color);
-        Gdip.CheckStatus(status);
-
-        return Color.FromArgb(color);
+        uint color;
+        PInvoke.GdipBitmapGetPixel(this.Pointer(), x, y, &color).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return Color.FromArgb((int)color);
     }
 
     public void SetPixel(int x, int y, Color color)
@@ -333,14 +326,14 @@ public sealed class Bitmap : Image
             throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
         }
 
-        int status = Gdip.GdipBitmapSetPixel(new HandleRef(this, _nativeImage), x, y, color.ToArgb());
-        Gdip.CheckStatus(status);
+        PInvoke.GdipBitmapSetPixel(this.Pointer(), x, y, (uint)color.ToArgb()).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void SetResolution(float xDpi, float yDpi)
     {
-        int status = Gdip.GdipBitmapSetResolution(new HandleRef(this, _nativeImage), xDpi, yDpi);
-        Gdip.CheckStatus(status);
+        PInvoke.GdipBitmapSetResolution(this.Pointer(), xDpi, yDpi).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public Bitmap Clone(Rectangle rect, PixelFormat format)
@@ -350,19 +343,168 @@ public sealed class Bitmap : Image
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
         }
 
-        IntPtr dstHandle;
-        int status = Gdip.GdipCloneBitmapAreaI(
-                                                 rect.X,
-                                                 rect.Y,
-                                                 rect.Width,
-                                                 rect.Height,
-                                                 unchecked((int)format),
-                                                 new HandleRef(this, _nativeImage),
-                                                 out dstHandle);
+        GpBitmap* clone;
+        Status status = PInvoke.GdipCloneBitmapAreaI(
+            rect.X, rect.Y, rect.Width, rect.Height,
+            (int)format,
+            this.Pointer(),
+            &clone);
 
-        if (status != Gdip.Ok || dstHandle == IntPtr.Zero)
+        if (status != Status.Ok || clone is null)
+        {
             throw Gdip.StatusException(status);
+        }
 
-        return new Bitmap(dstHandle);
+        GC.KeepAlive(this);
+        return new Bitmap(clone);
     }
+
+#if NET9_0_OR_GREATER
+    /// <summary>
+    ///  Alters the bitmap by applying the given <paramref name="effect"/>.
+    /// </summary>
+    /// <param name="effect">The effect to apply.</param>
+    /// <param name="area">The area to apply to, or <see cref="Rectangle.Empty"/> for the entire image.</param>
+    public void ApplyEffect(Effect effect, Rectangle area = default)
+    {
+        RECT rect = area;
+        PInvoke.GdipBitmapApplyEffect(
+            this.Pointer(),
+            effect.Pointer(),
+            area.IsEmpty ? null : &rect,
+            useAuxData: false,
+            auxData: null,
+            auxDataSize: null).ThrowIfFailed();
+
+        GC.KeepAlive(this);
+        GC.KeepAlive(effect);
+    }
+
+    /// <summary>
+    ///  Converts the bitmap to the specified <paramref name="format"/> using the given <paramref name="ditherType"/>.
+    ///  The original pixel data is replaced with the new format.
+    /// </summary>
+    /// <param name="format">
+    ///  <para>
+    ///   The new pixel format. <see cref="PixelFormat.Format16bppGrayScale"/> is not supported.
+    ///  </para>
+    /// </param>
+    /// <param name="ditherType">
+    ///  <para>
+    ///   The dithering algorithm. Pass <see cref="DitherType.None"/> when the conversion does not reduce the bit depth
+    ///   of the pixel data.
+    ///  </para>
+    ///  <para>
+    ///   This must be <see cref="DitherType.Solid"/> or <see cref="DitherType.ErrorDiffusion"/> if the <paramref name="paletteType"/>
+    ///   is <see cref="PaletteType.Custom"/> or <see cref="PaletteType.FixedBW"/>.
+    ///  </para>
+    /// </param>
+    /// <param name="paletteType">
+    ///  <para>
+    ///   The palette type to use when the pixel format is indexed. Ignored for non-indexed pixel formats.
+    ///  </para>
+    /// </param>
+    /// <param name="palette">
+    ///  <para>
+    ///   Pointer to a <see cref="ColorPalette"/> that specifies the palette whose indexes are stored in the pixel data
+    ///   of the converted bitmap. This must be specified for indexed pixel formats.
+    ///  </para>
+    ///  <para>
+    ///   This palette (called the actual palette) does not have to have the type specified by
+    ///   the <paramref name="paletteType"/> parameter. The <paramref name="paletteType"/> parameter specifies a standard
+    ///   palette that can be used by any of the ordered or spiral dithering algorithms. If the actual palette has a type
+    ///   other than that specified by the <paramref name="paletteType"/> parameter, then
+    ///   <see cref="ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/> performs a nearest-color
+    ///   conversion from the standard palette to the actual palette.
+    ///  </para>
+    /// </param>
+    /// <param name="alphaThresholdPercent">
+    ///  <para>
+    ///   Real number in the range 0 through 100 that specifies which pixels in the source bitmap will map to the
+    ///   transparent color in the converted bitmap.
+    ///  </para>
+    ///  <para>
+    ///   A value of 0 specifies that none of the source pixels map to the transparent color. A value of 100
+    ///   specifies that any pixel that is not fully opaque will map to the transparent color. A value of t specifies
+    ///   that any source pixel less than t percent of fully opaque will map to the transparent color. Note that for
+    ///   the alpha threshold to be effective, the palette must have a transparent color. If the palette does not have
+    ///   a transparent color, pixels with alpha values below the threshold will map to color that most closely
+    ///   matches (0, 0, 0, 0), usually black.
+    ///  </para>
+    /// </param>
+    /// <remarks>
+    ///  <para>
+    ///   <paramref name="paletteType"/> and <paramref name="palette"/> really only have relevance with indexed pixel
+    ///   formats. You can pass a <see cref="ColorPalette"/> for non-indexed pixel formats, but it has no impact on the
+    ///   transformation and will effective just call <see cref="Image.Palette"/> to set the palette when the conversion
+    ///   is complete.
+    ///  </para>
+    /// </remarks>
+    public void ConvertFormat(
+        PixelFormat format,
+        DitherType ditherType,
+        PaletteType paletteType = PaletteType.Custom,
+        ColorPalette? palette = null,
+        float alphaThresholdPercent = 0.0f)
+    {
+        if (palette is null)
+        {
+            PInvoke.GdipBitmapConvertFormat(
+                this.Pointer(),
+                (int)format,
+                (GdiPlus.DitherType)ditherType,
+                (GdiPlus.PaletteType)paletteType,
+                null,
+                alphaThresholdPercent).ThrowIfFailed();
+        }
+        else
+        {
+            using var buffer = palette.ConvertToBuffer();
+            fixed (void* b = buffer)
+            {
+                PInvoke.GdipBitmapConvertFormat(
+                    this.Pointer(),
+                    (int)format,
+                    (GdiPlus.DitherType)ditherType,
+                    (GdiPlus.PaletteType)paletteType,
+                    (GdiPlus.ColorPalette*)b,
+                    alphaThresholdPercent).ThrowIfFailed();
+            }
+        }
+
+        GC.KeepAlive(this);
+    }
+
+    /// <summary>
+    ///  Converts the bitmap to the specified <paramref name="format"/>.
+    ///  The original pixel data is replaced with the new format.
+    /// </summary>
+    /// <param name="format">
+    ///  <para>
+    ///   The new pixel format. <see cref="PixelFormat.Format16bppGrayScale"/> is not supported.
+    ///  </para>
+    /// </param>
+    public void ConvertFormat(PixelFormat format)
+    {
+        PixelFormat currentFormat = PixelFormat;
+        int targetSize = ((int)format >> 8) & 0xff;
+        int sourceSize = ((int)currentFormat >> 8) & 0xff;
+
+        if (!format.HasFlag(PixelFormat.Indexed))
+        {
+            ConvertFormat(format, targetSize > sourceSize ? DitherType.None : DitherType.Solid);
+            return;
+        }
+
+        int paletteSize = targetSize switch { 1 => 2, 4 => 16, _ => 256 };
+        bool hasAlpha = format.HasFlag(PixelFormat.Alpha);
+        if (hasAlpha)
+        {
+            paletteSize++;
+        }
+
+        ColorPalette palette = ColorPalette.CreateOptimalPalette(paletteSize, hasAlpha, this);
+        ConvertFormat(format, DitherType.ErrorDiffusion, PaletteType.Custom, palette, .25f);
+    }
+#endif
 }

@@ -17,7 +17,7 @@ public readonly ref struct BinaryFormatterScope
         // Prevent multiple BinaryFormatterScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(BinaryFormatterScope));
-        _switchScope = new AppContextSwitchScope(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, enable);
+        _switchScope = new(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, enable);
     }
 
     public void Dispose()
@@ -38,12 +38,10 @@ public readonly ref struct BinaryFormatterScope
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
         try
         {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(null!, null!);
-#pragma warning restore SYSLIB0011
         }
         catch (NotSupportedException)
         {

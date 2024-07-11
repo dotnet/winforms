@@ -3,13 +3,12 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
 internal partial class PropertyGridView
 {
-    private class GridViewListBoxItemAccessibleObject : ListBox.ListBoxItemAccessibleObject
+    private class GridViewListBoxItemAccessibleObject : ListBoxItemAccessibleObject
     {
         private readonly GridViewListBox _owningGridViewListBox;
         private readonly ItemArray.Entry _owningItem;
@@ -43,13 +42,11 @@ internal partial class PropertyGridView
 
         private protected override bool IsInternal => true;
 
-        /// <inheritdoc />
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(_owningGridViewListBox.InternalHandle),
-                _owningItem.GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)_owningGridViewListBox.InternalHandle,
+            _owningItem.GetHashCode()
+        ];
     }
 }

@@ -46,9 +46,9 @@ internal class StandardMenuStripVerb
         try
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (_designer.Component is MenuStrip)
+            if (_designer.Component is MenuStrip menuStrip)
             {
-                CreateStandardMenuStrip(_host, (MenuStrip)_designer.Component);
+                CreateStandardMenuStrip(_host, menuStrip);
             }
             else
             {
@@ -67,30 +67,30 @@ internal class StandardMenuStripVerb
     private void CreateStandardMenuStrip(IDesignerHost host, MenuStrip tool)
     {
         // build the static menu items structure.
-        string[][] menuItemNames = new string[][]
-        {
-            new string[] { SR.StandardMenuFile, SR.StandardMenuNew, SR.StandardMenuOpen, "-", SR.StandardMenuSave, SR.StandardMenuSaveAs, "-", SR.StandardMenuPrint, SR.StandardMenuPrintPreview, "-", SR.StandardMenuExit },
-            new string[] { SR.StandardMenuEdit, SR.StandardMenuUndo, SR.StandardMenuRedo, "-", SR.StandardMenuCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardMenuSelectAll },
-            new string[] { SR.StandardMenuTools, SR.StandardMenuCustomize, SR.StandardMenuOptions },
-            new string[] { SR.StandardMenuHelp, SR.StandardMenuContents, SR.StandardMenuIndex, SR.StandardMenuSearch, "-", SR.StandardMenuAbout }
-        };
+        string[][] menuItemNames =
+        [
+            [SR.StandardMenuFile, SR.StandardMenuNew, SR.StandardMenuOpen, "-", SR.StandardMenuSave, SR.StandardMenuSaveAs, "-", SR.StandardMenuPrint, SR.StandardMenuPrintPreview, "-", SR.StandardMenuExit],
+            [SR.StandardMenuEdit, SR.StandardMenuUndo, SR.StandardMenuRedo, "-", SR.StandardMenuCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardMenuSelectAll],
+            [SR.StandardMenuTools, SR.StandardMenuCustomize, SR.StandardMenuOptions],
+            [SR.StandardMenuHelp, SR.StandardMenuContents, SR.StandardMenuIndex, SR.StandardMenuSearch, "-", SR.StandardMenuAbout]
+        ];
 
         // build the static menu items image list that maps one-one with above menuItems structure. this is required so that the in LOCALIZED build we don't use the Localized item string.
-        string[][] menuItemImageNames = new string[][]
-        {
-            new string[] { "", "new", "open", "-", "save", "", "-", "print", "printPreview", "-", "" },
-            new string[] { "", "", "", "-", "cut", "copy", "paste", "-", "" },
-            new string[] { "", "", "" },
-            new string[] { "", "", "", "", "-", "" }
-        };
+        string[][] menuItemImageNames =
+        [
+            ["", "new", "open", "-", "save", "", "-", "print", "printPreview", "-", ""],
+            ["", "", "", "-", "cut", "copy", "paste", "-", ""],
+            ["", "", ""],
+            ["", "", "", "", "-", ""]
+        ];
 
-        Keys[][] menuItemShortcuts = new Keys[][]
-        {
-            new Keys[] { /*File*/Keys.None, /*New*/Keys.Control | Keys.N, /*Open*/Keys.Control | Keys.O, /*Separator*/ Keys.None, /*Save*/ Keys.Control | Keys.S, /*SaveAs*/Keys.None, Keys.None, /*Print*/ Keys.Control | Keys.P, /*PrintPreview*/ Keys.None, /*Separator*/Keys.None, /*Exit*/ Keys.None },
-            new Keys[] { /*Edit*/Keys.None, /*Undo*/Keys.Control | Keys.Z, /*Redo*/Keys.Control | Keys.Y, /*Separator*/Keys.None, /*Cut*/ Keys.Control | Keys.X, /*Copy*/ Keys.Control | Keys.C, /*Paste*/Keys.Control | Keys.V, /*Separator*/ Keys.None, /*SelectAll*/Keys.None },
-            new Keys[] { /*Tools*/Keys.None, /*Customize*/Keys.None, /*Options*/Keys.None },
-            new Keys[] { /*Help*/Keys.None, /*Contents*/Keys.None, /*Index*/Keys.None, /*Search*/Keys.None, /*Separator*/Keys.None, /*About*/Keys.None }
-        };
+        Keys[][] menuItemShortcuts =
+        [
+            [/*File*/Keys.None, /*New*/Keys.Control | Keys.N, /*Open*/Keys.Control | Keys.O, /*Separator*/ Keys.None, /*Save*/ Keys.Control | Keys.S, /*SaveAs*/Keys.None, Keys.None, /*Print*/ Keys.Control | Keys.P, /*PrintPreview*/ Keys.None, /*Separator*/Keys.None, /*Exit*/ Keys.None],
+            [/*Edit*/Keys.None, /*Undo*/Keys.Control | Keys.Z, /*Redo*/Keys.Control | Keys.Y, /*Separator*/Keys.None, /*Cut*/ Keys.Control | Keys.X, /*Copy*/ Keys.Control | Keys.C, /*Paste*/Keys.Control | Keys.V, /*Separator*/ Keys.None, /*SelectAll*/Keys.None],
+            [/*Tools*/Keys.None, /*Customize*/Keys.None, /*Options*/Keys.None],
+            [/*Help*/Keys.None, /*Contents*/Keys.None, /*Index*/Keys.None, /*Search*/Keys.None, /*Separator*/Keys.None, /*About*/Keys.None]
+        ];
 
         Debug.Assert(host is not null, "can't create standard menu without designer _host.");
         if (host is null)
@@ -134,9 +134,9 @@ internal class StandardMenuStripVerb
                         // create the component.
                         item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                         IDesigner designer = _host.GetDesigner(item);
-                        if (designer is ComponentDesigner)
+                        if (designer is ComponentDesigner componentDesigner)
                         {
-                            ((ComponentDesigner)designer).InitializeNewComponent(null);
+                            componentDesigner.InitializeNewComponent(null);
                         }
 
                         item.Text = itemText;
@@ -146,18 +146,18 @@ internal class StandardMenuStripVerb
                         // create the component.
                         item = (ToolStripMenuItem)_host.CreateComponent(typeof(ToolStripMenuItem), name);
                         IDesigner designer = _host.GetDesigner(item);
-                        if (designer is ComponentDesigner)
+                        if (designer is ComponentDesigner componentDesigner)
                         {
-                            ((ComponentDesigner)designer).InitializeNewComponent(null);
+                            componentDesigner.InitializeNewComponent(null);
                         }
 
                         item.Text = itemText;
                         Keys shortcut = menuItemShortcuts[j][i];
-                        if ((item is ToolStripMenuItem) && shortcut != Keys.None)
+                        if ((item is ToolStripMenuItem menuItem) && shortcut != Keys.None)
                         {
                             if (!ToolStripManager.IsShortcutDefined(shortcut) && ToolStripManager.IsValidShortcut(shortcut))
                             {
-                                ((ToolStripMenuItem)item).ShortcutKeys = shortcut;
+                                menuItem.ShortcutKeys = shortcut;
                             }
                         }
 
@@ -304,9 +304,9 @@ internal class StandardMenuStripVerb
                     // create the component.
                     item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                     IDesigner designer = _host.GetDesigner(item);
-                    if (designer is ComponentDesigner)
+                    if (designer is ComponentDesigner componentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        componentDesigner.InitializeNewComponent(null);
                     }
                 }
                 else
@@ -314,9 +314,9 @@ internal class StandardMenuStripVerb
                     // create the component.
                     item = (ToolStripButton)_host.CreateComponent(typeof(ToolStripButton), name);
                     IDesigner designer = _host.GetDesigner(item);
-                    if (designer is ComponentDesigner)
+                    if (designer is ComponentDesigner componentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        componentDesigner.InitializeNewComponent(null);
                     }
 
                     PropertyDescriptor displayStyleProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
@@ -402,39 +402,39 @@ internal class StandardMenuStripVerb
     private static Bitmap GetImage(string name)
     {
         Bitmap image = null;
-        if (name.StartsWith("new"))
+        if (name.StartsWith("new", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "new").ToBitmap();
         }
-        else if (name.StartsWith("open"))
+        else if (name.StartsWith("open", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "open").ToBitmap();
         }
-        else if (name.StartsWith("save"))
+        else if (name.StartsWith("save", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "save").ToBitmap();
         }
-        else if (name.StartsWith("printPreview"))
+        else if (name.StartsWith("printPreview", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "printPreview").ToBitmap();
         }
-        else if (name.StartsWith("print"))
+        else if (name.StartsWith("print", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "print").ToBitmap();
         }
-        else if (name.StartsWith("cut"))
+        else if (name.StartsWith("cut", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "cut").ToBitmap();
         }
-        else if (name.StartsWith("copy"))
+        else if (name.StartsWith("copy", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "copy").ToBitmap();
         }
-        else if (name.StartsWith("paste"))
+        else if (name.StartsWith("paste", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "paste").ToBitmap();
         }
-        else if (name.StartsWith("help"))
+        else if (name.StartsWith("help", StringComparison.Ordinal))
         {
             image = new Icon(typeof(ToolStripMenuItem), "help").ToBitmap();
         }

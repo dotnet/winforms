@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
-using static Interop.WinFormsComWrappers;
+using static WinFormsComWrappers;
 
 namespace System.Windows.Forms;
 
@@ -81,7 +81,7 @@ internal unsafe struct IExtender : IComIID, IVTable<IExtender, IExtender.Vtbl>
 
     // 39088D7E-B71E-11D1-8F39-00C04FD946D0
     /// <summary>The IID guid for this interface.</summary>
-    public static readonly Guid IID_Guid = new(0x39088D7E, 0xB71E, 0x11D1, 0x8F, 0x39, 0x00, 0xC0, 0x4F, 0xD9, 0x46, 0xD0);
+    public static Guid IID_Guid { get; } = new(0x39088D7E, 0xB71E, 0x11D1, 0x8F, 0x39, 0x00, 0xC0, 0x4F, 0xD9, 0x46, 0xD0);
 
     static ref readonly Guid IComIID.Guid
     {
@@ -125,88 +125,88 @@ internal unsafe struct IExtender : IComIID, IVTable<IExtender, IExtender.Vtbl>
         vtable->Move_24 = &Move;
     }
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Align(IExtender* @this, int* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Align);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Align(IExtender* @this, int value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Align = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Enabled(IExtender* @this, BOOL* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Enabled);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Enabled(IExtender* @this, BOOL value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Enabled = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Height(IExtender* @this, int* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Height);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Height(IExtender* @this, int value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Height = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Left(IExtender* @this, int* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Left);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Left(IExtender* @this, int value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Left = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_TabStop(IExtender* @this, BOOL* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.TabStop);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_TabStop(IExtender* @this, BOOL value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.TabStop = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Top(IExtender* @this, int* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Top);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Top(IExtender* @this, int value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Top = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Visible(IExtender* @this, BOOL* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Visible);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Visible(IExtender* @this, BOOL value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Visible = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Width(IExtender* @this, int* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Width);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT set_Width(IExtender* @this, int value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => o.Width = value);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Name(IExtender* @this, BSTR* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Name);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Parent(IExtender* @this, IUnknown** value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Parent);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Hwnd(IExtender* @this, HWND* value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Hwnd);
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT get_Container(IExtender* @this, IUnknown** value)
         => UnwrapAndInvoke<IExtender, Interface>(@this, o => *value = o.Container);
 
     // This one isn't actually used.
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT Move(IExtender* @this, void* left, void* top, void* width, void* height) => HRESULT.S_OK;
 
     [ComImport]

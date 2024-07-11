@@ -10367,7 +10367,7 @@ public class ToolStripItemTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripItem_IsInputKey_Invoke_ReturnsFalse(Keys keyData)
     {
         using SubToolStripItem item = new();
@@ -13956,7 +13956,7 @@ public class ToolStripItemTests
     [InlineData(Keys.A)]
     [InlineData(Keys.Enter)]
     [InlineData(Keys.Space)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripItem_ProcessCmdKey_Invoke_ReturnsFalse(Keys keyData)
     {
         using SubToolStripItem item = new();
@@ -14047,7 +14047,7 @@ public class ToolStripItemTests
     [InlineData(Keys.Space)]
     [InlineData(Keys.A)]
     [InlineData(Keys.None)]
-    [InlineData((Keys)(Keys.None - 1))]
+    [InlineData((Keys.None - 1))]
     public void ToolStripItem_ProcessDialogKey_UnknownKey_ReturnsFalse(Keys keyData)
     {
         using SubToolStripItem item = new();
@@ -15638,9 +15638,7 @@ public class ToolStripItemTests
         public bool IsAccessibleObjectCleared()
         {
             var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
-            var accessibleObject = Properties.GetObject(key) as AccessibleObject;
-
-            return accessibleObject is null;
+            return Properties.GetObject(key) is not AccessibleObject;
         }
     }
 }

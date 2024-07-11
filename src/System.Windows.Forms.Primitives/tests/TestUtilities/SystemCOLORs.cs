@@ -59,7 +59,7 @@ internal static class SystemCOLORs
 
     private static Dictionary<COLORREF, List<SYS_COLOR_INDEX>> CreateColorDictionary()
     {
-        Dictionary<COLORREF, List<SYS_COLOR_INDEX>> dictionary = new();
+        Dictionary<COLORREF, List<SYS_COLOR_INDEX>> dictionary = [];
 
         for (int i = 0; i <= (int)SYS_COLOR_INDEX.COLOR_MENUBAR; i++)
         {
@@ -77,10 +77,10 @@ internal static class SystemCOLORs
             }
             else
             {
-                List<SYS_COLOR_INDEX> colorList = new()
-                {
+                List<SYS_COLOR_INDEX> colorList =
+                [
                     (SYS_COLOR_INDEX)i
-                };
+                ];
 
                 dictionary.Add(colorRef, colorList);
             }

@@ -251,7 +251,7 @@ public class DataGridViewElementTests
     public static IEnumerable<object[]> DataGridViewDataErrorEventArgs_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new DataGridViewDataErrorEventArgs(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting) };
+        yield return new object[] { new DataGridViewDataErrorEventArgs(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting) };
     }
 
     [WinFormsTheory]
@@ -265,7 +265,7 @@ public class DataGridViewElementTests
     [WinFormsFact]
     public void DataGridViewElement_RaiseDataError_InvokeWithDataGridView_Success()
     {
-        DataGridViewDataErrorEventArgs eventArgs = new(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting);
+        DataGridViewDataErrorEventArgs eventArgs = new(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting);
         Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)

@@ -252,4 +252,35 @@ public class Panel_PanelAccessibleObjectTests
         Assert.Equal(buttonFirst.AccessibilityObject, panel.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild));
         Assert.Equal(buttonLast.AccessibilityObject, panel.AccessibilityObject.Navigate(AccessibleNavigation.LastChild));
     }
+
+    [WinFormsFact]
+    public void PanelAccessibleObject_BoundingRectangle_IsCorrect()
+    {
+        using Form form = new();
+        using Panel panel1 = new();
+        using Button button1 = new();
+
+        panel1.AutoScroll = true;
+        panel1.Controls.Add(button1);
+        panel1.Location = new(50, 50);
+        panel1.Size = new(200, 140);
+
+        button1.Location = new(17, 16);
+        button1.Size = new(237, 153);
+
+        form.ClientSize = new(300, 200);
+        form.Controls.Add(panel1);
+
+        form.Show();
+
+        Rectangle boundingRectangle = panel1.AccessibilityObject.BoundingRectangle;
+
+        int horizontalScrollBarHeight = SystemInformation.HorizontalScrollBarHeight;
+        int verticalScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
+
+        Rectangle expected = panel1.RectangleToScreen(panel1.ClientRectangle);
+
+        Assert.Equal(boundingRectangle.Width, expected.Width + verticalScrollBarWidth);
+        Assert.Equal(boundingRectangle.Height, expected.Height + horizontalScrollBarHeight);
+    }
 }

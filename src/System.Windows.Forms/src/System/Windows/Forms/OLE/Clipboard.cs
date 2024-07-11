@@ -4,8 +4,8 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Windows.Win32.System.Com;
+using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -22,14 +22,14 @@ public static class Clipboard
     /// <summary>
     ///  Overload that uses default values for retryTimes and retryDelay.
     /// </summary>
-    public static void SetDataObject(object data, bool copy)
-        => SetDataObject(data, copy, retryTimes: 10, retryDelay: 100);
+    public static void SetDataObject(object data, bool copy) =>
+        SetDataObject(data, copy, retryTimes: 10, retryDelay: 100);
 
     /// <summary>
     ///  Places data on the system <see cref="Clipboard"/> and uses copy to specify whether the data
     ///  should remain on the <see cref="Clipboard"/> after the application exits.
     /// </summary>
-    public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
+    public static unsafe void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
     {
         if (Application.OleRequired() != ApartmentState.STA)
         {
@@ -40,11 +40,15 @@ public static class Clipboard
         ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
         ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
-        IComDataObject dataObject = data as IComDataObject ?? new DataObject(data);
+        // Always wrap the data in our DataObject since we know how to retrieve our DataObject from the proxy OleGetClipboard returns.
+        DataObject wrappedData = data is DataObject { IsWrappedForClipboard: true } alreadyWrapped
+            ? alreadyWrapped
+            : new DataObject(data) { IsWrappedForClipboard = true };
+        using var dataObject = ComHelpers.GetComScope<Com.IDataObject>(wrappedData);
 
         HRESULT hr;
         int retry = retryTimes;
-        while ((hr = Ole32.OleSetClipboard(dataObject)) != HRESULT.S_OK)
+        while ((hr = PInvoke.OleSetClipboard(dataObject)).Failed)
         {
             if (--retry < 0)
             {
@@ -57,7 +61,7 @@ public static class Clipboard
         if (copy)
         {
             retry = retryTimes;
-            while ((hr = PInvoke.OleFlushClipboard()) != HRESULT.S_OK)
+            while ((hr = PInvoke.OleFlushClipboard()).Failed)
             {
                 if (--retry < 0)
                 {
@@ -72,7 +76,7 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
     /// </summary>
-    public static IDataObject? GetDataObject()
+    public static unsafe IDataObject? GetDataObject()
     {
         if (Application.OleRequired() != ApartmentState.STA)
         {
@@ -82,9 +86,9 @@ public static class Clipboard
         }
 
         int retryTimes = 10;
-        IComDataObject? dataObject = null;
+        using ComScope<Com.IDataObject> proxyDataObject = new(null);
         HRESULT hr;
-        while ((hr = Ole32.OleGetClipboard(ref dataObject)) != HRESULT.S_OK)
+        while ((hr = PInvoke.OleGetClipboard(proxyDataObject)).Failed)
         {
             if (--retryTimes < 0)
             {
@@ -94,11 +98,54 @@ public static class Clipboard
             Thread.Sleep(millisecondsTimeout: 100);
         }
 
-        return dataObject is null
-            ? null
-            : dataObject is IDataObject ido && !Marshal.IsComObject(dataObject)
-                ? ido
-                : new DataObject(dataObject);
+        // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
+        // without giving out the real data object. If the data placed on the clipboard is not one of our CCWs or the clipboard
+        // has been flushed, marshal will create a wrapper around the proxy for us to use. However, if the data placed on
+        // the clipboard is one of our own and the clipboard has not been flushed, we need to retrieve the real data object
+        // pointer in order to retrieve the original managed object via ComWrappers. To do this, we must query for an
+        // interface that is not known to the proxy e.g. IComCallableWrapper. If we are able to query for IComCallableWrapper
+        // it means that the real data object is one of our CCWs and we've retrieved it successfully,
+        // otherwise it is not ours and we will use the wrapped proxy.
+        IUnknown* target = default;
+        var realDataObject = proxyDataObject.TryQuery<IComCallableWrapper>(out hr);
+        if (hr.Succeeded)
+        {
+            target = realDataObject.AsUnknown;
+        }
+        else
+        {
+            target = proxyDataObject.AsUnknown;
+        }
+
+        if (!ComHelpers.TryGetObjectForIUnknown(target, out object? managedDataObject))
+        {
+            target->Release();
+            return null;
+        }
+
+        if (managedDataObject is not Com.IDataObject.Interface dataObject)
+        {
+            // We always wrap data set on the Clipboard in a DataObject, so if we do not have
+            // a IDataObject.Interface this means built-in com support is turned off and
+            // we have a proxy where there is no way to retrieve the original data object
+            // pointer from it likely because either the clipboard was flushed or the data on the
+            // clipboard is from another process. We need to mimic built-in com behavior and wrap the proxy ourselves.
+            // DataObject will ref count proxyDataObject properly to take ownership.
+            return new DataObject(proxyDataObject.Value);
+        }
+
+        if (dataObject is DataObject { IsWrappedForClipboard: true } wrappedData)
+        {
+            // There is a DataObject on the clipboard that we placed there. If the real data object
+            // implements IDataObject, we want to unwrap it and return it. Otherwise return
+            // the DataObject as is.
+            return wrappedData.TryUnwrapInnerIDataObject();
+        }
+
+        // We did not place the data on the clipboard. Fall back to old behavior.
+        return dataObject is IDataObject ido && !Marshal.IsComObject(dataObject)
+            ? ido
+            : new DataObject(dataObject);
     }
 
     /// <summary>
@@ -115,12 +162,11 @@ public static class Clipboard
     ///  Indicates whether there is data on the Clipboard that is in the specified format
     ///  or can be converted to that format.
     /// </summary>
-    public static bool ContainsData(string? format)
-        => !string.IsNullOrWhiteSpace(format) && ContainsData(format, autoConvert: false);
+    public static bool ContainsData(string? format) =>
+        !string.IsNullOrWhiteSpace(format) && ContainsData(format, autoConvert: false);
 
     private static bool ContainsData(string format, bool autoConvert) =>
-        GetDataObject() is { } dataObject
-        && dataObject.GetDataPresent(format, autoConvert: autoConvert);
+        GetDataObject() is { } dataObject && dataObject.GetDataPresent(format, autoConvert: autoConvert);
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the <see cref="DataFormats.FileDrop"/> format
@@ -150,25 +196,25 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Retrieves an audio stream from the Clipboard.
+    ///  Retrieves an audio stream from the <see cref="Clipboard"/>.
     /// </summary>
     public static Stream? GetAudioStream() => GetData(DataFormats.WaveAudioConstant) as Stream;
 
     /// <summary>
-    ///  Retrieves data from the Clipboard in the specified format.
+    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
     /// </summary>
-    public static object? GetData(string format)
-        => string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
+    public static object? GetData(string format) =>
+        string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
 
-    private static object? GetData(string format, bool autoConvert)
-        => GetDataObject() is { } dataObject ? dataObject.GetData(format, autoConvert) : null;
+    private static object? GetData(string format, bool autoConvert) =>
+        GetDataObject() is { } dataObject ? dataObject.GetData(format, autoConvert) : null;
 
     /// <summary>
-    ///  Retrieves a collection of file names from the Clipboard.
+    ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.
     /// </summary>
     public static StringCollection GetFileDropList()
     {
-        StringCollection result = new();
+        StringCollection result = [];
 
         if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
         {
@@ -179,17 +225,17 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Retrieves an image from the Clipboard.
+    ///  Retrieves an image from the <see cref="Clipboard"/>.
     /// </summary>
     public static Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
 
     /// <summary>
-    ///  Retrieves text data from the Clipboard in the <see cref="TextDataFormat.UnicodeText"/> format.
+    ///  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
     /// </summary>
     public static string GetText() => GetText(TextDataFormat.UnicodeText);
 
     /// <summary>
-    ///  Retrieves text data from the Clipboard in the format indicated by the specified
+    ///  Retrieves text data from the <see cref="Clipboard"/> in the format indicated by the specified
     ///  <see cref="TextDataFormat"/> value.
     /// </summary>
     public static string GetText(TextDataFormat format)
@@ -199,15 +245,15 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Clears the Clipboard and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+    ///  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
     public static void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 
     /// <summary>
-    ///  Clears the Clipboard and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+    ///  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
-    public static void SetAudio(Stream audioStream)
-        => SetDataObject(new DataObject(DataFormats.WaveAudioConstant, audioStream.OrThrowIfNull()), copy: true);
+    public static void SetAudio(Stream audioStream) =>
+        SetDataObject(new DataObject(DataFormats.WaveAudioConstant, audioStream.OrThrowIfNull()), copy: true);
 
     /// <summary>
     ///  Clears the Clipboard and then adds data in the specified format.
@@ -252,8 +298,8 @@ public static class Clipboard
     /// <summary>
     ///  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.
     /// </summary>
-    public static void SetImage(Image image)
-        => SetDataObject(new DataObject(DataFormats.BitmapConstant, autoConvert: true, image.OrThrowIfNull()), copy: true);
+    public static void SetImage(Image image) =>
+        SetDataObject(new DataObject(DataFormats.BitmapConstant, autoConvert: true, image.OrThrowIfNull()), copy: true);
 
     /// <summary>
     ///  Clears the Clipboard and then adds text data in the <see cref="TextDataFormat.UnicodeText"/> format.

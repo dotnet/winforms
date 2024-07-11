@@ -6,7 +6,6 @@ using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -91,7 +90,7 @@ public partial class ComboBox
 
         public override LOGFONTW Logfont
             => _owningComboBox.IsHandleCreated
-                ? LOGFONTW.FromFont(_owningComboBox.Font)
+                ? _owningComboBox.Font.ToLogicalFont()
                 : default;
 
         public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
@@ -345,7 +344,7 @@ public partial class ComboBox
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
             if (PInvoke.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
             {
-                *pRetVal  = ComHelpers.GetComPointer<ITextRangeProvider>(
+                *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
                         _owningComboBox.ChildEditAccessibleObject,
                         this,

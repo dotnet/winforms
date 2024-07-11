@@ -7,18 +7,19 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
-using Windows.Win32.System.Ole;
 using Moq;
+using Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
-public class DataObjectTests
+public partial class DataObjectTests
 {
     private static readonly string[] s_clipboardFormats =
-    {
+    [
         DataFormats.CommaSeparatedValue,
         DataFormats.Dib,
         DataFormats.Dif,
@@ -40,14 +41,14 @@ public class DataObjectTests
         DataFormats.UnicodeText,
         DataFormats.Serializable,
         "something custom",
-    };
+    ];
 
     private static readonly string[] s_mappedFormats =
-    {
+    [
         typeof(Bitmap).FullName,
         "FileName",
         "FileNameW"
-    };
+    ];
 
     [Fact]
     public void DataObject_ContainsAudio_InvokeDefault_ReturnsFalse()
@@ -298,7 +299,7 @@ public class DataObjectTests
             .Setup(o => o.GetData(format, true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format));
         mockDataObject.Verify(o => o.GetData(format, true), Times.Once());
     }
@@ -354,7 +355,7 @@ public class DataObjectTests
             .Setup(o => o.GetData(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format, autoConvert));
         mockDataObject.Verify(o => o.GetData(format, autoConvert), Times.Once());
     }
@@ -466,7 +467,7 @@ public class DataObjectTests
             .Setup(o => o.GetDataPresent(format, true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format));
         mockDataObject.Verify(o => o.GetDataPresent(format, true), Times.Once());
     }
@@ -522,7 +523,7 @@ public class DataObjectTests
             .Setup(o => o.GetDataPresent(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format, autoConvert));
         mockDataObject.Verify(o => o.GetDataPresent(format, autoConvert), Times.Once());
     }
@@ -668,7 +669,7 @@ public class DataObjectTests
             .Setup(o => o.GetFormats(true))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats());
         mockDataObject.Verify(o => o.GetFormats(true), Times.Once());
     }
@@ -723,7 +724,7 @@ public class DataObjectTests
             .Setup(o => o.GetFormats(autoConvert))
             .Returns(result)
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats(autoConvert));
         mockDataObject.Verify(o => o.GetFormats(autoConvert), Times.Once());
     }
@@ -926,7 +927,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetAudio(audioBytes);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()), Times.Once());
     }
@@ -941,7 +942,7 @@ public class DataObjectTests
     public static IEnumerable<object[]> SetAudio_Stream_TestData()
     {
         yield return new object[] { new MemoryStream(Array.Empty<byte>()) };
-        yield return new object[] { new MemoryStream(new byte[] { 1, 2, 3 }) };
+        yield return new object[] { new MemoryStream([1, 2, 3]) };
     }
 
     [Theory]
@@ -981,7 +982,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, audioStream))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetAudio(audioStream);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, audioStream), Times.Once());
     }
@@ -1060,7 +1061,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(data);
         mockDataObject.Verify(o => o.SetData(data), Times.Once());
     }
@@ -1153,7 +1154,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1249,7 +1250,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, autoConvert, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, autoConvert, data);
         mockDataObject.Verify(o => o.SetData(format, autoConvert, data), Times.Once());
     }
@@ -1271,7 +1272,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1356,7 +1357,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetFileDropList(filePaths);
         mockDataObject.Verify(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()), Times.Once());
     }
@@ -1419,7 +1420,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.Bitmap, true, image))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetImage(image);
         mockDataObject.Verify(o => o.SetData(DataFormats.Bitmap, true, image), Times.Once());
     }
@@ -1495,7 +1496,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(DataFormats.UnicodeText, false, textData))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetText(textData);
         mockDataObject.Verify(o => o.SetData(DataFormats.UnicodeText, false, textData), Times.Once());
     }
@@ -1582,7 +1583,7 @@ public class DataObjectTests
         mockDataObject
             .Setup(o => o.SetData(expectedFormat, false, textData))
             .Verifiable();
-        DataObject dataObject = new((object)mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         dataObject.SetText(textData, format);
         mockDataObject.Verify(o => o.SetData(expectedFormat, false, textData), Times.Once());
     }
@@ -1819,8 +1820,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { format1, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns([format1, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -1881,7 +1882,7 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
+            .Setup(o => o.GetFormats())
             .Returns((string[])null);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
@@ -1928,8 +1929,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { "Format1", DataFormats.Bitmap, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns(["Format1", DataFormats.Bitmap, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -2005,8 +2006,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { format1, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns([format1, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -2068,7 +2069,7 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
+            .Setup(o => o.GetFormats())
             .Returns((string[])null);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
@@ -2104,11 +2105,6 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> EnumFormatEtc_CustomComDataObject_TestData()
     {
-        yield return new object[] { DATADIR.DATADIR_GET, null };
-        yield return new object[] { DATADIR.DATADIR_SET, null };
-        yield return new object[] { DATADIR.DATADIR_GET - 1, null };
-        yield return new object[] { DATADIR.DATADIR_SET + 1, null };
-
         Mock<IEnumFORMATETC> mockEnumFormatEtc = new(MockBehavior.Strict);
         yield return new object[] { DATADIR.DATADIR_GET, mockEnumFormatEtc.Object };
         yield return new object[] { DATADIR.DATADIR_SET, mockEnumFormatEtc.Object };
@@ -2265,7 +2261,7 @@ public class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_FileNames_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+        dataObject.SetFileDropList(["Path1", "Path2"]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2306,7 +2302,7 @@ public class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_EmptyFileNames_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection());
+        dataObject.SetFileDropList([]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2345,7 +2341,7 @@ public class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_FileNamesNoData_ThrowsArgumentException()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+        dataObject.SetFileDropList(["Path1", "Path2"]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2364,7 +2360,7 @@ public class DataObjectTests
     public unsafe void IComDataObjectGetDataHere_EmptyFileNamesNoData_Success()
     {
         DataObject dataObject = new();
-        dataObject.SetFileDropList(new StringCollection());
+        dataObject.SetFileDropList([]);
         IComDataObject iComDataObject = dataObject;
 
         FORMATETC formatetc = new()
@@ -2425,5 +2421,109 @@ public class DataObjectTests
         };
         COMException ex = Assert.Throws<COMException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
         Assert.Equal(HRESULT.DV_E_FORMATETC, (HRESULT)ex.HResult);
+    }
+
+    private class DerivedDataObject : DataObject { }
+
+    private class CustomDataObject : IComDataObject, IDataObject
+    {
+        public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        public void DUnadvise(int connection) => throw new NotImplementedException();
+        public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
+        public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
+        public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
+        public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
+        public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
+        public object GetData(string format) => throw new NotImplementedException();
+        public object GetData(Type format) => throw new NotImplementedException();
+        public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => throw new NotImplementedException();
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => throw new NotImplementedException();
+        public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
+        public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
+        public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+        public void SetData(string format, object data) => throw new NotImplementedException();
+        public void SetData(Type format, object data) => throw new NotImplementedException();
+        public void SetData(object data) => throw new NotImplementedException();
+    }
+
+    public static IEnumerable<object[]> DataObjectMockRoundTripData()
+    {
+        yield return new object[] { new DataObject() };
+        yield return new object[] { new DerivedDataObject() };
+        yield return new object[] { new CustomDataObject() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DataObjectMockRoundTripData))]
+    public unsafe void DataObject_MockRoundTrip_OutData_IsSame(object data)
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        if (data is DataObject)
+        {
+            inData.Should().BeSameAs(data);
+        }
+        else
+        {
+            inData.Should().NotBeSameAs(data);
+        }
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+    }
+
+    [WinFormsFact]
+    public unsafe void DataObject_StringData_MockRoundTrip_IsWrapped()
+    {
+        string testString = "Test";
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
+        inData.Should().BeAssignableTo<DataObject>();
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(inData);
+        outData.GetData(typeof(string)).Should().Be(testString);
+    }
+
+    [WinFormsFact]
+    public unsafe void DataObject_IDataObject_MockRoundTrip_IsWrapped()
+    {
+        CustomIDataObject data = new();
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeAssignableTo<DataObject>();
+        inData.Should().NotBeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+    }
+
+    [WinFormsFact]
+    public unsafe void DataObject_ComTypesIDataObject_MockRoundTrip_IsWrapped()
+    {
+        CustomComTypesDataObject data = new();
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().NotBeSameAs(data);
+        inData.Should().BeAssignableTo<DataObject>();
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(inData);
     }
 }

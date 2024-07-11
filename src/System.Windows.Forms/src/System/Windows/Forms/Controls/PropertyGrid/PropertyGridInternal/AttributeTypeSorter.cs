@@ -9,7 +9,7 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal class AttributeTypeSorter : IComparer, IComparer<Attribute>
 {
-    private static readonly ConditionalWeakTable<Attribute, string> s_typeIds = new();
+    private static readonly ConditionalWeakTable<Attribute, string> s_typeIds = [];
 
     public int Compare(object? x, object? y) => Compare(x as Attribute, y as Attribute);
 

@@ -11,6 +11,7 @@ using System.Windows.Forms.TestUtilities;
 using System.Runtime.CompilerServices;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.Tests;
 
@@ -528,11 +529,11 @@ public partial class PropertyGridTests
 
     public static IEnumerable<object[]> BrowsableAttributes_Set_TestData()
     {
-        yield return new object[] { null, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { AttributeCollection.Empty, new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
+        yield return new object[] { null, new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { AttributeCollection.Empty, new AttributeCollection([BrowsableAttribute.Yes]) };
         yield return new object[] { new AttributeCollection(), new AttributeCollection() };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes }) };
-        yield return new object[] { new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }), new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, ReadOnlyAttribute.Yes }) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes]) };
+        yield return new object[] { new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]), new AttributeCollection([BrowsableAttribute.Yes, ReadOnlyAttribute.Yes]) };
     }
 
     [WinFormsTheory]
@@ -584,7 +585,7 @@ public partial class PropertyGridTests
     {
         using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 },
+            SelectedObjects = [1],
             BrowsableAttributes = value
         };
         Assert.Equal(expected, control.BrowsableAttributes);
@@ -1686,7 +1687,7 @@ public partial class PropertyGridTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(PropertyGrid.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.
@@ -2358,6 +2359,28 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
+    public void PropertyGrid_PropertyTabCollection_AddAndRemoveTabType_Success()
+    {
+        using PropertyGrid grid = new();
+        Assert.Equal(1, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab));
+        Assert.Equal(2, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.RemoveTabType(typeof(TestPropertyTab));
+        Assert.Equal(1, grid.PropertyTabs.Count);
+    }
+
+    private class TestPropertyTab : PropertyTab
+    {
+        public override string TabName => "TestTabName";
+
+        public override Bitmap Bitmap => new(10, 10);
+
+        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) => throw new NotImplementedException();
+    }
+
+    [WinFormsFact]
     public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentNullException()
     {
         using PropertyGrid control = new();
@@ -2624,7 +2647,7 @@ public partial class PropertyGridTests
     {
         using PropertyGrid control = new()
         {
-            SelectedObjects = new object[] { 1 }
+            SelectedObjects = [1]
         };
 
         control.SelectedObjects = value;
@@ -2682,7 +2705,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SelectedObjects_SetNullInValue_ThrowsArgumentException()
     {
         using SubPropertyGrid control = new();
-        Assert.Throws<ArgumentException>(() => control.SelectedObjects = new object[] { null });
+        Assert.Throws<ArgumentException>(() => control.SelectedObjects = [null]);
     }
 
     private ISite CreateISiteObject()
@@ -3952,21 +3975,168 @@ public partial class PropertyGridTests
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_PropertyValueChanged_Invoke_CallsPropertyValueChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        PropertyValueChangedEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().NotBeNull();
+            e.ChangedItem.Should().NotBeNull();
+            e.OldValue.Should().Be(0);
+            callCount++;
+        };
+
+        propertyGrid.PropertyValueChanged += handler;
+        var accessor = propertyGrid.TestAccessor();
+        var gridItem = new Mock<GridItem>().Object;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertyValueChanged -= handler;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertySortChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.PropertySortChanged += handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertySort = PropertySort.Categorized;
+        callCount.Should().Be(2);
+
+        propertyGrid.PropertySortChanged -= handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedObjectsChanged_Invoke_CallsSelectedObjectsChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(propertyGrid);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.SelectedObjectsChanged += handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(1);
+
+        propertyGrid.SelectedObjects = [new object(), new object()];
+        callCount.Should().Be(2);
+
+        propertyGrid.SelectedObjectsChanged -= handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
+    {
+        using PropertyGrid propertyGrid = new();
+        var testObject = new TestObject { Property1 = "ChangedValue1"};
+        propertyGrid.SelectedObject = testObject;
+
+        propertyGrid.ResetSelectedProperty();
+
+        var selectedGridItem = propertyGrid.SelectedGridItem;
+        selectedGridItem.Should().NotBeNull();
+        selectedGridItem.Value.Should().Be("Default1");
+    }
+
+    public class TestObject
+    {
+        [DefaultValue("Default1")]
+        public string Property1 { get; set; }
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertyTabChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        PropertyTabChangedEventArgs eventArgs = null;
+
+        propertyGrid.PropertyTabChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+        };
+
+        TestPropertyTab tab1 = new();
+        TestPropertyTab tab2 = new();
+
+        var oldTab = tab2;
+        var newTab = tab1;
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnPropertyTabChanged(new PropertyTabChangedEventArgs(oldTab, newTab));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        eventArgs.OldTab.Should().Be(oldTab);
+        eventArgs.NewTab.Should().Be(newTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedGridItemChanged_TriggeredCorrectly()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        SelectedGridItemChangedEventArgs eventArgs = null;
+        object actualSender = null;
+
+        propertyGrid.SelectedGridItemChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+            actualSender = sender;
+        };
+
+        Mock<GridItem> gridItemMock = new();
+        var gridItem = gridItemMock.Object;
+
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(null, gridItem));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        actualSender.Should().Be(propertyGrid);
+        eventArgs.NewSelection.Should().Be(gridItem);
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
 
     private class SubPropertyGrid : PropertyGrid
     {
-        public new const int ScrollStateAutoScrolling = PropertyGrid.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = PropertyGrid.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = PropertyGrid.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = PropertyGrid.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = PropertyGrid.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 
@@ -4096,7 +4266,7 @@ public partial class PropertyGridTests
 
     private class MySite : ISite
     {
-        private IComponentChangeService _componentChangeService = new ComponentChangeService();
+        private readonly IComponentChangeService _componentChangeService = new ComponentChangeService();
         public IComponent Component => null;
         public IContainer Container => null;
         public bool DesignMode => false;

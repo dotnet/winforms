@@ -20,7 +20,7 @@ internal struct EMREXTCREATEPEN
     public uint cbBits;             // Size of the brush bitmap bits if any
     public EXTLOGPEN32 elp;         // The extended pen with the style array.
 
-    public override string ToString()
+    public override readonly string ToString()
         => $@"[{nameof(EMREXTCREATEPEN)}] Index: {ihPen} Style: {elp.elpPenStyle} Width: {elp.elpWidth}BrushStyle: {elp.elpBrushStyle} Color: {elp.elpColor.ToSystemColorString()}";
 }
 

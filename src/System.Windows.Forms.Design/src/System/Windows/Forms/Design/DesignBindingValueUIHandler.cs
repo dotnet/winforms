@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -15,19 +13,19 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class DesignBindingValueUIHandler : IDisposable
 {
-    private Bitmap dataBitmap;
+    private Bitmap? _dataBitmap;
 
     internal Bitmap DataBitmap
     {
         get
         {
-            if (dataBitmap is null)
+            if (_dataBitmap is null)
             {
-                dataBitmap = new Bitmap(typeof(DesignBindingValueUIHandler), "BoundProperty.bmp");
-                dataBitmap.MakeTransparent();
+                _dataBitmap = new Bitmap(typeof(DesignBindingValueUIHandler), "BoundProperty.bmp");
+                _dataBitmap.MakeTransparent();
             }
 
-            return dataBitmap;
+            return _dataBitmap;
         }
     }
 
@@ -68,6 +66,6 @@ internal partial class DesignBindingValueUIHandler : IDisposable
 
     public void Dispose()
     {
-        dataBitmap?.Dispose();
+        _dataBitmap?.Dispose();
     }
 }

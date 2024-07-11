@@ -35,6 +35,23 @@ public class AutoCompleteStringCollectionTests
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null));
     }
 
+#nullable enable
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_AddRange_NullValues_Nop()
+    {
+        AutoCompleteStringCollection collection = new();
+        collection.AddRange([null!]);
+        Assert.Empty(collection);
+    }
+
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_Add_NullValue_ThrowsArgumentNullException()
+    {
+        AutoCompleteStringCollection collection = new();
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null!));
+    }
+#nullable disable
+
     [WinFormsFact]
     public void AutoCompleteStringCollection_Contains_Invoke_ReturnsExpected()
     {
@@ -181,6 +198,16 @@ public class AutoCompleteStringCollectionTests
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "value"));
     }
 
+#nullable enable
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_IListInsert_NullItem_Nop()
+    {
+        IList collection = new AutoCompleteStringCollection();
+        collection.Insert(0, null);
+        Assert.Empty(collection);
+    }
+#nullable disable
+
     [WinFormsFact]
     public void AutoCompleteStringCollection_Remove_String_Success()
     {
@@ -231,7 +258,7 @@ public class AutoCompleteStringCollectionTests
         AutoCompleteStringCollection collection = new();
         collection.Add("value");
 
-        string[] array = new string[] { "1", "2", "3" };
+        string[] array = ["1", "2", "3"];
         collection.CopyTo(array, 1);
         Assert.Equal(new string[] { "1", "value", "3" }, array);
     }
@@ -240,7 +267,7 @@ public class AutoCompleteStringCollectionTests
     public void AutoCompleteStringCollection_CopyTo_Empty_Nop()
     {
         AutoCompleteStringCollection collection = new();
-        string[] array = new string[] { "1", "2", "3" };
+        string[] array = ["1", "2", "3"];
         collection.CopyTo(array, 0);
         Assert.Equal(new string[] { "1", "2", "3" }, array);
     }

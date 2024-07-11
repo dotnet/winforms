@@ -54,8 +54,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         _host = host;
         _dragHandler = null;
         _dragComponents = null;
-        _selectionItems = new();
-        _selectionHandlers = new();
+        _selectionItems = [];
+        _selectionHandlers = [];
         AllowDrop = true;
         // Not really any reason for this, except that it can be handy when using Spy++
         Text = "SelectionUIOverlay";
@@ -586,7 +586,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         int hitTest = hti.hitTest;
         if (hitTest != SelectionUIItem.CONTAINER_SELECTOR && hti.selectionUIHit is not null)
         {
-            OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
+            OnContainerSelectorActive(new ContainerSelectorActiveEventArgs());
         }
 
         if (_lastMoveScreenCoord == screenCoord)
@@ -712,7 +712,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
 
                 if (me.Button == MouseButtons.Right && oldContainerDrag is not null && !oldDragMoved)
                 {
-                    OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(oldContainerDrag, ContainerSelectorActiveEventArgsType.Contextmenu));
+                    OnContainerSelectorActive(new ContainerSelectorActiveEventArgs());
                 }
             }
         }
@@ -957,7 +957,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         }
 
         // Now within the given selection, add those items that have the same UI handler and that have the proper rule constraints.
-        List<object> list = new();
+        List<object> list = [];
         for (int i = 0; i < objects.Length; i++)
         {
             if (GetHandler(objects[i]) == primaryHandler)
@@ -975,7 +975,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             return false; // nothing matching the given constraints
         }
 
-        objects = list.ToArray();
+        objects = [.. list];
         bool dragging = false;
         // We must setup state before calling QueryBeginDrag.  It is possible that QueryBeginDrag will cancel a drag (if it places a modal dialog, for example), so we must have the drag data all setup before it cancels.  Then, we will check again after QueryBeginDrag to see if a cancel happened.
         _dragComponents = objects;
@@ -1029,7 +1029,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         Rectangle newOffset = Rectangle.Empty;
         if (_dragHandler is null)
         {
-            throw new Exception(SR.DesignerBeginDragNotCalled);
+            throw new InvalidOperationException(SR.DesignerBeginDragNotCalled);
         }
 
         Debug.Assert(_dragComponents is not null, "We should have a set of drag controls here");
@@ -1130,13 +1130,13 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         object[]? selection = null;
         if (components is null)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
         if (selectionRules != SelectionRules.None)
         {
-            List<object> list = new();
+            List<object> list = [];
             foreach (object comp in components)
             {
                 if (_selectionItems.TryGetValue(comp, out SelectionUIItem? item) && item is not ContainerSelectionUIItem)
@@ -1148,37 +1148,32 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 }
             }
 
-            selection = list.ToArray();
+            selection = [.. list];
         }
 
-        return selection ?? (Array.Empty<object>());
+        return selection ?? [];
     }
 
     /// <summary>
     ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
     /// </summary>
-    Size ISelectionUIService.GetAdornmentDimensions(AdornmentType adornmentType)
+    Size ISelectionUIService.GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
-        switch (adornmentType)
-        {
-            case AdornmentType.GrabHandle:
-                return new Size(SelectionUIItem.GRABHANDLE_WIDTH, SelectionUIItem.GRABHANDLE_HEIGHT);
-            case AdornmentType.ContainerSelector:
-            case AdornmentType.Maximum:
-                return new Size(ContainerSelectionUIItem.CONTAINER_WIDTH, ContainerSelectionUIItem.CONTAINER_HEIGHT);
-        }
-
-        return new Size(0, 0);
-    }
+        AdornmentType.GrabHandle => new Size(SelectionUIItem.GRABHANDLE_WIDTH, SelectionUIItem.GRABHANDLE_HEIGHT),
+        AdornmentType.ContainerSelector or AdornmentType.Maximum => new Size(ContainerSelectionUIItem.CONTAINER_WIDTH, ContainerSelectionUIItem.CONTAINER_HEIGHT),
+        _ => new Size(0, 0),
+    };
 
     /// <summary>
-    ///  Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
+    ///  Tests to determine if the given screen coordinate is over an adornment for the specified component.
+    ///  This will only return true if the adornment, and selection UI, is visible.
     /// </summary>
-    bool ISelectionUIService.GetAdornmentHitTest(object component, Point value)
-        => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
+    bool ISelectionUIService.GetAdornmentHitTest(object component, Point value) =>
+        GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
 
     /// <summary>
-    ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
+    ///  Determines if the component is currently "container" selected. Container selection is a visual aid for
+    ///  selecting containers. It doesn't affect the normal "component" selection.
     /// </summary>
     bool ISelectionUIService.GetContainerSelected([NotNullWhen(true)] object? component)
         => (component is not null

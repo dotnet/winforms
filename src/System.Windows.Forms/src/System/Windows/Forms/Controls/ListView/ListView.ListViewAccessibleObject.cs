@@ -205,7 +205,7 @@ public partial class ListView
             => this.TryGetOwnerAs(out ListView? owningListView) ? (int)owningListView.View : base.GetMultiViewProviderCurrentView();
 
         internal override int[] GetMultiViewProviderSupportedViews()
-            => new int[] { (int)View.Details };
+            => [(int)View.Details];
 
         internal override string GetMultiViewProviderViewName(int viewId)
         {
@@ -233,7 +233,7 @@ public partial class ListView
                 return visibleGroups.Count == 0 ? null : visibleGroups[visibleGroups.Count - 1].AccessibilityObject;
             }
 
-            return owningListView.Items.Count == 0 ? null : owningListView.Items[owningListView.Items.Count - 1].AccessibilityObject;
+            return owningListView.Items.Count == 0 ? null : owningListView.Items[^1].AccessibilityObject;
         }
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
@@ -244,7 +244,9 @@ public partial class ListView
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                    => (VARIANT)(int)((this.TryGetOwnerAs(out ListView? owningListView) && owningListView.View == View.Details)
+                        ? UIA_CONTROLTYPE_ID.UIA_TableControlTypeId
+                        : UIA_CONTROLTYPE_ID.UIA_ListControlTypeId),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => (VARIANT)GetItemStatus(),
@@ -272,7 +274,7 @@ public partial class ListView
 
         internal IReadOnlyList<ListViewGroup> GetVisibleGroups()
         {
-            List<ListViewGroup> list = new();
+            List<ListViewGroup> list = [];
 
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {

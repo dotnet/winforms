@@ -17,11 +17,11 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionHelpProvider))]
 public class HelpProvider : Component, IExtenderProvider
 {
-    private readonly Dictionary<Control, string?> _helpStrings = new();
-    private readonly Dictionary<Control, bool> _showHelp = new();
-    private readonly List<Control> _boundControls = new();
-    private readonly Dictionary<Control, string?> _keywords = new();
-    private readonly Dictionary<Control, HelpNavigator> _navigators = new();
+    private readonly Dictionary<Control, string?> _helpStrings = [];
+    private readonly Dictionary<Control, bool> _showHelp = [];
+    private readonly List<Control> _boundControls = [];
+    private readonly Dictionary<Control, string?> _keywords = [];
+    private readonly Dictionary<Control, HelpNavigator> _navigators = [];
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="HelpProvider"/> class.
@@ -98,7 +98,7 @@ public class HelpProvider : Component, IExtenderProvider
     public virtual bool GetShowHelp(Control ctl)
     {
         ArgumentNullException.ThrowIfNull(ctl);
-        return _showHelp.TryGetValue(ctl, out bool value) ? value : false;
+        return _showHelp.TryGetValue(ctl, out bool value) && value;
     }
 
     /// <summary>
@@ -122,7 +122,6 @@ public class HelpProvider : Component, IExtenderProvider
 
         if (Control.MouseButtons != MouseButtons.None && !string.IsNullOrEmpty(helpString))
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: Mouse down w/ helpstring");
             Help.ShowPopup(ctl, helpString, hevent.MousePos);
             hevent.Handled = true;
             return;
@@ -131,7 +130,6 @@ public class HelpProvider : Component, IExtenderProvider
         // If we have a help file, and help keyword we try F1 help next
         if (HelpNamespace is not null)
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: F1 help");
             if (!string.IsNullOrEmpty(keyword))
             {
                 Help.ShowHelp(ctl, HelpNamespace, navigator, keyword);
@@ -148,7 +146,6 @@ public class HelpProvider : Component, IExtenderProvider
         // So at this point we don't have a help keyword, so try to display the whats this help
         if (!string.IsNullOrEmpty(helpString))
         {
-            Help.s_windowsFormsHelpTrace.TraceVerbose("HelpProvider:: back to helpstring");
             Help.ShowPopup(ctl, helpString, hevent.MousePos);
             hevent.Handled = true;
         }

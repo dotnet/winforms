@@ -27,7 +27,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         PropertyGridView ownerGridView,
         object target,
         IServiceProvider baseProvider,
-        IDesignerHost host,
+        IDesignerHost? host,
         PropertyTab ownerTab,
         PropertySort sortType)
         : base(ownerGridView.OwnerGrid, parent: null)
@@ -172,15 +172,19 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         }
     }
 
+    [AllowNull]
     public override object PropertyValue
     {
         get => Target;
         set
         {
             object old = Target;
-            Target = value;
-            _valueClassName = TypeDescriptor.GetClassName(Target);
-            OwnerGrid.ReplaceSelectedObject(old, value);
+            if (value is not null)
+            {
+                Target = value;
+                _valueClassName = TypeDescriptor.GetClassName(Target);
+                OwnerGrid.ReplaceSelectedObject(old, value);
+            }
         }
     }
 
@@ -243,13 +247,13 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
         // First, walk through all the entries and group them by their category.
 
-        Dictionary<string, List<GridEntry>> categories = new();
+        Dictionary<string, List<GridEntry>> categories = [];
         foreach (var child in Children)
         {
             string category = child.PropertyCategory;
             if (!categories.TryGetValue(category, out var gridEntries))
             {
-                gridEntries = new List<GridEntry>();
+                gridEntries = [];
                 categories[category] = gridEntries;
             }
 
@@ -258,7 +262,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
         // Now walk through and create a CategoryGridEntry that holds all the properties for each category.
 
-        List<GridEntry> categoryGridEntries = new();
+        List<GridEntry> categoryGridEntries = [];
         foreach (var entry in categories)
         {
             var gridEntries = entry.Value;

@@ -21,7 +21,7 @@ public partial class ControlDesigner
             ICollection originalCollection,
             ICollection valuesToSerialize)
         {
-            List<IComponent> subset = new();
+            List<IComponent> subset = [];
             if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
             {
                 foreach (object val in valuesToSerialize)

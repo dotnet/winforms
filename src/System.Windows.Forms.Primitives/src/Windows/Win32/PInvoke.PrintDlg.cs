@@ -9,9 +9,9 @@ namespace Windows.Win32;
 internal static partial class PInvoke
 {
     [DllImport("COMDLG32.dll", ExactSpelling = true, EntryPoint = "PrintDlgW")]
-    internal static extern unsafe HRESULT PrintDlg(PRINTDLGW_64* pPD);
+    internal static extern unsafe BOOL PrintDlg(PRINTDLGW_64* pPD);
 
-    internal static unsafe HRESULT PrintDlg(PRINTDLGW_32* pPD)
+    internal static unsafe BOOL PrintDlg(PRINTDLGW_32* pPD)
     {
         Debug.Assert(RuntimeInformation.ProcessArchitecture == Architecture.X86);
         return PrintDlg((PRINTDLGW_64*)pPD);

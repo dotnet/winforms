@@ -84,7 +84,7 @@ public class LinkAreaConverterTests
     {
         var converter = new LinkArea.LinkAreaConverter();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new LinkArea(1, 2), typeof(InstanceDescriptor)));
-        Assert.Equal(typeof(LinkArea).GetConstructor(new Type[] { typeof(int), typeof(int) }), descriptor.MemberInfo);
+        Assert.Equal(typeof(LinkArea).GetConstructor([typeof(int), typeof(int)]), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2 }, descriptor.Arguments);
     }
 

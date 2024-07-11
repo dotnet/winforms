@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
-using System.Windows.Forms.BinaryFormat;
 
 namespace System.Windows.Forms;
 
@@ -18,11 +18,11 @@ public partial class Control
         /// </summary>
         private class PropertyBagStream : IPropertyBag.Interface, IManagedWrapper<IPropertyBag>
         {
-            private Hashtable _bag = new();
+            private Hashtable _bag = [];
 
             internal void Read(IStream* istream)
             {
-                Stream stream = new DataStreamFromComStream(istream);
+                using DataStreamFromComStream stream = new(istream);
                 bool success = false;
 
                 try
@@ -40,7 +40,7 @@ public partial class Control
                 if (!success)
                 {
                     // Error reading. Just init an empty hashtable.
-                    _bag = new();
+                    _bag = [];
                 }
             }
 

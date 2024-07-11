@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -10,8 +8,8 @@ namespace System.Windows.Forms.Design;
 
 internal class GroupedContextMenuStrip : ContextMenuStrip
 {
-    private StringCollection _groupOrdering;
-    private ContextMenuStripGroupCollection _groups;
+    private StringCollection? _groupOrdering;
+    private ContextMenuStripGroupCollection? _groups;
     private bool _populated;
 
     public bool Populated
@@ -37,7 +35,7 @@ internal class GroupedContextMenuStrip : ContextMenuStrip
     {
         get
         {
-            _groupOrdering ??= new StringCollection();
+            _groupOrdering ??= [];
 
             return _groupOrdering;
         }
@@ -47,9 +45,9 @@ internal class GroupedContextMenuStrip : ContextMenuStrip
     public void Populate()
     {
         Items.Clear();
-        foreach (string groupName in GroupOrdering)
+        foreach (string? groupName in GroupOrdering)
         {
-            if (_groups.ContainsKey(groupName))
+            if (groupName is not null && _groups is not null && _groups.ContainsKey(groupName))
             {
                 List<ToolStripItem> items = _groups[groupName].Items;
 

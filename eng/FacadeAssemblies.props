@@ -16,8 +16,8 @@
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
 
-    <!-- Produce a full PDB for facade assemblies -->
-    <DebugType>full</DebugType>
+    <!-- Produce a portable PDB for facade assemblies -->
+    <DebugType>portable</DebugType>
 
     <MicrosoftTargetingPackNETFrameworkv472Package></MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>

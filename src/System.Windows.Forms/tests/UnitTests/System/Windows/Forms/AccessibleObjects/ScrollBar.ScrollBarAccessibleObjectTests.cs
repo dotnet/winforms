@@ -150,7 +150,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         using SubScrollBar scrollBar = new() { Enabled = true };
         ScrollBar.ScrollBarAccessibleObject accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(scrollBar.IsHandleCreated);
     }
 

@@ -12,12 +12,12 @@ public unsafe class HtmlToClrEventProxyTest
     [WinFormsFact]
     public void HtmlToClrEventProxy_EnumerateDispId_NamesExpected()
     {
-        HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
+        HtmlToClrEventProxy proxy = new("testEvent", (object sender, EventArgs e) => { });
         using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         // Requests that the object enumerates all of the elements on IDispatchEx
         uint fdexEnumAll = 2;
-        dispatchEx.Value->GetNextDispID(fdexEnumAll, PInvoke.DISPID_UNKNOWN, out int id);
+        dispatchEx.Value->GetNextDispID(fdexEnumAll, PInvokeCore.DISPID_UNKNOWN, out int id);
         Assert.Equal(0, id);
         using BSTR onHtmlEvent = default;
         dispatchEx.Value->GetMemberName(id, &onHtmlEvent);
@@ -39,7 +39,7 @@ public unsafe class HtmlToClrEventProxyTest
     [WinFormsFact]
     public void HtmlToClrEventProxy_PropFlags_Expected()
     {
-        HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
+        HtmlToClrEventProxy proxy = new("testEvent", (object sender, EventArgs e) => { });
         using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         FDEX_PROP_FLAGS methodFlags = FDEX_PROP_FLAGS.fdexPropCannotGet
@@ -68,12 +68,12 @@ public unsafe class HtmlToClrEventProxyTest
     {
         string eventName = "testEvent";
         int count = 0;
-        HtmlToClrEventProxy proxy = new(null, eventName, (object sender, EventArgs e) => count++);
+        HtmlToClrEventProxy proxy = new(eventName, (object sender, EventArgs e) => count++);
         using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
 
         VARIANT result = default;
         DISPPARAMS dispParams = default;
-        uint locale = PInvoke.GetThreadLocale();
+        uint locale = PInvokeCore.GetThreadLocale();
         HRESULT hr = dispatch.Value->Invoke(0, IID.NULL(), locale, DISPATCH_FLAGS.DISPATCH_METHOD, &dispParams, &result, default, default);
         Assert.True(hr.Succeeded);
         Assert.Equal(1, count);

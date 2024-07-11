@@ -8,37 +8,34 @@ internal unsafe struct ToolInfoWrapper<T>
 {
     public TTTOOLINFOW Info;
     public string? Text { get; set; }
-    [MaybeNull]
     private readonly T _handle;
 
+    // The size of the TTTOOLINFOW struct in version 4.7. We use this version to maintain compatibility.
+    private static uint TTTOOLINFO_V2_Size => IntPtr.Size == 4 ? 44u : 64u;
+
     public ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
+        : this(handle, handle.Handle, flags | TOOLTIP_FLAGS.TTF_IDISHWND, text)
     {
-        Info = new TTTOOLINFOW
-        {
-            hwnd = handle.Handle,
-            uId = (nuint)(IntPtr)handle.Handle,
-            uFlags = flags | TOOLTIP_FLAGS.TTF_IDISHWND
-        };
-        Text = text;
-        _handle = handle;
     }
 
-    public ToolInfoWrapper(T handle, IntPtr id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
+    public ToolInfoWrapper(T handle, nint id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
     {
         Info = new TTTOOLINFOW
         {
+            cbSize = TTTOOLINFO_V2_Size,
             hwnd = handle.Handle,
             uId = (nuint)id,
             uFlags = flags,
             rect = rect
         };
+
         Text = text;
         _handle = handle;
     }
 
     public LRESULT SendMessage(IHandle<HWND> sender, MessageId message, bool state = false)
     {
-        Info.cbSize = (uint)sizeof(TTTOOLINFOW);
+        Info.cbSize = TTTOOLINFO_V2_Size;
         fixed (char* c = Text)
         fixed (void* i = &Info)
         {

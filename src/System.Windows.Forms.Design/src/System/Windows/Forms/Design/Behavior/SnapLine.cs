@@ -76,19 +76,17 @@ public sealed class SnapLine
     /// <summary>
     ///  Returns true if the SnapLine is of a horizontal type.
     /// </summary>
-    public bool IsHorizontal =>
-        SnapLineType == SnapLineType.Top ||
-        SnapLineType == SnapLineType.Bottom ||
-        SnapLineType == SnapLineType.Horizontal ||
-        SnapLineType == SnapLineType.Baseline;
+    public bool IsHorizontal => SnapLineType is SnapLineType.Top
+        or SnapLineType.Bottom
+        or SnapLineType.Horizontal
+        or SnapLineType.Baseline;
 
     /// <summary>
     ///  Returns true if the SnapLine is of a vertical type.
     /// </summary>
-    public bool IsVertical =>
-        SnapLineType == SnapLineType.Left ||
-        SnapLineType == SnapLineType.Right ||
-        SnapLineType == SnapLineType.Vertical;
+    public bool IsVertical => SnapLineType is SnapLineType.Left
+        or SnapLineType.Right
+        or SnapLineType.Vertical;
 
     /// <summary>
     ///  Read-only property that returns the distance from the origin to where this SnapLine is defined.

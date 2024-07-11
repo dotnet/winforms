@@ -27,8 +27,8 @@ public class ColumnStyleTests
     [InlineData(SizeType.AutoSize, 0)]
     [InlineData(SizeType.Absolute, 1)]
     [InlineData(SizeType.Percent, 2)]
-    [InlineData((SizeType)(SizeType.AutoSize - 1), 3)]
-    [InlineData((SizeType)(SizeType.Percent + 1), 4)]
+    [InlineData((SizeType.AutoSize - 1), 3)]
+    [InlineData((SizeType.Percent + 1), 4)]
     public void ColumnStyle_Ctor_SizeType_Float(SizeType sizeType, float width)
     {
         ColumnStyle style = new(sizeType, width);

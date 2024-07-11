@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="tr" original="../TreeNodeCollectionEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>TreeNode Editor</source>
+        <target state="translated">TreeNode Düzenleyicisi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddChild.Text">
+        <source>Add &amp;Child</source>
+        <target state="translated">&amp;Alt Öğe Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddRoot.Text">
+        <source>Add &amp;Root</source>
+        <target state="translated">&amp;Kök Ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="translated">İptal</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnDelete.AccessibleName">
+        <source>Delete Node</source>
+        <target state="translated">Düğümü Sil</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="label1.Text">
+        <source>Select a &amp;node to edit:</source>
+        <target state="translated">Düzenle&amp;necek düğümü seçin:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="label2.Text">
+        <source>&amp;Properties:</source>
+        <target state="translated">Ö&amp;zellikler:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="moveDownButton.AccessibleName">
+        <source>Move Down</source>
+        <target state="translated">Aşağı Taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="moveUpButton.AccessibleName">
+        <source>Move Up</source>
+        <target state="translated">Yukarı Taşı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">Tamam</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

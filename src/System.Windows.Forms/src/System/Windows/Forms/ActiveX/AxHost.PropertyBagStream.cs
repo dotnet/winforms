@@ -3,10 +3,10 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 
@@ -16,14 +16,14 @@ public abstract unsafe partial class AxHost
     {
         private readonly Hashtable _bag;
 
-        internal PropertyBagStream() => _bag = new();
+        internal PropertyBagStream() => _bag = [];
 
         internal PropertyBagStream(Stream stream)
         {
             long position = stream.Position;
             try
             {
-                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                BinaryFormattedObject format = new(stream);
                 if (format.TryGetPrimitiveHashtable(out _bag!))
                 {
                     return;
@@ -49,7 +49,7 @@ public abstract unsafe partial class AxHost
 #pragma warning restore SYSLIB0011
 
                 // Error reading. Just init an empty hashtable.
-                _bag = new();
+                _bag = [];
             }
         }
 

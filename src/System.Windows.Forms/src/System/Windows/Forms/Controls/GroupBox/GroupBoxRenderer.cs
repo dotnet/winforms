@@ -314,7 +314,7 @@ public static class GroupBoxRenderer
             boxTop += font.Height / 2;
         }
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         ReadOnlySpan<int> darkLines =
         [
@@ -325,7 +325,7 @@ public static class GroupBoxRenderer
             bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2                   // Right
         ];
 
-        using PInvoke.CreatePenScope hpenDark = new(SystemColors.ControlDark);
+        using CreatePenScope hpenDark = new(SystemColors.ControlDark);
         hdc.DrawLines(hpenDark, darkLines);
 
         ReadOnlySpan<int> lightLines =
@@ -337,7 +337,7 @@ public static class GroupBoxRenderer
             bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1                       // Right
         ];
 
-        using PInvoke.CreatePenScope hpenLight = new(SystemColors.ControlLight);
+        using CreatePenScope hpenLight = new(SystemColors.ControlLight);
         hdc.DrawLines(hpenLight, lightLines);
     }
 

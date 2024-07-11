@@ -2075,10 +2075,10 @@ public class GroupBoxTests
             {
                 Msg = msg,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)1, m.Result);
+            Assert.Equal(1, m.Result);
             Assert.True(control.IsHandleCreated);
         }
         finally
@@ -2113,10 +2113,10 @@ public class GroupBoxTests
             {
                 Msg = msg,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)1, m.Result);
+            Assert.Equal(1, m.Result);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2140,10 +2140,10 @@ public class GroupBoxTests
         Message m = new()
         {
             Msg = msg,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -2176,10 +2176,10 @@ public class GroupBoxTests
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)1, m.Result);
+            Assert.Equal(1, m.Result);
             Assert.Equal(0, paintCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2221,10 +2221,10 @@ public class GroupBoxTests
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 WParam = hdc,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
-            Assert.Equal((IntPtr)250, m.Result);
+            Assert.Equal(250, m.Result);
             Assert.Equal(1, paintCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2263,7 +2263,7 @@ public class GroupBoxTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);

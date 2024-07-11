@@ -47,7 +47,7 @@ internal sealed class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHan
         }
 
         using BSTR categoryName = default;
-        return categorizeProperties.Value->GetCategoryName(categoryId, (int)PInvoke.GetThreadLocale(), &categoryName).Succeeded
+        return categorizeProperties.Value->GetCategoryName(categoryId, (int)PInvokeCore.GetThreadLocale(), &categoryName).Succeeded
             ? categoryName.ToString()
             : null;
     }

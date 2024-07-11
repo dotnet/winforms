@@ -35,7 +35,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -44,7 +44,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -60,7 +60,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -72,7 +72,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -84,7 +84,7 @@ public partial class ControlPaintTests
 
     public static IEnumerable<object[]> CreateHBitmapColorMask_TestData()
     {
-        foreach (IntPtr monochromeMask in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+        foreach (IntPtr monochromeMask in new IntPtr[] { IntPtr.Zero, 1 })
         {
             yield return new object[] { new Bitmap(10, 10, PixelFormat.Format1bppIndexed), monochromeMask };
             yield return new object[] { new Bitmap(10, 10, PixelFormat.Format32bppRgb), monochromeMask };
@@ -106,7 +106,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -115,7 +115,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -138,7 +138,7 @@ public partial class ControlPaintTests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -150,12 +150,12 @@ public partial class ControlPaintTests
             }
             finally
             {
-                PInvoke.DeleteObject(hBitmap);
+                PInvokeCore.DeleteObject(hBitmap);
             }
         }
         finally
         {
-            PInvoke.DeleteObject(monochromeMask);
+            PInvokeCore.DeleteObject(monochromeMask);
         }
     }
 
@@ -171,7 +171,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -183,7 +183,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -214,7 +214,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -223,7 +223,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -239,7 +239,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -251,7 +251,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -1964,10 +1964,10 @@ public partial class ControlPaintTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+        ControlPaint.DrawStringDisabled(graphics, s, font, color, layoutRectangle, format);
 
         // Call again to test caching.
-        ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+        ControlPaint.DrawStringDisabled(graphics, s, font, color, layoutRectangle, format);
     }
 
     [WinFormsTheory]

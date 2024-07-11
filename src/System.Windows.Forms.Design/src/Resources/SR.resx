@@ -804,6 +804,9 @@
   <data name="LocalizationProviderMissingService" xml:space="preserve">
     <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
   </data>
+  <data name="BaseNodeName" xml:space="preserve">
+    <value>Node</value>
+  </data>
   <data name="BasicDesignerLoaderDifferentHost" xml:space="preserve">
     <value>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</value>
   </data>
@@ -1620,5 +1623,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="DesignBindingPickerHelpNodeProjectGroup" xml:space="preserve">
     <value>Contains project data sources belonging to this namespace.</value>
   </data>
-
+  <data name="CollectionEditorCreateInstanceError" xml:space="preserve">
+    <value>Neither {0} nor {1} can create an instance of {2}.</value>
+  </data>
 </root>

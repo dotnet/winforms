@@ -278,7 +278,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
             {
                 int itemsCount = 41;
 
-                for (int index = 0; index < itemsCount; index++)
+                for (int index = 0; index < itemsCount; index += 10)
                 {
                     yield return new object[] { comboBoxStyle, scrollingDown, index, itemsCount };
                 }

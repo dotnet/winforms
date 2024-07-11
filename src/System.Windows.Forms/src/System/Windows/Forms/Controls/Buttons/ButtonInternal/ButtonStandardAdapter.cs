@@ -112,11 +112,11 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         if (Application.RenderWithVisualStyles)
         {
             // Don't have the text-pressed-down effect when we use themed painting to be consistent with Win32.
-            layout = PaintLayout(e, up: true).Layout();
+            layout = PaintLayout(up: true).Layout();
         }
         else
         {
-            layout = PaintLayout(e, up).Layout();
+            layout = PaintLayout(up).Layout();
         }
 
         _ = Control as Button;
@@ -206,14 +206,14 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
-        LayoutOptions layout = PaintLayout(e, up: false);
+        LayoutOptions layout = PaintLayout(up: false);
         Debug.Assert(
-            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(e, up: true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(up: true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
             "The state of up should not effect PreferredSize");
         return layout;
     }
 
-    private LayoutOptions PaintLayout(PaintEventArgs e, bool up)
+    private LayoutOptions PaintLayout(bool up)
     {
         LayoutOptions layout = CommonLayout();
         layout.TextOffset = !up;

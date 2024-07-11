@@ -282,7 +282,7 @@ dotnet_diagnostic.CA1813.severity = none
 dotnet_diagnostic.CA1814.severity = none
 
 # CA1815: Override equals and operator equals on value types
-dotnet_diagnostic.CA1815.severity = none
+dotnet_diagnostic.CA1815.severity = warning
 
 # CA1816: Dispose methods should call SuppressFinalize
 dotnet_diagnostic.CA1816.severity = none

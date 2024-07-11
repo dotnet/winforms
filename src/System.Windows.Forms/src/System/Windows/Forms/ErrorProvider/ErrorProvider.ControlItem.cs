@@ -13,15 +13,14 @@ public partial class ErrorProvider
     /// </summary>
     internal partial class ControlItem
     {
-        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
-
         private string _error;
         private readonly Control _control;
         private ErrorWindow? _window;
         private readonly ErrorProvider _provider;
         private int _iconPadding;
         private ErrorIconAlignment _iconAlignment;
-        private const int _startingBlinkPhase = 10; // We want to blink 5 times
+        private const int StartingBlinkPhase = 10; // We want to blink 5 times
+        private AccessibleObject? _accessibleObject;
 
         /// <summary>
         ///  Construct the item with its associated control, provider, and a unique ID. The ID is
@@ -34,53 +33,35 @@ public partial class ErrorProvider
             Id = id;
             _control = control;
             _provider = provider;
-            _control.HandleCreated += new EventHandler(OnCreateHandle);
-            _control.HandleDestroyed += new EventHandler(OnDestroyHandle);
-            _control.LocationChanged += new EventHandler(OnBoundsChanged);
-            _control.SizeChanged += new EventHandler(OnBoundsChanged);
-            _control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
-            _control.ParentChanged += new EventHandler(OnParentVisibleChanged);
-            Properties = new PropertyStore();
+            _control.HandleCreated += OnCreateHandle;
+            _control.HandleDestroyed += OnDestroyHandle;
+            _control.LocationChanged += OnBoundsChanged;
+            _control.SizeChanged += OnBoundsChanged;
+            _control.VisibleChanged += OnParentVisibleChanged;
+            _control.ParentChanged += OnParentVisibleChanged;
         }
 
         /// <summary>
         ///  The Accessibility Object for this ErrorProvider
         /// </summary>
-        internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-
-                if (accessibleObject is null)
-                {
-                    accessibleObject = CreateAccessibilityInstance();
-                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
-                }
-
-                return accessibleObject;
-            }
-        }
+        internal AccessibleObject AccessibilityObject => _accessibleObject ??= CreateAccessibilityInstance();
 
         /// <summary>
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ControlItemAccessibleObject(this, _window, _control, _provider);
-        }
+        private ControlItemAccessibleObject CreateAccessibilityInstance() => new(this, _window, _control, _provider);
 
         public void Dispose()
         {
             if (_control is not null)
             {
-                _control.HandleCreated -= new EventHandler(OnCreateHandle);
-                _control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
-                _control.LocationChanged -= new EventHandler(OnBoundsChanged);
-                _control.SizeChanged -= new EventHandler(OnBoundsChanged);
-                _control.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
-                _control.ParentChanged -= new EventHandler(OnParentVisibleChanged);
+                _control.HandleCreated -= OnCreateHandle;
+                _control.HandleDestroyed -= OnDestroyHandle;
+                _control.LocationChanged -= OnBoundsChanged;
+                _control.SizeChanged -= OnBoundsChanged;
+                _control.VisibleChanged -= OnParentVisibleChanged;
+                _control.ParentChanged -= OnParentVisibleChanged;
             }
 
             _error = string.Empty;
@@ -274,7 +255,7 @@ public partial class ErrorProvider
         {
             if (_window is not null)
             {
-                BlinkPhase = _startingBlinkPhase;
+                BlinkPhase = StartingBlinkPhase;
                 _window.StartBlinking();
             }
         }
@@ -323,13 +304,6 @@ public partial class ErrorProvider
             RemoveFromWindow();
             AddToWindow();
         }
-
-        /// <summary>
-        ///  Retrieves our internal property storage object. If you have a property
-        ///  whose value is not always set, you should store it in here to save
-        ///  space.
-        /// </summary>
-        private PropertyStore Properties { get; }
 
         /// <summary>
         ///  This is called when the control's handle is created.

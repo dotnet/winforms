@@ -339,7 +339,7 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(ENCODING_INDEX) Then
                     If Attributes.ContainsKey(KEY_ENCODING) Then
-                        Me.Encoding = System.Text.Encoding.GetEncoding(Attributes(KEY_ENCODING))
+                        Me.Encoding = Encoding.GetEncoding(Attributes(KEY_ENCODING))
                     End If
                 End If
                 Return _encoding
@@ -380,7 +380,7 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' If we're using custom location and the value is changing we need to
                 ' close the stream
-                If Me.Location = LogFileLocation.Custom And Not String.Equals(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) Then
+                If Location = LogFileLocation.Custom And Not String.Equals(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) Then
                     CloseCurrentStream()
                 End If
 
@@ -476,33 +476,33 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Add optional fields
             ' Callstack
-            If (Me.TraceOutputOptions And TraceOptions.Callstack) = TraceOptions.Callstack Then
+            If (TraceOutputOptions And TraceOptions.Callstack) = TraceOptions.Callstack Then
                 outBuilder.Append(Delimiter & eventCache.Callstack)
             End If
 
             ' LogicalOperationStack
-            If (Me.TraceOutputOptions And TraceOptions.LogicalOperationStack) = TraceOptions.LogicalOperationStack Then
+            If (TraceOutputOptions And TraceOptions.LogicalOperationStack) = TraceOptions.LogicalOperationStack Then
                 outBuilder.Append(Delimiter & StackToString(eventCache.LogicalOperationStack))
             End If
 
             ' DateTime
-            If (Me.TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
+            If (TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
                 ' Add DateTime. Time will be in GMT.
                 outBuilder.Append(Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
             End If
 
             ' ProcessId
-            If (Me.TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
+            If (TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
                 outBuilder.Append(Delimiter & eventCache.ProcessId.ToString(CultureInfo.InvariantCulture))
             End If
 
             ' ThreadId
-            If (Me.TraceOutputOptions And TraceOptions.ThreadId) = TraceOptions.ThreadId Then
+            If (TraceOutputOptions And TraceOptions.ThreadId) = TraceOptions.ThreadId Then
                 outBuilder.Append(Delimiter & eventCache.ThreadId)
             End If
 
             ' Timestamp
-            If (Me.TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
+            If (TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
                 outBuilder.Append(Delimiter & eventCache.Timestamp.ToString(CultureInfo.InvariantCulture))
             End If
 
@@ -732,10 +732,7 @@ Namespace Microsoft.VisualBasic.Logging
                         If Append Then
                             ' Try to get the file's actual encoding. If we get it, that trumps
                             ' the user specified value
-                            fileEncoding = GetFileEncoding(fileName)
-                            If fileEncoding Is Nothing Then
-                                fileEncoding = Encoding
-                            End If
+                            fileEncoding = If(GetFileEncoding(fileName), Encoding)
                         End If
 
                         Dim baseStreamWriter As New StreamWriter(fileName, Append, fileEncoding)
@@ -812,11 +809,11 @@ Namespace Microsoft.VisualBasic.Logging
         ''' date means we need to open a new file.
         ''' </remarks>
         Private Sub HandleDateChange()
-            If Me.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily Then
+            If LogFileCreationSchedule = LogFileCreationScheduleOption.Daily Then
                 If DayChanged() Then
                     CloseCurrentStream()
                 End If
-            ElseIf Me.LogFileCreationSchedule = LogFileCreationScheduleOption.Weekly Then
+            ElseIf LogFileCreationSchedule = LogFileCreationScheduleOption.Weekly Then
                 If WeekChanged() Then
                     CloseCurrentStream()
                 End If
@@ -833,14 +830,14 @@ Namespace Microsoft.VisualBasic.Logging
         Private Function ResourcesAvailable(newEntrySize As Long) As Boolean
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
-                If Me.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
+                If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
                     Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
             If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
-                If Me.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
+                If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
                     Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
                 Return False
@@ -908,7 +905,7 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If String.IsNullOrEmpty(_hostName) Then
                     ' Use the machine name
-                    _hostName = System.Environment.MachineName
+                    _hostName = Environment.MachineName
                 End If
                 Return _hostName
             End Get
@@ -931,7 +928,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileLocation))
             End If
         End Sub
 
@@ -941,7 +938,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(DiskSpaceExhaustedOption))
             End If
         End Sub
 
@@ -951,7 +948,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
-                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileCreationScheduleOption))
             End If
         End Sub
 
@@ -1013,7 +1010,7 @@ Namespace Microsoft.VisualBasic.Logging
         Private _delimiter As String = vbTab
 
         ' The encoding of the log file
-        Private _encoding As Encoding = System.Text.Encoding.UTF8
+        Private _encoding As Encoding = Encoding.UTF8
 
         ' The full name and path of the log file
         Private _fullFileName As String

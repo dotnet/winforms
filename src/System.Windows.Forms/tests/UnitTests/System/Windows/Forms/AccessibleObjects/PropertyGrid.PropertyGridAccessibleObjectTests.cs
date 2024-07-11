@@ -190,7 +190,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     {
         private class MenuCommandService : IMenuCommandService
         {
-            public DesignerVerbCollection Verbs { get; } = new(new[] { new DesignerVerb("", null) });
+            public DesignerVerbCollection Verbs { get; } = new([new DesignerVerb("", null)]);
 
             public void AddCommand(MenuCommand command) => throw new NotImplementedException();
 

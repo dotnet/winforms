@@ -188,7 +188,7 @@ public abstract partial class EventBindingService : IEventBindingService
             props.Add(prop);
         }
 
-        return new PropertyDescriptorCollection(props.ToArray());
+        return new PropertyDescriptorCollection([.. props]);
     }
 
     /// <summary>

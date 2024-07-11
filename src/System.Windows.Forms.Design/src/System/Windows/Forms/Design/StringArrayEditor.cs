@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 /// <summary>
@@ -15,16 +13,16 @@ internal class StringArrayEditor : StringCollectionEditor
     {
     }
 
-    protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
+    protected override Type CreateCollectionItemType() => CollectionType.GetElementType() ?? typeof(string[]);
 
     /// <summary>
     ///  We implement the getting and setting of items on this collection.
     /// </summary>
-    protected override object[] GetItems(object editValue)
+    protected override object[] GetItems(object? editValue)
     {
         if (editValue is not Array valueArray)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         object[] items = new object[valueArray.GetLength(0)];
@@ -37,9 +35,9 @@ internal class StringArrayEditor : StringCollectionEditor
     ///  It should return an instance to replace <paramref name="editValue"/> with, or
     ///  <paramref name="editValue"/> if there is no need to replace the instance.
     /// </summary>
-    protected override object SetItems(object editValue, object[] value)
+    protected override object? SetItems(object? editValue, object[]? value)
     {
-        if (editValue is Array || editValue is null)
+        if (editValue is Array or null && value is not null)
         {
             Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
             Array.Copy(value, newArray, value.Length);

@@ -43,7 +43,7 @@ internal partial class TableLayout
 
         public int RowSpan { get; set; } = 1;
 
-        #if DEBUG
+#if DEBUG
         public LayoutInfo Clone() => new(Element)
         {
             RowStart = RowStart,
@@ -54,17 +54,14 @@ internal partial class TableLayout
             ColumnPosition = ColumnPosition
         };
 
-        public override bool Equals(object? obj)
-        {
-            return obj is not LayoutInfo other
-                ? false
-                : other.RowStart == RowStart
+        public override bool Equals(object? obj) =>
+            obj is LayoutInfo other
+                && other.RowStart == RowStart
                 && other.ColumnStart == ColumnStart
                 && other.RowSpan == RowSpan
                 && other.ColumnSpan == ColumnSpan
                 && other.RowPosition == RowPosition
                 && other.ColumnPosition == ColumnPosition;
-        }
 
         public override int GetHashCode()
         {
@@ -77,6 +74,6 @@ internal partial class TableLayout
             hash.Add(ColumnPosition);
             return hash.ToHashCode();
         }
-        #endif
+#endif
     }
 }

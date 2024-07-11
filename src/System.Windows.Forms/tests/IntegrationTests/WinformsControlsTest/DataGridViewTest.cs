@@ -3,17 +3,18 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class DataGridViewTest : Form
 {
-    private static readonly Font[] s_fonts = new[]
-    {
+    private static readonly Font[] s_fonts =
+    [
         new Font("Tahoma", 12F, FontStyle.Regular),
         new Font("Consolas", 14F, FontStyle.Italic),
         new Font("Arial", 9F, FontStyle.Bold),
         new Font("Microsoft Sans Serif", 11F, FontStyle.Regular)
-    };
+    ];
     private int _cellFontIndex;
     private int _columnHeaderFontIndex;
     private int _rowHeaderFontIndex;

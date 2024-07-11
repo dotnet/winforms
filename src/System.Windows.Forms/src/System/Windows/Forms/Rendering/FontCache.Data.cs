@@ -37,7 +37,7 @@ internal sealed partial class FontCache
                 {
                     using var screenDC = GdiCache.GetScreenHdc();
                     HDC hdc = screenDC.HDC;
-                    using PInvoke.SelectObjectScope fontSelection = new(hdc, HFONT);
+                    using SelectObjectScope fontSelection = new(hdc, HFONT);
                     Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
 
                     TEXTMETRICW tm = default;
@@ -53,7 +53,7 @@ internal sealed partial class FontCache
         {
             if (!HFONT.IsNull)
             {
-                PInvoke.DeleteObject(HFONT);
+                PInvokeCore.DeleteObject(HFONT);
             }
 
             HFONT = default;
@@ -108,14 +108,14 @@ internal sealed partial class FontCache
                 logFont.FaceName = DefaultFaceName;
             }
 
-            HFONT hfont = PInvoke.CreateFontIndirect(&logFont);
+            HFONT hfont = PInvokeCore.CreateFontIndirect(&logFont);
 
             if (hfont.IsNull)
             {
                 // Get the default font if we couldn't get what we requested.
                 logFont.FaceName = DefaultFaceName;
                 logFont.lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_ONLY_PRECIS;
-                hfont = PInvoke.CreateFontIndirect(&logFont);
+                hfont = PInvokeCore.CreateFontIndirect(&logFont);
 
                 Debug.Assert(!hfont.IsNull);
             }

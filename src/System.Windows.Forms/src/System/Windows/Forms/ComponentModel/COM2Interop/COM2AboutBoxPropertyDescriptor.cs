@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2PropertyDescriptor which is not trim-compatible.")]
 internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
 {
     private TypeConverter? _converter;
@@ -14,15 +15,14 @@ internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescr
 
     public Com2AboutBoxPropertyDescriptor()
         : base(
-              PInvoke.DISPID_ABOUTBOX,
+              PInvokeCore.DISPID_ABOUTBOX,
               "About",
-              new Attribute[]
-              {
-                  new DispIdAttribute(PInvoke.DISPID_ABOUTBOX),
+              [
+                  new DispIdAttribute(PInvokeCore.DISPID_ABOUTBOX),
                   DesignerSerializationVisibilityAttribute.Hidden,
                   new DescriptionAttribute(SR.AboutBoxDesc),
                   new ParenthesizePropertyNameAttribute(true)
-              },
+              ],
               readOnly: true,
               typeof(string),
               typeData: null,

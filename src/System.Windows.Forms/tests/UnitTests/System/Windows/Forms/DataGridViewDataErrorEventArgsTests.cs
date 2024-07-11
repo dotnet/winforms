@@ -9,8 +9,8 @@ public class DataGridViewDataErrorEventArgsTests
     public static IEnumerable<object[]> Ctor_Exception_Int_Int_DataGridViewDataErrorContexts_TestData()
     {
         yield return new object[] { null, -1, -1, (DataGridViewDataErrorContexts)3 };
-        yield return new object[] { new Exception(), 0, 0, DataGridViewDataErrorContexts.Formatting };
-        yield return new object[] { new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting };
+        yield return new object[] { new InvalidOperationException(), 0, 0, DataGridViewDataErrorContexts.Formatting };
+        yield return new object[] { new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting };
     }
 
     [Theory]
@@ -43,7 +43,7 @@ public class DataGridViewDataErrorEventArgsTests
     [InlineData(false)]
     public void ThrowException_SetFalseWithException_GetReturnsExpected(bool value)
     {
-        DataGridViewDataErrorEventArgs e = new(new Exception(), 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = value };
+        DataGridViewDataErrorEventArgs e = new(new InvalidOperationException(), 1, 2, DataGridViewDataErrorContexts.Formatting) { ThrowException = value };
         Assert.Equal(value, e.ThrowException);
     }
 

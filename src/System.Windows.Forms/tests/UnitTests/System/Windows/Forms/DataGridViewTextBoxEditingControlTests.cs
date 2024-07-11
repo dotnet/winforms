@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -12,7 +11,7 @@ namespace System.Windows.Forms.Tests;
 
 public class DataGridViewTextBoxEditingControlTests
 {
-    private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
+    private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Ctor_Default()
@@ -1514,7 +1513,7 @@ public class DataGridViewTextBoxEditingControlTests
     {
         foreach (bool handled in new bool[] { true, false })
         {
-            foreach (IntPtr wParam in new IntPtr[] { (IntPtr)Keys.Enter, (IntPtr)Keys.LineFeed, (IntPtr)Keys.A, (IntPtr)2 })
+            foreach (IntPtr wParam in new IntPtr[] { (IntPtr)Keys.Enter, (IntPtr)Keys.LineFeed, (IntPtr)Keys.A, 2 })
             {
                 if (wParam != (IntPtr)Keys.Enter)
                 {

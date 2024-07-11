@@ -2753,7 +2753,7 @@ public partial class AccessibleObjectTests
     public void AccessibleObject_SystemWrapper_RuntimeId_IsValid()
     {
         AccessibleObject accessibleObject =
-            (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+            (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
         Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
     }

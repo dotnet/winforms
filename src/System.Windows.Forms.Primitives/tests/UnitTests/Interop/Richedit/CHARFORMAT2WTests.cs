@@ -30,6 +30,6 @@ public class CHARFORMAT2WTests
         string bigString = new('*', 32);
 
         charFormat.FaceName = bigString;
-        Assert.True(charFormat.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));
+        Assert.True(charFormat.FaceName.SequenceEqual(bigString.AsSpan()[1..]));
     }
 }

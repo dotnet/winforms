@@ -18,9 +18,10 @@ public partial class BindingContext : ICollection
     /// <summary>
     ///  Initializes a new instance of the System.Windows.Forms.BindingContext class.
     /// </summary>
+    [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
     public BindingContext()
     {
-        _listManagers = new();
+        _listManagers = [];
     }
 
     /// <summary>
@@ -92,7 +93,7 @@ public partial class BindingContext : ICollection
     ///  Fires the CollectionChangedEvent.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Add(object dataSource, BindingManagerBase listManager)
     {
@@ -101,7 +102,7 @@ public partial class BindingContext : ICollection
     }
 
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void AddCore(object dataSource, BindingManagerBase listManager)
     {
@@ -115,7 +116,7 @@ public partial class BindingContext : ICollection
     ///  Occurs when the collection has changed.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     [SRDescription(nameof(SR.collectionChangedEventDescr))]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -136,7 +137,7 @@ public partial class BindingContext : ICollection
     ///  Fires the CollectionChangedEvent.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Clear()
     {
@@ -148,7 +149,7 @@ public partial class BindingContext : ICollection
     ///  Clears the collection.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void ClearCore() => _listManagers.Clear();
 
@@ -187,7 +188,7 @@ public partial class BindingContext : ICollection
     ///  The CollectionChanged event is fired if it succeeds.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Remove(object dataSource)
     {
@@ -196,7 +197,7 @@ public partial class BindingContext : ICollection
     }
 
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void RemoveCore(object dataSource)
     {
@@ -262,11 +263,8 @@ public partial class BindingContext : ICollection
 
             BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
-            PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true);
-            if (prop is null)
-            {
-                throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
-            }
+            PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true)
+                ?? throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
 
             bindingManagerBase = typeof(IList).IsAssignableFrom(prop.PropertyType)
                 ? new RelatedCurrencyManager(formerManager, dataField)
@@ -324,7 +322,7 @@ public partial class BindingContext : ICollection
         {
             if (de.Value.Target is null)
             {
-                cleanupList ??= new();
+                cleanupList ??= [];
 
                 cleanupList.Add(de.Key);
             }

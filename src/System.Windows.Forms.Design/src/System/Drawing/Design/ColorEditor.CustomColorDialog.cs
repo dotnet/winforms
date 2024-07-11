@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Windows.Win32.UI.Controls.Dialogs;
-using static Interop;
 
 namespace System.Drawing.Design;
 

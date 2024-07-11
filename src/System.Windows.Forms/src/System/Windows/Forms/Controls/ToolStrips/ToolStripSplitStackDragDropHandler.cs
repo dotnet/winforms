@@ -20,7 +20,6 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
 
     public void OnDragEnter(DragEventArgs e)
     {
-        ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragEnter: {e}");
         if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
         {
             e.Effect = DragDropEffects.Move;
@@ -30,14 +29,11 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
 
     public void OnDragLeave(EventArgs e)
     {
-        ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragLeave: {e}");
         _owner.ClearInsertionMark();
     }
 
     public void OnDragDrop(DragEventArgs e)
     {
-        ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragDrop: {e}");
-
         if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
         {
             ToolStripItem item = (ToolStripItem)e.Data.GetData(typeof(ToolStripItem))!;
@@ -47,8 +43,6 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
 
     public void OnDragOver(DragEventArgs e)
     {
-        ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragOver: {e}");
-
         if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
         {
             if (ShowItemDropPoint(_owner.PointToClient(new Point(e.X, e.Y))))
@@ -142,9 +136,6 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
             ToolStripItem item = _owner.Items[i];
             RelativeLocation relativeLocation = ComparePositions(item.Bounds, ownerClientAreaRelativeDropPoint);
 
-            ToolStrip.s_itemReorderDebug.TraceVerbose($"Drop relative loc {relativeLocation}");
-            ToolStrip.s_itemReorderDebug.TraceVerbose($"Index {i}");
-
             Rectangle insertionRect = Rectangle.Empty;
             switch (relativeLocation)
             {
@@ -184,8 +175,6 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
             bounds.Inflate(_owner.DisplayedItems[i].Margin.Size);
             if (bounds.Contains(ownerClientAreaRelativeDropPoint))
             {
-                ToolStrip.s_dropTargetDebug.TraceVerbose($"MATCH {_owner.DisplayedItems[i].Text} Bounds: {_owner.DisplayedItems[i].Bounds}");
-
                 // consider what to do about items not in the display
                 return _owner.Items.IndexOf(_owner.DisplayedItems[i]);
             }

@@ -14,8 +14,23 @@ namespace System.Drawing.Design;
 /// </summary>
 public class UITypeEditor
 {
+    // Feature switch, when set to false, UITypeEditor is not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Drawing.Design.UITypeEditor.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Drawing.Design.UITypeEditor.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
+
     static UITypeEditor()
     {
+        // Trimming doesn't support UITypeEditor
+        if (!IsSupported)
+        {
+            return;
+        }
+
         // Our set of intrinsic editors.
         Hashtable intrinsicEditors = new Hashtable
         {
@@ -47,20 +62,28 @@ public class UITypeEditor
         TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);
     }
 
+    public UITypeEditor()
+    {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(UITypeEditor)));
+        }
+    }
+
     /// <summary>
     ///  Determines if drop-down editors should be resizable by the user.
     /// </summary>
     public virtual bool IsDropDownResizable => false;
 
     /// <summary>
-    ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
+    ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
     /// <param name="provider">An <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
     /// <param name="value">The object to edit.</param>
     public object? EditValue(IServiceProvider provider, object? value) => EditValue(null, provider, value);
 
     /// <summary>
-    ///  Edits the specified value using the editor style provided by <see cref="UITypeEditor.GetEditStyle()"/>.
+    ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
     /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
     /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>

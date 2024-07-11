@@ -54,7 +54,7 @@ public partial class Control
                         int firstDot = ns.IndexOf('/');
                         if (firstDot != -1)
                         {
-                            _companyName = ns.Substring(0, firstDot);
+                            _companyName = ns[..firstDot];
                         }
                         else
                         {
@@ -101,7 +101,7 @@ public partial class Control
                         int firstDot = ns.IndexOf('.');
                         if (firstDot != -1)
                         {
-                            _productName = ns.Substring(firstDot + 1);
+                            _productName = ns[(firstDot + 1)..];
                         }
                         else
                         {

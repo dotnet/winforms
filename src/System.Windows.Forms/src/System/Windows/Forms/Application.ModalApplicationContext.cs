@@ -44,7 +44,7 @@ public sealed partial class Application
 
                 parentControl!.Invoke(
                     disable ? new ThreadWindowCallback(DisableThreadWindowsCallback) : new ThreadWindowCallback(EnableThreadWindowsCallback),
-                    new object[] { _parentWindowContext, onlyWinForms });
+                    [_parentWindowContext, onlyWinForms]);
             }
         }
 

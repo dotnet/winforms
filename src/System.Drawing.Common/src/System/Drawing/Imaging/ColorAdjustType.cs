@@ -1,41 +1,46 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Specifies which GDI+ objects use color adjustment information.
+///  Specifies which GDI+ objects use color adjustment information.
 /// </summary>
 public enum ColorAdjustType
 {
     /// <summary>
-    /// Defines color adjustment information that is used by all GDI+ objects that do not have their own color
-    /// adjustment information.
+    ///  Defines color adjustment information that is used by all GDI+ objects that do not have their own color
+    ///  adjustment information.
     /// </summary>
-    Default = 0,
+    Default = GdiPlus.ColorAdjustType.ColorAdjustTypeDefault,
+
     /// <summary>
-    /// Defines color adjustment information for <see cref='Drawing.Bitmap'/>
-    /// objects.
+    ///  Defines color adjustment information for <see cref='Drawing.Bitmap'/> objects.
     /// </summary>
-    Bitmap,
+    Bitmap = GdiPlus.ColorAdjustType.ColorAdjustTypeBitmap,
+
     /// <summary>
-    /// Defines color adjustment information for <see cref='Drawing.Brush'/> objects.
+    ///  Defines color adjustment information for <see cref='Drawing.Brush'/> objects.
     /// </summary>
-    Brush,
+    Brush = GdiPlus.ColorAdjustType.ColorAdjustTypeBrush,
+
     /// <summary>
-    /// Defines color adjustment information for <see cref='Drawing.Pen'/> objects.
+    ///  Defines color adjustment information for <see cref='Drawing.Pen'/> objects.
     /// </summary>
-    Pen,
+    Pen = GdiPlus.ColorAdjustType.ColorAdjustTypePen,
+
     /// <summary>
-    /// Defines color adjustment information for text.
+    ///  Defines color adjustment information for text.
     /// </summary>
-    Text,
+    Text = GdiPlus.ColorAdjustType.ColorAdjustTypeText,
+
     /// <summary>
-    /// Specifies the number of types specified.
+    ///  Specifies the number of types specified.
     /// </summary>
-    Count,
+    Count = GdiPlus.ColorAdjustType.ColorAdjustTypeCount,
+
     /// <summary>
-    /// Specifies the number of types specified.
+    ///  Specifies the number of types specified.
     /// </summary>
-    Any
+    Any = GdiPlus.ColorAdjustType.ColorAdjustTypeAny
 }

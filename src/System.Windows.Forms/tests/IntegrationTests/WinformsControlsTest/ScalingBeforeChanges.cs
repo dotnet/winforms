@@ -8,8 +8,9 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.WindowsAndMessaging;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class ScalingBeforeChanges : Form
 {
     public ScalingBeforeChanges()
@@ -35,8 +36,8 @@ public partial class ScalingBeforeChanges : Form
         using GetDcScope dc = new(hwnd);
         if (!dc.IsNull)
         {
-            x = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-            y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+            x = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            y = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         }
     }
 
@@ -53,12 +54,12 @@ public partial class ScalingBeforeChanges : Form
 
     internal static int LOWORD(IntPtr param)
     {
-        return (int)(short)(unchecked((int)(long)param) & 0xFFFF);
+        return (short)(unchecked((int)(long)param) & 0xFFFF);
     }
 
     internal static int HIWORD(IntPtr param)
     {
-        return (int)(short)((unchecked((int)(long)param) >> 16) & 0xFFFF);
+        return (short)((unchecked((int)(long)param) >> 16) & 0xFFFF);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -96,7 +97,7 @@ public partial class ScalingBeforeChanges : Form
                     _deviceDpiY = y;
                     _deviceDpiX = x;
 
-                    Font = new Font(this.Font.FontFamily, this.Font.Size * factorY, this.Font.Style);
+                    Font = new Font(Font.FontFamily, Font.Size * factorY, Font.Style);
 
                     checkBox1.Scale(new SizeF(factorX, factorY));
                 }
@@ -122,12 +123,12 @@ public class MyCheckBox : CheckBox
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 break;
             case PInvoke.WM_DPICHANGED_AFTERPARENT:
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 break;
         }
 

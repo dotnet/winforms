@@ -199,7 +199,7 @@ public class TaskDialogIcon : IDisposable
         {
             if (!handle.IsNull)
             {
-                PInvoke.DestroyIcon(handle);
+                PInvokeCore.DestroyIcon(handle);
             }
         }
     }

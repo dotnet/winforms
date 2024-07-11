@@ -1,11 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class MultipleControls : Form
 {
     public MultipleControls()
@@ -72,7 +72,7 @@ public partial class MultipleControls : Form
                 0 => item1,
                 1 => item2,
                 2 => item3,
-                _ => throw new IndexOutOfRangeException(),
+                _ => throw new ArgumentOutOfRangeException(),
             };
         };
 
@@ -89,10 +89,10 @@ public partial class MultipleControls : Form
         ImageList imageListLarge = new();
 
         // Initialize the ImageList objects with bitmaps.
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
-        imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
-        imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallA.bmp"));
+        imageListSmall.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeA.bmp"));
+        imageListLarge.Images.Add(Image.FromFile("Images\\LargeABlue.bmp"));
 
         // Assign the ImageList objects to the ListView.
         listView2.LargeImageList = imageListLarge;

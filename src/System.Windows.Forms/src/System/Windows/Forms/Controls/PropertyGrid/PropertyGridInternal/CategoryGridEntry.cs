@@ -21,7 +21,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
 
         lock (s_lock)
         {
-            s_categoryStates ??= new();
+            s_categoryStates ??= [];
 
             if (!s_categoryStates.ContainsKey(name))
             {
@@ -69,7 +69,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
     /// </summary>
     protected override GridEntryAccessibleObject GetAccessibilityObject() => new CategoryGridEntryAccessibleObject(this);
 
-    protected override Color BackgroundColor => OwnerGridView.LineColor;
+    protected override Color BackgroundColor => OwnerGridView?.LineColor ?? default;
 
     protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
@@ -97,26 +97,31 @@ internal sealed partial class CategoryGridEntry : GridEntry
     {
         get
         {
-            PropertyGridView gridHost = OwnerGridView;
+            PropertyGridView? gridHost = OwnerGridView;
 
             // Give an extra pixel for breathing room.
             // Calling base.PropertyDepth to avoid the -1 in our override.
-            return 1 + gridHost.OutlineIconSize + OutlineIconPadding
+            return 1 + (gridHost?.OutlineIconSize ?? 0) + OutlineIconPadding
                 + (base.PropertyDepth * PropertyGridView.DefaultOutlineIndent);
         }
     }
 
-    public override string GetPropertyTextValue(object o) => string.Empty;
+    public override string GetPropertyTextValue(object? o) => string.Empty;
 
     public override Type PropertyType => typeof(void);
 
-    internal override object GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
+    internal override object? GetValueOwnerInternal() => ParentGridEntry?.GetValueOwnerInternal();
 
     protected override bool CreateChildren(bool diffOldChildren) => true;
 
     public override string GetTestingInfo() => $"object = ({FullLabel}), Category = ({PropertyLabel})";
 
-    public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public override void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
         base.PaintLabel(g, rect, clipRect, false, true);
 
@@ -141,19 +146,24 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
         }
     }
 
-    public override void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text)
+    public override void PaintValue(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        PaintValueFlags paintFlags,
+        string? text)
     {
         base.PaintValue(g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected, text);
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
@@ -161,5 +171,5 @@ internal sealed partial class CategoryGridEntry : GridEntry
     }
 
     internal override bool SendNotification(GridEntry entry, Notify notification)
-        => ParentGridEntry.SendNotification(entry, notification);
+        => ParentGridEntry?.SendNotification(entry, notification) ?? false;
 }

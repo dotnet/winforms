@@ -7,6 +7,11 @@ namespace System.Windows.Forms;
 
 public interface IBindableComponent : IComponent
 {
+    internal const string ComponentModelTrimIncompatibilityMessage = "Binding is not supported with trimming";
     ControlBindingsCollection DataBindings { get; }
-    BindingContext? BindingContext { get; set; }
+    BindingContext? BindingContext
+    {
+        get;
+        set;
+    }
 }

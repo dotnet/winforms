@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Design.Tests;
 public class EmbeddedResourceTests
 {
     // Get System.Windows.Forms.Design assembly to verify that it contains all the icons that the code uses.
-    private readonly Assembly assembly = Assembly.GetAssembly(typeof(AnchorEditor));
+    private readonly Assembly _assembly = Assembly.GetAssembly(typeof(AnchorEditor));
 
-    private static string s_expectedIconNames = """
+    private const string ExpectedIconNamesString = """
             System.ComponentModel.Design.Arrow
             System.ComponentModel.Design.ComponentEditorPage
             System.ComponentModel.Design.DateTimeFormat
@@ -64,7 +64,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.UserControlToolboxItem
             """;
 
-    private static string s_expectedBitmapNames = """
+    private const string ExpectedBitmapNamesString = """
             System.Windows.Forms.Design.Behavior.BottomClose
             System.Windows.Forms.Design.Behavior.BottomOpen
             System.Windows.Forms.Design.Behavior.LeftClose
@@ -79,17 +79,17 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.Behavior.TopOpen
             """;
 
-    public static TheoryData ExpectedIconNames()
-        => s_expectedIconNames.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp")).ToTheoryData();
+    public static TheoryData<string> ExpectedIconNames() =>
+        new(ExpectedIconNamesString.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp", StringComparison.Ordinal)));
 
-    public static TheoryData ExpectedBitmapNames()
-        => s_expectedBitmapNames.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData<string> ExpectedBitmapNames() =>
+        new(ExpectedBitmapNamesString.Split(Environment.NewLine));
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]
     public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
     {
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        using Stream stream = _assembly.GetManifestResourceStream(resourceName);
         Assert.NotNull(stream);
 
         using Icon icon = new(stream);
@@ -100,7 +100,7 @@ public class EmbeddedResourceTests
     [MemberData(nameof(ExpectedBitmapNames))]
     public void EmbeddedResource_ResourcesExist_Bitmap(string resourceName)
     {
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        using Stream stream = _assembly.GetManifestResourceStream(resourceName);
         Assert.NotNull(stream);
 
         using Bitmap bitmap = new(stream);
@@ -119,6 +119,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.FormatControl.resources
             System.Windows.Forms.Design.LinkAreaEditor.resources
             System.Windows.Forms.Design.MaskDesignerDialog.resources
+            System.Windows.Forms.Design.TreeNodeCollectionEditor.resources
             System.Windows.Forms.Design.ShortcutKeysEditor.resources
             System.Windows.Forms.Design.StringCollectionEditor.resources
             System.Windows.Forms.Design.StyleCollectionEditor.resources
@@ -127,10 +128,10 @@ public class EmbeddedResourceTests
     [Fact]
     public void EmbeddedResource_VerifyList()
     {
-        string[] actual = assembly.GetManifestResourceNames();
+        string[] actual = _assembly.GetManifestResourceNames();
         Array.Sort(actual, StringComparer.Ordinal);
 
-        string[] expected = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedBitmapNames}{Environment.NewLine}{ExpectedResourceNames}".Split(Environment.NewLine);
+        string[] expected = $"{ExpectedIconNamesString}{Environment.NewLine}{ExpectedBitmapNamesString}{Environment.NewLine}{ExpectedResourceNames}".Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 
         actual.Should().Equal(expected);

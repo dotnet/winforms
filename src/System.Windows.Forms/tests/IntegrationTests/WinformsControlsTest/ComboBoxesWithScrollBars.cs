@@ -3,15 +3,15 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class ComboBoxesWithScrollBars : Form
 {
     public ComboBoxesWithScrollBars()
     {
         InitializeComponent();
 
-        // Init comboboxes
         for (int i = 0; i <= 40; i++)
         {
             comboBox1.Items.Add(i);

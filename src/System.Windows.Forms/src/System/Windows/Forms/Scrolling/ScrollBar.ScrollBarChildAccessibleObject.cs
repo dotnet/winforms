@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -63,13 +62,12 @@ public partial class ScrollBar
 
         internal ScrollBarAccessibleObject ParentInternal => (ScrollBarAccessibleObject)OwningScrollBar.AccessibilityObject;
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(OwningScrollBar.InternalHandle),
-                GetChildId()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)OwningScrollBar.InternalHandle,
+            GetChildId()
+        ];
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch

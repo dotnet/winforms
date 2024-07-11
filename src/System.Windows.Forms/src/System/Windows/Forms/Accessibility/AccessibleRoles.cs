@@ -6,10 +6,10 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Specifies values representing possible roles for an accessible object.
 /// </summary>
-/// <remarks>
-///  if adding to this enumeration please update Control and ToolStripItem
-///  AccessibleRole to ensure the new member is valid.
-/// </remarks>
+/// <devdoc>
+///  If adding to this enumeration please update <see cref="Control.AccessibleRole"/> and
+///  <see cref="ToolStripItem.AccessibleRole"/> to ensure the new member is valid.
+/// </devdoc>
 public enum AccessibleRole
 {
     /// <summary>

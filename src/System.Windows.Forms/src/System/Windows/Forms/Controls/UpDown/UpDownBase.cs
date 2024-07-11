@@ -175,7 +175,7 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.Fixed3D)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))]
     public BorderStyle BorderStyle
     {
@@ -545,7 +545,7 @@ public abstract partial class UpDownBase : ContainerControl
                 backRect.Y--;
                 backRect.Width += 2;
                 backRect.Height += 2;
-                using PInvoke.CreatePenScope hpen = new(backColor);
+                using CreatePenScope hpen = new(backColor);
                 hdc.DrawRectangle(backRect, hpen);
             }
         }
@@ -567,13 +567,13 @@ public abstract partial class UpDownBase : ContainerControl
             backRect.Width++;
             backRect.Height++;
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreatePenScope hpen = new(backColor, width);
+            using CreatePenScope hpen = new(backColor, width);
             hdc.DrawRectangle(backRect, hpen);
         }
 
         if (!Enabled && BorderStyle != BorderStyle.None && !_upDownEdit.ShouldSerializeBackColor())
         {
-            // Draws a grayed rectangled around the upDownEdit, since otherwise we will have a white
+            // Draws a grayed rectangle around the upDownEdit, since otherwise we will have a white
             // border around the upDownEdit, which is inconsistent with Windows' behavior
             // we only want to do this when BackColor is not serialized, since otherwise
             // we should display the backcolor instead of the usual grayed textbox.
@@ -646,7 +646,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         if (ChangingText)
         {
-            Debug.Assert(UserEdit == false, "OnTextBoxTextChanged() - UserEdit == true");
+            Debug.Assert(!UserEdit, "OnTextBoxTextChanged() - UserEdit == true");
             ChangingText = false;
         }
         else
@@ -973,6 +973,18 @@ public abstract partial class UpDownBase : ContainerControl
     }
 
     internal override void SetToolTip(ToolTip toolTip)
+    {
+        if (toolTip is null)
+        {
+            return;
+        }
+
+        string? caption = toolTip.GetToolTip(this);
+        toolTip.SetToolTip(_upDownEdit, caption);
+        toolTip.SetToolTip(_upDownButtons, caption);
+    }
+
+    internal override void RemoveToolTip(ToolTip toolTip)
     {
         if (toolTip is null)
         {

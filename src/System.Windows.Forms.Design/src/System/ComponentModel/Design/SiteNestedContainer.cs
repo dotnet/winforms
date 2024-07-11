@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design;
 internal sealed class SiteNestedContainer : NestedContainer
 {
     private readonly DesignerHost _host;
-    private IServiceContainer? _services;
+    private ServiceContainer? _services;
     private readonly string? _containerName;
     private bool _safeToCallOwner;
 
@@ -86,7 +86,7 @@ internal sealed class SiteNestedContainer : NestedContainer
         }
 
         RemoveWithoutUnsiting(component);
-        _host.RemoveFromContainerPostProcess(component, this);
+        _host.RemoveFromContainerPostProcess(component);
     }
 
     protected override object? GetService(Type serviceType)

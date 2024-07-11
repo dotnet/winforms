@@ -11,7 +11,6 @@ using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using WMPLib;
-using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests;
 
@@ -91,16 +90,16 @@ public unsafe class ComNativeDescriptorTests
     public void ComNativeDescriptor_GetProperties_FromActiveXMediaPlayerControl_ComInterop()
     {
         Guid guid = typeof(WindowsMediaPlayerClass).GUID;
-        HRESULT hr = Ole32.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             in guid,
-            IntPtr.Zero,
+            pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
-            in IID.GetRef<IUnknown>(),
-            out object mediaPlayer);
+            out IUnknown* mediaPlayerPtr);
 
         Assert.Equal(HRESULT.S_OK, hr);
 
         ComNativeDescriptor descriptor = new();
+        object mediaPlayer = ComHelpers.GetObjectForIUnknown(mediaPlayerPtr);
         ValidateMediaPlayerProperties(mediaPlayer, descriptor.GetProperties(mediaPlayer));
     }
 
@@ -109,7 +108,7 @@ public unsafe class ComNativeDescriptorTests
     {
         Guid guid = typeof(WindowsMediaPlayerClass).GUID;
         ComScope<IUnknown> unknown = new(null);
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             &guid,
             null,
             CLSCTX.CLSCTX_INPROC_SERVER,

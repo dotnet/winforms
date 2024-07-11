@@ -15,8 +15,6 @@ internal partial class MdiControlStrip : MenuStrip
     private readonly ToolStripMenuItem _close;
     private readonly ToolStripMenuItem _minimize;
     private readonly ToolStripMenuItem _restore;
-    private MenuStrip? _mergedMenu;
-
     private IWin32Window _target;
 
     /// <summary>
@@ -44,7 +42,7 @@ internal partial class MdiControlStrip : MenuStrip
         }
 
         // add in opposite order to how you want it merged
-        Items.AddRange(new ToolStripItem[] { _minimize, _restore, _close, _system });
+        Items.AddRange(_minimize, _restore, _close, _system);
 
         SuspendLayout();
         foreach (ToolStripItem item in Items)
@@ -73,33 +71,16 @@ internal partial class MdiControlStrip : MenuStrip
         ResumeLayout(false);
     }
 
-    public ToolStripMenuItem Close
-    {
-        get { return _close; }
-    }
+    public ToolStripMenuItem Close => _close;
 
-    internal MenuStrip? MergedMenu
-    {
-        get
-        {
-            return _mergedMenu;
-        }
-        set
-        {
-            _mergedMenu = value;
-        }
-    }
+    internal MenuStrip? MergedMenu { get; set; }
 
-    private Image GetTargetWindowIcon()
+    private Bitmap GetTargetWindowIcon()
     {
         HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Icon icon = !hIcon.IsNull ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
-        Icon smallIcon = new(icon, SystemInformation.SmallIconSize);
-
-        Image systemIcon = smallIcon.ToBitmap();
-        smallIcon.Dispose();
-
-        return systemIcon;
+        using Icon smallIcon = new(icon, SystemInformation.SmallIconSize);
+        return smallIcon.ToBitmap();
     }
 
     private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.TestUtilities;
+using static System.Windows.Forms.MonthCalendar;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -643,15 +644,15 @@ public class MonthCalendarTests
         {
             CalendarDimensions = value
         };
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.False(calendar.IsHandleCreated);
 
         // Set same.
         var previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
         Assert.False(calendar.IsHandleCreated);
     }
@@ -701,8 +702,8 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -711,8 +712,8 @@ public class MonthCalendarTests
         // Set same.
         var previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
-        Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
-        Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+        Assert.True(calendar.CalendarDimensions.Width is > 0 and <= 12);
+        Assert.True(calendar.CalendarDimensions.Height is > 0 and <= 12);
         Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -2471,7 +2472,7 @@ public class MonthCalendarTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetMinReqRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -2985,27 +2986,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3032,7 +3033,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3040,7 +3041,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3048,7 +3049,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddAnnuallyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3056,7 +3057,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3064,7 +3065,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.AnnuallyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3092,27 +3093,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3139,7 +3140,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3147,7 +3148,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3155,7 +3156,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3163,7 +3164,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3171,7 +3172,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.BoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.BoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3199,27 +3200,27 @@ public class MonthCalendarTests
     {
         using MonthCalendar calendar = new();
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different day.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different month.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Different year.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // Duplicate.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.False(calendar.IsHandleCreated);
 
         // MinValue.
@@ -3246,7 +3247,7 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 3));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3254,7 +3255,7 @@ public class MonthCalendarTests
 
         // Different day.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 10, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3262,7 +3263,7 @@ public class MonthCalendarTests
 
         // Different month.
         calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3270,7 +3271,7 @@ public class MonthCalendarTests
 
         // Different year.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3278,7 +3279,7 @@ public class MonthCalendarTests
 
         // Duplicate.
         calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-        Assert.Equal(new DateTime[] { new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+        Assert.Equal([new(2019, 10, 3), new(2019, 10, 5), new(2019, 09, 5), new(2018, 09, 5), new(2018, 09, 5)], calendar.MonthlyBoldedDates);
         Assert.True(calendar.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -4157,7 +4158,7 @@ public class MonthCalendarTests
 
     public static IEnumerable<object[]> MonthCalendar_FillMonthDayStates_ReturnsExpected_TestData()
     {
-        // This test set of dates is designed for a specifict test case:
+        // This test set of dates is designed for a specific test case:
         // when a calendar has 12 fully visible months + 2 not fully visible.
         // This test calendar has (08/29/2021 - 09/10/2022) dates range.
 
@@ -4239,6 +4240,487 @@ public class MonthCalendarTests
         int actualIndex = calendar.TestAccessor().Dynamic.GetIndexInMonths(startDate, currentDate);
 
         Assert.Equal(expectedIndex, actualIndex);
+    }
+
+    [WinFormsFact]
+    public void SelectionRange_CopyConstructor_CopiesStartAndEndDatesCorrectly()
+    {
+        DateTime startDate = new(2023, 1, 1);
+        DateTime endDate = new(2023, 12, 31);
+        SelectionRange originalRange = new(startDate, endDate);
+        SelectionRange copiedRange = new(originalRange);
+
+        copiedRange.Start.Should().Be(startDate);
+        copiedRange.End.Should().Be(endDate);
+    }
+
+    [WinFormsFact]
+    public void GetFocused_Returns_FocusedCellAccessibleObject()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+        var result = accessibleObject.GetFocused();
+
+        result.Should().Be(accessibleObject.FocusedCell);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendarAccessibleObject_Help_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+        string expectedHelp = "MonthCalendar(Control)";
+
+        accessibleObject.Help.Should().Be(expectedHelp);
+    }
+
+    [WinFormsTheory]
+    [InlineData("42")]
+    public void CalendarWeekNumberCellAccessibleObject_Name_ReturnsExpected(string weekNumber)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        MonthCalendarAccessibleObject monthCalendarAccessibleObject = new(monthCalendar);
+        CalendarAccessibleObject calendarAccessibleObject = new(monthCalendarAccessibleObject, 1, "Main Calendar");
+        CalendarBodyAccessibleObject calendarBodyAccessibleObject = new(calendarAccessibleObject, monthCalendarAccessibleObject, 1);
+        CalendarRowAccessibleObject calendarRowAccessibleObject = new(calendarBodyAccessibleObject, monthCalendarAccessibleObject, 1, 1);
+
+        CalendarWeekNumberCellAccessibleObject accessibleObject = new(
+            calendarRowAccessibleObject,
+            calendarBodyAccessibleObject,
+            monthCalendarAccessibleObject,
+            calendarIndex: 0,
+            rowIndex: 0,
+            columnIndex: 0,
+            weekNumber);
+
+        string name = accessibleObject.Name;
+
+        name.Should().Be($"Week {weekNumber}");
+    }
+
+    [WinFormsFact]
+    public void CalendarTodayLinkAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+        Rectangle actual = todayLinkAccessibleObject.Bounds;
+        Rectangle expected = controlAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_FOOTER);
+
+        actual.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void CalendarPreviousButtonAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
+        Rectangle bounds = previousButtonAccessibleObject.Bounds;
+        Rectangle expectedBounds = new(13, 42, 16, 16);
+
+        bounds.Should().Be(expectedBounds);
+    }
+
+    private (CalendarRowAccessibleObject, CalendarCellAccessibleObject) CreateCalendarObjects(MonthCalendar control, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+    {
+        MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+        CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, calendarIndex, "Main Calendar");
+        CalendarBodyAccessibleObject bodyAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, calendarIndex);
+        CalendarRowAccessibleObject rowAccessibleObject = new(bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex);
+        CalendarCellAccessibleObject cellAccessibleObject = new(rowAccessibleObject, bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex, columnIndex);
+
+        return (rowAccessibleObject, cellAccessibleObject);
+    }
+
+    [WinFormsFact]
+    public void CalendarRowAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (rowAccessibleObject, _) = CreateCalendarObjects(monthCalendar);
+        Rectangle actual = rowAccessibleObject.Bounds;
+        Rectangle expected = controlAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDARROW, 0, 0);
+
+        actual.Should().Be(expected);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, "Week 23, Monday")]
+    [InlineData(1, null)]
+    public void CalendarCellAccessibleObject_Description_ReturnsExpected(int view, string expected)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        monthCalendar.FirstDayOfWeek = Day.Monday;
+        monthCalendar.SelectionStart = new DateTime(2021, 6, 16);
+        PInvoke.SendMessage(monthCalendar, PInvoke.MCM_SETCURRENTVIEW, 0, view);
+
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        cellAccessibleObject.Description.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_Select_SetsSelectionRange()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        DateTime startDate = new(2022, 10, 1);
+        DateTime endDate = new(2022, 10, 7);
+        cellAccessibleObject.TestAccessor().Dynamic._dateRange = new SelectionRange(startDate, endDate);
+
+        cellAccessibleObject.Select(AccessibleSelection.TakeSelection);
+
+        monthCalendar.SelectionStart.Should().Be(startDate);
+        monthCalendar.SelectionEnd.Should().Be(endDate);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleStates.Focusable | AccessibleStates.Selectable | AccessibleStates.Selected)]
+    public void CalendarCellAccessibleObject_State_ReturnsExpected(AccessibleStates expectedState)
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        bool shouldFocus = expectedState.HasFlag(AccessibleStates.Focused);
+        bool selectExactRange = expectedState.HasFlag(AccessibleStates.Selected);
+
+        if (shouldFocus)
+        {
+            monthCalendar.Focus();
+        }
+
+        if (selectExactRange)
+        {
+            monthCalendar.SetSelectionRange(cellAccessibleObject.DateRange.Start, cellAccessibleObject.DateRange.End);
+        }
+        else
+        {
+            monthCalendar.SetSelectionRange(cellAccessibleObject.DateRange.Start.AddDays(-1), cellAccessibleObject.DateRange.End.AddDays(1));
+        }
+
+        cellAccessibleObject.State.Should().Be(expectedState);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleSelection.AddSelection)]
+    [InlineData(AccessibleSelection.RemoveSelection)]
+    [InlineData(AccessibleSelection.TakeSelection)]
+    public void CalendarCellAccessibleObject_Select_Invoke_SetsSelectionRange(AccessibleSelection selectionFlag)
+    {
+        using MonthCalendar monthCalendar = new();
+        monthCalendar.CreateControl();
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        DateTime expectedStart = cellAccessibleObject.DateRange.Start;
+        DateTime expectedEnd = cellAccessibleObject.DateRange.End;
+
+        cellAccessibleObject.Select(selectionFlag);
+        monthCalendar.SelectionStart.Should().Be(expectedStart);
+        monthCalendar.SelectionEnd.Should().Be(expectedEnd);
+    }
+
+    [WinFormsFact]
+    public void CalendarCellAccessibleObject_Role_ReturnsExpected()
+    {
+        using MonthCalendar monthCalendar = new();
+
+        monthCalendar.CreateControl();
+        var controlAccessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+        var (_, cellAccessibleObject) = CreateCalendarObjects(monthCalendar);
+
+        cellAccessibleObject.Role.Should().Be(AccessibleRole.Cell);
+    }
+
+    private MonthCalendar InitializeCalendarWithDates()
+    {
+        MonthCalendar calendar = new();
+
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddAnnuallyBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddBoldedDate(new DateTime(2022, 2, 2));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 1, 1));
+        calendar.AddMonthlyBoldedDate(new DateTime(2022, 2, 2));
+
+        return calendar;
+    }
+
+    [WinFormsTheory]
+    [InlineData("RemoveAllAnnuallyBoldedDates", 0, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAnnuallyBoldedDate", 1, "AnnuallyBoldedDates")]
+    [InlineData("RemoveAllBoldedDates", 0, "BoldedDates")]
+    [InlineData("RemoveBoldedDate", 1, "BoldedDates")]
+    [InlineData("RemoveAllMonthlyBoldedDates", 0, "MonthlyBoldedDates")]
+    [InlineData("RemoveMonthlyBoldedDate", 1, "MonthlyBoldedDates")]
+    public void MonthCalendar_RemoveBoldedDates_Invoke_Success(string methodName, int expectedCount, string propertyName)
+    {
+        using MonthCalendar calendar = InitializeCalendarWithDates();
+
+        typeof(MonthCalendar).GetMethod(methodName).Invoke(calendar, methodName.Contains("All") ? null : new object[] { new DateTime(2022, 1, 1) });
+        ((DateTime[])typeof(MonthCalendar).GetProperty(propertyName).GetValue(calendar)).Length.Should().Be(expectedCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    [InlineData(100, 100, HitArea.Date, null)]
+    [InlineData(-100, -100, HitArea.Nowhere, "0001-01-01T00:00:00")]
+    public void MonthCalendar_HitTest_ReturnsExpected(int x, int y, HitArea expectedHitArea, string expectedTimeString)
+    {
+        using MonthCalendar calendar = new();
+        HitTestInfo hitTestInfo = calendar.HitTest(new Point(x, y));
+
+        hitTestInfo.Point.X.Should().Be(x);
+        hitTestInfo.Point.Y.Should().Be(y);
+        hitTestInfo.HitArea.Should().Be(expectedHitArea);
+
+        DateTime? expectedTime = expectedTimeString is null ? null : DateTime.Parse(expectedTimeString);
+
+        if (expectedTime is null)
+        {
+            hitTestInfo.Time.Should().NotBe(DateTime.MinValue);
+        }
+        else
+        {
+            hitTestInfo.Time.Should().Be(expectedTime.Value);
+        }
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ShouldSerializeProperties_ReturnsExpected()
+    {
+        using MonthCalendar calendar = new();
+        calendar.MaxDate = DateTime.MaxValue;
+
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTodayDate(), () => calendar.TodayDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeAnnuallyBoldedDates(), () => calendar.AddAnnuallyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeBoldedDates(), () => calendar.AddBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMonthlyBoldedDates(), () => calendar.AddMonthlyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMaxDate(), () => calendar.MaxDate = DateTime.Now.AddYears(2));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMinDate(), () => calendar.MinDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTrailingForeColor(), () => calendar.TrailingForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleForeColor(), () => calendar.TitleForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleBackColor(), () => calendar.TitleBackColor = Color.Red);
+    }
+
+    private void ShouldSerializeProperty(Func<bool> shouldSerializeFunc, Action setPropertyAction)
+    {
+        bool result1 = shouldSerializeFunc();
+        result1.Should().BeFalse();
+
+        setPropertyAction();
+
+        bool result2 = shouldSerializeFunc();
+        result2.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendar_ResetTodayDate_InvokeWithSetTodayDate_ReturnsExpected(bool createHandle)
+    {
+        using MonthCalendar calendar = new();
+        calendar.TodayDate = new DateTime(2000, 1, 1);
+
+        if (createHandle)
+        {
+            nint handle = calendar.Handle;
+        }
+
+        DateTime todayDateBeforeReset = calendar.TodayDate;
+        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        DateTime todayDateAfterReset = calendar.TodayDate;
+
+        todayDateBeforeReset.Should().NotBe(todayDateAfterReset);
+        todayDateAfterReset.Should().Be(DateTime.Today);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendar_ResetTodayDate_InvokeWithoutSetTodayDate_ReturnsExpected(bool createHandle)
+    {
+        using MonthCalendar calendar = new();
+
+        if (createHandle)
+        {
+            nint handle = calendar.Handle;
+        }
+
+        DateTime todayDateBeforeReset = calendar.TodayDate;
+        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        DateTime todayDateAfterReset = calendar.TodayDate;
+
+        todayDateBeforeReset.Should().Be(todayDateAfterReset);
+    }
+
+    private void TestResetColorProperty(Func<MonthCalendar, Color> getColor, Action<MonthCalendar, Color> setColor, Action<dynamic> resetColor)
+    {
+        using MonthCalendar calendar = new();
+        var testAccessor = calendar.TestAccessor();
+
+        Color originalColor = getColor(calendar);
+
+        setColor(calendar, Color.Red);
+        getColor(calendar).Should().Be(Color.Red);
+
+        resetColor(testAccessor.Dynamic);
+        getColor(calendar).Should().Be(originalColor);
+
+        setColor(calendar, Color.Red);
+        calendar.CreateControl();
+        resetColor(testAccessor.Dynamic);
+        getColor(calendar).Should().Be(originalColor);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTitleBackColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TitleBackColor,
+            setColor: (calendar, color) => calendar.TitleBackColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTitleBackColor()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTrailingForeColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TrailingForeColor,
+            setColor: (calendar, color) => calendar.TrailingForeColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTrailingForeColor()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTitleForeColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TitleForeColor,
+            setColor: (calendar, color) => calendar.TitleForeColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTitleForeColor()
+        );
+    }
+
+    private void TestResetProperty<T>(MonthCalendar calendar, Action<MonthCalendar, T> setProperty, Func<MonthCalendar, T> getProperty, T testValue, T expectedValue, Action<dynamic> resetProperty)
+    {
+        setProperty(calendar, testValue);
+        getProperty(calendar).Should().Be(testValue);
+
+        resetProperty(calendar.TestAccessor().Dynamic);
+        getProperty(calendar).Should().Be(expectedValue);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetSelectionRange_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        DateTime originalDate = DateTime.Now.Date;
+        TestResetProperty(
+            calendar,
+            (cal, range) => cal.SetSelectionRange(range.Item1, range.Item2),
+            cal => (cal.SelectionStart, cal.SelectionEnd),
+            (originalDate.AddDays(-1), originalDate.AddDays(1)),
+            (originalDate, originalDate),
+            dynamicAccessor => dynamicAccessor.ResetSelectionRange()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetMonthlyBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        TestResetProperty(
+            calendar,
+            (cal, date) => cal.AddMonthlyBoldedDate(date),
+            cal => cal.MonthlyBoldedDates.FirstOrDefault(),
+            DateTime.Now,
+            DateTime.MinValue,
+            dynamicAccessor => dynamicAccessor.ResetMonthlyBoldedDates()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetMaxDate_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.MaxDate = new DateTime(2022, 12, 31);
+
+        calendar.TestAccessor().Dynamic.ResetMaxDate();
+
+        calendar.MaxDate.Should().Be(new DateTime(9998, 12, 31));
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetCalendarDimensions_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.CalendarDimensions = new Size(2, 2);
+
+        calendar.TestAccessor().Dynamic.ResetCalendarDimensions();
+
+        calendar.CalendarDimensions.Should().Be(new Size(1, 1));
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetAnnuallyBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.AddAnnuallyBoldedDate(DateTime.Now);
+
+        calendar.TestAccessor().Dynamic.ResetAnnuallyBoldedDates();
+
+        calendar.AnnuallyBoldedDates.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.AddBoldedDate(DateTime.Now);
+
+        calendar.TestAccessor().Dynamic.ResetBoldedDates();
+
+        calendar.BoldedDates.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_OnCalendarViewChanged_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(calendar);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        calendar.TestAccessor().Dynamic._onCalendarViewChanged += handler;
+        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        calendar.TestAccessor().Dynamic._onCalendarViewChanged -= handler;
+        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
     }
 
     private class SubMonthCalendar : MonthCalendar

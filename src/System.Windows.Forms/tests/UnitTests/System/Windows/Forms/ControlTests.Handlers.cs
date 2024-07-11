@@ -699,8 +699,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_InvokeWithChildrenWithBindingContext_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext childContext1 = new();
-        BindingContext childContext2 = new();
+        BindingContext childContext1 = [];
+        BindingContext childContext2 = [];
         using Control child1 = new()
         {
             BindingContext = childContext1
@@ -1149,8 +1149,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_InvokeWithChildrenWithCursor_CallsCursorChanged(EventArgs eventArgs)
     {
-        Cursor childCursor1 = new((IntPtr)1);
-        Cursor childCursor2 = new((IntPtr)1);
+        Cursor childCursor1 = new(1);
+        Cursor childCursor2 = new(1);
         using Control child1 = new()
         {
             Cursor = childCursor1
@@ -3935,10 +3935,10 @@ public partial class ControlTests
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
+
         foreach (Control parent in new Control[] { control, tabPage })
         {
             int expected1 = parent == tabPage ? 0 : 1;
-            int expected2 = parent == tabPage ? 0 : 2;
 
             foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
             {
@@ -3964,8 +3964,8 @@ public partial class ControlTests
             yield return new object[] { parent, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
             yield return new object[] { parent, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
             yield return new object[] { parent, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
-            yield return new object[] { parent, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
-            yield return new object[] { parent, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+            yield return new object[] { parent, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+            yield return new object[] { parent, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
         }
     }
 
@@ -4090,8 +4090,8 @@ public partial class ControlTests
 
         yield return new object[] { true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
         yield return new object[] { true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-        yield return new object[] { true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-        yield return new object[] { true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+        yield return new object[] { true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+        yield return new object[] { true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
         yield return new object[] { false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
         yield return new object[] { false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
     }
@@ -4327,7 +4327,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBindingContextChanged_InvokeWithBindingContext_DoesNotCallBindingContextChanged(EventArgs eventArgs)
     {
-        BindingContext context = new();
+        BindingContext context = [];
         using SubControl control = new()
         {
             BindingContext = context
@@ -4380,7 +4380,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentCursorChanged_InvokeWithCursor_DoesNotCallCursorChanged(EventArgs eventArgs)
     {
-        Cursor cursor = new((IntPtr)1);
+        Cursor cursor = new(1);
         using SubControl control = new()
         {
             Cursor = cursor

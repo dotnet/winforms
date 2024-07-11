@@ -27,12 +27,12 @@ public partial class DataObject
         private const string AllowedAssemblyName = "System.Drawing";
 
         // .NET Framework PublicKeyToken=b03f5f7f11d50a3a
-        private static ReadOnlySpan<byte> AllowedToken => [ 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A ];
+        private static ReadOnlySpan<byte> AllowedToken => [0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A];
 
         public override Type? BindToType(string assemblyName, string typeName)
         {
             // Only safe to deserialize types are bypassing this callback. Strings and arrays of primitive types in
-            // particular. We are explicitly allowing the System.Drawing.Bitmap type to bind using the default binder.
+            // particular.
 
             if (AllowedTypeName.Equals(typeName, StringComparison.Ordinal))
             {
@@ -42,8 +42,7 @@ public partial class DataObject
                     if (AllowedAssemblyName.Equals(nameToBind.Name, StringComparison.Ordinal)
                         && AllowedToken.SequenceEqual(nameToBind.GetPublicKeyToken()))
                     {
-                        // Continue with the default binder.
-                        return null;
+                        return typeof(Bitmap);
                     }
                 }
                 catch (Exception ex) when (ex is ArgumentException or FileLoadException)

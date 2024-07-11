@@ -50,10 +50,8 @@ internal sealed unsafe class Com2FontConverter : Com2DataTypeToManagedDataTypeCo
         try
         {
             // This wasn't working because it was converting everything to world units.
-            using (Font font = Font.FromHfont(_lastHandle))
-            {
-                _lastFont = ControlPaint.FontInPoints(font);
-            }
+            using Font font = Font.FromHfont(_lastHandle);
+            _lastFont = ControlPaint.FontInPoints(font);
         }
         catch (ArgumentException)
         {
@@ -124,7 +122,7 @@ internal sealed unsafe class Com2FontConverter : Com2DataTypeToManagedDataTypeCo
             targetChanged = true;
         }
 
-        LOGFONTW logfont = LOGFONTW.FromFont(source);
+        LOGFONTW logfont = source.ToLogicalFont();
 
         if (target->Weight != (short)logfont.lfWeight)
         {

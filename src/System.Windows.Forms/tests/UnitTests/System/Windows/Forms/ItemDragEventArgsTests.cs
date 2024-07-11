@@ -8,7 +8,7 @@ public class ItemDragEventArgsTests
 {
     [Theory]
     [InlineData(MouseButtons.Left)]
-    [InlineData((MouseButtons)(MouseButtons.None - 1))]
+    [InlineData((MouseButtons.None - 1))]
     public void Ctor_MouseButtons(MouseButtons button)
     {
         ItemDragEventArgs e = new(button);
@@ -18,7 +18,7 @@ public class ItemDragEventArgsTests
 
     [Theory]
     [InlineData(MouseButtons.Left, 1)]
-    [InlineData((MouseButtons)(MouseButtons.None - 1), null)]
+    [InlineData((MouseButtons.None - 1), null)]
     public void Ctor_MouseButtons_Object(MouseButtons button, object item)
     {
         ItemDragEventArgs e = new(button, item);

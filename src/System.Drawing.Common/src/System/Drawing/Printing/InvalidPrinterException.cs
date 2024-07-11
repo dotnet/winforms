@@ -11,14 +11,11 @@ namespace System.Drawing.Printing;
 [Serializable]
 public partial class InvalidPrinterException : SystemException
 {
-    private readonly PrinterSettings? _settings;
-
     /// <summary>
     ///  Initializes a new instance of the <see cref='InvalidPrinterException'/> class.
     /// </summary>
     public InvalidPrinterException(PrinterSettings settings) : base(GenerateMessage(settings))
     {
-        _settings = settings;
     }
 
     private static string GenerateMessage(PrinterSettings settings)

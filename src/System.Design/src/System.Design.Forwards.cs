@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnTypeEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataSourceListEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormatStringEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.HelpNamespaceEditor))]
@@ -26,6 +27,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeNodeCollectionEditor))]
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]

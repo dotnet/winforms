@@ -59,7 +59,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 return _helpKeyword;
             }
 
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             if (owner is null)
             {
                 return null;
@@ -82,7 +82,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
                     // For value classes, the equality will never work, so just try the type equality.
                     if (entry.PropertyValue == owner
-                        || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue.GetType()))
+                        || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue?.GetType()))
                     {
                         _helpKeyword = $"{entry.PropertyName}.{_helpKeyword}";
                         break;
@@ -121,7 +121,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    internal override string LabelToolTipText => _toolTipText ?? base.LabelToolTipText;
+    internal override string? LabelToolTipText => _toolTipText ?? base.LabelToolTipText;
 
     internal override bool Enumerable => base.Enumerable && !IsPropertyReadOnly;
 
@@ -229,7 +229,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         {
             if (!_propertyValueUIServiceChecked && _propertyValueUIService is null)
             {
-                _propertyValueUIService = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
+                _propertyValueUIService = (IPropertyValueUIService?)GetService(typeof(IPropertyValueUIService));
                 _propertyValueUIServiceChecked = true;
             }
 
@@ -280,7 +280,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    internal override UITypeEditor UITypeEditor
+    internal override UITypeEditor? UITypeEditor
     {
         get
         {
@@ -304,14 +304,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             if (PropertyDescriptor.TryGetAttribute(out RefreshPropertiesAttribute? refreshAttribute) &&
                 !refreshAttribute.RefreshProperties.Equals(RefreshProperties.None))
             {
-                OwnerGridView.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
+                OwnerGridView?.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
             }
         }
     }
 
     internal override Point GetLabelToolTipLocation(int mouseX, int mouseY)
     {
-        if (_propertyValueUIItems is not null && _uiItemRects is not null)
+        if (_propertyValueUIItems is not null
+            && _uiItemRects is not null
+            && OwnerGridView is not null)
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -339,7 +341,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     protected void Initialize(PropertyDescriptor propertyDescriptor)
     {
-        _isSerializeContentsProperty = PropertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
+        _isSerializeContentsProperty = propertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
 
         if (!_hide && IsPropertyReadOnly)
         {
@@ -352,21 +354,21 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    protected virtual void NotifyParentsOfChanges(GridEntry entry)
+    protected virtual void NotifyParentsOfChanges(GridEntry? entry)
     {
         // See if we need to notify the parent(s) up the chain.
         while (entry is PropertyDescriptorGridEntry propertyEntry &&
             propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
-            object owner = entry.GetValueOwner();
+            object? owner = entry.GetValueOwner();
 
             // When owner is an instance of a value type we can't use == in the following while condition.
-            bool isValueType = owner.GetType().IsValueType;
+            bool isValueType = owner?.GetType().IsValueType ?? false;
 
             // Find the next property descriptor with a different parent.
             while (entry is not PropertyDescriptorGridEntry
-                || isValueType ? owner.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
+                || isValueType ? owner!.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
             {
                 entry = entry.ParentGridEntry;
                 if (entry is null)
@@ -380,8 +382,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 owner = entry.GetValueOwner();
 
-                ComponentChangeService?.OnComponentChanging(owner, entry.PropertyDescriptor);
-                ComponentChangeService?.OnComponentChanged(owner, entry.PropertyDescriptor);
+                if (owner is not null)
+                {
+                    ComponentChangeService?.OnComponentChanging(owner, entry.PropertyDescriptor);
+                    ComponentChangeService?.OnComponentChanged(owner, entry.PropertyDescriptor);
+                }
 
                 // Clear the value so it paints correctly next time.
                 entry.ClearCachedValues(clearChildren: false);
@@ -476,7 +481,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         if (_propertyValueUIItems is not null
             && _uiItemRects is not null
             && count == 2
-            && ((button & MouseButtons.Left) == MouseButtons.Left))
+            && ((button & MouseButtons.Left) == MouseButtons.Left)
+            && OwnerGridView is not null)
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -491,7 +497,12 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         return base.OnMouseClick(x, y, count, button);
     }
 
-    public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public override void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
         base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
@@ -530,7 +541,10 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
         }
 
-        OwnerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
+        if (OwnerGridView is { } ownerGridView)
+        {
+            ownerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
+        }
     }
 
     private object? SetPropertyValue(
@@ -723,8 +737,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             if (ParentGridEntry is not null)
             {
-                Type propertyType = ParentGridEntry.PropertyType;
-                treatAsValueType = propertyType.IsValueType || propertyType.IsArray;
+                Type? propertyType = ParentGridEntry.PropertyType;
+                if (propertyType is not null)
+                {
+                    treatAsValueType = propertyType.IsValueType || propertyType.IsArray;
+                }
             }
 
             if (realOwner is not null)

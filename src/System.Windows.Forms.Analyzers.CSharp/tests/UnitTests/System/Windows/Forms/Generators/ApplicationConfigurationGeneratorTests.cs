@@ -7,7 +7,6 @@ using System.Windows.Forms.Analyzers.Tests;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
-using Xunit;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests;
@@ -37,16 +36,20 @@ namespace MyProject
     }
 }";
 
-    public static IEnumerable<object[]> UnsupportedProjectTypes_TestData()
+    public static TheoryData<OutputKind> UnsupportedProjectTypes_TestData()
     {
+        TheoryData<OutputKind> testData = new();
+
         foreach (OutputKind projectType in Enum.GetValues(typeof(OutputKind)))
         {
-            if (projectType != OutputKind.ConsoleApplication &&
-                projectType != OutputKind.WindowsApplication)
+            if (projectType is not OutputKind.ConsoleApplication
+                and not OutputKind.WindowsApplication)
             {
-                yield return new object[] { projectType };
+                testData.Add(projectType);
             }
         }
+
+        return testData;
     }
 
     [Theory]

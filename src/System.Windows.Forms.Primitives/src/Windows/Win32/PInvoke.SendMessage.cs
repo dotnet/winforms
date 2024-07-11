@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static LRESULT SendMessage<T>(
         T hWnd,
         MessageId Msg,
@@ -16,6 +17,7 @@ internal static partial class PInvoke
         return result;
     }
 
+    /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static LRESULT SendMessage<THwnd, TWParam>(
         THwnd hWnd,
         MessageId Msg,
@@ -27,6 +29,7 @@ internal static partial class PInvoke
         return result;
     }
 
+    /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static unsafe LRESULT SendMessage<T>(
         T hWnd,
         MessageId Msg,
@@ -39,6 +42,7 @@ internal static partial class PInvoke
         }
     }
 
+    /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static unsafe nint SendMessage<THwnd, TLParam>(
         THwnd hWnd,
         MessageId Msg,
@@ -53,6 +57,7 @@ internal static partial class PInvoke
         }
     }
 
+    /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static unsafe nint SendMessage<THwnd, TWParam, TLParam>(
         THwnd hWnd,
         MessageId Msg,

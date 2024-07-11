@@ -74,13 +74,13 @@ internal class TemplateNodeCustomMenuItemCollection : CustomMenuItemCollection
             // the code in ComponentAdded will actually get the add done.
             IComponent component = designerHost.CreateComponent(t);
             IDesigner designer = designerHost.GetDesigner(component);
-            if (designer is ComponentDesigner)
+            if (designer is ComponentDesigner componentDesigner)
             {
-                ((ComponentDesigner)designer).InitializeNewComponent(null);
+                componentDesigner.InitializeNewComponent(null);
             }
 
             // Set the Image property and DisplayStyle...
-            if (component is ToolStripButton || component is ToolStripSplitButton || component is ToolStripDropDownButton)
+            if (component is ToolStripButton or ToolStripSplitButton or ToolStripDropDownButton)
             {
                 Image image = null;
                 try

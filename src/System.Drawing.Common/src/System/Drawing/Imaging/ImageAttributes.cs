@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using System.Drawing.Drawing2D;
 using System.IO;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+using System.Runtime.CompilerServices;
+#if NET9_0_OR_GREATER
+using System.ComponentModel;
+#endif
 
 namespace System.Drawing.Imaging;
 
@@ -29,513 +31,435 @@ namespace System.Drawing.Imaging;
 // have been set for the defaults or for that type.
 
 /// <summary>
-/// Contains information about how image colors are manipulated during rendering.
+///  Contains information about how image colors are manipulated during rendering.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public sealed class ImageAttributes : ICloneable, IDisposable
+public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
+    private const int ColorMapStackSpace = 32;
 
-    internal IntPtr nativeImageAttributes;
+    internal GpImageAttributes* _nativeImageAttributes;
 
-    internal void SetNativeImageAttributes(IntPtr handle)
+    internal void SetNativeImageAttributes(GpImageAttributes* handle)
     {
-        if (handle == IntPtr.Zero)
+        if (handle is null)
             throw new ArgumentNullException(nameof(handle));
 
-        nativeImageAttributes = handle;
+        _nativeImageAttributes = handle;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='ImageAttributes'/> class.
+    ///  Initializes a new instance of the <see cref='ImageAttributes'/> class.
     /// </summary>
     public ImageAttributes()
     {
-        IntPtr newImageAttributes;
+        GpImageAttributes* newImageAttributes;
 
-        int status = Gdip.GdipCreateImageAttributes(out newImageAttributes);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
+        PInvoke.GdipCreateImageAttributes(&newImageAttributes).ThrowIfFailed();
         SetNativeImageAttributes(newImageAttributes);
     }
 
-    internal ImageAttributes(IntPtr newNativeImageAttributes)
-    {
-        SetNativeImageAttributes(newNativeImageAttributes);
-    }
+    internal ImageAttributes(GpImageAttributes* newNativeImageAttributes)
+        => SetNativeImageAttributes(newNativeImageAttributes);
 
     /// <summary>
-    /// Cleans up Windows resources for this <see cref='ImageAttributes'/>.
+    ///  Cleans up Windows resources for this <see cref='ImageAttributes'/>.
     /// </summary>
     public void Dispose()
     {
-        Dispose(true);
+        if (_nativeImageAttributes is null)
+        {
+            return;
+        }
+
+        Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDisposeImageAttributes(_nativeImageAttributes);
+        _nativeImageAttributes = null;
+        Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         GC.SuppressFinalize(this);
     }
 
-    private void Dispose(bool disposing)
-    {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && nativeImageAttributes != IntPtr.Zero, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-        if (nativeImageAttributes != IntPtr.Zero)
-        {
-            try
-            {
-#if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
-#endif
-                Gdip.GdipDisposeImageAttributes(new HandleRef(this, nativeImageAttributes));
-#if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-
-                Debug.Fail($"Exception thrown during Dispose: {ex}");
-            }
-            finally
-            {
-                nativeImageAttributes = IntPtr.Zero;
-            }
-        }
-    }
-
     /// <summary>
-    /// Cleans up Windows resources for this <see cref='ImageAttributes'/>.
+    ///  Cleans up Windows resources for this <see cref='ImageAttributes'/>.
     /// </summary>
-    ~ImageAttributes()
-    {
-        Dispose(false);
-    }
+    ~ImageAttributes() => Dispose();
 
     /// <summary>
-    /// Creates an exact copy of this <see cref='ImageAttributes'/>.
+    ///  Creates an exact copy of this <see cref='ImageAttributes'/>.
     /// </summary>
     public object Clone()
     {
-        IntPtr clone;
-
-        int status = Gdip.GdipCloneImageAttributes(
-                                new HandleRef(this, nativeImageAttributes),
-                                out clone);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        GpImageAttributes* clone;
+        PInvoke.GdipCloneImageAttributes(_nativeImageAttributes, &clone).ThrowIfFailed();
+        GC.KeepAlive(this);
 
         return new ImageAttributes(clone);
     }
 
     /// <summary>
-    /// Sets the 5 X 5 color adjust matrix to the specified <see cref='Matrix'/>.
+    ///  Sets the 5 X 5 color adjust matrix to the specified <see cref='Matrix'/>.
     /// </summary>
-    public void SetColorMatrix(ColorMatrix newColorMatrix)
-    {
+    public void SetColorMatrix(ColorMatrix newColorMatrix) =>
         SetColorMatrix(newColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Default);
-    }
 
     /// <summary>
-    /// Sets the 5 X 5 color adjust matrix to the specified 'Matrix' with the specified 'ColorMatrixFlags'.
+    ///  Sets the 5 X 5 color adjust matrix to the specified 'Matrix' with the specified 'ColorMatrixFlags'.
     /// </summary>
-    public void SetColorMatrix(ColorMatrix newColorMatrix, ColorMatrixFlag flags)
-    {
+    public void SetColorMatrix(ColorMatrix newColorMatrix, ColorMatrixFlag flags) =>
         SetColorMatrix(newColorMatrix, flags, ColorAdjustType.Default);
-    }
 
     /// <summary>
-    /// Sets the 5 X 5 color adjust matrix to the specified 'Matrix' with the  specified 'ColorMatrixFlags'.
+    ///  Sets the 5 X 5 color adjust matrix to the specified 'Matrix' with the  specified 'ColorMatrixFlags'.
     /// </summary>
-    public void SetColorMatrix(ColorMatrix newColorMatrix, ColorMatrixFlag mode, ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesColorMatrix(
-                    new HandleRef(this, nativeImageAttributes),
-                    type,
-                    true,
-                    newColorMatrix,
-                    null,
-                    mode);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
+    public void SetColorMatrix(ColorMatrix newColorMatrix, ColorMatrixFlag mode, ColorAdjustType type) =>
+        SetColorMatrices(newColorMatrix, null, mode, type);
 
     /// <summary>
-    /// Clears the color adjust matrix to all zeroes.
+    ///  Clears the color adjust matrix to all zeroes.
     /// </summary>
-    public void ClearColorMatrix()
-    {
-        ClearColorMatrix(ColorAdjustType.Default);
-    }
+    public void ClearColorMatrix() => ClearColorMatrix(ColorAdjustType.Default);
 
     /// <summary>
-    /// Clears the color adjust matrix.
+    ///  Clears the color adjust matrix.
     /// </summary>
     public void ClearColorMatrix(ColorAdjustType type)
     {
-        int status = Gdip.GdipSetImageAttributesColorMatrix(
-            new HandleRef(this, nativeImageAttributes),
-            type,
+        PInvoke.GdipSetImageAttributesColorMatrix(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
             false,
             null,
             null,
-            ColorMatrixFlag.Default);
+            (ColorMatrixFlags)ColorMatrixFlag.Default).ThrowIfFailed();
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        GC.KeepAlive(this);
     }
 
     /// <summary>
-    /// Sets a color adjust matrix for image colors and a separate gray scale adjust matrix for gray scale values.
+    ///  Sets a color adjust matrix for image colors and a separate gray scale adjust matrix for gray scale values.
     /// </summary>
-    public void SetColorMatrices(ColorMatrix newColorMatrix, ColorMatrix? grayMatrix)
-    {
+    public void SetColorMatrices(ColorMatrix newColorMatrix, ColorMatrix? grayMatrix) =>
         SetColorMatrices(newColorMatrix, grayMatrix, ColorMatrixFlag.Default, ColorAdjustType.Default);
-    }
 
-    public void SetColorMatrices(ColorMatrix newColorMatrix, ColorMatrix? grayMatrix, ColorMatrixFlag flags)
-    {
+    public void SetColorMatrices(ColorMatrix newColorMatrix, ColorMatrix? grayMatrix, ColorMatrixFlag flags) =>
         SetColorMatrices(newColorMatrix, grayMatrix, flags, ColorAdjustType.Default);
+
+    public void SetColorMatrices(
+        ColorMatrix newColorMatrix,
+        ColorMatrix? grayMatrix,
+        ColorMatrixFlag mode,
+        ColorAdjustType type)
+    {
+        ArgumentNullException.ThrowIfNull(newColorMatrix);
+
+        if (grayMatrix is not null)
+        {
+            fixed (void* cm = &newColorMatrix.GetPinnableReference())
+            fixed (void* gm = &grayMatrix.GetPinnableReference())
+            {
+                PInvoke.GdipSetImageAttributesColorMatrix(
+                    _nativeImageAttributes,
+                    (GdiPlus.ColorAdjustType)type,
+                    enableFlag: true,
+                    (GdiPlus.ColorMatrix*)cm,
+                    (GdiPlus.ColorMatrix*)gm,
+                    (ColorMatrixFlags)mode).ThrowIfFailed();
+            }
+        }
+        else
+        {
+            fixed (void* cm = &newColorMatrix.GetPinnableReference())
+            {
+                PInvoke.GdipSetImageAttributesColorMatrix(
+                    _nativeImageAttributes,
+                    (GdiPlus.ColorAdjustType)type,
+                    enableFlag: true,
+                    (GdiPlus.ColorMatrix*)cm,
+                    null,
+                    (ColorMatrixFlags)mode).ThrowIfFailed();
+            }
+        }
+
+        GC.KeepAlive(this);
     }
 
-    public void SetColorMatrices(ColorMatrix newColorMatrix, ColorMatrix? grayMatrix, ColorMatrixFlag mode,
-                                 ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesColorMatrix(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            true,
-            newColorMatrix,
-            grayMatrix,
-            mode);
+    public void SetThreshold(float threshold) => SetThreshold(threshold, ColorAdjustType.Default);
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+    public void SetThreshold(float threshold, ColorAdjustType type) => SetThreshold(threshold, type, enableFlag: true);
+
+    public void ClearThreshold() => ClearThreshold(ColorAdjustType.Default);
+
+    public void ClearThreshold(ColorAdjustType type) => SetThreshold(0.0f, type, enableFlag: false);
+
+    private void SetThreshold(float threshold, ColorAdjustType type, bool enableFlag)
+    {
+        PInvoke.GdipSetImageAttributesThreshold(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag,
+            threshold).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void SetThreshold(float threshold)
+    public void SetGamma(float gamma) => SetGamma(gamma, ColorAdjustType.Default);
+
+    public void SetGamma(float gamma, ColorAdjustType type) => SetGamma(gamma, type, enableFlag: true);
+
+    public void ClearGamma() => ClearGamma(ColorAdjustType.Default);
+
+    public void ClearGamma(ColorAdjustType type) => SetGamma(0.0f, type, enableFlag: false);
+
+    private void SetGamma(float gamma, ColorAdjustType type, bool enableFlag)
     {
-        SetThreshold(threshold, ColorAdjustType.Default);
+        PInvoke.GdipSetImageAttributesGamma(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag,
+            gamma).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void SetThreshold(float threshold, ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesThreshold(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            true,
-            threshold);
+    public void SetNoOp() => SetNoOp(ColorAdjustType.Default);
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+    public void SetNoOp(ColorAdjustType type) => SetNoOp(type, enableFlag: true);
+
+    public void ClearNoOp() => ClearNoOp(ColorAdjustType.Default);
+
+    public void ClearNoOp(ColorAdjustType type) => SetNoOp(type, enableFlag: false);
+
+    private void SetNoOp(ColorAdjustType type, bool enableFlag)
+    {
+        PInvoke.GdipSetImageAttributesNoOp(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void ClearThreshold()
-    {
-        ClearThreshold(ColorAdjustType.Default);
-    }
-
-    public void ClearThreshold(ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesThreshold(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            false,
-            0.0f);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void SetGamma(float gamma)
-    {
-        SetGamma(gamma, ColorAdjustType.Default);
-    }
-
-    public void SetGamma(float gamma, ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesGamma(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            true,
-            gamma);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void ClearGamma()
-    {
-        ClearGamma(ColorAdjustType.Default);
-    }
-
-    public void ClearGamma(ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesGamma(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            false,
-            0.0f);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void SetNoOp()
-    {
-        SetNoOp(ColorAdjustType.Default);
-    }
-
-    public void SetNoOp(ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesNoOp(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            true);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void ClearNoOp()
-    {
-        ClearNoOp(ColorAdjustType.Default);
-    }
-
-    public void ClearNoOp(ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesNoOp(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            false);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void SetColorKey(Color colorLow, Color colorHigh)
-    {
+    public void SetColorKey(Color colorLow, Color colorHigh) =>
         SetColorKey(colorLow, colorHigh, ColorAdjustType.Default);
+
+    public void SetColorKey(Color colorLow, Color colorHigh, ColorAdjustType type) =>
+        SetColorKey(colorLow, colorHigh, type, enableFlag: true);
+
+    public void ClearColorKey() => ClearColorKey(ColorAdjustType.Default);
+
+    public void ClearColorKey(ColorAdjustType type) => SetColorKey(Color.Empty, Color.Empty, type, enableFlag: false);
+
+    private void SetColorKey(Color colorLow, Color colorHigh, ColorAdjustType type, bool enableFlag)
+    {
+        PInvoke.GdipSetImageAttributesColorKeys(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag,
+            (uint)colorLow.ToArgb(),
+            (uint)colorHigh.ToArgb()).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void SetColorKey(Color colorLow, Color colorHigh, ColorAdjustType type)
+    public void SetOutputChannel(ColorChannelFlag flags) => SetOutputChannel(flags, ColorAdjustType.Default);
+
+    public void SetOutputChannel(ColorChannelFlag flags, ColorAdjustType type) =>
+        SetOutputChannel(type, flags, enableFlag: true);
+
+    public void ClearOutputChannel() => ClearOutputChannel(ColorAdjustType.Default);
+
+    public void ClearOutputChannel(ColorAdjustType type) =>
+        SetOutputChannel(type, ColorChannelFlag.ColorChannelLast, enableFlag: false);
+
+    private void SetOutputChannel(ColorAdjustType type, ColorChannelFlag flags, bool enableFlag)
     {
-        int lowInt = colorLow.ToArgb();
-        int highInt = colorHigh.ToArgb();
+        PInvoke.GdipSetImageAttributesOutputChannel(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag,
+            (ColorChannelFlags)flags).ThrowIfFailed();
 
-        int status = Gdip.GdipSetImageAttributesColorKeys(
-                                    new HandleRef(this, nativeImageAttributes),
-                                    type,
-                                    true,
-                                    lowInt,
-                                    highInt);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        GC.KeepAlive(this);
     }
 
-    public void ClearColorKey()
-    {
-        ClearColorKey(ColorAdjustType.Default);
-    }
-
-    public void ClearColorKey(ColorAdjustType type)
-    {
-        int zero = 0;
-        int status = Gdip.GdipSetImageAttributesColorKeys(
-                                    new HandleRef(this, nativeImageAttributes),
-                                    type,
-                                    false,
-                                    zero,
-                                    zero);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void SetOutputChannel(ColorChannelFlag flags)
-    {
-        SetOutputChannel(flags, ColorAdjustType.Default);
-    }
-
-    public void SetOutputChannel(ColorChannelFlag flags, ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesOutputChannel(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            true,
-            flags);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void ClearOutputChannel()
-    {
-        ClearOutputChannel(ColorAdjustType.Default);
-    }
-
-    public void ClearOutputChannel(ColorAdjustType type)
-    {
-        int status = Gdip.GdipSetImageAttributesOutputChannel(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            false,
-            ColorChannelFlag.ColorChannelLast);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-    }
-
-    public void SetOutputChannelColorProfile(string colorProfileFilename)
-    {
+    public void SetOutputChannelColorProfile(string colorProfileFilename) =>
         SetOutputChannelColorProfile(colorProfileFilename, ColorAdjustType.Default);
-    }
 
-    public void SetOutputChannelColorProfile(string colorProfileFilename,
-                                             ColorAdjustType type)
+    public void SetOutputChannelColorProfile(string colorProfileFilename, ColorAdjustType type)
     {
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(colorProfileFilename);
 
-        int status = Gdip.GdipSetImageAttributesOutputChannelColorProfile(
-                                    new HandleRef(this, nativeImageAttributes),
-                                    type,
-                                    true,
-                                    colorProfileFilename);
+        fixed (char* n = colorProfileFilename)
+        {
+            PInvoke.GdipSetImageAttributesOutputChannelColorProfile(
+                _nativeImageAttributes,
+                (GdiPlus.ColorAdjustType)type,
+                enableFlag: true,
+                n).ThrowIfFailed();
+        }
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        GC.KeepAlive(this);
     }
 
-    public void ClearOutputChannelColorProfile()
-    {
-        ClearOutputChannel(ColorAdjustType.Default);
-    }
+    public void ClearOutputChannelColorProfile() => ClearOutputChannel(ColorAdjustType.Default);
 
     public void ClearOutputChannelColorProfile(ColorAdjustType type)
     {
-        int status = Gdip.GdipSetImageAttributesOutputChannel(
-            new HandleRef(this, nativeImageAttributes),
-            type,
+        PInvoke.GdipSetImageAttributesOutputChannel(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
             false,
-            ColorChannelFlag.ColorChannelLast);
+            ColorChannelFlags.ColorChannelFlagsLast).ThrowIfFailed();
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        GC.KeepAlive(this);
     }
 
-    public void SetRemapTable(ColorMap[] map)
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
+    public void SetRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Default);
+
+    /// <summary>
+    ///  Sets the default color-remap table.
+    /// </summary>
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+#if NET9_0_OR_GREATER
+    [EditorBrowsable(EditorBrowsableState.Never)]
+#endif
+    public void SetRemapTable(ColorMap[] map, ColorAdjustType type)
     {
-        SetRemapTable(map, ColorAdjustType.Default);
+        ArgumentNullException.ThrowIfNull(map);
+        SetRemapTable(type, map);
     }
 
-    public unsafe void SetRemapTable(ColorMap[] map, ColorAdjustType type)
-    {
-        int index;
-        int mapSize = map.Length;
-        int size = 4; // Marshal.SizeOf(index.GetType());
-        IntPtr memory = Marshal.AllocHGlobal(checked(mapSize * size * 2));
-        byte* pMemory = (byte*)memory;
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
+    public void SetRemapTable(params ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
 
-        try
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
+    public void SetRemapTable(params ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Default, map);
+#endif
+
+    /// <summary>
+    ///  Sets the color-remap table for a specified category.
+    /// </summary>
+    /// <param name="type">
+    ///  An element of <see cref="ColorAdjustType"/> that specifies the category for which the color-remap table is set.
+    /// </param>
+    /// <param name="map">
+    ///  A series of color pairs mapping an existing color to a new color.
+    /// </param>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void SetRemapTable(ColorAdjustType type, params ReadOnlySpan<ColorMap> map)
+    {
+        // Color is being generated incorrectly so we can't use GdiPlus.ColorMap directly.
+        // https://github.com/microsoft/CsWin32/issues/1121
+
+        StackBuffer stackBuffer = default;
+        using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
+
+        for (int i = 0; i < map.Length; i++)
         {
-            for (index = 0; index < mapSize; index++)
-            {
-                Marshal.StructureToPtr(map[index].OldColor.ToArgb(), (IntPtr)(pMemory + (nint)index * size * 2), false);
-                Marshal.StructureToPtr(map[index].NewColor.ToArgb(), (IntPtr)(pMemory + (nint)index * size * 2 + size), false);
-            }
-
-            Gdip.CheckStatus(Gdip.GdipSetImageAttributesRemapTable(
-                new HandleRef(this, nativeImageAttributes),
-                type,
-                true,
-                mapSize,
-                memory));
+            buffer[i] = (map[i].OldColor, map[i].NewColor);
         }
-        finally
+
+        fixed (void* m = buffer)
         {
-            Marshal.FreeHGlobal(memory);
+            PInvoke.GdipSetImageAttributesRemapTable(
+                _nativeImageAttributes,
+                (GdiPlus.ColorAdjustType)type,
+                enableFlag: true,
+                (uint)map.Length,
+                (GdiPlus.ColorMap*)m).ThrowIfFailed();
         }
+
+        GC.KeepAlive(this);
     }
 
-    public void ClearRemapTable()
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+    public void SetRemapTable(ColorAdjustType type, params ReadOnlySpan<(Color OldColor, Color NewColor)> map)
     {
-        ClearRemapTable(ColorAdjustType.Default);
+        StackBuffer stackBuffer = default;
+        using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
+
+        for (int i = 0; i < map.Length; i++)
+        {
+            buffer[i] = (map[i].OldColor, map[i].NewColor);
+        }
+
+        fixed (void* m = buffer)
+        {
+            PInvoke.GdipSetImageAttributesRemapTable(
+                _nativeImageAttributes,
+                (GdiPlus.ColorAdjustType)type,
+                enableFlag: true,
+                (uint)map.Length,
+                (GdiPlus.ColorMap*)m).ThrowIfFailed();
+        }
+
+        GC.KeepAlive(this);
     }
+#endif
+
+    [InlineArray(ColorMapStackSpace)]
+    private struct StackBuffer
+    {
+        internal (ARGB, ARGB) _element0;
+    }
+
+    public void ClearRemapTable() => ClearRemapTable(ColorAdjustType.Default);
 
     public void ClearRemapTable(ColorAdjustType type)
     {
-        Gdip.CheckStatus(Gdip.GdipSetImageAttributesRemapTable(
-            new HandleRef(this, nativeImageAttributes),
-            type,
-            false,
+        PInvoke.GdipSetImageAttributesRemapTable(
+            _nativeImageAttributes,
+            (GdiPlus.ColorAdjustType)type,
+            enableFlag: false,
             0,
-            IntPtr.Zero));
+            null).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void SetBrushRemapTable(ColorMap[] map)
-    {
-        SetRemapTable(map, ColorAdjustType.Brush);
-    }
+    public void SetBrushRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
 
-    public void ClearBrushRemapTable()
-    {
-        ClearRemapTable(ColorAdjustType.Brush);
-    }
+#if NET9_0_OR_GREATER
+    public void SetBrushRemapTable(params ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
 
-    public void SetWrapMode(WrapMode mode)
-    {
-        SetWrapMode(mode, default, false);
-    }
+    public void SetBrushRemapTable(params ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Brush, map);
+#endif
 
-    public void SetWrapMode(WrapMode mode, Color color)
-    {
-        SetWrapMode(mode, color, false);
-    }
+    public void ClearBrushRemapTable() => ClearRemapTable(ColorAdjustType.Brush);
 
-    public void SetWrapMode(WrapMode mode, Color color, bool clamp)
-    {
-        int status = Gdip.GdipSetImageAttributesWrapMode(
-                        new HandleRef(this, nativeImageAttributes),
-                        unchecked((int)mode),
-                        color.ToArgb(),
-                        clamp);
+    public void SetWrapMode(Drawing2D.WrapMode mode) => SetWrapMode(mode, default, clamp: false);
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+    public void SetWrapMode(Drawing2D.WrapMode mode, Color color) => SetWrapMode(mode, color, clamp: false);
+
+    public void SetWrapMode(Drawing2D.WrapMode mode, Color color, bool clamp)
+    {
+        PInvoke.GdipSetImageAttributesWrapMode(
+            _nativeImageAttributes,
+            (WrapMode)mode,
+            (uint)color.ToArgb(),
+            clamp).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
     public void GetAdjustedPalette(ColorPalette palette, ColorAdjustType type)
     {
-        // does inplace adjustment
-        IntPtr memory = palette.ConvertToMemory();
-        try
+        using var buffer = palette.ConvertToBuffer();
+        fixed (void* p = buffer)
         {
-            Gdip.CheckStatus(Gdip.GdipGetImageAttributesAdjustedPalette(
-                new HandleRef(this, nativeImageAttributes),
-                memory,
-                type));
-            palette.ConvertFromMemory(memory);
+            PInvoke.GdipGetImageAttributesAdjustedPalette(
+                _nativeImageAttributes,
+                (GdiPlus.ColorPalette*)p,
+                (GdiPlus.ColorAdjustType)type).ThrowIfFailed();
         }
-        finally
-        {
-            if (memory != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(memory);
-            }
-        }
+
+        GC.KeepAlive(this);
     }
 }

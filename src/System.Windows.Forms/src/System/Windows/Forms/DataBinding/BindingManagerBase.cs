@@ -91,7 +91,11 @@ public abstract class BindingManagerBase
         return GetItemProperties(BindType, 0, dataSources, listAccessors);
     }
 
-    protected virtual PropertyDescriptorCollection? GetItemProperties([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
+    protected virtual PropertyDescriptorCollection? GetItemProperties(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type listType,
+        int offset,
+        ArrayList dataSources,
+        ArrayList listAccessors)
     {
         if (listAccessors.Count < offset)
         {
@@ -109,7 +113,7 @@ public abstract class BindingManagerBase
             {
                 if (property.Name == "Item" && property.PropertyType != typeof(object))
                 {
-                    return TypeDescriptor.GetProperties(property.PropertyType, new Attribute[] { new BrowsableAttribute(true) });
+                    return TypeDescriptor.GetProperties(property.PropertyType, [new BrowsableAttribute(true)]);
                 }
             }
 
@@ -130,7 +134,7 @@ public abstract class BindingManagerBase
                 if (property.Name == "Item" && property.PropertyType != typeof(object))
                 {
                     // get all the properties that are not marked as Browsable(false)
-                    itemProps = TypeDescriptor.GetProperties(property.PropertyType, new Attribute[] { new BrowsableAttribute(true) });
+                    itemProps = TypeDescriptor.GetProperties(property.PropertyType, [new BrowsableAttribute(true)]);
                 }
             }
 

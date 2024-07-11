@@ -26,7 +26,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
     public BindingContext? BindingContext
     {
-        get => _bindingContext ??= new BindingContext();
+        get => _bindingContext ??= [];
 
         set
         {
@@ -51,7 +51,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     }
 
     /// <summary>
-    ///  Raises the <see cref="BindableComponent.BindingContextChanged"/> event.
+    ///  Raises the <see cref="BindingContextChanged"/> event.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnBindingContextChanged(EventArgs e)

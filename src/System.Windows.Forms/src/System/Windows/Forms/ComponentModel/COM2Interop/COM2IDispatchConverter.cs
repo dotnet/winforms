@@ -7,6 +7,7 @@ using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses ComNativeDescriptor which is not trim-compatible.")]
 internal unsafe class Com2IDispatchConverter : Com2ExtendedTypeConverter
 {
     private readonly bool _allowExpand;

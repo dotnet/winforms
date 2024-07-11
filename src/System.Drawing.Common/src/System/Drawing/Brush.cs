@@ -2,26 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
-public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
+public abstract unsafe class Brush : MarshalByRefObject, ICloneable, IDisposable
 {
-#if FINALIZATION_WATCH
-    private string allocationSite = Graphics.GetAllocationStack();
-#endif
     // Handle to native GDI+ brush object to be used on demand.
-    private IntPtr _nativeBrush;
+    private GpBrush* _nativeBrush;
 
     public abstract object Clone();
 
-    protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal(brush);
-    internal void SetNativeBrushInternal(IntPtr brush) => _nativeBrush = brush;
+    protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal((GpBrush*)brush);
+    internal void SetNativeBrushInternal(GpBrush* brush) => _nativeBrush = brush;
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    internal IntPtr NativeBrush => _nativeBrush;
+    internal GpBrush* NativeBrush => _nativeBrush;
 
     public void Dispose()
     {
@@ -31,37 +26,13 @@ public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-#if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativeBrush != IntPtr.Zero, $"""
-            **********************
-            Disposed through finalization:
-            {allocationSite}
-            """);
-#endif
-
-        if (_nativeBrush != IntPtr.Zero)
+        if (_nativeBrush is not null)
         {
-            try
-            {
-#if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
-#endif
-                Gdip.GdipDeleteBrush(new HandleRef(this, _nativeBrush));
-#if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-                // Catch all non fatal exceptions. This includes exceptions like EntryPointNotFoundException, that is thrown
-                // on Windows Nano.
-            }
-            finally
-            {
-                _nativeBrush = IntPtr.Zero;
-            }
+            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeleteBrush(_nativeBrush);
+            _nativeBrush = null;
+            Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
     }
 
-    ~Brush() => Dispose(false);
+    ~Brush() => Dispose(disposing: false);
 }

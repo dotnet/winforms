@@ -114,7 +114,7 @@ public partial class ComboBox
             {
                 _owner.ClearChildEditAccessibleObject();
             }
-            else if (_childWindowType == ChildWindowType.ListBox || _childWindowType == ChildWindowType.DropDownList)
+            else if (_childWindowType is ChildWindowType.ListBox or ChildWindowType.DropDownList)
             {
                 _owner.ClearChildListAccessibleObject();
             }

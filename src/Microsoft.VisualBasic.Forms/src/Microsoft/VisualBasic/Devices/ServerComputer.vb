@@ -80,7 +80,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>A string containing the name of the computer.</value>
         Public ReadOnly Property Name() As String
             Get
-                Return System.Environment.MachineName
+                Return Environment.MachineName
             End Get
         End Property
 

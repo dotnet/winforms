@@ -2861,7 +2861,7 @@ public class UpDownBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -2887,7 +2887,7 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -2914,7 +2914,7 @@ public class UpDownBaseTests
             Message m = new()
             {
                 Msg = (int)PInvoke.WM_MOUSEHOVER,
-                Result = (IntPtr)250
+                Result = 250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
@@ -2945,7 +2945,7 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -2970,10 +2970,10 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.True(control.IsHandleCreated);
     }
@@ -3000,10 +3000,10 @@ public class UpDownBaseTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -3021,17 +3021,24 @@ public class UpDownBaseTests
         string actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
         string actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
 
-        Assert.Empty(actualEditToolTipText);
-        Assert.Empty(actualButtonsToolTipText);
-        Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
+        actualEditToolTipText.Should().BeEmpty();
+        actualButtonsToolTipText.Should().BeEmpty();
+        toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
         string text = "Some test text";
         toolTip.SetToolTip(upDownBase, text); // Invokes UpDownBase's SetToolTip inside
         actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
         actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
 
-        Assert.Equal(text, actualEditToolTipText);
-        Assert.Equal(text, actualButtonsToolTipText);
+        actualEditToolTipText.Should().Be(text);
+        actualButtonsToolTipText.Should().Be(text);
+
+        toolTip.SetToolTip(upDownBase, null); // Invokes UpDownBase's SetToolTip inside
+        actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+        actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+        actualEditToolTipText.Should().BeEmpty();
+        actualButtonsToolTipText.Should().BeEmpty();
     }
 
     private class CustomValidateUpDownBase : UpDownBase
@@ -3077,15 +3084,15 @@ public class UpDownBaseTests
 
     public class SubUpDownBase : UpDownBase
     {
-        public new const int ScrollStateAutoScrolling = UpDownBase.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = UpDownBase.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = UpDownBase.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = UpDownBase.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = UpDownBase.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 

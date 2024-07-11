@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
@@ -143,7 +144,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         }
 
         Assert.NotNull(tabPage.AccessibilityObject.RuntimeId);
-        Assert.Equal(tabPage.HandleInternal, (IntPtr)tabPage.AccessibilityObject.RuntimeId[1]);
+        Assert.Equal(tabPage.HandleInternal, tabPage.AccessibilityObject.RuntimeId[1]);
         Assert.Equal(createControl, tabPage.IsHandleCreated);
     }
 
@@ -240,7 +241,7 @@ public class TabPage_TabPageAccessibilityObjectTests
     {
         using TabControl tabControl = new();
         TabPageCollection pages = tabControl.TabPages;
-        pages.AddRange(new TabPage[] { new(), new(), new() });
+        pages.AddRange([new(), new(), new()]);
         tabControl.CreateControl();
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
@@ -262,7 +263,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         using TabControl tabControl = new();
         tabControl.CreateControl();
         TabPageCollection pages = tabControl.TabPages;
-        pages.AddRange(new TabPage[] { new(), new(), new() });
+        pages.AddRange([new(), new(), new()]);
 
         TabPageAccessibleObject accessibleObject1 = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
         TabPageAccessibleObject accessibleObject2 = Assert.IsType<TabPageAccessibleObject>(pages[1].AccessibilityObject);
@@ -515,7 +516,43 @@ public class TabPage_TabPageAccessibilityObjectTests
         using TabPage tabPage = new();
         TabPageAccessibleObject accessibleObject = (TabPageAccessibleObject)tabPage.AccessibilityObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(tabPage.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void TabPageAccessibleObject_BoundingRectangle_IsCorrect()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        using Button button = new();
+        using TabPage tabPage = new();
+
+        tabControl.Controls.Add(tabPage);
+        tabControl.Location = new(22, 25);
+        tabControl.Size = new(151, 104);
+
+        button.Location = new(16, 12);
+        button.Size = new(198, 86);
+
+        tabPage.AutoScroll = true;
+        tabPage.Controls.Add(button);
+        tabPage.Location = new(4, 24);
+        tabPage.Size = new(143, 76);
+
+        form.ClientSize = new(520, 305);
+        form.Controls.Add(tabControl);
+
+        form.Show();
+
+        Rectangle boundingRectangle = tabPage.AccessibilityObject.BoundingRectangle;
+
+        int horizontalScrollBarHeight = SystemInformation.HorizontalScrollBarHeight;
+        int verticalScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
+
+        Rectangle expected = tabPage.RectangleToScreen(tabPage.ClientRectangle);
+
+        Assert.Equal(boundingRectangle.Width, expected.Width + verticalScrollBarWidth);
+        Assert.Equal(boundingRectangle.Height, expected.Height + horizontalScrollBarHeight);
     }
 }

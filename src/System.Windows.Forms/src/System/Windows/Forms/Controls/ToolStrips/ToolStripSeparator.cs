@@ -180,16 +180,11 @@ public partial class ToolStripSeparator : ToolStripItem
                 return false;
             }
 
-            switch (parent.LayoutStyle)
+            return parent.LayoutStyle switch
             {
-                case ToolStripLayoutStyle.VerticalStackWithOverflow:
-                    return false;
-                case ToolStripLayoutStyle.HorizontalStackWithOverflow:
-                case ToolStripLayoutStyle.Flow:
-                case ToolStripLayoutStyle.Table:
-                default:
-                    return true;
-            }
+                ToolStripLayoutStyle.VerticalStackWithOverflow => false,
+                _ => true,
+            };
         }
     }
 
@@ -273,7 +268,8 @@ public partial class ToolStripSeparator : ToolStripItem
             return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), SeparatorThickness);
         }
 
-        if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow)
+        // This is always true!
+        // parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow
         {
             // we don't actually know what size to make it, so just keep it a stock size.
             constrainingSize.Width = SeparatorHeight;

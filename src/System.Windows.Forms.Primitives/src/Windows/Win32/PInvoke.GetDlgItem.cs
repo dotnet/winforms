@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetDlgItem(HWND, int)"/>
     public static HWND GetDlgItem<T>(T hDlg, int nIDDlgItem)
         where T : IHandle<HWND>
     {

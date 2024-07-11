@@ -72,7 +72,7 @@ internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
                         unknown,
                         1,
                         &guid,
-                        PInvoke.GetThreadLocale(),
+                        PInvokeCore.GetThreadLocale(),
                         0,
                         null).ThrowOnFailure();
                 }
@@ -107,7 +107,7 @@ internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
                             unknown,
                             uuids.cElems,
                             uuids.pElems,
-                            PInvoke.GetThreadLocale(),
+                            PInvokeCore.GetThreadLocale(),
                             0,
                             null).ThrowOnFailure();
 

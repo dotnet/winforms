@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SHCreateItemFromParsingName(string, System.Com.IBindCtx*, in Guid, out void*)"/>
     public static unsafe IShellItem* SHCreateItemFromParsingName(string path)
     {
         HRESULT hr = SHCreateItemFromParsingName(path, pbc: null, in IID.GetRef<IShellItem>(), out void* ppv);

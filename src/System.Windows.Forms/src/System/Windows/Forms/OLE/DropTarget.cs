@@ -1,12 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-using Windows.Win32.System.SystemServices;
-using Ole = Windows.Win32.System.Ole;
-using Com = Windows.Win32.System.Com;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
+using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.SystemServices;
+using Com = Windows.Win32.System.Com;
+using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
@@ -15,37 +14,48 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
     private IDataObject? _lastDataObject;
     private DragDropEffects _lastEffect = DragDropEffects.None;
     private DragEventArgs? _lastDragEventArgs;
-    private readonly IntPtr _hwndTarget;
+    private readonly HWND _hwndTarget;
     private readonly IDropTarget _owner;
 
     public DropTarget(IDropTarget owner)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
         _owner = owner.OrThrowIfNull();
 
         if (_owner is Control control && control.IsHandleCreated)
         {
-            _hwndTarget = control.Handle;
+            _hwndTarget = control.HWND;
         }
         else if (_owner is ToolStripDropTargetManager toolStripTargetManager
             && toolStripTargetManager?.Owner is ToolStrip toolStrip
             && toolStrip.IsHandleCreated)
         {
-            _hwndTarget = toolStrip.Handle;
+            _hwndTarget = toolStrip.HWND;
         }
     }
-
-#if DEBUG
-    ~DropTarget()
-    {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget destroyed");
-    }
-#endif
 
     private void ClearDropDescription()
     {
         _lastDragEventArgs = null;
         DragDropHelper.ClearDropDescription(_lastDataObject);
+    }
+
+    /// <summary>
+    ///  Creates <see cref="IDataObject"/> to be passed out as data for drag/drop operation
+    ///  <paramref name="nativeDataObject"/> should have associated ComWrappers created wrapper that implements
+    ///  <see cref="IDataObject"/> to be passed out as is. Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
+    /// </summary>
+    private static IDataObject? CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* nativeDataObject)
+    {
+        using var unknown = ComScope<IUnknown>.QueryFrom(nativeDataObject);
+        if (ComWrappers.TryGetObject(unknown, out object? obj) && obj is IDataObject dataObject)
+        {
+            // If the original data object implemented IDataObject, we might've wrapped it. We need to give the original back out.
+            return dataObject is DataObject winFormsDataObject && winFormsDataObject.OriginalIDataObject is { } originalDataObject
+                ? originalDataObject
+                : dataObject;
+        }
+
+        return new DataObject(nativeDataObject);
     }
 
     private DragEventArgs? CreateDragEventArgs(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT pdwEffect)
@@ -58,22 +68,14 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         }
         else
         {
-            object obj = ComHelpers.GetObjectForIUnknown((Com.IUnknown*)pDataObj);
-            if (obj is IDataObject dataObject)
+            data = CreateWinFormsDataObjectForOutgoingDropData(pDataObj);
+            if (data is null)
             {
-                data = dataObject;
-            }
-            else if (obj is ComTypes.IDataObject nativeDataObject)
-            {
-                data = new DataObject(nativeDataObject);
-            }
-            else
-            {
-                return null; // Unknown data object interface; we can't work with this so return null
+                return null;
             }
         }
 
-        DragEventArgs drgevent = _lastDragEventArgs is null
+        DragEventArgs dragEvent = _lastDragEventArgs is null
             ? new DragEventArgs(data, (int)grfKeyState, pt.x, pt.y, (DragDropEffects)pdwEffect, _lastEffect)
             : new DragEventArgs(
                 data,
@@ -87,13 +89,11 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
                 _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
 
         _lastDataObject = data;
-        return drgevent;
+        return dragEvent;
     }
 
     HRESULT Ole.IDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
         Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
 
         if (pdwEffect is null)
@@ -123,9 +123,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
-
         if (pdwEffect is null)
         {
             return HRESULT.E_INVALIDARG;
@@ -153,7 +150,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragLeave()
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
         _owner.OnDragLeave(EventArgs.Empty);
 
         if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
@@ -167,9 +163,6 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
     {
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop received");
-        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
-
         if (pdwEffect is null)
         {
             return HRESULT.E_INVALIDARG;

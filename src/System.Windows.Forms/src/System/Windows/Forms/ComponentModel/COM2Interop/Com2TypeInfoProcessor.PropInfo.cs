@@ -12,14 +12,16 @@ internal static partial class Com2TypeInfoProcessor
         public const int ReadOnlyFalse = 2;
 
 #pragma warning disable IDE0036 // required must come first
+#pragma warning disable SA1206 // Declaration keywords should follow order
         required public string Name { get; init; }
+#pragma warning restore SA1206
 #pragma warning restore IDE0036
 
-        public int DispId { get; set; } = PInvoke.DISPID_UNKNOWN;
+        public int DispId { get; set; } = PInvokeCore.DISPID_UNKNOWN;
 
         public Type? ValueType { get; set; }
 
-        public List<Attribute> Attributes { get; } = new();
+        public List<Attribute> Attributes { get; } = [];
 
         public int ReadOnly { get; set; } = ReadOnlyUnknown;
 

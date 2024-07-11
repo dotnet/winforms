@@ -22,14 +22,13 @@ public class DataGridViewImageColumn : DataGridViewColumn
     public DataGridViewImageColumn(bool valuesAreIcons)
         : base(new DataGridViewImageCell(valuesAreIcons))
     {
-        DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
+        DataGridViewCellStyle defaultCellStyle = new()
         {
-            AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
+            AlignmentInternal = DataGridViewContentAlignment.MiddleCenter,
+            NullValue = valuesAreIcons
+                ? DataGridViewImageCell.ErrorIcon
+                : DataGridViewImageCell.ErrorBitmap
         };
-
-        defaultCellStyle.NullValue = valuesAreIcons
-            ? DataGridViewImageCell.ErrorIcon
-            : DataGridViewImageCell.ErrorBitmap;
 
         DefaultCellStyle = defaultCellStyle;
     }
@@ -248,7 +247,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
             dataGridViewColumn = (DataGridViewImageColumn)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewColumn);
+        CloneInternal(dataGridViewColumn);
         dataGridViewColumn.Icon = _icon;
         dataGridViewColumn.Image = _image;
 

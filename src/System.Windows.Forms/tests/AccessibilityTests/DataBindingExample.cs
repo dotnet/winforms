@@ -8,8 +8,8 @@ namespace Accessibility_Core_App;
 
 public partial class DataBindingExample : Form
 {
-    private readonly List<Student> _studentA = new();
-    private readonly List<Student> _studentB = new();
+    private readonly List<Student> _studentA = [];
+    private readonly List<Student> _studentB = [];
 
     public DataBindingExample()
     {
@@ -73,8 +73,10 @@ public partial class DataBindingExample : Form
         {
             for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
             {
-                TreeNode node = new();
-                node.Text = dataSet.Tables[0].Rows[i]["StuName"].ToString();
+                TreeNode node = new()
+                {
+                    Text = dataSet.Tables[0].Rows[i]["StuName"].ToString()
+                };
                 treeView1.Nodes.Add(node);
             }
         }

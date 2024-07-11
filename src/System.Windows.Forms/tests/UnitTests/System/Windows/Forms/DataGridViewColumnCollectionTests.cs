@@ -410,7 +410,7 @@ public class DataGridViewColumnCollectionTests
         {
             SelectionMode = selectionMode
         };
-        ISupportInitialize iSupportInitialize = (ISupportInitialize)control;
+        ISupportInitialize iSupportInitialize = control;
         DataGridViewColumnCollection collection = control.Columns;
         using DataGridViewColumn column = new(new SubDataGridViewCell())
         {

@@ -13,7 +13,7 @@ internal static class ModuleInitializer
     public static void InitializeModule()
     {
         // Ensure GDI+ is initialized with the module.
-        bool initialized = SafeNativeMethods.Gdip.Initialized;
+        bool initialized = Gdip.Initialized;
         Debug.Assert(initialized);
     }
 }

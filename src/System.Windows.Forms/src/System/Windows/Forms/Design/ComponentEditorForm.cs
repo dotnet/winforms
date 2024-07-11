@@ -102,7 +102,7 @@ public partial class ComponentEditorForm : Form
         _cancelButton.Text = SR.CloseCaption;
         _dirty = false;
 
-        if (lastApply == false)
+        if (!lastApply)
         {
             for (int n = 0; n < _pageSites.Length; n++)
             {
@@ -166,14 +166,10 @@ public partial class ComponentEditorForm : Form
     [MemberNotNull(nameof(_selector))]
     private void OnConfigureUI()
     {
-        Font? uiFont = Control.DefaultFont;
-        if (_component.Site is not null)
+        Font? uiFont = DefaultFont;
+        if (_component.Site?.TryGetService(out IUIService? uiService) == true)
         {
-            IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));
-            if (uiService is not null)
-            {
-                uiFont = (Font?)uiService.Styles["DialogFont"];
-            }
+            uiFont = (Font?)uiService.Styles["DialogFont"];
         }
 
         Font = uiFont;
@@ -200,17 +196,17 @@ public partial class ComponentEditorForm : Form
 
         int selectorWidth = MIN_SELECTOR_WIDTH;
 
-        if (_pageSites is not null)
+        if (_pageSites is not null && _pageSites.Length != 0)
         {
+            using Graphics graphics = CreateGraphicsInternal();
+
             // Add the nodes corresponding to the pages
             for (int n = 0; n < _pageSites.Length; n++)
             {
                 ComponentEditorPage page = _pageSites[n].GetPageControl();
 
                 string title = page.Title;
-                Graphics graphics = CreateGraphicsInternal();
                 int titleWidth = (int)graphics.MeasureString(title, Font).Width;
-                graphics.Dispose();
                 _selectorImageList.Images.Add(page.Icon.ToBitmap());
 
                 _selector.Nodes.Add(new TreeNode(title, n, n));
@@ -295,8 +291,8 @@ public partial class ComponentEditorForm : Form
         AcceptButton = _okButton;
 
         Controls.Clear();
-        Controls.AddRange(new Control[]
-        {
+        Controls.AddRange(
+        [
             _selector,
             grayStrip,
             _pageHost,
@@ -304,12 +300,13 @@ public partial class ComponentEditorForm : Form
             _cancelButton,
             _applyButton,
             _helpButton
-        });
+        ]);
 
-        // continuing with the old autoscale base size stuff, it works,
-        // and is currently set to a non-standard height
+        // Continuing with the old autoscale base size stuff, it works, and is currently set to a non-standard height.
         AutoScaleBaseSize = new Size(5, 14);
+#pragma warning disable CS0618 // Type or member is obsolete
         ApplyAutoScaling();
+#pragma warning restore CS0618
     }
 
     protected override void OnActivated(EventArgs e)

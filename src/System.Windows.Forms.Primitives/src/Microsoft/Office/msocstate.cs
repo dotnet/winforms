@@ -4,7 +4,7 @@
 namespace Microsoft.Office;
 
 /// <summary>
-///  State IDs passed to <see cref="IMsoComponent.OnEnterState" /> and
+///  State IDs passed to <see cref="IMsoComponent.OnEnterState(msocstate, BOOL)" /> and
 ///  <see cref="IMsoComponentManager.OnComponentEnterState" />
 ///
 ///  When the host or a component is notified through one of these methods that another

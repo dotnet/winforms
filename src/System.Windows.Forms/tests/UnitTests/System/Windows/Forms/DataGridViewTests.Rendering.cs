@@ -8,7 +8,7 @@ using static System.Windows.Forms.Metafiles.DataHelpers;
 
 namespace System.Windows.Forms.Tests;
 
-partial class DataGridViewTests
+public partial class DataGridViewTests
 {
     [WinFormsFact]
     public void DataGridView_GridColor_Rendering()

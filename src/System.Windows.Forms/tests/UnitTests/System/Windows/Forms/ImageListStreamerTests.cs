@@ -24,7 +24,7 @@ public class ImageListStreamerTests
 
         // Create a new ImageListStreamer from the stream
         ms.Position = 0;
-        using ImageListStreamer streamerFromMs = new(ms);
+        using ImageListStreamer streamerFromMs = new(ms.GetBuffer());
         using NativeImageList nativeImageListMs = streamerFromMs.GetNativeImageList();
         Assert.NotEqual(HIMAGELIST.Null, nativeImageListMs.HIMAGELIST);
 
@@ -46,8 +46,7 @@ public class ImageListStreamerTests
 
         // Create a new ImageListStreamer from the stream
         byte[] bytes = Convert.FromBase64String(DevMsImageListStreamer);
-        using MemoryStream ms = new(bytes);
-        using ImageListStreamer streamerFromMs = new(ms);
+        using ImageListStreamer streamerFromMs = new(bytes);
         using NativeImageList nativeImageListMs = streamerFromMs.GetNativeImageList();
         Assert.NotEqual(HIMAGELIST.Null, nativeImageListMs.HIMAGELIST);
 

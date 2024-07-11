@@ -9,9 +9,9 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using System.Xml;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.Resources;
 
@@ -34,11 +34,10 @@ public sealed class ResXDataNode : ISerializable
     private ResXFileRef? _fileRef;
 
     [Obsolete(DiagnosticId = "SYSLIB0051")]
-    private IFormatter? _binaryFormatter;
+    private BinaryFormatter? _binaryFormatter;
 
     // This is going to be used to check if a ResXDataNode is of type ResXFileRef
-    private static readonly ITypeResolutionService s_internalTypeResolver
-        = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new("System.Windows.Forms") });
+    private static readonly AssemblyNamesTypeResolutionService s_internalTypeResolver = new([new("System.Windows.Forms")]);
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:
@@ -76,10 +75,7 @@ public sealed class ResXDataNode : ISerializable
     public ResXDataNode(string name, object? value, Func<Type?, string>? typeNameConverter)
     {
         ArgumentNullException.ThrowIfNull(name);
-        if (name.Length == 0)
-        {
-            throw (new ArgumentException(nameof(name)));
-        }
+        ArgumentException.ThrowIfNullOrEmpty(name);
 
         _typeNameConverter = typeNameConverter;
 
@@ -303,7 +299,7 @@ public sealed class ResXDataNode : ISerializable
                 bool success = false;
                 try
                 {
-                    success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
+                    success = WinFormsBinaryFormatWriter.TryWriteObject(stream, value);
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
@@ -432,8 +428,8 @@ public sealed class ResXDataNode : ISerializable
 
         try
         {
-            BinaryFormattedObject format = new(stream, leaveOpen: true);
-            if (format.TryGetFrameworkObject(out object? value))
+            BinaryFormattedObject format = new(stream);
+            if (format.TryGetObject(out object? value))
             {
                 return value;
             }

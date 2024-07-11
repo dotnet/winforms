@@ -3,25 +3,25 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Represents the container for multiple-document interface (MDI) child forms.
-/// This class cannot be inherited.
+///  Represents the container for multiple-document interface (MDI) child forms.
+///  This class cannot be inherited.
 /// </summary>
 /// <remarks>
-///  Don't create an <see cref="MdiClient"/> control.
-///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
+///  <para>
+///   Don't create an <see cref="MdiClient"/> control. A form creates and uses the <see cref="MdiClient"/> when you set
+///   the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
+///  </para>
 /// </remarks>
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 public sealed partial class MdiClient : Control
 {
-    // kept in add order, not ZOrder. Need to return the correct
-    // array of items...
-    private readonly List<Form> _children = new();
+    // Kept in add order, not ZOrder. Need to return the correct array of items.
+    private readonly List<Form> _children = [];
 
     /// <summary>
     ///  Creates a new MdiClient.
@@ -120,7 +120,7 @@ public sealed partial class MdiClient : Control
     {
         get
         {
-            return _children.ToArray();
+            return [.. _children];
         }
     }
 
@@ -180,7 +180,7 @@ public sealed partial class MdiClient : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float dx, float dy)
     {
-        // Don't scale child forms...
+        // Don't scale child forms.
 
         SuspendLayout();
         try
@@ -214,7 +214,7 @@ public sealed partial class MdiClient : Control
     protected override unsafe void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
         if (!IsHandleCreated
-            || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false
+            || ParentInternal is Form { MdiChildrenMinimizedAnchorBottom: false }
             || ParentInternal?.Site?.DesignMode == true)
         {
             base.SetBoundsCore(x, y, width, height, specified);
@@ -281,8 +281,8 @@ public sealed partial class MdiClient : Control
         AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
         Rectangle bounds = Bounds;
-        using PInvoke.RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
-        using PInvoke.RegionScope rgn2 = new(
+        using RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
+        using RegionScope rgn2 = new(
             -rect.left,
             -rect.top,
             bounds.Width - rect.right,
@@ -293,7 +293,7 @@ public sealed partial class MdiClient : Control
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }
 
-        if ((RegionType)PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == RegionType.ERROR)
+        if (PInvokeCore.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == GDI_REGION_TYPE.RGN_ERROR)
         {
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }
@@ -309,20 +309,11 @@ public sealed partial class MdiClient : Control
         }
     }
 
-    internal override bool ShouldSerializeBackColor()
-    {
-        return BackColor != SystemColors.AppWorkspace;
-    }
+    internal override bool ShouldSerializeBackColor() => BackColor != SystemColors.AppWorkspace;
 
-    private static bool ShouldSerializeLocation()
-    {
-        return false;
-    }
+    private static bool ShouldSerializeLocation() => false;
 
-    internal override bool ShouldSerializeSize()
-    {
-        return false;
-    }
+    internal override bool ShouldSerializeSize() => false;
 
     /// <summary>
     ///  Processes Windows messages.
