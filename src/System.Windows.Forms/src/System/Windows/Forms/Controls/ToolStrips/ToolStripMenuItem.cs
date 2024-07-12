@@ -1060,11 +1060,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         {
             if (keyData is Keys.Space)
             {
-                if (CheckOnClick)
-                {
-                    Checked = !Checked;
-                }
-
+                Checked = CheckOnClick ? !Checked : Checked;
                 return true;
             }
 
