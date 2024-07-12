@@ -1661,7 +1661,7 @@ public abstract partial class ToolStripItem :
     internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
 
     /// <summary>
-    ///  Returns the parent <see="ToolStrip"/>'s renderer
+    ///  Returns the parent <see cref="ToolStrip"/>'s renderer
     /// </summary>
     protected internal virtual ToolStripRenderer? Renderer
     {
