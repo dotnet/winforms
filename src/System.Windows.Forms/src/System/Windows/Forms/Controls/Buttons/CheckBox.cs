@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Rendering.V10.CheckBox;
+using System.Windows.Forms.Rendering.CheckBox;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 

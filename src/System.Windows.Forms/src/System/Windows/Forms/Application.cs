@@ -43,9 +43,9 @@ public sealed partial class Application
     private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static DarkMode? s_darkMode;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -995,6 +995,8 @@ public sealed partial class Application
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+        // We need to check, if SetDefaultVisualStylesMode was called before EnableVisualStyles, so those will always be in sync!
         if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
         {
             DefaultVisualStylesMode = VisualStylesMode.Classic;

@@ -1670,7 +1670,7 @@ public unsafe partial class Control :
     [Experimental("WFO9001")]
     private void SetDarkMode(DarkMode darkMode)
     {
-        if (Equals(darkMode, DarkMode))
+        if (ParentInternal is not null && Equals(darkMode, DarkMode))
         {
             return;
         }
@@ -3781,7 +3781,8 @@ public unsafe partial class Control :
         set
         {
             {
-                if (Equals(value, VisualStylesMode))
+                if (ParentInternal is not null
+                    && Equals(value, VisualStylesMode))
                 {
                     return;
                 }
@@ -3846,7 +3847,7 @@ public unsafe partial class Control :
     /// <returns>The default visual styles mode for the control.</returns>
     [Experimental("WFO9000")]
     protected virtual VisualStylesMode DefaultVisualStylesMode =>
-            VisualStylesMode.Latest;
+            Application.DefaultVisualStylesMode;
 
     private bool ShouldSerializeVisualStylesMode()
         => Properties.ContainsObject(s_visualStylesModeProperty);
@@ -11550,6 +11551,7 @@ public unsafe partial class Control :
         {
             VisualStylesMode.Disabled => true,
             VisualStylesMode.Classic => true,
+            VisualStylesMode.Latest => true,
             _ => false,
         };
 

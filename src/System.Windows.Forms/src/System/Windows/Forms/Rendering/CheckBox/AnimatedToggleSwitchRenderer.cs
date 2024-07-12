@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Rendering.Animation;
 
-namespace System.Windows.Forms.Rendering.V10.CheckBox;
+namespace System.Windows.Forms.Rendering.CheckBox;
 
 internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {

@@ -1,6 +1,5 @@
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
-override System.Windows.Forms.MaskedTextBox.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 static System.Windows.Forms.Application.ApplicationColors.get -> System.Windows.Forms.ApplicationColors!

@@ -48,9 +48,9 @@ public abstract partial class TextBoxBase : Control
     private static readonly object s_multilineChangedEvent = new();
     private static readonly object s_readOnlyChangedEvent = new();
 
-    private const int VisualStylesFixed3DBorderPadding = 5;
-    private const int VisualStylesFixedSingleBorderPadding = 3;
-    private const int VisualStylesNoBorderPadding = 2;
+    private const int VisualStylesFixed3DBorderPadding = 3;
+    private const int VisualStylesFixedSingleBorderPadding = 2;
+    private const int VisualStylesNoBorderPadding = 1;
 
     /// <summary>
     ///  The current border for this edit control.
@@ -87,6 +87,10 @@ public abstract partial class TextBoxBase : Control
     // We store all boolean properties in here.
     private BitVector32 _textBoxFlags;
     private bool _triggerNewClientSizeRequest;
+
+#if DEBUG
+    private bool _debugFlag;
+#endif
 
     /// <summary>
     ///  Creates a new TextBox control.  Uses the parent's current font and color
@@ -802,8 +806,9 @@ public abstract partial class TextBoxBase : Control
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     public int PreferredHeight => VisualStylesMode switch
     {
-        VisualStylesMode.Disabled => PreferredHeightLegacy,
-        VisualStylesMode.Classic => PreferredHeightLegacy,
+        VisualStylesMode.Disabled => PreferredHeightClassic,
+        VisualStylesMode.Classic => PreferredHeightClassic,
+        VisualStylesMode.Latest => PreferredHeightModern,
 
         // We'll should never be here.
         _ => throw new InvalidEnumArgumentException(
@@ -813,7 +818,7 @@ public abstract partial class TextBoxBase : Control
     };
 #pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
-    private int PreferredHeightLegacy
+    private int PreferredHeightClassic
     {
         get
         {
@@ -831,32 +836,62 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    private int PreferredHeightVersion10
+    private int PreferredHeightModern
     {
         get
         {
-            // For Versions >=10, we take the Padding into account when calculating the preferred height.
-            int height = PreferredHeightLegacy
-                + 2 * GetLatestVisualStylesSystemPadding()
-                + Padding.Vertical;
+            // For modern Visual Styles we take the Padding and the adorner padding into account when calculating the preferred height.
+            int height = FontHeight
+                + Padding.Vertical
+                + GetLatestVisualStylesSystemPadding().Vertical;
 
             return height;
         }
     }
 
-    private int GetLatestVisualStylesSystemPadding() =>
-        BorderStyle switch
+    /// <summary>
+    ///  Defines the visible part of the padding.
+    ///  This is calculated and not adjustable by properties.
+    ///  The visible part of the padding is the part by what we extend the real-estate
+    ///  of the control with its back color. The invisible part of the Padding is the
+    ///  part, by which we extend the real-estate of the control with the back color of the parent control.
+    /// </summary>
+    /// <returns>The visible padding dimensions.</returns>
+    private Padding GetLatestVisualStylesSystemPadding()
+    {
+        int offset = GetBorderThicknessDpiFactor();
+
+        return BorderStyle switch
         {
-            BorderStyle.Fixed3D => VisualStylesFixed3DBorderPadding,
-            BorderStyle.FixedSingle => VisualStylesFixedSingleBorderPadding,
-            BorderStyle.None => VisualStylesNoBorderPadding,
-            _ => 0
+            BorderStyle.Fixed3D => new Padding(
+                left: VisualStylesFixed3DBorderPadding + offset,
+                top: VisualStylesFixed3DBorderPadding + offset,
+                right: VisualStylesFixed3DBorderPadding + offset,
+                bottom: VisualStylesFixed3DBorderPadding + offset),
+
+            BorderStyle.FixedSingle => new Padding(
+                left: VisualStylesFixedSingleBorderPadding + offset,
+                top: VisualStylesFixedSingleBorderPadding + offset,
+                right: VisualStylesFixedSingleBorderPadding + offset,
+                bottom: VisualStylesFixedSingleBorderPadding + offset),
+
+            BorderStyle.None => new Padding(
+                left: VisualStylesNoBorderPadding,
+                top: VisualStylesNoBorderPadding,
+                right: VisualStylesNoBorderPadding + 1,
+                // We still need some extra space for the Focus indication.
+                bottom: VisualStylesNoBorderPadding + offset),
+
+            _ => Padding.Empty,
         };
+    }
 
-    // GetPreferredSizeCore
-    //  This method can return a different value than PreferredHeight!
-    //  It properly handles border style + multiline and word-wrap.
-
+    /// <summary>
+    ///  Calculates the preferred size of the text box for multi-line text scenarios.
+    ///  Note that this calculation can be returning different values compared to <see cref="PreferredHeight"/>.
+    /// </summary>
+    /// <param name="proposedConstraints">The already existing proposed constraints.</param>
+    /// <returns>The preferred size.</returns>
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         Padding padding = default;
@@ -879,13 +914,7 @@ public abstract partial class TextBoxBase : Control
         {
             // For Versions >=10, we take our modern Style adorners into account
             // when we're calculating the preferred height.
-            int systemPaddingOffset = GetLatestVisualStylesSystemPadding();
-
-            padding = new Padding(
-                systemPaddingOffset,
-                systemPaddingOffset,
-                systemPaddingOffset,
-                systemPaddingOffset);
+            padding = GetLatestVisualStylesSystemPadding();
 
             // And also we take the actual Padding property into account
             // when calculating the preferred height.
@@ -1537,6 +1566,30 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    protected override unsafe void OnGotFocus(EventArgs e)
+    {
+        // We need to invalidate for NcPaint, so we draw focused adorners.
+        PInvoke.RedrawWindow(
+            hWnd: this,
+            lprcUpdate: null,
+            hrgnUpdate: HRGN.Null,
+            flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+
+        base.OnGotFocus(e);
+    }
+
+    protected override unsafe void OnLostFocus(EventArgs e)
+    {
+        // We need to invalidate for NcPaint, so we draw un-focused adorners.
+        PInvoke.RedrawWindow(
+            hWnd: this,
+            lprcUpdate: null,
+            hrgnUpdate: HRGN.Null,
+            flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+
+        base.OnLostFocus(e);
+    }
+
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
@@ -1613,7 +1666,7 @@ public abstract partial class TextBoxBase : Control
     protected override void OnTextChanged(EventArgs e)
     {
         // since AutoSize existed in Everett, (and is the default) we can't
-        // relayout the parent when the "PreferredSize" of the control changes.
+        // re-layout the parent when the "PreferredSize" of the control changes.
         // this means a multiline = true textbox won't naturally grow in height when
         // the text changes.
         CommonProperties.xClearPreferredSizeCache(this);
@@ -2130,12 +2183,12 @@ public abstract partial class TextBoxBase : Control
         Invalidate(true);
     }
 
-    private void WmNcPaint(ref Message m)
+    private bool WmNcPaint(ref Message m)
     {
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (VisualStylesMode < VisualStylesMode.Latest)
         {
-            return;
+            return false;
         }
 #pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
@@ -2146,13 +2199,33 @@ public abstract partial class TextBoxBase : Control
 
         int result = PInvokeCore.ReleaseDC(hwnd, hdc);
         Debug.Assert(result != 0);
+
+        return true;
     }
+
+    private int GetBorderThicknessDpiFactor()
+        => _deviceDpi switch
+        {
+            <= 96 => 1,
+            <= 120 => 2,
+            <= 192 => 3,
+            _ => 4,
+        };
 
     private void RenderModernBorder(HDC hdc, BorderStyle borderStyle)
     {
-        int borderThickness = 2;
-        int deflateOffset = borderThickness / 2;
-        int cornerRadius = 15;
+        const int cornerRadius = 15;
+
+#if DEBUG
+        if (Debugger.IsAttached && !_debugFlag)
+        {
+            _debugFlag = true;
+            // Debugger.Break();
+        }
+#endif
+
+        Padding systemPadding = GetLatestVisualStylesSystemPadding();
+        int borderThickness = GetBorderThicknessDpiFactor();
 
         Color adornerColor = ForeColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
@@ -2162,20 +2235,29 @@ public abstract partial class TextBoxBase : Control
         using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
         using Brush adornerBrush = new SolidBrush(adornerColor);
         using Pen adornerPen = new(adornerColor, borderThickness);
+        using Pen focusPen = new(Application.ApplicationColors.Highlight, borderThickness);
 
-        Rectangle bounds = Bounds;
+        Rectangle bounds = new Rectangle(
+            x: 0,
+            y: 0,
+            width: Bounds.Width,
+            height: Bounds.Height);
 
+        Padding clientPadding = ClientPadding;
+
+        // This is the client area without the padding:
         Rectangle clientBounds = new(
-            (bounds.Width - ClientRectangle.Width) / 2,
-            (bounds.Height - ClientRectangle.Height) / 2,
-            ClientRectangle.Width,
-            ClientRectangle.Height);
+            clientPadding.Left,
+            clientPadding.Top,
+            bounds.Width - clientPadding.Horizontal,
+            bounds.Height - clientPadding.Vertical);
 
-        Rectangle deflatedBounds = new(
-            x: bounds.Left + Padding.Left + deflateOffset,
-            y: bounds.Top + Padding.Top + deflateOffset,
-            width: bounds.Width - (Padding.Horizontal + deflateOffset + deflateOffset),
-            height: bounds.Height - (Padding.Vertical + deflateOffset + deflateOffset));
+        // This is the client area of the actual original edit control.
+        Rectangle deflatedBounds = Add(bounds, Padding);
+
+        // Making sure we never color outside the lines:
+        deflatedBounds.Width -= 1;
+        deflatedBounds.Height -= 1;
 
         // Get the Graphics Object from the DC:
         using Graphics graphics = Graphics.FromHdc(hdc);
@@ -2183,20 +2265,10 @@ public abstract partial class TextBoxBase : Control
         // We need Anti-Aliasing:
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Translate the origin to the top-left corner of the control:
-        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
+        graphics.Clip = new Region(bounds);
+        graphics.ExcludeClip(clientBounds);
 
         bounds.Inflate(1, 1);
-
-        Rectangle translatedClientBounds = new(
-            clientBounds.Left,
-            clientBounds.Top,
-            clientBounds.Width,
-            clientBounds.Height);
-
-        // Contrast to Copilot's suggestions, we need to first exclude
-        // the clip, then translate the origin.
-        graphics.ExcludeClip(translatedClientBounds);
 
         // Fill the background with the specified brush:
         graphics.FillRectangle(parentBackgroundBrush, bounds);
@@ -2242,6 +2314,40 @@ public abstract partial class TextBoxBase : Control
 
                 break;
         }
+
+        // Draw the focus just as one line over the bottom border:
+        if (Focused)
+        {
+            int left, right;
+
+            switch (BorderStyle)
+            {
+                case BorderStyle.None:
+                case BorderStyle.FixedSingle:
+                    left = deflatedBounds.Left;
+                    right = deflatedBounds.Right;
+                    break;
+
+                default:
+                    // We must shorten the line on both side to not draw into the curve:
+                    left = deflatedBounds.Left + (cornerRadius + 1) / 2;
+                    right = deflatedBounds.Right - (cornerRadius + 1) / 2;
+                    break;
+            }
+
+            graphics.DrawLine(
+                pen: focusPen,
+                x1: left,
+                y1: deflatedBounds.Bottom,
+                x2: right,
+                y2: deflatedBounds.Bottom);
+        }
+
+        static Rectangle Add(Rectangle r, Padding p) => new(
+            r.X + p.Left,
+            r.Y + p.Top,
+            r.Width - p.Horizontal,
+            r.Height - p.Vertical);
     }
 
     private void WmNcCalcSize(ref Message m)
@@ -2253,12 +2359,12 @@ public abstract partial class TextBoxBase : Control
 
             if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
             {
-                int borderLineOffset = GetLatestVisualStylesSystemPadding();
+                Padding padding = ClientPadding;
 
-                ncCalcSizeParams.rgrc._0.top += (Padding.Top + borderLineOffset);
-                ncCalcSizeParams.rgrc._0.bottom -= (Padding.Bottom + borderLineOffset);
-                ncCalcSizeParams.rgrc._0.left += (Padding.Left + borderLineOffset);
-                ncCalcSizeParams.rgrc._0.right -= (Padding.Right + borderLineOffset);
+                ncCalcSizeParams.rgrc._0.top += padding.Top;
+                ncCalcSizeParams.rgrc._0.bottom -= padding.Bottom;
+                ncCalcSizeParams.rgrc._0.left += padding.Left;
+                ncCalcSizeParams.rgrc._0.right -= padding.Right;
 
                 // Write the modified structure back to lParam
                 Marshal.StructureToPtr(ncCalcSizeParams, m.LParamInternal, false);
@@ -2270,6 +2376,8 @@ public abstract partial class TextBoxBase : Control
 
         base.WndProc(ref m);
     }
+
+    private Padding ClientPadding => Padding + GetLatestVisualStylesSystemPadding();
 
     private void WmReflectCommand(ref Message m)
     {
@@ -2350,7 +2458,13 @@ public abstract partial class TextBoxBase : Control
                 break;
 
             case PInvoke.WM_NCPAINT:
-                WmNcPaint(ref m);
+                bool handled = WmNcPaint(ref m);
+
+                if (!handled)
+                {
+                    base.WndProc(ref m);
+                }
+
                 break;
 
             case PInvoke.WM_LBUTTONDBLCLK:

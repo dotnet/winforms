@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Rendering.Animation;
 
-namespace System.Windows.Forms.Rendering.V10.TextBox;
+namespace System.Windows.Forms.Rendering.TextBox;
 
 internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
 {
