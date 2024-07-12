@@ -11,12 +11,14 @@ internal readonly partial struct Value
     private readonly struct PackedColor
     {
         private readonly int _argb;
-        private readonly KnownColor _knownColor;
+        private readonly short _knownColor;
+        private readonly short _state;
 
-        private PackedColor(int argb, KnownColor knownColor)
+        private PackedColor(int argb, KnownColor knownColor, short state)
         {
             _argb = argb;
-            _knownColor = knownColor;
+            _knownColor = (short)knownColor;
+            _state = state;
         }
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
@@ -43,10 +45,12 @@ internal readonly partial struct Value
                 return false;
             }
 
-            packedColor = new PackedColor((int)castColor.Argb, (KnownColor)castColor.KnownColor);
+            packedColor = new PackedColor((int)castColor.Argb, (KnownColor)castColor.KnownColor, castColor.State);
             return true;
         }
 
-        public Color Extract() => _knownColor != 0 ? Color.FromKnownColor(_knownColor) : Color.FromArgb(_argb);
+        public Color Extract() => _knownColor != 0
+            ? Color.FromKnownColor((KnownColor)_knownColor)
+            : _state == 0 ? Color.Empty : Color.FromArgb(_argb);
     }
 }
