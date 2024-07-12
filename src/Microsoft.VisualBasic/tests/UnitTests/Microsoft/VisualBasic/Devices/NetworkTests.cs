@@ -15,13 +15,6 @@ public class NetworkTests
     }
 
     [Fact]
-    public void Ping()
-    {
-        Network network = new();
-        Assert.True(network.Ping("127.0.0.1"));
-    }
-
-    [Fact]
     public void Ping_ShortTimeout_Success()
     {
         Network network = new();
