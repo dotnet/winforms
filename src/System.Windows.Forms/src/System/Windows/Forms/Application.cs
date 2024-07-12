@@ -40,7 +40,7 @@ public sealed partial class Application
     private static bool s_comCtlSupportsVisualStylesInitialized;
     private static bool s_comCtlSupportsVisualStyles;
     private static FormCollection? s_forms;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
     private static DarkMode? s_darkMode;
@@ -279,6 +279,7 @@ public sealed partial class Application
     ///  </para>
     /// </remarks>
 
+    [Experimental("WFO9000")]
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
     /// <summary>
@@ -288,6 +289,7 @@ public sealed partial class Application
     ///  as not setting using <see cref="EnableVisualStyles"/>.
     /// </summary>
     /// <param name="styleSetting">The version of visual styles to set.</param>
+    [Experimental("WFO9000")]
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
         if (styleSetting != DefaultVisualStylesMode)
@@ -304,6 +306,7 @@ public sealed partial class Application
         }
     }
 
+    [Experimental("WFO9000")]
     public static bool IsVisualStylesSupported
         => DefaultVisualStylesMode switch
         {
@@ -554,9 +557,11 @@ public sealed partial class Application
     ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
     ///  of the controls in your app.
     /// </summary>
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public static bool RenderWithVisualStyles =>
         ComCtlSupportsVisualStyles
             && DefaultVisualStylesMode != VisualStylesMode.Disabled;
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
@@ -944,10 +949,12 @@ public sealed partial class Application
 
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
         {
-            DefaultVisualStylesMode = VisualStylesMode.Latest;
+            DefaultVisualStylesMode = VisualStylesMode.Classic;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         s_comCtlSupportsVisualStylesInitialized = false;
     }

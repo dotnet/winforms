@@ -3763,6 +3763,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
+    [Experimental("WFO9000")]
     public VisualStylesMode VisualStylesMode
     {
         get => Properties.TryGetObject(s_visualStylesModeProperty, out VisualStylesMode value)
@@ -3835,6 +3836,7 @@ public unsafe partial class Control :
     ///  Gets the default visual styles mode for the control; standard is <see cref="VisualStylesMode.Latest"/>.
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
+    [Experimental("WFO9000")]
     protected virtual VisualStylesMode DefaultVisualStylesMode =>
             VisualStylesMode.Latest;
 
@@ -8666,6 +8668,7 @@ public unsafe partial class Control :
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
         // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
             && parent.RenderTransparencyWithVisualStyles)
         {
@@ -8688,6 +8691,7 @@ public unsafe partial class Control :
 
             return;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // Move the rendering area and setup it's size (we want to translate it to the parent's origin).
         Rectangle shift = new(-Left, -Top, parent.Width, parent.Height);
@@ -11528,12 +11532,12 @@ public unsafe partial class Control :
     {
     }
 
+    [Experimental("WFO9000")]
     protected virtual bool ValidateVisualStylesMode(VisualStylesMode visualStylesMode)
         => visualStylesMode switch
         {
             VisualStylesMode.Disabled => true,
             VisualStylesMode.Classic => true,
-            >= VisualStylesMode.Version10 => true,
             _ => false,
         };
 

@@ -35,10 +35,9 @@ System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Window
 System.Windows.Forms.ApplicationColors
 System.Windows.Forms.ApplicationColors.ApplicationColors() -> void
 System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Classic = 8 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 1 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 0 -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Version10 = 10 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 2 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.IsDarkModeEnabled.get -> bool

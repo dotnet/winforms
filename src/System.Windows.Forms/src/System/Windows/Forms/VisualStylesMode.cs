@@ -6,25 +6,22 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents the version of the visual renderer.
 /// </summary>
+[Experimental("WFO9000")]
 public enum VisualStylesMode : short
 {
     /// <summary>
-    ///  The visual renderer is not in use. See <see cref="UseVisualStyles"/>.
+    ///  Visual renderers are not in use. See <see cref="UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
     /// </summary>
     Disabled = 0,
 
     /// <summary>
-    ///  The classic version of the visual renderer (.NET 8 and earlier).
+    ///  The classic version of the visual renderer (.NET 8 and earlier), using the Version 6 of ComCtl.
     /// </summary>
-    Classic = 8,
+    Classic = 1,
 
     /// <summary>
-    ///  The .NET 9/.NET 10 version of the visual renderer.
+    ///  The latest version of the visual renderer. Controls are rendered using the latest version
+    ///  of ComCtl and customized adorner rendering and layouting in addition.
     /// </summary>
-    Version10 = 10,
-
-    /// <summary>
-    ///  The latest version of the visual renderer.
-    /// </summary>
-    Latest = short.MaxValue
+    Latest = 2
 }

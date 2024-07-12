@@ -83,11 +83,13 @@ public partial class CheckBox : ButtonBase
                 {
                     UpdateStyles();
 
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     if (value == Appearance.ToggleSwitch
-                        && VisualStylesMode >= VisualStylesMode.Version10)
+                        && VisualStylesMode == VisualStylesMode.Latest)
                     {
                         Refresh();
                     }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
@@ -239,7 +241,8 @@ public partial class CheckBox : ButtonBase
             }
             else
             {
-                if (VisualStylesMode >= VisualStylesMode.Version10)
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                if (VisualStylesMode == VisualStylesMode.Latest)
                 {
                     SetStyle(ControlStyles.UserPaint, true);
                     SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -254,6 +257,7 @@ public partial class CheckBox : ButtonBase
                         cp.Style |= PInvoke.BS_PUSHLIKE;
                     }
                 }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
                 // Determine the alignment of the check box
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
@@ -290,8 +294,9 @@ public partial class CheckBox : ButtonBase
     {
         Size textSize;
 
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Appearance == Appearance.ToggleSwitch
-            && VisualStylesMode >= VisualStylesMode.Version10)
+            && VisualStylesMode == VisualStylesMode.Latest)
         {
             _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
             int dpiScale = (int)(DeviceDpi / 96f);
@@ -304,6 +309,7 @@ public partial class CheckBox : ButtonBase
 
             return new Size(totalWidth, totalHeight);
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         if (Appearance == Appearance.Button)
         {
@@ -327,12 +333,14 @@ public partial class CheckBox : ButtonBase
 
     protected override void OnPaint(PaintEventArgs pevent)
     {
-        if (VisualStylesMode >= VisualStylesMode.Version10
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (VisualStylesMode == VisualStylesMode.Latest
             && Appearance == Appearance.ToggleSwitch)
         {
             _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
             return;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         base.OnPaint(pevent);
     }
@@ -440,13 +448,15 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
-        if (VisualStylesMode >= VisualStylesMode.Version10
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (VisualStylesMode == VisualStylesMode.Latest
             && Appearance == Appearance.ToggleSwitch)
         {
             _toggleSwitchRenderer?.RestartAnimation();
 
             Refresh();
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         if (OwnerDraw)
         {

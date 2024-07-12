@@ -420,7 +420,8 @@ public abstract partial class TextBoxBase : Control
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
             cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
-            if (VisualStylesMode >= VisualStylesMode.Version10)
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (VisualStylesMode == VisualStylesMode.Latest)
             {
                 // We draw the borders ourselves for the visual styles for .NET 9/10 onwards.
                 if (_textBoxFlags[s_multiline])
@@ -456,6 +457,7 @@ public abstract partial class TextBoxBase : Control
                     }
                 }
             }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             return cp;
         }
@@ -797,11 +799,11 @@ public abstract partial class TextBoxBase : Control
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     public int PreferredHeight => VisualStylesMode switch
     {
         VisualStylesMode.Disabled => PreferredHeightLegacy,
         VisualStylesMode.Classic => PreferredHeightLegacy,
-        >= VisualStylesMode.Version10 => PreferredHeightVersion10,
 
         // We'll should never be here.
         _ => throw new InvalidEnumArgumentException(
@@ -809,6 +811,7 @@ public abstract partial class TextBoxBase : Control
             (int)VisualStylesMode,
             typeof(VisualStylesMode))
     };
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     private int PreferredHeightLegacy
     {
@@ -871,7 +874,8 @@ public abstract partial class TextBoxBase : Control
             format |= TextFormatFlags.WordBreak;
         }
 
-        if (VisualStylesMode >= VisualStylesMode.Version10)
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (VisualStylesMode == VisualStylesMode.Latest)
         {
             // For Versions >=10, we take our modern Style adorners into account
             // when we're calculating the preferred height.
@@ -920,6 +924,7 @@ public abstract partial class TextBoxBase : Control
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
@@ -1219,6 +1224,13 @@ public abstract partial class TextBoxBase : Control
             _textBoxFlags[s_codeUpdateText] = false;
         }
     }
+
+    /// <summary>
+    /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
+    /// </summary>
+    [Experimental("WFO9000")]
+    protected override VisualStylesMode DefaultVisualStylesMode =>
+        VisualStylesMode.Classic;
 
     /// <summary>
     ///  Gets or sets a value indicating whether a multiline text box control
@@ -2086,11 +2098,13 @@ public abstract partial class TextBoxBase : Control
         // We only want to do this for VisualStylesMode >= Version10.
         // Also, we do that only one time per instance,
         // but we need to reset this, when the handle is recreated.
-        if (VisualStylesMode < VisualStylesMode.Version10
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (VisualStylesMode < VisualStylesMode.Latest
             || _triggerNewClientSizeRequest)
         {
             return;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         _triggerNewClientSizeRequest = true;
 
@@ -2116,12 +2130,14 @@ public abstract partial class TextBoxBase : Control
         Invalidate(true);
     }
 
-    protected virtual void WmNcPaint(ref Message m)
+    private void WmNcPaint(ref Message m)
     {
-        if (VisualStylesMode < VisualStylesMode.Version10)
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (VisualStylesMode < VisualStylesMode.Latest)
         {
             return;
         }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         HWND hwnd = (HWND)m.HWnd;
         HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
