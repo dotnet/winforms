@@ -1625,6 +1625,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [SRDescription(nameof(SR.ControlDarkModeDescr))]
+    [Experimental("WFO9001")]
     public DarkMode DarkMode
     {
         get => Properties.TryGetObject(s_darkModeProperty, out DarkMode value)
@@ -1634,16 +1635,19 @@ public unsafe partial class Control :
         set => SetDarkMode(value);
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     private bool ShouldSerializeDarkMode()
         => DarkMode != DefaultDarkMode;
 
     private void ResetDarkMode()
         => DarkMode = DefaultDarkMode;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     /// <summary>
     ///  Tests, if the control is currently in dark mode. This property is ambient. Inherited controls can return false,
     ///  to prevent their base classes to apply their dark-mode logic, and can still test for dark-mode by calling base.IsDarkModeEnabled.
     /// </summary>
+    [Experimental("WFO9001")]
     protected virtual bool IsDarkModeEnabled
     {
         get
@@ -1663,6 +1667,7 @@ public unsafe partial class Control :
         }
     }
 
+    [Experimental("WFO9001")]
     private void SetDarkMode(DarkMode darkMode)
     {
         if (Equals(darkMode, DarkMode))
@@ -1675,9 +1680,9 @@ public unsafe partial class Control :
             DarkMode.Inherits or
             DarkMode.Enabled or
             DarkMode.Disabled => Application.EnvironmentDarkMode == DarkMode.NotSupported || !DarkModeSupported
-                    ? throw new ArgumentException("${darkModeSetting} is not supported in this Environment.")
+                    ? throw new ArgumentException($"{darkMode} is not supported in this Environment.")
                     : true,
-            _ => throw new ArgumentException("${darkModeSetting} is not supported in this context.")
+            _ => throw new ArgumentException($"{darkMode} is not supported in this context.")
         })
         {
             // When DarkModeSetting was different than its parent before, but now it is about to become the same,
@@ -1709,15 +1714,18 @@ public unsafe partial class Control :
     /// </summary>
     /// <param name="darkModeSetting">A value of type <see cref="DarkMode"/> with the new dark-mode setting.</param>
     /// <returns><see langword="true"/>, if the setting succeeded, otherwise <see langword="false"/>.</returns>
+    [Experimental("WFO9001")]
     protected virtual bool SetDarkModeCore(DarkMode darkModeSetting) => true;
 
     /// <summary>
     ///  Determines whether the control supports dark mode.
     /// </summary>
     /// <returns><see langword="true"/>, if the control supports dark mode; otherwise, <see langword="false"/>.</returns>
+    [Experimental("WFO9001")]
     protected virtual bool DarkModeSupported
         => Application.EnvironmentDarkMode != DarkMode.NotSupported;
 
+    [Experimental("WFO9001")]
     private static DarkMode DefaultDarkMode => DarkMode.Inherits;
 
     /// <summary>
@@ -7747,6 +7755,7 @@ public unsafe partial class Control :
                 PInvoke.SetWindowText(this, _text);
             }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (IsDarkModeEnabled)
             {
                 // These controls need to be individually themed.
@@ -7761,6 +7770,7 @@ public unsafe partial class Control :
                         pszSubIdList: null);
                 }
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             if (this is not ScrollableControl
                 && !IsMirrored
@@ -10836,7 +10846,9 @@ public unsafe partial class Control :
                 {
                     if (value)
                     {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                         PrepareDarkMode(HWND, IsDarkModeEnabled);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                     }
 
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);

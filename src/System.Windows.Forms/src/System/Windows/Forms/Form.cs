@@ -98,7 +98,7 @@ public partial class Form : ContainerControl
     private const int SizeGripSize = 16;
 
     private static Icon? s_defaultIcon;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     // Property store keys for properties.  The property store allocates most efficiently
     // in groups of four, so we try to lump properties in groups of four based on how
@@ -4179,10 +4179,12 @@ public partial class Form : ContainerControl
         // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (IsDarkModeEnabled)
             {
                 PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }

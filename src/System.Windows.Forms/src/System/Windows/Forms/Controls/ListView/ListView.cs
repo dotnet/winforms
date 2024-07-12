@@ -4613,6 +4613,7 @@ public partial class ListView : Control
             PInvoke.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (IsDarkModeEnabled)
         {
             _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
@@ -4621,6 +4622,7 @@ public partial class ListView : Control
             var columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
             PInvoke.SetWindowTheme(columnHeaderHandle, "DarkMode_ItemsView", null);
         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         UpdateExtendedStyles();
         RealizeProperties();
@@ -5018,16 +5020,19 @@ public partial class ListView : Control
         Color c;
 
         c = BackColor;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (c != Application.ApplicationColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
+
         if (c != Application.ApplicationColors.WindowText || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         if (_imageListLarge is not null)
         {
@@ -6019,6 +6024,7 @@ public partial class ListView : Control
 
         // We need to set the text color when we are in dark mode,
         // so that the themed headers are actually readable.
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (IsDarkModeEnabled && !OwnerDraw && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
         {
             NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
@@ -6039,6 +6045,7 @@ public partial class ListView : Control
                 return false;
             }
         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {

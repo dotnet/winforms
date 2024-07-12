@@ -193,10 +193,12 @@ public partial class MonthCalendar : Control
     {
         get
         {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (ShouldSerializeBackColor() || IsDarkModeEnabled)
             {
                 return base.BackColor;
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return Application.ApplicationColors.Window;
         }
@@ -407,10 +409,12 @@ public partial class MonthCalendar : Control
     {
         get
         {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (ShouldSerializeForeColor() || IsDarkModeEnabled)
             {
                 return base.ForeColor;
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return Application.ApplicationColors.WindowText;
         }

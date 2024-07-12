@@ -32,7 +32,7 @@ public static partial class ToolStripManager
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     private static void InitializeThread()
     {
@@ -555,10 +555,12 @@ public static partial class ToolStripManager
             case ToolStripManagerRenderMode.System:
                 return new ToolStripSystemRenderer(isDefault: true);
             case ToolStripManagerRenderMode.Professional:
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 if (Application.IsDarkModeEnabled)
                 {
                     return new ToolStripProfessionalRenderer(new DarkProfessionalColors());
                 }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 return new ToolStripProfessionalRenderer(isDefault: true);
 

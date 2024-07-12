@@ -249,6 +249,7 @@ public partial class ComboBox : ListControl
         }
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  The background color of this control. This is an ambient property and
     ///  will always return a non-null value.
@@ -3977,6 +3978,7 @@ public partial class ComboBox : ListControl
                 break;
         }
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private FlatComboAdapter FlatComboBoxAdapter
     {

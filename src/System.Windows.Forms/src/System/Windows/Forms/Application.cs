@@ -43,7 +43,9 @@ public sealed partial class Application
     private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     private static DarkMode? s_darkMode;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -243,6 +245,7 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
+    [Experimental("WFO9001")]
     public static DarkMode DefaultDarkMode
     {
         get
@@ -319,6 +322,7 @@ public sealed partial class Application
     /// </summary>
     /// <param name="darkMode">The default dark mode to set.</param>
     /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
+    [Experimental("WFO9001")]
     public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
     {
         DarkMode.Enabled or
@@ -327,6 +331,7 @@ public sealed partial class Application
         _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
     };
 
+    [Experimental("WFO9001")]
     private static bool SetDefaultDarkModeCore(DarkMode darkMode)
     {
         if (EnvironmentDarkMode == DarkMode.NotSupported)
@@ -341,6 +346,23 @@ public sealed partial class Application
 
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
+    /// <summary>
+    ///  Gets the dark mode setting of the OS system environment.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The dark mode setting is determined based on the operating system version and its system settings. It returns
+    ///   <see cref="DarkMode.Enabled"/> if the dark mode is enabled in the system settings, <see cref="DarkMode.Disabled"/>
+    ///   if the dark mode is disabled, and <see cref="DarkMode.NotSupported"/> if the dark mode is not supported.
+    ///  </para>
+    ///  <para>
+    ///   Dark mode is supported on Windows 11 or later versions.
+    ///  </para>
+    ///  <para>
+    ///   Dark mode is not supported, if High Contrast mode has been enabled in the system settings.
+    ///  </para>
+    /// </remarks>
+    [Experimental("WFO9001")]
     public static DarkMode EnvironmentDarkMode
     {
         get
@@ -381,6 +403,7 @@ public sealed partial class Application
     ///  Gets a value indicating whether the application is running in a dark mode context.
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
+    [Experimental("WFO9001")]
     public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
         && DefaultDarkMode switch
         {
@@ -396,6 +419,28 @@ public sealed partial class Application
             }
         };
 
+    /// <summary>
+    ///  Gets the application colors.
+    /// </summary>
+    /// <remarks>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>
+    ///     In Light Mode, the colors are derived from <see cref="SystemColors"/>.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     In Dark Mode, the colors are derived from a custom set of colors defined by WinForms,
+    ///     which resemble a compromise between Visual Studio Dark Scheme, Windows 11 Dark Scheme, and accessibility requirements.
+    ///    </description>
+    ///    </item>
+    ///  </list>
+    ///  <para>
+    ///   The color scheme is read-only and cannot be changed.
+    ///  </para>
+    /// </remarks>
+    [Experimental("WFO9002")]
     public static ApplicationColors ApplicationColors
         => IsDarkModeEnabled
             ? DarkThemedApplicationColors.DefaultInstance

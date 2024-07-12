@@ -104,7 +104,7 @@ public abstract partial class TextBoxBase : Control
                 | ControlStyles.UseTextForAccessibility
                 | ControlStyles.UserPaint, false);
 
-        // cache requestedHeight. Note: Control calls DefaultSize (overridable) in the constructor
+        // cache requested height. Note: Control calls DefaultSize (overridable) in the constructor
         // to set the control's cached height that is returned when calling Height, so we just
         // need to get the cached height here.
         _requestedHeight = Height;

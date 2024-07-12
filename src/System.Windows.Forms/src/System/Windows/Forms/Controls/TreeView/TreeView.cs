@@ -1878,6 +1878,7 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (c != Application.ApplicationColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
@@ -1889,6 +1890,7 @@ public partial class TreeView : Control
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
