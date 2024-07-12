@@ -61,9 +61,9 @@ variables:
   value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
 - name: _Sign
   value: true
-#- ${{ if and(notin(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
-- name: enableSourceIndex
-  value: true
+- ${{ if and(notin(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+  - name: enableSourceIndex
+    value: true
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
