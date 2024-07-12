@@ -9,7 +9,6 @@ internal readonly partial struct Value
     {
         public static PackedDateTimeOffsetFlag Instance { get; } = new();
 
-        public override DateTimeOffset To(in Value value)
-            => value._union.PackedDateTimeOffset.Extract();
+        public override DateTimeOffset To(in Value value) => value._union.PackedDateTimeOffset.Extract();
     }
 }

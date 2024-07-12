@@ -9,7 +9,6 @@ internal readonly partial struct Value
     {
         public static DateTimeOffsetFlag Instance { get; } = new();
 
-        public override DateTimeOffset To(in Value value)
-            => new(new DateTime(value._union.Ticks, DateTimeKind.Utc));
+        public override DateTimeOffset To(in Value value) => new(new DateTime(value._union.Ticks, DateTimeKind.Utc));
     }
 }
