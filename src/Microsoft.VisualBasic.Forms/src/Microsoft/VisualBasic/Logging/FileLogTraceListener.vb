@@ -7,9 +7,9 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -831,14 +831,14 @@ Namespace Microsoft.VisualBasic.Logging
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
+                    Throw New InvalidOperationException(VbUtils.GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
             If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
+                    Throw New InvalidOperationException(VbUtils.GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
                 Return False
             End If

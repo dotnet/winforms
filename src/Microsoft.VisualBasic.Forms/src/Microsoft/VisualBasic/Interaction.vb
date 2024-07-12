@@ -7,9 +7,9 @@ Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic
 
@@ -26,11 +26,11 @@ Namespace Microsoft.VisualBasic
             Dim errorCode As Integer = 0
 
             If (PathName Is Nothing) Then
-                Throw New ArgumentNullException(GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+                Throw New ArgumentNullException(VbUtils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
             End If
 
             If (Style < 0 OrElse Style > 9) Then
-                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValue1, "Style"))
+                Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
             End If
 
             NativeMethods.GetStartupInfo(startupInfo)
@@ -127,7 +127,7 @@ Namespace Microsoft.VisualBasic
             End If
 
             If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then 'we never found a window belonging to the desired process
-                Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, CStr(ProcessId)))
+                Throw New ArgumentException(VbUtils.GetResourceString(SR.ProcessNotFound, CStr(ProcessId)))
             Else
                 AppActivateHelper(windowHandle, CStr(ProcessId))
             End If
@@ -186,7 +186,7 @@ Namespace Microsoft.VisualBasic
             End If
 
             If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then 'no match
-                Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, Title))
+                Throw New ArgumentException(VbUtils.GetResourceString(SR.ProcessNotFound, Title))
             Else
                 AppActivateHelper(windowHandle, Title)
             End If
@@ -213,7 +213,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, processId))
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.ProcessNotFound, processId))
                 End If
 
                 '  set active window to the owned one
@@ -342,7 +342,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+                Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
 
             Try
@@ -362,7 +362,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
+                Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
             Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,

@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub New()
         End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:="<Public API>
         ''' <summary>
         ''' Gets the total size of physical memory on the machine.
         ''' </summary>
@@ -48,8 +48,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Gets the total size of user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process, 
-        '''          in bytes.</value>
+        ''' <value>
+        '''   A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process,
+        '''   in bytes.
+        '''  </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
@@ -61,8 +63,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Gets the total size of free user potion of virtual address space for calling process.
         ''' </summary>
-        ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process, 
-        '''          in bytes.</value>
+        ''' <value>
+        '''  A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process,
+        '''  in bytes.
+        ''' </value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
@@ -70,7 +74,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
         ''' Gets the current UICulture installed on the machine.
@@ -123,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
                 _instanceBeingWatched = RealClass
             End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
@@ -151,7 +155,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
@@ -200,7 +204,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend Sub New()
             End Sub
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -228,7 +232,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
             Private Sub Refresh()
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
@@ -241,5 +245,4 @@ Namespace Microsoft.VisualBasic.Devices
             Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
         End Class
     End Class
-
 End Namespace
