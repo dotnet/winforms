@@ -72,13 +72,15 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     private void RenderSwitch(Graphics g, Rectangle rect, int circleDiameter)
     {
-        if (_animationProgress is null)
+        float animationProgress = CheckBox.Checked ? 1 : 0;
+
+        if (_animationProgress is not null)
         {
             // Let's make sure, we don't draw anything if the animation is not running.
-            return;
+            animationProgress = _animationProgress.Value;
         }
 
-        Color backgroundColor = CheckBox.Checked ^ (_animationProgress < 0.8f)
+        Color backgroundColor = CheckBox.Checked ^ (animationProgress < 0.8f)
             ? SystemColors.Highlight
             : SystemColors.ControlDark;
 
@@ -87,8 +89,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         static float EaseOut(float t) => (1 - t) * (1 - t);
 
         float circlePosition = CheckBox.Checked
-            ? (rect.Width - circleDiameter) * (1 - EaseOut(_animationProgress.Value))
-            : (rect.Width - circleDiameter) * EaseOut(_animationProgress.Value);
+            ? (rect.Width - circleDiameter) * (1 - EaseOut(animationProgress))
+            : (rect.Width - circleDiameter) * EaseOut(animationProgress);
 
         using var backgroundBrush = new SolidBrush(backgroundColor);
         using var circleBrush = new SolidBrush(circleColor);

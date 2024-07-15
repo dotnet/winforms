@@ -304,6 +304,7 @@ public partial class CheckBox : ButtonBase
             textSize = TextRenderer.MeasureText(Text, Font);
             int switchWidth = 50 * dpiScale;
             int switchHeight = 25 * dpiScale;
+
             int totalWidth = textSize.Width + switchWidth + 20 * dpiScale; // 10 dpi padding on each side
             int totalHeight = Math.Max(textSize.Height, switchHeight);
 
