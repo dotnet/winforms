@@ -1204,17 +1204,16 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Gets the size of the form when it is
-    ///  maximized.
+    ///  Gets the size of the form when it is  maximized.
     /// </summary>
     protected Rectangle MaximizedBounds
     {
-        get => Properties.GetRectangle(s_propMaximizedBounds, out _);
+        get => Properties.GetValueOrDefault<Rectangle>(s_propMaximizedBounds);
         set
         {
             if (!value.Equals(MaximizedBounds))
             {
-                Properties.SetRectangle(s_propMaximizedBounds, value);
+                Properties.SetValue(s_propMaximizedBounds, value);
                 OnMaximizedBoundsChanged(EventArgs.Empty);
             }
         }

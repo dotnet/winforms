@@ -345,7 +345,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public Padding Padding
     {
-        get => Properties.GetPadding(s_propPadding, out _);
+        get => Properties.GetValueOrDefault<Padding>(s_propPadding);
         set
         {
             if (value.Left < 0 || value.Right < 0 || value.Top < 0 || value.Bottom < 0)
@@ -378,7 +378,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value.Bottom >= 0);
             if (value != Padding)
             {
-                Properties.SetPadding(s_propPadding, value);
+                Properties.SetValue(s_propPadding, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
