@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Class
 
         ''' <summary>
-        '''  Inherits SafeHandleZeroOrMinusOneIsInvalid, with additional InitialSetHandle method.
+        '''  Inherits <see cref="SafeHandleZeroOrMinusOneIsInvalid"/>, with additional InitialSetHandle method.
         '''  This is required because call to constructor of SafeHandle is not allowed in constrained region.
         ''' </summary>
         Friend NotInheritable Class LateInitSafeHandleZeroOrMinusOneIsInvalid
