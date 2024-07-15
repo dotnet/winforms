@@ -1,12 +1,10 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Collections.ObjectModel
 Imports System.Reflection
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -15,9 +13,28 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  specified using the assembly attributes (contained in AssemblyInfo.vb file in case of
     '''  a VB project in Visual Studio .NET).
     ''' </summary>
-    ''' <remarks>This class is based on the FileVersionInfo class of the framework, but
-    ''' reduced to a number of relevant properties.</remarks>
+    ''' <remarks>
+    '''  This class is based on the <see cref="FileVersionInfo"/> class of the framework, but
+    '''  reduced to a number of relevant properties.
+    ''' </remarks>
     Public Class AssemblyInfo
+        ' The assembly with the information.
+        Private ReadOnly _assembly As Assembly
+
+        ' Since these properties will not change during runtime, they're cached.
+        ' String.Empty is not Nothing so use Nothing to mark an un-accessed property.
+        ' Cache the assembly's company name.
+        Private _companyName As String
+        ' Cache the assembly's copyright.
+        Private _copyright As String
+        ' Cache the assembly's description.
+        Private _description As String
+        ' Cache the assembly's product name.
+        Private _productName As String
+        ' Cache the assembly's title.
+        Private _title As String
+        ' Cache the assembly's trademark.
+        Private _trademark As String
 
         ''' <summary>
         ''' Creates an AssemblyInfo from an assembly
@@ -25,7 +42,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="CurrentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
-                Throw GetArgumentNullException("CurrentAssembly")
+                Throw ExUtils.GetArgumentNullException(NameOf(currentAssembly))
             End If
             _assembly = currentAssembly
         End Sub
@@ -41,7 +58,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyDescriptionAttribute =
                         CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
                     If Attribute Is Nothing Then
-                        _description = ""
+                        _description = String.Empty
                     Else
                         _description = Attribute.Description
                     End If
@@ -61,7 +78,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyCompanyAttribute =
                         CType(GetAttribute(GetType(AssemblyCompanyAttribute)), AssemblyCompanyAttribute)
                     If Attribute Is Nothing Then
-                        _companyName = ""
+                        _companyName = String.Empty
                     Else
                         _companyName = Attribute.Company
                     End If
@@ -81,7 +98,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyTitleAttribute =
                         CType(GetAttribute(GetType(AssemblyTitleAttribute)), AssemblyTitleAttribute)
                     If Attribute Is Nothing Then
-                        _title = ""
+                        _title = String.Empty
                     Else
                         _title = Attribute.Title
                     End If
@@ -100,7 +117,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _copyright Is Nothing Then
                     Dim Attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
                     If Attribute Is Nothing Then
-                        _copyright = ""
+                        _copyright = String.Empty
                     Else
                         _copyright = Attribute.Copyright
                     End If
@@ -119,7 +136,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _trademark Is Nothing Then
                     Dim Attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
                     If Attribute Is Nothing Then
-                        _trademark = ""
+                        _trademark = String.Empty
                     Else
                         _trademark = Attribute.Trademark
                     End If
@@ -138,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _productName Is Nothing Then
                     Dim Attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
                     If Attribute Is Nothing Then
-                        _productName = ""
+                        _productName = String.Empty
                     Else
                         _productName = Attribute.Product
                     End If
@@ -233,16 +250,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
         End Function
 
-        ' Private fields.
-        Private ReadOnly _assembly As Assembly ' The assembly with the information.
-
-        ' Since these properties will not change during runtime, they're cached.
-        ' "" is not Nothing so use Nothing to mark an un-accessed property.
-        Private _description As String ' Cache the assembly's description.
-        Private _title As String ' Cache the assembly's title.
-        Private _productName As String ' Cache the assembly's product name.
-        Private _companyName As String ' Cache the assembly's company name.
-        Private _trademark As String ' Cache the assembly's trademark.
-        Private _copyright As String ' Cache the assembly's copyright.
     End Class
 End Namespace

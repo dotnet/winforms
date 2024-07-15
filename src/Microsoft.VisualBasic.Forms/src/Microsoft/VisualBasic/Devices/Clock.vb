@@ -1,10 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
-
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
@@ -13,11 +9,12 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class Clock
 
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
+
         ''' <summary>
         ''' Gets a Date that is the current local date and time on this computer.
         ''' </summary>
         ''' <value>A Date whose value is the current date and time.</value>
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
         Public ReadOnly Property LocalTime() As DateTime
             Get
                 Return DateTime.Now
@@ -34,7 +31,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Return DateTime.UtcNow
             End Get
         End Property
-#Enable Warning IDE0049 ' Simplify Names
+
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         ''' <summary>
         ''' This property wraps the Environment.TickCount property to get the
