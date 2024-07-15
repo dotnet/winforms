@@ -1,3 +1,4 @@
+System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font?
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 virtual System.Drawing.Design.PropertyValueUIHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc, System.Collections.ArrayList! valueUIItemList) -> void

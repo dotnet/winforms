@@ -927,7 +927,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
         }
 
-        return MeasureTextHeight(graphics, " ", cellStyle.Font, int.MaxValue, TextFormatFlags.Default) + adjustment;
+        return MeasureTextHeight(graphics, " ", cellStyle.Font!, int.MaxValue, TextFormatFlags.Default) + adjustment;
     }
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
@@ -1282,11 +1282,11 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         string? formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
         if (!string.IsNullOrEmpty(formattedValue))
         {
-            preferredSize = MeasureTextSize(graphics, formattedValue, cellStyle.Font, flags);
+            preferredSize = MeasureTextSize(graphics, formattedValue, cellStyle.Font!, flags);
         }
         else
         {
-            preferredSize = MeasureTextSize(graphics, " ", cellStyle.Font, flags);
+            preferredSize = MeasureTextSize(graphics, " ", cellStyle.Font!, flags);
         }
 
         if (freeDimension == DataGridViewFreeDimension.Height)

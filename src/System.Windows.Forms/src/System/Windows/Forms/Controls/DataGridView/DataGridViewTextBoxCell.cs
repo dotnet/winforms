@@ -239,7 +239,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
                 using var screen = GdiCache.GetScreenDCGraphics();
-                preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font, originalWidth, flags);
+                preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font!, originalWidth, flags);
             }
 
             if (preferredHeight < editingControlBounds.Height)
@@ -436,7 +436,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                             MeasureTextWidth(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginBottom),
                                 flags),
                             0);
@@ -450,7 +450,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                             MeasureTextHeight(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginRight),
                                 flags));
                         break;
@@ -461,7 +461,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                         preferredSize = MeasureTextPreferredSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             5.0F,
                             flags);
                         break;
@@ -475,7 +475,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                 case DataGridViewFreeDimension.Width:
                     {
                         preferredSize = new Size(
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Width,
                             0);
                         break;
                     }
@@ -484,13 +484,13 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                     {
                         preferredSize = new Size(
                             0,
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Height);
                         break;
                     }
 
                 default:
                     {
-                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
+                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags);
                         break;
                     }
             }

@@ -7,9 +7,7 @@ using System.Runtime.CompilerServices;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This is a small class that can efficiently store property values.
-///  It tries to optimize for size first, "get" access second, and
-///  "set" access third.
+///  Efficient property store that avoids boxing for common value types.
 /// </summary>
 internal class PropertyStore
 {
@@ -17,22 +15,26 @@ internal class PropertyStore
 
     private readonly Dictionary<int, Value> _values = [];
 
+    /// <summary>
+    ///  Returns <see langword="true"/> if the current key has a value in the <see cref="PropertyStore"/>.
+    /// </summary>
+    public bool ContainsKey(int key) => _values.ContainsKey(key);
+
+    // REMOVE
     public bool ContainsInteger(int key) => _values.ContainsKey(key);
 
+    // REMOVE
     public bool ContainsObject(int key) => _values.ContainsKey(key);
 
     /// <summary>
-    ///  Creates a new key for this property store. This is NOT
-    ///  guarded by any thread safety so if you are calling it on
-    ///  multiple threads you should guard. For our purposes,
-    ///  we're fine because this is designed to be called in a class
-    ///  initializer, and we never have the same class hierarchy
-    ///  initializing on multiple threads at once.
+    ///  Creates a new key for this property store.
     /// </summary>
     public static int CreateKey() => s_currentKey++;
 
+    // REMOVE
     public Color GetColor(int key) => GetColor(key, out _);
 
+    // REMOVE
     /// <summary>
     ///  A wrapper around GetObject designed to reduce the boxing hit
     /// </summary>
@@ -48,6 +50,7 @@ internal class PropertyStore
         return Color.Empty;
     }
 
+    // REMOVE
     /// <summary>
     ///  A wrapper around GetObject designed to reduce the boxing hit.
     /// </summary>
@@ -63,6 +66,7 @@ internal class PropertyStore
         return Size.Empty;
     }
 
+    // REMOVE
     /// <summary>
     ///  Retrieves an integer value from our property list.
     ///  This will set value to zero and return false if the
@@ -70,6 +74,7 @@ internal class PropertyStore
     /// </summary>
     public int GetInteger(int key) => GetInteger(key, out _);
 
+    // REMOVE
     /// <summary>
     ///  Retrieves an integer value from our property list.
     ///  This will set value to zero and return false if the
@@ -81,6 +86,7 @@ internal class PropertyStore
         return found ? value.GetValue<int>() : default;
     }
 
+    // REMOVE
     /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
@@ -88,6 +94,7 @@ internal class PropertyStore
     /// </summary>
     public object? GetObject(int key) => GetObject(key, out _);
 
+    // REMOVE
     /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
@@ -114,12 +121,14 @@ internal class PropertyStore
         return found;
     }
 
+    // REMOVE
     public bool ContainsObjectThatIsNotNull(int key)
     {
         object? entry = GetObject(key, out bool found);
         return found && entry is not null;
     }
 
+    // REMOVE
     /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
@@ -131,32 +140,44 @@ internal class PropertyStore
         return found ? value.GetValue<object?>() : null;
     }
 
+    // REMOVE
     /// <summary>
     ///  Removes the given key from the array
     /// </summary>
     public void RemoveInteger(int key) => _values.Remove(key);
 
+    // REMOVE
     /// <summary>
     ///  Removes the given key from the array
     /// </summary>
     public void RemoveObject(int key) => _values.Remove(key);
 
+    /// <summary>
+    ///  Removes the given key from the store.
+    /// </summary>
     public void RemoveValue(int key) => _values.Remove(key);
 
+    // REMOVE
     public void SetColor(int key, Color value) => _values[key] = value;
 
+    // REMOVE
     public void SetSize(int key, Size value) => _values[key] = value;
 
+    // REMOVE
     /// <summary>
     ///  Stores the given value in the key.
     /// </summary>
     public void SetInteger(int key, int value) => _values[key] = value;
 
+    // REMOVE
     /// <summary>
     ///  Stores the given value in the key.
     /// </summary>
     public void SetObject(int key, object? value) => _values[key] = new(value);
 
+    /// <summary>
+    ///  Gets the current value for the given key, or the default value for the type if the key is not found.
+    /// </summary>
     public T? GetValueOrDefault<T>(int key)
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -167,6 +188,10 @@ internal class PropertyStore
         return default;
     }
 
+    /// <summary>
+    ///  Tries to get the value for the given key. Returns <see langword="true"/> if the value was found and was
+    ///  not <see langword="null"/>.
+    /// </summary>
     public bool TryGetValue<T>(int key, [NotNullWhen(true)] out T? value)
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -179,6 +204,12 @@ internal class PropertyStore
         return false;
     }
 
+    // Ideally we can get rid of this one and just clear values when they are null.
+
+    /// <summary>
+    ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values.
+    ///  Returns <see langword="true"/> if the value was found.
+    /// </summary>
     public bool TryGetValueOrNull<T>(int key, out T? value) where T : class
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -191,7 +222,29 @@ internal class PropertyStore
         return false;
     }
 
-    public void SetValue<T>(int key, T value)
+    /// <summary>
+    ///  Sets the given value or clears it from the store if the value is <see langword="null"/>.
+    ///  Returns the previous value if it was set, or <see langword="null"/>.
+    /// </summary>
+    public T? AddOrRemoveValue<T>(int key, T? value) where T : class
+    {
+        TryGetValue(key, out T? previous);
+        if (value is null)
+        {
+            _values.Remove(key);
+        }
+        else
+        {
+            _values[key] = new(value);
+        }
+
+        return previous;
+    }
+
+    /// <summary>
+    ///  Adds the given value to the store.
+    /// </summary>
+    public void AddValue<T>(int key, T value)
     {
         // For value types that are larger than 8 bytes, we attempt to update the existing value
         // to avoid another boxing allocation.

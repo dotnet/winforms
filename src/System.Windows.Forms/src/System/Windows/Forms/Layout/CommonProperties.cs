@@ -198,7 +198,7 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetMargin(element), "PERF: Caller should guard against setting Margin to original value.");
 
-        element.Properties.SetValue(s_marginProperty, value);
+        element.Properties.AddValue(s_marginProperty, value);
 
         Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
@@ -264,7 +264,7 @@ internal partial class CommonProperties
             "PERF: Caller should guard against setting Padding to original value.");
 
         value = LayoutUtils.ClampNegativePaddingToZero(value);
-        element.Properties.SetValue(s_paddingProperty, value);
+        element.Properties.AddValue(s_paddingProperty, value);
 
         Debug.Assert(GetPadding(element, new Padding(-7105)) == value, "Error detected setting Padding.");
     }
@@ -329,7 +329,7 @@ internal partial class CommonProperties
                 originalBounds.Height = height;
             }
 
-            element.Properties.SetValue(s_specifiedBoundsProperty, originalBounds);
+            element.Properties.AddValue(s_specifiedBoundsProperty, originalBounds);
         }
         else
         {
@@ -338,7 +338,7 @@ internal partial class CommonProperties
             if (element.Properties.ContainsObject(s_specifiedBoundsProperty))
             {
                 // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
-                element.Properties.SetValue(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
+                element.Properties.AddValue(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
             }
         }
     }
@@ -347,7 +347,7 @@ internal partial class CommonProperties
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height)
     {
         Rectangle bounds = new(x, y, width, height);
-        element.Properties.SetValue(s_specifiedBoundsProperty, bounds);
+        element.Properties.AddValue(s_specifiedBoundsProperty, bounds);
     }
 
     /// <summary>

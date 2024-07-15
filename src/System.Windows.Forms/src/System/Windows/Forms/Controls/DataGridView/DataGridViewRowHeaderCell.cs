@@ -852,7 +852,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         if (TextFitsInBounds(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             maxBounds,
                             flags))
                         {
