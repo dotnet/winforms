@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace System;
@@ -34,6 +35,8 @@ internal readonly partial struct Value
         [FieldOffset(0)] public double Double;                  // 8 bytes
         [FieldOffset(0)] public DateTime DateTime;              // 8 bytes  (ulong)
         [FieldOffset(0)] public PackedDateTimeOffset PackedDateTimeOffset;
+        [FieldOffset(0)] public PackedColor PackedColor;
+        [FieldOffset(0)] public Size Size;
         [FieldOffset(0)] public (int Offset, int Count) Segment;
     }
 }

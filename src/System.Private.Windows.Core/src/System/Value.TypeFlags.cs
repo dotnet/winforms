@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
+
 namespace System;
 
 internal readonly partial struct Value
@@ -20,7 +22,9 @@ internal readonly partial struct Value
         internal static StraightCastFlag<float> Single { get; } = StraightCastFlag<float>.Instance;
         internal static StraightCastFlag<double> Double { get; } = StraightCastFlag<double>.Instance;
         internal static StraightCastFlag<DateTime> DateTime { get; } = StraightCastFlag<DateTime>.Instance;
-        internal static DateTimeOffsetFlag DateTimeOffset { get; } = DateTimeOffsetFlag.Instance;
+        internal static UtcDateTimeOffsetFlag UtcDateTimeOffset { get; } = UtcDateTimeOffsetFlag.Instance;
         internal static PackedDateTimeOffsetFlag PackedDateTimeOffset { get; } = PackedDateTimeOffsetFlag.Instance;
+        internal static PackedColorFlag PackedColor { get; } = PackedColorFlag.Instance;
+        internal static StraightCastFlag<Size> Size { get; } = StraightCastFlag<Size>.Instance;
     }
 }
