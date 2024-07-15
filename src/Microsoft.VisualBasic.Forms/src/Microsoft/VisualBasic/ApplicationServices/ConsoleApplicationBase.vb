@@ -51,7 +51,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Allows derived classes to set what the command line should look like. WindowsFormsApplicationBase calls this
+        '''  Allows derived classes to set what the command line should look like. <see cref="WindowsFormsApplicationBase"/> calls this
         '''  for instance because we snag the command line from Main().
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
