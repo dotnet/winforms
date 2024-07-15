@@ -688,7 +688,7 @@ Namespace Microsoft.VisualBasic.Logging
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
-            Dim BaseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+            Dim baseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
@@ -749,7 +749,7 @@ Namespace Microsoft.VisualBasic.Logging
             End While
             'If we fall out the loop, we have failed to obtain a valid stream name.  This occurs if there are files on your system
             'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
-            Throw ExUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, BaseStreamName)
+            Throw ExUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
         End Function
 
         ''' <summary>
