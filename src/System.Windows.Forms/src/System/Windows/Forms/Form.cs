@@ -1204,7 +1204,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Gets the size of the form when it is  maximized.
+    ///  Gets the size of the form when it is maximized.
     /// </summary>
     protected Rectangle MaximizedBounds
     {
