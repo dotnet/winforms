@@ -688,7 +688,7 @@ Namespace Microsoft.VisualBasic.Logging
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
-            Dim BaseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+            Dim baseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
