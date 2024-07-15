@@ -843,6 +843,19 @@ public class CheckedListBoxTests
         callCount.Should().Be(1);
     }
 
+    [WinFormsFact]
+    public void CheckedListBox_DrawItemEvent_AddRemove_Success()
+    {
+        using SubCheckedListBox checkedListBox = new();
+        DrawItemEventHandler handler = (sender, e) => { };
+
+        Action actAdd = () => checkedListBox.DrawItem += handler;
+        Action actRemove = () => checkedListBox.DrawItem -= handler;
+
+        actAdd.Should().NotThrow();
+        actRemove.Should().NotThrow();
+    }
+
     private class SubCheckedListBox : CheckedListBox
     {
         public new int _listItemBordersHeight => base._listItemBordersHeight;
