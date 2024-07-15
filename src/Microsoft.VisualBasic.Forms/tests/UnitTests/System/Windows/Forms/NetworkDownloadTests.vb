@@ -58,8 +58,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
                                       destinationFileName:=testDirectory, ' This is a Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -89,8 +89,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
                                       $"{destinationFileName}{separator}",
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -121,8 +121,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
                                       destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -153,8 +153,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
                                       destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -200,8 +200,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(New Uri(webListener.Address),
                                       destinationFileName,
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=True,
                                       connectionTimeout:=-1,
                                       overwrite:=False)
@@ -228,8 +228,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
                                           destinationFileName,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False)
@@ -256,8 +256,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
                                           destinationFileName,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False,
@@ -285,8 +285,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(address:=CType(Nothing, Uri),
                                           destinationFileName,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False,
@@ -311,8 +311,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
                               destinationFileName,
-                              userName:="",
-                              password:="",
+                              userName:=String.Empty,
+                              password:=String.Empty,
                               showUI:=False,
                               TestingConnectionTimeout,
                               overwrite:=True,
@@ -334,8 +334,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
                               destinationFileName,
-                              userName:="",
-                              password:="",
+                              userName:=String.Empty,
+                              password:=String.Empty,
                               showUI:=False,
                               TestingConnectionTimeout,
                               overwrite:=True)
@@ -379,8 +379,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             My.Computer.Network _
                 .DownloadFile(New Uri(webListener.Address),
                               destinationFileName,
-                              userName:="",
-                              password:="",
+                              userName:=String.Empty,
+                              password:=String.Empty,
                               showUI:=False,
                               TestingConnectionTimeout,
                               overwrite:=True,
@@ -403,8 +403,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 My.Computer.Network _
                     .DownloadFile(New Uri(webListener.Address),
                                   destinationFileName,
-                                  userName:="",
-                                  password:="",
+                                  userName:=String.Empty,
+                                  password:=String.Empty,
                                   showUI:=True,
                                   TestingConnectionTimeout,
                                   overwrite:=True)
@@ -493,8 +493,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
                                       destinationFileName:=testDirectory, ' This is a Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -524,8 +524,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
                                       $"{destinationFileName}{separator}",
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -556,8 +556,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
                                       destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -588,8 +588,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
                                       destinationFileName:=root, ' This is a Root Directory!
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=True,
@@ -684,8 +684,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(webListener.Address,
                                           destinationFileName:=Nothing,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False)
@@ -711,8 +711,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(webListener.Address,
                                           destinationFileName:=Nothing,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False,
@@ -738,8 +738,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     My.Computer.Network _
                         .DownloadFile(webListener.Address,
                                       destinationFileName,
-                                      userName:="",
-                                      password:="",
+                                      userName:=String.Empty,
+                                      password:=String.Empty,
                                       showUI:=False,
                                       TestingConnectionTimeout,
                                       overwrite:=False)
@@ -766,8 +766,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(InvalidUrlAddress,
                                           destinationFileName,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=False,
                                           TestingConnectionTimeout,
                                           overwrite:=False)
@@ -794,8 +794,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network _
                             .DownloadFile(InvalidUrlAddress,
                                           destinationFileName,
-                                          userName:="",
-                                          password:="",
+                                          userName:=String.Empty,
+                                          password:=String.Empty,
                                           showUI:=True,
                                           TestingConnectionTimeout,
                                           overwrite:=False)
@@ -821,7 +821,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .DownloadFile(webListener.Address,
                                   destinationFileName,
                                   userName:=Nothing,
-                                  password:="",
+                                  password:=String.Empty,
                                   showUI:=True,
                                   TestingConnectionTimeout,
                                   overwrite:=False)
@@ -842,8 +842,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             My.Computer.Network _
                 .DownloadFile(webListener.Address,
                               destinationFileName,
-                              userName:="",
-                              password:="",
+                              userName:=String.Empty,
+                              password:=String.Empty,
                               showUI:=False,
                               TestingConnectionTimeout,
                               overwrite:=True,
@@ -866,8 +866,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 My.Computer.Network _
                     .DownloadFile(webListener.Address,
                                   destinationFileName,
-                                  userName:="",
-                                  password:="",
+                                  userName:=String.Empty,
+                                  password:=String.Empty,
                                   showUI:=False,
                                   TestingConnectionTimeout,
                                   overwrite:=True)
@@ -912,8 +912,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             My.Computer.Network _
                                 .DownloadFile(webListener.Address,
                                               destinationFileName,
-                                              userName:="",
-                                              password:="",
+                                              userName:=String.Empty,
+                                              password:=String.Empty,
                                               showUI:=False,
                                               connectionTimeout:=1,
                                               overwrite:=True)
@@ -933,7 +933,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFile_UrlWithWrongPassword_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetDestinationFileName(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, "")
+            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, String.Empty)
             Dim listener As HttpListener = webListener.ProcessRequests()
 
             Try

@@ -705,11 +705,11 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure all nulls are empty strings
             If userName Is Nothing Then
-                userName = ""
+                userName = String.Empty
             End If
 
             If password Is Nothing Then
-                password = ""
+                password = String.Empty
             End If
 
             If userName.Length = 0 And password.Length = 0 Then

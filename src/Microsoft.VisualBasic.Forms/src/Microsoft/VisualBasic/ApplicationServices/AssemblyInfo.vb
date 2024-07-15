@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private ReadOnly _assembly As Assembly
 
         ' Since these properties will not change during runtime, they're cached.
-        ' "" is not Nothing so use Nothing to mark an un-accessed property.
+        ' String.Empty is not Nothing so use Nothing to mark an un-accessed property.
         ' Cache the assembly's company name.
         Private _companyName As String
         ' Cache the assembly's copyright.
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim attribute As AssemblyDescriptionAttribute =
                         CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
                     If attribute Is Nothing Then
-                        _description = ""
+                        _description = String.Empty
                     Else
                         _description = attribute.Description
                     End If
@@ -78,7 +78,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim attribute As AssemblyCompanyAttribute =
                         CType(GetAttribute(GetType(AssemblyCompanyAttribute)), AssemblyCompanyAttribute)
                     If attribute Is Nothing Then
-                        _companyName = ""
+                        _companyName = String.Empty
                     Else
                         _companyName = attribute.Company
                     End If
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim attribute As AssemblyTitleAttribute =
                         CType(GetAttribute(GetType(AssemblyTitleAttribute)), AssemblyTitleAttribute)
                     If attribute Is Nothing Then
-                        _title = ""
+                        _title = String.Empty
                     Else
                         _title = attribute.Title
                     End If
@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _copyright Is Nothing Then
                     Dim attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
                     If attribute Is Nothing Then
-                        _copyright = ""
+                        _copyright = String.Empty
                     Else
                         _copyright = attribute.Copyright
                     End If
@@ -136,7 +136,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _trademark Is Nothing Then
                     Dim attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
                     If attribute Is Nothing Then
-                        _trademark = ""
+                        _trademark = String.Empty
                     Else
                         _trademark = attribute.Trademark
                     End If
@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _productName Is Nothing Then
                     Dim attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
                     If attribute Is Nothing Then
-                        _productName = ""
+                        _productName = String.Empty
                     Else
                         _productName = attribute.Product
                     End If

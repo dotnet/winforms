@@ -189,7 +189,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub FileNormalizePathEmptyStringTest_Fail()
             Dim ex As Exception = Assert.Throws(Of ArgumentException)(
                 Sub()
-                    FileSystemUtils.NormalizePath("")
+                    FileSystemUtils.NormalizePath(String.Empty)
                 End Sub)
             Assert.Equal("The path is empty. (Parameter 'path')", ex.Message)
         End Sub
