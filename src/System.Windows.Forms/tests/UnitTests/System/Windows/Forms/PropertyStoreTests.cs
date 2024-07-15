@@ -199,6 +199,36 @@ public class PropertyStoreTests
         Assert.False(store.TryGetObject(s_int, out int? outValue), "PropertyStore contains key.");
         Assert.Null(outValue);
     }
+
+    [Fact]
+    public void PropertyStore_Rectangle_UpdateDoesNotAllocate()
+    {
+        PropertyStore store = new();
+        Rectangle one = new(1, 2, 3, 4);
+        Rectangle two = new(5, 6, 7, 8);
+        store.SetValue(1, one);
+        long currentBytes = GC.GetAllocatedBytesForCurrentThread();
+        store.SetValue(1, two);
+        currentBytes = GC.GetAllocatedBytesForCurrentThread() - currentBytes;
+        currentBytes.Should().Be(0);
+
+        store.TryGetValue(1, out Rectangle result).Should().BeTrue();
+        result.Should().Be(two);
+    }
+
+    [Fact]
+    public void PropertyStore_Padding_UpdateDoesNotAllocate()
+    {
+        PropertyStore store = new();
+        Padding one = new(1, 2, 3, 4);
+        Padding two = new(5, 6, 7, 8);
+        store.SetValue(1, one);
+        long currentBytes = GC.GetAllocatedBytesForCurrentThread();
+        store.SetValue(1, two);
+        currentBytes = GC.GetAllocatedBytesForCurrentThread() - currentBytes;
+        currentBytes.Should().Be(0);
+
+        store.TryGetValue(1, out Padding result).Should().BeTrue();
+        result.Should().Be(two);
+    }
 }
-
-
