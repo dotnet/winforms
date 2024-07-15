@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  a VB project in Visual Studio .NET).
     ''' </summary>
     ''' <remarks>
-    '''  This class is based on the FileVersionInfo class of the framework, but
+    '''  This class is based on the <see cref="FileVersionInfo"/> class of the framework, but
     '''  reduced to a number of relevant properties.
     ''' </remarks>
     Public Class AssemblyInfo
@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private ReadOnly _assembly As Assembly
 
         ' Since these properties will not change during runtime, they're cached.
-        ' "" is not Nothing so use Nothing to mark an un-accessed property.
+        ' String.Empty is not Nothing so use Nothing to mark an un-accessed property.
         ' Cache the assembly's company name.
         Private _companyName As String
         ' Cache the assembly's copyright.
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyDescriptionAttribute =
                         CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
                     If Attribute Is Nothing Then
-                        _description = ""
+                        _description = String.Empty
                     Else
                         _description = Attribute.Description
                     End If
@@ -78,7 +78,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyCompanyAttribute =
                         CType(GetAttribute(GetType(AssemblyCompanyAttribute)), AssemblyCompanyAttribute)
                     If Attribute Is Nothing Then
-                        _companyName = ""
+                        _companyName = String.Empty
                     Else
                         _companyName = Attribute.Company
                     End If
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim Attribute As AssemblyTitleAttribute =
                         CType(GetAttribute(GetType(AssemblyTitleAttribute)), AssemblyTitleAttribute)
                     If Attribute Is Nothing Then
-                        _title = ""
+                        _title = String.Empty
                     Else
                         _title = Attribute.Title
                     End If
@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _copyright Is Nothing Then
                     Dim Attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
                     If Attribute Is Nothing Then
-                        _copyright = ""
+                        _copyright = String.Empty
                     Else
                         _copyright = Attribute.Copyright
                     End If
@@ -136,7 +136,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _trademark Is Nothing Then
                     Dim Attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
                     If Attribute Is Nothing Then
-                        _trademark = ""
+                        _trademark = String.Empty
                     Else
                         _trademark = Attribute.Trademark
                     End If
@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _productName Is Nothing Then
                     Dim Attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
                     If Attribute Is Nothing Then
-                        _productName = ""
+                        _productName = String.Empty
                     Else
                         _productName = Attribute.Product
                     End If

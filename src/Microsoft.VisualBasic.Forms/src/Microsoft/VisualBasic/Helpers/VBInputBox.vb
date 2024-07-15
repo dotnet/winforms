@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private OKButton As Button
         Private MyCancelButton As Button
 #Enable Warning IDE1006 ' Naming Styles
-        Public Output As String = ""
+        Public Output As String = String.Empty
 
         'This constructor needed to be able to show the designer at design-time.
         Friend Sub New()

@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             If hr > 0 AndAlso hr <= &HFFFFI Then
                 sMsg = GetResourceString(CType(hr, vbErrors))
             Else
-                sMsg = ""
+                sMsg = String.Empty
             End If
             VbMakeException = VbMakeExceptionEx(hr, sMsg)
         End Function

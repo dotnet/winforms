@@ -294,7 +294,7 @@ Namespace Microsoft.VisualBasic
                     title = fullName.Substring(0, firstCommaLocation)
                 Else
                     'The name is not in the format we're expecting so return an empty string
-                    title = ""
+                    title = String.Empty
                 End If
             End Try
 

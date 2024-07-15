@@ -547,7 +547,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="data">An object containing the message to be logged</param>
         Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, data As Object)
 
-            Dim message As String = ""
+            Dim message As String = String.Empty
             If data IsNot Nothing Then
                 message = data.ToString()
             End If
@@ -975,7 +975,7 @@ Namespace Microsoft.VisualBasic.Logging
                 sb.Remove(sb.Length - length, length)
             End If
 
-            Return """" & sb.ToString() & """"
+            Return $"""{sb}"""
 
         End Function
 

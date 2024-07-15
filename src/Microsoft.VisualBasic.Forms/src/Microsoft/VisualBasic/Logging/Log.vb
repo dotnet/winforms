@@ -64,7 +64,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="id">An id for the message (used for correlation).</param>
         Public Sub WriteEntry(message As String, severity As TraceEventType, id As Integer)
             If message Is Nothing Then
-                message = ""
+                message = String.Empty
             End If
             _traceSource.TraceEvent(severity, id, message)
         End Sub
@@ -75,7 +75,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <param name="ex">The exception being logged.</param>
         Public Sub WriteException(ex As Exception)
-            WriteException(ex, TraceEventType.Error, "", TraceEventTypeToId(TraceEventType.Error))
+            WriteException(ex, TraceEventType.Error, String.Empty, TraceEventTypeToId(TraceEventType.Error))
         End Sub
 
         ''' <summary>
