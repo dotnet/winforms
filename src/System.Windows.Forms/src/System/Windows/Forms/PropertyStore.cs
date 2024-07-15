@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
@@ -10,33 +11,15 @@ namespace System.Windows.Forms;
 ///  It tries to optimize for size first, "get" access second, and
 ///  "set" access third.
 /// </summary>
-internal partial class PropertyStore
+internal class PropertyStore
 {
     private static int s_currentKey;
 
     private readonly Dictionary<int, Value> _values = [];
 
-    /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public bool ContainsInteger(int key)
-    {
-        GetInteger(key, out bool found);
-        return found;
-    }
+    public bool ContainsInteger(int key) => _values.ContainsKey(key);
 
-    /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public bool ContainsObject(int key)
-    {
-        GetObject(key, out bool found);
-        return found;
-    }
+    public bool ContainsObject(int key) => _values.ContainsKey(key);
 
     /// <summary>
     ///  Creates a new key for this property store. This is NOT
@@ -68,26 +51,6 @@ internal partial class PropertyStore
     /// <summary>
     ///  A wrapper around GetObject designed to reduce the boxing hit.
     /// </summary>
-    public Padding GetPadding(int key, out bool found)
-    {
-        object? storedObject = GetObject(key, out found);
-        if (found)
-        {
-            if (storedObject is PaddingWrapper wrapper)
-            {
-                return wrapper.Padding;
-            }
-
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
-        }
-
-        found = false;
-        return Padding.Empty;
-    }
-
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
     public Size GetSize(int key, out bool found)
     {
         if (_values.TryGetValue(key, out Value value))
@@ -98,26 +61,6 @@ internal partial class PropertyStore
 
         found = false;
         return Size.Empty;
-    }
-
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Rectangle GetRectangle(int key, out bool found)
-    {
-        object? storedObject = GetObject(key, out found);
-        if (found)
-        {
-            if (storedObject is RectangleWrapper wrapper)
-            {
-                return wrapper.Rectangle;
-            }
-
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
-        }
-
-        found = false;
-        return Rectangle.Empty;
     }
 
     /// <summary>
@@ -198,41 +141,9 @@ internal partial class PropertyStore
     /// </summary>
     public void RemoveObject(int key) => _values.Remove(key);
 
+    public void RemoveValue(int key) => _values.Remove(key);
+
     public void SetColor(int key, Color value) => _values[key] = value;
-
-    public void SetPadding(int key, Padding value)
-    {
-        object? storedObject = GetObject(key, out bool found);
-        if (!found)
-        {
-            SetObject(key, new PaddingWrapper(value));
-        }
-        else
-        {
-            if (storedObject is PaddingWrapper wrapper)
-            {
-                // re-using the wrapper reduces the boxing hit.
-                wrapper.Padding = value;
-            }
-            else
-            {
-                Debug.Assert(storedObject is null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new PaddingWrapper(value));
-            }
-        }
-    }
-
-    public void SetRectangle(int key, Rectangle value)
-    {
-        if (!_values.TryGetValue(key, out Value foundValue))
-        {
-            _values[key] = new(new RectangleWrapper(value));
-        }
-        else
-        {
-            foundValue.GetValue<RectangleWrapper>().Rectangle = value;
-        }
-    }
 
     public void SetSize(int key, Size value) => _values[key] = value;
 
@@ -245,4 +156,74 @@ internal partial class PropertyStore
     ///  Stores the given value in the key.
     /// </summary>
     public void SetObject(int key, object? value) => _values[key] = new(value);
+
+    public T? GetValueOrDefault<T>(int key)
+    {
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            return foundValue.GetValue<T>();
+        }
+
+        return default;
+    }
+
+    public bool TryGetValue<T>(int key, [NotNullWhen(true)] out T? value)
+    {
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            value = foundValue.GetValue<T>();
+            return value is not null;
+        }
+
+        value = default;
+        return false;
+    }
+
+    public bool TryGetValueOrNull<T>(int key, out T? value) where T : class
+    {
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            value = foundValue.GetValue<T>();
+            return true;
+        }
+
+        value = default;
+        return false;
+    }
+
+    public void SetValue<T>(int key, T value)
+    {
+        // For value types that are larger than 8 bytes, we attempt to update the existing value
+        // to avoid another boxing allocation.
+
+        if (typeof(T) == typeof(Padding))
+        {
+            AddOrUpdate(key, Unsafe.As<T, Padding>(ref value));
+        }
+        else if (typeof(T) == typeof(Rectangle))
+        {
+            AddOrUpdate(key, Unsafe.As<T, Rectangle>(ref value));
+        }
+        else
+        {
+            _values[key] = Value.Create(value);
+        }
+    }
+
+    private unsafe void AddOrUpdate<T>(int key, T value) where T : unmanaged
+    {
+        // Should only call this from SetValue<T> for value types that are larger than 8 bytes.
+        Debug.Assert(sizeof(T) > 8);
+
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            object storedValue = foundValue.GetValue<object>();
+            ref T unboxed = ref Unsafe.Unbox<T>(storedValue);
+            unboxed = value;
+        }
+        else
+        {
+            _values[key] = Value.Create(value);
+        }
+    }
 }
