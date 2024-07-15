@@ -30,7 +30,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Returns the command line arguments for the current application.
         ''' </summary>
         ''' <remarks>
-        '''  This function differs from System.Environment.GetCommandLineArgs in that the
+        '''  This function differs from <see cref="System.Environment.GetCommandLineArgs"/> in that the
         '''  path of the executing file (the 0th entry) is omitted from the returned collection
         ''' </remarks>
         Public ReadOnly Property CommandLineArgs() As ObjectModel.ReadOnlyCollection(Of String)
