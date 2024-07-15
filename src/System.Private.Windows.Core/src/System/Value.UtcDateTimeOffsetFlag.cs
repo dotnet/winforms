@@ -5,9 +5,9 @@ namespace System;
 
 internal readonly partial struct Value
 {
-    private sealed class DateTimeOffsetFlag : TypeFlag<DateTimeOffset>
+    private sealed class UtcDateTimeOffsetFlag : TypeFlag<DateTimeOffset>
     {
-        public static DateTimeOffsetFlag Instance { get; } = new();
+        public static UtcDateTimeOffsetFlag Instance { get; } = new();
 
         public override DateTimeOffset To(in Value value) => new(new DateTime(value._union.Ticks, DateTimeKind.Utc));
     }

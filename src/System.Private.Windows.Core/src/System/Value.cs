@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace System;
@@ -392,6 +393,65 @@ internal readonly partial struct Value
     public static explicit operator double?(in Value value) => value.GetValue<double?>();
     #endregion
 
+    #region Size
+    public Value(Size value)
+    {
+        _object = TypeFlags.Size;
+        _union.Size = value;
+    }
+
+    public Value(Size? value)
+    {
+        if (value.HasValue)
+        {
+            _object = TypeFlags.Size;
+            _union.Size = value.Value;
+        }
+        else
+        {
+            _object = null;
+        }
+    }
+
+    public static implicit operator Value(Size value) => new(value);
+    public static explicit operator Size(in Value value) => value.GetValue<Size>();
+    public static implicit operator Value(Size? value) => new(value);
+    public static explicit operator Size?(in Value value) => value.GetValue<Size?>();
+    #endregion
+
+    #region Color
+    public Value(Color value)
+    {
+        if (PackedColor.TryCreate(value, out PackedColor packed))
+        {
+            _object = TypeFlags.PackedColor;
+            _union.PackedColor = packed;
+        }
+        else
+        {
+            // Named colors can't be packed, so we have to box them.
+            _object = value;
+        }
+    }
+
+    public Value(Color? value)
+    {
+        if (!value.HasValue)
+        {
+            _object = null;
+        }
+        else
+        {
+            this = new(value.Value);
+        }
+    }
+
+    public static implicit operator Value(Color value) => new(value);
+    public static explicit operator Color(in Value value) => value.GetValue<Color>();
+    public static implicit operator Value(Color? value) => new(value);
+    public static explicit operator Color?(in Value value) => value.GetValue<Color?>();
+    #endregion
+
     #region DateTimeOffset
     public Value(DateTimeOffset value)
     {
@@ -400,7 +460,7 @@ internal readonly partial struct Value
         {
             // This is a UTC time
             _union.Ticks = value.Ticks;
-            _object = TypeFlags.DateTimeOffset;
+            _object = TypeFlags.UtcDateTimeOffset;
         }
         else if (PackedDateTimeOffset.TryCreate(value, offset, out PackedDateTimeOffset packed))
         {
@@ -540,6 +600,8 @@ internal readonly partial struct Value
             return new(Unsafe.As<T, DateTime>(ref Unsafe.AsRef(in value)));
         if (typeof(T) == typeof(DateTimeOffset))
             return new(Unsafe.As<T, DateTimeOffset>(ref Unsafe.AsRef(in value)));
+        if (typeof(T) == typeof(Color))
+            return new(Unsafe.As<T, Color>(ref Unsafe.AsRef(in value)));
 
         if (typeof(T) == typeof(bool?))
             return new(Unsafe.As<T, bool?>(ref Unsafe.AsRef(in value)));
@@ -619,9 +681,16 @@ internal readonly partial struct Value
             || (typeof(T) == typeof(float) && _object == TypeFlags.Single)
             || (typeof(T) == typeof(ushort) && _object == TypeFlags.UInt16)
             || (typeof(T) == typeof(uint) && _object == TypeFlags.UInt32)
-            || (typeof(T) == typeof(ulong) && _object == TypeFlags.UInt64)))
+            || (typeof(T) == typeof(ulong) && _object == TypeFlags.UInt64)
+            || (typeof(T) == typeof(Size) && _object == TypeFlags.Size)))
         {
             value = Unsafe.As<Union, T>(ref Unsafe.AsRef(in _union));
+            success = true;
+        }
+        else if (typeof(T) == typeof(Color) && _object == TypeFlags.PackedColor)
+        {
+            Color color = _union.PackedColor.Extract();
+            value = Unsafe.As<Color, T>(ref Unsafe.AsRef(in color));
             success = true;
         }
         else if (typeof(T) == typeof(DateTime) && _object == TypeFlags.DateTime)
@@ -629,7 +698,7 @@ internal readonly partial struct Value
             value = Unsafe.As<DateTime, T>(ref Unsafe.AsRef(in _union.DateTime));
             success = true;
         }
-        else if (typeof(T) == typeof(DateTimeOffset) && _object == TypeFlags.DateTimeOffset)
+        else if (typeof(T) == typeof(DateTimeOffset) && _object == TypeFlags.UtcDateTimeOffset)
         {
             DateTimeOffset dto = new(_union.Ticks, TimeSpan.Zero);
             value = Unsafe.As<DateTimeOffset, T>(ref Unsafe.AsRef(in dto));
@@ -779,13 +848,19 @@ internal readonly partial struct Value
             value = Unsafe.As<sbyte?, T>(ref Unsafe.AsRef(in @sbyte));
             result = true;
         }
+        else if (typeof(T) == typeof(Color?) && _object == TypeFlags.PackedColor)
+        {
+            Color? color = _union.PackedColor.Extract();
+            value = Unsafe.As<Color?, T>(ref Unsafe.AsRef(in color));
+            result = true;
+        }
         else if (typeof(T) == typeof(DateTime?) && _object == TypeFlags.DateTime)
         {
             DateTime? dateTime = _union.DateTime;
             value = Unsafe.As<DateTime?, T>(ref Unsafe.AsRef(in dateTime));
             result = true;
         }
-        else if (typeof(T) == typeof(DateTimeOffset?) && _object == TypeFlags.DateTimeOffset)
+        else if (typeof(T) == typeof(DateTimeOffset?) && _object == TypeFlags.UtcDateTimeOffset)
         {
             DateTimeOffset? dto = new DateTimeOffset(_union.Ticks, TimeSpan.Zero);
             value = Unsafe.As<DateTimeOffset?, T>(ref Unsafe.AsRef(in dto));
@@ -856,6 +931,7 @@ internal readonly partial struct Value
         if (_object is null)
         {
             value = default!;
+            result = typeof(T) == typeof(object);
         }
         else if (typeof(T) == typeof(char[]))
         {
