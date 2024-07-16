@@ -2356,11 +2356,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(rightToLeft, cellStyle.Alignment, cellStyle.WrapMode);
         if (cellStyle.WrapMode == DataGridViewTriState.True)
         {
-            return MeasureTextHeight(g, text, cellStyle.Font, maxWidth, flags, out widthTruncated);
+            return MeasureTextHeight(g, text, cellStyle.Font!, maxWidth, flags, out widthTruncated);
         }
         else
         {
-            Size size = MeasureTextSize(g, text, cellStyle.Font, flags);
+            Size size = MeasureTextSize(g, text, cellStyle.Font!, flags);
             widthTruncated = size.Width > maxWidth;
             return size.Height;
         }

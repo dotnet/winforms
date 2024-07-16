@@ -168,21 +168,14 @@ public class DataGridViewCellStyle : ICloneable
     }
 
     [SRCategory(nameof(SR.CatAppearance))]
-    [AllowNull]
-    public Font Font
+    public Font? Font
     {
-        get => (Font)Properties.GetObject(s_propFont)!;
+        get => Properties.GetValueOrDefault<Font>(s_propFont);
         set
         {
-            Font f = Font;
-            if (value is not null || Properties.ContainsObject(s_propFont))
-            {
-                Properties.SetObject(s_propFont, value);
-            }
+            Font? previous = Properties.AddOrRemoveValue(s_propFont, value);
 
-            if ((f is null && value is not null) ||
-                (f is not null && value is null) ||
-                (f is not null && value is not null && !f.Equals(Font)))
+            if (previous != value || (previous is not null && !previous.Equals(value)))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Font);
             }
@@ -192,13 +185,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color ForeColor
     {
-        get => Properties.GetColor(s_propForeColor);
+        get => Properties.TryGetValue(s_propForeColor, out Color color) ? color : Color.Empty;
         set
         {
             Color c = ForeColor;
             if (!value.IsEmpty || Properties.ContainsObject(s_propForeColor))
             {
-                Properties.SetColor(s_propForeColor, value);
+                Properties.AddValue(s_propForeColor, value);
             }
 
             if (!c.Equals(ForeColor))
@@ -378,7 +371,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value.Bottom >= 0);
             if (value != Padding)
             {
-                Properties.SetValue(s_propPadding, value);
+                Properties.AddValue(s_propPadding, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -626,19 +619,11 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
-    private bool ShouldSerializeBackColor()
-    {
-        Properties.GetColor(s_propBackColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeBackColor() => Properties.ContainsKey(s_propBackColor);
 
-    private bool ShouldSerializeFont() => Properties.ContainsObjectThatIsNotNull(s_propFont);
+    private bool ShouldSerializeFont() => Properties.TryGetValueOrNull(s_propFont, out Font? font) && font is not null;
 
-    private bool ShouldSerializeForeColor()
-    {
-        Properties.GetColor(s_propForeColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeForeColor() => Properties.ContainsKey(s_propForeColor);
 
     private bool ShouldSerializeFormatProvider() =>
         Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);

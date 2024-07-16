@@ -1926,9 +1926,9 @@ public unsafe partial class Control :
                 ClearDpiFonts();
             }
 
-            if (Properties.ContainsInteger(s_fontHeightProperty))
+            if (Properties.ContainsKey(s_fontHeightProperty))
             {
-                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+                Properties.AddValue(s_fontHeightProperty, (value is null) ? -1 : value.Height);
             }
 
             // Font is an ambient property.  We need to layout our parent because Font may
@@ -2988,26 +2988,13 @@ public unsafe partial class Control :
     {
         get
         {
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft)
+                || rightToLeft == RightToLeft.Inherit)
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = ParentInternal?.RightToLeft ?? DefaultRightToLeft;
             }
 
-            if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
-            {
-                Control? parent = ParentInternal;
-                if (parent is not null)
-                {
-                    rightToLeft = (int)parent.RightToLeft;
-                }
-                else
-                {
-                    rightToLeft = (int)DefaultRightToLeft;
-                }
-            }
-
-            return (RightToLeft)rightToLeft;
+            return rightToLeft;
         }
         set
         {
@@ -3016,9 +3003,9 @@ public unsafe partial class Control :
 
             RightToLeft oldValue = RightToLeft;
 
-            if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
+            if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.SetInteger(s_rightToLeftProperty, (int)value);
+                Properties.AddValue(s_rightToLeftProperty, value);
             }
 
             if (oldValue != RightToLeft)
@@ -3065,9 +3052,9 @@ public unsafe partial class Control :
             _scaledFontWrapper = null;
 
             _scaledControlFont = value;
-            if (Properties.ContainsInteger(s_fontHeightProperty))
+            if (Properties.ContainsKey(s_fontHeightProperty))
             {
-                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+                Properties.AddValue(s_fontHeightProperty, (value is null) ? -1 : value.Height);
             }
         }
     }
@@ -3537,24 +3524,14 @@ public unsafe partial class Control :
     /// </remarks>
     internal bool UseCompatibleTextRenderingInternal
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_useCompatibleTextRenderingProperty))
-            {
-                int value = Properties.GetInteger(s_useCompatibleTextRenderingProperty, out bool found);
-                if (found)
-                {
-                    return value == 1;
-                }
-            }
-
-            return UseCompatibleTextRenderingDefault;
-        }
+        get => Properties.TryGetValue(s_useCompatibleTextRenderingProperty, out bool value)
+            ? value
+            : UseCompatibleTextRenderingDefault;
         set
         {
             if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInternal != value)
             {
-                Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
+                Properties.AddValue(s_useCompatibleTextRenderingProperty, value);
 
                 // Update the preferred size cache since we will be rendering text using a different engine.
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
@@ -7253,7 +7230,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft) || rightToLeft == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -10754,11 +10731,9 @@ public unsafe partial class Control :
     ///  Returns true if the RightToLeft should be persisted in code gen.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal virtual bool ShouldSerializeRightToLeft()
-    {
-        int rtl = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        return (found && rtl != (int)RightToLeft.Inherit);
-    }
+    internal virtual bool ShouldSerializeRightToLeft() =>
+        Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft)
+            && rightToLeft != RightToLeft.Inherit;
 
     /// <summary>
     ///  Returns true if the visible property should be persisted in code gen.
