@@ -176,7 +176,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             _toolStrip = new PropertyGridToolStrip(this);
 
             // SetupToolbar should perform the layout
-            using SuspendLayoutScope suspendToolStripLayout = new(_toolStrip, performLayout: false);
+            using (SuspendLayoutScope suspendToolStripLayout = new(_toolStrip, performLayout: false))
             {
                 _toolStrip.ShowItemToolTips = true;
 
