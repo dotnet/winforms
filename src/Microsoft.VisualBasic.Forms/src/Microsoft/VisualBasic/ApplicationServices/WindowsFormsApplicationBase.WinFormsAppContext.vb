@@ -25,12 +25,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ''' <summary>
             ''' <list type="number">
-            ''' <item>
-            ''' <description>shutdown when the main form closes.</description>
-            ''' </item>
-            ''' <item>
-            ''' <description>shutdown only after the last form closes.</description>
-            ''' </item>
+            '''    <item>
+            '''      <description>Shutdown when the main form closes.</description>
+            '''    </item>
+            '''    <item>
+            '''      <description>Shutdown only after the last form closes.</description>
+            '''    </item>
             ''' </list>
             ''' </summary>
             ''' <param name="sender"></param>
