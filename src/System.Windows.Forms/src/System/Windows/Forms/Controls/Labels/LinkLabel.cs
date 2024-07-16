@@ -1155,18 +1155,16 @@ public partial class LinkLabel : Label, IButtonControl
 
         Rectangle imageBounds = CalcImageRenderBounds(image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
 
-        using GraphicsStateScope backgroundPaintScope = new(e.Graphics);
+        using (GraphicsStateScope backgroundPaintScope = new(e.Graphics))
         {
             e.Graphics.ExcludeClip(imageBounds);
             base.OnPaintBackground(e);
         }
 
         using GraphicsStateScope imagePaintScope = new(e.Graphics);
-        {
-            e.Graphics.IntersectClip(imageBounds);
-            base.OnPaintBackground(e);
-            DrawImage(e.Graphics, image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
-        }
+        e.Graphics.IntersectClip(imageBounds);
+        base.OnPaintBackground(e);
+        DrawImage(e.Graphics, image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
     }
 
     protected override void OnFontChanged(EventArgs e)
