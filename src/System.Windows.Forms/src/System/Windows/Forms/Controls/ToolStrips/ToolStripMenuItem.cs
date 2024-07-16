@@ -727,9 +727,9 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-                image.MakeTransparent(Application.ApplicationColors.Control);
-                return image;
-            }
+        image.MakeTransparent(Application.ApplicationColors.Control);
+        return image;
+    }
 
     internal Size GetShortcutTextSize()
     {

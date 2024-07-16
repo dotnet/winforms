@@ -941,45 +941,42 @@ public partial class TextBox : TextBoxBase
                 base.WndProc(ref m);
                 break;
         }
-    }
 
-    /// <summary>
-    ///  Handles the WM_PAINT message to render the placeholder text in the TextBox control.
-    /// </summary>
-    /// <param name="m">The message to handle.</param>
-    private unsafe void WmPaintInternal(ref Message m)
-    {
-        // The native control tracks its own state, which can lead to two issues:
-        //
-        // 1. The native control invalidates itself and overwrites the placeholder text.
-        // 2. The placeholder text is drawn multiple times without being cleared first.
-        //
-        // To avoid these issues, we need the following operations.
-        //
-        // NOTE: There is still observable flicker with this implementation. A second WM_PAINT is triggered
-        // after our BeginPaint/EndPaint calls. Something seems to be invalidating the control again.
-        // Explicitly calling ValidateRect should, in theory, prevent this second call, but it doesn't seem to work.
-
-        // Invalidate the whole control to ensure the native control doesn't make any assumptions about what to paint.
-        if (ShouldRenderPlaceHolderText())
+        // Handles the WM_PAINT message to render the placeholder text in the TextBox control.
+        unsafe void WmPaintInternal(ref Message m)
         {
-            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
-        }
+            // The native control tracks its own state, which can lead to two issues:
+            //
+            // 1. The native control invalidates itself and overwrites the placeholder text.
+            // 2. The placeholder text is drawn multiple times without being cleared first.
+            //
+            // To avoid these issues, we need the following operations.
+            //
+            // NOTE: There is still observable flicker with this implementation. A second WM_PAINT is triggered
+            // after our BeginPaint/EndPaint calls. Something seems to be invalidating the control again.
+            // Explicitly calling ValidateRect should, in theory, prevent this second call, but it doesn't seem to work.
 
-        // Let the native implementation draw the background and animate the frame.
-        base.WndProc(ref m);
+            // Invalidate the whole control to ensure the native control doesn't make any assumptions about what to paint.
+            if (ShouldRenderPlaceHolderText())
+            {
+                PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
+            }
 
-        if (ShouldRenderPlaceHolderText())
-        {
-            // Invalidate again because the native WM_PAINT has already validated everything by calling BeginPaint itself.
-            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
+            // Let the native implementation draw the background and animate the frame.
+            base.WndProc(ref m);
 
-            // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-            using BeginPaintScope paintScope = new(HWND);
-            DrawPlaceholderText(paintScope);
+            if (ShouldRenderPlaceHolderText())
+            {
+                // Invalidate again because the native WM_PAINT has already validated everything by calling BeginPaint itself.
+                PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
-            // Validate the rectangle to prevent further invalidation and flicker.
-            PInvoke.ValidateRect(this, lpRect: null);
+                // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
+                using BeginPaintScope paintScope = new(HWND);
+                DrawPlaceholderText(paintScope);
+
+                // Validate the rectangle to prevent further invalidation and flicker.
+                PInvoke.ValidateRect(this, lpRect: null);
+            }
         }
     }
 

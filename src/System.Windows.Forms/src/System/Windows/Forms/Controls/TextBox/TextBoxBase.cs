@@ -88,10 +88,6 @@ public abstract partial class TextBoxBase : Control
     private BitVector32 _textBoxFlags;
     private bool _triggerNewClientSizeRequest;
 
-#if DEBUG
-    private bool _debugFlag;
-#endif
-
     /// <summary>
     ///  Creates a new TextBox control.  Uses the parent's current font and color
     ///  set.
@@ -804,18 +800,33 @@ public abstract partial class TextBoxBase : Control
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-    public int PreferredHeight => VisualStylesMode switch
-    {
-        VisualStylesMode.Disabled => PreferredHeightClassic,
-        VisualStylesMode.Classic => PreferredHeightClassic,
-        VisualStylesMode.Latest => PreferredHeightModern,
+    public int PreferredHeight =>
+        VisualStylesMode switch
+        {
+            VisualStylesMode.Disabled => PreferredHeightClassic,
+            VisualStylesMode.Classic => PreferredHeightClassic,
+            VisualStylesMode.Latest => PreferredHeightCore,
 
-        // We'll should never be here.
-        _ => throw new InvalidEnumArgumentException(
-            nameof(VisualStylesMode),
-            (int)VisualStylesMode,
-            typeof(VisualStylesMode))
-    };
+            // We'll should never be here.
+            _ => throw new InvalidEnumArgumentException(
+                argumentName: nameof(VisualStylesMode),
+                invalidValue: (int)VisualStylesMode,
+                enumClass: typeof(VisualStylesMode))
+        };
+
+    [Experimental("WFO9000")]
+    protected virtual int PreferredHeightCore
+    {
+        get
+        {
+            // For modern Visual Styles we take the Padding and the adorner padding into account when calculating the preferred height.
+            int height = FontHeight
+                + Padding.Vertical
+                + GetVisualStylesSystemPadding().Vertical;
+
+            return height;
+        }
+    }
 #pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     private int PreferredHeightClassic
@@ -836,19 +847,6 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    private int PreferredHeightModern
-    {
-        get
-        {
-            // For modern Visual Styles we take the Padding and the adorner padding into account when calculating the preferred height.
-            int height = FontHeight
-                + Padding.Vertical
-                + GetLatestVisualStylesSystemPadding().Vertical;
-
-            return height;
-        }
-    }
-
     /// <summary>
     ///  Defines the visible part of the padding.
     ///  This is calculated and not adjustable by properties.
@@ -857,7 +855,7 @@ public abstract partial class TextBoxBase : Control
     ///  part, by which we extend the real-estate of the control with the back color of the parent control.
     /// </summary>
     /// <returns>The visible padding dimensions.</returns>
-    private Padding GetLatestVisualStylesSystemPadding()
+    protected virtual Padding GetVisualStylesSystemPadding()
     {
         int offset = GetBorderThicknessDpiFactor();
 
@@ -878,7 +876,7 @@ public abstract partial class TextBoxBase : Control
             BorderStyle.None => new Padding(
                 left: VisualStylesNoBorderPadding,
                 top: VisualStylesNoBorderPadding,
-                right: VisualStylesNoBorderPadding + 1,
+                right: VisualStylesNoBorderPadding + offset,
                 // We still need some extra space for the Focus indication.
                 bottom: VisualStylesNoBorderPadding + offset),
 
@@ -914,7 +912,7 @@ public abstract partial class TextBoxBase : Control
         {
             // For Versions >=10, we take our modern Style adorners into account
             // when we're calculating the preferred height.
-            padding = GetLatestVisualStylesSystemPadding();
+            padding = GetVisualStylesSystemPadding();
 
             // And also we take the actual Padding property into account
             // when calculating the preferred height.
@@ -2183,25 +2181,35 @@ public abstract partial class TextBoxBase : Control
         Invalidate(true);
     }
 
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private bool WmNcPaint(ref Message m)
     {
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (VisualStylesMode < VisualStylesMode.Latest)
         {
             return false;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         HWND hwnd = (HWND)m.HWnd;
         HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
 
-        RenderModernBorder(hdc, BorderStyle);
+        // Get the Graphics Object from the DC:
 
-        int result = PInvokeCore.ReleaseDC(hwnd, hdc);
-        Debug.Assert(result != 0);
+        Graphics graphics = Graphics.FromHdc(hdc);
+
+        try
+        {
+            OnNcPaint(graphics);
+        }
+        finally
+        {
+            graphics.Dispose();
+            int result = PInvokeCore.ReleaseDC(hwnd, hdc);
+            Debug.Assert(result != 0);
+        }
 
         return true;
     }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private int GetBorderThicknessDpiFactor()
         => _deviceDpi switch
@@ -2212,19 +2220,12 @@ public abstract partial class TextBoxBase : Control
             _ => 4,
         };
 
-    private void RenderModernBorder(HDC hdc, BorderStyle borderStyle)
+    [Experimental("WFO9000")]
+    protected virtual void OnNcPaint(Graphics graphics)
     {
         const int cornerRadius = 15;
 
-#if DEBUG
-        if (Debugger.IsAttached && !_debugFlag)
-        {
-            _debugFlag = true;
-            // Debugger.Break();
-        }
-#endif
-
-        Padding systemPadding = GetLatestVisualStylesSystemPadding();
+        Padding systemPadding = GetVisualStylesSystemPadding();
         int borderThickness = GetBorderThicknessDpiFactor();
 
         Color adornerColor = ForeColor;
@@ -2259,9 +2260,6 @@ public abstract partial class TextBoxBase : Control
         deflatedBounds.Width -= 1;
         deflatedBounds.Height -= 1;
 
-        // Get the Graphics Object from the DC:
-        using Graphics graphics = Graphics.FromHdc(hdc);
-
         // We need Anti-Aliasing:
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -2273,7 +2271,7 @@ public abstract partial class TextBoxBase : Control
         // Fill the background with the specified brush:
         graphics.FillRectangle(parentBackgroundBrush, bounds);
 
-        switch (borderStyle)
+        switch (BorderStyle)
         {
             case BorderStyle.None:
 
@@ -2377,7 +2375,7 @@ public abstract partial class TextBoxBase : Control
         base.WndProc(ref m);
     }
 
-    private Padding ClientPadding => Padding + GetLatestVisualStylesSystemPadding();
+    private Padding ClientPadding => Padding + GetVisualStylesSystemPadding();
 
     private void WmReflectCommand(ref Message m)
     {

@@ -158,8 +158,8 @@ public unsafe partial class Control :
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
-    private const string DarkModeIdentifier = "DarkMode";
-    private const string ExplorerThemeIdentifier = "Explorer";
+    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string ExplorerThemeIdentifier = "Explorer";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -3780,63 +3780,62 @@ public unsafe partial class Control :
 
         set
         {
+            if (ParentInternal is not null
+                && Equals(value, VisualStylesMode))
             {
-                if (ParentInternal is not null
-                    && Equals(value, VisualStylesMode))
-                {
-                    return;
-                }
-
-                if (!ValidateVisualStylesMode(value))
-                {
-                    throw new NotSupportedException(
-                        string.Format(
-                            format: SR.VisualStylesModeNotSupported,
-                            arg0: value,
-                            arg1: GetType().Name,
-                            arg2: string.IsNullOrWhiteSpace(Name)
-                                ? "- - -"
-                                : Name));
-                }
-
-                // When VisualStyleMode was different than its parent before, but now it is about to become the same,
-                // we're removing it altogether, so it can again inherit the value from its parent.
-                if (Properties.ContainsObject(s_visualStylesModeProperty)
-                    && Equals(ParentInternal?.VisualStylesMode, value))
-                {
-                    Properties.RemoveObject(s_visualStylesModeProperty);
-                }
-                else
-                {
-                    Properties.SetObject(s_visualStylesModeProperty, value);
-                }
+                return;
             }
 
-            if (IsHandleCreated)
+            if (!ValidateVisualStylesMode(value))
             {
-                // This implies updating the styles.
-                RecreateHandle();
+                throw new NotSupportedException(
+                    string.Format(
+                        format: SR.VisualStylesModeNotSupported,
+                        arg0: value,
+                        arg1: GetType().Name,
+                        arg2: string.IsNullOrWhiteSpace(Name)
+                            ? "- - -"
+                            : Name));
+            }
 
-                // We need to re-layout, because changing the VisualStylesMode in many cases
-                // affects the layout of the control.
-                using (LayoutTransaction.CreateTransactionIf(
-                    condition: true,
-                    controlToLayout: ParentInternal,
-                    elementCausingLayout: this,
-                    property: nameof(Padding)))
-                { }
-
-                if (GetState(States.LayoutIsDirty))
-                {
-                    // The above did not cause our layout to be refreshed. We explicitly refresh our
-                    // layout to ensure that any children are repositioned to account for the change
-                    // in whatever could cause a new size (most likely a new BorderStyle related Padding)..
-                    LayoutTransaction.DoLayout(this, this, nameof(Padding));
-                }
+            // When VisualStyleMode was different than its parent before, but now it is about to become the same,
+            // we're removing it altogether, so it can again inherit the value from its parent.
+            if (Properties.ContainsObject(s_visualStylesModeProperty)
+                && Equals(ParentInternal?.VisualStylesMode, value))
+            {
+                Properties.RemoveObject(s_visualStylesModeProperty);
             }
             else
             {
-                UpdateStyles();
+                Properties.SetObject(s_visualStylesModeProperty, value);
+            }
+
+            // We need to re-layout, because changing the VisualStylesMode in many cases
+            // affects the layout of the control.
+            using (LayoutTransaction.CreateTransactionIf(
+                condition: AutoSize,
+                controlToLayout: ParentInternal,
+                elementCausingLayout: this,
+                property: nameof(Padding)))
+            {
+                if (IsHandleCreated)
+                {
+                    // This implies updating the styles.
+                    RecreateHandle();
+
+
+                    if (GetState(States.LayoutIsDirty))
+                    {
+                        // The above did not cause our layout to be refreshed. We explicitly refresh our
+                        // layout to ensure that any children are repositioned to account for the change
+                        // in whatever could cause a new size (most likely a new BorderStyle related Padding)..
+                        LayoutTransaction.DoLayout(this, this, nameof(Padding));
+                    }
+                }
+                else
+                {
+                    UpdateStyles();
+                }
             }
         }
     }
@@ -3846,8 +3845,7 @@ public unsafe partial class Control :
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
     [Experimental("WFO9000")]
-    protected virtual VisualStylesMode DefaultVisualStylesMode =>
-            Application.DefaultVisualStylesMode;
+    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     private bool ShouldSerializeVisualStylesMode()
         => Properties.ContainsObject(s_visualStylesModeProperty);

@@ -245,25 +245,6 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-    [Experimental("WFO9001")]
-    public static DarkMode DefaultDarkMode
-    {
-        get
-        {
-            if (!s_darkMode.HasValue)
-            {
-                if (EnvironmentDarkMode is DarkMode.NotSupported)
-                {
-                    return DarkMode.NotSupported;
-                }
-
-                return DarkMode.Disabled;
-            }
-
-            return s_darkMode.Value;
-        }
-    }
-
     /// <summary>
     ///  Gets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
     /// </summary>
@@ -308,14 +289,6 @@ public sealed partial class Application
             EnableVisualStyles();
         }
     }
-
-    [Experimental("WFO9000")]
-    public static bool IsVisualStylesSupported
-        => DefaultVisualStylesMode switch
-        {
-            VisualStylesMode.Disabled => false,
-            _ => true
-        };
 
     /// <summary>
     ///  Sets the default dark mode for the application.
@@ -404,19 +377,11 @@ public sealed partial class Application
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
     [Experimental("WFO9001")]
-    public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
-        && DefaultDarkMode switch
+    public static bool IsDarkModeEnabled =>
+        EnvironmentDarkMode switch
         {
             DarkMode.Enabled => true,
-            DarkMode.Disabled => false,
-            _ => EnvironmentDarkMode switch
-            {
-                DarkMode.Enabled => true,
-                DarkMode.Disabled => false,
-
-                // We return false even if DarkMode is not supported so that we ALWAYS have a valid result here.
-                _ => false
-            }
+            _ => false
         };
 
     /// <summary>

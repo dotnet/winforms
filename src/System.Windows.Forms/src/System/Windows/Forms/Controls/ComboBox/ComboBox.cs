@@ -2460,8 +2460,8 @@ public partial class ComboBox : ListControl
             cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
 
             // Style the ComboBox drop-down (including its ScrollBar(s)):
-            var result = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
-            PInvoke.SetWindowTheme(cInfo.hwndList, "DarkMode_Explorer", null);
+            _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
+            PInvoke.SetWindowTheme(cInfo.hwndList, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
         }
 
         if (_itemsCollection is not null)
