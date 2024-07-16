@@ -61,6 +61,9 @@ variables:
   value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
 - name: _Sign
   value: true
+- ${{ if and(notin(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+  - name: enableSourceIndex
+    value: true
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -106,6 +109,15 @@ extends:
           name: Windows_arm64
           targetArchitecture: arm64
           skipTests: $(SkipTests)
+
+      - ${{ if eq(variables.enableSourceIndex, 'true') }}:
+        - template: /eng/common/templates-official/job/source-index-stage1.yml@self
+          parameters:
+            sourceIndexBuildCommand: eng\cibuild.cmd -restore -build -configuration Release /p:Platform=x64 /p:TargetArchitecture=x64 /bl:msbuild.binlog
+            binlogPath: msbuild.binlog
+            pool:
+              name: $(DncEngInternalBuildPool)
+              demands: ImageOverride -equals 1es-windows-2022
 
     - ${{ if eq(variables['EnableLoc'], 'true') }}:
       - stage: OneLocBuild
