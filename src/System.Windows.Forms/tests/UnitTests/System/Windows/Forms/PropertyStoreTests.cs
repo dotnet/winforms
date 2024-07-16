@@ -206,9 +206,9 @@ public class PropertyStoreTests
         PropertyStore store = new();
         Rectangle one = new(1, 2, 3, 4);
         Rectangle two = new(5, 6, 7, 8);
-        store.SetValue(1, one);
+        store.AddValue(1, one);
         long currentBytes = GC.GetAllocatedBytesForCurrentThread();
-        store.SetValue(1, two);
+        store.AddValue(1, two);
         currentBytes = GC.GetAllocatedBytesForCurrentThread() - currentBytes;
         currentBytes.Should().Be(0);
 
@@ -222,9 +222,9 @@ public class PropertyStoreTests
         PropertyStore store = new();
         Padding one = new(1, 2, 3, 4);
         Padding two = new(5, 6, 7, 8);
-        store.SetValue(1, one);
+        store.AddValue(1, one);
         long currentBytes = GC.GetAllocatedBytesForCurrentThread();
-        store.SetValue(1, two);
+        store.AddValue(1, two);
         currentBytes = GC.GetAllocatedBytesForCurrentThread() - currentBytes;
         currentBytes.Should().Be(0);
 

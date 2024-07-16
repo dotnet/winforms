@@ -1213,7 +1213,7 @@ public partial class Form : ContainerControl
         {
             if (!value.Equals(MaximizedBounds))
             {
-                Properties.SetValue(s_propMaximizedBounds, value);
+                Properties.AddValue(s_propMaximizedBounds, value);
                 OnMaximizedBoundsChanged(EventArgs.Empty);
             }
         }
