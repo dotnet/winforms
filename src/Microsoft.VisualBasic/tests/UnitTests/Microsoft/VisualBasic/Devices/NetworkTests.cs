@@ -61,7 +61,7 @@ public class NetworkTests
     public void PingUriTimeout_Throw()
     {
         Network network = new();
-        Action action = () => network.Ping((Uri)null, 1));
+        Action action = () => network.Ping((Uri)null, 1);
         action.Should().Throw<ArgumentNullException>();
     }
 
