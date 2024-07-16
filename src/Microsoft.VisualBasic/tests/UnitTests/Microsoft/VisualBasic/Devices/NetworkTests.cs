@@ -66,6 +66,5 @@ public class NetworkTests
     }
 
     // Not tested:
-    //    Public Sub DownloadFile(...) [multiple overloads]
     //    Public Sub UploadFile(...) [multiple overloads]
 }
