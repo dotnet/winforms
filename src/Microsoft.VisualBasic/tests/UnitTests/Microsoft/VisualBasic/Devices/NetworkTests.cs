@@ -53,7 +53,8 @@ public class NetworkTests
     public void PingUri_Throw()
     {
         Network network = new();
-        Assert.Throws<ArgumentNullException>(() => network.Ping((Uri)null));
+        Action action = () => network.Ping((Uri)null);
+        action.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
