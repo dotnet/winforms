@@ -241,6 +241,8 @@ configuration:
       then:
       - removeLabel:
           label: ':mailbox_with_no_mail: waiting-author-feedback'
+      - addLabel:
+          label: 'untriaged'
       description: Remove needs author feedback label when the author comments on an issue
     - if:
       - payloadType: Issue_Comment
