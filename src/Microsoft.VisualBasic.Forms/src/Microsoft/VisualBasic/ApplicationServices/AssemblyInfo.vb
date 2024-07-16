@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  a VB project in Visual Studio .NET).
     ''' </summary>
     ''' <remarks>
-    '''  This class is based on the FileVersionInfo class of the framework, but
+    '''  This class is based on the <see cref="FileVersionInfo"/> class of the framework, but
     '''  reduced to a number of relevant properties.
     ''' </remarks>
     Public Class AssemblyInfo
@@ -37,7 +37,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _trademark As String
 
         ''' <summary>
-        '''  Creates an AssemblyInfo from an assembly
+        '''  Creates an AssemblyInfo from an assembly.
         ''' </summary>
         ''' <param name="currentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
@@ -88,7 +88,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the title associated with the assembly.
+        '''  Gets the company name associated with the assembly.
         ''' </summary>
         ''' <value>A String containing the AssemblyTitleAttribute associated with the assembly.</value>
         ''' <exception cref="InvalidOperationException">if the AssemblyTitleAttribute is not defined.</exception>
