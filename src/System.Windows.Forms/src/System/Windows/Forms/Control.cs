@@ -7230,7 +7230,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft) || rightToLeft == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -10731,11 +10731,9 @@ public unsafe partial class Control :
     ///  Returns true if the RightToLeft should be persisted in code gen.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal virtual bool ShouldSerializeRightToLeft()
-    {
-        int rtl = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        return (found && rtl != (int)RightToLeft.Inherit);
-    }
+    internal virtual bool ShouldSerializeRightToLeft() =>
+        Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft)
+            && rightToLeft != RightToLeft.Inherit;
 
     /// <summary>
     ///  Returns true if the visible property should be persisted in code gen.
