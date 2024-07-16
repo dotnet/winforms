@@ -1,3 +1,5 @@
+System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
+System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 virtual System.Drawing.Design.PropertyValueUIHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc, System.Collections.ArrayList! valueUIItemList) -> void
 virtual System.Drawing.Design.PropertyValueUIItemInvokeHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! descriptor, System.Drawing.Design.PropertyValueUIItem! invokedItem) -> void
 virtual System.Windows.Forms.Application.MessageLoopCallback.Invoke() -> bool

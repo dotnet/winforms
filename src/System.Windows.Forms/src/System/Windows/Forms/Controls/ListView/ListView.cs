@@ -6168,24 +6168,20 @@ public partial class ListView : Control
 
             ISite? site = Site;
 
-            if (site is not null)
+            if (site?.TryGetService(out IComponentChangeService? service) == true)
             {
-                IComponentChangeService? cs = (IComponentChangeService?)site.GetService(typeof(IComponentChangeService));
-                if (cs is not null)
+                try
                 {
-                    try
+                    service.OnComponentChanging(this, null);
+                }
+                catch (CheckoutException coEx)
+                {
+                    if (coEx == CheckoutException.Canceled)
                     {
-                        cs.OnComponentChanging(this, null);
+                        return false;
                     }
-                    catch (CheckoutException coEx)
-                    {
-                        if (coEx == CheckoutException.Canceled)
-                        {
-                            return false;
-                        }
 
-                        throw;
-                    }
+                    throw;
                 }
             }
         }

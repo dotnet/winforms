@@ -5494,9 +5494,7 @@ public class DataGridViewCellTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        {
-            Assert.Equal(Size.Empty, DataGridViewCell.MeasureTextSize(graphics, text, SystemFonts.DefaultFont, TextFormatFlags.Default));
-        }
+        Assert.Equal(Size.Empty, DataGridViewCell.MeasureTextSize(graphics, text, SystemFonts.DefaultFont, TextFormatFlags.Default));
     }
 
     [WinFormsTheory]

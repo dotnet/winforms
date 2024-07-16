@@ -9704,6 +9704,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Número excessivo de chamadas para ResumeUpdateMenuHandles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
         <target state="translated">AllowItemReorder e AllowDrop não podem ser verdadeiros.</target>
