@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Runtime.InteropServices
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -13,7 +14,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
-
 
         Friend Function VbMakeException(hr As Integer) As Exception
             Dim sMsg As String
@@ -164,7 +164,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetWin32Exception(resourceID As String,
                             ParamArray placeHolders() As String) As ComponentModel.Win32Exception
 
-            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), VbUtils.GetResourceString(resourceID, placeHolders))
         End Function
 
     End Module
