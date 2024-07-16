@@ -6,27 +6,33 @@ namespace System.Windows.Forms.Design.Editors.Tests;
 public class TreeNodeCollectionEditorTests
 {
     [WinFormsFact]
-    public void TreeNodeCollectionForm_Constructor_InitializesProperties()
+    public void TreeNodeCollectionEditor_Constructor_InitializesProperties()
     {
         Type type = typeof(TreeNode);
         TreeNodeCollectionEditor editor = new(type);
-        Assert.NotNull(editor);
+        editor.Should().NotBeNull();
     }
 
     [WinFormsFact]
-    public void TreeNodeCollectionForm_Property_HelpTopic()
+    public void TreeNodeCollectionEditor_Property_HelpTopic()
     {
         Type type = typeof(TreeNode);
-        SubTreeNodeCollectionEditor subCollectionEditor = new(type);
-        Assert.Equal("net.ComponentModel.TreeNodeCollectionEditor", subCollectionEditor.HelpTopic);
+        TreeNodeCollectionEditor collectionEditor = new(type);
+        string helpTopic = collectionEditor.TestAccessor().Dynamic.HelpTopic;
+        helpTopic.Should().Be("net.ComponentModel.TreeNodeCollectionEditor");
     }
 
-    internal class SubTreeNodeCollectionEditor : TreeNodeCollectionEditor
+    [WinFormsFact]
+    public void TreeNodeCollectionEditor_CreateCollectionForm_returnExpectedValue()
     {
-        public SubTreeNodeCollectionEditor(Type type) : base(type)
+        Type type = typeof(TreeNode);
+        TreeNodeCollectionEditor collectionEditor = new(type);
+        Form colletionForm;
+        using (new NoAssertContext())
         {
+            colletionForm = collectionEditor.TestAccessor().Dynamic.CreateCollectionForm();
         }
 
-        public new string HelpTopic => base.HelpTopic;
+        colletionForm.Should().NotBeNull();
     }
 }
