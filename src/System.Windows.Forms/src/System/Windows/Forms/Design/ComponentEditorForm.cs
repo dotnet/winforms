@@ -167,13 +167,9 @@ public partial class ComponentEditorForm : Form
     private void OnConfigureUI()
     {
         Font? uiFont = DefaultFont;
-        if (_component.Site is not null)
+        if (_component.Site?.TryGetService(out IUIService? uiService) == true)
         {
-            IUIService? uiService = (IUIService?)_component.Site.GetService(typeof(IUIService));
-            if (uiService is not null)
-            {
-                uiFont = (Font?)uiService.Styles["DialogFont"];
-            }
+            uiFont = (Font?)uiService.Styles["DialogFont"];
         }
 
         Font = uiFont;
