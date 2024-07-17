@@ -596,6 +596,24 @@ public class GroupBoxTests
         Assert.Equal(result, control.DisplayRectangle);
     }
 
+    [WinFormsFact]
+    public void GroupBox_FontPropertyChange_UpdatesFontHeightAndCachedFont()
+    {
+        using GroupBox groupBox = new();
+        var originalFont = groupBox.Font;
+        using Font newFont = new(originalFont.FontFamily, originalFont.Size + 5, originalFont.Style);
+
+        groupBox.Font = newFont;
+        Rectangle result = groupBox.DisplayRectangle;
+        var accessor = groupBox.TestAccessor();
+
+        int updatedFontHeight = accessor.Dynamic._fontHeight;
+        Font updatedCachedFont = accessor.Dynamic._cachedFont;
+
+        updatedFontHeight.Should().Be(newFont.Height);
+        updatedCachedFont.Should().BeEquivalentTo(newFont);
+    }
+
     [WinFormsTheory]
     [InlineData(FlatStyle.Flat, true, true, true)]
     [InlineData(FlatStyle.Popup, true, true, true)]
