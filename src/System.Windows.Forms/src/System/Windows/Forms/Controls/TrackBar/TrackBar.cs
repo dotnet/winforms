@@ -573,21 +573,20 @@ public partial class TrackBar : Control, ISupportInitialize
                 return;
             }
 
-            if (recreateHandle)
-            {
-                RecreateHandle();
-            }
-
             if (_autoDrawTicks)
             {
                 PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)value);
             }
+
+            if (recreateHandle)
+            {
+                RecreateHandle();
+            }
             else
             {
                 DrawTicksManually();
+                Invalidate();
             }
-
-            Invalidate();
         }
     }
 
