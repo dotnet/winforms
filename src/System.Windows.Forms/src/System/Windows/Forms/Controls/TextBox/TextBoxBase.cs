@@ -2129,7 +2129,7 @@ public abstract partial class TextBoxBase : Control
 
     internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
-        InitializeClientAreaAndNCBkColor(dc, (HWND)Handle);
+        InitializeClientArea(dc, (HWND)Handle);
 
         if (msg == PInvoke.WM_CTLCOLORSTATIC && !ShouldSerializeBackColor())
         {
@@ -2142,43 +2142,6 @@ public abstract partial class TextBoxBase : Control
         {
             return base.InitializeDCForWmCtlColor(dc, msg);
         }
-    }
-
-    private protected virtual unsafe void InitializeClientAreaAndNCBkColor(HDC hDC, HWND hwnd)
-    {
-        // We only want to do this for VisualStylesMode >= Version10.
-        // Also, we do that only one time per instance,
-        // but we need to reset this, when the handle is recreated.
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (VisualStylesMode < VisualStylesMode.Latest
-            || _triggerNewClientSizeRequest)
-        {
-            return;
-        }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-        _triggerNewClientSizeRequest = true;
-
-        // Get the window bounds
-        Rectangle bounds = Bounds;
-
-        // Call SetWindowPos with the current Bounds with SWP_FRAMECHANGED flag.
-        // Only then we do not change the Window pos/size, but we'll get that WmNcCalcSize message version
-        // that we need to adjust the client area.
-        PInvoke.SetWindowPos(
-            hWnd: this,
-            hWndInsertAfter: HWND.HWND_TOP,
-            X: 0,
-            Y: 0,
-            cx: 0,
-            cy: 0,
-            uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
-                | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
-                | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
-                | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
-                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
-
-        Invalidate(true);
     }
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -2221,7 +2184,7 @@ public abstract partial class TextBoxBase : Control
         };
 
     [Experimental("WFO9000")]
-    protected virtual void OnNcPaint(Graphics graphics)
+    private protected virtual void OnNcPaint(Graphics graphics)
     {
         const int cornerRadius = 15;
 
@@ -2296,7 +2259,7 @@ public abstract partial class TextBoxBase : Control
 
                 break;
 
-            default:
+            case BorderStyle.Fixed3D:
 
                 // fill a rounded Rectangle
                 graphics.FillRoundedRectangle(
@@ -2316,7 +2279,7 @@ public abstract partial class TextBoxBase : Control
         // Draw the focus just as one line over the bottom border:
         if (Focused)
         {
-            int left, right;
+            int left = 0, right = 0;
 
             switch (BorderStyle)
             {
@@ -2326,7 +2289,7 @@ public abstract partial class TextBoxBase : Control
                     right = deflatedBounds.Right;
                     break;
 
-                default:
+                case BorderStyle.Fixed3D:
                     // We must shorten the line on both side to not draw into the curve:
                     left = deflatedBounds.Left + (cornerRadius + 1) / 2;
                     right = deflatedBounds.Right - (cornerRadius + 1) / 2;
@@ -2348,24 +2311,60 @@ public abstract partial class TextBoxBase : Control
             r.Height - p.Vertical);
     }
 
-    private void WmNcCalcSize(ref Message m)
+    private protected virtual unsafe void InitializeClientArea(HDC hDC, HWND hwnd)
+    {
+        // We only want to do this for VisualStylesMode >= Version10.
+        // Also, we do that only one time per instance,
+        // but we need to reset this, when the handle is recreated.
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (VisualStylesMode < VisualStylesMode.Latest
+            || _triggerNewClientSizeRequest)
+        {
+            return;
+        }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        _triggerNewClientSizeRequest = true;
+
+        // Get the window bounds
+        Rectangle bounds = Bounds;
+
+        // Call SetWindowPos with the current Bounds with SWP_FRAMECHANGED flag.
+        // Only then we do not change the Window pos/size, but we'll get that WmNcCalcSize message version
+        // that we need to adjust the client area.
+        PInvoke.SetWindowPos(
+            hWnd: this,
+            hWndInsertAfter: HWND.HWND_TOP,
+            X: 0,
+            Y: 0,
+            cx: 0,
+            cy: 0,
+            uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
+                | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+
+        Invalidate(true);
+    }
+
+    private unsafe void WmNcCalcSize(ref Message m)
     {
         // Make sure _we_ actually kicked this off.
         if (_triggerNewClientSizeRequest)
         {
             bool wParam = m.WParamInternal != 0;
 
-            if (Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParamInternal) is NCCALCSIZE_PARAMS ncCalcSizeParams)
+            NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
+
+            if (ncCalcSizeParams is not null)
             {
                 Padding padding = ClientPadding;
 
-                ncCalcSizeParams.rgrc._0.top += padding.Top;
-                ncCalcSizeParams.rgrc._0.bottom -= padding.Bottom;
-                ncCalcSizeParams.rgrc._0.left += padding.Left;
-                ncCalcSizeParams.rgrc._0.right -= padding.Right;
-
-                // Write the modified structure back to lParam
-                Marshal.StructureToPtr(ncCalcSizeParams, m.LParamInternal, false);
+                ncCalcSizeParams->rgrc._0.top += padding.Top;
+                ncCalcSizeParams->rgrc._0.bottom -= padding.Bottom;
+                ncCalcSizeParams->rgrc._0.left += padding.Left;
+                ncCalcSizeParams->rgrc._0.right -= padding.Right;
 
                 m.ResultInternal = (LRESULT)0;
                 return;

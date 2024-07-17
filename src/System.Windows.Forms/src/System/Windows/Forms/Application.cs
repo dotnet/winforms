@@ -246,23 +246,70 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
     /// <summary>
-    ///  Gets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    ///  Gets the default dark mode for the application. This is the DarkMode which either has been set
+    ///  by <see cref="SetDefaultDarkMode(DarkMode)"/> or its default value <see cref="DarkMode.Disabled"/>.
+    /// </summary>
+    [Experimental("WFO9001")]
+    public static DarkMode DefaultDarkMode
+    {
+        get
+        {
+            if (!s_darkMode.HasValue)
+            {
+                if (EnvironmentDarkMode is DarkMode.NotSupported)
+                {
+                    return DarkMode.NotSupported;
+                }
+
+                return DarkMode.Disabled;
+            }
+
+            return s_darkMode.Value;
+        }
+    }
+
+    /// <summary>
+    ///  Sets the default dark mode for the application.
+    /// </summary>
+    /// <param name="darkMode">The default dark mode to set.</param>
+    /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
+    [Experimental("WFO9001")]
+    public static bool SetDefaultDarkMode(DarkMode darkMode)
+    {
+        return darkMode switch
+        {
+            DarkMode.Enabled or DarkMode.Disabled or DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
+            _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
+        };
+
+        static bool SetDefaultDarkModeCore(DarkMode darkMode)
+        {
+            if (EnvironmentDarkMode == DarkMode.NotSupported)
+            {
+                s_darkMode = DarkMode.NotSupported;
+                return false;
+            }
+
+            s_darkMode = darkMode;
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Gets the default <see cref="DefaultVisualStylesMode"/> used as the rendering style guideline for the application's controls.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Starting from .NET 9, controls are required to adapt to new requirements in certain situations such as
-    ///   dark mode and enhanced accessibility (A11Y) features. These changes can potentially alter the layout
-    ///   and appearance of forms.
+    ///   Starting from .NET 9, controls must adapt to new requirements in certain situations, such as dark mode and enhanced accessibility (A11Y) features.
+    ///   These changes can potentially alter the layout and appearance of forms.
     ///  </para>
     ///  <para>
-    ///   Therefore, it is necessary to provide mechanisms to finely control backwards compatibility for existing
-    ///   and upcoming versions. This includes adjusting control rendering, requesting different sizes for new
-    ///   minimum space requirements, and handling adornments or margins/paddings. This property allows developers
-    ///   to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
-    ///   particularly when backwards compatibility is essential.
+    ///   Therefore, it is necessary to provide mechanisms to finely control backward compatibility for existing and upcoming versions.
+    ///   This includes adjusting control rendering, requesting different sizes for new minimum space requirements, and handling adornments or margins/paddings.
+    ///   This property allows developers to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
+    ///   particularly when backward compatibility to "XP-based VisualStyles" is essential.
     ///  </para>
     /// </remarks>
-
     [Experimental("WFO9000")]
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
@@ -288,33 +335,6 @@ public sealed partial class Application
 
             EnableVisualStyles();
         }
-    }
-
-    /// <summary>
-    ///  Sets the default dark mode for the application.
-    /// </summary>
-    /// <param name="darkMode">The default dark mode to set.</param>
-    /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
-    [Experimental("WFO9001")]
-    public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
-    {
-        DarkMode.Enabled or
-        DarkMode.Disabled or
-        DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
-        _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
-    };
-
-    [Experimental("WFO9001")]
-    private static bool SetDefaultDarkModeCore(DarkMode darkMode)
-    {
-        if (EnvironmentDarkMode == DarkMode.NotSupported)
-        {
-            s_darkMode = DarkMode.NotSupported;
-            return false;
-        }
-
-        s_darkMode = darkMode;
-        return true;
     }
 
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
@@ -377,11 +397,19 @@ public sealed partial class Application
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
     [Experimental("WFO9001")]
-    public static bool IsDarkModeEnabled =>
-        EnvironmentDarkMode switch
+    public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
+        && DefaultDarkMode switch
         {
             DarkMode.Enabled => true,
-            _ => false
+            DarkMode.Disabled => false,
+            _ => EnvironmentDarkMode switch
+            {
+                DarkMode.Enabled => true,
+                DarkMode.Disabled => false,
+
+                // We return false even if DarkMode is not supported so that we ALWAYS have a valid result here.
+                _ => false
+            }
         };
 
     /// <summary>
@@ -391,12 +419,12 @@ public sealed partial class Application
     ///  <list type="bullet">
     ///   <item>
     ///    <description>
-    ///     In Light Mode, the colors are derived from <see cref="SystemColors"/>.
+    ///     In light mode or high contrast settings, the colors are equal to the <see cref="SystemColors"/>.
     ///    </description>
     ///   </item>
     ///   <item>
     ///    <description>
-    ///     In Dark Mode, the colors are derived from a custom set of colors defined by WinForms,
+    ///     In dark mode, the colors are derived from a custom set of colors defined by WinForms,
     ///     which resemble a compromise between Visual Studio Dark Scheme, Windows 11 Dark Scheme, and accessibility requirements.
     ///    </description>
     ///    </item>

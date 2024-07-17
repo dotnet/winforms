@@ -974,22 +974,22 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Graphics g = e.Graphics;
         renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 
-            Color textColor = Application.ApplicationColors.MenuText;
-            if (IsForeColorSet)
+        Color textColor = Application.ApplicationColors.MenuText;
+        if (IsForeColorSet)
+        {
+            textColor = ForeColor;
+        }
+        else if (!IsTopLevel || (ToolStripManager.VisualStylesEnabled))
+        {
+            if (Selected || Pressed)
             {
-                textColor = ForeColor;
+                textColor = Application.ApplicationColors.HighlightText;
             }
-            else if (!IsTopLevel || (ToolStripManager.VisualStylesEnabled))
+            else
             {
-                if (Selected || Pressed)
-                {
-                    textColor = Application.ApplicationColors.HighlightText;
-                }
-                else
-                {
-                    textColor = Application.ApplicationColors.MenuText;
-                }
+                textColor = Application.ApplicationColors.MenuText;
             }
+        }
 
         bool rightToLeft = (RightToLeft == RightToLeft.Yes);
 
@@ -1026,13 +1026,13 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                 }
             }
 
-                if (HasDropDownItems)
-                {
-                    ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
-                    Color arrowColor = (Selected || Pressed) ? Application.ApplicationColors.HighlightText : Application.ApplicationColors.MenuText;
-                    arrowColor = (Enabled) ? arrowColor : Application.ApplicationColors.ControlDark;
-                    renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
-                }
+            if (HasDropDownItems)
+            {
+                ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
+                Color arrowColor = (Selected || Pressed) ? Application.ApplicationColors.HighlightText : Application.ApplicationColors.MenuText;
+                arrowColor = (Enabled) ? arrowColor : Application.ApplicationColors.ControlDark;
+                renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
+            }
 
             if (menuItemInternalLayout.PaintImage && (DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image is not null)
             {

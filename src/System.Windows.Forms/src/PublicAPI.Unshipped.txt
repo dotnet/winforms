@@ -1,13 +1,12 @@
+static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 static System.Windows.Forms.Application.ApplicationColors.get -> System.Windows.Forms.ApplicationColors!
-static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
-static System.Windows.Forms.Application.IsVisualStylesSupported.get -> bool
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance

@@ -72,11 +72,16 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     private void RenderSwitch(Graphics g, Rectangle rect, int circleDiameter)
     {
-        float animationProgress = CheckBox.Checked ? 1 : 0;
+        float animationProgress = 1;
 
         if (_animationProgress is not null)
         {
             // Let's make sure, we don't draw anything if the animation is not running.
+            if (_animationProgress == 0)
+            {
+                return;
+            }
+
             animationProgress = _animationProgress.Value;
         }
 
@@ -86,8 +91,9 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         Color circleColor = SystemColors.ControlLightLight;
 
-        static float EaseOut(float t) => (1 - t) * (1 - t);
-
+        // This works both for when the Animation is running, and when it's not running.
+        // In the latter case we set the animationProgress to 1, so the circle is drawn
+        // at the correct position.
         float circlePosition = CheckBox.Checked
             ? (rect.Width - circleDiameter) * (1 - EaseOut(animationProgress))
             : (rect.Width - circleDiameter) * EaseOut(animationProgress);
@@ -95,6 +101,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         using var backgroundBrush = new SolidBrush(backgroundColor);
         using var circleBrush = new SolidBrush(circleColor);
         using var backgroundPen = new Pen(SystemColors.WindowFrame, 2 * DpiScale);
+
+        g.SmoothingMode = SmoothingMode.AntiAlias;
 
         if (_switchStyle == ModernCheckBoxStyle.Rounded)
         {
@@ -117,6 +125,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         }
 
         g.FillEllipse(circleBrush, rect.X + circlePosition, rect.Y + 2.5f * DpiScale, circleDiameter, circleDiameter);
+
+        static float EaseOut(float t) => (1 - t) * (1 - t);
     }
 
     protected override void OnStoppedAnimation()

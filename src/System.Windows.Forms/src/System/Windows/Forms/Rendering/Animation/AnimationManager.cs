@@ -111,6 +111,8 @@ internal partial class AnimationManager
     {
         lock (_lock)
         {
+            long elapsedStopwatchMilliseconds = Instance._stopwatch.ElapsedMilliseconds;
+
             foreach (AnimationRendererItem item in _renderer.Values)
             {
                 if (!item.Renderer.IsRunning)
@@ -118,7 +120,6 @@ internal partial class AnimationManager
                     continue;
                 }
 
-                long elapsedStopwatchMilliseconds = Instance._stopwatch.ElapsedMilliseconds;
                 long remainingAnimationMilliseconds = item.StopwatchTarget - elapsedStopwatchMilliseconds;
 
                 item.FrameCount += item.FrameOffset;
@@ -143,6 +144,12 @@ internal partial class AnimationManager
                             item.Renderer.RestartAnimation();
                             break;
                     }
+
+                    _syncContext?.Post(
+                        d: _ => item.Renderer.AnimationProc(1),
+                        state: null);
+
+                    continue;
                 }
 
                 float progress = 1 - (remainingAnimationMilliseconds / (float)item.AnimationDuration);

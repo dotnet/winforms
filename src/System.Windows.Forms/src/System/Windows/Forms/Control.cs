@@ -3823,7 +3823,6 @@ public unsafe partial class Control :
                     // This implies updating the styles.
                     RecreateHandle();
 
-
                     if (GetState(States.LayoutIsDirty))
                     {
                         // The above did not cause our layout to be refreshed. We explicitly refresh our
