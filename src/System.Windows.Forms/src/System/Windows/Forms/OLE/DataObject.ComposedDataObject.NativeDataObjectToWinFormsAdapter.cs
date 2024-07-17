@@ -17,17 +17,6 @@ public unsafe partial class DataObject
 {
     internal unsafe partial class ComposedDataObject
     {
-        // Feature switch, when set to false, BinaryFormatter is not supported in trimmed applications.
-        // This field, using the default BinaryFormatter switch, is used to control trim warnings related to using BinaryFormatter in WinForms trimming.
-        // The trimmer will generate a warning when set to true and will not generate a warning when set to false.
-        [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
-#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-        internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization { get; } =
-            AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled)
-                ? isEnabled
-                : true;
-#pragma warning restore IDE0075
-
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
         /// </summary>
@@ -186,7 +175,7 @@ public unsafe partial class DataObject
 
                 static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
                 {
-                    Stream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
+                    MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
                     return !isSerializedObject ? stream : ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
 
                     static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
@@ -356,13 +345,14 @@ public unsafe partial class DataObject
                     }
 
                     object? data = null;
-                    HRESULT result = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+                    HRESULT hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
 
                     // One of the ways this can happen is when we attempt to put binary formatted data onto the
                     // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
                     // The data state, however, is not good, and this error will be returned by Windows when asking to
                     // get the data out.
-                    Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+                    Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+                    Debug.WriteLineIf(hr == HRESULT.DV_E_TYMED, "DV_E_TYMED returned when trying to get clipboard data.");
 
                     try
                     {
