@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Runtime.InteropServices
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
 
 Namespace Microsoft.VisualBasic.CompilerServices
 

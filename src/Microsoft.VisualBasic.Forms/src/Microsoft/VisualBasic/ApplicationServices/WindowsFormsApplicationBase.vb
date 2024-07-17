@@ -12,7 +12,7 @@ Imports System.Threading
 Imports System.Windows.Forms
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
