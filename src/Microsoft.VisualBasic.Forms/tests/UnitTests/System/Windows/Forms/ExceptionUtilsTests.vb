@@ -5,7 +5,7 @@ Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 

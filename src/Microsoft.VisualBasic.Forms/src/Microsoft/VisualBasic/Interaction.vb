@@ -9,7 +9,7 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
 
 Namespace Microsoft.VisualBasic
 
