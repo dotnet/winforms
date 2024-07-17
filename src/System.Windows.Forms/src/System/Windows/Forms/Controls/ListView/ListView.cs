@@ -5115,12 +5115,9 @@ public partial class ListView : Control
             return;
         }
 
-        if (!VirtualMode)
+        for (int i = 0; i < Items.Count; i++)
         {
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].ReleaseUiaProvider();
-            }
+            Items[i].ReleaseUiaProvider();
         }
 
         if (_defaultGroup is not null)

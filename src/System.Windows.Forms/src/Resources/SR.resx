@@ -4018,7 +4018,7 @@ Stack trace where the illegal operation occurred was:
     <value>Occurs whenever the state of a virtual item is changed.</value>
   </data>
   <data name="ListViewVirtualListSizeDescr" xml:space="preserve">
-    <value>Sets the count of the item collection when the ListView is in virtual mode.</value>
+    <value>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</value>
   </data>
   <data name="ListViewVirtualListSizeInvalidArgument" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. {0} should be greater than or equal to 0.</value>
