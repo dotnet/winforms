@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Concurrent;
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -11,23 +12,13 @@ namespace System.Windows.Forms.PropertyGridInternal;
 internal sealed partial class CategoryGridEntry : GridEntry
 {
     private readonly string _name;
-    private static Dictionary<string, bool>? s_categoryStates;
-    private static readonly object s_lock = new();
+    private static readonly ConcurrentDictionary<string, bool> s_categoryStates = [];
 
     public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry parent, string name, IEnumerable<GridEntry> children)
         : base(ownerGrid, parent)
     {
         _name = name;
-
-        lock (s_lock)
-        {
-            s_categoryStates ??= [];
-
-            if (!s_categoryStates.ContainsKey(name))
-            {
-                s_categoryStates.Add(name, true);
-            }
-        }
+        s_categoryStates.TryAdd(name, true);
 
         IsExpandable = true;
 
@@ -37,10 +28,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
             child.ParentGridEntry = this;
         }
 
-        lock (s_lock)
-        {
-            InternalExpanded = s_categoryStates[name];
-        }
+        InternalExpanded = s_categoryStates[name];
 
         SetFlag(Flags.LabelBold, true);
     }
@@ -80,10 +68,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         set
         {
             base.InternalExpanded = value;
-            lock (s_lock)
-            {
-                s_categoryStates![_name] = value;
-            }
+            s_categoryStates[_name] = value;
         }
     }
 
