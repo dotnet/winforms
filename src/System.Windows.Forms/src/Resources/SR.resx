@@ -6971,7 +6971,7 @@ Stack trace where the illegal operation occurred was:
     <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
   <data name="BinaryFormatterNotSupported" xml:space="preserve">
-    <value>Using the BinaryFormatter is not supported in trimmed applications.</value>
+    <value>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</value>
   </data>
   <data name="ControlNotSupportedInTrimming" xml:space="preserve">
     <value>'{0}' is not supported in trimmed applications.</value>
