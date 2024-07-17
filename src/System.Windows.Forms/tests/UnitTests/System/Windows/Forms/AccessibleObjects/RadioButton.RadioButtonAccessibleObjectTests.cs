@@ -71,7 +71,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void RadioButtonAccessibleObject_Name_ReturnsExpected()
+    public void RadioButtonAccessibleObject_Name_ReturnsExpected_AccessibleName()
     {
         using RadioButton radioButton = new()
         {
