@@ -86,6 +86,37 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     }
 
     [WinFormsFact]
+    public void RadioButtonAccessibleObject_Name_ReturnsExpected_FromText()
+    {
+        using RadioButton radioButton = new() { Text = "TestText" };
+        RadioButtonAccessibleObject radioButtonAccessibleObject = new(radioButton);
+
+        radioButtonAccessibleObject.Name.Should().Be("TestText");
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, "TestText")]
+    [InlineData(false, "&TestText")]
+    public void RadioButtonAccessibleObject_Name_ReturnsExpected_FromText_WithOrWithoutMnemonics(bool useMnemonic, string expectedName)
+    {
+        using RadioButton radioButton = new() { Text = "&TestText", UseMnemonic = useMnemonic };
+        RadioButtonAccessibleObject radioButtonAccessibleObject = new(radioButton);
+
+        radioButtonAccessibleObject.Name.Should().Be(expectedName);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, "Alt+r")]
+    [InlineData(false, null)]
+    public void RadioButtonAccessibleObject_KeyboardShortcut_ReturnsExpected(bool useMnemonic, string expectedShortcut)
+    {
+        using RadioButton radioButton = new() { Text = "&RadioButton", UseMnemonic = useMnemonic };
+        RadioButtonAccessibleObject radioButtonAccessibleObject = new(radioButton);
+
+        radioButtonAccessibleObject.KeyboardShortcut.Should().Be(expectedShortcut);
+    }
+
+    [WinFormsFact]
     public void RadioButtonAccessibleObject_Role_Custom_ReturnsExpected()
     {
         using RadioButton radioButton = new()

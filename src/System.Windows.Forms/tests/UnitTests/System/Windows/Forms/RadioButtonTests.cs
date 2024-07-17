@@ -172,6 +172,32 @@ public class RadioButtonTests : AbstractButtonBaseTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
     }
 
+    public static TheoryData<ContentAlignment, ContentAlignment> CheckAlignData => new()
+    {
+         { ContentAlignment.TopLeft, ContentAlignment.TopLeft },
+         { ContentAlignment.TopRight, ContentAlignment.TopRight },
+         { ContentAlignment.BottomCenter, ContentAlignment.BottomCenter },
+         { ContentAlignment.BottomLeft, ContentAlignment.BottomLeft },
+         { ContentAlignment.BottomRight, ContentAlignment.BottomRight },
+         { ContentAlignment.MiddleLeft, ContentAlignment.MiddleLeft },
+         { ContentAlignment.MiddleRight, ContentAlignment.MiddleRight },
+         { ContentAlignment.TopCenter, ContentAlignment.TopCenter },
+         { ContentAlignment.MiddleCenter, ContentAlignment.MiddleCenter }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckAlignData))]
+    public void RadioButton_CheckAlign_Set_GetReturnsExpected(ContentAlignment value, ContentAlignment expected)
+    {
+        using RadioButton control = new();
+        control.CheckAlign = value;
+        control.CheckAlign.Should().Be(expected);
+
+        // Set same.
+        control.CheckAlign = value;
+        control.CheckAlign.Should().Be(expected);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void RadioRadioButton_TabStop_Set_GetReturnsExpected(bool value)
