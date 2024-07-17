@@ -9706,7 +9706,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">창에 포커스가 없을 때 컨트롤이 상호 작용할 수 있도록 허용합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
