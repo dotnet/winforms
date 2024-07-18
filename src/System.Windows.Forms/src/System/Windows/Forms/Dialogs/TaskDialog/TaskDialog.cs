@@ -398,6 +398,115 @@ public partial class TaskDialog : IWin32Window
         return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);
     }
 
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        TaskDialogPage page)
+        => ShowDialogAsync(IntPtr.Zero, page.OrThrowIfNull(), TaskDialogStartupLocation.CenterOwner, CancellationToken.None);
+
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation)
+        => ShowDialogAsync(IntPtr.Zero, page.OrThrowIfNull(), startupLocation, CancellationToken.None);
+
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        TaskDialogPage page,
+        CancellationToken cancellationToken)
+        => ShowDialogAsync(IntPtr.Zero, page.OrThrowIfNull(), TaskDialogStartupLocation.CenterOwner, cancellationToken);
+
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation,
+        CancellationToken cancellationToken)
+        => ShowDialogAsync(IntPtr.Zero, page.OrThrowIfNull(), startupLocation, cancellationToken);
+
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        IWin32Window win32Window,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation,
+        CancellationToken cancellationToken)
+        => ShowDialogAsync(win32Window.Handle, page.OrThrowIfNull(), startupLocation, cancellationToken);
+
+    /// <summary>
+    ///   Shows the task dialog with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="page">
+    ///   The page instance that contains the contents which this task dialog will display.
+    /// </param>
+    /// <param name="hwndOwner">
+    ///   The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
+    ///   modeless dialog.
+    /// </param>
+    /// <param name="startupLocation">
+    ///   Gets or sets the position of the task dialog when it is shown.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///   A <see cref="CancellationToken"/> that can be used to cancel the operation.
+    /// </param>
+    /// <remarks>
+    ///   <para>
+    ///     Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///     this method returns or the dialog is navigated to a different page.
+    ///   </para>
+    /// </remarks>
+    /// <returns>
+    ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="page"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
+    /// </exception>
+    public static async Task<TaskDialogButton> ShowDialogAsync(
+        IntPtr hwndOwner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(page);
+
+        var tcs = new TaskCompletionSource<TaskDialogButton>();
+        if (cancellationToken.CanBeCanceled)
+        {
+            cancellationToken.Register(() => tcs.TrySetCanceled());
+        }
+
+        TaskDialog? dialog = null;
+
+        void ShowDialogProc()
+        {
+            try
+            {
+                dialog = new();
+                tcs.SetResult(dialog.ShowDialogInternal(hwndOwner, page, startupLocation));
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        SynchronizationContext.Current!.Post(_ => ShowDialogProc(), null);
+
+        TaskDialogButton result;
+
+        try
+        {
+            result = await tcs.Task.ConfigureAwait(true);
+        }
+        catch (TaskCanceledException)
+        {
+            dialog?.Close();
+            throw;
+        }
+
+        return result;
+    }
+
     /// <summary>
     ///   Shows the task dialog with the specified owner.
     /// </summary>
