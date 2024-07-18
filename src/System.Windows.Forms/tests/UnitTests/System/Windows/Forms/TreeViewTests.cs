@@ -7551,9 +7551,9 @@ public class TreeViewTests
     }
 
     [WinFormsTheory]
-    [InlineData(5, 100, 5)] 
-    [InlineData(10, 100, 5)] 
-    public void TreeView_VisibleCount_MultipleNodes_ReturnsExpected(int nodeCount, int controlHeight, int expectedVisibleCount)
+    [InlineData(5)]
+    [InlineData(10)]
+    public void TreeView_VisibleCount_MultipleNodes_ReturnsExpected(int nodeCount)
     {
         using TreeView treeView = new();
 
@@ -7563,8 +7563,8 @@ public class TreeViewTests
         }
 
         treeView.CreateControl();
-        treeView.Height = controlHeight;
-        treeView.VisibleCount.Should().Be(expectedVisibleCount);
+        treeView.Height = 100; 
+        treeView.VisibleCount.Should().Be(5); 
     }
 
     private class SubTreeView : TreeView
