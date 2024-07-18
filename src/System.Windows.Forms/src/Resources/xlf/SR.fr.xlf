@@ -6534,6 +6534,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Se produit en mode owner-draw, lorsqu'il est nécessaire de dessiner un SubItem (mode Détails uniquement).</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewFailedRetrieveVirtualItem">
+        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
+        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">FindNearestItem est pris en charge uniquement lorsque le ListView est en mode SMALLICON ou LARGEICON.</target>

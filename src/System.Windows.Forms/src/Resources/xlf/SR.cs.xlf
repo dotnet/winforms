@@ -6534,6 +6534,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vyvolá se v režimu vlastního vykreslování, když je potřeba vykreslit podpoložku (SubItem) (pouze zobrazení Details).</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewFailedRetrieveVirtualItem">
+        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
+        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">Vlastnost FindNearestItem je podporována pouze v případě, že vlastnost ListView je v zobrazení SMALLICON nebo LARGEICON.</target>

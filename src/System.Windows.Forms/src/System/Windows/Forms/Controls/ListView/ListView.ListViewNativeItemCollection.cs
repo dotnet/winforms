@@ -43,6 +43,8 @@ public partial class ListView
                     // if we are showing virtual items, we need to get the item from the user
                     RetrieveVirtualItemEventArgs rVI = new(displayIndex);
                     _owner.OnRetrieveVirtualItem(rVI);
+                    if (rVI.Item is null)
+                        throw new InvalidOperationException(string.Format(SR.ListViewFailedRetrieveVirtualItem, displayIndex));
                     rVI.Item!.SetItemIndex(_owner, displayIndex);
                     return rVI.Item;
                 }

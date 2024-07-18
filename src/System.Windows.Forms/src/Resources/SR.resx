@@ -4023,6 +4023,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewVirtualListSizeInvalidArgument" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. {0} should be greater than or equal to 0.</value>
   </data>
+  <data name="ListViewFailedRetrieveVirtualItem" xml:space="preserve">
+    <value>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</value>
+  </data>
   <data name="ListViewVirtualListViewRequiresNoCheckedItems" xml:space="preserve">
     <value>Cannot set VirtualMode=true on a list whose checked items collection is not empty.</value>
   </data>
