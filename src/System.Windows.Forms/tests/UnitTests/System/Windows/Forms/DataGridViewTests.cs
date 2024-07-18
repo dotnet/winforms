@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -286,7 +285,6 @@ public partial class DataGridViewTests : IDisposable
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
             Assert.True(control.IsHandleCreated);
-            ;
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -524,14 +522,17 @@ public partial class DataGridViewTests : IDisposable
         Assert.False(control.IsHandleCreated);
     }
 
-    public static IEnumerable<object[]> ColumnHeadersHeightSizeMode_SetWithHandle_TestData()
+    public static TheoryData<bool, DataGridViewColumnHeadersHeightSizeMode, int> ColumnHeadersHeightSizeMode_SetWithHandle_TestData()
     {
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18 };
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
+        return new TheoryData<bool, DataGridViewColumnHeadersHeightSizeMode, int>
+        {
+            { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18 },
+            { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight },
+            { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight },
+        };
     }
 
     [WinFormsTheory]
