@@ -6534,11 +6534,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">소유자 그리기 모드에서 하위 항목(자세히 보기에만 해당)을 그려야 할 때 발생합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">FindNearestItem은 ListView가 SMALLICON 또는 LARGEICON 보기에 있는 경우에만 지원됩니다.</target>

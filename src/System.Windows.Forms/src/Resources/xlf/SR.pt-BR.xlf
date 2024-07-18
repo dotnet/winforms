@@ -6534,11 +6534,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Ocorre no modo de desenho do proprietário, quando é necessário desenhar SubItem (modo de exibição Detalhes apenas).</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">Somente há suporte para FindNearestItem quando ListView está na exibição SMALLICON ou LARGEICON.</target>

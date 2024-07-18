@@ -44,7 +44,7 @@ public partial class ListView
                     RetrieveVirtualItemEventArgs rVI = new(displayIndex);
                     _owner.OnRetrieveVirtualItem(rVI);
                     if (rVI.Item is null)
-                        throw new InvalidOperationException(string.Format(SR.ListViewFailedRetrieveVirtualItem, displayIndex));
+                        throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
                     rVI.Item!.SetItemIndex(_owner, displayIndex);
                     return rVI.Item;
                 }

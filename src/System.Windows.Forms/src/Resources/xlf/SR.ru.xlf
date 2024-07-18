@@ -6535,11 +6535,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Возникает в режиме прорисовки владельца, когда требуется прорисовка SubItem (только в представлении Details).</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">FindNearestItem поддерживается, только когда для ListView используется представление SMALLICON или LARGEICON.</target>

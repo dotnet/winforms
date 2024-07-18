@@ -6534,11 +6534,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Występuje w trybie rysowania przez właściciela, gdy potrzebne jest narysowanie elementu SubItem (tylko w widoku Details).</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">Element FindNearestItem jest obsługiwany tylko wtedy, gdy element ListView jest w widoku SMALLICON lub LARGEICON.</target>

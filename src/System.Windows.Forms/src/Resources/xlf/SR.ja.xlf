@@ -6534,11 +6534,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">オーナー描画モードで、サブアイテムが (詳細ビューのみ) 描画されなければならないときに発生します。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">FindNearestItem は、ListView が SMALLICON または LARGEICON ビューであるときにのみサポートされます。</target>

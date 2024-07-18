@@ -6534,11 +6534,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">当需要绘制子项(仅限“详细信息”视图)时，在所有者描述模式下发生。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">仅当 ListView 在 SMALLICON 或 LARGEICON 视图中时才支持 FindNearestItem。</target>

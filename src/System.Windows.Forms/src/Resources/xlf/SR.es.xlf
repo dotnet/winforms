@@ -6534,11 +6534,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Tiene lugar en modo owner-draw, cuando es necesario dibujar un subelemento (sólo en vista de detalles).</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFailedRetrieveVirtualItem">
-        <source>Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</source>
-        <target state="new">Failed to retrieve the virtual item corresponding to index {0}. Please make sure the RetrieveVirtualItem event providing valid items.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">FindNearestItem se admite sólo cuando ListView está en las vistas SMALLICON o LARGEICON.</target>
