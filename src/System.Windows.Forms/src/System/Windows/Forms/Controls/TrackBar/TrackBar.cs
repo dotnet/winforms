@@ -566,24 +566,26 @@ public partial class TrackBar : Control, ISupportInitialize
             }
 
             _tickFrequency = value;
-            // Determine if the decision of whether the ticks drawing,
-            // is performed by the native control or the Windows Forms runtime
-            // is still valid. If it's no longer valid, we'll need to recreate the native control.
+
             bool recreateHandle = ShouldRecreateHandle();
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            if (_autoDrawTicks)
             {
                 PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)value);
-                // If user opts out of TrackBarModernRendering then recreateHandle
-                // will always be false.
-                if (recreateHandle)
-                {
-                    RecreateHandle();
-                }
-                else
-                {
-                    DrawTicks();
-                    Invalidate();
-                }
+            }
+
+            if (recreateHandle)
+            {
+                RecreateHandle();
+            }
+            else
+            {
+                DrawTicksManually();
+                Invalidate();
             }
         }
     }
@@ -762,11 +764,14 @@ public partial class TrackBar : Control, ISupportInitialize
 
     /// <summary>
     ///  Check if the value of the max is greater then the taskbar size.
-    ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
+    ///  If so then we divide the value by size and only that many ticks to be drawn on the screen
+    ///  via TBM_SETTIC.
     /// </summary>
-    private void DrawTicks()
+    /// <remarks>
+    ///  <para>This should not be called if <see cref="_autoDrawTicks"/> is <see langword="true"/></para>
+    /// </remarks>
+    private void DrawTicksManually()
     {
-        // Will be true if they opt out TrackBarModernRendering.
         if (_tickStyle == TickStyle.None || _autoDrawTicks)
         {
             return;
@@ -854,8 +859,15 @@ public partial class TrackBar : Control, ISupportInitialize
         Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
         PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
         PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
-        PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
-        DrawTicks();
+        if (_autoDrawTicks)
+        {
+            PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+        }
+        else
+        {
+            DrawTicksManually();
+        }
+
         PInvoke.SendMessage(this, PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
         PInvoke.SendMessage(this, PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
         SetTrackBarPosition();
@@ -1048,7 +1060,7 @@ public partial class TrackBar : Control, ISupportInitialize
                 PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                 if (!_autoDrawTicks)
                 {
-                    DrawTicks();
+                    DrawTicksManually();
                 }
 
                 Invalidate();
@@ -1138,10 +1150,11 @@ public partial class TrackBar : Control, ISupportInitialize
     }
 
     /// <summary>
-    /// Determine if the decision of whether the ticks drawing,
-    /// is performed by the native control or the Windows Forms runtime
-    /// is still valid. If it's no longer valid, we'll need to recreate the native control.
-    /// If user opts out of TrackBarModernRendering then this will always return false.
+    ///  Determine if the previous decision of whether drawing ticks
+    ///  is performed by the native control or the Windows Forms runtime
+    ///  is still valid. If it's no longer valid, the native control needs to be recreated.
+    ///  If user opts out of <see cref="LocalAppContextSwitches.TrackBarModernRendering"/>
+    ///  then this will always return false.
     /// </summary>
     private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();
 
