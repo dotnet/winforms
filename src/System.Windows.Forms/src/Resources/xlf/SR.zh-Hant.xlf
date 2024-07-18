@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">修剪後的應用程式不支援使用 BinaryFormatter。</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">修剪後的應用程式不支援使用 BinaryFormatter。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
