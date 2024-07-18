@@ -13,8 +13,6 @@ public partial class Control
     public async Task InvokeAsync(Action action)
         => await InvokeAsync(action, CancellationToken.None).ConfigureAwait(true);
 
-#nullable enable
-
     /// <summary>
     ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
     /// </summary>
@@ -67,8 +65,6 @@ public partial class Control
     public Task<TResult> InvokeAsync<TResult>(Func<TResult> syncFunction)
         => InvokeAsync(syncFunction, CancellationToken.None);
 
-#nullable enable
-
     /// <summary>
     ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
     /// </summary>
@@ -116,7 +112,7 @@ public partial class Control
     /// <summary>
     ///  Invokes the specified asynchronous function on the thread that owns the control's handle.
     /// </summary>
-    /// <param name="function">The asynchronous function to execute.</param>
+    /// <param name="asyncFunc">The asynchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation.</returns>
     public async Task InvokeAsync(Func<Task> asyncFunc, CancellationToken cancellationToken)
@@ -130,11 +126,11 @@ public partial class Control
 
         if (InvokeRequired)
         {
-            BeginInvoke(WrappedFunction);
+            BeginInvoke(async () => await WrappedFunctionAsync().ConfigureAwait(true));
         }
         else
         {
-            WrappedFunction();
+            await WrappedFunctionAsync().ConfigureAwait(true);
         }
 
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
@@ -142,11 +138,11 @@ public partial class Control
             await tcs.Task.ConfigureAwait(false);
         }
 
-        async Task WrappedFunction()
+        async Task WrappedFunctionAsync()
         {
             try
             {
-                await asyncFunc();
+                await asyncFunc().ConfigureAwait(true);
                 tcs.SetResult();
             }
             catch (Exception ex)
@@ -178,11 +174,11 @@ public partial class Control
 
         if (InvokeRequired)
         {
-            BeginInvoke(WrappedFunction);
+            BeginInvoke(async () => await WrappedFunction().ConfigureAwait(false));
         }
         else
         {
-            WrappedFunction();
+            await WrappedFunction().ConfigureAwait(true);
         }
 
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
@@ -195,8 +191,9 @@ public partial class Control
         {
             try
             {
-                T result = await asyncFunc();
+                T result = await asyncFunc().ConfigureAwait(true);
                 tcs.SetResult(result);
+
                 return result;
             }
             catch (Exception ex)
