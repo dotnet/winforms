@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace Xunit;
+namespace System;
 
-internal static class TheoryDataExtensions
+public static class TheoryDataExtensions
 {
     /// <summary>
     ///  Converts an IEnumerable<typeparamref name="T"/> into an Xunit theory compatible enumerable.

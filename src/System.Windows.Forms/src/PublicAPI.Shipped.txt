@@ -13386,6 +13386,7 @@ virtual System.Windows.Forms.ToolStripItem.Pressed.get -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessCmdKey(ref System.Windows.Forms.Message m, System.Windows.Forms.Keys keyData) -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessMnemonic(char charCode) -> bool
+virtual System.Windows.Forms.ToolStripItem.Renderer.get -> System.Windows.Forms.ToolStripRenderer?
 virtual System.Windows.Forms.ToolStripItem.ResetBackColor() -> void
 virtual System.Windows.Forms.ToolStripItem.ResetDisplayStyle() -> void
 virtual System.Windows.Forms.ToolStripItem.ResetFont() -> void

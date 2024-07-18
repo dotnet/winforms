@@ -256,6 +256,17 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         set => base.AutoScrollPosition = value;
     }
 
+    /// <summary>
+    ///  When <see langword="true"/> Allows the control to be interacted when window does not have focus.
+    /// </summary>
+    [Browsable(true)]
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ToolStripAllowClickThrough))]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+    public bool AllowClickThrough { get; set; }
+
     public override bool AllowDrop
     {
         get => base.AllowDrop;
@@ -4683,7 +4694,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             SnapFocus((HWND)(nint)m.WParamInternal);
         }
 
-        if (m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
+        if (!AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
         {
             // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
             // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
@@ -4732,6 +4743,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
 
         base.WndProc(ref m);
+
+        if (AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE && m.ResultInternal == PInvoke.MA_ACTIVATEANDEAT)
+        {
+            m.ResultInternal = (LRESULT)(nint)PInvoke.MA_ACTIVATE;
+        }
 
         if (m.Msg == (int)PInvoke.WM_NCDESTROY)
         {
