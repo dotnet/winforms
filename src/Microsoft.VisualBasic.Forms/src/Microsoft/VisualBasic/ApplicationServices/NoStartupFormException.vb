@@ -3,7 +3,7 @@
 
 Imports System.ComponentModel
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
