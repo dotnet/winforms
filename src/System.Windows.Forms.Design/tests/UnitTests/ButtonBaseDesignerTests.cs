@@ -1,11 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Collections;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ButtonBaseDesignerTests
+public sealed class ButtonBaseDesignerTests
 {
     [Fact]
     public void ButtonBaseDesigner_Constructor_Initialize_AutoResizeHandles()
@@ -19,7 +21,7 @@ public class ButtonBaseDesignerTests
 
     public static IEnumerable<object[]> IDictionary_TestData()
     {
-        yield return new object[] { null };
+        yield return new object[] { null! };
         yield return new object[] { new Dictionary<string, object>() };
     }
 
@@ -39,7 +41,8 @@ public class ButtonBaseDesignerTests
     public void ButtonBaseDesigner_InitializeNewComponent_NotInitialized(IDictionary defaultValues)
     {
         using ButtonBaseDesigner buttonBaseDesigner = new();
-        Assert.Throws<InvalidOperationException>(() => buttonBaseDesigner.InitializeNewComponent(defaultValues));
+        Action action = () => buttonBaseDesigner.InitializeNewComponent(defaultValues);
+        action.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
