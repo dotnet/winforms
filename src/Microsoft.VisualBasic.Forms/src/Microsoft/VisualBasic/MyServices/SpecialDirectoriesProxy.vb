@@ -7,7 +7,7 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    ''' An extremely thin wrapper around Microsoft.VisualBasic.FileIO.SpecialDirectories to expose the type through My.
+    '''  An extremely thin wrapper around Microsoft.VisualBasic.FileIO.SpecialDirectories to expose the type through My.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class SpecialDirectoriesProxy
@@ -67,11 +67,10 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        ''' Proxy class can only created by internal classes.
+        '''  Proxy class can only created by internal classes.
         ''' </summary>
         Friend Sub New()
         End Sub
 
     End Class
-
 End Namespace
