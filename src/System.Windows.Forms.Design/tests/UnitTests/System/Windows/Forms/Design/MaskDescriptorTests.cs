@@ -94,11 +94,16 @@ public class MaskDescriptorTests : IDisposable
     }
 
     [WinFormsTheory]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "", "", "", typeof(object), false)]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "00/00/0000", "Date", "12/31/2000", typeof(DateTime), true)]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "DifferentType", "", "", typeof(object), false)]
-    public void Equals_VariousScenarios(string mask1, string name1, string sample1, Type type1, string mask2, string name2, string sample2, Type type2, bool expected)
+    [InlineData("", "", "", typeof(object), false)]
+    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), true)]
+    [InlineData("DifferentType", "", "", typeof(object), false)]
+    public void Equals_VariousScenarios(string mask2, string name2, string sample2, Type type2, bool expected)
     {
+        string mask1 = "00/00/0000";
+        string name1 = "Date";
+        string sample1 = "12/31/2000";
+        Type type1 = typeof(DateTime);
+
         ConcreteMaskDescriptor descriptor1 = new(mask: mask1, name: name1, sample: sample1, validatingType: type1);
 
         object descriptor2 = mask2 != "DifferentType"
@@ -111,13 +116,18 @@ public class MaskDescriptorTests : IDisposable
     }
 
     [WinFormsTheory]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "00/00/0000", "Date", "12/31/2000", typeof(DateTime), true, "Identical descriptors should produce the same hash code.")]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "000-00-0000", "SSN", "123-45-6789", typeof(DateTime), false, "Descriptors with different masks should produce different hash codes.")]
-    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), "00/00/0000", "Date", "12/31/2000", typeof(string), false, "Descriptors with different validating types should produce different hash codes.")]
-    public void GetHashCode_VariousScenarios(string mask1, string name1, string sample1, Type type1, string mask2, string name2, string sample2, Type type2, bool shouldMatch, string reason, string culture1 = "", string culture2 = "")
+    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(DateTime), true, "Identical descriptors should produce the same hash code.")]
+    [InlineData("000-00-0000", "SSN", "123-45-6789", typeof(DateTime), false, "Descriptors with different masks should produce different hash codes.")]
+    [InlineData("00/00/0000", "Date", "12/31/2000", typeof(string), false, "Descriptors with different validating types should produce different hash codes.")]
+    public void GetHashCode_VariousScenarios(string mask2, string name2, string sample2, Type type2, bool shouldMatch, string reason, string culture1 = "", string culture2 = "")
     {
         try
         {
+            string mask1 = "00/00/0000";
+            string name1 = "Date";
+            string sample1 = "12/31/2000";
+            Type type1 = typeof(DateTime);
+
             if (!string.IsNullOrEmpty(culture1))
             {
                 Thread.CurrentThread.CurrentCulture = new(culture1);
