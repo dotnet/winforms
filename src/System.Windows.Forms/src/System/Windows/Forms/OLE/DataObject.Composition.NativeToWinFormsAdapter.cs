@@ -15,16 +15,16 @@ namespace System.Windows.Forms;
 
 public unsafe partial class DataObject
 {
-    internal unsafe partial class ComposedDataObject
+    internal unsafe partial class Composition
     {
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
         /// </summary>
-        private unsafe class NativeDataObjectToWinFormsAdapter : IDataObject, Com.IDataObject.Interface
+        private unsafe class NativeToWinFormsAdapter : IDataObject, Com.IDataObject.Interface
         {
             private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
-            public NativeDataObjectToWinFormsAdapter(Com.IDataObject* dataObject)
+            public NativeToWinFormsAdapter(Com.IDataObject* dataObject)
             {
 #if DEBUG
                 _nativeDataObject = new(dataObject, takeOwnership: true, trackDisposal: false);

@@ -11,15 +11,15 @@ public class SpecialDirectoriesProxyTests
     public void Properties()
     {
         SpecialDirectoriesProxy specialDirectories = new ServerComputer().FileSystem.SpecialDirectories;
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData, () => specialDirectories.AllUsersApplicationData);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.CurrentUserApplicationData, () => specialDirectories.CurrentUserApplicationData);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Desktop, () => specialDirectories.Desktop);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyDocuments, () => specialDirectories.MyDocuments);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyMusic, () => specialDirectories.MyMusic);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyPictures, () => specialDirectories.MyPictures);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Programs, () => specialDirectories.Programs);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.ProgramFiles, () => specialDirectories.ProgramFiles);
-        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Temp, () => specialDirectories.Temp);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.AllUsersApplicationData, () => specialDirectories.AllUsersApplicationData);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.CurrentUserApplicationData, () => specialDirectories.CurrentUserApplicationData);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.Desktop, () => specialDirectories.Desktop);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.MyDocuments, () => specialDirectories.MyDocuments);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.MyMusic, () => specialDirectories.MyMusic);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.MyPictures, () => specialDirectories.MyPictures);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.Programs, () => specialDirectories.Programs);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.ProgramFiles, () => specialDirectories.ProgramFiles);
+        VerifySpecialDirectory(() => FileIO.SpecialDirectories.Temp, () => specialDirectories.Temp);
     }
 
     private static void VerifySpecialDirectory(Func<string> getExpected, Func<string> getActual)

@@ -24,20 +24,20 @@ public unsafe partial class DataObject :
     private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
     private const string BitmapFullName = "System.Drawing.Bitmap";
 
-    private readonly ComposedDataObject _innerData;
+    private readonly Composition _innerData;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
-    internal DataObject(Com.IDataObject* data) => _innerData = ComposedDataObject.CreateFromNativeDataObject(data);
+    internal DataObject(Com.IDataObject* data) => _innerData = Composition.CreateFromNativeDataObject(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     public DataObject()
     {
-        _innerData = ComposedDataObject.CreateFromWinFormsDataObject(new DataStore());
+        _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
     }
 
     /// <summary>
@@ -51,15 +51,15 @@ public unsafe partial class DataObject :
         }
         else if (data is IDataObject iDataObject)
         {
-            _innerData = ComposedDataObject.CreateFromWinFormsDataObject(iDataObject);
+            _innerData = Composition.CreateFromWinFormsDataObject(iDataObject);
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
-            _innerData = ComposedDataObject.CreateFromRuntimeDataObject(comDataObject);
+            _innerData = Composition.CreateFromRuntimeDataObject(comDataObject);
         }
         else
         {
-            _innerData = ComposedDataObject.CreateFromWinFormsDataObject(new DataStore());
+            _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
             SetData(data);
         }
     }
@@ -88,7 +88,7 @@ public unsafe partial class DataObject :
         return _innerData.OriginalIDataObject is { } original ? original : this;
     }
 
-    /// <inheritdoc cref="ComposedDataObject.OriginalIDataObject"/>
+    /// <inheritdoc cref="Composition.OriginalIDataObject"/>
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
     #region IDataObject

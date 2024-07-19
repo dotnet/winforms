@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.IO
 Imports System.IO.Pipes
 Imports System.Runtime.InteropServices
@@ -35,7 +32,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 cancellationToken.ThrowIfCancellationRequested()
                 Await pipeServer.WaitForConnectionAsync(cancellationToken).ConfigureAwait(False)
                 Try
-                    Dim args = Await ReadArgsAsync(pipeServer, cancellationToken).ConfigureAwait(False)
+                    Dim args() As String = Await ReadArgsAsync(pipeServer, cancellationToken).ConfigureAwait(False)
                     If args IsNot Nothing Then
                         callback(args)
                     End If
@@ -57,18 +54,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         Private Async Function ReadArgsAsync(pipeServer As NamedPipeServerStream, cancellationToken As CancellationToken) As Task(Of String())
-            Const bufferLength = 1024
-            Dim buffer = New Byte(bufferLength - 1) {}
+            Const bufferLength As Integer = 1024
+            Dim buffer As Byte() = New Byte(bufferLength - 1) {}
             Using stream As New MemoryStream
                 While True
-                    Dim bytesRead = Await pipeServer.ReadAsync(buffer.AsMemory(0, bufferLength), cancellationToken).ConfigureAwait(False)
+                    Dim bytesRead As Integer = Await pipeServer.ReadAsync(buffer.AsMemory(0, bufferLength), cancellationToken).ConfigureAwait(False)
                     If bytesRead = 0 Then
                         Exit While
                     End If
                     stream.Write(buffer, 0, bytesRead)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
-                Dim serializer = New DataContractSerializer(GetType(String()))
+                Dim serializer As New DataContractSerializer(GetType(String()))
                 Try
                     Return DirectCast(serializer.ReadObject(stream), String())
                 Catch ex As Exception
@@ -80,7 +77,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Async Function WriteArgsAsync(pipeClient As NamedPipeClientStream, args As String(), cancellationToken As CancellationToken) As Task
             Dim content As Byte()
             Using stream As New MemoryStream
-                Dim serializer = New DataContractSerializer(GetType(String()))
+                Dim serializer As New DataContractSerializer(GetType(String()))
                 serializer.WriteObject(stream, args)
                 content = stream.ToArray()
             End Using
@@ -88,5 +85,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
     End Module
-
 End Namespace

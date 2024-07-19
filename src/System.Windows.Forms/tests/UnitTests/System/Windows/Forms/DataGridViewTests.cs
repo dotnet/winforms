@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests;
 
-public partial class DataGridViewTests: IDisposable
+public partial class DataGridViewTests : IDisposable
 {
     private readonly DataGridView _dataGridView;
     public DataGridViewTests()
@@ -284,7 +284,7 @@ public partial class DataGridViewTests: IDisposable
             Assert.Equal(expectedValue, control.ColumnHeadersHeight);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
-            Assert.True(control.IsHandleCreated);;
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -522,14 +522,17 @@ public partial class DataGridViewTests: IDisposable
         Assert.False(control.IsHandleCreated);
     }
 
-    public static IEnumerable<object[]> ColumnHeadersHeightSizeMode_SetWithHandle_TestData()
+    public static TheoryData<bool, DataGridViewColumnHeadersHeightSizeMode, int> ColumnHeadersHeightSizeMode_SetWithHandle_TestData()
     {
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18};
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
-        yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
+        return new TheoryData<bool, DataGridViewColumnHeadersHeightSizeMode, int>
+        {
+            { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18 },
+            { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight },
+            { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight },
+            { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight },
+        };
     }
 
     [WinFormsTheory]
@@ -1911,7 +1914,7 @@ public partial class DataGridViewTests: IDisposable
                 if (columnHeadersWidthSizeMode == DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     && columnHeadersVisible is true
                     && RuntimeInformation.ProcessArchitecture == Architecture.X86)
-                  continue;
+                    continue;
 
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, null };
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, new EventArgs() };
@@ -2895,6 +2898,22 @@ public partial class DataGridViewTests: IDisposable
         public new void OnRowHeadersWidthChanged(EventArgs e) => base.OnRowHeadersWidthChanged(e);
 
         public new void OnRowHeadersWidthSizeModeChanged(DataGridViewAutoSizeModeEventArgs e) => base.OnRowHeadersWidthSizeModeChanged(e);
+
+        public new void OnCellDoubleClick(DataGridViewCellEventArgs e) => base.OnCellDoubleClick(e);
+
+        public new void OnCellFormatting(DataGridViewCellFormattingEventArgs e) => base.OnCellFormatting(e);
+
+        public new void OnCellLeave(DataGridViewCellEventArgs e) => base.OnCellLeave(e);
+
+        public new void OnCellMouseClick(DataGridViewCellMouseEventArgs e) => base.OnCellMouseClick(e);
+
+        public new void OnCellMouseDoubleClick(DataGridViewCellMouseEventArgs e) => base.OnCellMouseDoubleClick(e);
+
+        public new void OnColumnDividerDoubleClick(DataGridViewColumnDividerDoubleClickEventArgs e) => base.OnColumnDividerDoubleClick(e);
+
+        public new void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e) => base.OnColumnHeaderMouseClick(e);
+
+        public new void OnColumnHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e) => base.OnColumnHeaderMouseDoubleClick(e);
     }
 
     [WinFormsFact]
@@ -3111,7 +3130,7 @@ public partial class DataGridViewTests: IDisposable
 
         _dataGridView.CellBorderStyleChanged -= handler;
         _dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-        callCount.Should().Be(1);   
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -3528,6 +3547,526 @@ public partial class DataGridViewTests: IDisposable
 
         eventInfo.RemoveEventHandler(_dataGridView, handler);
         propertyInfo.SetValue(_dataGridView, newPropertyValue, null);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AutoSizeColumnsModeChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewAutoSizeColumnsModeEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.AutoSizeColumnsModeChanged += handler;
+        _dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        callCount.Should().Be(1);
+
+        _dataGridView.AutoSizeColumnsModeChanged -= handler;
+        _dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_AutoSizeRowsModeChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewAutoSizeModeEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.AutoSizeRowsModeChanged += handler;
+        _dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        callCount.Should().Be(1);
+
+        _dataGridView.AutoSizeRowsModeChanged -= handler;
+        _dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellDoubleClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("TestColumn", "Test Column");
+        dataGridView.Rows.Add("A");
+        dataGridView.Rows.Add("B");
+
+        dataGridView.CellDoubleClick += handler;
+        DataGridViewCellEventArgs args = new(0, 0);
+        dataGridView.OnCellDoubleClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.CellDoubleClick -= handler;
+        args = new(0, 1);
+        dataGridView.OnCellDoubleClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellEndEditEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewCellEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add("A");
+        _dataGridView.Rows.Add("B");
+
+        _dataGridView.CellEndEdit += handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 0];
+        _dataGridView.BeginEdit(false);
+        _dataGridView.EndEdit();
+        callCount.Should().Be(1);
+
+        _dataGridView.CellEndEdit -= handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 1];
+        _dataGridView.BeginEdit(false);
+        _dataGridView.EndEdit();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellEnterEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewCellEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Rows.Add("A");
+        _dataGridView.Rows.Add("B");
+
+        _dataGridView.CellEnter += handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 0];
+        callCount.Should().Be(1);
+
+        _dataGridView.CellEnter -= handler;
+        _dataGridView.CurrentCell = _dataGridView[0, 1];
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellFormattingEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellFormattingEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Rows.Add("A");
+        dataGridView.Rows.Add("B");
+
+        dataGridView.CellFormatting += handler;
+        DataGridViewCellFormattingEventArgs cellFormattingEventArgs = new(0, 0, dataGridView.Rows[0].Cells[0].Value, dataGridView.Rows[0].Cells[0].ValueType, dataGridView.Rows[0].Cells[0].InheritedStyle);
+        dataGridView.OnCellFormatting(cellFormattingEventArgs);
+        callCount.Should().Be(1);
+
+        dataGridView.CellFormatting -= handler;
+        cellFormattingEventArgs = new(0, 1, dataGridView.Rows[1].Cells[0].Value, dataGridView.Rows[1].Cells[0].ValueType, dataGridView.Rows[1].Cells[0].InheritedStyle);
+        dataGridView.OnCellFormatting(cellFormattingEventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellLeaveEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Rows.Add("A");
+        dataGridView.Rows.Add("B");
+
+        dataGridView.CellLeave += handler;
+        DataGridViewCellEventArgs cellEventArgs = new(0, 0);
+        dataGridView.OnCellLeave(cellEventArgs);
+        callCount.Should().Be(1);
+
+        dataGridView.CellLeave -= handler;
+        cellEventArgs = new(0, 1);
+        dataGridView.OnCellLeave(cellEventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellMouseClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellMouseEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Rows.Add("A");
+        dataGridView.Rows.Add("B");
+
+        dataGridView.CellMouseClick += handler;
+        DataGridViewCellMouseEventArgs args = new(0, 0, 0, 0, new(MouseButtons.Left, 1, 0, 0, 0));
+        dataGridView.OnCellMouseClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.CellMouseClick -= handler;
+        args = new(0, 1, 0, 0, new(MouseButtons.Left, 1, 0, 0, 0));
+        dataGridView.OnCellMouseClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_CellMouseDoubleClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellMouseEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Rows.Add("A");
+        dataGridView.Rows.Add("B");
+
+        dataGridView.CellMouseDoubleClick += handler;
+        DataGridViewCellMouseEventArgs args = new(0, 0, 0, 0, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnCellMouseDoubleClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.CellMouseDoubleClick -= handler;
+        args = new(0, 1, 0, 0, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnCellMouseDoubleClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnDividerDoubleClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewColumnDividerDoubleClickEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Columns.Add("Column2", "Column2");
+
+        dataGridView.ColumnDividerDoubleClick += handler;
+        DataGridViewColumnDividerDoubleClickEventArgs args = new(0, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnColumnDividerDoubleClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.ColumnDividerDoubleClick -= handler;
+        args = new(1, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnColumnDividerDoubleClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnHeaderMouseClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellMouseEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Columns.Add("Column2", "Column2");
+
+        dataGridView.ColumnHeaderMouseClick += handler;
+        DataGridViewCellMouseEventArgs args = new(0, -1, 0, 0, new(MouseButtons.Left, 1, 0, 0, 0));
+        dataGridView.OnColumnHeaderMouseClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.ColumnHeaderMouseClick -= handler;
+        args = new(1, -1, 0, 0, new(MouseButtons.Left, 1, 0, 0, 0));
+        dataGridView.OnColumnHeaderMouseClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnHeaderMouseDoubleClickEvent_Raised_Success()
+    {
+        SubDataGridView dataGridView = new();
+        int callCount = 0;
+        DataGridViewCellMouseEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        dataGridView.Columns.Add("Column1", "Column1");
+        dataGridView.Columns.Add("Column2", "Column2");
+
+        dataGridView.ColumnHeaderMouseDoubleClick += handler;
+        DataGridViewCellMouseEventArgs args = new(0, -1, 0, 0, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnColumnHeaderMouseDoubleClick(args);
+        callCount.Should().Be(1);
+
+        dataGridView.ColumnHeaderMouseDoubleClick -= handler;
+        args = new(1, -1, 0, 0, new(MouseButtons.Left, 2, 0, 0, 0));
+        dataGridView.OnColumnHeaderMouseDoubleClick(args);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnHeaderCellChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Columns.Add("Column2", "Column2");
+
+        _dataGridView.ColumnHeaderCellChanged += handler;
+        _dataGridView.Columns[0].HeaderCell = new();
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnHeaderCellChanged -= handler;
+        _dataGridView.Columns[1].HeaderCell = new();
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnMinimumWidthChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+
+        _dataGridView.ColumnMinimumWidthChanged += handler;
+        _dataGridView.Columns[0].MinimumWidth = 50;
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnMinimumWidthChanged -= handler;
+        _dataGridView.Columns[0].MinimumWidth = 100;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnNameChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+
+        _dataGridView.ColumnNameChanged += handler;
+        _dataGridView.Columns[0].Name = "TestName1";
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnNameChanged -= handler;
+        _dataGridView.Columns[0].Name = "TestName2";
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnRemovedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+        _dataGridView.Columns.Add("Column2", "Column2");
+
+        _dataGridView.ColumnRemoved += handler;
+        _dataGridView.Columns.Remove("Column2");
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnRemoved -= handler;
+        _dataGridView.Columns.Remove("Column1");
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnSortModeChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+
+        _dataGridView.ColumnSortModeChanged += handler;
+        _dataGridView.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnSortModeChanged -= handler;
+        _dataGridView.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnToolTipTextChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+
+        _dataGridView.ColumnToolTipTextChanged += handler;
+        _dataGridView.Columns[0].ToolTipText = "ToolTip Text";
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnToolTipTextChanged -= handler;
+        _dataGridView.Columns[0].ToolTipText = "New ToolTip Text";
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ColumnWidthChangedEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewColumnEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column1");
+
+        _dataGridView.ColumnWidthChanged += handler;
+        _dataGridView.Columns[0].Width = 50;
+        callCount.Should().Be(1);
+
+        _dataGridView.ColumnWidthChanged -= handler;
+        _dataGridView.Columns[0].Width = 100;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DataBindingCompleteEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewBindingCompleteEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        int rowsCount1 = 3;
+        BindingSource bindingSource1 = GetTestBindingSource(rowsCount1);
+        int rowsCount2 = 5;
+        BindingSource bindingSource2 = GetTestBindingSource(rowsCount2);
+        BindingContext context1 = new()
+        {
+            { bindingSource1, bindingSource1.CurrencyManager }
+        };
+        BindingContext context2 = new()
+        {
+            { bindingSource2, bindingSource2.CurrencyManager }
+        };
+
+        _dataGridView.DataBindingComplete += handler;
+        _dataGridView.BindingContext = context1;
+        _dataGridView.DataSource = bindingSource1;
+        callCount.Should().Be(1);
+
+        _dataGridView.DataBindingComplete -= handler;
+        _dataGridView.BindingContext = context2;
+        _dataGridView.DataSource = bindingSource2;
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DefaultValuesNeededEvent_Raised_Success()
+    {
+        int callCount = 0;
+        DataGridViewRowEventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(_dataGridView);
+            e.Should().NotBeNull();
+            callCount++;
+        };
+
+        _dataGridView.Columns.Add("Column1", "Column 1");
+        _dataGridView.Columns.Add("Column2", "Column 2");
+        _dataGridView.AllowUserToAddRows = true; 
+
+        _dataGridView.DefaultValuesNeeded += handler;
+        _dataGridView.CurrentCell = _dataGridView.Rows[_dataGridView.NewRowIndex].Cells[0];
+        callCount.Should().Be(1);
+
+        _dataGridView.DefaultValuesNeeded -= handler;
+        _dataGridView.CurrentCell = _dataGridView.Rows[_dataGridView.NewRowIndex].Cells[1];
         callCount.Should().Be(1);
     }
 }

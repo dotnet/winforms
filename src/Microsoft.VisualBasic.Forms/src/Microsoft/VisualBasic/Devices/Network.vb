@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
 Imports System.ComponentModel
 Imports System.Net
 Imports System.Security
@@ -218,7 +216,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As String,
                              destinationFileName As String,
@@ -239,7 +237,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub DownloadFile(address As String,
@@ -273,7 +271,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
@@ -294,7 +292,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub DownloadFile(address As Uri,
@@ -319,7 +317,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="networkCredentials">The credentials of the user performing the download</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
         Public Sub DownloadFile(address As Uri,
@@ -340,7 +338,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="networkCredentials">The credentials of the user performing the download</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
@@ -366,7 +364,7 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
@@ -469,7 +467,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="Password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                       address As String,
                       userName As String,
@@ -488,7 +486,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="Password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                       address As String,
@@ -524,7 +522,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
                               userName As String,
@@ -543,7 +541,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
@@ -567,7 +565,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri representing the destination</param>
         ''' <param name="networkCredentials">The credentials of the user performing the upload</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
                               networkCredentials As ICredentials,
@@ -584,7 +582,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri representing the destination</param>
         ''' <param name="networkCredentials">The credentials of the user performing the upload</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
@@ -592,7 +590,7 @@ Namespace Microsoft.VisualBasic.Devices
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
-            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
+            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
@@ -647,7 +645,7 @@ Namespace Microsoft.VisualBasic.Devices
         Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
             SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
                 'Don't call AsyncOperationManager.OperationSynchronizationContext.Post.  The reason we want to go through m_SynchronizationContext is that
-                'the OperationSyncronizationContext is thread static.  Since we are getting called on some random thread, the context that was
+                'the OperationSynchronizationContext is thread static.  Since we are getting called on some random thread, the context that was
                 'in place when the Network object was created won't be available (it is on the original thread).  To hang on to the original
                 'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
                 _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
@@ -706,11 +704,11 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure all nulls are empty strings
             If userName Is Nothing Then
-                userName = ""
+                userName = String.Empty
             End If
 
             If password Is Nothing Then
-                password = ""
+                password = String.Empty
             End If
 
             If userName.Length = 0 And password.Length = 0 Then

@@ -15,6 +15,7 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")]
+[CollectionDefinition("Sequential", DisableParallelization = true)]
 public partial class ClipboardTests
 {
     [WinFormsFact]
@@ -313,7 +314,7 @@ public partial class ClipboardTests
     [WinFormsTheory]
     [MemberData(nameof(Clipboard_SetDataObject_Null_TheoryData))]
     public void Clipboard_SetDataObject_NullData_ThrowsArgumentNullException(Action action)
-    { 
+    {
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 

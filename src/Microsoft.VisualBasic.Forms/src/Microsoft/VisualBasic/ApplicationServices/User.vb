@@ -1,27 +1,25 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.ComponentModel
 Imports System.Security.Principal
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Class abstracting the computer user
+    '''  Class abstracting the computer user
     ''' </summary>
     Public Class User
 
         ''' <summary>
-        ''' Creates an instance of User
+        '''  Creates an instance of User
         ''' </summary>
         Public Sub New()
         End Sub
 
         ''' <summary>
-        ''' The name of the current user
+        '''  The name of the current user
         ''' </summary>
         Public ReadOnly Property Name() As String
             Get
@@ -30,7 +28,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' The current IPrincipal which represents the current user
+        '''  The current <see cref="IPrincipal"/> which represents the current user.
         ''' </summary>
         ''' <value>An IPrincipal representing the current user</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -44,7 +42,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Indicates whether or not the current user has been authenticated.
+        '''  Indicates whether or not the current user has been authenticated.
         ''' </summary>
         Public ReadOnly Property IsAuthenticated() As Boolean
             Get
@@ -53,7 +51,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Indicates whether or not the current user is a member of the passed in role
+        '''  Indicates whether or not the current user is a member of the passed in role
         ''' </summary>
         ''' <param name="role">The name of the role</param>
         ''' <returns>True if the user is a member of the role otherwise False</returns>
@@ -62,23 +60,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        ''' The principal representing the current user.
+        '''  The principal representing the current user.
         ''' </summary>
         ''' <value>An IPrincipal representing the current user</value>
-        ''' <remarks> 
-        ''' This should be overridden by derived classes that don't get the current
-        ''' user from the current thread
+        ''' <remarks>
+        '''  This should be overridden by derived classes that don't get the current
+        '''  user from the current thread
         ''' </remarks>
         Protected Overridable Property InternalPrincipal() As IPrincipal
             Get
-                Return Threading.Thread.CurrentPrincipal
+                Return Thread.CurrentPrincipal
             End Get
             Set(value As IPrincipal)
-                Threading.Thread.CurrentPrincipal = value
+                Thread.CurrentPrincipal = value
             End Set
         End Property
 
     End Class 'User
-
 End Namespace
-
